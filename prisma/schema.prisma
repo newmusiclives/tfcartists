@@ -1,0 +1,465 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Artist data and status
+model Artist {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Basic Info
+  name              String
+  email             String?  @unique
+  phone             String?  @unique
+  genre             String?
+  bio               String?
+
+  // Discovery Source
+  discoverySource   String   // "instagram", "tiktok", "spotify", "manual"
+  sourceUrl         String?
+  sourceHandle      String?
+
+  // Engagement Metrics
+  followerCount     Int?
+  engagementRate    Float?
+  hasLiveShows      Boolean  @default(false)
+
+  // Status in Riley's Pipeline
+  status            ArtistStatus @default(DISCOVERED)
+  pipelineStage     String       @default("discovery") // discovery, contacted, engaged, qualified, onboarding, activated
+
+  // Contact Info
+  lastContactedAt   DateTime?
+  nextFollowUpAt    DateTime?
+  conversationCount Int       @default(0)
+
+  // Show Info
+  nextShowDate      DateTime?
+  nextShowVenue     String?
+  nextShowCity      String?
+  hasUsedNineWord   Boolean   @default(false)
+  firstWinDate      DateTime?
+
+  // Relationships
+  conversations     Conversation[]
+  shows             Show[]
+  donations         Donation[]
+  referrals         Referral[]
+
+  // TrueFans RADIO Airplay
+  airplayTier       AirplayTier @default(FREE)
+  airplayActivatedAt DateTime?
+  airplayShares     Int         @default(1) // Shares in the Artist Pool
+  lastTierUpgrade   DateTime?
+
+  // Relationships for airplay
+  airplayPayments   AirplayPayment[]
+
+  // Metadata
+  metadata          Json?
+}
+
+enum ArtistStatus {
+  DISCOVERED      // Found by Riley
+  CONTACTED       // Riley reached out
+  ENGAGED         // Artist responded
+  QUALIFIED       // Has live shows, interested
+  ONBOARDING      // Setting up profile
+  ACTIVATED       // Used the 9-word line
+  ACTIVE          // Regular user
+  INNER_CIRCLE    // Advocate/referrer
+  DORMANT         // Inactive
+  UNRESPONSIVE    // No response after attempts
+}
+
+enum AirplayTier {
+  FREE            // Free tier - 1 share (default for all contacted artists)
+  TIER_5          // $5/month - 5 shares
+  TIER_20         // $20/month - 25 shares
+  TIER_50         // $50/month - 75 shares
+  TIER_120        // $120/month - 200 shares
+}
+
+// Conversations with Riley
+model Conversation {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  artistId    String
+  artist      Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  channel     String   // "sms", "instagram", "email"
+  messages    Message[]
+
+  // Status
+  isActive    Boolean  @default(true)
+  handedOffTo String?  // "echo", "nova", "human"
+
+  // Metadata
+  metadata    Json?
+}
+
+// Individual messages in conversations
+model Message {
+  id              String       @id @default(cuid())
+  createdAt       DateTime     @default(now())
+
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  role            String       // "riley", "artist", "system"
+  content         String
+  aiProvider      String?      // "openai", "claude"
+
+  // Message metadata
+  intent          String?      // "outreach", "qualify", "educate", "book", "motivate"
+  wasRead         Boolean      @default(false)
+  sentiment       String?      // "positive", "neutral", "negative"
+
+  metadata        Json?
+}
+
+// Live shows
+model Show {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  artistId    String
+  artist      Artist    @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  // Show details
+  date        DateTime
+  venue       String
+  city        String
+  state       String?
+
+  // Tracking
+  status      ShowStatus @default(SCHEDULED)
+  usedNineWord Boolean   @default(false)
+  donationCount Int      @default(0)
+  totalRaised  Float     @default(0)
+
+  // Donations
+  donations   Donation[]
+
+  // Metadata
+  metadata    Json?
+}
+
+enum ShowStatus {
+  SCHEDULED
+  REMINDED
+  LIVE
+  COMPLETED
+  CANCELLED
+}
+
+// Donations/wins
+model Donation {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  artistId    String
+  artist      Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  showId      String?
+  show        Show?    @relation(fields: [showId], references: [id], onDelete: SetNull)
+
+  amount      Float
+  fanName     String?
+  fanEmail    String?
+
+  // First win tracking
+  isFirstWin  Boolean  @default(false)
+  celebratedBy String? // "nova"
+
+  metadata    Json?
+}
+
+// Referral tracking
+model Referral {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+
+  referrerId      String
+  referrer        Artist   @relation(fields: [referrerId], references: [id], onDelete: Cascade)
+
+  referredEmail   String
+  referredName    String?
+  status          String   @default("sent") // sent, accepted, activated
+
+  metadata        Json?
+}
+
+// Riley's activity log
+model RileyActivity {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  action      String   // "discovered_artist", "sent_message", "qualified_artist", "booked_show"
+  artistId    String?
+  details     Json?
+
+  aiProvider  String?
+  successful  Boolean  @default(true)
+}
+
+// TrueFans RADIO Airplay Payments
+model AirplayPayment {
+  id          String      @id @default(cuid())
+  createdAt   DateTime    @default(now())
+
+  artistId    String
+  artist      Artist      @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  tier        AirplayTier
+  amount      Float       // $5, $20, $50, or $120
+  period      String      // "2024-12", "2025-01", etc.
+  status      String      @default("active") // active, expired, cancelled
+
+  // Payment metadata
+  paymentMethod String?
+  transactionId String?
+
+  metadata    Json?
+}
+
+// TrueFans RADIO Revenue Pool (monthly)
+model RadioRevenuePool {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+
+  period          String   @unique // "2024-12", "2025-01", etc.
+
+  // Revenue tracking
+  totalAdRevenue  Float    @default(0)
+  artistPoolAmount Float   @default(0) // 80% of totalAdRevenue
+  totalShares     Int      @default(0) // Sum of all artist shares
+  perShareValue   Float    @default(0) // artistPoolAmount / totalShares
+
+  // Artist counts by tier
+  freeArtists     Int      @default(0)
+  tier5Artists    Int      @default(0)
+  tier20Artists   Int      @default(0)
+  tier50Artists   Int      @default(0)
+  tier120Artists  Int      @default(0)
+
+  // Distribution tracking
+  distributedAt   DateTime?
+  distributionComplete Boolean @default(false)
+
+  metadata        Json?
+}
+
+// Individual artist's monthly radio earnings
+model RadioEarnings {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  artistId    String
+  period      String   // "2024-12", "2025-01", etc.
+
+  tier        String   // FREE, TIER_5, etc.
+  shares      Int      // Number of shares
+  earnings    Float    // shares * perShareValue
+
+  paid        Boolean  @default(false)
+  paidAt      DateTime?
+
+  metadata    Json?
+
+  @@unique([artistId, period])
+}
+
+// Sponsors (Harper's Team)
+model Sponsor {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Basic Info
+  businessName      String
+  contactName       String?
+  email             String?  @unique
+  phone             String?  @unique
+  businessType      String   // "music_shop", "craft_maker", "venue", "restaurant", etc.
+
+  // Discovery Source
+  discoverySource   String
+  sourceUrl         String?
+
+  // Location
+  city              String?
+  state             String?
+
+  // Status in Harper's Pipeline
+  status            SponsorStatus @default(DISCOVERED)
+  pipelineStage     String        @default("discovery") // discovery, contacted, interested, negotiating, closed, active
+
+  // Contact tracking
+  lastContactedAt   DateTime?
+  nextFollowUpAt    DateTime?
+  emailsSent        Int       @default(0)
+  textsSent         Int       @default(0)
+  callsCompleted    Int       @default(0)
+
+  // Deal info
+  sponsorshipTier   String?  // "bronze", "silver", "gold", "platinum"
+  monthlyAmount     Float?
+  contractStart     DateTime?
+  contractEnd       DateTime?
+
+  // Assignment
+  assignedTo        String?  // "harper_ai", "human_closer", team member name
+
+  // Relationships
+  conversations     SponsorConversation[]
+  calls             SponsorCall[]
+  sponsorships      Sponsorship[]
+
+  metadata          Json?
+}
+
+enum SponsorStatus {
+  DISCOVERED
+  CONTACTED
+  INTERESTED
+  NEGOTIATING
+  CLOSED
+  ACTIVE
+  CHURNED
+  UNRESPONSIVE
+}
+
+// Sponsor conversations
+model SponsorConversation {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sponsorId   String
+  sponsor     Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  channel     String   // "email", "sms", "voice_ai"
+  messages    SponsorMessage[]
+
+  isActive    Boolean  @default(true)
+  handedOffTo String?  // "human_closer", team member name
+
+  metadata    Json?
+}
+
+model SponsorMessage {
+  id              String              @id @default(cuid())
+  createdAt       DateTime            @default(now())
+
+  conversationId  String
+  conversation    SponsorConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  role            String   // "harper", "sponsor", "system", "human"
+  content         String
+  aiProvider      String?
+
+  intent          String?  // "outreach", "educate", "pitch", "negotiate", "close"
+  sentiment       String?
+
+  metadata        Json?
+}
+
+// Call tracking
+model SponsorCall {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  sponsorId   String
+  sponsor     Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  callType    String   // "voice_ai", "human"
+  duration    Int?     // seconds
+  outcome     String?  // "interested", "not_interested", "callback", "closed"
+  recording   String?  // URL to call recording
+  transcript  String?
+
+  handledBy   String?  // "harper_ai", team member name
+
+  metadata    Json?
+}
+
+// Active sponsorships
+model Sponsorship {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  sponsorId   String
+  sponsor     Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  tier        String   // "bronze", "silver", "gold", "platinum"
+  monthlyAmount Float
+  startDate   DateTime
+  endDate     DateTime?
+
+  status      String   @default("active") // active, paused, cancelled
+
+  // Benefits tracking
+  adSpotsPerMonth   Int?
+  socialMentions    Int?
+  eventPromotion    Boolean @default(false)
+
+  metadata    Json?
+}
+
+// Track submissions from artists
+model TrackSubmission {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  artistId    String
+
+  // Track info
+  trackTitle  String
+  trackUrl    String?  // URL to audio file
+  genre       String?
+  duration    Int?     // seconds
+
+  // Status
+  status      String   @default("pending") // pending, approved, rejected, live
+  reviewedBy  String?
+  reviewedAt  DateTime?
+
+  // Airplay tracking
+  addedToRotation Boolean @default(false)
+  playCount   Int      @default(0)
+
+  metadata    Json?
+}
+
+// Harper's activity log
+model HarperActivity {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  action      String   // "discovered_sponsor", "sent_email", "completed_call", "closed_deal"
+  sponsorId   String?
+  details     Json?
+
+  aiProvider  String?
+  successful  Boolean  @default(true)
+}
+
+// System configuration
+model Config {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  updatedAt   DateTime @updatedAt
+}
