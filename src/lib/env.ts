@@ -52,9 +52,13 @@ const validateEnv = () => {
 
   const env = parsed.data;
 
-  // Check that at least one AI provider is configured
-  if (!env.OPENAI_API_KEY && !env.ANTHROPIC_API_KEY) {
-    throw new Error("At least one AI provider API key (OPENAI_API_KEY or ANTHROPIC_API_KEY) must be configured");
+  // Only validate AI providers at runtime, not during build
+  // During build (when next build runs), we don't need AI keys
+  const isBuildTime = process.env.npm_lifecycle_event === 'build';
+
+  if (!isBuildTime && !env.OPENAI_API_KEY && !env.ANTHROPIC_API_KEY) {
+    console.warn("⚠️  No AI provider API key configured (OPENAI_API_KEY or ANTHROPIC_API_KEY)");
+    console.warn("⚠️  AI features will not work until you configure at least one provider.");
   }
 
   // Warn about production requirements
