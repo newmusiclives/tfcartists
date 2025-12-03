@@ -22,16 +22,10 @@ export default function StationCapacityPage() {
   const sponsorCapacity = calculateMaxSponsorCapacity();
   const premiumRevenue = calculatePremiumSponsorRevenue();
 
-  // Calculate revenue for balanced scenario
-  const balancedStationRevenue = calculateStationRevenue(
-    artistCapacity.scenarios.balanced,
-    sponsorCapacity.balanced,
-    true
-  );
-
-  const premiumStationRevenue = calculateStationRevenue(
-    artistCapacity.scenarios.premium,
-    sponsorCapacity.balanced,
+  // Calculate revenue for Master Overview scenario
+  const masterStationRevenue = calculateStationRevenue(
+    artistCapacity.scenarios.masterOverview,
+    sponsorCapacity.masterOverview,
     true
   );
 
@@ -127,47 +121,65 @@ export default function StationCapacityPage() {
 
           <div className="space-y-4">
             <div className="bg-white rounded-lg p-4">
-              <h3 className="font-semibold text-lg mb-2">Maximum Capacity</h3>
+              <h3 className="font-semibold text-lg mb-2">Master Overview Capacity</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Based on minimum 10 plays/month for FREE tier artists
+                340 total artists across 5 tiers (as per Master Overview)
               </p>
               <div className="text-3xl font-bold text-purple-600">
-                {artistCapacity.maxFreeArtists.toLocaleString()} artists
+                340 artists
               </div>
-              <p className="text-sm text-gray-500 mt-1">(all FREE tier)</p>
+              <p className="text-sm text-gray-500 mt-1">Target capacity per station</p>
             </div>
 
-            {/* Artist Scenarios */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ScenarioCard
-                title="Balanced Mix"
-                description="40% FREE, 30% Bronze, 20% Silver, 7% Gold, 3% Platinum"
-                artists={artistCapacity.scenarios.balanced.artists}
-                revenue={artistCapacity.scenarios.balanced.revenue}
-                breakdown={{
-                  FREE: artistCapacity.scenarios.balanced.FREE,
-                  "Bronze ($5)": artistCapacity.scenarios.balanced.TIER_5,
-                  "Silver ($20)": artistCapacity.scenarios.balanced.TIER_20,
-                  "Gold ($50)": artistCapacity.scenarios.balanced.TIER_50,
-                  "Platinum ($120)": artistCapacity.scenarios.balanced.TIER_120,
-                }}
-                color="purple"
-              />
+            {/* Artist Distribution - Master Overview */}
+            <div className="bg-white rounded-lg p-6">
+              <h3 className="font-semibold text-lg mb-2">Master Overview Distribution</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Fixed artist distribution per station
+              </p>
 
-              <ScenarioCard
-                title="Premium Mix"
-                description="20% FREE, 20% Bronze, 30% Silver, 20% Gold, 10% Platinum"
-                artists={artistCapacity.scenarios.premium.artists}
-                revenue={artistCapacity.scenarios.premium.revenue}
-                breakdown={{
-                  FREE: artistCapacity.scenarios.premium.FREE,
-                  "Bronze ($5)": artistCapacity.scenarios.premium.TIER_5,
-                  "Silver ($20)": artistCapacity.scenarios.premium.TIER_20,
-                  "Gold ($50)": artistCapacity.scenarios.premium.TIER_50,
-                  "Platinum ($120)": artistCapacity.scenarios.premium.TIER_120,
-                }}
-                color="purple"
-              />
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="text-sm">
+                  <span className="text-gray-600">FREE:</span>
+                  <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.FREE}</span>
+                  <span className="text-xs text-gray-500 ml-1">(1 share)</span>
+                </div>
+                <div className="text-sm">
+                  <span className="text-gray-600">Bronze ($5):</span>
+                  <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.BRONZE}</span>
+                  <span className="text-xs text-gray-500 ml-1">(5 shares)</span>
+                </div>
+                <div className="text-sm">
+                  <span className="text-gray-600">Silver ($20):</span>
+                  <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.SILVER}</span>
+                  <span className="text-xs text-gray-500 ml-1">(25 shares)</span>
+                </div>
+                <div className="text-sm">
+                  <span className="text-gray-600">Gold ($50):</span>
+                  <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.GOLD}</span>
+                  <span className="text-xs text-gray-500 ml-1">(75 shares)</span>
+                </div>
+                <div className="text-sm col-span-2">
+                  <span className="text-gray-600">Platinum ($120):</span>
+                  <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.PLATINUM}</span>
+                  <span className="text-xs text-gray-500 ml-1">(200 shares)</span>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Artists</span>
+                  <span className="font-bold">{artistCapacity.scenarios.masterOverview.artists}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Shares</span>
+                  <span className="font-bold text-purple-600">{artistCapacity.scenarios.masterOverview.totalShares.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Monthly Revenue (Team Riley)</span>
+                  <span className="font-bold text-purple-600">${artistCapacity.scenarios.masterOverview.revenue.toLocaleString()}</span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -181,76 +193,82 @@ export default function StationCapacityPage() {
 
           <div className="space-y-4">
             {/* Single Tier Maximums */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <TierMaxCard
-                tier="Bronze"
-                sponsors={sponsorCapacity.allBronze.sponsors}
-                revenue={sponsorCapacity.allBronze.revenue}
-                spots={SPONSOR_AD_SPOTS.BRONZE}
+                tier="Tier 1"
+                price="$100/mo"
+                sponsors={sponsorCapacity.allTier1.sponsors}
+                revenue={sponsorCapacity.allTier1.revenue}
+                spots={SPONSOR_AD_SPOTS.TIER_1}
               />
               <TierMaxCard
-                tier="Silver"
-                sponsors={sponsorCapacity.allSilver.sponsors}
-                revenue={sponsorCapacity.allSilver.revenue}
-                spots={SPONSOR_AD_SPOTS.SILVER}
+                tier="Tier 2"
+                price="$200/mo"
+                sponsors={sponsorCapacity.allTier2.sponsors}
+                revenue={sponsorCapacity.allTier2.revenue}
+                spots={SPONSOR_AD_SPOTS.TIER_2}
               />
               <TierMaxCard
-                tier="Gold"
-                sponsors={sponsorCapacity.allGold.sponsors}
-                revenue={sponsorCapacity.allGold.revenue}
-                spots={SPONSOR_AD_SPOTS.GOLD}
-              />
-              <TierMaxCard
-                tier="Platinum"
-                sponsors={sponsorCapacity.allPlatinum.sponsors}
-                revenue={sponsorCapacity.allPlatinum.revenue}
-                spots={SPONSOR_AD_SPOTS.PLATINUM}
+                tier="Tier 3"
+                price="$400/mo"
+                sponsors={sponsorCapacity.allTier3.sponsors}
+                revenue={sponsorCapacity.allTier3.revenue}
+                spots={SPONSOR_AD_SPOTS.TIER_3}
               />
             </div>
 
-            {/* Balanced Sponsor Mix */}
+            {/* Master Overview Sponsor Mix */}
             <div className="bg-white rounded-lg p-6">
-              <h3 className="font-semibold text-lg mb-2">Balanced Sponsor Mix</h3>
+              <h3 className="font-semibold text-lg mb-2">Master Overview Target</h3>
               <p className="text-gray-600 text-sm mb-4">
-                40% Bronze, 35% Silver, 20% Gold, 5% Platinum
+                24 total sponsors generating $7,800/month (base + premium)
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <div className="grid grid-cols-3 gap-4 mb-4">
                 <div className="text-center">
-                  <div className="text-sm text-gray-600">Bronze</div>
+                  <div className="text-sm text-gray-600">Tier 1 ($100)</div>
                   <div className="text-2xl font-bold text-green-600">
-                    {sponsorCapacity.balanced.BRONZE}
+                    {sponsorCapacity.masterOverview.TIER_1}
                   </div>
+                  <div className="text-xs text-gray-500 mt-1">2 spots/day</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-sm text-gray-600">Silver</div>
+                  <div className="text-sm text-gray-600">Tier 2 ($200)</div>
                   <div className="text-2xl font-bold text-green-600">
-                    {sponsorCapacity.balanced.SILVER}
+                    {sponsorCapacity.masterOverview.TIER_2}
                   </div>
+                  <div className="text-xs text-gray-500 mt-1">5 spots/day</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-sm text-gray-600">Gold</div>
+                  <div className="text-sm text-gray-600">Tier 3 ($400)</div>
                   <div className="text-2xl font-bold text-green-600">
-                    {sponsorCapacity.balanced.GOLD}
+                    {sponsorCapacity.masterOverview.TIER_3}
                   </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-sm text-gray-600">Platinum</div>
-                  <div className="text-2xl font-bold text-green-600">
-                    {sponsorCapacity.balanced.PLATINUM}
-                  </div>
+                  <div className="text-xs text-gray-500 mt-1">10 spots/day</div>
                 </div>
               </div>
-              <div className="pt-4 border-t">
+              <div className="pt-4 border-t space-y-2">
                 <div className="flex justify-between items-center">
                   <div>
-                    <div className="text-sm text-gray-600">Total Sponsors</div>
-                    <div className="text-2xl font-bold">{sponsorCapacity.balanced.sponsors}</div>
+                    <div className="text-sm text-gray-600">Base Package Sponsors</div>
+                    <div className="text-2xl font-bold">{sponsorCapacity.masterOverview.sponsors}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-gray-600">Monthly Revenue</div>
+                    <div className="text-sm text-gray-600">Base Revenue</div>
                     <div className="text-2xl font-bold text-green-600">
-                      ${sponsorCapacity.balanced.revenue.toLocaleString()}
+                      ${sponsorCapacity.masterOverview.revenue.toLocaleString()}
                     </div>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center pt-2 border-t">
+                  <div className="text-sm text-gray-600">+ Premium Add-ons</div>
+                  <div className="text-sm font-semibold text-green-600">
+                    +${premiumRevenue.totalPremiumRevenue.toLocaleString()}
+                  </div>
+                </div>
+                <div className="flex justify-between items-center pt-2 border-t">
+                  <div className="font-semibold">Total Harper Revenue</div>
+                  <div className="text-2xl font-bold text-green-600">
+                    ${(sponsorCapacity.masterOverview.revenue + premiumRevenue.totalPremiumRevenue).toLocaleString()}
                   </div>
                 </div>
               </div>
@@ -301,79 +319,53 @@ export default function StationCapacityPage() {
 
         {/* Total Station Revenue */}
         <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl shadow-lg p-8">
-          <h2 className="text-3xl font-bold mb-6">Total Station Revenue Projections</h2>
+          <h2 className="text-3xl font-bold mb-6">Master Overview - Total Station Revenue</h2>
+          <p className="text-purple-100 mb-6">Per station monthly revenue breakdown</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="max-w-2xl mx-auto">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-4">Balanced Artist Mix</h3>
               <div className="space-y-3">
                 <RevenueRow
-                  label="Riley's Team (Artist Tiers)"
-                  amount={balancedStationRevenue.artistTierRevenue}
+                  label="Team Riley (Artist Submissions)"
+                  amount={masterStationRevenue.artistTierRevenue}
+                />
+                <div className="text-sm text-purple-200 pl-4 -mt-2">
+                  100% retained by station
+                </div>
+                <RevenueRow
+                  label="Team Harper (Base Sponsor Packages)"
+                  amount={masterStationRevenue.sponsorRevenue}
                 />
                 <RevenueRow
-                  label="Harper's Team (Sponsors)"
-                  amount={balancedStationRevenue.sponsorRevenue}
-                />
-                <RevenueRow
-                  label="Premium Sponsors"
-                  amount={balancedStationRevenue.premiumSponsorRevenue}
+                  label="Team Harper (Premium Add-ons)"
+                  amount={masterStationRevenue.premiumSponsorRevenue}
                 />
                 <div className="pt-3 border-t border-white/20">
                   <RevenueRow
-                    label="Total Revenue"
-                    amount={balancedStationRevenue.totalRevenue}
+                    label="Total Monthly Revenue"
+                    amount={masterStationRevenue.totalRevenue}
                     bold
                   />
                 </div>
                 <div className="pt-3 mt-3 border-t border-white/20 space-y-2">
                   <RevenueRow
-                    label="Artist Pool (80% of sponsor rev)"
-                    amount={balancedStationRevenue.artistPool}
+                    label="Artist Pool (80% of Harper revenue)"
+                    amount={masterStationRevenue.artistPool}
                     small
                   />
                   <RevenueRow
-                    label="Station Operations"
-                    amount={balancedStationRevenue.stationOperations}
+                    label="Station Net Revenue"
+                    amount={masterStationRevenue.stationOperations}
                     small
                   />
                 </div>
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-4">Premium Artist Mix</h3>
-              <div className="space-y-3">
-                <RevenueRow
-                  label="Riley's Team (Artist Tiers)"
-                  amount={premiumStationRevenue.artistTierRevenue}
-                />
-                <RevenueRow
-                  label="Harper's Team (Sponsors)"
-                  amount={premiumStationRevenue.sponsorRevenue}
-                />
-                <RevenueRow
-                  label="Premium Sponsors"
-                  amount={premiumStationRevenue.premiumSponsorRevenue}
-                />
-                <div className="pt-3 border-t border-white/20">
-                  <RevenueRow
-                    label="Total Revenue"
-                    amount={premiumStationRevenue.totalRevenue}
-                    bold
-                  />
-                </div>
-                <div className="pt-3 mt-3 border-t border-white/20 space-y-2">
-                  <RevenueRow
-                    label="Artist Pool (80% of sponsor rev)"
-                    amount={premiumStationRevenue.artistPool}
-                    small
-                  />
-                  <RevenueRow
-                    label="Station Operations"
-                    amount={premiumStationRevenue.stationOperations}
-                    small
-                  />
+                <div className="pt-3 mt-3 border-t border-white/20">
+                  <div className="text-center space-y-1">
+                    <div className="text-sm text-purple-200">Annual Net per Station</div>
+                    <div className="text-3xl font-bold">
+                      ${(masterStationRevenue.stationOperations * 12).toLocaleString()}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -472,22 +464,24 @@ function ScenarioCard({
 
 function TierMaxCard({
   tier,
+  price,
   sponsors,
   revenue,
   spots,
 }: {
   tier: string;
+  price: string;
   sponsors: number;
   revenue: number;
   spots: number;
 }) {
   return (
     <div className="bg-white rounded-lg p-4">
-      <div className="text-sm text-gray-600 mb-1">Max {tier}</div>
+      <div className="text-sm text-gray-600 mb-1">Max {tier} ({price})</div>
       <div className="text-2xl font-bold text-green-600 mb-1">
         {sponsors.toLocaleString()}
       </div>
-      <div className="text-xs text-gray-500 mb-2">{spots} spots each</div>
+      <div className="text-xs text-gray-500 mb-2">{spots} spots/month</div>
       <div className="text-sm font-semibold">${(revenue / 1000).toFixed(0)}k/mo</div>
     </div>
   );

@@ -20,6 +20,18 @@ export default function HomePage() {
                 Admin
               </Link>
               <Link
+                href="/riley"
+                className="text-purple-600 hover:text-purple-700 font-medium transition-colors"
+              >
+                Riley
+              </Link>
+              <Link
+                href="/harper"
+                className="text-green-600 hover:text-green-700 font-medium transition-colors"
+              >
+                Harper
+              </Link>
+              <Link
                 href="/capacity"
                 className="text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center space-x-1"
               >

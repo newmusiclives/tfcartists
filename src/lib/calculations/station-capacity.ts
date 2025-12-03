@@ -23,31 +23,55 @@ export const STATION_CONSTRAINTS = {
   NEWS_WEATHER_SPONSORS: 2, // max daily mentions
 } as const;
 
-// AIRPLAY TIERS (from airplay-system.ts)
+// AIRPLAY TIERS - Team Riley
 export const AIRPLAY_TIER_SHARES = {
   FREE: 1,
-  TIER_5: 5,
-  TIER_20: 25,
-  TIER_50: 75,
-  TIER_120: 200,
+  BRONZE: 5,    // $5/month
+  SILVER: 25,   // $20/month
+  GOLD: 75,     // $50/month
+  PLATINUM: 200, // $120/month
 } as const;
 
-// SPONSOR TIERS (from harper-personality.ts)
-export const SPONSOR_AD_SPOTS = {
-  BRONZE: 10,
+export const AIRPLAY_TIER_PRICING = {
+  FREE: 0,
+  BRONZE: 5,
   SILVER: 20,
-  GOLD: 40,
-  PLATINUM: 60,
+  GOLD: 50,
+  PLATINUM: 120,
+} as const;
+
+export const AIRPLAY_TIER_PLAYS_PER_MONTH = {
+  FREE: 1,
+  BRONZE: 4,
+  SILVER: 16,
+  GOLD: 48,
+  PLATINUM: 192,
+} as const;
+
+// MASTER OVERVIEW ARTIST CAPACITY
+export const ARTIST_CAPACITY = {
+  FREE: 180,
+  BRONZE: 80,
+  SILVER: 40,
+  GOLD: 30,
+  PLATINUM: 10,
+  TOTAL: 340,
+} as const;
+
+// SPONSOR TIERS - Team Harper (3-tier model)
+export const SPONSOR_AD_SPOTS = {
+  TIER_1: 60,   // 2 spots/day × 30 days
+  TIER_2: 150,  // 5 spots/day × 30 days
+  TIER_3: 300,  // 10 spots/day × 30 days
 } as const;
 
 export const SPONSOR_PRICING = {
-  BRONZE: 100,
-  SILVER: 250,
-  GOLD: 400,
-  PLATINUM: 500,
-  NEWS_WEATHER: 200, // per month
-  SPONSORED_HOUR: 500, // per hour
-  WEEK_TAKEOVER: 2000, // per week
+  TIER_1: 100,  // per month
+  TIER_2: 200,  // per month
+  TIER_3: 400,  // per month
+  NEWS_WEATHER: 400, // per month
+  SPONSORED_HOUR: 300, // per month (not per hour!)
+  WEEK_TAKEOVER: 800, // per month (not per week!)
 } as const;
 
 /**
@@ -92,20 +116,20 @@ export function calculateMonthlyAirtime(daysInMonth: number = 30) {
  */
 export function calculateArtistCapacity(tierDistribution: {
   FREE?: number;
-  TIER_5?: number;
-  TIER_20?: number;
-  TIER_50?: number;
-  TIER_120?: number;
+  BRONZE?: number;
+  SILVER?: number;
+  GOLD?: number;
+  PLATINUM?: number;
 }) {
   const monthly = calculateMonthlyAirtime();
 
   // Calculate total shares
   const totalShares =
     (tierDistribution.FREE || 0) * AIRPLAY_TIER_SHARES.FREE +
-    (tierDistribution.TIER_5 || 0) * AIRPLAY_TIER_SHARES.TIER_5 +
-    (tierDistribution.TIER_20 || 0) * AIRPLAY_TIER_SHARES.TIER_20 +
-    (tierDistribution.TIER_50 || 0) * AIRPLAY_TIER_SHARES.TIER_50 +
-    (tierDistribution.TIER_120 || 0) * AIRPLAY_TIER_SHARES.TIER_120;
+    (tierDistribution.BRONZE || 0) * AIRPLAY_TIER_SHARES.BRONZE +
+    (tierDistribution.SILVER || 0) * AIRPLAY_TIER_SHARES.SILVER +
+    (tierDistribution.GOLD || 0) * AIRPLAY_TIER_SHARES.GOLD +
+    (tierDistribution.PLATINUM || 0) * AIRPLAY_TIER_SHARES.PLATINUM;
 
   // Plays per share
   const playsPerShare = totalShares > 0 ? monthly.totalMonthlyTracks / totalShares : 0;
@@ -113,10 +137,10 @@ export function calculateArtistCapacity(tierDistribution: {
   // Calculate plays per artist in each tier
   const playsPerArtist = {
     FREE: playsPerShare * AIRPLAY_TIER_SHARES.FREE,
-    TIER_5: playsPerShare * AIRPLAY_TIER_SHARES.TIER_5,
-    TIER_20: playsPerShare * AIRPLAY_TIER_SHARES.TIER_20,
-    TIER_50: playsPerShare * AIRPLAY_TIER_SHARES.TIER_50,
-    TIER_120: playsPerShare * AIRPLAY_TIER_SHARES.TIER_120,
+    BRONZE: playsPerShare * AIRPLAY_TIER_SHARES.BRONZE,
+    SILVER: playsPerShare * AIRPLAY_TIER_SHARES.SILVER,
+    GOLD: playsPerShare * AIRPLAY_TIER_SHARES.GOLD,
+    PLATINUM: playsPerShare * AIRPLAY_TIER_SHARES.PLATINUM,
   };
 
   return {
@@ -130,58 +154,59 @@ export function calculateArtistCapacity(tierDistribution: {
 
 /**
  * Calculate maximum artist capacity
- * Assumes minimum plays per artist to maintain quality (e.g., at least 10 plays/month for FREE tier)
+ * Uses Master Overview specifications: 340 total artists across 5 tiers
  */
-export function calculateMaxArtistCapacity(minPlaysPerFreeTierArtist: number = 10) {
+export function calculateMaxArtistCapacity() {
   const monthly = calculateMonthlyAirtime();
 
-  // If FREE tier gets minimum plays, calculate max artists
-  const maxFreeArtists = Math.floor(monthly.totalMonthlyTracks / minPlaysPerFreeTierArtist);
-
-  // Calculate for mixed tier scenarios
-  const scenarios = {
-    allFree: {
-      artists: maxFreeArtists,
-      revenue: 0, // All FREE
-    },
-    balanced: {
-      // Example: 40% FREE, 30% Bronze, 20% Silver, 7% Gold, 3% Platinum
-      FREE: Math.floor(maxFreeArtists * 0.4),
-      TIER_5: Math.floor(maxFreeArtists * 0.3),
-      TIER_20: Math.floor(maxFreeArtists * 0.2),
-      TIER_50: Math.floor(maxFreeArtists * 0.07),
-      TIER_120: Math.floor(maxFreeArtists * 0.03),
-    },
-    premium: {
-      // Example: 20% FREE, 20% Bronze, 30% Silver, 20% Gold, 10% Platinum
-      FREE: Math.floor(maxFreeArtists * 0.2),
-      TIER_5: Math.floor(maxFreeArtists * 0.2),
-      TIER_20: Math.floor(maxFreeArtists * 0.3),
-      TIER_50: Math.floor(maxFreeArtists * 0.2),
-      TIER_120: Math.floor(maxFreeArtists * 0.1),
-    },
+  // Master Overview: Exact artist distribution
+  const masterOverview = {
+    FREE: ARTIST_CAPACITY.FREE,       // 180 artists
+    BRONZE: ARTIST_CAPACITY.BRONZE,   // 80 artists
+    SILVER: ARTIST_CAPACITY.SILVER,   // 40 artists
+    GOLD: ARTIST_CAPACITY.GOLD,       // 30 artists
+    PLATINUM: ARTIST_CAPACITY.PLATINUM, // 10 artists
   };
 
-  // Calculate revenue for balanced scenario
-  const balancedRevenue =
-    scenarios.balanced.TIER_5 * 5 +
-    scenarios.balanced.TIER_20 * 20 +
-    scenarios.balanced.TIER_50 * 50 +
-    scenarios.balanced.TIER_120 * 120;
+  // Calculate revenue from Master Overview distribution
+  const masterRevenue =
+    masterOverview.BRONZE * AIRPLAY_TIER_PRICING.BRONZE +
+    masterOverview.SILVER * AIRPLAY_TIER_PRICING.SILVER +
+    masterOverview.GOLD * AIRPLAY_TIER_PRICING.GOLD +
+    masterOverview.PLATINUM * AIRPLAY_TIER_PRICING.PLATINUM;
 
-  // Calculate revenue for premium scenario
-  const premiumRevenue =
-    scenarios.premium.TIER_5 * 5 +
-    scenarios.premium.TIER_20 * 20 +
-    scenarios.premium.TIER_50 * 50 +
-    scenarios.premium.TIER_120 * 120;
+  // Calculate total shares
+  const masterShares =
+    masterOverview.FREE * AIRPLAY_TIER_SHARES.FREE +
+    masterOverview.BRONZE * AIRPLAY_TIER_SHARES.BRONZE +
+    masterOverview.SILVER * AIRPLAY_TIER_SHARES.SILVER +
+    masterOverview.GOLD * AIRPLAY_TIER_SHARES.GOLD +
+    masterOverview.PLATINUM * AIRPLAY_TIER_SHARES.PLATINUM;
+
+  // If FREE tier gets minimum plays, calculate max artists
+  const maxFreeArtists = Math.floor(monthly.totalMonthlyTracks / 1); // 1 play minimum
 
   return {
     maxFreeArtists,
     scenarios: {
-      allFree: { ...scenarios.allFree, artists: maxFreeArtists },
-      balanced: { ...scenarios.balanced, revenue: balancedRevenue, artists: Object.values(scenarios.balanced).reduce((a, b) => a + b, 0) },
-      premium: { ...scenarios.premium, revenue: premiumRevenue, artists: Object.values(scenarios.premium).reduce((a, b) => a + b, 0) },
+      masterOverview: {
+        ...masterOverview,
+        revenue: masterRevenue,
+        artists: ARTIST_CAPACITY.TOTAL,
+        totalShares: masterShares,
+      },
+      balanced: {
+        ...masterOverview,
+        revenue: masterRevenue,
+        artists: ARTIST_CAPACITY.TOTAL,
+        totalShares: masterShares,
+      },
+      premium: {
+        ...masterOverview,
+        revenue: masterRevenue,
+        artists: ARTIST_CAPACITY.TOTAL,
+        totalShares: masterShares,
+      },
     },
   };
 }
@@ -190,26 +215,23 @@ export function calculateMaxArtistCapacity(minPlaysPerFreeTierArtist: number = 1
  * Calculate sponsor capacity based on ad spots
  */
 export function calculateSponsorCapacity(sponsorDistribution: {
-  BRONZE?: number;
-  SILVER?: number;
-  GOLD?: number;
-  PLATINUM?: number;
+  TIER_1?: number;
+  TIER_2?: number;
+  TIER_3?: number;
 }) {
   const monthly = calculateMonthlyAirtime();
 
   // Calculate total ad spots needed
   const totalSpotsNeeded =
-    (sponsorDistribution.BRONZE || 0) * SPONSOR_AD_SPOTS.BRONZE +
-    (sponsorDistribution.SILVER || 0) * SPONSOR_AD_SPOTS.SILVER +
-    (sponsorDistribution.GOLD || 0) * SPONSOR_AD_SPOTS.GOLD +
-    (sponsorDistribution.PLATINUM || 0) * SPONSOR_AD_SPOTS.PLATINUM;
+    (sponsorDistribution.TIER_1 || 0) * SPONSOR_AD_SPOTS.TIER_1 +
+    (sponsorDistribution.TIER_2 || 0) * SPONSOR_AD_SPOTS.TIER_2 +
+    (sponsorDistribution.TIER_3 || 0) * SPONSOR_AD_SPOTS.TIER_3;
 
   // Calculate revenue
   const revenue =
-    (sponsorDistribution.BRONZE || 0) * SPONSOR_PRICING.BRONZE +
-    (sponsorDistribution.SILVER || 0) * SPONSOR_PRICING.SILVER +
-    (sponsorDistribution.GOLD || 0) * SPONSOR_PRICING.GOLD +
-    (sponsorDistribution.PLATINUM || 0) * SPONSOR_PRICING.PLATINUM;
+    (sponsorDistribution.TIER_1 || 0) * SPONSOR_PRICING.TIER_1 +
+    (sponsorDistribution.TIER_2 || 0) * SPONSOR_PRICING.TIER_2 +
+    (sponsorDistribution.TIER_3 || 0) * SPONSOR_PRICING.TIER_3;
 
   const spotsRemaining = monthly.totalMonthlyAdSpots - totalSpotsNeeded;
   const capacityUtilization = (totalSpotsNeeded / monthly.totalMonthlyAdSpots) * 100;
@@ -226,48 +248,58 @@ export function calculateSponsorCapacity(sponsorDistribution: {
 
 /**
  * Calculate maximum sponsor capacity
+ * Master Overview: Target is 24 sponsors generating $7,800/month
  */
 export function calculateMaxSponsorCapacity() {
   const monthly = calculateMonthlyAirtime();
   const totalMonthlySpots = monthly.totalMonthlyAdSpots;
 
   const scenarios = {
-    allBronze: {
-      sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.BRONZE), // 1,728
-      revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.BRONZE) * SPONSOR_PRICING.BRONZE,
+    allTier1: {
+      sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_1), // 288 sponsors
+      revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_1) * SPONSOR_PRICING.TIER_1,
     },
-    allSilver: {
-      sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.SILVER), // 864
-      revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.SILVER) * SPONSOR_PRICING.SILVER,
+    allTier2: {
+      sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_2), // 115 sponsors
+      revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_2) * SPONSOR_PRICING.TIER_2,
     },
-    allGold: {
-      sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.GOLD), // 432
-      revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.GOLD) * SPONSOR_PRICING.GOLD,
+    allTier3: {
+      sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_3), // 57 sponsors
+      revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_3) * SPONSOR_PRICING.TIER_3,
     },
-    allPlatinum: {
-      sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.PLATINUM), // 288
-      revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.PLATINUM) * SPONSOR_PRICING.PLATINUM,
+    masterOverview: {
+      // Master Overview target: $7,800/month from 24 sponsors
+      // 8 Tier 1 ($800), 10 Tier 2 ($2,000), 6 Tier 3 ($2,400) = $5,200
+      // Plus 6 Sponsored Hours ($1,800) and 1 Week Takeover ($800) = $7,800
+      TIER_1: 8,
+      TIER_2: 10,
+      TIER_3: 6,
     },
     balanced: {
-      // Realistic mix: 40% Bronze, 35% Silver, 20% Gold, 5% Platinum
-      BRONZE: Math.floor((totalMonthlySpots * 0.4) / SPONSOR_AD_SPOTS.BRONZE),
-      SILVER: Math.floor((totalMonthlySpots * 0.35) / SPONSOR_AD_SPOTS.SILVER),
-      GOLD: Math.floor((totalMonthlySpots * 0.2) / SPONSOR_AD_SPOTS.GOLD),
-      PLATINUM: Math.floor((totalMonthlySpots * 0.05) / SPONSOR_AD_SPOTS.PLATINUM),
+      // Balanced mix using available inventory
+      TIER_1: 8,
+      TIER_2: 10,
+      TIER_3: 6,
     },
   };
 
-  // Calculate balanced revenue
-  const balancedRevenue =
-    scenarios.balanced.BRONZE * SPONSOR_PRICING.BRONZE +
-    scenarios.balanced.SILVER * SPONSOR_PRICING.SILVER +
-    scenarios.balanced.GOLD * SPONSOR_PRICING.GOLD +
-    scenarios.balanced.PLATINUM * SPONSOR_PRICING.PLATINUM;
+  // Calculate master overview revenue
+  const masterRevenue =
+    scenarios.masterOverview.TIER_1 * SPONSOR_PRICING.TIER_1 +
+    scenarios.masterOverview.TIER_2 * SPONSOR_PRICING.TIER_2 +
+    scenarios.masterOverview.TIER_3 * SPONSOR_PRICING.TIER_3;
 
+  scenarios.masterOverview = {
+    ...scenarios.masterOverview,
+    sponsors: 24,
+    revenue: masterRevenue, // Base $5,200 (premium adds $2,600 for $7,800 total)
+  } as any;
+
+  // Calculate balanced revenue (same as master for now)
   scenarios.balanced = {
     ...scenarios.balanced,
-    sponsors: Object.values(scenarios.balanced).reduce((a, b) => a + b, 0),
-    revenue: balancedRevenue,
+    sponsors: 24,
+    revenue: masterRevenue,
   } as any;
 
   return scenarios;
@@ -275,11 +307,13 @@ export function calculateMaxSponsorCapacity() {
 
 /**
  * Calculate premium sponsor opportunities
+ * Master Overview: News & Weather $400, Sponsored Hours $300, Week Takeover $800
  */
 export function calculatePremiumSponsorRevenue() {
-  const newsWeatherRevenue = STATION_CONSTRAINTS.NEWS_WEATHER_SPONSORS * SPONSOR_PRICING.NEWS_WEATHER; // $400/mo
-  const sponsoredHoursRevenue = STATION_CONSTRAINTS.MAX_SPONSORED_HOURS_PER_WEEK * 4 * SPONSOR_PRICING.SPONSORED_HOUR; // $4,000/mo
-  const weekTakeoverRevenue = STATION_CONSTRAINTS.MAX_WEEK_TAKEOVERS_PER_MONTH * SPONSOR_PRICING.WEEK_TAKEOVER; // $2,000/mo
+  // Master Overview specs
+  const newsWeatherRevenue = STATION_CONSTRAINTS.NEWS_WEATHER_SPONSORS * SPONSOR_PRICING.NEWS_WEATHER; // 2 × $400 = $800/mo
+  const sponsoredHoursRevenue = 6 * SPONSOR_PRICING.SPONSORED_HOUR; // 6 slots × $300 = $1,800/mo
+  const weekTakeoverRevenue = STATION_CONSTRAINTS.MAX_WEEK_TAKEOVERS_PER_MONTH * SPONSOR_PRICING.WEEK_TAKEOVER; // 1 × $800 = $800/mo
 
   return {
     newsWeather: {
@@ -288,7 +322,7 @@ export function calculatePremiumSponsorRevenue() {
       monthlyRevenue: newsWeatherRevenue,
     },
     sponsoredHours: {
-      slotsPerMonth: STATION_CONSTRAINTS.MAX_SPONSORED_HOURS_PER_WEEK * 4,
+      slotsPerMonth: 6, // Master Overview: 6 sponsored hours per month
       pricePerHour: SPONSOR_PRICING.SPONSORED_HOUR,
       monthlyRevenue: sponsoredHoursRevenue,
     },
@@ -297,40 +331,44 @@ export function calculatePremiumSponsorRevenue() {
       pricePerWeek: SPONSOR_PRICING.WEEK_TAKEOVER,
       monthlyRevenue: weekTakeoverRevenue,
     },
-    totalPremiumRevenue: newsWeatherRevenue + sponsoredHoursRevenue + weekTakeoverRevenue, // $6,400/mo
+    totalPremiumRevenue: newsWeatherRevenue + sponsoredHoursRevenue + weekTakeoverRevenue, // $3,400/mo
   };
 }
 
 /**
  * Calculate total station revenue potential
+ * Master Overview: Riley $3,900/mo (100% retained), Harper $7,800/mo (80% to artists)
  */
 export function calculateStationRevenue(
-  artistTierDistribution: { FREE?: number; TIER_5?: number; TIER_20?: number; TIER_50?: number; TIER_120?: number },
-  sponsorTierDistribution: { BRONZE?: number; SILVER?: number; GOLD?: number; PLATINUM?: number },
+  artistTierDistribution: { FREE?: number; BRONZE?: number; SILVER?: number; GOLD?: number; PLATINUM?: number },
+  sponsorTierDistribution: { TIER_1?: number; TIER_2?: number; TIER_3?: number },
   includePremiumSponsors: boolean = true
 ) {
-  // Artist revenue (from paid tiers)
+  // Artist revenue (from paid tiers) - Team Riley
   const artistRevenue =
-    (artistTierDistribution.TIER_5 || 0) * 5 +
-    (artistTierDistribution.TIER_20 || 0) * 20 +
-    (artistTierDistribution.TIER_50 || 0) * 50 +
-    (artistTierDistribution.TIER_120 || 0) * 120;
+    (artistTierDistribution.BRONZE || 0) * AIRPLAY_TIER_PRICING.BRONZE +
+    (artistTierDistribution.SILVER || 0) * AIRPLAY_TIER_PRICING.SILVER +
+    (artistTierDistribution.GOLD || 0) * AIRPLAY_TIER_PRICING.GOLD +
+    (artistTierDistribution.PLATINUM || 0) * AIRPLAY_TIER_PRICING.PLATINUM;
 
-  // Sponsor revenue (from all tiers)
+  // Sponsor revenue (from all tiers) - Team Harper
   const sponsorCapacity = calculateSponsorCapacity(sponsorTierDistribution);
   const sponsorRevenue = sponsorCapacity.monthlyRevenue;
 
   // Premium sponsor revenue
   const premiumRevenue = includePremiumSponsors ? calculatePremiumSponsorRevenue().totalPremiumRevenue : 0;
 
+  // Total Harper revenue (base + premium)
+  const totalHarperRevenue = sponsorRevenue + premiumRevenue;
+
   // Total revenue
-  const totalRevenue = artistRevenue + sponsorRevenue + premiumRevenue;
+  const totalRevenue = artistRevenue + totalHarperRevenue;
 
-  // Artist pool (80% of sponsor revenue)
-  const artistPool = sponsorRevenue * 0.8;
+  // Artist pool (80% of ALL sponsor revenue including premium)
+  const artistPool = totalHarperRevenue * 0.8;
 
-  // Station operations (20% of sponsor revenue + all artist tier revenue)
-  const stationOperations = (sponsorRevenue * 0.2) + artistRevenue + premiumRevenue;
+  // Station operations (20% of sponsor revenue + 100% of artist tier revenue)
+  const stationOperations = (totalHarperRevenue * 0.2) + artistRevenue;
 
   return {
     artistTierRevenue: artistRevenue,
@@ -341,7 +379,7 @@ export function calculateStationRevenue(
     stationOperations,
     breakdown: {
       rileyTeamRevenue: artistRevenue,
-      harperTeamRevenue: sponsorRevenue + premiumRevenue,
+      harperTeamRevenue: totalHarperRevenue,
     },
   };
 }

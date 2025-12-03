@@ -11,6 +11,7 @@ import {
   Sparkles,
   ArrowRight,
   Radio,
+  Settings,
 } from "lucide-react";
 import { formatCurrency, getStatusColor } from "@/lib/utils";
 
@@ -110,6 +111,13 @@ export default function AdminDashboard() {
               >
                 <Radio className="w-4 h-4" />
                 <span>Capacity</span>
+              </Link>
+              <Link
+                href="/admin/settings"
+                className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              >
+                <Settings className="w-4 h-4" />
+                <span>Settings</span>
               </Link>
               <Link
                 href="/admin/artists"
