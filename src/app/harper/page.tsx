@@ -6,21 +6,23 @@ import { SPONSOR_AD_SPOTS, SPONSOR_PRICING } from "@/lib/calculations/station-ca
 
 export default function HarperDashboardPage() {
   // Mock data - in production this would come from the database
+  // OPTIMAL 77% CAPACITY MODEL WITH LOCAL HERO ENTRY TIER
   const stats = {
-    totalSponsors: 24,
+    totalSponsors: 125,
     byTier: {
-      TIER_1: 8,  // $100/mo
-      TIER_2: 10, // $200/mo
-      TIER_3: 6,  // $400/mo
+      LOCAL_HERO: 45,  // $50/mo (ENTRY LEVEL)
+      TIER_1: 28,      // $100/mo
+      TIER_2: 35,      // $200/mo
+      TIER_3: 17,      // $400/mo
     },
-    monthlyRevenue: 5200, // Base packages
+    monthlyRevenue: 18850, // Base packages (45×$50 + 28×$100 + 35×$200 + 17×$400)
     premiumRevenue: 3400, // Premium add-ons (News, Sponsored Hours, Takeovers)
-    totalRevenue: 8600, // Total (slightly above target due to rounding)
-    artistPoolPayout: 6880, // 80% of total Harper revenue
-    stationRevenue: 1720, // 20% of total Harper revenue
-    activeCalls: 5,
-    scheduledCallbacks: 12,
-    dealsInNegotiation: 7,
+    totalRevenue: 22250, // Total Harper revenue (base + premium)
+    artistPoolPayout: 17800, // 80% of total Harper revenue
+    stationRevenue: 4450, // 20% of total Harper revenue
+    activeCalls: 10,
+    scheduledCallbacks: 22,
+    dealsInNegotiation: 15,
   };
 
   const recentDeals = [
@@ -82,7 +84,7 @@ export default function HarperDashboardPage() {
             icon={<Building2 className="w-6 h-6 text-green-600" />}
             label="Active Sponsors"
             value={stats.totalSponsors}
-            subtitle="Target: 24 sponsors"
+            subtitle="77% optimal capacity"
             color="green"
           />
           <MetricCard
@@ -119,7 +121,7 @@ export default function HarperDashboardPage() {
                 ${stats.monthlyRevenue.toLocaleString()}
               </div>
               <div className="text-xs text-gray-500">
-                {stats.byTier.TIER_1} Tier 1 + {stats.byTier.TIER_2} Tier 2 + {stats.byTier.TIER_3} Tier 3
+                {stats.byTier.LOCAL_HERO} Local Hero + {stats.byTier.TIER_1} Tier 1 + {stats.byTier.TIER_2} Tier 2 + {stats.byTier.TIER_3} Tier 3
               </div>
             </div>
 
@@ -178,14 +180,23 @@ export default function HarperDashboardPage() {
         <section className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Sponsor Distribution by Tier</h2>
           <p className="text-gray-600 text-sm mb-6">
-            Current sponsors: {stats.totalSponsors} (Target: 24 per Master Overview)
+            Current sponsors: {stats.totalSponsors} at 77% optimal capacity with Local Hero entry tier
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <SponsorTierCard
+              tier="Local Hero"
+              count={stats.byTier.LOCAL_HERO}
+              target={45}
+              price={SPONSOR_PRICING.LOCAL_HERO}
+              spots={SPONSOR_AD_SPOTS.LOCAL_HERO}
+              spotsPerDay={1}
+              color="teal"
+            />
             <SponsorTierCard
               tier="Tier 1"
               count={stats.byTier.TIER_1}
-              target={8}
+              target={28}
               price={SPONSOR_PRICING.TIER_1}
               spots={SPONSOR_AD_SPOTS.TIER_1}
               spotsPerDay={2}
@@ -194,7 +205,7 @@ export default function HarperDashboardPage() {
             <SponsorTierCard
               tier="Tier 2"
               count={stats.byTier.TIER_2}
-              target={10}
+              target={35}
               price={SPONSOR_PRICING.TIER_2}
               spots={SPONSOR_AD_SPOTS.TIER_2}
               spotsPerDay={5}
@@ -203,7 +214,7 @@ export default function HarperDashboardPage() {
             <SponsorTierCard
               tier="Tier 3"
               count={stats.byTier.TIER_3}
-              target={6}
+              target={17}
               price={SPONSOR_PRICING.TIER_3}
               spots={SPONSOR_AD_SPOTS.TIER_3}
               spotsPerDay={10}
@@ -389,6 +400,7 @@ function SponsorTierCard({
 }) {
   const percentage = (count / target) * 100;
   const colorClasses = {
+    teal: "text-teal-600 bg-teal-100",
     blue: "text-blue-600 bg-blue-100",
     green: "text-green-600 bg-green-100",
     purple: "text-purple-600 bg-purple-100",
@@ -452,7 +464,11 @@ function DealRow({
       text: "text-blue-700",
       label: "Pending",
     },
-  }[status];
+  }[status] || {
+    bg: "bg-gray-50",
+    text: "text-gray-700",
+    label: status,
+  };
 
   const tierPrice = {
     TIER_1: "$100",
@@ -497,7 +513,7 @@ function CallRow({
     discovery: { color: "blue", label: "Discovery" },
     pitch: { color: "purple", label: "Pitch" },
     close: { color: "green", label: "Closing" },
-  }[type];
+  }[type] || { color: "gray", label: type };
 
   return (
     <div className="flex items-center justify-between p-4 bg-white rounded-lg border-2 border-gray-200">

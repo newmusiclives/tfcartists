@@ -2,22 +2,32 @@ import { NextRequest, NextResponse } from "next/server";
 import { riley } from "@/lib/ai/riley-agent";
 import { prisma } from "@/lib/db";
 import { RILEY_INTENTS } from "@/lib/ai/riley-personality";
+import { logger } from "@/lib/logger";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { withValidation, triggerOutreachSchema } from "@/lib/validation/schemas";
 
 /**
  * POST /api/riley/outreach
  * Trigger Riley to reach out to a specific artist
+ *
+ * Rate limited: 10 requests per minute (AI tier)
+ * Input validation: artistId
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { artistId } = body;
-
-    if (!artistId) {
-      return NextResponse.json(
-        { error: "Missing required field: artistId" },
-        { status: 400 }
-      );
+    // Check rate limit
+    const rateLimitResponse = await withRateLimit(request, "ai");
+    if (rateLimitResponse) {
+      return rateLimitResponse;
     }
+
+    // Validate request body
+    const validationResult = await withValidation(request, triggerOutreachSchema);
+    if (validationResult instanceof Response) {
+      return validationResult;
+    }
+
+    const { artistId } = validationResult.data;
 
     // Get artist
     const artist = await prisma.artist.findUnique({
@@ -63,7 +73,9 @@ export async function POST(request: NextRequest) {
       message,
     });
   } catch (error) {
-    console.error("Error sending outreach:", error);
+    logger.error("Error sending outreach", {
+      error: error instanceof Error ? error.message : String(error),
+    });
     return NextResponse.json({ error: "Failed to send outreach" }, { status: 500 });
   }
 }

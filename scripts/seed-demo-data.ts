@@ -118,7 +118,7 @@ async function main() {
           {
             role: "riley",
             content:
-              "Perfect. It's called TrueFans CONNECT — you say one 9-word line onstage and fans can instantly support you. No setup, no QR codes. Interested?",
+              "Perfect. It's called TrueFans RADIO — you say one 9-word line onstage and fans can instantly support you. No setup, no QR codes. Interested?",
             intent: "educate_product",
             aiProvider: "claude",
           },

@@ -373,7 +373,12 @@ function SubmissionRow({
       text: "text-red-700",
       label: "Rejected",
     },
-  }[status];
+  }[status] || {
+    icon: <Clock className="w-4 h-4 text-gray-600" />,
+    bg: "bg-gray-50",
+    text: "text-gray-700",
+    label: status,
+  };
 
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">

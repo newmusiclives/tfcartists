@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles, Users, TrendingUp, MessageCircle, DollarSign, Radio } from "lucide-react";
+import { ArrowRight, Sparkles, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -10,7 +10,7 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <Sparkles className="w-6 h-6 text-purple-600" />
-              <span className="font-bold text-xl">TrueFans CONNECT</span>
+              <span className="font-bold text-xl">TrueFans RADIO</span>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -30,6 +30,12 @@ export default function HomePage() {
                 className="text-green-600 hover:text-green-700 font-medium transition-colors"
               >
                 Harper
+              </Link>
+              <Link
+                href="/elliot"
+                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              >
+                Elliot
               </Link>
               <Link
                 href="/capacity"
@@ -58,16 +64,16 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
-            Riley + Harper
+            TrueFans RADIO
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
-              Artist & Sponsor Acquisition
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-green-600 to-blue-600">
+              Complete Radio Growth Ecosystem
             </span>
           </h1>
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Riley's team finds and onboards artists — giving them TrueFans CONNECT accounts + FREE radio airplay.
-            Harper's team secures sponsors from music-related businesses, craft makers, and local shops to fund the stations.
+            Riley's team finds and onboards artists. Harper's team secures sponsors to fund the stations.
+            Elliot's team builds a passionate listener community that grows itself through viral content, artist fan activation, and habit formation.
           </p>
 
           <div className="flex items-center justify-center space-x-4">
@@ -88,7 +94,7 @@ export default function HomePage() {
         </div>
 
         {/* Team Stats */}
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <div className="bg-white rounded-xl p-8 shadow-lg">
             <div className="flex items-center space-x-3 mb-4">
               <Users className="w-10 h-10 text-purple-600" />
@@ -104,7 +110,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
-                <span>Signs up for TrueFans CONNECT</span>
+                <span>Signs up for TrueFans RADIO</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
@@ -112,11 +118,11 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
-                <span>Teaches the 9-word line</span>
+                <span>Manages 5-tier system</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
-                <span>Tracks first wins & engagement</span>
+                <span>340 artists, $3,900/month</span>
               </li>
             </ul>
           </div>
@@ -144,11 +150,43 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-green-600">✓</span>
-                <span>Station sponsorship packages</span>
+                <span>4-tier sponsorship packages</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-green-600">✓</span>
-                <span>80% revenue to Artist Pool</span>
+                <span>125 sponsors, $22,250/month</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-xl p-8 shadow-lg">
+            <div className="flex items-center space-x-3 mb-4">
+              <Target className="w-10 h-10 text-blue-600" />
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">Elliot's Team</h3>
+                <p className="text-sm text-gray-600">Listener Growth</p>
+              </div>
+            </div>
+            <ul className="space-y-2 text-gray-700">
+              <li className="flex items-center space-x-2">
+                <span className="text-blue-600">✓</span>
+                <span>Viral content creation</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-blue-600">✓</span>
+                <span>Artist fan activation</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-blue-600">✓</span>
+                <span>Community building</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-blue-600">✓</span>
+                <span>Habit formation & retention</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-blue-600">✓</span>
+                <span>1,250 DAU, 52% retention</span>
               </li>
             </ul>
           </div>
@@ -172,7 +210,7 @@ export default function HomePage() {
           <Step
             number="3"
             title="Dual Signup"
-            description="TrueFans CONNECT account + FREE radio airplay"
+            description="TrueFans RADIO account + FREE radio airplay"
           />
           <Step
             number="4"
@@ -202,7 +240,7 @@ export default function HomePage() {
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">$127.50</div>
               <div className="text-purple-100">Total Raised</div>
-              <div className="text-sm text-purple-200 mt-2">Via TrueFans CONNECT</div>
+              <div className="text-sm text-purple-200 mt-2">Via TrueFans RADIO</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">31</div>
@@ -225,35 +263,48 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
             <div>
               <h3 className="text-white font-semibold mb-2">Riley's Team</h3>
               <p className="text-sm">Artist Acquisition & Onboarding</p>
+              <Link href="/riley" className="text-xs hover:text-white transition-colors block mt-2">
+                View Dashboard →
+              </Link>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-2">Harper's Team</h3>
               <p className="text-sm">Sponsor Acquisition & Revenue</p>
+              <Link href="/harper" className="text-xs hover:text-white transition-colors block mt-2">
+                View Dashboard →
+              </Link>
+            </div>
+            <div>
+              <h3 className="text-white font-semibold mb-2">Elliot's Team</h3>
+              <p className="text-sm">Listener Growth & Retention</p>
+              <Link href="/elliot" className="text-xs hover:text-white transition-colors block mt-2">
+                View Dashboard →
+              </Link>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-2">Quick Links</h3>
-              <div className="space-x-4 text-sm">
-                <Link href="/admin" className="hover:text-white transition-colors">
+              <div className="space-y-2 text-sm">
+                <Link href="/admin" className="hover:text-white transition-colors block">
                   Dashboard
                 </Link>
-                <Link href="/capacity" className="hover:text-white transition-colors">
+                <Link href="/capacity" className="hover:text-white transition-colors block">
                   Capacity
                 </Link>
-                <Link href="/airplay" className="hover:text-white transition-colors">
+                <Link href="/airplay" className="hover:text-white transition-colors block">
                   Airplay
                 </Link>
-                <Link href="/onboard" className="hover:text-white transition-colors">
+                <Link href="/onboard" className="hover:text-white transition-colors block">
                   Onboard
                 </Link>
               </div>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p>&copy; 2024 TrueFans Internal System. Riley + Harper AI Teams.</p>
+            <p>&copy; 2024 TrueFans Internal System. Riley + Harper + Elliot AI Teams.</p>
           </div>
         </div>
       </footer>

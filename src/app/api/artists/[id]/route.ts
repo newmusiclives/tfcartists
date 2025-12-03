@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 /**
  * GET /api/artists/[id]
@@ -38,7 +39,7 @@ export async function GET(
 
     return NextResponse.json({ artist });
   } catch (error) {
-    console.error("Error fetching artist:", error);
+    logger.error("Error fetching artist", { error });
     return NextResponse.json({ error: "Failed to fetch artist" }, { status: 500 });
   }
 }
@@ -62,7 +63,7 @@ export async function PATCH(
 
     return NextResponse.json({ artist });
   } catch (error) {
-    console.error("Error updating artist:", error);
+    logger.error("Error updating artist", { error });
     return NextResponse.json({ error: "Failed to update artist" }, { status: 500 });
   }
 }

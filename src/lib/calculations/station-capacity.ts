@@ -5,6 +5,21 @@
  * based on airtime constraints
  */
 
+// TYPE DEFINITIONS
+export interface SponsorScenario {
+  sponsors: number;
+  revenue: number;
+}
+
+export interface SponsorDistribution {
+  LOCAL_HERO: number;
+  TIER_1: number;
+  TIER_2: number;
+  TIER_3: number;
+  sponsors: number;
+  revenue: number;
+}
+
 // AIRTIME CONSTRAINTS
 export const STATION_CONSTRAINTS = {
   // Track rotation
@@ -58,17 +73,19 @@ export const ARTIST_CAPACITY = {
   TOTAL: 340,
 } as const;
 
-// SPONSOR TIERS - Team Harper (3-tier model)
+// SPONSOR TIERS - Team Harper (4-tier model with Local Hero entry level)
 export const SPONSOR_AD_SPOTS = {
-  TIER_1: 60,   // 2 spots/day × 30 days
-  TIER_2: 150,  // 5 spots/day × 30 days
-  TIER_3: 300,  // 10 spots/day × 30 days
+  LOCAL_HERO: 30,  // 1 spot/day × 30 days (ENTRY LEVEL)
+  TIER_1: 60,      // 2 spots/day × 30 days
+  TIER_2: 150,     // 5 spots/day × 30 days
+  TIER_3: 300,     // 10 spots/day × 30 days
 } as const;
 
 export const SPONSOR_PRICING = {
-  TIER_1: 100,  // per month
-  TIER_2: 200,  // per month
-  TIER_3: 400,  // per month
+  LOCAL_HERO: 50,  // per month (ENTRY LEVEL)
+  TIER_1: 100,     // per month
+  TIER_2: 200,     // per month
+  TIER_3: 400,     // per month
   NEWS_WEATHER: 400, // per month
   SPONSORED_HOUR: 300, // per month (not per hour!)
   WEEK_TAKEOVER: 800, // per month (not per week!)
@@ -215,6 +232,7 @@ export function calculateMaxArtistCapacity() {
  * Calculate sponsor capacity based on ad spots
  */
 export function calculateSponsorCapacity(sponsorDistribution: {
+  LOCAL_HERO?: number;
   TIER_1?: number;
   TIER_2?: number;
   TIER_3?: number;
@@ -223,12 +241,14 @@ export function calculateSponsorCapacity(sponsorDistribution: {
 
   // Calculate total ad spots needed
   const totalSpotsNeeded =
+    (sponsorDistribution.LOCAL_HERO || 0) * SPONSOR_AD_SPOTS.LOCAL_HERO +
     (sponsorDistribution.TIER_1 || 0) * SPONSOR_AD_SPOTS.TIER_1 +
     (sponsorDistribution.TIER_2 || 0) * SPONSOR_AD_SPOTS.TIER_2 +
     (sponsorDistribution.TIER_3 || 0) * SPONSOR_AD_SPOTS.TIER_3;
 
   // Calculate revenue
   const revenue =
+    (sponsorDistribution.LOCAL_HERO || 0) * SPONSOR_PRICING.LOCAL_HERO +
     (sponsorDistribution.TIER_1 || 0) * SPONSOR_PRICING.TIER_1 +
     (sponsorDistribution.TIER_2 || 0) * SPONSOR_PRICING.TIER_2 +
     (sponsorDistribution.TIER_3 || 0) * SPONSOR_PRICING.TIER_3;
@@ -248,13 +268,17 @@ export function calculateSponsorCapacity(sponsorDistribution: {
 
 /**
  * Calculate maximum sponsor capacity
- * Master Overview: Target is 24 sponsors generating $7,800/month
+ * OPTIMAL MODEL: 77% capacity = 125 sponsors generating $22,250/month with Local Hero entry tier
  */
 export function calculateMaxSponsorCapacity() {
   const monthly = calculateMonthlyAirtime();
   const totalMonthlySpots = monthly.totalMonthlyAdSpots;
 
   const scenarios = {
+    allLocalHero: {
+      sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.LOCAL_HERO), // 576 sponsors
+      revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.LOCAL_HERO) * SPONSOR_PRICING.LOCAL_HERO,
+    },
     allTier1: {
       sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_1), // 288 sponsors
       revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_1) * SPONSOR_PRICING.TIER_1,
@@ -267,42 +291,52 @@ export function calculateMaxSponsorCapacity() {
       sponsors: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_3), // 57 sponsors
       revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_3) * SPONSOR_PRICING.TIER_3,
     },
-    masterOverview: {
-      // Master Overview target: $7,800/month from 24 sponsors
-      // 8 Tier 1 ($800), 10 Tier 2 ($2,000), 6 Tier 3 ($2,400) = $5,200
-      // Plus 6 Sponsored Hours ($1,800) and 1 Week Takeover ($800) = $7,800
-      TIER_1: 8,
-      TIER_2: 10,
-      TIER_3: 6,
+    optimal: {
+      // OPTIMAL 77% CAPACITY MODEL WITH LOCAL HERO ENTRY TIER
+      // 45 Local Hero ($2,250), 28 Tier 1 ($2,800), 35 Tier 2 ($7,000), 17 Tier 3 ($6,800) = $18,850
+      // Plus Premium ($3,400) = $22,250 total
+      // 125 sponsors, 13,380 spots (77.4% capacity)
+      LOCAL_HERO: 45,
+      TIER_1: 28,
+      TIER_2: 35,
+      TIER_3: 17,
     },
     balanced: {
       // Balanced mix using available inventory
-      TIER_1: 8,
-      TIER_2: 10,
-      TIER_3: 6,
+      LOCAL_HERO: 45,
+      TIER_1: 28,
+      TIER_2: 35,
+      TIER_3: 17,
     },
   };
 
-  // Calculate master overview revenue
-  const masterRevenue =
-    scenarios.masterOverview.TIER_1 * SPONSOR_PRICING.TIER_1 +
-    scenarios.masterOverview.TIER_2 * SPONSOR_PRICING.TIER_2 +
-    scenarios.masterOverview.TIER_3 * SPONSOR_PRICING.TIER_3;
+  // Calculate optimal revenue
+  const optimalRevenue =
+    scenarios.optimal.LOCAL_HERO * SPONSOR_PRICING.LOCAL_HERO +
+    scenarios.optimal.TIER_1 * SPONSOR_PRICING.TIER_1 +
+    scenarios.optimal.TIER_2 * SPONSOR_PRICING.TIER_2 +
+    scenarios.optimal.TIER_3 * SPONSOR_PRICING.TIER_3;
 
-  scenarios.masterOverview = {
-    ...scenarios.masterOverview,
-    sponsors: 24,
-    revenue: masterRevenue, // Base $5,200 (premium adds $2,600 for $7,800 total)
-  } as any;
+  const optimalWithMetrics: SponsorDistribution = {
+    ...scenarios.optimal,
+    sponsors: 125,
+    revenue: optimalRevenue, // Base $18,850 (premium adds $3,400 for $22,250 total)
+  };
 
-  // Calculate balanced revenue (same as master for now)
-  scenarios.balanced = {
+  const balancedWithMetrics: SponsorDistribution = {
     ...scenarios.balanced,
-    sponsors: 24,
-    revenue: masterRevenue,
-  } as any;
+    sponsors: 125,
+    revenue: optimalRevenue,
+  };
 
-  return scenarios;
+  return {
+    allLocalHero: scenarios.allLocalHero,
+    allTier1: scenarios.allTier1,
+    allTier2: scenarios.allTier2,
+    allTier3: scenarios.allTier3,
+    optimal: optimalWithMetrics,
+    balanced: balancedWithMetrics,
+  };
 }
 
 /**
@@ -337,11 +371,12 @@ export function calculatePremiumSponsorRevenue() {
 
 /**
  * Calculate total station revenue potential
- * Master Overview: Riley $3,900/mo (100% retained), Harper $7,800/mo (80% to artists)
+ * OPTIMAL MODEL: Riley $3,900/mo (100% retained), Harper $22,250/mo (80% to artists)
+ * Total Artist Pool: $17,800/mo | Total Station Revenue: $8,350/mo
  */
 export function calculateStationRevenue(
   artistTierDistribution: { FREE?: number; BRONZE?: number; SILVER?: number; GOLD?: number; PLATINUM?: number },
-  sponsorTierDistribution: { TIER_1?: number; TIER_2?: number; TIER_3?: number },
+  sponsorTierDistribution: { LOCAL_HERO?: number; TIER_1?: number; TIER_2?: number; TIER_3?: number },
   includePremiumSponsors: boolean = true
 ) {
   // Artist revenue (from paid tiers) - Team Riley

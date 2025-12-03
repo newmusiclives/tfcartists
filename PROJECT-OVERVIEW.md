@@ -1,4 +1,4 @@
-# TrueFans CONNECT - Riley AI Sales System
+# TrueFans RADIO - Riley AI Sales System
 ## Project Overview
 
 ## What Was Built

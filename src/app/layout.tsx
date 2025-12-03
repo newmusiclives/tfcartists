@@ -4,8 +4,12 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// Force dynamic rendering for all pages to prevent build-time data collection
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata: Metadata = {
-  title: "TrueFans CONNECT - Riley AI Sales System",
+  title: "TrueFans RADIO - Riley AI Sales System",
   description: "AI-powered artist acquisition and engagement platform",
 };
 

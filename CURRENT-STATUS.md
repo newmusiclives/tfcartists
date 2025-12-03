@@ -1,4 +1,4 @@
-# TrueFans CONNECT - Current Project Status
+# TrueFans RADIO - Current Project Status
 
 **Last Updated:** December 2025
 **Git Commit:** Initial commit with station capacity calculator and dual-team system

@@ -382,7 +382,7 @@ function ArtistRow({ artist, onSelect }: { artist: typeof artistsData[0]; onSele
         <div className="text-sm text-gray-500">{artist.email}</div>
       </td>
       <td className="px-4 py-4">
-        <span className={`px-2 py-1 rounded text-xs font-semibold ${tierColors[artist.tier]}`}>
+        <span className={`px-2 py-1 rounded text-xs font-semibold ${tierColors[artist.tier as keyof typeof tierColors] || tierColors.FREE}`}>
           {artist.tier}
         </span>
       </td>
@@ -397,7 +397,7 @@ function ArtistRow({ artist, onSelect }: { artist: typeof artistsData[0]; onSele
         <div className="text-sm font-semibold text-green-600">${artist.monthlyEarnings.toFixed(2)}</div>
       </td>
       <td className="px-4 py-4">
-        <span className={`px-2 py-1 rounded text-xs font-semibold ${engagementColors[artist.engagement]}`}>
+        <span className={`px-2 py-1 rounded text-xs font-semibold ${engagementColors[artist.engagement as keyof typeof engagementColors] || engagementColors.low}`}>
           {artist.engagement}
         </span>
       </td>

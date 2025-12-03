@@ -7,6 +7,8 @@ import {
 } from "./riley-personality";
 import { prisma } from "@/lib/db";
 import { activateAirplay } from "@/lib/radio/airplay-system";
+import { logger } from "@/lib/logger";
+import { messageDelivery, MessageChannel } from "@/lib/messaging/delivery-service";
 
 export interface RileyConversationContext {
   artistId: string;
@@ -131,9 +133,77 @@ export class RileyAgent {
       },
     });
 
-    // TODO: Actually send the message via SMS/Instagram/Email
-    // This would integrate with Twilio, Instagram API, SendGrid, etc.
-    console.log(`[Riley → ${artistId}] ${content}`);
+    // Actually send the message via SMS/Email/Instagram
+    let deliveryAddress = "";
+
+    if (channel === "sms" && artist.phone) {
+      deliveryAddress = artist.phone;
+    } else if (channel === "email" && artist.email) {
+      deliveryAddress = artist.email;
+    } else if (channel === "instagram" && artist.sourceHandle && artist.discoverySource === "instagram") {
+      deliveryAddress = artist.sourceHandle;
+    } else {
+      logger.warn("No delivery address available for artist", {
+        artistId,
+        channel,
+        hasPhone: !!artist.phone,
+        hasEmail: !!artist.email,
+        hasInstagram: !!(artist.sourceHandle && artist.discoverySource === "instagram"),
+      });
+      return;
+    }
+
+    // Attempt message delivery
+    const deliveryResult = await messageDelivery.send({
+      to: deliveryAddress,
+      content,
+      channel: channel as MessageChannel,
+    });
+
+    // Log delivery result
+    if (deliveryResult.success) {
+      logger.info("Riley message delivered successfully", {
+        artistId,
+        channel,
+        intent,
+        messageId: deliveryResult.messageId,
+        messageLength: content.length,
+      });
+
+      // Update message with delivery status
+      await prisma.message.updateMany({
+        where: {
+          conversationId: conversation.id,
+          role: "riley",
+          content,
+        },
+        data: {
+          deliveryStatus: "delivered",
+          externalMessageId: deliveryResult.messageId,
+          deliveredAt: new Date(),
+        },
+      });
+    } else {
+      logger.error("Riley message delivery failed", {
+        artistId,
+        channel,
+        intent,
+        error: deliveryResult.error,
+      });
+
+      // Update message with failure status
+      await prisma.message.updateMany({
+        where: {
+          conversationId: conversation.id,
+          role: "riley",
+          content,
+        },
+        data: {
+          deliveryStatus: "failed",
+          deliveryError: deliveryResult.error,
+        },
+      });
+    }
   }
 
   /**

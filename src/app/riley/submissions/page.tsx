@@ -308,7 +308,13 @@ function SubmissionCard({ submission, onSelect }: { submission: typeof initialSu
       border: "border-red-200",
       label: "Rejected",
     },
-  }[submission.status];
+  }[submission.status] || {
+    icon: <Clock className="w-4 h-4 text-gray-600" />,
+    bg: "bg-gray-50",
+    text: "text-gray-700",
+    border: "border-gray-200",
+    label: submission.status,
+  };
 
   return (
     <div className={`flex items-center justify-between p-4 bg-gray-50 rounded-lg border-2 ${statusConfig.border} hover:shadow-md transition-shadow`}>

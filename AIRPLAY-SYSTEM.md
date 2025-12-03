@@ -114,7 +114,7 @@ Updates:
 > "Hey — quick q: do you play live shows? Plus you'll get FREE airplay on TrueFans RADIO!"
 
 ### Product Education
-> "It's TrueFans CONNECT — one 9-word line onstage and fans can support you. And you get FREE airplay on TrueFans RADIO — your music goes into rotation immediately."
+> "It's TrueFans RADIO — one 9-word line onstage and fans can support you. And you get FREE airplay on TrueFans RADIO — your music goes into rotation immediately."
 
 ### Tier Upsell (Future)
 > "BTW — you're currently on our FREE tier. Want more rotation? Our Silver tier ($20/mo) gives you 25x more airplay AND 25x more Artist Pool earnings!"

@@ -1,0 +1,81 @@
+/**
+ * Environment Variable Validation
+ *
+ * Validates that all required environment variables are present
+ * and provides type-safe access to them.
+ */
+
+import { z } from "zod";
+
+const envSchema = z.object({
+  // Database (optional during build, required at runtime)
+  DATABASE_URL: z.string().optional(),
+
+  // AI Providers
+  OPENAI_API_KEY: z.string().optional(),
+  ANTHROPIC_API_KEY: z.string().optional(),
+  AI_PROVIDER: z.enum(["openai", "anthropic"]).default("openai"),
+
+  // Communication (optional for now, required for production)
+  TWILIO_ACCOUNT_SID: z.string().optional(),
+  TWILIO_AUTH_TOKEN: z.string().optional(),
+  TWILIO_PHONE_NUMBER: z.string().optional(),
+  SENDGRID_API_KEY: z.string().optional(),
+  INSTAGRAM_ACCESS_TOKEN: z.string().optional(),
+
+  // NextAuth (optional for now, required for production)
+  NEXTAUTH_SECRET: z.string().optional(),
+  NEXTAUTH_URL: z.string().optional(),
+
+  // Team passwords (optional - defaults provided in auth config)
+  ADMIN_PASSWORD: z.string().optional(),
+  RILEY_PASSWORD: z.string().optional(),
+  HARPER_PASSWORD: z.string().optional(),
+  ELLIOT_PASSWORD: z.string().optional(),
+
+  // Rate Limiting (optional - uses in-memory in development)
+  UPSTASH_REDIS_REST_URL: z.string().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+
+  // Node Environment
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+});
+
+// Validate at least one AI provider is configured
+const validateEnv = () => {
+  const parsed = envSchema.safeParse(process.env);
+
+  if (!parsed.success) {
+    console.error("❌ Invalid environment variables:", parsed.error.flatten().fieldErrors);
+    throw new Error("Invalid environment variables");
+  }
+
+  const env = parsed.data;
+
+  // Check that at least one AI provider is configured
+  if (!env.OPENAI_API_KEY && !env.ANTHROPIC_API_KEY) {
+    throw new Error("At least one AI provider API key (OPENAI_API_KEY or ANTHROPIC_API_KEY) must be configured");
+  }
+
+  // Warn about production requirements
+  if (env.NODE_ENV === "production") {
+    const missingProdVars: string[] = [];
+
+    if (!env.NEXTAUTH_SECRET) missingProdVars.push("NEXTAUTH_SECRET");
+    if (!env.NEXTAUTH_URL) missingProdVars.push("NEXTAUTH_URL");
+    if (!env.TWILIO_ACCOUNT_SID) missingProdVars.push("TWILIO_ACCOUNT_SID");
+    if (!env.SENDGRID_API_KEY) missingProdVars.push("SENDGRID_API_KEY");
+
+    if (missingProdVars.length > 0) {
+      console.warn("⚠️  Production deployment missing optional variables:", missingProdVars.join(", "));
+      console.warn("⚠️  Some features may not work without these variables.");
+    }
+  }
+
+  return env;
+};
+
+export const env = validateEnv();
+
+// Type-safe environment variable access
+export type Env = z.infer<typeof envSchema>;

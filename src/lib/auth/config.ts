@@ -1,0 +1,200 @@
+import NextAuth, { NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { z } from "zod";
+import { env } from "@/lib/env";
+
+// Define the credentials schema
+const loginSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
+});
+
+/**
+ * NextAuth.js v5 Configuration
+ *
+ * IMPORTANT: In production, replace this with a proper database-backed authentication
+ * This is a simple credentials provider for development/demo purposes
+ *
+ * For production, consider:
+ * - Database adapter (Prisma adapter with User/Account/Session models)
+ * - OAuth providers (Google, GitHub, etc.)
+ * - Magic link authentication
+ * - Two-factor authentication
+ */
+export const authConfig: NextAuthConfig = {
+  providers: [
+    Credentials({
+      name: "Credentials",
+      credentials: {
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        try {
+          // Validate credentials
+          const parsed = loginSchema.safeParse(credentials);
+          if (!parsed.success) {
+            return null;
+          }
+
+          const { username, password } = parsed.data;
+
+          // DEVELOPMENT ONLY: Simple hardcoded admin user
+          // In production, query your database and verify hashed password
+          if (
+            username === "admin" &&
+            password === process.env.ADMIN_PASSWORD || "truefans2024"
+          ) {
+            return {
+              id: "admin-1",
+              name: "TrueFans Admin",
+              email: "admin@truefansradio.com",
+              role: "admin",
+            };
+          }
+
+          // Riley team access
+          if (
+            username === "riley" &&
+            password === process.env.RILEY_PASSWORD || "riley2024"
+          ) {
+            return {
+              id: "riley-1",
+              name: "Riley (Artist Team)",
+              email: "riley@truefansradio.com",
+              role: "riley",
+            };
+          }
+
+          // Harper team access
+          if (
+            username === "harper" &&
+            password === process.env.HARPER_PASSWORD || "harper2024"
+          ) {
+            return {
+              id: "harper-1",
+              name: "Harper (Sponsor Team)",
+              email: "harper@truefansradio.com",
+              role: "harper",
+            };
+          }
+
+          // Elliot team access
+          if (
+            username === "elliot" &&
+            password === process.env.ELLIOT_PASSWORD || "elliot2024"
+          ) {
+            return {
+              id: "elliot-1",
+              name: "Elliot (Listener Team)",
+              email: "elliot@truefansradio.com",
+              role: "elliot",
+            };
+          }
+
+          // Invalid credentials
+          return null;
+        } catch (error) {
+          console.error("Auth error:", error);
+          return null;
+        }
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/login",
+    error: "/login", // Redirect errors to login page instead of using default error page
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      // Add user role to JWT token
+      if (user) {
+        token.role = user.role;
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Add user role to session
+      if (session.user) {
+        session.user.role = token.role as string;
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
+    async authorized({ auth, request }) {
+      const { pathname } = request.nextUrl;
+
+      // Public routes (no auth required)
+      const publicRoutes = ["/", "/login"];
+      if (publicRoutes.includes(pathname)) {
+        return true;
+      }
+
+      // Require authentication for all other routes
+      const isAuthenticated = !!auth?.user;
+
+      if (!isAuthenticated) {
+        return false;
+      }
+
+      // Role-based access control
+      const userRole = auth.user.role;
+
+      // Admin can access everything
+      if (userRole === "admin") {
+        return true;
+      }
+
+      // Team-specific access
+      if (pathname.startsWith("/riley") && userRole !== "riley") {
+        return false;
+      }
+
+      if (pathname.startsWith("/harper") && userRole !== "harper") {
+        return false;
+      }
+
+      if (pathname.startsWith("/elliot") && userRole !== "elliot") {
+        return false;
+      }
+
+      // API routes require authentication
+      if (pathname.startsWith("/api")) {
+        return isAuthenticated;
+      }
+
+      return true;
+    },
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  secret: env.NEXTAUTH_SECRET,
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+
+// Extend NextAuth types
+declare module "next-auth" {
+  interface User {
+    role?: string;
+  }
+
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      role?: string;
+    };
+  }
+}
+
+declare module "@auth/core/jwt" {
+  interface JWT {
+    role?: string;
+  }
+}

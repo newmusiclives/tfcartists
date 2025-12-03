@@ -22,10 +22,10 @@ export default function StationCapacityPage() {
   const sponsorCapacity = calculateMaxSponsorCapacity();
   const premiumRevenue = calculatePremiumSponsorRevenue();
 
-  // Calculate revenue for Master Overview scenario
+  // Calculate revenue for Optimal 75% scenario
   const masterStationRevenue = calculateStationRevenue(
     artistCapacity.scenarios.masterOverview,
-    sponsorCapacity.masterOverview,
+    sponsorCapacity.optimal,
     true
   );
 
@@ -193,7 +193,14 @@ export default function StationCapacityPage() {
 
           <div className="space-y-4">
             {/* Single Tier Maximums */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <TierMaxCard
+                tier="Local Hero"
+                price="$50/mo"
+                sponsors={sponsorCapacity.allLocalHero.sponsors}
+                revenue={sponsorCapacity.allLocalHero.revenue}
+                spots={SPONSOR_AD_SPOTS.LOCAL_HERO}
+              />
               <TierMaxCard
                 tier="Tier 1"
                 price="$100/mo"
@@ -217,31 +224,38 @@ export default function StationCapacityPage() {
               />
             </div>
 
-            {/* Master Overview Sponsor Mix */}
+            {/* Optimal 77% Capacity Sponsor Mix with Local Hero */}
             <div className="bg-white rounded-lg p-6">
-              <h3 className="font-semibold text-lg mb-2">Master Overview Target</h3>
+              <h3 className="font-semibold text-lg mb-2">Optimal 77% Capacity Model with Local Hero</h3>
               <p className="text-gray-600 text-sm mb-4">
-                24 total sponsors generating $7,800/month (base + premium)
+                125 total sponsors generating $22,250/month (base + premium) with $50 entry tier
               </p>
-              <div className="grid grid-cols-3 gap-4 mb-4">
+              <div className="grid grid-cols-4 gap-4 mb-4">
+                <div className="text-center">
+                  <div className="text-sm text-gray-600">Local Hero ($50)</div>
+                  <div className="text-2xl font-bold text-teal-600">
+                    {sponsorCapacity.optimal.LOCAL_HERO}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">1 spot/day</div>
+                </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-600">Tier 1 ($100)</div>
                   <div className="text-2xl font-bold text-green-600">
-                    {sponsorCapacity.masterOverview.TIER_1}
+                    {sponsorCapacity.optimal.TIER_1}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">2 spots/day</div>
                 </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-600">Tier 2 ($200)</div>
                   <div className="text-2xl font-bold text-green-600">
-                    {sponsorCapacity.masterOverview.TIER_2}
+                    {sponsorCapacity.optimal.TIER_2}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">5 spots/day</div>
                 </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-600">Tier 3 ($400)</div>
                   <div className="text-2xl font-bold text-green-600">
-                    {sponsorCapacity.masterOverview.TIER_3}
+                    {sponsorCapacity.optimal.TIER_3}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">10 spots/day</div>
                 </div>
@@ -250,12 +264,12 @@ export default function StationCapacityPage() {
                 <div className="flex justify-between items-center">
                   <div>
                     <div className="text-sm text-gray-600">Base Package Sponsors</div>
-                    <div className="text-2xl font-bold">{sponsorCapacity.masterOverview.sponsors}</div>
+                    <div className="text-2xl font-bold">{sponsorCapacity.optimal.sponsors}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-gray-600">Base Revenue</div>
                     <div className="text-2xl font-bold text-green-600">
-                      ${sponsorCapacity.masterOverview.revenue.toLocaleString()}
+                      ${sponsorCapacity.optimal.revenue.toLocaleString()}
                     </div>
                   </div>
                 </div>
@@ -268,7 +282,7 @@ export default function StationCapacityPage() {
                 <div className="flex justify-between items-center pt-2 border-t">
                   <div className="font-semibold">Total Harper Revenue</div>
                   <div className="text-2xl font-bold text-green-600">
-                    ${(sponsorCapacity.masterOverview.revenue + premiumRevenue.totalPremiumRevenue).toLocaleString()}
+                    ${(sponsorCapacity.optimal.revenue + premiumRevenue.totalPremiumRevenue).toLocaleString()}
                   </div>
                 </div>
               </div>
@@ -319,8 +333,8 @@ export default function StationCapacityPage() {
 
         {/* Total Station Revenue */}
         <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl shadow-lg p-8">
-          <h2 className="text-3xl font-bold mb-6">Master Overview - Total Station Revenue</h2>
-          <p className="text-purple-100 mb-6">Per station monthly revenue breakdown</p>
+          <h2 className="text-3xl font-bold mb-6">Optimal 77% Capacity - Total Station Revenue</h2>
+          <p className="text-purple-100 mb-6">Per station monthly revenue with Local Hero entry tier ($50/mo)</p>
 
           <div className="max-w-2xl mx-auto">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">

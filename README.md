@@ -1,6 +1,6 @@
-# TrueFans CONNECT - Riley AI Sales System
+# TrueFans RADIO - Riley AI Sales System
 
-An AI-powered artist acquisition and engagement platform that uses conversational AI agents (led by Riley) to discover, educate, and activate emerging artists for TrueFans CONNECT.
+An AI-powered artist acquisition and engagement platform that uses conversational AI agents (led by Riley) to discover, educate, and activate emerging artists for TrueFans RADIO.
 
 ## Overview
 
@@ -304,7 +304,7 @@ This is the initial foundation. To extend:
 
 ## License
 
-Proprietary - TrueFans CONNECT
+Proprietary - TrueFans RADIO
 
 ## Support
 
@@ -312,4 +312,4 @@ For questions or issues, contact the development team.
 
 ---
 
-**Built with ❤️ for TrueFans CONNECT**
+**Built with ❤️ for TrueFans RADIO**

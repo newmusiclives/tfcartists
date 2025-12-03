@@ -64,6 +64,14 @@ model Artist {
 
   // Metadata
   metadata          Json?
+
+  // Indexes for performance
+  @@index([status])
+  @@index([pipelineStage])
+  @@index([airplayTier])
+  @@index([lastContactedAt])
+  @@index([nextFollowUpAt])
+  @@index([discoverySource])
 }
 
 enum ArtistStatus {
@@ -105,6 +113,10 @@ model Conversation {
 
   // Metadata
   metadata    Json?
+
+  // Indexes for performance
+  @@index([artistId])
+  @@index([isActive])
 }
 
 // Individual messages in conversations
@@ -124,7 +136,17 @@ model Message {
   wasRead         Boolean      @default(false)
   sentiment       String?      // "positive", "neutral", "negative"
 
+  // Delivery tracking
+  deliveryStatus  String?      // "pending", "delivered", "failed", "read"
+  externalMessageId String?    // Twilio SID, SendGrid message ID, etc.
+  deliveryError   String?      // Error message if delivery failed
+  deliveredAt     DateTime?    // When message was successfully delivered
+
   metadata        Json?
+
+  // Indexes for performance
+  @@index([conversationId])
+  @@index([createdAt])
 }
 
 // Live shows
@@ -327,6 +349,13 @@ model Sponsor {
   sponsorships      Sponsorship[]
 
   metadata          Json?
+
+  // Indexes for performance
+  @@index([status])
+  @@index([pipelineStage])
+  @@index([sponsorshipTier])
+  @@index([lastContactedAt])
+  @@index([nextFollowUpAt])
 }
 
 enum SponsorStatus {
@@ -462,4 +491,223 @@ model Config {
   key         String   @unique
   value       String
   updatedAt   DateTime @updatedAt
+}
+
+// =============================================================================
+// TEAM ELLIOT - LISTENER GROWTH ENGINE
+// =============================================================================
+
+// Listeners (anonymous or identified)
+model Listener {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Identity (optional)
+  email             String?  @unique
+  name              String?
+  phone             String?  @unique
+
+  // Discovery
+  discoverySource   String   // "artist_referral", "social_media", "organic", "search", "ad"
+  referringArtistId String?  // If came from artist promotion
+  sourceUrl         String?
+
+  // Listening Behavior
+  totalSessions     Int      @default(0)
+  totalListeningHours Float  @default(0)
+  averageSessionLength Float @default(0)
+  lastListenedAt    DateTime?
+  favoriteTimeSlot  String?  // "morning", "midday", "evening", "late_night"
+
+  // Engagement Level
+  engagementScore   Int      @default(0) // 0-100
+  status            ListenerStatus @default(NEW)
+  tier              ListenerTier   @default(CASUAL)
+
+  // Habit Formation
+  listeningStreak   Int      @default(0) // consecutive days
+  preferredDJ       String?  // "hank", "june", "aj"
+  notificationsEnabled Boolean @default(false)
+
+  // Community
+  communityMember   Boolean  @default(false)
+  discordId         String?
+  facebookId        String?
+
+  // Relationships
+  sessions          ListeningSession[]
+  engagements       ListenerEngagement[]
+  campaignResponses CampaignResponse[]
+
+  metadata          Json?
+}
+
+enum ListenerStatus {
+  NEW             // First 7 days
+  ACTIVE          // Regular listener
+  POWER_USER      // 5+ sessions/week
+  AT_RISK         // Hasn't listened in 14 days
+  CHURNED         // Hasn't listened in 30 days
+  REACTIVATED     // Returned after churn
+}
+
+enum ListenerTier {
+  CASUAL          // 1-2 sessions/week
+  REGULAR         // 3-4 sessions/week
+  SUPER_FAN       // 5+ sessions/week
+  EVANGELIST      // Shares content, refers others
+}
+
+// Individual listening sessions
+model ListeningSession {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  listenerId  String?
+  listener    Listener? @relation(fields: [listenerId], references: [id], onDelete: SetNull)
+
+  // Session details
+  startTime   DateTime
+  endTime     DateTime?
+  duration    Int?      // minutes
+  timeSlot    String    // "morning", "midday", "evening", "late_night"
+  djName      String?   // "hank", "june", "aj"
+
+  // Content consumed
+  tracksHeard Int       @default(0)
+  adsHeard    Int       @default(0)
+  sponsorsHeard String? // JSON array of sponsor names
+
+  // Device/Platform
+  device      String?   // "web", "mobile", "smart_speaker"
+  location    String?   // City/state if available
+
+  metadata    Json?
+}
+
+// Viral content created by Team Elliot
+model ViralContent {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Content details
+  type        String   // "tiktok", "reel", "short", "story", "post"
+  title       String
+  description String?
+  contentUrl  String?  // URL to video/image
+  platform    String   // "tiktok", "instagram", "youtube", "facebook"
+
+  // Created by
+  createdBy   String   // "nova", "river", "sage", "elliot"
+  category    String   // "artist_spotlight", "dj_moment", "behind_scenes", "listener_story"
+
+  // Artist connection
+  artistId    String?
+  artistName  String?
+
+  // Performance
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  shares      Int      @default(0)
+  comments    Int      @default(0)
+  newListeners Int     @default(0) // Tracked conversions
+
+  // Status
+  status      String   @default("draft") // draft, published, archived
+  publishedAt DateTime?
+
+  metadata    Json?
+}
+
+// Growth campaigns
+model GrowthCampaign {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Campaign details
+  name        String
+  type        String   // "artist_referral", "viral_push", "habit_builder", "community_event"
+  status      String   @default("active") // active, paused, completed
+
+  // Targeting
+  targetAudience String // "new_listeners", "at_risk", "power_users", "all"
+  channel     String   // "social", "email", "push", "sms", "community"
+
+  // Managed by
+  managedBy   String   // "elliot", "nova", "river", "sage", "orion"
+
+  // Goals
+  goalType    String   // "listeners", "sessions", "retention", "virality"
+  goalTarget  Int      // Target number
+  goalReached Int      @default(0)
+
+  // Timing
+  startDate   DateTime
+  endDate     DateTime?
+
+  // Results
+  responses   CampaignResponse[]
+
+  metadata    Json?
+}
+
+// Campaign responses/interactions
+model CampaignResponse {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  campaignId  String
+  campaign    GrowthCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  listenerId  String?
+  listener    Listener? @relation(fields: [listenerId], references: [id], onDelete: SetNull)
+
+  // Response
+  action      String   // "clicked", "listened", "shared", "joined", "ignored"
+  converted   Boolean  @default(false) // Did they complete the goal?
+
+  metadata    Json?
+}
+
+// Listener engagement (comments, shares, participation)
+model ListenerEngagement {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  listenerId  String?
+  listener    Listener? @relation(fields: [listenerId], references: [id], onDelete: SetNull)
+
+  // Engagement type
+  type        String   // "comment", "share", "referral", "contest_entry", "community_post"
+  platform    String?  // "discord", "facebook", "instagram", "tiktok"
+
+  // Content
+  content     String?
+  targetUrl   String?  // What they engaged with
+
+  // Value
+  sentiment   String?  // "positive", "neutral", "negative"
+
+  metadata    Json?
+}
+
+// Elliot team activity log
+model ElliotActivity {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  // Action
+  action      String   // "created_content", "launched_campaign", "activated_listener", "sent_notification"
+  teamMember  String   // "elliot", "nova", "river", "sage", "orion"
+
+  // Related entities
+  listenerId  String?
+  artistId    String?
+  campaignId  String?
+
+  details     Json?
+  successful  Boolean  @default(true)
 }

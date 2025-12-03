@@ -95,7 +95,7 @@ export default function OnboardPage() {
             </Link>
             <div className="flex items-center space-x-2">
               <Sparkles className="w-5 h-5 text-purple-600" />
-              <span className="font-semibold">TrueFans CONNECT</span>
+              <span className="font-semibold">TrueFans RADIO</span>
             </div>
           </div>
         </div>

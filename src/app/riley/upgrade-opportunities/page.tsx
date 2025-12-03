@@ -337,7 +337,7 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: typeof opport
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
             <div className="font-semibold text-gray-900 text-lg">{opportunity.artist}</div>
-            <span className={`px-2 py-1 rounded text-xs font-semibold ${engagementColors[opportunity.engagement]}`}>
+            <span className={`px-2 py-1 rounded text-xs font-semibold ${engagementColors[opportunity.engagement as keyof typeof engagementColors] || engagementColors.low}`}>
               {opportunity.engagement.toUpperCase()} ENGAGEMENT
             </span>
             {opportunity.contacted && (

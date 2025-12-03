@@ -6,6 +6,7 @@
  */
 
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 export interface DiscoveredArtist {
   name: string;
@@ -27,7 +28,7 @@ export class ArtistDiscoveryEngine {
   async discoverFromInstagram(
     hashtags: string[] = ["livemusic", "emergingartist", "newmusic"]
   ): Promise<DiscoveredArtist[]> {
-    console.log("[Discovery] Scanning Instagram for hashtags:", hashtags);
+    logger.debug("[Discovery] Scanning Instagram for hashtags:", hashtags);
 
     // TODO: Integrate with Instagram API
     // - Search by hashtags
@@ -45,7 +46,7 @@ export class ArtistDiscoveryEngine {
   async discoverFromTikTok(
     hashtags: string[] = ["livemusic", "unsigned", "indieartist"]
   ): Promise<DiscoveredArtist[]> {
-    console.log("[Discovery] Scanning TikTok for hashtags:", hashtags);
+    logger.debug("[Discovery] Scanning TikTok for hashtags:", hashtags);
 
     // TODO: Integrate with TikTok API
     // - Search by hashtags
@@ -61,7 +62,7 @@ export class ArtistDiscoveryEngine {
    * TODO: Implement actual Spotify API integration
    */
   async discoverFromSpotify(genres: string[] = ["indie", "alternative"]): Promise<DiscoveredArtist[]> {
-    console.log("[Discovery] Scanning Spotify for genres:", genres);
+    logger.debug("[Discovery] Scanning Spotify for genres:", genres);
 
     // TODO: Integrate with Spotify API
     // - Search for artists by genre
@@ -77,7 +78,7 @@ export class ArtistDiscoveryEngine {
    * TODO: Implement venue scraping or API integration
    */
   async discoverFromVenues(venueUrls: string[]): Promise<DiscoveredArtist[]> {
-    console.log("[Discovery] Scanning venue lineups:", venueUrls);
+    logger.debug("[Discovery] Scanning venue lineups:", venueUrls);
 
     // TODO: Implement venue lineup scraping
     // - Scrape venue websites for upcoming shows
@@ -146,7 +147,7 @@ export class ArtistDiscoveryEngine {
    * Run full discovery cycle across all platforms
    */
   async runDiscoveryCycle(): Promise<number> {
-    console.log("[Discovery] Starting discovery cycle...");
+    logger.debug("[Discovery] Starting discovery cycle...");
 
     const discovered: DiscoveredArtist[] = [];
 
