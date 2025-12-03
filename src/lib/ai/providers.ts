@@ -15,20 +15,35 @@ export interface AIResponse {
 }
 
 class AIProviderService {
-  private openai: OpenAI;
-  private anthropic: Anthropic;
+  private openai: OpenAI | null = null;
+  private anthropic: Anthropic | null = null;
   private defaultProvider: AIProvider;
 
   constructor() {
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-
-    this.anthropic = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
-    });
-
     this.defaultProvider = (process.env.DEFAULT_AI_PROVIDER as AIProvider) || "claude";
+  }
+
+  // Lazy initialization - only create clients when needed
+  private getOpenAI(): OpenAI {
+    if (!this.openai) {
+      const apiKey = process.env.OPENAI_API_KEY;
+      if (!apiKey) {
+        throw new Error("OPENAI_API_KEY is not configured. Set it in your environment variables.");
+      }
+      this.openai = new OpenAI({ apiKey });
+    }
+    return this.openai;
+  }
+
+  private getAnthropic(): Anthropic {
+    if (!this.anthropic) {
+      const apiKey = process.env.ANTHROPIC_API_KEY;
+      if (!apiKey) {
+        throw new Error("ANTHROPIC_API_KEY is not configured. Set it in your environment variables.");
+      }
+      this.anthropic = new Anthropic({ apiKey });
+    }
+    return this.anthropic;
   }
 
   async chat(
@@ -57,7 +72,9 @@ class AIProviderService {
     maxTokens: number,
     model?: string
   ): Promise<AIResponse> {
-    const completion = await this.openai.chat.completions.create({
+    const openai = this.getOpenAI(); // Lazy load
+
+    const completion = await openai.chat.completions.create({
       model: model || "gpt-4o-mini",
       messages: messages.map((m) => ({
         role: m.role,
@@ -80,11 +97,13 @@ class AIProviderService {
     maxTokens: number,
     model?: string
   ): Promise<AIResponse> {
+    const anthropic = this.getAnthropic(); // Lazy load
+
     // Extract system message if present
     const systemMessage = messages.find((m) => m.role === "system");
     const conversationMessages = messages.filter((m) => m.role !== "system");
 
-    const response = await this.anthropic.messages.create({
+    const response = await anthropic.messages.create({
       model: model || "claude-3-5-sonnet-20241022",
       max_tokens: maxTokens,
       temperature,
@@ -108,5 +127,5 @@ class AIProviderService {
   }
 }
 
-// Singleton instance
+// Singleton instance - safe to create at module load now since constructor doesn't create clients
 export const aiProvider = new AIProviderService();
