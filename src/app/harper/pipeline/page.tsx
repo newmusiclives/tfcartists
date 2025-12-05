@@ -201,6 +201,12 @@ export default function SponsorPipeline() {
   const [selectedSponsor, setSelectedSponsor] = useState<Sponsor | null>(null);
   const [showActionModal, setShowActionModal] = useState(false);
 
+  const handleViewAllStages = () => {
+    setSelectedStage('all');
+    setSelectedPriority('all');
+    setSearchTerm('');
+  };
+
   const filteredSponsors = sponsors.filter(sponsor => {
     const matchesStage = selectedStage === 'all' || sponsor.stage === selectedStage;
     const matchesPriority = selectedPriority === 'all' || sponsor.priority === selectedPriority;
@@ -316,10 +322,56 @@ export default function SponsorPipeline() {
           </div>
         </div>
 
+        {/* Pipeline Overview */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Pipeline Overview</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+            {Object.entries(stageConfig).map(([stageKey, config], idx) => {
+              const stageSponsors = getSponsorsByStage(stageKey as PipelineStage);
+              return (
+                <button
+                  key={stageKey}
+                  type="button"
+                  onClick={() => setSelectedStage(stageKey as PipelineStage)}
+                  className={`relative p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                    selectedStage === stageKey
+                      ? "border-green-500 bg-green-100 shadow-lg ring-2 ring-green-200"
+                      : "border-gray-200 hover:border-green-300 hover:shadow-md hover:bg-green-50"
+                  }`}
+                >
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-gray-900 mb-1">{stageSponsors.length}</div>
+                    <div className="text-xs font-medium text-gray-600 mb-2">{config.label}</div>
+                    <div className="text-xs text-gray-500">
+                      {getAssignedTo(stageKey as PipelineStage).split(' ')[0]}
+                    </div>
+                  </div>
+                  {idx < Object.keys(stageConfig).length - 1 && (
+                    <ChevronRight className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-4 text-gray-400 hidden lg:block" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mt-4 flex items-center justify-center space-x-2">
+            <button
+              type="button"
+              onClick={handleViewAllStages}
+              className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer hover:scale-105 ${
+                selectedStage === "all"
+                  ? "bg-green-600 text-white shadow-lg ring-2 ring-green-300"
+                  : "bg-green-100 text-green-700 hover:bg-green-200 hover:shadow-md"
+              }`}
+            >
+              {selectedStage === "all" ? "✓ Viewing All Stages" : "View All Stages"} ({sponsors.length} sponsors)
+            </button>
+          </div>
+        </div>
+
         {/* Filters */}
         <div className="bg-white p-4 rounded-lg border mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
+          <div className="flex flex-col md:flex-row gap-4 items-center">
+            <div className="flex-1 w-full">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
@@ -332,16 +384,15 @@ export default function SponsorPipeline() {
               </div>
             </div>
             <div className="flex gap-2">
-              <select
-                value={selectedStage}
-                onChange={(e) => setSelectedStage(e.target.value as PipelineStage | 'all')}
-                className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                <option value="all">All Stages</option>
-                {Object.entries(stageConfig).map(([key, config]) => (
-                  <option key={key} value={key}>{config.label}</option>
-                ))}
-              </select>
+              {selectedStage !== "all" && (
+                <button
+                  type="button"
+                  onClick={handleViewAllStages}
+                  className="text-sm text-green-600 hover:text-green-700 font-medium underline whitespace-nowrap"
+                >
+                  Clear filters
+                </button>
+              )}
               <select
                 value={selectedPriority}
                 onChange={(e) => setSelectedPriority(e.target.value as Priority | 'all')}
@@ -356,38 +407,23 @@ export default function SponsorPipeline() {
           </div>
         </div>
 
-        {/* Pipeline Stages */}
-        <div className="space-y-6">
-          {Object.entries(stageConfig).map(([stageKey, config]) => {
-            const stageSponsors = getSponsorsByStage(stageKey as PipelineStage);
-            const stageRevenue = stageSponsors.reduce((sum, s) => sum + s.potentialRevenue, 0);
+        {/* Filtered Sponsors List */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-semibold text-gray-900 text-lg">
+              {selectedStage === "all" ? "All Sponsors" : `${stageConfig[selectedStage].label} Stage`}
+              {" "}({filteredSponsors.length})
+            </h3>
+          </div>
 
-            return (
-              <div key={stageKey} className="bg-white rounded-lg border">
-                <div className="p-4 border-b">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <span className={`px-3 py-1 rounded-full text-sm font-medium border ${config.color}`}>
-                        {config.label}
-                      </span>
-                      <span className="text-sm text-gray-600">{config.description}</span>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <span className="text-sm text-gray-600">
-                        {stageSponsors.length} sponsors
-                      </span>
-                      <span className="text-sm font-medium text-green-600">
-                        ${stageRevenue}/mo
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4">
-                  {stageSponsors.length === 0 ? (
-                    <p className="text-gray-500 text-center py-8">No sponsors in this stage</p>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {stageSponsors.map((sponsor) => (
+          {filteredSponsors.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              <Building2 className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+              <p>No sponsors found matching your filters.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filteredSponsors.map((sponsor) => (
                         <div
                           key={sponsor.id}
                           onClick={() => handleSponsorClick(sponsor)}
@@ -422,13 +458,9 @@ export default function SponsorPipeline() {
                             </span>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

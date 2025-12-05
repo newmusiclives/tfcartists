@@ -52,6 +52,11 @@ export default function PipelinePage() {
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
   const [showActionModal, setShowActionModal] = useState(false);
 
+  const handleViewAllStages = () => {
+    setSelectedStage("all");
+    setSelectedPriority("all");
+  };
+
   // Mock pipeline data with full details
   const [artists, setArtists] = useState<Artist[]>([
     {
@@ -330,11 +335,12 @@ export default function PipelinePage() {
             {pipelineStages.map((stage, idx) => (
               <button
                 key={stage.key}
+                type="button"
                 onClick={() => setSelectedStage(stage.key)}
-                className={`relative p-4 rounded-lg border-2 transition-all ${
+                className={`relative p-4 rounded-lg border-2 transition-all cursor-pointer ${
                   selectedStage === stage.key
-                    ? "border-purple-400 bg-purple-50 shadow-md"
-                    : "border-gray-200 hover:border-gray-300 hover:shadow"
+                    ? "border-purple-500 bg-purple-100 shadow-lg ring-2 ring-purple-200"
+                    : "border-gray-200 hover:border-purple-300 hover:shadow-md hover:bg-purple-50"
                 }`}
               >
                 <div className="text-center">
@@ -350,14 +356,15 @@ export default function PipelinePage() {
           </div>
           <div className="mt-4 flex items-center justify-center space-x-2">
             <button
-              onClick={() => setSelectedStage("all")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              type="button"
+              onClick={handleViewAllStages}
+              className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer hover:scale-105 ${
                 selectedStage === "all"
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-purple-600 text-white shadow-lg ring-2 ring-purple-300"
+                  : "bg-purple-100 text-purple-700 hover:bg-purple-200 hover:shadow-md"
               }`}
             >
-              View All Stages ({artists.length})
+              {selectedStage === "all" ? "✓ Viewing All Stages" : "View All Stages"} ({artists.length} artists)
             </button>
           </div>
         </div>
@@ -365,10 +372,21 @@ export default function PipelinePage() {
         {/* Filters */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900">
-              {selectedStage === "all" ? "All Artists" : `${selectedStage.charAt(0).toUpperCase() + selectedStage.slice(1)} Stage`}
-              {" "}({filteredArtists.length})
-            </h3>
+            <div className="flex items-center space-x-3">
+              <h3 className="font-semibold text-gray-900">
+                {selectedStage === "all" ? "All Artists" : `${selectedStage.charAt(0).toUpperCase() + selectedStage.slice(1)} Stage`}
+                {" "}({filteredArtists.length})
+              </h3>
+              {selectedStage !== "all" && (
+                <button
+                  type="button"
+                  onClick={handleViewAllStages}
+                  className="text-xs text-purple-600 hover:text-purple-700 font-medium underline"
+                >
+                  Clear filter
+                </button>
+              )}
+            </div>
             <div className="flex items-center space-x-4">
               <select
                 value={selectedPriority}
