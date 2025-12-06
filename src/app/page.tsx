@@ -14,6 +14,19 @@ export default function HomePage() {
             </div>
             <div className="flex items-center space-x-4">
               <Link
+                href="/station"
+                className="text-amber-700 hover:text-amber-800 font-medium transition-colors inline-flex items-center space-x-1"
+              >
+                <Radio className="w-4 h-4" />
+                <span>NACR</span>
+              </Link>
+              <Link
+                href="/network"
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Network
+              </Link>
+              <Link
                 href="/admin"
                 className="text-gray-600 hover:text-gray-900 transition-colors"
               >
@@ -36,13 +49,6 @@ export default function HomePage() {
                 className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
               >
                 Elliot
-              </Link>
-              <Link
-                href="/capacity"
-                className="text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center space-x-1"
-              >
-                <Radio className="w-4 h-4" />
-                <span>Capacity</span>
               </Link>
               <Link
                 href="/onboard"

@@ -711,3 +711,213 @@ model ElliotActivity {
   details     Json?
   successful  Boolean  @default(true)
 }
+
+// =============================================================================
+// STATION PROGRAMMING & DJ SYSTEM
+// =============================================================================
+
+// DJ Personalities
+model DJ {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Basic info
+  name        String   // "Hank Westwood", "Dakota Raine", etc.
+  slug        String   @unique // "hank-westwood", "dakota-raine"
+  fullName    String?  // Full character name if different
+
+  // Character profile
+  bio         String   // Full bio text
+  age         String?  // "Late 40s", "Early 30s"
+  background  String?  // Character background story
+  vibe        String?  // "Blue-collar optimism, working-class pride"
+  tagline     String?  // "Pour the coffee. Fire up the engine."
+
+  // Voice & personality
+  voiceDescription String? // "Gravel and warmth, like coffee and worn denim"
+  personalityTraits String? // JSON array of traits
+  musicalFocus String?      // Description of music they play
+
+  // Visual identity
+  photoUrl    String?
+  colorPrimary String?   // Hex color for show branding
+  colorSecondary String?
+
+  // Status
+  isActive    Boolean  @default(true)
+  isWeekend   Boolean  @default(false) // Weekend-only DJ
+  priority    Int      @default(0)     // For ordering
+
+  // Relationships
+  shows       DJShow[]
+  trackPlays  TrackPlayback[]
+
+  metadata    Json?
+
+  @@index([isActive])
+  @@index([slug])
+}
+
+// DJ Shows/Time Slots
+model DJShow {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  djId        String
+  dj          DJ       @relation(fields: [djId], references: [id], onDelete: Cascade)
+
+  // Show details
+  name        String   // "Sunrise & Steel", "Desert Folk Dispatch"
+  slug        String   @unique // "sunrise-and-steel"
+  description String?  // Full show description
+
+  // Schedule
+  dayOfWeek   Int      // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  startTime   String   // "06:00" in 24-hour format
+  endTime     String   // "10:00" in 24-hour format
+  duration    Int      // minutes (e.g., 240 for 4 hours)
+
+  // Programming focus
+  mood        String?  // "Morning ritual, working-class pride"
+  musicalFocus String? // Genre/style focus for this time slot
+  tempoStyle  String?  // "Upbeat but not jarring", "Slow, contemplative"
+
+  // Show identity
+  soundbedUrl String?  // Intro/outro audio
+  visualUrl   String?  // Show artwork
+
+  // Status
+  isActive    Boolean  @default(true)
+  isSpecial   Boolean  @default(false) // Special programming vs regular show
+
+  // Relationships
+  trackPlays  TrackPlayback[]
+  programmingBlocks ProgrammingBlock[]
+
+  metadata    Json?
+
+  @@index([djId])
+  @@index([dayOfWeek])
+  @@index([isActive])
+}
+
+// Track playback history
+model TrackPlayback {
+  id          String   @id @default(cuid())
+  playedAt    DateTime @default(now())
+
+  // Track info
+  trackId     String?  // Link to TrackSubmission if applicable
+  trackTitle  String
+  artistName  String
+  artistId    String?  // Link to Artist if applicable
+  duration    Int?     // seconds
+
+  // Playback context
+  djId        String?
+  dj          DJ?      @relation(fields: [djId], references: [id], onDelete: SetNull)
+
+  showId      String?
+  show        DJShow?  @relation(fields: [showId], references: [id], onDelete: SetNull)
+
+  timeSlot    String   // "morning", "midday", "evening", "late_night"
+
+  // Programming context
+  wasScheduled Boolean  @default(true)
+  wasRequested Boolean  @default(false)
+  requestedBy  String?  // Listener ID if it was a request
+
+  // Analytics
+  listenerCount Int?    // How many were listening
+  skipCount    Int      @default(0)
+  likeCount    Int      @default(0)
+
+  metadata    Json?
+
+  @@index([playedAt])
+  @@index([artistId])
+  @@index([djId])
+  @@index([showId])
+  @@index([timeSlot])
+}
+
+// Special programming blocks
+model ProgrammingBlock {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Block details
+  name        String   // "New Artist Showcase", "Songwriter Session"
+  description String?
+  type        String   // "weekly_feature", "monthly_special", "seasonal", "event"
+
+  // Schedule
+  djShowId    String?
+  djShow      DJShow?  @relation(fields: [djShowId], references: [id], onDelete: SetNull)
+
+  dayOfWeek   Int?     // null if recurring across multiple days
+  timeSlot    String?  // "morning", "midday", "evening", "late_night"
+  duration    Int?     // minutes
+
+  // Recurrence
+  frequency   String   // "weekly", "monthly", "seasonal", "one_time"
+  nextOccurrence DateTime?
+
+  // Content focus
+  theme       String?  // "Texas Songwriter Night", "Deep Cuts Vinyl Night"
+  curatedBy   String?  // DJ or team member who curates
+
+  // Status
+  isActive    Boolean  @default(true)
+  startDate   DateTime
+  endDate     DateTime?
+
+  metadata    Json?
+
+  @@index([djShowId])
+  @@index([isActive])
+  @@index([nextOccurrence])
+}
+
+// Station configuration
+model Station {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Station identity
+  name        String   // "North Country Radio"
+  callSign    String?  // "NACR"
+  tagline     String?  // "Where the music finds you"
+  description String?
+
+  // Branding
+  logoUrl     String?
+  primaryColor String?
+  secondaryColor String?
+  genre       String   // "Americana, Country, Singer-Songwriter"
+
+  // Station capacity (based on docs)
+  maxTracksPerMonth  Int @default(8640)  // 12 tracks/hour * 24 hours * 30 days
+  maxAdsPerMonth     Int @default(17280) // 24 ad spots/hour * 24 hours * 30 days
+  maxArtistCapacity  Int @default(340)   // Artist capacity
+  maxSponsorCapacity Int @default(125)   // Sponsor capacity
+  targetDAU          Int @default(1250)  // Target Daily Active Users
+
+  // Programming hours
+  primeHoursStart    String @default("06:00")
+  primeHoursEnd      String @default("18:00")
+
+  // Stream URLs
+  streamUrl          String?
+  backupStreamUrl    String?
+
+  // Status
+  isActive           Boolean @default(true)
+  launchDate         DateTime?
+
+  metadata    Json?
+}
