@@ -43,7 +43,7 @@ export const authConfig: NextAuthConfig = {
           // In production, query your database and verify hashed password
           if (
             username === "admin" &&
-            password === process.env.ADMIN_PASSWORD || "truefans2024"
+            password === (process.env.ADMIN_PASSWORD || "truefans2024")
           ) {
             return {
               id: "admin-1",
@@ -56,7 +56,7 @@ export const authConfig: NextAuthConfig = {
           // Riley team access
           if (
             username === "riley" &&
-            password === process.env.RILEY_PASSWORD || "riley2024"
+            password === (process.env.RILEY_PASSWORD || "riley2024")
           ) {
             return {
               id: "riley-1",
@@ -69,7 +69,7 @@ export const authConfig: NextAuthConfig = {
           // Harper team access
           if (
             username === "harper" &&
-            password === process.env.HARPER_PASSWORD || "harper2024"
+            password === (process.env.HARPER_PASSWORD || "harper2024")
           ) {
             return {
               id: "harper-1",
@@ -82,7 +82,7 @@ export const authConfig: NextAuthConfig = {
           // Elliot team access
           if (
             username === "elliot" &&
-            password === process.env.ELLIOT_PASSWORD || "elliot2024"
+            password === (process.env.ELLIOT_PASSWORD || "elliot2024")
           ) {
             return {
               id: "elliot-1",

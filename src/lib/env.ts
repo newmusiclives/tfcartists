@@ -61,19 +61,46 @@ const validateEnv = () => {
     console.warn("⚠️  AI features will not work until you configure at least one provider.");
   }
 
-  // Warn about production requirements
+  // Strict production requirements
   if (env.NODE_ENV === "production") {
-    const missingProdVars: string[] = [];
+    const missingCriticalVars: string[] = [];
+    const missingOptionalVars: string[] = [];
 
-    if (!env.NEXTAUTH_SECRET) missingProdVars.push("NEXTAUTH_SECRET");
-    if (!env.NEXTAUTH_URL) missingProdVars.push("NEXTAUTH_URL");
-    if (!env.TWILIO_ACCOUNT_SID) missingProdVars.push("TWILIO_ACCOUNT_SID");
-    if (!env.SENDGRID_API_KEY) missingProdVars.push("SENDGRID_API_KEY");
+    // Critical variables - MUST be set in production
+    if (!env.DATABASE_URL) missingCriticalVars.push("DATABASE_URL");
+    if (!env.NEXTAUTH_SECRET) missingCriticalVars.push("NEXTAUTH_SECRET");
+    if (!env.NEXTAUTH_URL) missingCriticalVars.push("NEXTAUTH_URL");
 
-    if (missingProdVars.length > 0) {
-      console.warn("⚠️  Production deployment missing optional variables:", missingProdVars.join(", "));
+    // Validate NEXTAUTH_SECRET strength in production
+    if (env.NEXTAUTH_SECRET && env.NEXTAUTH_SECRET.length < 32) {
+      console.error("❌ NEXTAUTH_SECRET must be at least 32 characters in production");
+      throw new Error("NEXTAUTH_SECRET too weak for production");
+    }
+
+    // Validate at least one AI provider is configured
+    if (!env.OPENAI_API_KEY && !env.ANTHROPIC_API_KEY) {
+      missingCriticalVars.push("OPENAI_API_KEY or ANTHROPIC_API_KEY");
+    }
+
+    // Optional but recommended variables
+    if (!env.UPSTASH_REDIS_REST_URL) missingOptionalVars.push("UPSTASH_REDIS_REST_URL");
+    if (!env.UPSTASH_REDIS_REST_TOKEN) missingOptionalVars.push("UPSTASH_REDIS_REST_TOKEN");
+    if (!env.TWILIO_ACCOUNT_SID) missingOptionalVars.push("TWILIO_ACCOUNT_SID");
+    if (!env.SENDGRID_API_KEY) missingOptionalVars.push("SENDGRID_API_KEY");
+
+    // Fail hard on missing critical variables
+    if (missingCriticalVars.length > 0) {
+      console.error("❌ CRITICAL: Missing required production variables:", missingCriticalVars.join(", "));
+      throw new Error(`Production deployment failed: Missing critical environment variables: ${missingCriticalVars.join(", ")}`);
+    }
+
+    // Warn about missing optional variables
+    if (missingOptionalVars.length > 0) {
+      console.warn("⚠️  Production deployment missing optional variables:", missingOptionalVars.join(", "));
       console.warn("⚠️  Some features may not work without these variables.");
     }
+
+    console.log("✅ Production environment validation passed");
   }
 
   return env;

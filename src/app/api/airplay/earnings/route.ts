@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getArtistEarnings, getCurrentPeriod } from "@/lib/radio/airplay-system";
+import { logger } from "@/lib/logger";
+
+// Force dynamic rendering for this route (uses query parameters)
+export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/airplay/earnings?artistId=xxx&period=2024-12
@@ -12,6 +16,7 @@ export async function GET(request: NextRequest) {
     const period = searchParams.get("period") || getCurrentPeriod();
 
     if (!artistId) {
+      logger.warn("Earnings request missing artistId parameter");
       return NextResponse.json(
         { error: "Missing required parameter: artistId" },
         { status: 400 }
@@ -20,9 +25,13 @@ export async function GET(request: NextRequest) {
 
     const earnings = await getArtistEarnings(artistId, period);
 
+    logger.info("Fetched earnings", { artistId, period });
     return NextResponse.json({ earnings });
   } catch (error) {
-    console.error("Error fetching earnings:", error);
+    logger.error("Error fetching earnings", {
+      error: error instanceof Error ? error.message : String(error),
+      artistId: request.nextUrl.searchParams.get("artistId"),
+    });
     return NextResponse.json(
       { error: "Failed to fetch earnings" },
       { status: 500 }

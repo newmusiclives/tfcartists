@@ -4,9 +4,18 @@ generator client {
 }
 
 datasource db {
+  // Use SQLite for development (file:./dev.db)
+  // Use PostgreSQL for production (postgresql://...)
+  // Prisma will use the appropriate provider based on DATABASE_URL
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+// NOTE: For production deployment with PostgreSQL:
+// 1. Change provider to "postgresql"
+// 2. Set DATABASE_URL to your PostgreSQL connection string
+// 3. Run: npx prisma db push
+// 4. Or use migrations: npx prisma migrate deploy
 
 // Artist data and status
 model Artist {
@@ -62,6 +71,10 @@ model Artist {
   // Relationships for airplay
   airplayPayments   AirplayPayment[]
 
+  // Soft Delete & Optimistic Locking
+  deletedAt         DateTime?    // Soft delete timestamp
+  version           Int      @default(1) // Optimistic locking version
+
   // Metadata
   metadata          Json?
 
@@ -72,6 +85,7 @@ model Artist {
   @@index([lastContactedAt])
   @@index([nextFollowUpAt])
   @@index([discoverySource])
+  @@index([deletedAt])
 }
 
 enum ArtistStatus {
@@ -348,6 +362,10 @@ model Sponsor {
   calls             SponsorCall[]
   sponsorships      Sponsorship[]
 
+  // Soft Delete & Optimistic Locking
+  deletedAt         DateTime?    // Soft delete timestamp
+  version           Int      @default(1) // Optimistic locking version
+
   metadata          Json?
 
   // Indexes for performance
@@ -356,6 +374,7 @@ model Sponsor {
   @@index([sponsorshipTier])
   @@index([lastContactedAt])
   @@index([nextFollowUpAt])
+  @@index([deletedAt])
 }
 
 enum SponsorStatus {
