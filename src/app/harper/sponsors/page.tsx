@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Building2, Search, DollarSign, TrendingUp, Calendar, Mail, Phone, BarChart3, ChevronRight, Users, AlertCircle, CheckCircle, Clock, Globe, X } from 'lucide-react';
 import Link from 'next/link';
+import { SharedNav } from '@/components/shared-nav';
 
 type SponsorTier = 'bronze' | 'silver' | 'gold' | 'platinum';
 type SponsorStatus = 'active' | 'paused' | 'ending_soon' | 'cancelled';
@@ -416,15 +417,15 @@ export default function SponsorManagement() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Shared Navigation */}
+      <SharedNav />
+
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700">
-                  <Building2 className="w-6 h-6" />
-                </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
                 <h1 className="text-2xl font-bold text-gray-900">Sponsor Management</h1>
               </div>

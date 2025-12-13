@@ -23,6 +23,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
+import { SharedNav } from "@/components/shared-nav";
 
 type PipelineStage = "discovered" | "contacted" | "responded" | "invited" | "submitted" | "approved" | "activated";
 
@@ -266,18 +267,16 @@ export default function PipelinePage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
-      {/* Header */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-40">
+      {/* Shared Navigation */}
+      <SharedNav />
+
+      {/* Page Header */}
+      <div className="border-b bg-white/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Link href="/riley" className="text-gray-600 hover:text-gray-900 transition-colors">
-                <ArrowLeft className="w-5 h-5" />
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Artist Pipeline</h1>
-                <p className="text-sm text-gray-600">Complete journey from discovery to activation</p>
-              </div>
+          <div className="flex justify-between items-center py-6">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Artist Pipeline</h1>
+              <p className="text-sm text-gray-600">Complete journey from discovery to activation</p>
             </div>
             <div className="flex items-center space-x-3">
               <Link
@@ -297,7 +296,7 @@ export default function PipelinePage() {
             </div>
           </div>
         </div>
-      </nav>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}

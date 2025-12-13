@@ -393,7 +393,7 @@ Each station follows the proven NACR model:
 **Strategy:** "If you like X, you'll love Y"
 
 **Examples:**
-- NACR listener enjoys Dakota Raine's Desert Folk Dispatch → Suggest Indie Folk Radio
+- NACR listener enjoys Loretta Merrick's Desert Folk Dispatch → Suggest Indie Folk Radio
 - Blues Radio listener loves late-night blues → Suggest Ambient Americana Radio
 
 **Implementation:**

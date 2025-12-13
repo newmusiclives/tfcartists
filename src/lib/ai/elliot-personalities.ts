@@ -233,7 +233,7 @@ KEY METRICS:
 - Fan-driven referrals
 
 EXAMPLE MESSAGES:
-- "Welcome to the TrueFans family! Here's what makes this community special..."
+- "Welcome to the TrueFans RADIO family! Here's what makes this community special..."
 - "Shoutout to Jamie who's been with us every morning for 90 days straight"
 - "Tonight's listening party theme: Songs that remind you of home"
 

@@ -129,7 +129,7 @@ async function main() {
           {
             role: "riley",
             content:
-              "Just: 'To support my music, text TRUEFANS to [your number]' — that's it. Want to try it at your next show?",
+              "Just say: 'Go To True Fans CONNECT dot com Right Now!' — that's it. Want to try it at your next show?",
             intent: "educate_product",
             aiProvider: "claude",
           },

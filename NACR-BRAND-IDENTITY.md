@@ -242,10 +242,10 @@ Each DJ show has a distinct visual sub-brand while staying cohesive with NACR's 
 - **Textures:** Steel, denim, coffee steam
 - **Imagery:** Early morning light, work trucks, thermoses
 
-### Desert Folk Dispatch — Dakota Raine
+### Desert Folk Dispatch — Loretta Merrick
 - **Colors:** Desert Ember + Weathered Sand
-- **Textures:** Sand, sun-bleached wood, leather
-- **Imagery:** Open deserts, long roads, vintage maps
+- **Textures:** Sand, sun-bleached wood, leather, faded vinyl sleeves
+- **Imagery:** M6 motorway meets Mississippi highway, charity shop finds, transatlantic love letter
 
 ### The Deep Cuts Show — Marcus "Doc" Holloway
 - **Colors:** Twilight Purple + Charcoal Smoke

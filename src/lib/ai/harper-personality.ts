@@ -141,7 +141,7 @@ Next steps:
 2. Get contract start date
 3. Collect business details for ads
 4. Set up payment (link to payment form)
-5. Welcome them to the TrueFans family
+5. Welcome them to the TrueFans RADIO family
 
 Be excited but professional. Make them feel great about the decision.`;
 

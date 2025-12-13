@@ -81,23 +81,23 @@ export default function DJsPage() {
             ]}
           />
 
-          {/* Dakota Raine */}
+          {/* Loretta Merrick */}
           <DJCard
-            name="Dakota Raine"
+            name="Loretta Merrick"
             show="Desert Folk Dispatch"
             time="10:00am – 2:00pm"
-            tagline="Stories from the long road."
+            tagline="Somewhere between the M6 and the Mississippi."
             icon={<Compass className="w-12 h-12 text-orange-600" />}
             color="bg-gradient-to-br from-orange-500 to-red-500"
-            age="Early 30s"
-            background="Wanderer, poet, desert dweller"
-            vibe="Open spaces, lonesome highways, sun-baked wisdom"
-            musicalFocus="Sparse arrangements, desert vibes, storytelling songs"
+            age="35"
+            background="Born Solihull, raised Reading. Found Gillian Welch in charity shop at 16. Summer in Nashville at 21. Now lives Sutton Coldfield, works Kings Heath record shop."
+            vibe="British outsider's love for American roots music"
+            musicalFocus="Raw, ancient sounds — Gillian Welch, Townes, Lucinda, Isbell, John Moreland"
             traits={[
-              "Poetic — Speaks in images, not just facts",
-              "Spacious — Comfortable with silence, lets songs breathe",
-              "Curious — 'Where was this written? What inspired it?'",
-              "Contemplative — Music as a companion for the journey"
+              "Smart but unpretentious — Talks about americana like sharing a secret",
+              "Soft southern English accent — Midlands edges creeping back in",
+              "Quietly passionate — Found her obsession in a 50p CD",
+              "Contemplative — Understands the loneliness in the music"
             ]}
           />
 
@@ -192,39 +192,60 @@ export default function DJsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <WeekendDJCard
-              name="Paul Saunders"
-              show="The Long Road Home"
-              time="Sunday, 8am–12pm"
-              focus="Sunday morning reflection, coffee on the porch, spiritual but not preachy"
-              icon={<Sun className="w-8 h-8 text-amber-600" />}
-            />
-            <WeekendDJCard
               name="Jo McAllister"
               show="Rust Belt Revival"
-              time="Saturday, 10am–2pm"
+              time="Saturday, 6am–10am"
               focus="Heartland rock, Springsteen energy, blue-collar pride"
               icon={<Music className="w-8 h-8 text-gray-700" />}
             />
             <WeekendDJCard
+              name="Paul Saunders"
+              show="The Long Road Home"
+              time="Saturday, 10am–2pm"
+              focus="FOUNDER - Creator of TrueFans CONNECT & TrueFans RADIO Network. Reflective americana, mission-driven"
+              icon={<Sun className="w-8 h-8 text-amber-600" />}
+            />
+            <WeekendDJCard
               name="Ezra Stone"
               show="Afterglow Americana"
-              time="Saturday, 6pm–10pm"
+              time="Saturday, 2pm–6pm"
               focus="Twilight introspection, evening stillness, melancholic beauty"
               icon={<Moon className="w-8 h-8 text-purple-600" />}
             />
             <WeekendDJCard
+              name="Levi Bridges"
+              show="The Melody Trail"
+              time="Saturday, 6pm–10pm"
+              focus="Outdoor enthusiast, hiking soundtrack, weekend kickoff energy"
+              icon={<Compass className="w-8 h-8 text-green-600" />}
+            />
+            <WeekendDJCard
               name="Sam Turnbull"
               show="Raw Tracks & Room Tones"
-              time="Sunday, 2pm–6pm"
+              time="Sunday, 6am–10am"
               focus="Live sessions, demos, lo-fi, the sound of making music"
               icon={<Disc className="w-8 h-8 text-red-600" />}
             />
             <WeekendDJCard
-              name="Levi Bridges"
-              show="The Melody Trail"
-              time="Friday, 6pm–10pm"
-              focus="Outdoor enthusiast, hiking soundtrack, weekend kickoff energy"
-              icon={<Compass className="w-8 h-8 text-green-600" />}
+              name="Ruby Finch"
+              show="Mountain Daybreak"
+              time="Sunday, 10am–2pm"
+              focus="Appalachian roots, bluegrass warmth, Sunday comfort"
+              icon={<Sun className="w-8 h-8 text-orange-500" />}
+            />
+            <WeekendDJCard
+              name="Mark Faulkner"
+              show="Backroads & Barrooms"
+              time="Sunday, 2pm–6pm"
+              focus="Texas country, jukebox wisdom, honky-tonk soul"
+              icon={<Music className="w-8 h-8 text-amber-700" />}
+            />
+            <WeekendDJCard
+              name="Iris Langley"
+              show="Evening Hymns"
+              time="Sunday, 6pm–10pm"
+              focus="Singer-songwriter intimacy, literary folk, twilight contemplation"
+              icon={<Moon className="w-8 h-8 text-indigo-600" />}
             />
           </div>
         </div>

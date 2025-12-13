@@ -14,6 +14,7 @@ import {
   SPONSOR_AD_SPOTS,
   SPONSOR_PRICING,
 } from "@/lib/calculations/station-capacity";
+import { SharedNav } from "@/components/shared-nav";
 
 export default function StationCapacityPage() {
   const daily = calculateDailyAirtime();
@@ -31,16 +32,12 @@ export default function StationCapacityPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Shared Navigation */}
+      <SharedNav />
+
       {/* Header */}
       <div className="border-b bg-white/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <Link
-            href="/admin"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Admin</span>
-          </Link>
           <div className="flex items-center space-x-3">
             <Radio className="w-8 h-8 text-blue-600" />
             <div>

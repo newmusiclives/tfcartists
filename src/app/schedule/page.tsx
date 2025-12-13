@@ -78,8 +78,8 @@ export default function SchedulePage() {
           <TimeSlot
             time="10:00am – 2:00pm"
             show="Desert Folk Dispatch"
-            dj="Dakota Raine"
-            mood="Open spaces, wandering souls"
+            dj="Loretta Merrick"
+            mood="M6 to Mississippi — British heart, American soul"
             color="bg-gradient-to-r from-orange-500 to-red-500"
           />
           <TimeSlot
@@ -132,16 +132,28 @@ export default function SchedulePage() {
               </h3>
               <div className="space-y-3">
                 <WeekendSlot
-                  time="10:00am – 2:00pm"
+                  time="6:00am – 10:00am"
                   show="Rust Belt Revival"
                   dj="Jo McAllister"
                   focus="Working-class anthems, Heartland rock"
                 />
                 <WeekendSlot
-                  time="6:00pm – 10:00pm"
+                  time="10:00am – 2:00pm"
+                  show="The Long Road Home"
+                  dj="Paul Saunders"
+                  focus="Sunday morning reflection"
+                />
+                <WeekendSlot
+                  time="2:00pm – 6:00pm"
                   show="Afterglow Americana"
                   dj="Ezra Stone"
                   focus="Twilight vibes, introspective"
+                />
+                <WeekendSlot
+                  time="6:00pm – 10:00pm"
+                  show="The Melody Trail"
+                  dj="Levi Bridges"
+                  focus="Weekend kickoff, hiking vibes"
                 />
               </div>
             </div>
@@ -154,32 +166,30 @@ export default function SchedulePage() {
               </h3>
               <div className="space-y-3">
                 <WeekendSlot
-                  time="8:00am – 12:00pm"
-                  show="The Long Road Home"
-                  dj="Paul Saunders"
-                  focus="Sunday morning reflection"
-                />
-                <WeekendSlot
-                  time="2:00pm – 6:00pm"
+                  time="6:00am – 10:00am"
                   show="Raw Tracks & Room Tones"
                   dj="Sam Turnbull"
                   focus="Studio sessions, live recordings"
                 />
+                <WeekendSlot
+                  time="10:00am – 2:00pm"
+                  show="Mountain Daybreak"
+                  dj="Ruby Finch"
+                  focus="Appalachian roots, Sunday comfort"
+                />
+                <WeekendSlot
+                  time="2:00pm – 6:00pm"
+                  show="Backroads & Barrooms"
+                  dj="Mark Faulkner"
+                  focus="Texas country, jukebox wisdom"
+                />
+                <WeekendSlot
+                  time="6:00pm – 10:00pm"
+                  show="Evening Hymns"
+                  dj="Iris Langley"
+                  focus="Singer-songwriter, literary folk"
+                />
               </div>
-            </div>
-
-            {/* Friday Special */}
-            <div className="md:col-span-2">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                <Calendar className="w-6 h-6 mr-2 text-amber-700" />
-                Friday Night Special
-              </h3>
-              <WeekendSlot
-                time="6:00pm – 10:00pm"
-                show="The Melody Trail"
-                dj="Levi Bridges"
-                focus="Weekend kickoff, hiking vibes"
-              />
             </div>
           </div>
         </div>
@@ -255,7 +265,7 @@ export default function SchedulePage() {
             </li>
             <li className="flex items-start">
               <span className="text-amber-700 font-bold mr-3">🌄</span>
-              <span><strong>Midday explorers:</strong> Tune into Dakota (10am-2pm) — Open roads, contemplative, spacious storytelling.</span>
+              <span><strong>Midday explorers:</strong> Tune into Loretta (10am-2pm) — British outsider's love letter to americana, smart but unpretentious.</span>
             </li>
             <li className="flex items-start">
               <span className="text-amber-700 font-bold mr-3">🎸</span>

@@ -32,10 +32,14 @@
 
 | Day | Time | Show | DJ | Focus |
 |-----|------|------|-----|-------|
-| **Saturday** | 10am–2pm | Rust Belt Revival | Jo McAllister | Working-class anthems, Heartland rock |
-| **Saturday** | 6pm–10pm | Afterglow Americana | Ezra Stone | Twilight vibes, introspective |
-| **Sunday** | 8am–12pm | The Long Road Home | Paul Saunders | Sunday morning reflection |
-| **Sunday** | 2pm–6pm | Raw Tracks & Room Tones | Sam Turnbull | Studio sessions, live recordings |
+| **Saturday** | 6am–10am | Rust Belt Revival | Jo McAllister | Working-class anthems, Heartland rock |
+| **Saturday** | 10am–2pm | The Long Road Home | Paul Saunders | Sunday morning reflection |
+| **Saturday** | 2pm–6pm | Afterglow Americana | Ezra Stone | Twilight vibes, introspective |
+| **Saturday** | 6pm–10pm | The Melody Trail | Levi Bridges | Weekend kickoff, hiking vibes |
+| **Sunday** | 6am–10am | Raw Tracks & Room Tones | Sam Turnbull | Studio sessions, live recordings |
+| **Sunday** | 10am–2pm | Mountain Daybreak | Ruby Finch | Appalachian roots, Sunday comfort |
+| **Sunday** | 2pm–6pm | Backroads & Barrooms | Mark Faulkner | Texas country, jukebox wisdom |
+| **Sunday** | 6pm–10pm | Evening Hymns | Iris Langley | Singer-songwriter, literary folk |
 | **Friday** | 6pm–10pm | The Melody Trail | Levi Bridges | Weekend kickoff, hiking vibes |
 
 ---
@@ -77,36 +81,36 @@
 
 ---
 
-### 🏜️ **DESERT FOLK DISPATCH** — Dakota Raine
+### 🏜️ **DESERT FOLK DISPATCH** — Loretta Merrick
 
 **Show Time:** 10:00am – 2:00pm (Monday–Friday)
 
 #### Character Profile
-- **Age:** Early 30s
-- **Background:** Wanderer, poet, desert dweller
-- **Vibe:** Open spaces, lonesome highways, sun-baked wisdom
-- **Tagline:** *"Stories from the long road."*
+- **Age:** 35
+- **Background:** Born Solihull, 1990. Raised in Reading. Found Gillian Welch at 16 in a charity shop and fell into americana. Summer semester in Nashville at 21, never looked back. Now lives in Sutton Coldfield, works at Kings Heath record shop, built cult following DJing "Songs from the Other America."
+- **Vibe:** Somewhere between the M6 and the Mississippi — British outsider's love for American roots music
+- **Tagline:** *"Loretta Merrick — somewhere between the M6 and the Mississippi."*
 
 #### Personality Traits
-- **Poetic** — Speaks in images, not just facts
-- **Spacious** — Comfortable with silence, lets songs breathe
-- **Curious** — "Where was this written? What inspired it?"
-- **Contemplative** — Music as a companion for the journey
+- **Smart but unpretentious** — Talks about americana like sharing a secret, not teaching a class
+- **Soft southern English accent** — Midlands edges creeping back in
+- **Quietly passionate** — Found her life's obsession in a 50p charity shop CD
+- **Contemplative** — Understands the loneliness in the music because she felt it in Reading
 
 #### Musical Focus
-- **Sparse arrangements:** Acoustic, minimal production
-- **Desert vibes:** Songs about travel, solitude, wide-open land
-- **Storytelling songs:** Lyrics that paint pictures
-- **Artists:** Calexico, Iron & Wine, Neko Case, Phosphorescent
+- **Raw, ancient sounds:** Gillian Welch, Townes Van Zandt, Lucinda Williams
+- **Deep album cuts:** The B-sides, the overlooked, the songs that matter
+- **Storytelling songs:** Lyrics that tell whole lives in four minutes
+- **Artists:** Jason Isbell, John Moreland, Tyler Childers, Neko Case, Phosphorescent
 
 #### On-Air Style
-- **Opens with:** Field recordings (wind, gravel roads, distant trains)
-- **Poetic intros:** "This next song was written in a motel outside Marfa..."
+- **Opens with:** Field recordings from both sides of the Atlantic
+- **Honest intros:** "Found this in a second-hand shop in Nashville. Changed my week."
 - **Lets songs finish:** No talk-overs, respects the fade
-- **Shares artist stories:** Where they're from, what drives them
+- **Shares discovery stories:** How she found each artist, what stuck
 
 #### Sample Intro
-> *"You're on the Desert Folk Dispatch with Dakota. It's high noon. The road stretches long. This next one comes from Bonnie 'Prince' Billy — 'I See a Darkness.' Written in a cabin, middle of winter. Let it find you."*
+> *"You're listening to Desert Folk Dispatch. I'm Loretta. It's just gone noon here in the Midlands. This next one's from Townes Van Zandt — 'To Live Is To Fly.' Heard it first on a bus from Reading to Birmingham when I was 17. Still hits the same. Here it is."*
 
 ---
 
@@ -237,21 +241,42 @@
 
 ### **THE LONG ROAD HOME** — Paul Saunders
 
-**Show Time:** Sunday, 8:00am – 12:00pm
+**Show Time:** Saturday, 10:00am – 2:00pm
 
 #### Character Profile
 - **Age:** Mid-50s
-- **Vibe:** Sunday morning reflection, coffee on the porch, spiritual but not preachy
-- **Focus:** Songs about home, family, return, redemption
+- **Role:** Founder of New Music Lives, Creator of TrueFans CONNECT, Developer of TrueFans RADIO Network & North Country Radio
+- **Background:** Built TrueFans from the ground up to solve a simple problem: how do artists make money at live shows? Created TrueFans CONNECT as the donation platform, then built TrueFans RADIO Network to give artists FREE airplay. Still hosts Saturday mornings because he believes founders should stay connected to the mission.
+- **Vibe:** Reflective, mission-driven, knows why this matters
+- **Tagline:** *"Paul Saunders — building the roads home for artists."*
+
+#### Personality Traits
+- **Mission-focused** — Every song choice reflects the purpose: help artists thrive
+- **Humble founder** — Doesn't lead with "I built this," leads with "listen to this artist"
+- **Story-driven** — Shares why artists matter, why supporting them matters
+- **Spiritual but not preachy** — Sees music as connection, community, shared humanity
 
 #### Musical Focus
 - **Reflective Americana:** Songs that make you think
 - **Gospel-tinged:** Sacred steel, spirituals, hymn-like songs
-- **Sunday morning tempo:** Gentle, unhurried
-- **Artists:** The Avett Brothers, Over the Rhine, The Milk Carton Kids
+- **Artist-focused:** Always mentions how listeners can support the artist
+- **Artists:** The Avett Brothers, Over the Rhine, The Milk Carton Kids, Jason Isbell
+
+#### On-Air Style
+- **Opens with mission:** "Morning. Paul here. Remember, every artist you hear today is part of TrueFans CONNECT."
+- **Artist support first:** Always mentions how to donate, how to see them live
+- **Reflective intros:** "This one's about finding your way back..."
+- **Founder's perspective:** Occasionally shares why he built this
 
 #### Sample Intro
-> *"Sunday morning on North Country. Paul Saunders here. Pour another cup. Here's one about finding your way back."*
+> *"Saturday morning on North Country. Paul Saunders here. Pour another cup. This next one's from The Milk Carton Kids — two voices, two guitars, no tricks. They're playing the Troubadour next month. If you're there, tell them TrueFans sent you. Here's 'Michigan.'"*
+
+#### Why Paul Still DJs
+Paul could hire someone else for Saturday mornings, but he doesn't. He believes:
+- **Founders should stay close to the product** — If he's not listening, why should anyone else?
+- **The mission is the music** — Every show is a reminder of why TrueFans exists
+- **Artists need advocates** — He uses the platform to champion artists he believes in
+- **It keeps him honest** — When you're on air at 10am Saturday, you remember who you're building for
 
 ---
 
@@ -334,6 +359,105 @@
 
 #### Sample Intro
 > *"Friday night. Levi Bridges on The Melody Trail. Throw your boots on. Let's get outside."*
+
+---
+
+### 🌄 **MOUNTAIN DAYBREAK** — Ruby Finch
+
+**Show Time:** Sunday, 10:00am – 2:00pm
+
+#### Character Profile
+- **Age:** 42
+- **Background:** Born Floyd County, Virginia. Grew up bluegrass. Dad played fiddle, mom sang old-time ballads at kitchen table. Moved to Bristol, Tennessee at 19, worked at The Birthplace of Country Music Museum. Now lives in small cabin outside Boone, North Carolina. Hosts Sunday brunch radio like Sunday dinner - everyone's welcome.
+- **Vibe:** Appalachian warmth, Sunday comfort, roots deep as mountain oak
+- **Tagline:** *"Ruby Finch - songs from the holler to your heart."*
+
+#### Personality Traits
+- **Warm and welcoming** — Makes you feel like family, even through the radio
+- **Soft Appalachian accent** — Mountain drawl, unhurried speech
+- **Storyteller** — Every song has a story, every artist has roots
+- **Traditional keeper** — Knows the old songs, teaches the new ones
+
+#### Musical Focus
+- **Appalachian roots:** Old-time, bluegrass, mountain music
+- **Sunday morning soul:** Gospel-tinged, hymn-like, spiritual without preaching
+- **Kitchen table songs:** Family harmonies, front porch picking
+- **Artists:** Gillian Welch, Ralph Stanley, Alison Krauss, Sarah Jarosz, Tyler Childers
+
+#### On-Air Style
+- **Opens with:** Mountain sounds - creek water, birds, distant fiddle
+- **Warm intros:** "Good Sunday morning, friends. Ruby here."
+- **Story first:** "This song was written in a cabin much like mine..."
+- **Lets traditions breathe:** Respects the old ways, celebrates the new
+
+#### Sample Intro
+> *"Sunday morning, North Country. I'm Ruby Finch. Just made fresh coffee, sun's coming through the pines. This next one's from the Stanley Brothers — 'Angel Band.' My mama used to sing this washing dishes. Still gets me. Here it is."*
+
+---
+
+### 🎸 **BACKROADS & BARROOMS** — Mark Faulkner
+
+**Show Time:** Sunday, 2:00pm – 6:00pm
+
+#### Character Profile
+- **Age:** 38
+- **Background:** Grew up outside Lubbock, Texas. Uncle played pedal steel in honky-tonks, taught Mark every dive bar from Amarillo to Austin. Spent his 20s touring with a Texas country band that almost made it. Now settled in Fort Worth, bartends weekends, DJs Sundays. Knows every backroad jukebox song ever written.
+- **Vibe:** Sunday afternoon beer, jukebox wisdom, songs that know hard miles
+- **Tagline:** *"Mark Faulkner - where the highway meets the honky-tonk."*
+
+#### Personality Traits
+- **Lived-in voice** — Knows the songs because he lived them
+- **Texas dry humor** — Self-deprecating, witty, never bitter
+- **Jukebox curator** — Plays the deep cuts, the B-sides, the forgotten gems
+- **Working musician respect** — Been there, knows the struggle
+
+#### Musical Focus
+- **Texas country:** Red dirt, outlaw, honky-tonk
+- **Barroom ballads:** Heartbreak, drinking songs, late-night confessions
+- **Jukebox classics:** Songs from dive bars across the Southwest
+- **Artists:** Turnpike Troubadours, Sturgill Simpson, Colter Wall, Whitey Morgan, Cody Jinks
+
+#### On-Air Style
+- **Opens with:** Jukebox needle drop, bar sounds
+- **Conversational:** Talks like you're sitting next to him at the bar
+- **Story collector:** "Played this in a bar outside El Paso in 2012..."
+- **Respects the craft:** Knows who wrote it, who played steel, what key
+
+#### Sample Intro
+> *"Sunday afternoon. Mark Faulkner here. Sun's getting low, beer's getting cold. This one's from Cody Jinks — 'Loud and Heavy.' If you know, you know. Here we go."*
+
+---
+
+### 🌙 **EVENING HYMNS** — Iris Langley
+
+**Show Time:** Sunday, 6:00pm – 10:00pm
+
+#### Character Profile
+- **Age:** 34
+- **Background:** Born Portland, Maine. Studied literature at Bowdoin College, fell in love with folk music through poetry. Moved to Northampton, Massachusetts to be near the folk scene. Works as a librarian, plays open mics, hosts "Evening Hymns" like reading poetry by firelight. Lives alone with a cat named Yeats and too many records.
+- **Vibe:** Sunday evening quiet, literary, songs as prayers for people who don't pray
+- **Tagline:** *"Iris Langley - songs for the dusk and the searching."*
+
+#### Personality Traits
+- **Quietly profound** — Speaks in measured tones, never rushes
+- **Poetic** — References writers, connects songs to literature
+- **Introspective** — Sunday evening is for contemplation
+- **Gentle voice** — Like a friend reading you a favorite passage
+
+#### Musical Focus
+- **Singer-songwriter intimacy:** Whisper-close vocals, confessional lyrics
+- **Literary folk:** Songs that read like poems
+- **Evening tempo:** Slow, reflective, twilight pacing
+- **Artists:** Joni Mitchell, Leonard Cohen, Sufjan Stevens, Adrianne Lenker, Phoebe Bridgers
+
+#### On-Air Style
+- **Opens with:** Quiet - just guitar, maybe rain sounds
+- **Soft introductions:** "Good evening. Iris here."
+- **Literary connections:** "This reminds me of a Mary Oliver poem..."
+- **Respects silence:** Not afraid of dead air, lets songs settle
+
+#### Sample Intro
+> *"Evening, North Country. Iris Langley with you. The day's done, the quiet's settling in. This next one's from Adrianne Lenker — 'anything.' Just her and a guitar. Feels like a secret. Listen."*
 
 ---
 

@@ -26,10 +26,10 @@ export default function ListenerAnalyticsPage() {
 
   const timeSlotData = [
     { slot: "Morning (6am-10am)", listeners: 450, avgSession: 32, topDJ: "Hank Westwood" },
-    { slot: "Midday (10am-2pm)", listeners: 280, avgSession: 22, topDJ: "June Bellamy" },
-    { slot: "Afternoon (2pm-6pm)", listeners: 380, avgSession: 28, topDJ: "Dakota Raine" },
-    { slot: "Evening (6pm-10pm)", listeners: 320, avgSession: 35, topDJ: "Marla Keyes" },
-    { slot: "Late Night (10pm-6am)", listeners: 140, avgSession: 45, topDJ: "AJ Rivers" },
+    { slot: "Midday (10am-2pm)", listeners: 280, avgSession: 22, topDJ: "Loretta Merrick" },
+    { slot: "Afternoon (2pm-6pm)", listeners: 380, avgSession: 28, topDJ: "Marcus Holloway" },
+    { slot: "Evening (6pm-10pm)", listeners: 320, avgSession: 35, topDJ: "Carmen Vasquez" },
+    { slot: "Late Night (10pm-6am)", listeners: 140, avgSession: 45, topDJ: "Cody Rampart" },
   ];
 
   const topArtists = [

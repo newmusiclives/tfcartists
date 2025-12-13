@@ -56,10 +56,10 @@ NACR features a full roster of warm, narrative-driven DJs who embody the station
 - **Voice:** Gravel and warmth, like coffee and worn denim
 - **Tagline:** "Pour the coffee. Fire up the engine. Let's roll."
 
-#### 🏜️ **Desert Folk Dispatch** — Dakota Raine (10am–2pm)
-- **Vibe:** Open spaces, wanderers, storytellers
-- **Voice:** Poetic, spacious, sun-baked wisdom
-- **Tagline:** "Stories from the long road."
+#### 🏜️ **Desert Folk Dispatch** — Loretta Merrick (10am–2pm)
+- **Vibe:** British heart, American soul, transatlantic love letter to roots music
+- **Voice:** Smart but unpretentious, soft southern English accent, Midlands edges
+- **Tagline:** "Somewhere between the M6 and the Mississippi."
 
 #### 🎸 **The Deep Cuts Show** — Marcus "Doc" Holloway (2–6pm)
 - **Vibe:** Music historian, album-side cuts, vinyl nerd
@@ -478,7 +478,7 @@ This is a **lifestyle-business-friendly model:**
 
 1. **"North Country Nights" tee** — Black, desert sunset graphic
 2. **"Campfire Sessions" hoodie** — Rust/sienna, cozy fit
-3. **"Desert Folk Dispatch" tour tee** — Dakota Raine show merch
+3. **"Desert Folk Dispatch" tour tee** — Loretta Merrick show merch
 4. **Rope cap (rust horizon)** — Adjustable, vintage feel
 
 ### Accessories

@@ -52,7 +52,7 @@
 - **Feedback collection:** Test stream, app, UX
 
 #### Content Production
-- **DJ intro videos:** Meet Hank, Dakota, Doc, Carmen, Cody
+- **DJ intro videos:** Meet Hank, Loretta, Doc, Carmen, Cody
 - **Artist spotlight videos:** 10 featured artists
 - **Behind-the-scenes content:** How NACR works, AI teams intro
 - **Teaser trailers:** "Coming soon" social media campaign
@@ -258,7 +258,7 @@
 **Strategies:**
 - **Daily reminders:** Push notifications at peak listening times
 - **Streak tracking:** "You've listened 7 days in a row — keep it going!"
-- **Personalized DJ recommendations:** "We think you'll love Dakota Raine's show"
+- **Personalized DJ recommendations:** "We think you'll love Loretta Merrick's show"
 - **Listener rewards:** Badges, shout-outs, exclusive content for regulars
 - **Weekly themes:** "Texas Week", "Women in Americana", etc.
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, DollarSign, Users, TrendingUp, Calculator, User } from "lucide-react";
 import { AIRPLAY_TIER_SHARES } from "@/lib/calculations/station-capacity";
+import { SharedNav } from "@/components/shared-nav";
 
 export default function PoolCalculatorPage() {
   // Based on Master Overview: Harper generates $7,800/month, 80% = $6,240 to artist pool
@@ -52,16 +53,12 @@ export default function PoolCalculatorPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+      {/* Shared Navigation */}
+      <SharedNav />
+
       {/* Header */}
       <div className="border-b bg-white/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <Link
-            href="/riley"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Riley Dashboard</span>
-          </Link>
           <div className="flex items-center space-x-3">
             <Calculator className="w-8 h-8 text-green-600" />
             <div>

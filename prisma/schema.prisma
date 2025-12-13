@@ -742,8 +742,8 @@ model DJ {
   updatedAt   DateTime @updatedAt
 
   // Basic info
-  name        String   // "Hank Westwood", "Dakota Raine", etc.
-  slug        String   @unique // "hank-westwood", "dakota-raine"
+  name        String   // "Hank Westwood", "Loretta Merrick", etc.
+  slug        String   @unique // "hank-westwood", "loretta-merrick"
   fullName    String?  // Full character name if different
 
   // Character profile
