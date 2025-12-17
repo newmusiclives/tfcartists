@@ -217,3 +217,23 @@ export const SPONSORSHIP_PACKAGES = {
     ],
   },
 } as const;
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+/**
+ * Format conversation history for AI context
+ */
+export function formatConversationHistory(
+  messages: Array<{ role: string; content: string }>
+): string {
+  if (messages.length === 0) return "This is the first message in the conversation.";
+
+  return messages
+    .map((m) => {
+      const speaker = m.role === "harper" ? "You (Harper)" : "Sponsor";
+      return `${speaker}: ${m.content}`;
+    })
+    .join("\n");
+}

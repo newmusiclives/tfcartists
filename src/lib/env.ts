@@ -14,7 +14,7 @@ const envSchema = z.object({
   // AI Providers
   OPENAI_API_KEY: z.string().optional(),
   ANTHROPIC_API_KEY: z.string().optional(),
-  AI_PROVIDER: z.enum(["openai", "anthropic"]).default("openai"),
+  DEFAULT_AI_PROVIDER: z.enum(["openai", "claude"]).default("claude"),
 
   // Communication (optional for now, required for production)
   TWILIO_ACCOUNT_SID: z.string().optional(),
@@ -22,6 +22,19 @@ const envSchema = z.object({
   TWILIO_PHONE_NUMBER: z.string().optional(),
   SENDGRID_API_KEY: z.string().optional(),
   INSTAGRAM_ACCESS_TOKEN: z.string().optional(),
+
+  // Manifest Financial (payment processing)
+  MANIFEST_API_KEY: z.string().optional(),
+  MANIFEST_WEBHOOK_SECRET: z.string().optional(),
+
+  // Social Media Discovery
+  TIKTOK_API_KEY: z.string().optional(),
+  SPOTIFY_CLIENT_ID: z.string().optional(),
+  SPOTIFY_CLIENT_SECRET: z.string().optional(),
+
+  // Voice AI (Harper's calls)
+  VAPI_API_KEY: z.string().optional(),
+  VAPI_PHONE_NUMBER: z.string().optional(),
 
   // NextAuth (optional for now, required for production)
   NEXTAUTH_SECRET: z.string().optional(),
@@ -33,9 +46,17 @@ const envSchema = z.object({
   HARPER_PASSWORD: z.string().optional(),
   ELLIOT_PASSWORD: z.string().optional(),
 
+  // Automation & Cron
+  CRON_SECRET: z.string().optional(),
+  RILEY_ACTIVE: z.string().optional(),
+  RILEY_MAX_OUTREACH_PER_DAY: z.string().optional(),
+
   // Rate Limiting (optional - uses in-memory in development)
   UPSTASH_REDIS_REST_URL: z.string().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+
+  // Error Monitoring
+  SENTRY_DSN: z.string().optional(),
 
   // Node Environment
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),

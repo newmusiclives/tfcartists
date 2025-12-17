@@ -13,23 +13,23 @@ export async function GET(request: NextRequest) {
 
     // Sponsors by stage
     const sponsorsByStage = await Promise.all([
-      prisma.sponsor.count({ where: { stage: "DISCOVERY" } }),
-      prisma.sponsor.count({ where: { stage: "CONTACTED" } }),
-      prisma.sponsor.count({ where: { stage: "INTERESTED" } }),
-      prisma.sponsor.count({ where: { stage: "NEGOTIATING" } }),
-      prisma.sponsor.count({ where: { stage: "CLOSED" } }),
-      prisma.sponsor.count({ where: { stage: "ACTIVE" } }),
-      prisma.sponsor.count({ where: { stage: "CHURNED" } }),
+      prisma.sponsor.count({ where: { pipelineStage: "discovery" } }),
+      prisma.sponsor.count({ where: { pipelineStage: "contacted" } }),
+      prisma.sponsor.count({ where: { pipelineStage: "interested" } }),
+      prisma.sponsor.count({ where: { pipelineStage: "negotiating" } }),
+      prisma.sponsor.count({ where: { pipelineStage: "closed" } }),
+      prisma.sponsor.count({ where: { pipelineStage: "active" } }),
+      prisma.sponsor.count({ where: { pipelineStage: "churned" } }),
     ]);
 
     // Active sponsorships
     const activeSponsors = await prisma.sponsor.count({
-      where: { stage: { in: ["ACTIVE", "CLOSED"] } },
+      where: { pipelineStage: { in: ["ACTIVE", "CLOSED"] } },
     });
 
     // Calculate MRR (Monthly Recurring Revenue)
     const sponsors = await prisma.sponsor.findMany({
-      where: { stage: { in: ["ACTIVE", "CLOSED"] } },
+      where: { pipelineStage: { in: ["ACTIVE", "CLOSED"] } },
       select: { monthlyAmount: true },
     });
 
@@ -38,27 +38,27 @@ export async function GET(request: NextRequest) {
     // Revenue by tier
     const revenueByTier = await Promise.all([
       prisma.sponsor.aggregate({
-        where: { sponsorshipTier: "LOCAL_HERO", stage: { in: ["ACTIVE", "CLOSED"] } },
+        where: { sponsorshipTier: "LOCAL_HERO", pipelineStage: { in: ["ACTIVE", "CLOSED"] } },
         _sum: { monthlyAmount: true },
         _count: true,
       }),
       prisma.sponsor.aggregate({
-        where: { sponsorshipTier: "BRONZE", stage: { in: ["ACTIVE", "CLOSED"] } },
+        where: { sponsorshipTier: "BRONZE", pipelineStage: { in: ["ACTIVE", "CLOSED"] } },
         _sum: { monthlyAmount: true },
         _count: true,
       }),
       prisma.sponsor.aggregate({
-        where: { sponsorshipTier: "SILVER", stage: { in: ["ACTIVE", "CLOSED"] } },
+        where: { sponsorshipTier: "SILVER", pipelineStage: { in: ["ACTIVE", "CLOSED"] } },
         _sum: { monthlyAmount: true },
         _count: true,
       }),
       prisma.sponsor.aggregate({
-        where: { sponsorshipTier: "GOLD", stage: { in: ["ACTIVE", "CLOSED"] } },
+        where: { sponsorshipTier: "GOLD", pipelineStage: { in: ["ACTIVE", "CLOSED"] } },
         _sum: { monthlyAmount: true },
         _count: true,
       }),
       prisma.sponsor.aggregate({
-        where: { sponsorshipTier: "PLATINUM", stage: { in: ["ACTIVE", "CLOSED"] } },
+        where: { sponsorshipTier: "PLATINUM", pipelineStage: { in: ["ACTIVE", "CLOSED"] } },
         _sum: { monthlyAmount: true },
         _count: true,
       }),

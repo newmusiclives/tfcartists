@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
       select: {
         businessName: true,
         contactName: true,
-        stage: true,
+        pipelineStage: true,
         sponsorshipTier: true,
         lastContactedAt: true,
       },

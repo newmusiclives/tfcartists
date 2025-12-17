@@ -70,14 +70,14 @@ export default function DJsPage() {
             icon={<Coffee className="w-12 h-12 text-amber-700" />}
             color="bg-gradient-to-br from-amber-600 to-orange-600"
             age="Late 40s"
-            background="Former steel mill worker turned radio DJ"
-            vibe="Blue-collar optimism, calloused hands, warm coffee voice"
-            musicalFocus="Morning energy, acoustic-driven, working-class anthems"
+            background="Construction foreman by day, grew up on 90s country radio, discovered modern Americana through his daughter's Spotify"
+            vibe="Blue-collar heart with contemporary country soul, bridge between classic and modern"
+            musicalFocus="Contemporary country blend: Chris Stapleton, Zach Bryan, Tyler Childers mixed with classic working-class anthems"
             traits={[
-              "Grounded — Speaks to the working folks starting their day",
-              "Optimistic without being cheesy",
-              "Respectful of labor — Celebrates tradespeople, builders, makers",
-              "Brief and warm — Doesn't waste time, but always has heart"
+              "Grounded — Speaks to working folks starting their day, truck radio energy",
+              "Genre bridge — Loves both George Strait and Zach Bryan equally",
+              "Authenticity advocate — 'Real country, real stories, real people'",
+              "Morning motivation — Sets the tone with songs that make you want to work hard"
             ]}
           />
 
@@ -90,14 +90,14 @@ export default function DJsPage() {
             icon={<Compass className="w-12 h-12 text-orange-600" />}
             color="bg-gradient-to-br from-orange-500 to-red-500"
             age="35"
-            background="Born Solihull, raised Reading. Found Gillian Welch in charity shop at 16. Summer in Nashville at 21. Now lives Sutton Coldfield, works Kings Heath record shop."
-            vibe="British outsider's love for American roots music"
-            musicalFocus="Raw, ancient sounds — Gillian Welch, Townes, Lucinda, Isbell, John Moreland"
+            background="British expat, discovered Kacey Musgraves at 16, moved to Nashville at 25. Now champions the new wave of country storytellers from abroad."
+            vibe="Transatlantic country curator, connects UK and US modern Americana scenes"
+            musicalFocus="Contemporary country storytellers: Kacey Musgraves, Margo Price, Sierra Ferrell, Molly Tuttle, Brandi Carlile alongside classic influences"
             traits={[
-              "Smart but unpretentious — Talks about americana like sharing a secret",
-              "Soft southern English accent — Midlands edges creeping back in",
-              "Quietly passionate — Found her obsession in a 50p CD",
-              "Contemplative — Understands the loneliness in the music"
+              "Global perspective — Sees country music as universal storytelling, not just American",
+              "Soft English accent with Nashville twang — Musical code-switching",
+              "New traditionalist — Respects roots while championing modern voices",
+              "Discovery champion — Always breaking new artists from both sides of the Atlantic"
             ]}
           />
 
@@ -110,34 +110,34 @@ export default function DJsPage() {
             icon={<Disc className="w-12 h-12 text-purple-600" />}
             color="bg-gradient-to-br from-purple-600 to-indigo-600"
             age="Mid-50s"
-            background="Record store owner, music historian, vinyl collector"
-            vibe="Professor meets bartender, deep knowledge without pretension"
-            musicalFocus="Deep album cuts, vinyl-era thinking, cross-genre exploration"
+            background="Former A&R scout, discovered indie country artists before they broke. Now curates deep cuts across generations."
+            vibe="Genre historian who connects Merle Haggard to Zach Bryan, shows how country evolved"
+            musicalFocus="Cross-generational country: Sturgill Simpson, The War and Treaty, Colter Wall, mixed with deep album tracks from legends"
             traits={[
-              "Knowledgeable — Knows the B-sides, the covers, the deep cuts",
-              "Unpretentious — Shares knowledge generously, not condescendingly",
-              "Album-oriented — 'This song makes sense in context...'",
-              "Mentor energy — Helps listeners discover new (old) favorites"
+              "Timeline builder — Shows how today's country grew from yesterday's rebels",
+              "Story connector — 'Listen to how Zach Bryan channels Townes Van Zandt'",
+              "Artist champion — Broke artists early, still roots for underdogs",
+              "Album thinker — Plays full album sides, not just singles"
             ]}
           />
 
           {/* Carmen Vasquez */}
           <DJCard
             name="Carmen Vasquez"
-            show="Borderlands"
+            show="Evening Drive"
             time="6:00pm – 10:00pm"
-            tagline="Where the music crosses over."
+            tagline="Where today's country meets the highway."
             icon={<Globe className="w-12 h-12 text-rose-600" />}
             color="bg-gradient-to-br from-rose-600 to-pink-600"
             age="Late 30s"
-            background="Bilingual, border town roots, cultural bridge-builder"
-            vibe="Tex-Mex soul, cross-cultural warmth, storytelling in two languages"
-            musicalFocus="Cross-border sounds, bilingual artists, cultural fusion"
+            background="Portland-based music journalist turned DJ, spent a decade covering Nashville's indie country scene for alt-weeklies"
+            vibe="Prime time contemporary country curator, champions the genre's evolution"
+            musicalFocus="Modern country hits and deep cuts: Kacey Musgraves, Chris Stapleton, Maren Morris, Brothers Osborne, Elle King"
             traits={[
-              "Bilingual flow — Switches between English and Spanish naturally",
-              "Cultural pride — Celebrates border culture as its own identity",
-              "Warm and inclusive — 'There's room for everyone here'",
-              "Story-focused — Every song has cultural context"
+              "Music journalist ear — Knows the stories, the producers, the whole scene",
+              "Genre champion — Defends contemporary country as legitimate artistry",
+              "Prime time energy — Evening commute energy, ready for the night",
+              "Discovery advocate — Breaks new artists who deserve mainstream attention"
             ]}
           />
 
@@ -150,21 +150,21 @@ export default function DJsPage() {
             icon={<Moon className="w-12 h-12 text-indigo-600" />}
             color="bg-gradient-to-br from-indigo-700 to-slate-700"
             age="Early 40s"
-            background="Honky-tonk drifter, outlaw poet, late-night storyteller"
-            vibe="Whiskey-soaked wisdom, dive bar philosopher, neon-lit highways"
-            musicalFocus="Honky-tonk and outlaw country, late-night tempo, heartbreak songs"
+            background="Touring musician for 15 years, seen every dive bar from Austin to Asheville. Now champions the new outlaws."
+            vibe="Late-night confessional with the new generation of country rebels"
+            musicalFocus="Modern outlaw country: Zach Bryan, Ian Munsick, Cody Jinks, Flatland Cavalry, mixed with classic late-night heartbreakers"
             traits={[
-              "Outlaw spirit — Celebrates the renegades, the misfits, the wanderers",
-              "Late-night intimacy — Quieter energy, like talking to a friend at 1am",
-              "Storytelling focus — Songs about trouble, heartbreak, redemption",
-              "Poetic without being precious — 'This next one's for everyone still awake'"
+              "New outlaw champion — Connects Waylon's spirit to today's rebels",
+              "Lived experience — Knows the road life, the struggle, the 2am thoughts",
+              "Intimate storyteller — Shares the stories behind the songs",
+              "Genre rebel — Plays what feels real, not what charts say"
             ]}
           />
 
-          {/* RoboDJ */}
+          {/* Nocturn */}
           <DJCard
-            name="RoboDJ"
-            show="Overnight Automation"
+            name="Nocturn"
+            show="The Overnight"
             time="2:00am – 6:00am"
             tagline="Let the music play."
             icon={<Radio className="w-12 h-12 text-gray-600" />}
@@ -195,56 +195,56 @@ export default function DJsPage() {
               name="Jo McAllister"
               show="Rust Belt Revival"
               time="Saturday, 6am–10am"
-              focus="Heartland rock, Springsteen energy, blue-collar pride"
+              focus="Contemporary working-class country: Tyler Childers, Zach Bryan, The War and Treaty — blue-collar stories, modern sound"
               icon={<Music className="w-8 h-8 text-gray-700" />}
             />
             <WeekendDJCard
               name="Paul Saunders"
               show="The Long Road Home"
               time="Saturday, 10am–2pm"
-              focus="FOUNDER - Creator of TrueFans CONNECT & TrueFans RADIO Network. Reflective americana, mission-driven"
+              focus="FOUNDER - Creator of TrueFans CONNECT & TrueFans RADIO Network. Contemporary Americana storytellers, mission-driven music"
               icon={<Sun className="w-8 h-8 text-amber-600" />}
             />
             <WeekendDJCard
               name="Ezra Stone"
               show="Afterglow Americana"
               time="Saturday, 2pm–6pm"
-              focus="Twilight introspection, evening stillness, melancholic beauty"
+              focus="Modern melancholic country: Phoebe Bridgers, Noah Kahan, Kacey Musgraves' introspective side — twilight contemplation"
               icon={<Moon className="w-8 h-8 text-purple-600" />}
             />
             <WeekendDJCard
               name="Levi Bridges"
               show="The Melody Trail"
               time="Saturday, 6pm–10pm"
-              focus="Outdoor enthusiast, hiking soundtrack, weekend kickoff energy"
+              focus="Outdoor country anthems: Ian Munsick, Parker McCollum, Riley Green — weekend adventure soundtrack"
               icon={<Compass className="w-8 h-8 text-green-600" />}
             />
             <WeekendDJCard
               name="Sam Turnbull"
               show="Raw Tracks & Room Tones"
               time="Sunday, 6am–10am"
-              focus="Live sessions, demos, lo-fi, the sound of making music"
+              focus="Stripped-down modern country: acoustic sessions from Zach Bryan, Sierra Ferrell, Molly Tuttle — raw and authentic"
               icon={<Disc className="w-8 h-8 text-red-600" />}
             />
             <WeekendDJCard
               name="Ruby Finch"
               show="Mountain Daybreak"
               time="Sunday, 10am–2pm"
-              focus="Appalachian roots, bluegrass warmth, Sunday comfort"
+              focus="New traditional country: Molly Tuttle, Billy Strings, Sierra Ferrell — modern bluegrass meets contemporary Americana"
               icon={<Sun className="w-8 h-8 text-orange-500" />}
             />
             <WeekendDJCard
               name="Mark Faulkner"
               show="Backroads & Barrooms"
               time="Sunday, 2pm–6pm"
-              focus="Texas country, jukebox wisdom, honky-tonk soul"
+              focus="Modern Texas country: Cody Johnson, Parker McCollum, Flatland Cavalry — red dirt meets contemporary Nashville"
               icon={<Music className="w-8 h-8 text-amber-700" />}
             />
             <WeekendDJCard
               name="Iris Langley"
               show="Evening Hymns"
               time="Sunday, 6pm–10pm"
-              focus="Singer-songwriter intimacy, literary folk, twilight contemplation"
+              focus="Contemporary singer-songwriters: Maren Morris, Brandi Carlile, Jason Isbell — intimate storytelling for the modern era"
               icon={<Moon className="w-8 h-8 text-indigo-600" />}
             />
           </div>
@@ -413,11 +413,11 @@ function WeekendDJCard({
         {icon}
         <div>
           <h3 className="text-xl font-bold text-gray-900">{name}</h3>
-          <p className="text-sm font-medium text-gray-700">{show}</p>
+          <p className="text-base font-medium text-gray-700">{show}</p>
         </div>
       </div>
-      <p className="text-sm text-gray-600 mb-3">{time}</p>
-      <p className="text-sm text-gray-700">{focus}</p>
+      <p className="text-base text-gray-600 mb-3">{time}</p>
+      <p className="text-base text-gray-700">{focus}</p>
     </div>
   );
 }

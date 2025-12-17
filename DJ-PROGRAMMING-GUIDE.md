@@ -22,11 +22,11 @@
 | Time | Show | DJ | Mood |
 |------|------|-----|------|
 | **6:00am – 10:00am** | Sunrise & Steel | Hank Westwood | Morning ritual, working-class pride |
-| **10:00am – 2:00pm** | Desert Folk Dispatch | Dakota Raine | Open spaces, wandering souls |
-| **2:00pm – 6:00pm** | The Deep Cuts Show | Marcus "Doc" Holloway | Vinyl deep dives, album-side gems |
-| **6:00pm – 10:00pm** | Borderlands | Carmen Vasquez | Cross-cultural, bilingual storytelling |
-| **10:00pm – 2:00am** | Midnight Rodeo | Cody Rampart | Honky-tonk nights, outlaw country |
-| **2:00am – 6:00am** | RoboDJ | (Automated) | Minimal talk, pure flow |
+| **10:00am – 2:00pm** | Desert Folk Dispatch | Loretta Merrick | Contemporary country discovery |
+| **2:00pm – 6:00pm** | The Deep Cuts Show | Marcus "Doc" Holloway | Cross-generational deep cuts |
+| **6:00pm – 10:00pm** | Evening Drive | Carmen Vasquez | Prime time contemporary country |
+| **10:00pm – 2:00am** | Midnight Rodeo | Cody Rampart | Modern outlaw country nights |
+| **2:00am – 6:00am** | The Overnight | Nocturn | Minimal talk, pure flow |
 
 ### Weekend Schedule (Saturday & Sunday)
 
@@ -54,30 +54,30 @@
 
 #### Character Profile
 - **Age:** Late 40s
-- **Background:** Former steel mill worker turned radio DJ
-- **Vibe:** Blue-collar optimism, calloused hands, warm coffee voice
+- **Background:** Construction foreman by day, grew up on 90s country radio, discovered modern Americana through his daughter's Spotify
+- **Vibe:** Blue-collar heart with contemporary country soul, bridge between classic and modern
 - **Tagline:** *"Pour the coffee. Fire up the engine. Let's roll."*
 
 #### Personality Traits
-- **Grounded** — Speaks to the working folks starting their day
-- **Optimistic without being cheesy** — "Today's a good day to make something"
-- **Respectful of labor** — Celebrates tradespeople, builders, makers
-- **Brief and warm** — Doesn't waste time, but always has heart
+- **Grounded** — Speaks to working folks starting their day, truck radio energy
+- **Genre bridge** — Loves both George Strait and Zach Bryan equally
+- **Authenticity advocate** — "Real country, real stories, real people"
+- **Morning motivation** — Sets the tone with songs that make you want to work hard
 
 #### Musical Focus
-- **Morning energy:** Upbeat but not jarring
-- **Acoustic-driven:** Guitars, banjos, harmonica
-- **Working-class anthems:** Songs about struggle, pride, getting by
-- **Mix of classic and new:** Townes Van Zandt → Tyler Childers
+- **Contemporary country blend:** Chris Stapleton, Zach Bryan, Tyler Childers
+- **Working-class anthems:** Modern songs about blue-collar life and pride
+- **Cross-generational:** Connects 90s country radio to today's indie country
+- **Morning energy:** Upbeat, motivating, real stories
 
 #### On-Air Style
-- **Opens with sound:** Coffee pouring, steel clanging, morning birds
-- **Brief intros:** "This one's for everyone clocking in this morning."
-- **Weather and time checks:** Practical, helpful
-- **Closes with:** "Keep your head up. See you tomorrow."
+- **Opens with sound:** Coffee pouring, truck engine, morning birds
+- **Relatable intros:** "This one's for everyone heading to the job site this morning"
+- **Artist bridges:** "If you loved Dwight Yoakam, wait til you hear Colter Wall"
+- **Closes with:** "Work hard. See you tomorrow."
 
 #### Sample Intro
-> *"Morning, North Country. This is Hank. It's 6:47. The sun's just clearing the horizon, and the coffee's hot. Here's one from John Moreland about the long drive home. This is 'Break My Heart Sweetly.'"*
+> *"Morning, North Country. Hank here. It's 6:47, coffee's fresh. Here's Zach Bryan with 'Something in the Orange.' This one hits just like Townes used to. Here it is."*
 
 ---
 
@@ -87,30 +87,30 @@
 
 #### Character Profile
 - **Age:** 35
-- **Background:** Born Solihull, 1990. Raised in Reading. Found Gillian Welch at 16 in a charity shop and fell into americana. Summer semester in Nashville at 21, never looked back. Now lives in Sutton Coldfield, works at Kings Heath record shop, built cult following DJing "Songs from the Other America."
-- **Vibe:** Somewhere between the M6 and the Mississippi — British outsider's love for American roots music
+- **Background:** British expat, discovered Kacey Musgraves at 16, moved to Nashville at 25. Now champions the new wave of country storytellers from abroad.
+- **Vibe:** Transatlantic country curator, connects UK and US modern Americana scenes
 - **Tagline:** *"Loretta Merrick — somewhere between the M6 and the Mississippi."*
 
 #### Personality Traits
-- **Smart but unpretentious** — Talks about americana like sharing a secret, not teaching a class
-- **Soft southern English accent** — Midlands edges creeping back in
-- **Quietly passionate** — Found her life's obsession in a 50p charity shop CD
-- **Contemplative** — Understands the loneliness in the music because she felt it in Reading
+- **Global perspective** — Sees country music as universal storytelling, not just American
+- **Soft English accent with Nashville twang** — Musical code-switching
+- **New traditionalist** — Respects roots while championing modern voices
+- **Discovery champion** — Always breaking new artists from both sides of the Atlantic
 
 #### Musical Focus
-- **Raw, ancient sounds:** Gillian Welch, Townes Van Zandt, Lucinda Williams
-- **Deep album cuts:** The B-sides, the overlooked, the songs that matter
-- **Storytelling songs:** Lyrics that tell whole lives in four minutes
-- **Artists:** Jason Isbell, John Moreland, Tyler Childers, Neko Case, Phosphorescent
+- **Contemporary country storytellers:** Kacey Musgraves, Margo Price, Sierra Ferrell
+- **Modern traditionalists:** Molly Tuttle, Billy Strings, Sarah Jarosz
+- **Transatlantic blend:** UK country artists alongside American contemporaries
+- **Artists:** Brandi Carlile, The War and Treaty, Yola, Marcus King
 
 #### On-Air Style
-- **Opens with:** Field recordings from both sides of the Atlantic
-- **Honest intros:** "Found this in a second-hand shop in Nashville. Changed my week."
-- **Lets songs finish:** No talk-overs, respects the fade
-- **Shares discovery stories:** How she found each artist, what stuck
+- **Opens with:** Pedal steel guitar, modern production sounds
+- **Artist discovery:** "Just found this artist from Glasgow doing Nashville sound"
+- **Lets songs breathe:** Respects the production, minimal talk-overs
+- **Cultural connector:** Explains how country music is growing globally
 
 #### Sample Intro
-> *"You're listening to Desert Folk Dispatch. I'm Loretta. It's just gone noon here in the Midlands. This next one's from Townes Van Zandt — 'To Live Is To Fly.' Heard it first on a bus from Reading to Birmingham when I was 17. Still hits the same. Here it is."*
+> *"Desert Folk Dispatch. I'm Loretta. Just past noon. This next one's from Sierra Ferrell — 'Jeremiah.' She's bringing old-time country into 2025, and it's brilliant. Listen."*
 
 ---
 
@@ -120,63 +120,63 @@
 
 #### Character Profile
 - **Age:** Mid-50s
-- **Background:** Record store owner, music historian, vinyl collector
-- **Vibe:** Professor meets bartender, deep knowledge without pretension
+- **Background:** Former A&R scout, discovered indie country artists before they broke. Now curates deep cuts across generations.
+- **Vibe:** Genre historian who connects Merle Haggard to Zach Bryan, shows how country evolved
 - **Tagline:** *"The songs you forgot you loved."*
 
 #### Personality Traits
-- **Knowledgeable** — Knows the B-sides, the covers, the deep cuts
-- **Unpretentious** — Shares knowledge generously, not condescendingly
-- **Album-oriented** — "This song makes sense in the context of Side B..."
-- **Mentor energy** — Helps listeners discover new (old) favorites
+- **Timeline builder** — Shows how today's country grew from yesterday's rebels
+- **Story connector** — "Listen to how Zach Bryan channels Townes Van Zandt"
+- **Artist champion** — Broke artists early, still roots for underdogs
+- **Album thinker** — Plays full album sides, not just singles
 
 #### Musical Focus
-- **Deep album cuts:** Not the hits, the hidden gems
-- **Vinyl-era thinking:** Side A vs. Side B, sequencing matters
-- **Cross-genre:** Americana, folk, alt-country, roots rock, some blues
-- **Artists:** Emmylou Harris, Steve Earle, Lucinda Williams, Jason Isbell
+- **Cross-generational country:** Sturgill Simpson, The War and Treaty, Colter Wall
+- **Deep album tracks:** The songs that should have been singles
+- **Genre evolution:** Shows lineage from outlaw country to modern indie country
+- **Artists:** Jason Isbell, Margo Price, Tyler Childers, Chris Stapleton
 
 #### On-Air Style
-- **Opens with:** Vinyl crackle, needle drop sound
-- **Educational but brief:** "This is from her 1987 album, recorded in Nashville..."
-- **Connects songs:** "This pairs well with what we just heard because..."
-- **Encourages discovery:** "Go find the full album. You won't regret it."
+- **Opens with:** Vinyl crackle meets digital warmth
+- **Historical context:** "This is where Tyler Childers got that sound..."
+- **Connects eras:** Plays classic followed by modern interpretation
+- **Discovery focus:** "I signed this artist in 2015. Now listen to them."
 
 #### Sample Intro
-> *"Doc Holloway here on The Deep Cuts Show. We're pulling a gem from Gillian Welch's 'Soul Journey,' track seven: 'Wrecking Ball.' This one didn't get the radio play, but it should have. Close your eyes and listen."*
+> *"Doc Holloway here. Deep Cuts. This is Colter Wall — 'Kate McCannon.' If you loved Marty Robbins' gunfighter ballads, you'll love this. Same tradition, new generation. Here it is."*
 
 ---
 
-### 🌆 **BORDERLANDS** — Carmen Vasquez
+### 🌆 **EVENING DRIVE** — Carmen Vasquez
 
 **Show Time:** 6:00pm – 10:00pm (Monday–Friday)
 
 #### Character Profile
 - **Age:** Late 30s
-- **Background:** Bilingual, border town roots, cultural bridge-builder
-- **Vibe:** Tex-Mex soul, cross-cultural warmth, storytelling in two languages
-- **Tagline:** *"Where the music crosses over."*
+- **Background:** Portland-based music journalist turned DJ, spent a decade covering Nashville's indie country scene for alt-weeklies
+- **Vibe:** Prime time contemporary country curator, champions the genre's evolution
+- **Tagline:** *"Where today's country meets the highway."*
 
 #### Personality Traits
-- **Bilingual flow** — Switches between English and Spanish naturally
-- **Cultural pride** — Celebrates border culture as its own identity
-- **Warm and inclusive** — "There's room for everyone here"
-- **Story-focused** — Every song has cultural context
+- **Music journalist ear** — Knows the stories, the producers, the whole scene
+- **Genre champion** — Defends contemporary country as legitimate artistry
+- **Prime time energy** — Evening commute energy, ready for the night
+- **Discovery advocate** — Breaks new artists who deserve mainstream attention
 
 #### Musical Focus
-- **Cross-border sounds:** Tex-Mex, Tejano, border ballads, Americana with Latin influence
-- **Bilingual artists:** Songs in English, Spanish, or both
-- **Cultural fusion:** Where country meets conjunto, folk meets ranchera
-- **Artists:** Los Lobos, Alejandro Escovedo, Carrie Rodriguez, Lila Downs
+- **Modern country hits and deep cuts:** Kacey Musgraves, Chris Stapleton, Maren Morris
+- **Contemporary scene:** Brothers Osborne, Elle King, Marcus King
+- **Evening drive energy:** Perfect for the commute home or night out
+- **Genre evolution:** Shows how modern country became diverse and interesting
 
 #### On-Air Style
-- **Opens with:** Accordion, bajo sexto, or border soundscapes
-- **Bilingual intros:** Seamlessly blends languages
-- **Cultural context:** "This corrido tells the story of..."
-- **Celebrates community:** Shout-outs to border towns, listeners
+- **Opens with:** Upbeat modern country production
+- **Journalist insight:** "This was produced by Dave Cobb in RCA Studio A..."
+- **Artist advocacy:** Defends and explains contemporary country's artistry
+- **Prime time flow:** High energy, keeps the evening moving
 
 #### Sample Intro
-> *"Buenas noches, North Country. This is Carmen on Borderlands. Tenemos una canción especial — 'Across the Borderline' by Ry Cooder and Freddy Fender. A song about crossing, about belonging, about home. Escucha."*
+> *"Evening, North Country. Carmen here. Prime time. This is Maren Morris — 'The Bones.' This is what contemporary country sounds like when it's done right. Here it is."*
 
 ---
 
@@ -186,38 +186,39 @@
 
 #### Character Profile
 - **Age:** Early 40s
-- **Background:** Honky-tonk drifter, outlaw poet, late-night storyteller
-- **Vibe:** Whiskey-soaked wisdom, dive bar philosopher, neon-lit highways
+- **Background:** Touring musician for 15 years, seen every dive bar from Austin to Asheville. Now champions the new outlaws.
+- **Vibe:** Late-night confessional with the new generation of country rebels
 - **Tagline:** *"The night belongs to the restless."*
 
 #### Personality Traits
-- **Outlaw spirit** — Celebrates the renegades, the misfits, the wanderers
-- **Late-night intimacy** — Quieter energy, like talking to a friend at 1am
-- **Storytelling focus** — Songs about trouble, heartbreak, redemption
-- **Poetic without being precious** — "This next one's for everyone still awake"
+- **New outlaw champion** — Connects Waylon's spirit to today's rebels
+- **Lived experience** — Knows the road life, the struggle, the 2am thoughts
+- **Intimate storyteller** — Shares the stories behind the songs
+- **Genre rebel** — Plays what feels real, not what charts say
 
 #### Musical Focus
-- **Honky-tonk and outlaw country:** Waylon, Willie, Townes, Blaze Foley
-- **Late-night tempo:** Slower, more contemplative
-- **Heartbreak and whiskey:** Songs about loss, longing, the long night
-- **Modern outlaws:** Sturgill Simpson, Colter Wall, Margo Price
+- **Modern outlaw country:** Zach Bryan, Ian Munsick, Cody Jinks, Flatland Cavalry
+- **Late-night confessionals:** Contemporary heartbreak songs with depth
+- **Road songs:** Modern highway anthems and touring life stories
+- **Cross-generation:** Waylon Jennings followed by Zach Bryan, showing the lineage
 
 #### On-Air Style
-- **Opens with:** Neon hum, distant highway, lone harmonica
-- **Minimal talk:** Let the songs do the work
-- **Occasional stories:** "I once heard Blaze Foley play this in a bar in Austin..."
-- **Closes quietly:** "Stay safe out there. See you on the other side."
+- **Opens with:** Distant highway sounds, acoustic guitar strum
+- **Road stories:** "Played this song in a bar outside Lubbock last year..."
+- **Minimal production:** Raw, honest, late-night intimacy
+- **Closes quietly:** "Keep driving. See you tomorrow night."
 
 #### Sample Intro
-> *"Midnight Rodeo. Cody here. It's 12:38. The highway's empty. The bottle's half-full. Here's one from Guy Clark — 'Desperados Waiting for a Train.' For everyone still driving."*
+> *"Midnight Rodeo. Cody here. It's 12:38. The highway's quiet. This is Zach Bryan — 'Condemned.' For everyone still awake, still thinking, still driving. Here it is."*
 
 ---
 
-### 🤖 **ROBO DJ** (Automated)
+### 🤖 **NOCTURN** (Automated)
 
 **Show Time:** 2:00am – 6:00am (Monday–Friday)
 
 #### Character Profile
+- **Name:** Nocturn — the overnight voice
 - **Not a character** — Purely functional, minimal personality
 - **Purpose:** Keep music flowing during overnight hours
 
@@ -247,118 +248,118 @@
 - **Age:** Mid-50s
 - **Role:** Founder of New Music Lives, Creator of TrueFans CONNECT, Developer of TrueFans RADIO Network & North Country Radio
 - **Background:** Built TrueFans from the ground up to solve a simple problem: how do artists make money at live shows? Created TrueFans CONNECT as the donation platform, then built TrueFans RADIO Network to give artists FREE airplay. Still hosts Saturday mornings because he believes founders should stay connected to the mission.
-- **Vibe:** Reflective, mission-driven, knows why this matters
+- **Vibe:** Reflective, mission-driven, champions contemporary artists making real music
 - **Tagline:** *"Paul Saunders — building the roads home for artists."*
 
 #### Personality Traits
 - **Mission-focused** — Every song choice reflects the purpose: help artists thrive
 - **Humble founder** — Doesn't lead with "I built this," leads with "listen to this artist"
-- **Story-driven** — Shares why artists matter, why supporting them matters
-- **Spiritual but not preachy** — Sees music as connection, community, shared humanity
+- **Contemporary advocate** — Champions today's storytellers carrying the tradition forward
+- **Community builder** — Sees music as connection, shared experience
 
 #### Musical Focus
-- **Reflective Americana:** Songs that make you think
-- **Gospel-tinged:** Sacred steel, spirituals, hymn-like songs
-- **Artist-focused:** Always mentions how listeners can support the artist
-- **Artists:** The Avett Brothers, Over the Rhine, The Milk Carton Kids, Jason Isbell
+- **Contemporary Americana storytellers:** The War and Treaty, Brandi Carlile, Jason Isbell
+- **Mission-aligned artists:** Musicians building sustainable careers outside mainstream
+- **Reflective country:** Songs about journey, home, purpose
+- **Artists:** Margo Price, Tyler Childers, Sierra Ferrell, Zach Bryan
 
 #### On-Air Style
-- **Opens with mission:** "Morning. Paul here. Remember, every artist you hear today is part of TrueFans CONNECT."
-- **Artist support first:** Always mentions how to donate, how to see them live
-- **Reflective intros:** "This one's about finding your way back..."
-- **Founder's perspective:** Occasionally shares why he built this
+- **Opens with mission:** "Saturday morning. Paul here. Every artist you hear is building a career on TrueFans CONNECT."
+- **Artist support first:** Always mentions how to support, how to see them live
+- **Story-driven:** "This artist played to 15 people in 2019. Now listen to them..."
+- **Founder's heart:** Shares why independent music matters
 
 #### Sample Intro
-> *"Saturday morning on North Country. Paul Saunders here. Pour another cup. This next one's from The Milk Carton Kids — two voices, two guitars, no tricks. They're playing the Troubadour next month. If you're there, tell them TrueFans sent you. Here's 'Michigan.'"*
+> *"Saturday morning on North Country. Paul Saunders here. This next one's from The War and Treaty — 'That's How Love Is Made.' Two voices, one story, building it their way. They're on TrueFans CONNECT. Support them. Here it is."*
 
 #### Why Paul Still DJs
 Paul could hire someone else for Saturday mornings, but he doesn't. He believes:
 - **Founders should stay close to the product** — If he's not listening, why should anyone else?
-- **The mission is the music** — Every show is a reminder of why TrueFans exists
-- **Artists need advocates** — He uses the platform to champion artists he believes in
-- **It keeps him honest** — When you're on air at 10am Saturday, you remember who you're building for
+- **The mission is the music** — Every show reminds him why TrueFans exists
+- **Artists need advocates** — He champions contemporary artists building real careers
+- **It keeps him honest** — Saturday mornings remind him who he's building for
 
 ---
 
 ### **RUST BELT REVIVAL** — Jo McAllister
 
-**Show Time:** Saturday, 10:00am – 2:00pm
+**Show Time:** Saturday, 6:00am – 10:00am
 
 #### Character Profile
 - **Age:** Late 40s
-- **Background:** From the industrial Midwest, working-class roots
-- **Vibe:** Heartland rock, Springsteen energy, blue-collar pride
-- **Focus:** Songs about factories, struggle, resilience, American Dream
+- **Background:** From the industrial Midwest, working-class roots, bridges heartland rock with modern country
+- **Vibe:** Contemporary working-class country with Springsteen's heart
+- **Focus:** Modern blue-collar anthems from Tyler Childers to Zach Bryan
 
 #### Musical Focus
-- **Heartland rock:** Bruce Springsteen, John Mellencamp, Tom Petty
-- **Working-class anthems:** Songs about labor, pride, survival
-- **Driving rhythms:** More energetic than weekday shows
-- **Modern Heartland:** The Gaslight Anthem, The War on Drugs
+- **Contemporary working-class country:** Tyler Childers, Zach Bryan, The War and Treaty
+- **Modern heartland:** Artists telling blue-collar stories with country sounds
+- **Driving Saturday energy:** Upbeat, motivating, weekend kickoff
+- **Cross-genre:** Where heartland rock meets modern country
 
 #### Sample Intro
-> *"Saturday on North Country. Jo McAllister with Rust Belt Revival. Here's one for everyone who's ever punched a clock and still believed in something better."*
+> *"Saturday morning on North Country. Jo McAllister with Rust Belt Revival. Here's Tyler Childers — 'Long Violent History.' For everyone who works hard and still believes. Here it is."*
 
 ---
 
 ### **AFTERGLOW AMERICANA** — Ezra Stone
 
-**Show Time:** Saturday, 6:00pm – 10:00pm
+**Show Time:** Saturday, 2:00pm – 6:00pm
 
 #### Character Profile
 - **Age:** Early 30s
-- **Vibe:** Twilight introspection, evening stillness, melancholic beauty
-- **Focus:** Songs for winding down, reflecting, letting go
+- **Vibe:** Modern melancholic country, twilight introspection for the streaming generation
+- **Focus:** Contemporary introspective country: Phoebe Bridgers, Noah Kahan, Kacey Musgraves
 
 #### Musical Focus
-- **Twilight tempo:** Slow, spacious, contemplative
-- **Melancholic beauty:** Heartbreak, longing, bittersweet
-- **Cinematic soundscapes:** Ambient Americana, atmospheric
-- **Artists:** Bon Iver, The National, Phoebe Bridgers, Sufjan Stevens
+- **Modern melancholic country:** Phoebe Bridgers, Noah Kahan, Kacey Musgraves' introspective side
+- **Indie country crossover:** Where indie folk meets contemporary country
+- **Afternoon contemplation:** Reflective, emotional, honest
+- **Artists:** Zach Bryan (slow songs), Sierra Ferrell (ballads), Adrianne Lenker
 
 #### Sample Intro
-> *"Saturday evening. Ezra Stone here. The day's winding down. Here's something for the quiet hours."*
+> *"Saturday afternoon. Ezra Stone here with Afterglow Americana. This is Noah Kahan — 'Stick Season.' Modern country heartbreak. Here it is."*
 
 ---
 
 ### **RAW TRACKS & ROOM TONES** — Sam Turnbull
 
-**Show Time:** Sunday, 2:00pm – 6:00pm
+**Show Time:** Sunday, 6:00am – 10:00am
 
 #### Character Profile
 - **Age:** Mid-30s
-- **Background:** Recording engineer, studio nerd, live sound enthusiast
-- **Vibe:** Behind-the-scenes, studio magic, the sound of making music
-- **Focus:** Live recordings, demos, lo-fi, room ambience
+- **Background:** Recording engineer, studio nerd, champions stripped-down modern country
+- **Vibe:** Behind-the-scenes of contemporary country, the raw takes
+- **Focus:** Acoustic sessions from Zach Bryan, Sierra Ferrell, Molly Tuttle
 
 #### Musical Focus
-- **Live sessions:** In-studio performances, concert recordings
-- **Demos and lo-fi:** Rough cuts, early versions, raw emotion
-- **Production talk:** "Listen to how the room sounds on this one..."
-- **Artists:** All genres, focus on the recording itself
+- **Stripped-down modern country:** Acoustic sessions, live takes, raw performances
+- **Contemporary artists unplugged:** Zach Bryan, Sierra Ferrell, Molly Tuttle
+- **Production focus:** "One mic, one take, listen to the room..."
+- **Raw authenticity:** Lo-fi country, demos, the sound before polish
 
 #### Sample Intro
-> *"Sam Turnbull with Raw Tracks. This next one was recorded in a barn outside Nashville, one mic, one take. You can hear the floorboards creak. Here's what happened."*
+> *"Sunday morning. Sam Turnbull with Raw Tracks. This is Sierra Ferrell, live from her living room, one mic. You can hear everything. Here's 'In Dreams.'"*
 
 ---
 
 ### **THE MELODY TRAIL** — Levi Bridges
 
-**Show Time:** Friday, 6:00pm – 10:00pm
+**Show Time:** Saturday, 6:00pm – 10:00pm
 
 #### Character Profile
 - **Age:** Late 20s
-- **Vibe:** Outdoor enthusiast, hiking soundtrack, campfire songs
-- **Focus:** Songs for the trail, for wandering, for being outside
+- **Vibe:** Outdoor country anthems, weekend adventure energy
+- **Focus:** Modern country for hiking, camping, weekend adventures
 
 #### Musical Focus
-- **Acoustic-driven:** Guitars, banjos, mandolins
-- **Hiking/camping vibes:** Songs about nature, wandering, freedom
-- **Weekend kickoff energy:** Excited for adventure
-- **Artists:** The Head and the Heart, Shakey Graves, Mandolin Orange
+- **Outdoor country anthems:** Ian Munsick, Parker McCollum, Riley Green
+- **Weekend adventure soundtrack:** Songs about freedom, open roads, mountain life
+- **Contemporary camping music:** Modern country with outdoor soul
+- **Saturday night energy:** Upbeat, excited, ready to explore
 
 #### Sample Intro
-> *"Friday night. Levi Bridges on The Melody Trail. Throw your boots on. Let's get outside."*
+> *"Saturday night. Levi Bridges on The Melody Trail. Here's Ian Munsick — 'Long Haul.' Weekend adventure starts now. Let's go."*
 
 ---
 
@@ -368,30 +369,30 @@ Paul could hire someone else for Saturday mornings, but he doesn't. He believes:
 
 #### Character Profile
 - **Age:** 42
-- **Background:** Born Floyd County, Virginia. Grew up bluegrass. Dad played fiddle, mom sang old-time ballads at kitchen table. Moved to Bristol, Tennessee at 19, worked at The Birthplace of Country Music Museum. Now lives in small cabin outside Boone, North Carolina. Hosts Sunday brunch radio like Sunday dinner - everyone's welcome.
-- **Vibe:** Appalachian warmth, Sunday comfort, roots deep as mountain oak
+- **Background:** Born Floyd County, Virginia. Grew up bluegrass. Now champions the new traditional country movement — Molly Tuttle, Billy Strings, Sierra Ferrell. Lives outside Boone, North Carolina. Hosts Sunday brunch radio like Sunday dinner - everyone's welcome.
+- **Vibe:** New traditional country, Appalachian roots meet modern bluegrass
 - **Tagline:** *"Ruby Finch - songs from the holler to your heart."*
 
 #### Personality Traits
-- **Warm and welcoming** — Makes you feel like family, even through the radio
+- **Warm and welcoming** — Makes you feel like family through the radio
 - **Soft Appalachian accent** — Mountain drawl, unhurried speech
-- **Storyteller** — Every song has a story, every artist has roots
-- **Traditional keeper** — Knows the old songs, teaches the new ones
+- **New traditionalist** — Honors roots, celebrates contemporary carriers
+- **Bridge builder** — Connects Ralph Stanley to Billy Strings
 
 #### Musical Focus
-- **Appalachian roots:** Old-time, bluegrass, mountain music
-- **Sunday morning soul:** Gospel-tinged, hymn-like, spiritual without preaching
-- **Kitchen table songs:** Family harmonies, front porch picking
-- **Artists:** Gillian Welch, Ralph Stanley, Alison Krauss, Sarah Jarosz, Tyler Childers
+- **New traditional country:** Molly Tuttle, Billy Strings, Sierra Ferrell
+- **Modern bluegrass:** Contemporary pickers keeping traditions alive
+- **Sunday morning soul:** Gospel-tinged modern country
+- **Artists:** Sarah Jarosz, Tyler Childers, Nickel Creek, The SteelDrivers
 
 #### On-Air Style
-- **Opens with:** Mountain sounds - creek water, birds, distant fiddle
+- **Opens with:** Mountain sounds mixed with modern banjo
 - **Warm intros:** "Good Sunday morning, friends. Ruby here."
-- **Story first:** "This song was written in a cabin much like mine..."
-- **Lets traditions breathe:** Respects the old ways, celebrates the new
+- **Tradition connector:** "Ralph Stanley would've loved this..."
+- **Celebrates evolution:** Old ways living in new artists
 
 #### Sample Intro
-> *"Sunday morning, North Country. I'm Ruby Finch. Just made fresh coffee, sun's coming through the pines. This next one's from the Stanley Brothers — 'Angel Band.' My mama used to sing this washing dishes. Still gets me. Here it is."*
+> *"Sunday morning, North Country. I'm Ruby Finch. Coffee's fresh. This next one's from Billy Strings — 'Dust in a Baggie.' Appalachian music alive in 2025. My daddy would've loved this. Here it is."*
 
 ---
 
@@ -401,30 +402,30 @@ Paul could hire someone else for Saturday mornings, but he doesn't. He believes:
 
 #### Character Profile
 - **Age:** 38
-- **Background:** Grew up outside Lubbock, Texas. Uncle played pedal steel in honky-tonks, taught Mark every dive bar from Amarillo to Austin. Spent his 20s touring with a Texas country band that almost made it. Now settled in Fort Worth, bartends weekends, DJs Sundays. Knows every backroad jukebox song ever written.
-- **Vibe:** Sunday afternoon beer, jukebox wisdom, songs that know hard miles
+- **Background:** Grew up outside Lubbock, Texas. Uncle played pedal steel in honky-tonks. Spent his 20s touring red dirt circuit. Now settled in Fort Worth, bartends weekends, DJs Sundays. Champions modern Texas country.
+- **Vibe:** Sunday afternoon beer, modern Texas country, jukebox wisdom
 - **Tagline:** *"Mark Faulkner - where the highway meets the honky-tonk."*
 
 #### Personality Traits
 - **Lived-in voice** — Knows the songs because he lived them
 - **Texas dry humor** — Self-deprecating, witty, never bitter
-- **Jukebox curator** — Plays the deep cuts, the B-sides, the forgotten gems
+- **Modern jukebox curator** — Plays today's Texas country hits
 - **Working musician respect** — Been there, knows the struggle
 
 #### Musical Focus
-- **Texas country:** Red dirt, outlaw, honky-tonk
-- **Barroom ballads:** Heartbreak, drinking songs, late-night confessions
-- **Jukebox classics:** Songs from dive bars across the Southwest
-- **Artists:** Turnpike Troubadours, Sturgill Simpson, Colter Wall, Whitey Morgan, Cody Jinks
+- **Modern Texas country:** Cody Johnson, Parker McCollum, Flatland Cavalry
+- **Red dirt evolution:** Contemporary Texas country scene
+- **Barroom ready:** Songs that belong on a Sunday afternoon jukebox
+- **Artists:** Cody Jinks, Koe Wetzel, Wade Bowen, Randy Rogers Band
 
 #### On-Air Style
 - **Opens with:** Jukebox needle drop, bar sounds
-- **Conversational:** Talks like you're sitting next to him at the bar
-- **Story collector:** "Played this in a bar outside El Paso in 2012..."
-- **Respects the craft:** Knows who wrote it, who played steel, what key
+- **Conversational:** Talks like you're at the bar with him
+- **Scene stories:** "Saw Parker play this in a bar outside Lubbock in 2018..."
+- **Respects the craft:** Knows who wrote it, who produced it
 
 #### Sample Intro
-> *"Sunday afternoon. Mark Faulkner here. Sun's getting low, beer's getting cold. This one's from Cody Jinks — 'Loud and Heavy.' If you know, you know. Here we go."*
+> *"Sunday afternoon. Mark Faulkner here. Beer's cold, sun's getting low. This is Parker McCollum — 'Handle on You.' Texas country, 2025. Here we go."*
 
 ---
 
@@ -434,30 +435,30 @@ Paul could hire someone else for Saturday mornings, but he doesn't. He believes:
 
 #### Character Profile
 - **Age:** 34
-- **Background:** Born Portland, Maine. Studied literature at Bowdoin College, fell in love with folk music through poetry. Moved to Northampton, Massachusetts to be near the folk scene. Works as a librarian, plays open mics, hosts "Evening Hymns" like reading poetry by firelight. Lives alone with a cat named Yeats and too many records.
-- **Vibe:** Sunday evening quiet, literary, songs as prayers for people who don't pray
+- **Background:** Born Portland, Maine. Studied literature at Bowdoin College. Fell in love with singer-songwriters — from Joni Mitchell to Maren Morris. Works as a librarian, plays open mics, champions contemporary storytellers. Lives in Northampton with a cat named Yeats.
+- **Vibe:** Sunday evening intimacy, contemporary singer-songwriters, songs as modern prayers
 - **Tagline:** *"Iris Langley - songs for the dusk and the searching."*
 
 #### Personality Traits
 - **Quietly profound** — Speaks in measured tones, never rushes
-- **Poetic** — References writers, connects songs to literature
-- **Introspective** — Sunday evening is for contemplation
-- **Gentle voice** — Like a friend reading you a favorite passage
+- **Literary lens** — Sees contemporary country as poetry set to music
+- **Genre connector** — Connects Joni Mitchell to Maren Morris
+- **Gentle presence** — Like a friend sharing favorite songs
 
 #### Musical Focus
-- **Singer-songwriter intimacy:** Whisper-close vocals, confessional lyrics
-- **Literary folk:** Songs that read like poems
-- **Evening tempo:** Slow, reflective, twilight pacing
-- **Artists:** Joni Mitchell, Leonard Cohen, Sufjan Stevens, Adrianne Lenker, Phoebe Bridgers
+- **Contemporary singer-songwriters:** Maren Morris, Brandi Carlile, Jason Isbell
+- **Intimate storytelling:** Modern country with literary depth
+- **Sunday evening tempo:** Slow, reflective, contemplative
+- **Artists:** Kacey Musgraves, Zach Bryan (ballads), Phoebe Bridgers, The War and Treaty
 
 #### On-Air Style
-- **Opens with:** Quiet - just guitar, maybe rain sounds
+- **Opens with:** Quiet guitar, maybe ambient sounds
 - **Soft introductions:** "Good evening. Iris here."
-- **Literary connections:** "This reminds me of a Mary Oliver poem..."
-- **Respects silence:** Not afraid of dead air, lets songs settle
+- **Literary connections:** "Maren Morris writes like a poet..."
+- **Respects space:** Lets songs breathe, not afraid of silence
 
 #### Sample Intro
-> *"Evening, North Country. Iris Langley with you. The day's done, the quiet's settling in. This next one's from Adrianne Lenker — 'anything.' Just her and a guitar. Feels like a secret. Listen."*
+> *"Evening, North Country. Iris Langley with you. The day's settling. This is Brandi Carlile — 'The Joke.' Contemporary country as prayer. Just listen."*
 
 ---
 

@@ -62,7 +62,7 @@ partners@truefansradio.com`;
     await prisma.sponsor.update({
       where: { id: sponsorId },
       data: {
-        stage: "CONTACTED",
+        pipelineStage: "contacted",
         lastContactedAt: new Date(),
         nextFollowUpAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days
       },

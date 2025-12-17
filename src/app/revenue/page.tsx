@@ -42,7 +42,8 @@ export default function RevenueBreakdownPage() {
     { name: "Urban Threads Boutique", tier: "PLATINUM", monthly: 500, adSpots: 60, status: "Active" },
   ];
 
-  // Sponsor tier summary  const sponsorTiers = {
+  // Sponsor tier summary
+  const sponsorTiers = {
     BRONZE: { count: 28, monthly: 100, adSpots: 10, total: 2800 },
     SILVER: { count: 35, monthly: 250, adSpots: 20, total: 8750 },
     GOLD: { count: 17, monthly: 400, adSpots: 40, total: 6800 },

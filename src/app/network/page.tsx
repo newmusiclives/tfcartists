@@ -197,7 +197,7 @@ export default function NetworkPage() {
               stations="10 Stations"
               timeline="Months 19-36"
               revenue="~$900k-$1.2M/year"
-              description="Heartland Rock, Ambient Americana, Indie Rock, Gospel, Texas Country"
+              description="Heartland Rock, Christian, Indie Rock, Singer-Songwriter, Texas Country"
             />
           </div>
 
@@ -246,8 +246,8 @@ export default function NetworkPage() {
             phase="Phase 3"
           />
           <FutureStation
-            name="Ambient Americana Radio™"
-            genre="Cinematic, atmospheric, instrumental + vocal"
+            name="Christian Radio™"
+            genre="Contemporary Christian, worship, gospel"
             phase="Phase 3"
           />
           <FutureStation
@@ -256,8 +256,8 @@ export default function NetworkPage() {
             phase="Phase 3"
           />
           <FutureStation
-            name="Gospel & Spirituals Radio™"
-            genre="Gospel, spirituals, sacred steel, soul"
+            name="Singer Songwriter Radio™"
+            genre="Acoustic storytellers, intimate performances, lyric-focused"
             phase="Phase 3"
           />
           <FutureStation

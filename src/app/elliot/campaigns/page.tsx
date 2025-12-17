@@ -12,7 +12,7 @@ export default function GrowthCampaignsPage() {
       platform: "TikTok + Instagram",
       startDate: "Dec 1, 2024",
       endDate: "Dec 31, 2024",
-      status: "active",
+      status: "active" as const,
       budget: 2500,
       spent: 1840,
       impressions: 125000,
@@ -29,7 +29,7 @@ export default function GrowthCampaignsPage() {
       platform: "All Channels",
       startDate: "Dec 5, 2024",
       endDate: "Dec 20, 2024",
-      status: "active",
+      status: "active" as const,
       budget: 3000,
       spent: 890,
       impressions: 45000,
@@ -46,7 +46,7 @@ export default function GrowthCampaignsPage() {
       platform: "Email + Web",
       startDate: "Dec 8, 2024",
       endDate: "Dec 15, 2024",
-      status: "active",
+      status: "active" as const,
       budget: 500,
       spent: 125,
       impressions: 8500,
@@ -261,21 +261,37 @@ function CampaignCard({
   progress,
   description,
   status,
-}: any) {
-  const statusConfig = {
+}: {
+  name: string;
+  type: string;
+  platform: string;
+  startDate: string;
+  endDate: string;
+  budget: number;
+  spent: number;
+  impressions: number;
+  engagement: number;
+  conversions: number;
+  goal: string;
+  progress: number;
+  description: string;
+  status: "active" | "paused" | "completed";
+}) {
+  const statusConfig: Record<string, { bg: string; text: string; label: string; border: string }> = {
     active: { bg: "bg-green-100", text: "text-green-700", label: "🟢 Active", border: "border-green-300" },
     paused: { bg: "bg-yellow-100", text: "text-yellow-700", label: "⏸️ Paused", border: "border-yellow-300" },
     completed: { bg: "bg-gray-100", text: "text-gray-700", label: "✅ Completed", border: "border-gray-300" },
-  }[status];
+  };
+  const config = statusConfig[status];
 
   return (
-    <div className={`border-2 ${statusConfig.border} rounded-lg p-5 bg-white`}>
+    <div className={`border-2 ${config.border} rounded-lg p-5 bg-white`}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-1">
             <h3 className="text-lg font-bold text-gray-900">{name}</h3>
-            <span className={`text-xs px-2 py-1 rounded-full ${statusConfig.bg} ${statusConfig.text} font-medium`}>
-              {statusConfig.label}
+            <span className={`text-xs px-2 py-1 rounded-full ${config.bg} ${config.text} font-medium`}>
+              {config.label}
             </span>
           </div>
           <p className="text-sm text-gray-600 mb-2">{description}</p>

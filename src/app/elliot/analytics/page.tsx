@@ -18,10 +18,10 @@ export default function ListenerAnalyticsPage() {
   };
 
   const listenerTiers = [
-    { tier: "Casual", count: 680, percentage: 54, sessions: "1-2/week", color: "blue" },
-    { tier: "Regular", count: 420, percentage: 34, sessions: "3-4/week", color: "green" },
-    { tier: "Super Fan", count: 125, percentage: 10, sessions: "5+/week", color: "purple" },
-    { tier: "Evangelist", count: 25, percentage: 2, sessions: "Daily + Shares", color: "orange" },
+    { tier: "Casual", count: 680, percentage: 54, sessions: "1-2/week", color: "blue" as const },
+    { tier: "Regular", count: 420, percentage: 34, sessions: "3-4/week", color: "green" as const },
+    { tier: "Super Fan", count: 125, percentage: 10, sessions: "5+/week", color: "purple" as const },
+    { tier: "Evangelist", count: 25, percentage: 2, sessions: "Daily + Shares", color: "orange" as const },
   ];
 
   const timeSlotData = [
@@ -239,16 +239,23 @@ function MetricCard({
   );
 }
 
-function TierCard({ tier, count, percentage, sessions, color }: any) {
-  const colorClasses = {
+function TierCard({ tier, count, percentage, sessions, color }: {
+  tier: string;
+  count: number;
+  percentage: number;
+  sessions: string;
+  color: "blue" | "green" | "purple" | "orange";
+}) {
+  const colorClasses: Record<string, string> = {
     blue: "bg-blue-100 text-blue-700 border-blue-200",
     green: "bg-green-100 text-green-700 border-green-200",
     purple: "bg-purple-100 text-purple-700 border-purple-200",
     orange: "bg-orange-100 text-orange-700 border-orange-200",
-  }[color];
+  };
+  const className = colorClasses[color];
 
   return (
-    <div className={`rounded-lg p-4 border-2 ${colorClasses}`}>
+    <div className={`rounded-lg p-4 border-2 ${className}`}>
       <div className="text-xs font-bold mb-2">{tier}</div>
       <div className="text-3xl font-bold mb-1">{count}</div>
       <div className="text-xs mb-3">{percentage}% of listeners</div>

@@ -20,7 +20,7 @@ export default function CommunityPage() {
       id: 1,
       name: "Jessica Turner",
       avatar: "JT",
-      tier: "Ambassador",
+      tier: "Ambassador" as const,
       points: 8450,
       posts: 124,
       likes: 3200,
@@ -32,7 +32,7 @@ export default function CommunityPage() {
       id: 2,
       name: "Mike Rodriguez",
       avatar: "MR",
-      tier: "Super Fan",
+      tier: "Super Fan" as const,
       points: 6200,
       posts: 98,
       likes: 2450,
@@ -44,7 +44,7 @@ export default function CommunityPage() {
       id: 3,
       name: "Sarah Chen",
       avatar: "SC",
-      tier: "Ambassador",
+      tier: "Ambassador" as const,
       points: 7800,
       posts: 145,
       likes: 2890,
@@ -56,7 +56,7 @@ export default function CommunityPage() {
       id: 4,
       name: "David Williams",
       avatar: "DW",
-      tier: "Super Fan",
+      tier: "Super Fan" as const,
       points: 5900,
       posts: 87,
       likes: 2100,
@@ -108,7 +108,7 @@ export default function CommunityPage() {
       time: "7:00 PM EST",
       host: "Hank Westwood",
       attendees: 67,
-      type: "Virtual",
+      type: "Virtual" as const,
     },
     {
       name: "Community Songwriting Workshop",
@@ -116,7 +116,7 @@ export default function CommunityPage() {
       time: "6:00 PM EST",
       host: "Sarah Blake",
       attendees: 34,
-      type: "Hybrid",
+      type: "Hybrid" as const,
     },
     {
       name: "Fan Q&A with The Mountain Brothers",
@@ -124,7 +124,7 @@ export default function CommunityPage() {
       time: "8:00 PM EST",
       host: "Elliot AI",
       attendees: 92,
-      type: "Virtual",
+      type: "Virtual" as const,
     },
   ];
 
@@ -317,14 +317,26 @@ function MetricCard({
   );
 }
 
-function MemberCard({ rank, name, avatar, tier, points, posts, likes, joinDate, lastActive, badge }: any) {
-  const tierConfig = {
+function MemberCard({ rank, name, avatar, tier, points, posts, likes, joinDate, lastActive, badge }: {
+  rank: number;
+  name: string;
+  avatar: string;
+  tier: "Ambassador" | "Super Fan";
+  points: number;
+  posts: number;
+  likes: number;
+  joinDate: string;
+  lastActive: string;
+  badge: string;
+}) {
+  const tierConfig: Record<string, { bg: string; text: string; border: string }> = {
     Ambassador: { bg: "bg-purple-100", text: "text-purple-700", border: "border-purple-300" },
     "Super Fan": { bg: "bg-blue-100", text: "text-blue-700", border: "border-blue-300" },
-  }[tier];
+  };
+  const config = tierConfig[tier];
 
   return (
-    <div className={`border-2 ${tierConfig.border} rounded-lg p-4 bg-white`}>
+    <div className={`border-2 ${config.border} rounded-lg p-4 bg-white`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
@@ -339,7 +351,7 @@ function MemberCard({ rank, name, avatar, tier, points, posts, likes, joinDate, 
             <div className="flex items-center space-x-2">
               <div className="font-bold text-gray-900">{name}</div>
               <span className="text-lg">{badge}</span>
-              <span className={`text-xs px-2 py-1 rounded-full ${tierConfig.bg} ${tierConfig.text} font-medium`}>
+              <span className={`text-xs px-2 py-1 rounded-full ${config.bg} ${config.text} font-medium`}>
                 {tier}
               </span>
             </div>
@@ -385,19 +397,27 @@ function ActivityRow({ user, action, topic, time, engagement }: any) {
   );
 }
 
-function EventRow({ name, date, time, host, attendees, type }: any) {
-  const typeConfig = {
+function EventRow({ name, date, time, host, attendees, type }: {
+  name: string;
+  date: string;
+  time: string;
+  host: string;
+  attendees: number;
+  type: "Virtual" | "Hybrid" | "In-Person";
+}) {
+  const typeConfig: Record<string, { bg: string; text: string }> = {
     Virtual: { bg: "bg-blue-100", text: "text-blue-700" },
     Hybrid: { bg: "bg-purple-100", text: "text-purple-700" },
     "In-Person": { bg: "bg-green-100", text: "text-green-700" },
-  }[type];
+  };
+  const eventConfig = typeConfig[type];
 
   return (
     <div className="flex items-center justify-between p-4 bg-white rounded-lg border-2 border-purple-200">
       <div className="flex-1">
         <div className="flex items-center space-x-2 mb-1">
           <div className="font-semibold text-gray-900">{name}</div>
-          <span className={`text-xs px-2 py-1 rounded-full ${typeConfig.bg} ${typeConfig.text} font-medium`}>
+          <span className={`text-xs px-2 py-1 rounded-full ${eventConfig.bg} ${eventConfig.text} font-medium`}>
             {type}
           </span>
         </div>
