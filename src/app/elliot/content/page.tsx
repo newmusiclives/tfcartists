@@ -17,7 +17,7 @@ export default function ViralContentPage() {
       comments: 450,
       conversions: 45,
       thumbnail: "🌅",
-      status: "viral",
+      status: "viral" as const,
       description: "Hank Westwood shares his morning routine and philosophy of gratitude",
     },
     {
@@ -32,7 +32,7 @@ export default function ViralContentPage() {
       comments: 320,
       conversions: 32,
       thumbnail: "🎸",
-      status: "performing",
+      status: "performing" as const,
       description: "Mysterious singer-songwriter taking Americana by storm",
     },
     {
@@ -47,7 +47,7 @@ export default function ViralContentPage() {
       comments: 680,
       conversions: 58,
       thumbnail: "🚗",
-      status: "viral",
+      status: "viral" as const,
       description: "Perfect playlist for your next road trip",
     },
     {
@@ -62,7 +62,7 @@ export default function ViralContentPage() {
       comments: 410,
       conversions: 38,
       thumbnail: "⏸️",
-      status: "viral",
+      status: "viral" as const,
       description: "Willow Creek's 'Mountain Rain' moment",
     },
     {
@@ -77,7 +77,7 @@ export default function ViralContentPage() {
       comments: 180,
       conversions: 18,
       thumbnail: "🎙️",
-      status: "growing",
+      status: "growing" as const,
       description: "Meet our late-night DJ and his story",
     },
     {
@@ -92,7 +92,7 @@ export default function ViralContentPage() {
       comments: 95,
       conversions: 12,
       thumbnail: "💙",
-      status: "new",
+      status: "new" as const,
       description: "Emotional listener testimonial",
     },
   ];
@@ -251,26 +251,41 @@ function MetricCard({ icon, label, value, subtitle }: any) {
   );
 }
 
-function ContentCard({ title, platform, creator, publishedDate, views, likes, shares, comments, conversions, thumbnail, status, description, viralThreshold }: any) {
-  const statusConfig = {
+function ContentCard({ title, platform, creator, publishedDate, views, likes, shares, comments, conversions, thumbnail, status, description, viralThreshold }: {
+  title: string;
+  platform: string;
+  creator: string;
+  publishedDate: string;
+  views: number;
+  likes: number;
+  shares: number;
+  comments: number;
+  conversions: number;
+  thumbnail: string;
+  status: "viral" | "performing" | "growing" | "new";
+  description: string;
+  viralThreshold: number;
+}) {
+  const statusConfig: Record<string, { bg: string; text: string; label: string; border: string }> = {
     viral: { bg: "bg-purple-100", text: "text-purple-700", label: "🔥 Viral", border: "border-purple-300" },
     performing: { bg: "bg-green-100", text: "text-green-700", label: "✅ Performing", border: "border-green-300" },
     growing: { bg: "bg-blue-100", text: "text-blue-700", label: "📈 Growing", border: "border-blue-300" },
     new: { bg: "bg-gray-100", text: "text-gray-700", label: "🆕 New", border: "border-gray-300" },
-  }[status];
+  };
+  const config = statusConfig[status];
 
   const isViral = views >= viralThreshold;
 
   return (
-    <div className={`border-2 ${statusConfig.border} rounded-lg p-4 ${isViral ? 'bg-gradient-to-r from-purple-50 to-pink-50' : 'bg-white'}`}>
+    <div className={`border-2 ${config.border} rounded-lg p-4 ${isViral ? 'bg-gradient-to-r from-purple-50 to-pink-50' : 'bg-white'}`}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-start space-x-3 flex-1">
           <div className="text-4xl">{thumbnail}</div>
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
               <h3 className="text-lg font-bold text-gray-900">{title}</h3>
-              <span className={`text-xs px-2 py-1 rounded-full ${statusConfig.bg} ${statusConfig.text} font-medium`}>
-                {statusConfig.label}
+              <span className={`text-xs px-2 py-1 rounded-full ${config.bg} ${config.text} font-medium`}>
+                {config.label}
               </span>
             </div>
             <p className="text-sm text-gray-600 mb-2">{description}</p>

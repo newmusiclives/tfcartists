@@ -205,11 +205,12 @@ function StatCard({
 }
 
 function CallCard({ call }: { call: any }) {
-  const typeConfig = {
+  const typeConfigs: Record<string, { color: string; label: string; icon: string }> = {
     discovery: { color: "blue", label: "Discovery", icon: "🔍" },
     pitch: { color: "purple", label: "Pitch", icon: "📊" },
     close: { color: "green", label: "Closing", icon: "✅" },
-  }[call.type] || { color: "gray", label: call.type, icon: "📞" };
+  };
+  const typeConfig = typeConfigs[call.type] || { color: "gray", label: call.type, icon: "📞" };
 
   return (
     <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
@@ -252,11 +253,12 @@ function CallCard({ call }: { call: any }) {
 }
 
 function CompletedCallRow({ call }: { call: any }) {
-  const typeConfig = {
+  const typeConfigs: Record<string, { color: string; label: string }> = {
     discovery: { color: "blue", label: "Discovery" },
     pitch: { color: "purple", label: "Pitch" },
     close: { color: "green", label: "Closing" },
-  }[call.type] || { color: "gray", label: call.type };
+  };
+  const typeConfig = typeConfigs[call.type] || { color: "gray", label: call.type };
 
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
