@@ -68,6 +68,7 @@ export function getHarperPrompt(
     businessType?: string;
     contactName?: string;
     city?: string;
+    suggestedTier?: string;
     hasRespondedBefore?: boolean;
   }
 ): string {

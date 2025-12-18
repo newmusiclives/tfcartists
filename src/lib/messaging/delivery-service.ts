@@ -20,6 +20,7 @@ export interface MessagePayload {
   content: string;
   channel: MessageChannel;
   from?: string; // Optional custom sender
+  subject?: string; // Optional subject for email
 }
 
 class MessageDeliveryService {
@@ -27,7 +28,7 @@ class MessageDeliveryService {
    * Send a message via the specified channel
    */
   async send(payload: MessagePayload): Promise<DeliveryResult> {
-    const { channel, to, content, from } = payload;
+    const { channel, to, content, from, subject } = payload;
 
     logger.info("Attempting message delivery", {
       channel,
@@ -40,7 +41,7 @@ class MessageDeliveryService {
         case "sms":
           return await this.sendSMS(to, content, from);
         case "email":
-          return await this.sendEmail(to, content, from);
+          return await this.sendEmail(to, content, from, subject);
         case "instagram":
           return await this.sendInstagram(to, content);
         default:
@@ -118,7 +119,8 @@ class MessageDeliveryService {
   private async sendEmail(
     to: string,
     content: string,
-    from?: string
+    from?: string,
+    subject?: string
   ): Promise<DeliveryResult> {
     // Check if SendGrid is configured
     if (!env.SENDGRID_API_KEY) {
@@ -139,7 +141,7 @@ class MessageDeliveryService {
       const msg = {
         to,
         from: from || "riley@truefansradio.com",
-        subject: "TrueFans RADIO",
+        subject: subject || "TrueFans RADIO",
         text: content,
         html: this.formatEmailHTML(content),
       };

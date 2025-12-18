@@ -135,7 +135,14 @@ export async function GET(req: NextRequest) {
     });
 
     // 5. Create individual earnings records
-    const earningsRecords = [];
+    const earningsRecords: Array<{
+      artistId: string;
+      period: string;
+      tier: string;
+      shares: number;
+      earnings: number;
+      paid: boolean;
+    }> = [];
 
     for (const artist of artists) {
       const earnings = artist.airplayShares * perShareValue;

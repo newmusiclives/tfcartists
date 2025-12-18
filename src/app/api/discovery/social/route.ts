@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { socialDiscovery } from "@/lib/discovery/social-discovery";
+import { socialDiscovery, DiscoveredArtist } from "@/lib/discovery/social-discovery";
 import { logger } from "@/lib/logger";
 
 /**
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let discovered = [];
+    let discovered: DiscoveredArtist[] = [];
 
     switch (platform) {
       case "instagram":

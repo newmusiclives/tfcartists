@@ -98,7 +98,6 @@ export class HarperAgent {
         role: "harper",
         content,
         intent,
-        deliveryStatus: "pending",
       },
     });
 
@@ -128,14 +127,8 @@ export class HarperAgent {
         subject: channel === "email" ? `Partnership Opportunity - ${sponsor.businessName}` : undefined,
       });
 
-      // Update message with delivery info
-      await prisma.sponsorMessage.update({
-        where: { id: message.id },
-        data: {
-          deliveryStatus: result.success ? "delivered" : "failed",
-          externalMessageId: result.messageId,
-        },
-      });
+      // Note: Delivery status tracking could be added to metadata if needed
+      // The SponsorMessage model doesn't have deliveryStatus or externalMessageId fields
 
       logger.info("Harper message sent", {
         sponsorId,
@@ -146,12 +139,7 @@ export class HarperAgent {
       });
     } catch (error) {
       logger.error("Failed to deliver Harper message", { error, sponsorId, messageId: message.id });
-
-      await prisma.sponsorMessage.update({
-        where: { id: message.id },
-        data: { deliveryStatus: "failed" },
-      });
-
+      // Note: Delivery status could be tracked in metadata if needed
       throw error;
     }
 
@@ -159,9 +147,8 @@ export class HarperAgent {
     await prisma.harperActivity.create({
       data: {
         sponsorId,
-        type: "message_sent",
-        channel,
-        metadata: { intent, messageId: message.id },
+        action: "sent_message",
+        details: { intent, messageId: message.id, channel },
       },
     });
 
@@ -223,12 +210,11 @@ export class HarperAgent {
         conversationId: conversation.id,
         role: "sponsor",
         content: messageContent,
-        deliveryStatus: "received",
       },
     });
 
-    // Determine intent based on message content and sponsor stage
-    const intent = this.determineIntent(messageContent, sponsor.stage);
+    // Determine intent based on message content and sponsor pipeline stage
+    const intent = this.determineIntent(messageContent, sponsor.pipelineStage);
 
     // Build conversation history
     const conversationHistory = conversation.messages.map((msg) => ({
@@ -336,10 +322,10 @@ export class HarperAgent {
     if (newStage) {
       await prisma.sponsor.update({
         where: { id: sponsorId },
-        data: { stage: newStage },
+        data: { pipelineStage: newStage },
       });
 
-      logger.info("Sponsor stage updated", { sponsorId, newStage, intent });
+      logger.info("Sponsor pipeline stage updated", { sponsorId, newStage, intent });
     }
   }
 
@@ -356,7 +342,7 @@ export class HarperAgent {
     await prisma.sponsor.update({
       where: { id: sponsorId },
       data: {
-        stage: "CLOSED",
+        pipelineStage: "closed",
         sponsorshipTier: tier,
         monthlyAmount,
         contractStart: startDate || new Date(),
@@ -391,9 +377,8 @@ export class HarperAgent {
     await prisma.harperActivity.create({
       data: {
         sponsorId,
-        type: "deal_closed",
-        channel: "system",
-        metadata: {
+        action: "closed_deal",
+        details: {
           tier,
           monthlyAmount,
           sponsorshipId: sponsorship.id,
@@ -429,7 +414,7 @@ export class HarperAgent {
         callType,
         duration,
         outcome,
-        recordingUrl,
+        recording: recordingUrl,
         transcript,
         handledBy: callType === "voice_ai" ? "harper_ai" : "human_closer",
       },
@@ -448,9 +433,8 @@ export class HarperAgent {
     await prisma.harperActivity.create({
       data: {
         sponsorId,
-        type: "call_completed",
-        channel: "phone",
-        metadata: { callType, duration, outcome },
+        action: "completed_call",
+        details: { callType, duration, outcome },
       },
     });
 

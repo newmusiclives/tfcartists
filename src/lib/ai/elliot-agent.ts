@@ -400,38 +400,38 @@ Create a personalized, authentic message to engage this listener.`,
     type: ContentGenerationContext["type"]
   ): keyof typeof ELLIOT_PERSONALITIES {
     const mapping: Record<string, keyof typeof ELLIOT_PERSONALITIES> = {
-      tiktok: "nova",
-      reel: "river",
-      short: "sage",
-      story: "orion",
-      post: "elliot",
+      tiktok: "NOVA",
+      reel: "RIVER",
+      short: "SAGE",
+      story: "ORION",
+      post: "ELLIOT",
     };
-    return mapping[type] || "elliot";
+    return mapping[type] || "ELLIOT";
   }
 
   private selectCampaignManager(
     type: CampaignContext["type"]
   ): keyof typeof ELLIOT_PERSONALITIES {
     const mapping: Record<string, keyof typeof ELLIOT_PERSONALITIES> = {
-      artist_referral: "orion",
-      viral_push: "nova",
-      habit_builder: "sage",
-      community_event: "river",
+      artist_referral: "ORION",
+      viral_push: "NOVA",
+      habit_builder: "SAGE",
+      community_event: "RIVER",
     };
-    return mapping[type] || "elliot";
+    return mapping[type] || "ELLIOT";
   }
 
   private selectEngagementAgent(
     status: string
   ): keyof typeof ELLIOT_PERSONALITIES {
     const mapping: Record<string, keyof typeof ELLIOT_PERSONALITIES> = {
-      NEW: "orion",
-      ACTIVE: "sage",
-      AT_RISK: "river",
-      CHURNED: "nova",
-      POWER_USER: "elliot",
+      NEW: "ORION",
+      ACTIVE: "SAGE",
+      AT_RISK: "RIVER",
+      CHURNED: "NOVA",
+      POWER_USER: "ELLIOT",
     };
-    return mapping[status] || "elliot";
+    return mapping[status] || "ELLIOT";
   }
 
   private getPlatform(type: ContentGenerationContext["type"]): string {
