@@ -75,15 +75,15 @@ const validateEnv = () => {
 
   // Only validate AI providers at runtime, not during build
   // During build (when next build runs), we don't need AI keys
-  const isBuildTime = process.env.npm_lifecycle_event === 'build';
+  const isBuildTime = process.env.npm_lifecycle_event === 'build' || process.env.NETLIFY === 'true';
 
   if (!isBuildTime && !env.OPENAI_API_KEY && !env.ANTHROPIC_API_KEY) {
     console.warn("⚠️  No AI provider API key configured (OPENAI_API_KEY or ANTHROPIC_API_KEY)");
     console.warn("⚠️  AI features will not work until you configure at least one provider.");
   }
 
-  // Strict production requirements
-  if (env.NODE_ENV === "production") {
+  // Strict production requirements (skip during build time)
+  if (env.NODE_ENV === "production" && !isBuildTime) {
     const missingCriticalVars: string[] = [];
     const missingOptionalVars: string[] = [];
 
