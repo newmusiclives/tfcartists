@@ -2,12 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 /**
  * POST /api/harper/outreach
  * Send initial outreach message to a sponsor
+ *
+ * Rate limited: 10 requests per minute (AI tier)
  */
 export async function POST(request: NextRequest) {
+  // Check rate limit
+  const rateLimitResponse = await withRateLimit(request, "ai");
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
   try {
     const body = await request.json();
     const { sponsorId, channel = "email", template = "initial_contact" } = body;

@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
 import { logger } from "@/lib/logger";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 /**
  * POST /api/harper/message
  * Handle incoming sponsor message or send a message in an ongoing conversation
+ *
+ * Rate limited: 10 requests per minute (AI tier)
  */
 export async function POST(request: NextRequest) {
+  // Check rate limit
+  const rateLimitResponse = await withRateLimit(request, "ai");
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
   try {
     const body = await request.json();
     const { sponsorId, content, channel = "email" } = body;

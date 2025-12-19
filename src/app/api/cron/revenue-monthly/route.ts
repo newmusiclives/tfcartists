@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
+import {
+  calculateMonthlyScoutCommissions,
+  processScoutPayouts,
+} from "@/lib/scout/monthly-payout";
 
 /**
  * Revenue Distribution Cron Job
@@ -173,9 +177,34 @@ export async function GET(req: NextRequest) {
       artistsCount: artists.length,
     });
 
+    // 6. Calculate Scout Commissions (from artist tier payments, not ad revenue pool)
+    logger.info("Calculating scout commissions...");
+    const scoutCommissionResults =
+      await calculateMonthlyScoutCommissions(period);
+
+    logger.info("Scout commissions calculated", {
+      period,
+      totalCommissions: scoutCommissionResults.totalCommissions,
+      totalBonuses: scoutCommissionResults.totalBonuses,
+      totalAmount: scoutCommissionResults.totalAmount,
+      scoutCount: scoutCommissionResults.scoutCount,
+      commissionRecords: scoutCommissionResults.commissionRecords,
+    });
+
+    // 7. Process Scout Payouts (monthly automatic)
+    logger.info("Processing scout payouts...");
+    const payoutResults = await processScoutPayouts(period);
+
+    logger.info("Scout payouts processed", {
+      period,
+      totalPaid: payoutResults.totalPaid,
+      payoutCount: payoutResults.payoutCount,
+      failedCount: payoutResults.failedCount,
+    });
+
     return NextResponse.json({
       success: true,
-      message: "Revenue distribution completed",
+      message: "Revenue distribution and scout payouts completed",
       data: {
         period,
         totalAdRevenue,
@@ -184,6 +213,18 @@ export async function GET(req: NextRequest) {
         totalArtists: artists.length,
         totalShares,
         tierCounts,
+        scoutCommissions: {
+          totalCommissions: scoutCommissionResults.totalCommissions,
+          totalBonuses: scoutCommissionResults.totalBonuses,
+          totalAmount: scoutCommissionResults.totalAmount,
+          scoutCount: scoutCommissionResults.scoutCount,
+          commissionRecords: scoutCommissionResults.commissionRecords,
+        },
+        scoutPayouts: {
+          totalPaid: payoutResults.totalPaid,
+          payoutCount: payoutResults.payoutCount,
+          failedCount: payoutResults.failedCount,
+        },
       },
       timestamp: new Date().toISOString(),
     });

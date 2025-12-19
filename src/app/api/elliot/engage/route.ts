@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { elliot } from "@/lib/ai/elliot-agent";
 import { logger } from "@/lib/logger";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 /**
  * POST /api/elliot/engage
  * Engage with a specific listener
+ *
+ * Rate limited: 10 requests per minute (AI tier)
  */
 export async function POST(req: NextRequest) {
+  // Check rate limit
+  const rateLimitResponse = await withRateLimit(req, "ai");
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
   try {
     const body = await req.json();
     const { listenerId, engagementType } = body;

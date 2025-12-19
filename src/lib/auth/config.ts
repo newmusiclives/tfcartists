@@ -39,57 +39,71 @@ export const authConfig: NextAuthConfig = {
 
           const { username, password } = parsed.data;
 
-          // DEVELOPMENT ONLY: Simple hardcoded admin user
-          // In production, query your database and verify hashed password
-          if (
-            username === "admin" &&
-            password === (process.env.ADMIN_PASSWORD || "truefans2024")
-          ) {
-            return {
-              id: "admin-1",
-              name: "TrueFans Admin",
-              email: "admin@truefansradio.com",
-              role: "admin",
-            };
+          // SECURITY: All passwords MUST be set via environment variables
+          // No default passwords allowed in production
+
+          // Admin user access
+          if (username === "admin") {
+            if (!env.ADMIN_PASSWORD) {
+              console.error("ADMIN_PASSWORD environment variable not set");
+              return null;
+            }
+            if (password === env.ADMIN_PASSWORD) {
+              return {
+                id: "admin-1",
+                name: "TrueFans Admin",
+                email: "admin@truefansradio.com",
+                role: "admin",
+              };
+            }
           }
 
           // Riley team access
-          if (
-            username === "riley" &&
-            password === (process.env.RILEY_PASSWORD || "riley2024")
-          ) {
-            return {
-              id: "riley-1",
-              name: "Riley (Artist Team)",
-              email: "riley@truefansradio.com",
-              role: "riley",
-            };
+          if (username === "riley") {
+            if (!env.RILEY_PASSWORD) {
+              console.error("RILEY_PASSWORD environment variable not set");
+              return null;
+            }
+            if (password === env.RILEY_PASSWORD) {
+              return {
+                id: "riley-1",
+                name: "Riley (Artist Team)",
+                email: "riley@truefansradio.com",
+                role: "riley",
+              };
+            }
           }
 
           // Harper team access
-          if (
-            username === "harper" &&
-            password === (process.env.HARPER_PASSWORD || "harper2024")
-          ) {
-            return {
-              id: "harper-1",
-              name: "Harper (Sponsor Team)",
-              email: "harper@truefansradio.com",
-              role: "harper",
-            };
+          if (username === "harper") {
+            if (!env.HARPER_PASSWORD) {
+              console.error("HARPER_PASSWORD environment variable not set");
+              return null;
+            }
+            if (password === env.HARPER_PASSWORD) {
+              return {
+                id: "harper-1",
+                name: "Harper (Sponsor Team)",
+                email: "harper@truefansradio.com",
+                role: "harper",
+              };
+            }
           }
 
           // Elliot team access
-          if (
-            username === "elliot" &&
-            password === (process.env.ELLIOT_PASSWORD || "elliot2024")
-          ) {
-            return {
-              id: "elliot-1",
-              name: "Elliot (Listener Team)",
-              email: "elliot@truefansradio.com",
-              role: "elliot",
-            };
+          if (username === "elliot") {
+            if (!env.ELLIOT_PASSWORD) {
+              console.error("ELLIOT_PASSWORD environment variable not set");
+              return null;
+            }
+            if (password === env.ELLIOT_PASSWORD) {
+              return {
+                id: "elliot-1",
+                name: "Elliot (Listener Team)",
+                email: "elliot@truefansradio.com",
+                role: "elliot",
+              };
+            }
           }
 
           // Invalid credentials

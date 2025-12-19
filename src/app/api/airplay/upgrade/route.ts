@@ -1,11 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 import { upgradeAirplayTier, AirplayTier } from "@/lib/radio/airplay-system";
+import { auth } from "@/lib/auth/config";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 /**
  * POST /api/airplay/upgrade
  * Upgrade an artist's airplay tier
+ *
+ * Rate limited: 60 requests per minute (API tier)
  */
 export async function POST(request: NextRequest) {
+  // Check rate limit
+  const rateLimitResponse = await withRateLimit(request, "api");
+  if (rateLimitResponse) {
+    return rateLimitResponse;
+  }
+
+  // SECURITY: Require authentication
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json(
+      { error: "Unauthorized - Authentication required" },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { artistId, tier, paymentDetails } = body;

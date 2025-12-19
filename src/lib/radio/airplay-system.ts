@@ -166,6 +166,14 @@ export async function distributeRevenuePool(
     where: { period },
   });
 
+  // IDEMPOTENCY CHECK: Prevent duplicate distribution
+  if (pool && pool.distributionComplete) {
+    throw new Error(
+      `Revenue already distributed for period ${period}. ` +
+      `Distribution completed at ${pool.distributedAt?.toISOString()}`
+    );
+  }
+
   const poolStats = await calculateRevenuePool(period);
 
   if (!pool) {
