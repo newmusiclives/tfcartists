@@ -128,7 +128,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
-                <span>340 artists, $3,900/month</span>
+                <span>300 artists, $4,350/month</span>
               </li>
             </ul>
           </div>
@@ -160,7 +160,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-green-600">✓</span>
-                <span>125 sponsors, $22,250/month</span>
+                <span>72 sponsors, $18,150/month</span>
               </li>
             </ul>
           </div>
@@ -192,7 +192,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-blue-600">✓</span>
-                <span>1,250 DAU, 52% retention</span>
+                <span>6,000 listeners, growing organically</span>
               </li>
             </ul>
           </div>

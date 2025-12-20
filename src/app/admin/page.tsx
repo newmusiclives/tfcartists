@@ -12,6 +12,8 @@ import {
   ArrowRight,
   Radio,
   Settings,
+  Target,
+  CheckCircle2,
 } from "lucide-react";
 import { formatCurrency, getStatusColor } from "@/lib/utils";
 
@@ -111,6 +113,20 @@ export default function AdminDashboard() {
               >
                 <Radio className="w-4 h-4" />
                 <span>Capacity</span>
+              </Link>
+              <Link
+                href="/revenue/projections"
+                className="inline-flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-300 rounded-lg text-green-700 hover:from-green-100 hover:to-blue-100 font-semibold transition-all"
+              >
+                <Target className="w-4 h-4" />
+                <span>Revenue Model</span>
+              </Link>
+              <Link
+                href="/admin/verification"
+                className="inline-flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-300 rounded-lg text-blue-700 hover:from-blue-100 hover:to-purple-100 font-semibold transition-all"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Verify Processes</span>
               </Link>
               <Link
                 href="/admin/settings"
