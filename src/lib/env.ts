@@ -45,6 +45,7 @@ const envSchema = z.object({
   RILEY_PASSWORD: z.string().optional(),
   HARPER_PASSWORD: z.string().optional(),
   ELLIOT_PASSWORD: z.string().optional(),
+  CASSIDY_PASSWORD: z.string().optional(),
 
   // Automation & Cron
   CRON_SECRET: z.string().optional(),

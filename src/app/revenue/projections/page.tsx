@@ -503,7 +503,7 @@ export default function RevenueProjectionsPage() {
                   {Object.entries(scoutTiers).map(([key, tier]) => (
                     <div key={key} className="bg-white rounded p-2 border border-orange-200">
                       <div className="font-semibold text-orange-700">{tier.name}</div>
-                      <div className="text-gray-600">{tier.scouts} artists</div>
+                      <div className="text-gray-600">{tier.artists} artists</div>
                       <div className="font-bold text-orange-900">{tier.range}</div>
                     </div>
                   ))}
@@ -515,7 +515,7 @@ export default function RevenueProjectionsPage() {
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
                   <div className="text-green-800">
-                    <strong>NO CAP for Top 20%!</strong> Elite artists ({scoutTiers.tier1.scouts} artists) can earn ${scoutTiers.tier1.range}/month. Remaining artists have performance-based caps.
+                    <strong>NO CAP for Top 20%!</strong> Elite artists ({scoutTiers.tier1.artists} artists) can earn ${scoutTiers.tier1.range}/month. Remaining artists have performance-based caps.
                   </div>
                 </div>
               </div>
@@ -783,7 +783,7 @@ export default function RevenueProjectionsPage() {
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Quality > Quantity: {current.metadata.referralArtists} artists (reduced from {capacity === "60" ? "90" : "150"})</span>
+                  <span>Quality &gt; Quantity: {current.metadata.referralArtists} artists (reduced from {capacity === "60" ? "90" : "150"})</span>
                 </li>
               </ul>
             </div>

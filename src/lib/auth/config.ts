@@ -106,6 +106,22 @@ export const authConfig: NextAuthConfig = {
             }
           }
 
+          // Cassidy team access
+          if (username === "cassidy") {
+            if (!env.CASSIDY_PASSWORD) {
+              console.error("CASSIDY_PASSWORD environment variable not set");
+              return null;
+            }
+            if (password === env.CASSIDY_PASSWORD) {
+              return {
+                id: "cassidy-1",
+                name: "Cassidy (Review Panel)",
+                email: "cassidy@truefansradio.com",
+                role: "cassidy",
+              };
+            }
+          }
+
           // Invalid credentials
           return null;
         } catch (error) {
@@ -170,6 +186,10 @@ export const authConfig: NextAuthConfig = {
       }
 
       if (pathname.startsWith("/elliot") && userRole !== "elliot") {
+        return false;
+      }
+
+      if (pathname.startsWith("/cassidy") && userRole !== "cassidy") {
         return false;
       }
 

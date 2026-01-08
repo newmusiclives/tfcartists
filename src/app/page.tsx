@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target } from "lucide-react";
+import { ArrowRight, Sparkles, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -51,6 +51,12 @@ export default function HomePage() {
                 Elliot
               </Link>
               <Link
+                href="/cassidy"
+                className="text-teal-600 hover:text-teal-700 font-medium transition-colors"
+              >
+                Cassidy
+              </Link>
+              <Link
                 href="/onboard"
                 className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
               >
@@ -78,7 +84,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Riley's team finds and onboards artists. Harper's team secures sponsors to fund the stations.
+            Riley's team finds and onboards artists. Cassidy's panel reviews submissions and assigns rotation tiers. Harper's team secures sponsors to fund the stations.
             Elliot's team builds a passionate listener community that grows itself through viral content, artist fan activation, and habit formation.
           </p>
 
@@ -100,7 +106,7 @@ export default function HomePage() {
         </div>
 
         {/* Team Stats */}
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
           <div className="bg-white rounded-xl p-8 shadow-lg">
             <div className="flex items-center space-x-3 mb-4">
               <Users className="w-10 h-10 text-purple-600" />
@@ -161,6 +167,38 @@ export default function HomePage() {
               <li className="flex items-center space-x-2">
                 <span className="text-green-600">✓</span>
                 <span>72 sponsors, $18,150/month</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-xl p-8 shadow-lg">
+            <div className="flex items-center space-x-3 mb-4">
+              <Award className="w-10 h-10 text-teal-600" />
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">Cassidy's Panel</h3>
+                <p className="text-sm text-gray-600">Submission Review</p>
+              </div>
+            </div>
+            <ul className="space-y-2 text-gray-700">
+              <li className="flex items-center space-x-2">
+                <span className="text-teal-600">✓</span>
+                <span>Expert 6-person panel</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-teal-600">✓</span>
+                <span>5-7 day review process</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-teal-600">✓</span>
+                <span>Tier placement system</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-teal-600">✓</span>
+                <span>95% placement rate</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-teal-600">✓</span>
+                <span>200 artists, 80/20 rotation</span>
               </li>
             </ul>
           </div>

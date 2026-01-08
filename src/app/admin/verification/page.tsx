@@ -89,7 +89,7 @@ export default function VerificationPage() {
        model.revenue.platformFees + model.revenue.sponsored);
 
     const expensesCheck = model.expenses.total ===
-      (model.expenses.artistPool + model.expenses.referralArtists + model.expenses.gps +
+      (model.expenses.artistPool + model.expenses.artists + model.expenses.gps +
        model.expenses.operations);
 
     const profitCheck = model.profit === (model.revenue.total - model.expenses.total);
@@ -385,7 +385,7 @@ export default function VerificationPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">Artist Referral Commissions:</span>
-                  <span className="font-semibold">${revenueVerification.model.expenses.referralArtists.toLocaleString()}</span>
+                  <span className="font-semibold">${revenueVerification.model.expenses.artists.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">Listener Promotion Commissions:</span>

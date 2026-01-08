@@ -965,6 +965,324 @@ model Station {
 }
 
 // =============================================================================
+// TEAM CASSIDY - SUBMISSION REVIEW & ROTATION CURATION
+// =============================================================================
+
+// Submission for review panel
+model Submission {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Artist info
+  artistId          String
+  artistName        String
+  artistEmail       String?
+  artistPhone       String?
+
+  // Track details
+  trackTitle        String
+  trackFileUrl      String   // URL to audio file
+  trackDuration     Int?     // seconds
+  genre             String?
+  genreTags         String?  // JSON array
+
+  // Submission context (from Riley)
+  discoverySource   String?  // "Newport Folk Festival", venue, etc.
+  discoveredBy      String?  // Riley team member
+  rileyContext      Json?    // Discovery metadata
+
+  // Review status
+  status            SubmissionStatus @default(PENDING)
+  submissionType    String   @default("initial") // initial, progression_request
+
+  // Judging timeline
+  judgingStartedAt  DateTime?
+  judgingCompletedAt DateTime?
+
+  // Final decision
+  tierAwarded       RotationTier?
+  awardedAt         DateTime?
+  rotationSpinsWeekly Int?
+  decisionRationale String?  // Cassidy's summary
+
+  // Progression pathway
+  upgradePathway    Json?    // Next tier, timeline, improvements needed
+
+  // Revenue
+  premiumFastTrack  Boolean  @default(false)
+  fastTrackFee      Float?
+
+  // Relationships
+  reviews           SubmissionReview[]
+  tierHistory       TierPlacement[]
+
+  metadata          Json?
+
+  @@index([status])
+  @@index([artistId])
+  @@index([tierAwarded])
+  @@index([judgingStartedAt])
+}
+
+enum SubmissionStatus {
+  PENDING           // Awaiting review
+  IN_REVIEW         // Being judged
+  JUDGED            // Decision made
+  PLACED            // Added to rotation
+  NOT_PLACED        // Not accepted (~5%)
+}
+
+enum RotationTier {
+  BRONZE            // 4-6 spins/week
+  SILVER            // 10-14 spins/week
+  GOLD              // 20-25 spins/week
+  PLATINUM          // 30+ spins/week
+}
+
+// Individual judge reviews
+model SubmissionReview {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+
+  submissionId      String
+  submission        Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  judgeId           String
+  judge             Judge    @relation(fields: [judgeId], references: [id], onDelete: Cascade)
+
+  // Numerical scores (0-100)
+  overallScore      Int?
+  productionQuality Int?
+  commercialViability Int?
+  artisticMerit     Int?
+  performanceQuality Int?
+  culturalSignificance Int?
+  growthPotential   Int?
+
+  // Qualitative assessment
+  strengths         String?
+  growthAreas       String?
+  tierRecommendation RotationTier?
+  upgradePathwayAdvice String?
+
+  // Judge-specific notes
+  technicalNotes    String?  // Dakota Wells
+  programmingNotes  String?  // Maya Reeves
+  performanceNotes  String?  // Jesse Coleman
+  musicologicalNotes String? // Dr. Sam Chen
+  audienceNotes     String?  // Whitley Cross
+
+  // Meta
+  scoredAt          DateTime @default(now())
+
+  @@unique([submissionId, judgeId])
+  @@index([submissionId])
+  @@index([judgeId])
+}
+
+// Panel judges
+model Judge {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Basic info
+  name              String
+  role              String   // "Music Director", "Production Engineer", etc.
+  expertiseArea     String?  // "Technical assessment", "Commercial viability", etc.
+  bio               String?
+
+  // Performance metrics
+  avgScoreAccuracy  Float?   // How well predictions match final tiers
+  judgingConsistency Float?  // Inter-judge agreement
+  totalSubmissionsJudged Int @default(0)
+
+  // Status
+  isActive          Boolean  @default(true)
+  availabilitySchedule Json?
+
+  // Relationships
+  reviews           SubmissionReview[]
+
+  metadata          Json?
+
+  @@index([isActive])
+}
+
+// Tier placement history
+model TierPlacement {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+
+  submissionId      String?
+  submission        Submission? @relation(fields: [submissionId], references: [id], onDelete: SetNull)
+
+  artistId          String
+  artistName        String
+
+  // Tier change
+  previousTier      RotationTier?
+  newTier           RotationTier
+  changeDate        DateTime @default(now())
+  reason            String?
+  decidedBy         String   // "Cassidy Monroe", "Panel Consensus"
+
+  // Judge scores summary
+  judgeScores       Json?
+
+  // Progression context
+  isProgression     Boolean  @default(false)
+  timeInPreviousTierDays Int?
+  improvementNotes  String?
+
+  metadata          Json?
+
+  @@index([artistId])
+  @@index([newTier])
+  @@index([changeDate])
+}
+
+// Progression/upgrade requests
+model ProgressionRequest {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  artistId          String
+  artistName        String
+  submissionId      String
+
+  // Request details
+  currentTier       RotationTier
+  requestedTier     RotationTier
+  requestDate       DateTime @default(now())
+  timeSinceLastTierDays Int?
+
+  // Artist's claims
+  improvementsClaimed String?
+  newMaterialDescription String?
+
+  // Riley support
+  rileyRecommendation String?
+  rileyConfidenceScore Int?
+
+  // Review status
+  reviewStatus      String   @default("pending") // pending, approved, denied, needs_more_time
+  reviewDate        DateTime?
+  reviewerId        String?  // Judge ID
+  decisionRationale String?
+
+  // Outcome
+  upgradeApproved   Boolean?
+  newTierIfApproved RotationTier?
+  timelineToResubmit String?
+
+  metadata          Json?
+
+  @@index([artistId])
+  @@index([reviewStatus])
+  @@index([currentTier])
+}
+
+// Panel review meetings
+model PanelMeeting {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+
+  meetingDate       DateTime
+  meetingType       String   // "tuesday_session", "thursday_session", "monthly_strategy"
+
+  // Attendees (JSON arrays of IDs)
+  judgesPresent     String?  // JSON array of judge IDs
+  rileyRepPresent   String?
+  harperRepPresent  String?
+  elliottRepPresent String?
+
+  // Submissions reviewed
+  submissionsReviewed String? // JSON array of submission IDs
+  tiersAssigned     Json?     // {submission_id: tier}
+
+  // Meeting notes
+  discussionSummary String?
+  strategicDecisions Json?
+  actionItems       Json?
+
+  // Metrics
+  submissionsJudgedCount Int?
+  avgJudgingTimeMinutes Int?
+  consensusReachedCount Int?
+  splitDecisionsCount Int?
+
+  metadata          Json?
+
+  @@index([meetingDate])
+  @@index([meetingType])
+}
+
+// Rotation slots for programming
+model RotationSlot {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Time configuration
+  daypart           String   // "morning_drive", "midday", "afternoon_drive", "evening", "overnight", "weekend"
+  dayOfWeek         Int      // 0-6 (Sunday-Saturday)
+  timeStart         String   // "HH:MM"
+  timeEnd           String   // "HH:MM"
+
+  // Current assignment
+  currentArtistId   String?
+  currentArtistName String?
+  currentTrackId    String?
+  currentTier       RotationTier?
+  indieVsMainstream String   @default("mainstream") // "indie", "mainstream"
+
+  // Replacement strategy
+  replacementCandidateArtistId String?
+  replacementReadinessScore Int?
+  replacementScheduledDate DateTime?
+
+  // Sponsor integration (Harper)
+  sponsorId         String?
+  sponsorIntegrationType String? // "pre_roll", "post_roll", "artist_spotlight"
+
+  // Performance (Elliott)
+  avgEngagementScore Float?
+  skipRate          Float?
+  listenerFeedback  Json?
+
+  // 80/20 transformation
+  mainstreamReplaced Boolean @default(false)
+  replacedAt        DateTime?
+  progressContribution Float?
+
+  metadata          Json?
+
+  @@index([daypart])
+  @@index([currentTier])
+  @@index([mainstreamReplaced])
+}
+
+// Cassidy team activity log
+model CassidyActivity {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+
+  action            String   // "reviewed_submission", "assigned_tier", "approved_progression", "scheduled_meeting"
+  submissionId      String?
+  artistId          String?
+  judgeId           String?
+  details           Json?
+
+  successful        Boolean  @default(true)
+
+  @@index([action])
+  @@index([createdAt])
+}
+
+// =============================================================================
 // TEAM ELLIOT - ARTIST DISCOVERY PIPELINE (SCOUT SYSTEM)
 // =============================================================================
 

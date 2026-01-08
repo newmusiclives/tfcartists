@@ -256,7 +256,7 @@ export async function processScoutPayouts(
       // TODO: Send payout notification email
       // await notifyScoutEarnings(scoutId, period, amount);
     } catch (error) {
-      logger.error(`Payout failed for scout ${scoutId}:`, error);
+      logger.error(`Payout failed for scout ${scoutId}:`, error as any);
 
       // Mark commissions as FAILED
       await prisma.scoutCommission.updateMany({

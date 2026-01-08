@@ -277,13 +277,13 @@ export default function ListenerOpportunityPage() {
                       <span className="font-semibold">{example.listeners}</span>
                     </div>
                   )}
-                  {example.artists && (
+                  {'artists' in example && example.artists && (
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Artists Helped:</span>
                       <span className="font-semibold">{example.artists}</span>
                     </div>
                   )}
-                  {example.sponsors && (
+                  {'sponsors' in example && example.sponsors && (
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Sponsors:</span>
                       <span className="font-semibold">{example.sponsors}</span>

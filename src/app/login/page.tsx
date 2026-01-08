@@ -139,6 +139,10 @@ function LoginForm() {
                 <p className="font-medium text-blue-700">Elliot</p>
                 <p className="text-blue-600">elliot / elliot2024</p>
               </div>
+              <div className="bg-teal-50 rounded-lg p-3 col-span-2">
+                <p className="font-medium text-teal-700">Cassidy</p>
+                <p className="text-teal-600">cassidy / cassidy2024</p>
+              </div>
             </div>
           </div>
         </div>
