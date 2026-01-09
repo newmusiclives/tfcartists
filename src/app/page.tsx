@@ -18,7 +18,7 @@ export default function HomePage() {
                 className="text-amber-700 hover:text-amber-800 font-medium transition-colors inline-flex items-center space-x-1"
               >
                 <Radio className="w-4 h-4" />
-                <span>NACR</span>
+                <span>NCR</span>
               </Link>
               <Link
                 href="/network"
@@ -84,7 +84,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Riley's team finds and onboards artists. Cassidy's panel reviews submissions and assigns rotation tiers. Harper's team secures sponsors to fund the stations.
+            Riley's team finds and onboards artists. Cassidy's team reviews submissions and assigns rotation tiers. Harper's team secures sponsors to fund the stations.
             Elliot's team builds a passionate listener community that grows itself through viral content, artist fan activation, and habit formation.
           </p>
 
@@ -111,7 +111,7 @@ export default function HomePage() {
             <div className="flex items-center space-x-3 mb-4">
               <Users className="w-10 h-10 text-purple-600" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900">Riley's Team</h3>
+                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Riley's Team</h3>
                 <p className="text-sm text-gray-600">Artist Acquisition</p>
               </div>
             </div>
@@ -122,7 +122,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
-                <span>Signs up for TrueFans RADIO</span>
+                <span>Automated outreach campaigns</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
@@ -130,7 +130,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
-                <span>Manages 5-tier system</span>
+                <span>Manages upgrade opportunities</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
@@ -143,7 +143,7 @@ export default function HomePage() {
             <div className="flex items-center space-x-3 mb-4">
               <DollarSign className="w-10 h-10 text-green-600" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900">Harper's Team</h3>
+                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Harper's Team</h3>
                 <p className="text-sm text-gray-600">Sponsor Acquisition</p>
               </div>
             </div>
@@ -154,11 +154,11 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-green-600">✓</span>
-                <span>Local craft makers</span>
+                <span>Local craft makers & venues</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-green-600">✓</span>
-                <span>Community shops & venues</span>
+                <span>Community sponsor outreach</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-green-600">✓</span>
@@ -175,14 +175,14 @@ export default function HomePage() {
             <div className="flex items-center space-x-3 mb-4">
               <Award className="w-10 h-10 text-teal-600" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900">Cassidy's Panel</h3>
+                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Cassidy's Team</h3>
                 <p className="text-sm text-gray-600">Submission Review</p>
               </div>
             </div>
             <ul className="space-y-2 text-gray-700">
               <li className="flex items-center space-x-2">
                 <span className="text-teal-600">✓</span>
-                <span>Expert 6-person panel</span>
+                <span>Expert 6-person review panel</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-teal-600">✓</span>
@@ -190,11 +190,11 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-teal-600">✓</span>
-                <span>Tier placement system</span>
+                <span>4-tier placement system</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-teal-600">✓</span>
-                <span>95% placement rate</span>
+                <span>95% placement success rate</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-teal-600">✓</span>
@@ -207,7 +207,7 @@ export default function HomePage() {
             <div className="flex items-center space-x-3 mb-4">
               <Target className="w-10 h-10 text-blue-600" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900">Elliot's Team</h3>
+                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Elliot's Team</h3>
                 <p className="text-sm text-gray-600">Listener Growth</p>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-blue-600">✓</span>
-                <span>Community building</span>
+                <span>Community building campaigns</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-blue-600">✓</span>
@@ -230,7 +230,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-blue-600">✓</span>
-                <span>6,000 listeners, growing organically</span>
+                <span>6,000 listeners, growing daily</span>
               </li>
             </ul>
           </div>
@@ -316,6 +316,13 @@ export default function HomePage() {
               </Link>
             </div>
             <div>
+              <h3 className="text-white font-semibold mb-2">Cassidy's Team</h3>
+              <p className="text-sm">Submission Review & Curation</p>
+              <Link href="/cassidy" className="text-xs hover:text-white transition-colors block mt-2">
+                View Dashboard →
+              </Link>
+            </div>
+            <div>
               <h3 className="text-white font-semibold mb-2">Harper's Team</h3>
               <p className="text-sm">Sponsor Acquisition & Revenue</p>
               <Link href="/harper" className="text-xs hover:text-white transition-colors block mt-2">
@@ -329,26 +336,9 @@ export default function HomePage() {
                 View Dashboard →
               </Link>
             </div>
-            <div>
-              <h3 className="text-white font-semibold mb-2">Quick Links</h3>
-              <div className="space-y-2 text-sm">
-                <Link href="/admin" className="hover:text-white transition-colors block">
-                  Dashboard
-                </Link>
-                <Link href="/capacity" className="hover:text-white transition-colors block">
-                  Capacity
-                </Link>
-                <Link href="/airplay" className="hover:text-white transition-colors block">
-                  Airplay
-                </Link>
-                <Link href="/onboard" className="hover:text-white transition-colors block">
-                  Onboard
-                </Link>
-              </div>
-            </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p>&copy; 2024 TrueFans Internal System. Riley + Harper + Elliot AI Teams.</p>
+            <p>&copy; 2024 TrueFans Internal System. Riley + Cassidy + Harper + Elliot AI Teams.</p>
           </div>
         </div>
       </footer>

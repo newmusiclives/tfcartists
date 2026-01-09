@@ -85,7 +85,7 @@ export default function AdminSettingsPage() {
 
   // System settings
   const [systemSettings, setSystemSettings] = useState({
-    stationName: "North Country Radio (NACR)",
+    stationName: "North Country Radio (NCR)",
     stationUrl: "https://truefansradio.com",
     adminEmail: "admin@truefansradio.com",
     supportEmail: "support@truefansradio.com",

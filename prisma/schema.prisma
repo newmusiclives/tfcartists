@@ -932,7 +932,7 @@ model Station {
 
   // Station identity
   name        String   // "North Country Radio"
-  callSign    String?  // "NACR"
+  callSign    String?  // "NCR"
   tagline     String?  // "Where the music finds you"
   description String?
 

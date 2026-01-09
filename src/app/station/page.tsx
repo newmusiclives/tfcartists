@@ -69,7 +69,7 @@ export default function StationPage() {
         </div>
       </section>
 
-      {/* What Makes NACR Special */}
+      {/* What Makes NCR Special */}
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-serif font-bold text-center mb-12 text-gray-900">
@@ -201,7 +201,7 @@ export default function StationPage() {
           </h2>
           <div className="space-y-6 text-lg text-center max-w-3xl mx-auto">
             <p>
-              <strong>NACR isn't a physical place — it's a feeling:</strong>
+              <strong>NCR isn't a physical place — it's a feeling:</strong>
               <br />
               The open road, the long horizon, the quiet truth of a great song.
             </p>
@@ -305,7 +305,7 @@ export default function StationPage() {
       <section className="bg-gradient-to-br from-amber-50 to-orange-100 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-serif font-bold mb-6 text-gray-900">
-            Ready to Experience NACR?
+            Ready to Experience NCR?
           </h2>
           <p className="text-xl text-gray-700 mb-8">
             Explore our DJ lineup, view the programming schedule,

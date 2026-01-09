@@ -287,7 +287,7 @@ export default function SchedulePage() {
       <section className="bg-gradient-to-br from-amber-50 to-orange-100 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-serif font-bold mb-6 text-gray-900">
-            Make NACR Part of Your Day
+            Make NCR Part of Your Day
           </h2>
           <p className="text-xl text-gray-700 mb-8">
             Set your alarm. Bookmark your favorite show. Build a listening habit.

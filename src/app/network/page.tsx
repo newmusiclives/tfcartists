@@ -23,7 +23,7 @@ export default function NetworkPage() {
                 href="/station"
                 className="text-amber-700 hover:text-amber-800 font-medium transition-colors"
               >
-                NACR
+                NCR
               </Link>
               <Link
                 href="/djs"
@@ -128,7 +128,7 @@ export default function NetworkPage() {
           Flagship Station: North Country Radio™
         </h2>
         <p className="text-xl text-gray-700 text-center mb-12 max-w-3xl mx-auto">
-          NACR proves the model with Americana / Country / Singer-Songwriter programming.
+          NCR proves the model with Americana / Country / Singer-Songwriter programming.
           Once successful, we replicate to other genres.
         </p>
 
@@ -162,7 +162,7 @@ export default function NetworkPage() {
                 href="/station"
                 className="inline-flex items-center space-x-2 bg-amber-700 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-amber-800 transition-colors shadow-lg"
               >
-                <span>Explore NACR</span>
+                <span>Explore NCR</span>
                 <Radio className="w-5 h-5" />
               </Link>
             </div>
@@ -183,7 +183,7 @@ export default function NetworkPage() {
               stations="1 Station"
               timeline="Months 1-6"
               revenue="~$91k/year"
-              description="Launch NACR, prove the model, document playbook"
+              description="Launch NCR, prove the model, document playbook"
             />
             <ScaleCard
               phase="Phase 2"
@@ -326,7 +326,7 @@ export default function NetworkPage() {
             <EconomicsCard
               stations={5}
               revenue="$450,000 – $550,000"
-              description="Blues, Indie Folk, Bluegrass, Alt-Country + NACR"
+              description="Blues, Indie Folk, Bluegrass, Alt-Country + NCR"
             />
             <EconomicsCard
               stations={10}
@@ -365,7 +365,7 @@ export default function NetworkPage() {
               className="inline-flex items-center space-x-2 bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-bold hover:bg-purple-50 transition-colors shadow-xl"
             >
               <Radio className="w-5 h-5" />
-              <span>Explore NACR</span>
+              <span>Explore NCR</span>
             </Link>
             <Link
               href="/"
