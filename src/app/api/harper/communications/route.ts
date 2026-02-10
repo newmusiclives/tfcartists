@@ -15,15 +15,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "sponsorId is required" }, { status: 400 });
     }
 
-    // Get all conversations for this sponsor
+    // Get conversations for this sponsor (limited)
     const conversations = await prisma.sponsorConversation.findMany({
       where: { sponsorId },
       include: {
         messages: {
           orderBy: { createdAt: "asc" },
+          take: 100,
         },
       },
       orderBy: { createdAt: "desc" },
+      take: 20,
     });
 
     // Get sponsor details
@@ -49,7 +51,7 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     logger.error("Failed to retrieve Harper communications", { error: error.message });
     return NextResponse.json(
-      { error: "Failed to retrieve communications", details: error.message },
+      { error: "Failed to retrieve communications" },
       { status: 500 }
     );
   }

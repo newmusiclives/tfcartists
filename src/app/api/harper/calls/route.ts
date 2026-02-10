@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     logger.error("Failed to log Harper call", { error: error.message });
     return NextResponse.json(
-      { error: "Failed to log call", details: error.message },
+      { error: "Failed to log call" },
       { status: 500 }
     );
   }
@@ -72,6 +72,7 @@ export async function GET(request: NextRequest) {
     const calls = await prisma.sponsorCall.findMany({
       where: { sponsorId },
       orderBy: { createdAt: "desc" },
+      take: 50,
     });
 
     return NextResponse.json({
@@ -82,7 +83,7 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     logger.error("Failed to retrieve Harper calls", { error: error.message });
     return NextResponse.json(
-      { error: "Failed to retrieve calls", details: error.message },
+      { error: "Failed to retrieve calls" },
       { status: 500 }
     );
   }

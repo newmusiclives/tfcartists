@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth/config";
+import { logger } from "@/lib/logger";
 import type { SubmitReviewRequest } from "@/types/cassidy";
 
 /**
@@ -155,7 +156,7 @@ export async function POST(request: NextRequest) {
       totalJudges,
     }, { status: 201 });
   } catch (error) {
-    console.error("Error submitting review:", error);
+    logger.error("Error submitting review", { error });
     return NextResponse.json(
       { error: "Failed to submit review" },
       { status: 500 }
@@ -215,6 +216,7 @@ export async function GET(request: NextRequest) {
       orderBy: {
         scoredAt: "asc",
       },
+      take: 50,
     });
 
     return NextResponse.json({
@@ -222,7 +224,7 @@ export async function GET(request: NextRequest) {
       count: reviews.length,
     });
   } catch (error) {
-    console.error("Error fetching reviews:", error);
+    logger.error("Error fetching reviews", { error });
     return NextResponse.json(
       { error: "Failed to fetch reviews" },
       { status: 500 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { manifest } from "@/lib/payments/manifest";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { auth } from "@/lib/auth/config";
 
 /**
  * POST /api/payments/payouts
@@ -9,6 +10,14 @@ import { logger } from "@/lib/logger";
  */
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (session.user.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden - admin only" }, { status: 403 });
+    }
+
     const body = await req.json();
     const { artistId, period, bankAccountId } = body;
 
@@ -79,7 +88,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         error: "Failed to create payout",
-        details: error instanceof Error ? error.message : String(error),
+        details: process.env.NODE_ENV === "development" ? (error instanceof Error ? error.message : String(error)) : undefined,
       },
       { status: 500 }
     );
@@ -92,6 +101,11 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const artistId = searchParams.get("artistId");
 
@@ -102,10 +116,11 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Get all earnings for this artist
+    // Get earnings for this artist (paginated)
     const earnings = await prisma.radioEarnings.findMany({
       where: { artistId },
       orderBy: { createdAt: "desc" },
+      take: 100,
     });
 
     return NextResponse.json({
@@ -122,7 +137,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         error: "Failed to fetch payouts",
-        details: error instanceof Error ? error.message : String(error),
+        details: process.env.NODE_ENV === "development" ? (error instanceof Error ? error.message : String(error)) : undefined,
       },
       { status: 500 }
     );

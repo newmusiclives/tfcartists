@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
 import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { auth } from "@/lib/auth/config";
 
 /**
  * POST /api/harper/message
@@ -10,6 +11,14 @@ import { withRateLimit } from "@/lib/rate-limit/limiter";
  * Rate limited: 10 requests per minute (AI tier)
  */
 export async function POST(request: NextRequest) {
+  const session = await auth();
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!["harper", "admin"].includes(session.user.role || "")) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   // Check rate limit
   const rateLimitResponse = await withRateLimit(request, "ai");
   if (rateLimitResponse) {
@@ -42,7 +51,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     logger.error("Harper message handling failed", { error: error.message });
     return NextResponse.json(
-      { error: "Failed to handle message", details: error.message },
+      { error: "Failed to handle message" },
       { status: 500 }
     );
   }

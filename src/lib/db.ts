@@ -26,13 +26,22 @@ const createPrismaClient = () => {
 
   const isProduction = process.env.NODE_ENV === "production";
 
+  // For serverless (Netlify/Vercel), append connection pool params to PostgreSQL URLs
+  let dbUrl = process.env.DATABASE_URL;
+  if (isProduction && dbUrl && dbUrl.startsWith("postgresql")) {
+    const separator = dbUrl.includes("?") ? "&" : "?";
+    if (!dbUrl.includes("connection_limit")) {
+      dbUrl = `${dbUrl}${separator}connection_limit=5&pool_timeout=10`;
+    }
+  }
+
   return new PrismaClient({
     log: isProduction
       ? ["error", "warn"]
       : ["query", "error", "warn"],
     datasources: {
       db: {
-        url: process.env.DATABASE_URL,
+        url: dbUrl,
       },
     },
   });

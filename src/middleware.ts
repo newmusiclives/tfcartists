@@ -49,7 +49,15 @@ function addSecurityHeaders(response: NextResponse) {
  */
 function addCorsHeaders(response: NextResponse, request: NextRequest) {
   const origin = request.headers.get("origin");
-  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map(o => o.trim()).filter(Boolean) || [];
+
+  // Always allow the app's own origin
+  if (process.env.NEXTAUTH_URL) {
+    const appOrigin = new URL(process.env.NEXTAUTH_URL).origin;
+    if (!allowedOrigins.includes(appOrigin)) {
+      allowedOrigins.push(appOrigin);
+    }
+  }
 
   // In development, allow all origins
   if (process.env.NODE_ENV === "development") {

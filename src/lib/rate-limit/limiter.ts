@@ -161,13 +161,23 @@ export async function checkRateLimit(
       };
     }
 
-    // Production without rate limiter - log warning but allow
-    logger.warn("Rate limiting not configured - allowing request", {
-      identifier,
-      type: limiterType,
-    });
+    // Production without Upstash - use basic in-memory rate limiting as fallback
+    const key = `ratelimit:${limiterType}:${identifier}`;
+    const count = await memoryStore.incr(key);
+    const limits = { ai: 10, api: 60, auth: 5 };
+    const limit = limits[limiterType];
 
-    return { success: true };
+    if (count > limit) {
+      logger.warn("Rate limit exceeded (in-memory fallback)", {
+        identifier,
+        type: limiterType,
+        count,
+        limit,
+      });
+      return { success: false, limit, remaining: 0, error: "Rate limit exceeded" };
+    }
+
+    return { success: true, limit, remaining: limit - count };
   }
 
   // Use Upstash rate limiter

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth/config";
+import { logger } from "@/lib/logger";
 import type { CreateSubmissionRequest, SubmissionListItem } from "@/types/cassidy";
 
 /**
@@ -16,18 +17,17 @@ import type { CreateSubmissionRequest, SubmissionListItem } from "@/types/cassid
  */
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication (optional in development)
+    // Check authentication
     const session = await auth();
-    // Allow access without auth for development
-    // if (!session?.user) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     // Check role authorization
-    // const userRole = session?.user?.role;
-    // if (userRole !== "cassidy" && userRole !== "admin") {
-    //   return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    // }
+    const userRole = session?.user?.role;
+    if (userRole !== "cassidy" && userRole !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     // Parse query parameters
     const searchParams = request.nextUrl.searchParams;
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error fetching submissions:", error);
+    logger.error("Error fetching submissions", { error });
     return NextResponse.json(
       { error: "Failed to fetch submissions" },
       { status: 500 }
@@ -180,7 +180,7 @@ export async function POST(request: NextRequest) {
       },
     }, { status: 201 });
   } catch (error) {
-    console.error("Error creating submission:", error);
+    logger.error("Error creating submission", { error });
     return NextResponse.json(
       { error: "Failed to create submission" },
       { status: 500 }

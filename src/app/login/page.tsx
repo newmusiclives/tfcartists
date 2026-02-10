@@ -119,37 +119,17 @@ function LoginForm() {
             </button>
           </form>
 
-          {/* Demo Credentials */}
+          {/* Help text */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-500 text-center mb-3">Demo Credentials:</p>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="bg-gray-50 rounded-lg p-3">
-                <p className="font-medium text-gray-700">Admin</p>
-                <p className="text-gray-600">admin / truefans2024</p>
-              </div>
-              <div className="bg-purple-50 rounded-lg p-3">
-                <p className="font-medium text-purple-700">Riley</p>
-                <p className="text-purple-600">riley / riley2024</p>
-              </div>
-              <div className="bg-pink-50 rounded-lg p-3">
-                <p className="font-medium text-pink-700">Harper</p>
-                <p className="text-pink-600">harper / harper2024</p>
-              </div>
-              <div className="bg-blue-50 rounded-lg p-3">
-                <p className="font-medium text-blue-700">Elliot</p>
-                <p className="text-blue-600">elliot / elliot2024</p>
-              </div>
-              <div className="bg-teal-50 rounded-lg p-3 col-span-2">
-                <p className="font-medium text-teal-700">Cassidy</p>
-                <p className="text-teal-600">cassidy / cassidy2024</p>
-              </div>
-            </div>
+            <p className="text-xs text-gray-500 text-center">
+              Contact your administrator if you need login credentials.
+            </p>
           </div>
         </div>
 
         {/* Footer */}
         <p className="text-center text-purple-200 text-sm mt-6">
-          © 2024 TrueFans RADIO. All rights reserved.
+          © 2025 TrueFans RADIO. All rights reserved.
         </p>
       </div>
     </div>

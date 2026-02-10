@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { manifest } from "@/lib/payments/manifest";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { auth } from "@/lib/auth/config";
 
 /**
  * POST /api/payments/subscribe
@@ -9,6 +10,11 @@ import { logger } from "@/lib/logger";
  */
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await req.json();
     const { type, entityId, tier, email, name } = body;
 
@@ -85,7 +91,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         error: "Failed to create subscription",
-        details: error instanceof Error ? error.message : String(error),
+        details: process.env.NODE_ENV === "development" ? (error instanceof Error ? error.message : String(error)) : undefined,
       },
       { status: 500 }
     );

@@ -76,31 +76,28 @@ function LocalhostGuide() {
       <h2 className="text-3xl font-bold mb-6">Live Demo Guide - What Works RIGHT NOW</h2>
 
       <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
-        <p className="font-semibold text-blue-900 mb-2">Your site is running at: http://localhost:3000</p>
-        <p className="text-blue-800">This guide shows you exactly what you can click through and demo on the live site.</p>
+        <p className="font-semibold text-blue-900 mb-2">Welcome to TrueFans RADIO</p>
+        <p className="text-blue-800">This guide shows you exactly what you can click through and explore on the live site.</p>
       </div>
 
-      <h3 className="text-2xl font-bold mt-8 mb-4">Login Credentials</h3>
+      <h3 className="text-2xl font-bold mt-8 mb-4">Team Dashboards</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-purple-50 rounded-lg p-4 border-2 border-purple-200">
-          <h4 className="font-bold text-purple-900 mb-2">Riley's Account (Artist Team)</h4>
-          <p className="text-sm text-gray-700 mb-1">Username: <code className="bg-purple-100 px-2 py-1 rounded">riley</code></p>
-          <p className="text-sm text-gray-700 mb-2">Password: <code className="bg-purple-100 px-2 py-1 rounded">riley2024</code></p>
+          <h4 className="font-bold text-purple-900 mb-2">Riley (Artist Team)</h4>
+          <p className="text-sm text-gray-700 mb-2">Artist acquisition and pipeline management</p>
           <a href="/riley" className="text-purple-600 hover:text-purple-700 text-sm font-medium">→ Go to Riley Dashboard</a>
         </div>
 
         <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
-          <h4 className="font-bold text-green-900 mb-2">Harper's Account (Sponsor Team)</h4>
-          <p className="text-sm text-gray-700 mb-1">Username: <code className="bg-green-100 px-2 py-1 rounded">harper</code></p>
-          <p className="text-sm text-gray-700 mb-2">Password: <code className="bg-green-100 px-2 py-1 rounded">harper2024</code></p>
+          <h4 className="font-bold text-green-900 mb-2">Harper (Sponsor Team)</h4>
+          <p className="text-sm text-gray-700 mb-2">Sponsor outreach and deal management</p>
           <a href="/harper" className="text-green-600 hover:text-green-700 text-sm font-medium">→ Go to Harper Dashboard</a>
         </div>
 
         <div className="bg-orange-50 rounded-lg p-4 border-2 border-orange-200">
-          <h4 className="font-bold text-orange-900 mb-2">Admin Account</h4>
-          <p className="text-sm text-gray-700 mb-1">Username: <code className="bg-orange-100 px-2 py-1 rounded">admin</code></p>
-          <p className="text-sm text-gray-700 mb-2">Password: <code className="bg-orange-100 px-2 py-1 rounded">truefans2024</code></p>
+          <h4 className="font-bold text-orange-900 mb-2">Admin Dashboard</h4>
+          <p className="text-sm text-gray-700 mb-2">System-wide overview and settings</p>
           <a href="/admin" className="text-orange-600 hover:text-orange-700 text-sm font-medium">→ Go to Admin Dashboard</a>
         </div>
       </div>

@@ -30,7 +30,11 @@ export async function GET(req: NextRequest) {
   try {
     // Verify cron secret
     const authHeader = req.headers.get("authorization");
-    const cronSecret = env.CRON_SECRET || "development-secret";
+    const cronSecret = env.CRON_SECRET;
+    if (!cronSecret) {
+      logger.error("CRON_SECRET not configured");
+      return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+    }
 
     if (authHeader !== `Bearer ${cronSecret}`) {
       logger.warn("Unauthorized cron attempt", { path: "/api/cron/revenue-monthly" });
@@ -235,7 +239,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         error: "Revenue distribution failed",
-        details: error instanceof Error ? error.message : String(error),
+        details: process.env.NODE_ENV === "development" ? (error instanceof Error ? error.message : String(error)) : undefined,
       },
       { status: 500 }
     );
