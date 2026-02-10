@@ -5,22 +5,16 @@
   publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
 
-# Next.js Plugin
+# Next.js Plugin - handles API routes, SSR, and static pages automatically
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 # Scheduled Functions (Cron Jobs)
 # Note: Scheduled functions require Netlify Pro plan or higher
 # Schedules are defined in netlify/functions/*.ts files using @netlify/functions
-
-# Redirects for API routes
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
 
 # Headers for security
 [[headers]]
