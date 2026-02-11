@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -53,92 +53,70 @@ export default function OutreachPage() {
   const [selectedLead, setSelectedLead] = useState<ArtistLead | null>(null);
   const [showNewLeadModal, setShowNewLeadModal] = useState(false);
 
-  // Mock data for artist leads
-  const [leads, setLeads] = useState<ArtistLead[]>([
-    {
-      id: 1,
-      name: "Sarah Martinez",
-      genre: "Indie Folk",
-      location: "Burlington, VT",
-      source: "instagram",
-      socialHandle: "@sarahmartinezmusic",
-      email: "sarah@example.com",
-      followers: 2400,
-      lastShow: "The Higher Ground - Jan 15",
-      status: "new",
-      notes: "Strong engagement on recent posts. Has upcoming show at Nectar's.",
-    },
-    {
-      id: 2,
-      name: "The Wanderers",
-      genre: "Americana",
-      location: "Montpelier, VT",
-      source: "venue",
-      email: "band@thewanderers.com",
-      phone: "(802) 555-0123",
-      website: "thewanderers.com",
-      lastShow: "Langdon Street Cafe - Jan 10",
-      status: "contacted",
-      firstContact: "Jan 18, 2024",
-      lastContact: "Jan 18, 2024",
-      nextFollowUp: "Jan 25, 2024",
-      notes: "Sent initial outreach email. Waiting for response.",
-    },
-    {
-      id: 3,
-      name: "Jake Rivers",
-      genre: "Country/Rock",
-      location: "St. Johnsbury, VT",
-      source: "spotify",
-      socialHandle: "@jakerivers",
-      email: "jake.rivers@example.com",
-      followers: 1850,
-      status: "responded",
-      firstContact: "Jan 12, 2024",
-      lastContact: "Jan 16, 2024",
-      notes: "Responded positively. Interested in FREE tier. Ready to submit track.",
-    },
-    {
-      id: 4,
-      name: "Emma Stone & The Pebbles",
-      genre: "Rock",
-      location: "Brattleboro, VT",
-      source: "referral",
-      email: "emma@stoneandpebbles.com",
-      phone: "(802) 555-0199",
-      status: "invited",
-      firstContact: "Jan 8, 2024",
-      lastContact: "Jan 15, 2024",
-      nextFollowUp: "Jan 22, 2024",
-      notes: "Referred by John Smith. Sent track submission invite. Following up soon.",
-    },
-    {
-      id: 5,
-      name: "Chris Taylor",
-      genre: "Blues",
-      location: "Rutland, VT",
-      source: "instagram",
-      socialHandle: "@christaylorblues",
-      email: "chris@example.com",
-      followers: 3200,
-      status: "submitted",
-      firstContact: "Jan 5, 2024",
-      lastContact: "Jan 19, 2024",
-      notes: "Submitted 'Midnight Highway'. Under review by Sienna. Very engaged.",
-    },
-    {
-      id: 6,
-      name: "The Mountain Echoes",
-      genre: "Folk",
-      location: "Stowe, VT",
-      source: "venue",
-      email: "contact@mountainechoes.com",
-      status: "not_interested",
-      firstContact: "Jan 10, 2024",
-      lastContact: "Jan 14, 2024",
-      notes: "Not interested at this time. Already has distribution deal.",
-    },
-  ]);
+  const [leads, setLeads] = useState<ArtistLead[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchLeads() {
+      try {
+        const [discoveredRes, contactedRes] = await Promise.all([
+          fetch("/api/artists?status=DISCOVERED&limit=20"),
+          fetch("/api/artists?status=CONTACTED&limit=20"),
+        ]);
+
+        const discoveredData = discoveredRes.ok ? await discoveredRes.json() : { artists: [] };
+        const contactedData = contactedRes.ok ? await contactedRes.json() : { artists: [] };
+
+        const allArtists = [...(discoveredData.artists || []), ...(contactedData.artists || [])];
+
+        const statusMap: Record<string, ContactStatus> = {
+          DISCOVERED: "new",
+          CONTACTED: "contacted",
+          ENGAGED: "responded",
+          QUALIFIED: "invited",
+          ONBOARDING: "submitted",
+          ACTIVATED: "upgraded",
+          REJECTED: "not_interested",
+        };
+
+        const sourceMap: Record<string, DiscoverySource> = {
+          instagram: "instagram",
+          tiktok: "instagram",
+          spotify: "spotify",
+          venue: "venue",
+          referral: "referral",
+          manual: "website",
+          website: "website",
+        };
+
+        const mapped: ArtistLead[] = allArtists.map((a: any, index: number) => ({
+          id: index + 1,
+          name: a.name || "Unknown",
+          genre: a.genre || "Unknown",
+          location: a.nextShowCity || "",
+          source: sourceMap[a.discoverySource] || "website",
+          socialHandle: a.sourceHandle || undefined,
+          email: a.email || undefined,
+          phone: a.phone || undefined,
+          website: a.sourceUrl || undefined,
+          followers: a.followerCount || undefined,
+          lastShow: a.nextShowVenue ? `${a.nextShowVenue}${a.nextShowDate ? ` - ${new Date(a.nextShowDate).toLocaleDateString()}` : ""}` : undefined,
+          status: statusMap[a.status] || "new",
+          firstContact: a.createdAt ? new Date(a.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : undefined,
+          lastContact: a.lastContactedAt ? new Date(a.lastContactedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : undefined,
+          nextFollowUp: a.nextFollowUpAt ? new Date(a.nextFollowUpAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : undefined,
+          notes: a.bio || undefined,
+        }));
+
+        setLeads(mapped);
+      } catch (err) {
+        console.error("Error fetching leads:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchLeads();
+  }, []);
 
   const stats = {
     totalLeads: leads.length,
@@ -208,6 +186,17 @@ export default function OutreachPage() {
     };
     return icons[source];
   };
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading artist leads...</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">

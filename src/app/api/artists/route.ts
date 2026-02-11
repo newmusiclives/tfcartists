@@ -1,42 +1,60 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { handleApiError } from "@/lib/api/errors";
+import { withPagination } from "@/lib/api/helpers";
 
 /**
  * GET /api/artists
- * Get all artists with optional filters
+ * Get all artists with optional filters, pagination, search, tier filter
  */
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get("status");
     const stage = searchParams.get("stage");
-    const limit = parseInt(searchParams.get("limit") || "50");
+    const tier = searchParams.get("tier");
+    const { page, limit, skip, sortBy, sortOrder, search } = withPagination(searchParams);
 
-    const artists = await prisma.artist.findMany({
-      where: {
-        ...(status && { status: status as any }),
-        ...(stage && { pipelineStage: stage }),
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: limit,
-      include: {
-        _count: {
-          select: {
-            conversations: true,
-            shows: true,
-            donations: true,
+    const where: any = {
+      deletedAt: null,
+      ...(status && { status: status as any }),
+      ...(stage && { pipelineStage: stage }),
+      ...(tier && { airplayTier: tier as any }),
+      ...(search && {
+        OR: [
+          { name: { contains: search } },
+          { email: { contains: search } },
+          { genre: { contains: search } },
+        ],
+      }),
+    };
+
+    const [artists, total] = await Promise.all([
+      prisma.artist.findMany({
+        where,
+        orderBy: { [sortBy]: sortOrder },
+        take: limit,
+        skip,
+        include: {
+          _count: {
+            select: {
+              conversations: true,
+              shows: true,
+              donations: true,
+            },
           },
         },
-      },
-    });
+      }),
+      prisma.artist.count({ where }),
+    ]);
 
-    return NextResponse.json({ artists });
+    return NextResponse.json({
+      artists,
+      pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    });
   } catch (error) {
-    logger.error("Error fetching artists", { error });
-    return NextResponse.json({ error: "Failed to fetch artists" }, { status: 500 });
+    return handleApiError(error, "/api/artists");
   }
 }
 

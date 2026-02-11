@@ -1,108 +1,101 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, TrendingUp, User, Mail, MessageCircle, CheckCircle } from "lucide-react";
 import { AIRPLAY_TIER_PRICING, AIRPLAY_TIER_SHARES, AIRPLAY_TIER_PLAYS_PER_MONTH } from "@/lib/calculations/station-capacity";
 
-// Mock data - in production this would come from the database
-const opportunitiesData = [
-  {
-    id: 1,
-    artist: "John Smith",
-    email: "john@example.com",
-    currentTier: "FREE",
-    suggestedTier: "BRONZE",
-    currentPlays: 15,
-    targetPlays: 4,
-    engagement: "high",
-    tracksSubmitted: 2,
-    monthsSinceJoin: 2,
-    reason: "High engagement (15 plays vs 1 allocated). Artist is clearly popular with listeners.",
-    estimatedROI: "+$4.85/month from pool shares for $5/month cost",
-    contacted: false,
-  },
-  {
-    id: 2,
-    artist: "Lisa Wong",
-    email: "lisa@example.com",
-    currentTier: "BRONZE",
-    suggestedTier: "SILVER",
-    currentPlays: 28,
-    targetPlays: 4,
-    engagement: "high",
-    tracksSubmitted: 5,
-    monthsSinceJoin: 3,
-    reason: "Consistently exceeding Bronze tier plays. Growing fanbase and strong track quality.",
-    estimatedROI: "+$24.25/month from pool shares for $20/month cost",
-    contacted: false,
-  },
-  {
-    id: 3,
-    artist: "Mike Johnson",
-    email: "mike@example.com",
-    currentTier: "SILVER",
-    suggestedTier: "GOLD",
-    currentPlays: 52,
-    targetPlays: 16,
-    engagement: "high",
-    tracksSubmitted: 8,
-    monthsSinceJoin: 4,
-    reason: "Outperforming Silver tier by 3x. High-quality production and loyal listener base.",
-    estimatedROI: "+$72.75/month from pool shares for $50/month cost",
-    contacted: false,
-  },
-  {
-    id: 4,
-    artist: "Emma Davis",
-    email: "emma@example.com",
-    currentTier: "FREE",
-    suggestedTier: "BRONZE",
-    currentPlays: 12,
-    targetPlays: 1,
-    engagement: "high",
-    tracksSubmitted: 3,
-    monthsSinceJoin: 1,
-    reason: "New artist showing strong initial engagement. Multiple quality tracks submitted.",
-    estimatedROI: "+$4.85/month from pool shares for $5/month cost",
-    contacted: false,
-  },
-  {
-    id: 5,
-    artist: "Sarah Blake",
-    email: "sarah@example.com",
-    currentTier: "SILVER",
-    suggestedTier: "GOLD",
-    currentPlays: 45,
-    targetPlays: 16,
-    engagement: "medium",
-    tracksSubmitted: 6,
-    monthsSinceJoin: 3,
-    reason: "Consistent performance above Silver tier. Professional production quality.",
-    estimatedROI: "+$72.75/month from pool shares for $50/month cost",
-    contacted: false,
-  },
-  {
-    id: 6,
-    artist: "Marcus Cole",
-    email: "marcus@example.com",
-    currentTier: "BRONZE",
-    suggestedTier: "SILVER",
-    currentPlays: 22,
-    targetPlays: 4,
-    engagement: "high",
-    tracksSubmitted: 4,
-    monthsSinceJoin: 2,
-    reason: "Growing audience with 5x current tier allocation. Time to level up.",
-    estimatedROI: "+$24.25/month from pool shares for $20/month cost",
-    contacted: false,
-  },
-];
+interface OpportunityItem {
+  id: string;
+  artist: string;
+  email: string;
+  currentTier: string;
+  suggestedTier: string;
+  currentPlays: number;
+  targetPlays: number;
+  engagement: string;
+  tracksSubmitted: number;
+  monthsSinceJoin: number;
+  reason: string;
+  estimatedROI: string;
+  contacted: boolean;
+}
 
 export default function UpgradeOpportunitiesPage() {
-  const [opportunities, setOpportunities] = useState(opportunitiesData);
-  const [selectedOpportunity, setSelectedOpportunity] = useState<typeof opportunitiesData[0] | null>(null);
+  const [opportunities, setOpportunities] = useState<OpportunityItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedOpportunity, setSelectedOpportunity] = useState<OpportunityItem | null>(null);
   const [filter, setFilter] = useState<"all" | "contacted" | "not_contacted">("all");
+
+  useEffect(() => {
+    async function fetchOpportunities() {
+      try {
+        const [freeRes, tierRes] = await Promise.all([
+          fetch("/api/artists?tier=FREE&sortBy=engagementRate&sortOrder=desc&limit=10"),
+          fetch("/api/artists?tier=TIER_5&sortBy=engagementRate&sortOrder=desc&limit=10"),
+        ]);
+
+        const freeData = freeRes.ok ? await freeRes.json() : { artists: [] };
+        const tierData = tierRes.ok ? await tierRes.json() : { artists: [] };
+
+        const tierNameMap: Record<string, string> = {
+          FREE: "FREE",
+          TIER_5: "BRONZE",
+          TIER_20: "SILVER",
+          TIER_50: "GOLD",
+          TIER_120: "PLATINUM",
+        };
+
+        const nextTierMap: Record<string, string> = {
+          FREE: "BRONZE",
+          BRONZE: "SILVER",
+          SILVER: "GOLD",
+          GOLD: "PLATINUM",
+        };
+
+        const tierPriceMap: Record<string, number> = {
+          FREE: 0, BRONZE: 5, SILVER: 20, GOLD: 50, PLATINUM: 120,
+        };
+
+        const allArtists = [...(freeData.artists || []), ...(tierData.artists || [])];
+
+        const mapped: OpportunityItem[] = allArtists.map((a: any) => {
+          const currentTier = tierNameMap[a.airplayTier] || "FREE";
+          const suggestedTier = nextTierMap[currentTier] || "BRONZE";
+          const engRate = a.engagementRate || 0;
+          const engagement = engRate > 5 ? "high" : engRate > 2 ? "medium" : "low";
+          const monthsSinceJoin = a.createdAt
+            ? Math.max(1, Math.floor((Date.now() - new Date(a.createdAt).getTime()) / (1000 * 60 * 60 * 24 * 30)))
+            : 1;
+          const suggestedPrice = tierPriceMap[suggestedTier] || 5;
+          const currentPrice = tierPriceMap[currentTier] || 0;
+
+          return {
+            id: a.id,
+            artist: a.name || "Unknown",
+            email: a.email || "",
+            currentTier,
+            suggestedTier,
+            currentPlays: a.conversationCount || 0,
+            targetPlays: a.airplayShares || 1,
+            engagement,
+            tracksSubmitted: a._count?.conversations || 0,
+            monthsSinceJoin,
+            reason: `${engagement === "high" ? "High" : "Growing"} engagement with ${engRate.toFixed(1)}% rate. Potential upgrade candidate.`,
+            estimatedROI: `+$${(suggestedPrice * 0.97).toFixed(2)}/month from pool shares for $${suggestedPrice}/month cost`,
+            contacted: a.lastContactedAt != null,
+          };
+        });
+
+        setOpportunities(mapped);
+      } catch (err) {
+        console.error("Error fetching upgrade opportunities:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchOpportunities();
+  }, []);
 
   const filteredOpportunities = opportunities.filter(opp => {
     if (filter === "all") return true;
@@ -120,12 +113,23 @@ export default function UpgradeOpportunitiesPage() {
       .reduce((sum, o) => sum + (AIRPLAY_TIER_PRICING[o.suggestedTier as keyof typeof AIRPLAY_TIER_PRICING] - AIRPLAY_TIER_PRICING[o.currentTier as keyof typeof AIRPLAY_TIER_PRICING]), 0),
   };
 
-  const handleContact = (id: number) => {
+  const handleContact = (id: string) => {
     setOpportunities(prev => prev.map(o =>
       o.id === id ? { ...o, contacted: true } : o
     ));
     setSelectedOpportunity(null);
   };
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading upgrade opportunities...</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -320,7 +324,7 @@ function FilterButton({ active, onClick, label, count }: { active: boolean; onCl
   );
 }
 
-function OpportunityCard({ opportunity, onSelect }: { opportunity: typeof opportunitiesData[0]; onSelect: (o: typeof opportunitiesData[0]) => void }) {
+function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityItem; onSelect: (o: OpportunityItem) => void }) {
   const currentPrice = AIRPLAY_TIER_PRICING[opportunity.currentTier as keyof typeof AIRPLAY_TIER_PRICING];
   const suggestedPrice = AIRPLAY_TIER_PRICING[opportunity.suggestedTier as keyof typeof AIRPLAY_TIER_PRICING];
   const priceDiff = suggestedPrice - currentPrice;
@@ -393,9 +397,9 @@ function OpportunityModal({
   onClose,
   onContact
 }: {
-  opportunity: typeof opportunitiesData[0];
+  opportunity: OpportunityItem;
   onClose: () => void;
-  onContact: (id: number) => void;
+  onContact: (id: string) => void;
 }) {
   const currentShares = AIRPLAY_TIER_SHARES[opportunity.currentTier as keyof typeof AIRPLAY_TIER_SHARES];
   const suggestedShares = AIRPLAY_TIER_SHARES[opportunity.suggestedTier as keyof typeof AIRPLAY_TIER_SHARES];

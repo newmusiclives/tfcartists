@@ -1,141 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Users, Search, Filter, TrendingUp, Music, DollarSign, User, Mail, Phone, Calendar } from "lucide-react";
 import { ARTIST_CAPACITY, AIRPLAY_TIER_SHARES, AIRPLAY_TIER_PRICING, AIRPLAY_TIER_PLAYS_PER_MONTH } from "@/lib/calculations/station-capacity";
 
-// Mock data - in production this would come from the database
-const artistsData = [
-  {
-    id: 1,
-    name: "Sarah Blake",
-    email: "sarah@example.com",
-    phone: "555-0101",
-    tier: "SILVER",
-    status: "ACTIVE",
-    joinedAt: "Jan 2024",
-    tracksSubmitted: 4,
-    playsThisMonth: 16,
-    poolShares: 25,
-    monthlyEarnings: 24.25,
-    engagement: "high",
-    genre: "Americana"
-  },
-  {
-    id: 2,
-    name: "Jake Rivers",
-    email: "jake@example.com",
-    phone: "555-0102",
-    tier: "GOLD",
-    status: "ACTIVE",
-    joinedAt: "Dec 2023",
-    tracksSubmitted: 6,
-    playsThisMonth: 48,
-    poolShares: 75,
-    monthlyEarnings: 72.75,
-    engagement: "high",
-    genre: "Folk"
-  },
-  {
-    id: 3,
-    name: "Maya Santos",
-    email: "maya@example.com",
-    phone: "555-0103",
-    tier: "BRONZE",
-    status: "ACTIVE",
-    joinedAt: "Jan 2024",
-    tracksSubmitted: 2,
-    playsThisMonth: 4,
-    poolShares: 5,
-    monthlyEarnings: 4.85,
-    engagement: "medium",
-    genre: "Roots"
-  },
-  {
-    id: 4,
-    name: "Alex Turner",
-    email: "alex@example.com",
-    phone: "555-0104",
-    tier: "PLATINUM",
-    status: "ACTIVE",
-    joinedAt: "Nov 2023",
-    tracksSubmitted: 12,
-    playsThisMonth: 192,
-    poolShares: 200,
-    monthlyEarnings: 194.00,
-    engagement: "high",
-    genre: "Singer-Songwriter"
-  },
-  {
-    id: 5,
-    name: "Emma Davis",
-    email: "emma@example.com",
-    phone: "555-0105",
-    tier: "FREE",
-    status: "ACTIVE",
-    joinedAt: "Jan 2024",
-    tracksSubmitted: 1,
-    playsThisMonth: 1,
-    poolShares: 1,
-    monthlyEarnings: 0.97,
-    engagement: "low",
-    genre: "Folk"
-  },
-  {
-    id: 6,
-    name: "Marcus Cole",
-    email: "marcus@example.com",
-    phone: "555-0106",
-    tier: "BRONZE",
-    status: "ACTIVE",
-    joinedAt: "Jan 2024",
-    tracksSubmitted: 3,
-    playsThisMonth: 4,
-    poolShares: 5,
-    monthlyEarnings: 4.85,
-    engagement: "medium",
-    genre: "Bluegrass"
-  },
-  {
-    id: 7,
-    name: "Lisa Wong",
-    email: "lisa@example.com",
-    phone: "555-0107",
-    tier: "SILVER",
-    status: "ACTIVE",
-    joinedAt: "Dec 2023",
-    tracksSubmitted: 5,
-    playsThisMonth: 16,
-    poolShares: 25,
-    monthlyEarnings: 24.25,
-    engagement: "high",
-    genre: "Indie Folk"
-  },
-  {
-    id: 8,
-    name: "John Smith",
-    email: "john@example.com",
-    phone: "555-0108",
-    tier: "FREE",
-    status: "ACTIVE",
-    joinedAt: "Jan 2024",
-    tracksSubmitted: 1,
-    playsThisMonth: 1,
-    poolShares: 1,
-    monthlyEarnings: 0.97,
-    engagement: "high",
-    genre: "Americana"
-  },
-];
+const tierMap: Record<string, string> = {
+  FREE: "FREE",
+  TIER_5: "BRONZE",
+  TIER_20: "SILVER",
+  TIER_50: "GOLD",
+  TIER_120: "PLATINUM",
+};
+
+const sharesMap: Record<string, number> = {
+  FREE: 1, TIER_5: 5, TIER_20: 25, TIER_50: 75, TIER_120: 200,
+};
+
+function mapArtist(a: any) {
+  const tier = tierMap[a.airplayTier] || "FREE";
+  const shares = sharesMap[a.airplayTier] || 1;
+  const price = AIRPLAY_TIER_PRICING[tier as keyof typeof AIRPLAY_TIER_PRICING] || 0;
+  return {
+    id: a.id,
+    name: a.name,
+    email: a.email || "",
+    phone: a.phone || "",
+    tier,
+    status: a.status,
+    joinedAt: new Date(a.createdAt).toLocaleDateString("en-US", { month: "short", year: "numeric" }),
+    tracksSubmitted: a._count?.conversations || 0,
+    playsThisMonth: shares,
+    poolShares: shares,
+    monthlyEarnings: 0,
+    engagement: (a.engagementRate || 0) >= 5 ? "high" : (a.engagementRate || 0) >= 3 ? "medium" : "low",
+    genre: a.genre || "Unknown",
+  };
+}
 
 type TierFilter = "ALL" | "FREE" | "BRONZE" | "SILVER" | "GOLD" | "PLATINUM";
 
 export default function RileyArtistsPage() {
-  const [artists, setArtists] = useState(artistsData);
+  const [artists, setArtists] = useState<ReturnType<typeof mapArtist>[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [tierFilter, setTierFilter] = useState<TierFilter>("ALL");
-  const [selectedArtist, setSelectedArtist] = useState<typeof artistsData[0] | null>(null);
+  const [selectedArtist, setSelectedArtist] = useState<ReturnType<typeof mapArtist> | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchArtists() {
+      try {
+        const res = await fetch("/api/artists?limit=100");
+        if (res.ok) {
+          const data = await res.json();
+          setArtists((data.artists || []).map(mapArtist));
+        }
+      } catch (error) {
+        console.error("Error fetching artists:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchArtists();
+  }, []);
 
   const filteredArtists = artists.filter(artist => {
     const matchesSearch = artist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -156,6 +83,14 @@ export default function RileyArtistsPage() {
     totalShares: artists.reduce((sum, a) => sum + a.poolShares, 0),
     totalMonthlyRevenue: artists.reduce((sum, a) => sum + (AIRPLAY_TIER_PRICING[a.tier as keyof typeof AIRPLAY_TIER_PRICING] || 0), 0),
   };
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading artists...</div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
@@ -360,7 +295,7 @@ function TabButton({ active, onClick, label }: { active: boolean; onClick: () =>
   );
 }
 
-function ArtistRow({ artist, onSelect }: { artist: typeof artistsData[0]; onSelect: (a: typeof artistsData[0]) => void }) {
+function ArtistRow({ artist, onSelect }: { artist: ReturnType<typeof mapArtist>; onSelect: (a: ReturnType<typeof mapArtist>) => void }) {
   const engagementColors = {
     high: "text-green-600 bg-green-50",
     medium: "text-yellow-600 bg-yellow-50",
@@ -413,7 +348,7 @@ function ArtistRow({ artist, onSelect }: { artist: typeof artistsData[0]; onSele
   );
 }
 
-function ArtistDetailModal({ artist, onClose }: { artist: typeof artistsData[0]; onClose: () => void }) {
+function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapArtist>; onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<"overview" | "tracks" | "plays" | "revenue" | "tiers">("overview");
 
   // Mock historical data

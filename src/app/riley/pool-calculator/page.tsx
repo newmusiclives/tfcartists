@@ -1,25 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, DollarSign, Users, TrendingUp, Calculator, User } from "lucide-react";
 import { AIRPLAY_TIER_SHARES } from "@/lib/calculations/station-capacity";
 import { SharedNav } from "@/components/shared-nav";
 
 export default function PoolCalculatorPage() {
-  // Based on Master Overview: Harper generates $7,800/month, 80% = $6,240 to artist pool
   const [harperRevenue, setHarperRevenue] = useState(7800);
+  const [loading, setLoading] = useState(true);
   const artistPoolPercentage = 0.80;
   const artistPoolAmount = harperRevenue * artistPoolPercentage;
 
-  // Artist distribution from Master Overview
   const [artistCounts, setArtistCounts] = useState({
-    FREE: 180,
-    BRONZE: 80,
-    SILVER: 40,
-    GOLD: 30,
-    PLATINUM: 10,
+    FREE: 0,
+    BRONZE: 0,
+    SILVER: 0,
+    GOLD: 0,
+    PLATINUM: 0,
   });
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const res = await fetch("/api/riley/stats");
+        if (!res.ok) throw new Error("Failed to fetch stats");
+        const data = await res.json();
+        if (data.byTier) {
+          setArtistCounts({
+            FREE: data.byTier.FREE || 0,
+            BRONZE: data.byTier.BRONZE || 0,
+            SILVER: data.byTier.SILVER || 0,
+            GOLD: data.byTier.GOLD || 0,
+            PLATINUM: data.byTier.PLATINUM || 0,
+          });
+        }
+        if (data.monthlyRevenue != null) {
+          setHarperRevenue(data.monthlyRevenue || 7800);
+        }
+      } catch (err) {
+        console.error("Error fetching pool stats:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStats();
+  }, []);
 
   // Calculate total shares
   const totalShares =
@@ -50,6 +76,17 @@ export default function PoolCalculatorPage() {
   };
 
   const totalArtists = Object.values(artistCounts).reduce((a, b) => a + b, 0);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading pool calculator data...</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">

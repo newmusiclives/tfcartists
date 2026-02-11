@@ -1,40 +1,111 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Users, Music, DollarSign, TrendingUp, Upload, CheckCircle, Clock, XCircle, Search, UserCircle } from "lucide-react";
 import { ARTIST_CAPACITY, AIRPLAY_TIER_SHARES, AIRPLAY_TIER_PRICING, AIRPLAY_TIER_PLAYS_PER_MONTH } from "@/lib/calculations/station-capacity";
 
+interface RileyStats {
+  totalArtists: number;
+  byTier: { FREE: number; BRONZE: number; SILVER: number; GOLD: number; PLATINUM: number };
+  monthlyRevenue: number;
+  totalShares: number;
+  pendingSubmissions: number;
+  approvedThisMonth: number;
+  rejectedThisMonth: number;
+}
+
+interface SubmissionItem {
+  id: string;
+  artistName: string;
+  trackTitle: string;
+  tierAwarded: string | null;
+  status: string;
+  createdAt: string;
+}
+
 export default function RileyDashboardPage() {
-  // Mock data - in production this would come from the database
-  const stats = {
-    totalArtists: 340,
-    byTier: {
-      FREE: 180,
-      BRONZE: 80,
-      SILVER: 40,
-      GOLD: 30,
-      PLATINUM: 10,
-    },
-    monthlyRevenue: 3900, // From Master Overview
-    totalShares: 6430,
-    pendingSubmissions: 12,
-    approvedThisMonth: 45,
-    rejectedThisMonth: 3,
-  };
+  const [stats, setStats] = useState<RileyStats | null>(null);
+  const [recentSubmissions, setRecentSubmissions] = useState<SubmissionItem[]>([]);
+  const [upgradeArtists, setUpgradeArtists] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const recentSubmissions = [
-    { id: 1, artist: "Sarah Blake", track: "Wildfire", tier: "SILVER", status: "pending", submittedAt: "2 hours ago" },
-    { id: 2, artist: "Jake Rivers", track: "Long Road Home", tier: "GOLD", status: "approved", submittedAt: "5 hours ago" },
-    { id: 3, artist: "Maya Santos", track: "Desert Moon", tier: "BRONZE", status: "pending", submittedAt: "1 day ago" },
-    { id: 4, artist: "Alex Turner", track: "Fading Light", tier: "PLATINUM", status: "approved", submittedAt: "1 day ago" },
-    { id: 5, artist: "Emma Davis", track: "Broken Strings", tier: "FREE", status: "rejected", submittedAt: "2 days ago" },
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [statsRes, submissionsRes, artistsRes] = await Promise.all([
+          fetch("/api/riley/stats"),
+          fetch("/api/cassidy/submissions?limit=5"),
+          fetch("/api/artists?tier=FREE&sortBy=engagementRate&sortOrder=desc&limit=3"),
+        ]);
 
-  const tierUpgradeOpportunities = [
-    { artist: "John Smith", currentTier: "FREE", suggestedTier: "BRONZE", plays: 15, engagement: "high" },
-    { artist: "Lisa Wong", currentTier: "BRONZE", suggestedTier: "SILVER", plays: 28, engagement: "high" },
-    { artist: "Mike Johnson", currentTier: "SILVER", suggestedTier: "GOLD", plays: 52, engagement: "medium" },
-  ];
+        if (statsRes.ok) {
+          setStats(await statsRes.json());
+        }
+        if (submissionsRes.ok) {
+          const data = await submissionsRes.json();
+          setRecentSubmissions(data.submissions || []);
+        }
+        if (artistsRes.ok) {
+          const data = await artistsRes.json();
+          setUpgradeArtists(
+            (data.artists || [])
+              .filter((a: any) => a.engagementRate && a.engagementRate >= 4.0)
+              .map((a: any) => ({
+                artist: a.name,
+                currentTier: "FREE",
+                suggestedTier: "BRONZE",
+                plays: a.followerCount || 0,
+                engagement: a.engagementRate >= 5.0 ? "high" : "medium",
+              }))
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading dashboard...</div>
+      </main>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+        <div className="text-red-600">Error loading dashboard data</div>
+      </main>
+    );
+  }
+
+  const tierUpgradeOpportunities = upgradeArtists.length > 0
+    ? upgradeArtists
+    : [{ artist: "No upgrade candidates", currentTier: "FREE", suggestedTier: "BRONZE", plays: 0, engagement: "low" }];
+
+  function formatTimeAgo(dateStr: string) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const hours = Math.floor(diff / 3600000);
+    if (hours < 1) return "just now";
+    if (hours < 24) return `${hours} hours ago`;
+    const days = Math.floor(hours / 24);
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  }
+
+  const mappedSubmissions = recentSubmissions.map((s) => ({
+    id: s.id,
+    artist: s.artistName,
+    track: s.trackTitle,
+    tier: s.tierAwarded || "PENDING",
+    status: s.status === "PLACED" ? "approved" : s.status === "NOT_PLACED" ? "rejected" : "pending",
+    submittedAt: formatTimeAgo(s.createdAt),
+  }));
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
@@ -194,7 +265,7 @@ export default function RileyDashboardPage() {
           </div>
 
           <div className="space-y-3">
-            {recentSubmissions.map((submission) => (
+            {mappedSubmissions.map((submission) => (
               <SubmissionRow key={submission.id} {...submission} />
             ))}
           </div>

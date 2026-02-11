@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -58,132 +58,74 @@ export default function PipelinePage() {
     setSelectedPriority("all");
   };
 
-  // Mock pipeline data with full details
-  const [artists, setArtists] = useState<Artist[]>([
-    {
-      id: 1,
-      name: "Sarah Martinez",
-      genre: "Indie Folk",
-      location: "Burlington, VT",
-      stage: "discovered",
-      assignedTo: "Grace Holland",
-      discoverySource: "Instagram",
-      email: "sarah@example.com",
-      socialHandle: "@sarahmartinezmusic",
-      daysInStage: 1,
-      nextAction: "Send initial outreach email",
-      priority: "high",
-      notes: "Strong Instagram presence (2,400 followers). Recent show at Higher Ground. Very engaged with local music scene.",
-    },
-    {
-      id: 2,
-      name: "The Wanderers",
-      genre: "Americana",
-      location: "Montpelier, VT",
-      stage: "contacted",
-      assignedTo: "Grace Holland",
-      discoverySource: "Venue",
-      email: "band@thewanderers.com",
-      phone: "(802) 555-0123",
-      website: "thewanderers.com",
-      daysInStage: 3,
-      nextAction: "Follow up on initial email",
-      priority: "medium",
-      notes: "Contacted via email on Jan 18. No response yet. Follow up scheduled for Jan 22. Band has great live energy.",
-    },
-    {
-      id: 3,
-      name: "Jake Rivers",
-      genre: "Country/Rock",
-      location: "St. Johnsbury, VT",
-      stage: "responded",
-      assignedTo: "Grace Holland",
-      discoverySource: "Spotify",
-      email: "jake.rivers@example.com",
-      socialHandle: "@jakerivers",
-      daysInStage: 2,
-      nextAction: "Send track submission invitation",
-      priority: "high",
-      notes: "Very interested! Responded within 2 hours. Ready to submit track. Has 1,850 Spotify followers.",
-    },
-    {
-      id: 4,
-      name: "Emma Stone & The Pebbles",
-      genre: "Rock",
-      location: "Brattleboro, VT",
-      stage: "invited",
-      assignedTo: "Grace Holland",
-      discoverySource: "Referral",
-      email: "emma@stoneandpebbles.com",
-      phone: "(802) 555-0199",
-      daysInStage: 5,
-      nextAction: "Send reminder to submit track",
-      priority: "medium",
-      notes: "Referred by John Smith. Sent submission invite on Jan 17. Following up this week.",
-    },
-    {
-      id: 5,
-      name: "Chris Taylor",
-      genre: "Blues",
-      location: "Rutland, VT",
-      stage: "submitted",
-      assignedTo: "Sienna Park",
-      discoverySource: "Instagram",
-      email: "chris@example.com",
-      trackName: "Midnight Highway",
-      submittedDate: "Jan 20, 2024",
-      daysInStage: 1,
-      nextAction: "Quality review in progress",
-      priority: "high",
-      notes: "Submitted 'Midnight Highway'. Excellent audio quality (320kbps MP3). Fast response time. Very professional.",
-    },
-    {
-      id: 6,
-      name: "Maya Santos",
-      genre: "Latin Pop",
-      location: "Burlington, VT",
-      stage: "submitted",
-      assignedTo: "Sienna Park",
-      discoverySource: "Instagram",
-      email: "maya@example.com",
-      trackName: "Desert Moon",
-      submittedDate: "Jan 19, 2024",
-      daysInStage: 2,
-      nextAction: "Quality review in progress",
-      priority: "medium",
-      notes: "Submitted 'Desert Moon'. Good audio quality. Under quality review by Sienna.",
-    },
-    {
-      id: 7,
-      name: "Alex Turner",
-      genre: "Alternative",
-      location: "Montpelier, VT",
-      stage: "approved",
-      assignedTo: "Marcus Tate",
-      discoverySource: "Spotify",
-      email: "alex@example.com",
-      trackName: "Fading Light",
-      daysInStage: 1,
-      nextAction: "Activate FREE tier account",
-      priority: "high",
-      notes: "Track 'Fading Light' approved! Setting up station account and scheduling first plays. Great production quality.",
-    },
-    {
-      id: 8,
-      name: "Lisa Chen",
-      genre: "Indie Rock",
-      location: "Burlington, VT",
-      stage: "activated",
-      assignedTo: "Marcus Tate",
-      discoverySource: "Venue",
-      email: "lisa@example.com",
-      trackName: "Electric Dreams",
-      daysInStage: 7,
-      nextAction: "Monitor performance for upgrade opportunity",
-      priority: "low",
-      notes: "Active on FREE tier. Getting 15 plays/month (above 10 minimum). Strong engagement. Potential upgrade candidate soon.",
-    },
-  ]);
+  const [artists, setArtists] = useState<Artist[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPipeline() {
+      try {
+        const res = await fetch("/api/artists?limit=100");
+        if (res.ok) {
+          const data = await res.json();
+          const stageMap: Record<string, PipelineStage> = {
+            discovery: "discovered",
+            contacted: "contacted",
+            engaged: "responded",
+            qualified: "invited",
+            onboarding: "submitted",
+            activated: "activated",
+          };
+          const assignMap: Record<string, string> = {
+            discovered: "Grace Holland",
+            contacted: "Grace Holland",
+            responded: "Grace Holland",
+            invited: "Grace Holland",
+            submitted: "Sienna Park",
+            approved: "Marcus Tate",
+            activated: "Jordan Cross",
+          };
+          const actionMap: Record<string, string> = {
+            discovered: "Send initial outreach",
+            contacted: "Follow up",
+            responded: "Send submission invitation",
+            invited: "Remind to submit track",
+            submitted: "Quality review in progress",
+            approved: "Activate account",
+            activated: "Monitor performance",
+          };
+          setArtists(
+            (data.artists || []).map((a: any) => {
+              const stage = stageMap[a.pipelineStage] || "discovered";
+              const daysDiff = a.lastContactedAt
+                ? Math.max(1, Math.floor((Date.now() - new Date(a.lastContactedAt).getTime()) / 86400000))
+                : Math.floor((Date.now() - new Date(a.createdAt).getTime()) / 86400000);
+              return {
+                id: a.id,
+                name: a.name,
+                genre: a.genre || "Unknown",
+                location: a.nextShowCity || "Unknown",
+                stage,
+                assignedTo: assignMap[stage] || "Grace Holland",
+                discoverySource: a.discoverySource || "manual",
+                email: a.email,
+                phone: a.phone,
+                socialHandle: a.sourceHandle,
+                daysInStage: daysDiff,
+                nextAction: actionMap[stage] || "Review",
+                priority: (a.engagementRate || 0) >= 5 ? "high" as const : (a.engagementRate || 0) >= 3 ? "medium" as const : "low" as const,
+                notes: a.bio || `${a.followerCount || 0} followers on ${a.discoverySource}`,
+              };
+            })
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching pipeline data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPipeline();
+  }, []);
 
   const pipelineStages = [
     { key: "discovered" as const, label: "Discovered", count: artists.filter(a => a.stage === "discovered").length, color: "gray", assignedTo: "Grace" },

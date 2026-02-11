@@ -1,108 +1,66 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Music, CheckCircle, XCircle, Clock, Play, User, Tag, Calendar } from "lucide-react";
 
-// Mock data - in production this would come from the database
-const initialSubmissions = [
-  {
-    id: 1,
-    artist: "Sarah Blake",
-    artistEmail: "sarah@example.com",
-    track: "Wildfire",
-    tier: "SILVER",
-    status: "pending",
-    submittedAt: "2 hours ago",
-    duration: "3:45",
-    genre: "Americana",
-    audioUrl: "/tracks/wildfire.mp3",
-    notes: "Strong vocals, professional production quality"
-  },
-  {
-    id: 2,
-    artist: "Jake Rivers",
-    artistEmail: "jake@example.com",
-    track: "Long Road Home",
-    tier: "GOLD",
-    status: "approved",
-    submittedAt: "5 hours ago",
-    duration: "4:12",
-    genre: "Folk",
-    audioUrl: "/tracks/long-road.mp3",
-    notes: "Excellent fit for station format"
-  },
-  {
-    id: 3,
-    artist: "Maya Santos",
-    artistEmail: "maya@example.com",
-    track: "Desert Moon",
-    tier: "BRONZE",
-    status: "pending",
-    submittedAt: "1 day ago",
-    duration: "3:28",
-    genre: "Roots",
-    audioUrl: "/tracks/desert-moon.mp3",
-    notes: ""
-  },
-  {
-    id: 4,
-    artist: "Alex Turner",
-    artistEmail: "alex@example.com",
-    track: "Fading Light",
-    tier: "PLATINUM",
-    status: "approved",
-    submittedAt: "1 day ago",
-    duration: "5:03",
-    genre: "Singer-Songwriter",
-    audioUrl: "/tracks/fading-light.mp3",
-    notes: "Premium quality, added to prime rotation"
-  },
-  {
-    id: 5,
-    artist: "Emma Davis",
-    artistEmail: "emma@example.com",
-    track: "Broken Strings",
-    tier: "FREE",
-    status: "rejected",
-    submittedAt: "2 days ago",
-    duration: "2:58",
-    genre: "Folk",
-    audioUrl: "/tracks/broken-strings.mp3",
-    notes: "Audio quality issues - clipping detected. Please resubmit with proper mastering."
-  },
-  {
-    id: 6,
-    artist: "Marcus Cole",
-    artistEmail: "marcus@example.com",
-    track: "Mountain High",
-    tier: "BRONZE",
-    status: "pending",
-    submittedAt: "3 hours ago",
-    duration: "3:55",
-    genre: "Bluegrass",
-    audioUrl: "/tracks/mountain-high.mp3",
-    notes: ""
-  },
-  {
-    id: 7,
-    artist: "Lisa Wong",
-    artistEmail: "lisa@example.com",
-    track: "City Lights",
-    tier: "SILVER",
-    status: "pending",
-    submittedAt: "4 hours ago",
-    duration: "4:20",
-    genre: "Indie Folk",
-    audioUrl: "/tracks/city-lights.mp3",
-    notes: ""
-  },
-];
+interface SubmissionItem {
+  id: string;
+  artist: string;
+  artistEmail: string;
+  track: string;
+  tier: string;
+  status: string;
+  submittedAt: string;
+  duration: string;
+  genre: string;
+  audioUrl: string;
+  notes: string;
+}
 
 export default function RileySubmissionsPage() {
-  const [submissions, setSubmissions] = useState(initialSubmissions);
+  const [submissions, setSubmissions] = useState<SubmissionItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected">("all");
-  const [selectedSubmission, setSelectedSubmission] = useState<typeof initialSubmissions[0] | null>(null);
+  const [selectedSubmission, setSelectedSubmission] = useState<SubmissionItem | null>(null);
+
+  useEffect(() => {
+    async function fetchSubmissions() {
+      try {
+        const res = await fetch("/api/cassidy/submissions");
+        if (!res.ok) throw new Error("Failed to fetch submissions");
+        const data = await res.json();
+        const mapped: SubmissionItem[] = (data.submissions || []).map((s: any) => {
+          const statusMap: Record<string, string> = {
+            PENDING: "pending",
+            IN_REVIEW: "pending",
+            JUDGED: "pending",
+            PLACED: "approved",
+            NOT_PLACED: "rejected",
+          };
+          return {
+            id: s.id,
+            artist: s.artistName || "Unknown Artist",
+            artistEmail: s.artistEmail || "",
+            track: s.trackTitle || "Untitled",
+            tier: s.tierAwarded || "FREE",
+            status: statusMap[s.status] || "pending",
+            submittedAt: s.submittedAt || s.createdAt || "",
+            duration: s.trackDuration ? `${Math.floor(s.trackDuration / 60)}:${String(s.trackDuration % 60).padStart(2, "0")}` : "",
+            genre: s.genre || "",
+            audioUrl: s.trackFileUrl || "",
+            notes: s.decisionRationale || "",
+          };
+        });
+        setSubmissions(mapped);
+      } catch (err) {
+        console.error("Error fetching submissions:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSubmissions();
+  }, []);
 
   const filteredSubmissions = submissions.filter(s =>
     filter === "all" ? true : s.status === filter
@@ -114,19 +72,30 @@ export default function RileySubmissionsPage() {
     rejected: submissions.filter(s => s.status === "rejected").length,
   };
 
-  const handleApprove = (id: number) => {
+  const handleApprove = (id: string) => {
     setSubmissions(prev => prev.map(s =>
       s.id === id ? { ...s, status: "approved" as const } : s
     ));
     setSelectedSubmission(null);
   };
 
-  const handleReject = (id: number, reason: string) => {
+  const handleReject = (id: string, reason: string) => {
     setSubmissions(prev => prev.map(s =>
       s.id === id ? { ...s, status: "rejected" as const, notes: reason } : s
     ));
     setSelectedSubmission(null);
   };
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading submissions...</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
@@ -285,7 +254,7 @@ function FilterButton({ active, onClick, label, count }: { active: boolean; onCl
   );
 }
 
-function SubmissionCard({ submission, onSelect }: { submission: typeof initialSubmissions[0]; onSelect: (s: typeof initialSubmissions[0]) => void }) {
+function SubmissionCard({ submission, onSelect }: { submission: SubmissionItem; onSelect: (s: SubmissionItem) => void }) {
   const statusConfig = {
     pending: {
       icon: <Clock className="w-4 h-4 text-yellow-600" />,
@@ -376,10 +345,10 @@ function ReviewModal({
   onApprove,
   onReject
 }: {
-  submission: typeof initialSubmissions[0];
+  submission: SubmissionItem;
   onClose: () => void;
-  onApprove: (id: number) => void;
-  onReject: (id: number, reason: string) => void;
+  onApprove: (id: string) => void;
+  onReject: (id: string, reason: string) => void;
 }) {
   const [rejectionReason, setRejectionReason] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
