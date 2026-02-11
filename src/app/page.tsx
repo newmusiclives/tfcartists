@@ -68,27 +68,26 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center space-y-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-20">
+        <div className="text-center">
           <div className="inline-flex items-center space-x-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">
             <Sparkles className="w-4 h-4" />
             <span>TrueFans Internal System</span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
+          <h1 className="mt-6 text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 leading-[1.1] tracking-tight">
             TrueFans RADIO
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-green-600 to-blue-600">
+            <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-green-600 to-blue-600">
               Complete Radio Growth Ecosystem
             </span>
           </h1>
 
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Riley's team finds and onboards artists. Cassidy's team reviews submissions and assigns rotation tiers. Harper's team secures sponsors to fund the stations.
             Elliot's team builds a passionate listener community that grows itself through viral content, artist fan activation, and habit formation.
           </p>
 
-          <div className="flex items-center justify-center space-x-4">
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/admin"
               className="inline-flex items-center space-x-2 bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition-colors shadow-lg hover:shadow-xl"
@@ -106,7 +105,7 @@ export default function HomePage() {
         </div>
 
         {/* Team Stats */}
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        <div className="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           <div className="bg-white rounded-xl p-8 shadow-lg">
             <div className="flex items-center space-x-3 mb-4">
               <Users className="w-10 h-10 text-purple-600" />
