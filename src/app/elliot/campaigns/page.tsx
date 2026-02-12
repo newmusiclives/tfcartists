@@ -1,93 +1,95 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Megaphone, TrendingUp, Users, DollarSign, Calendar, Target, Zap } from "lucide-react";
 
-export default function GrowthCampaignsPage() {
-  const activeCampaigns = [
-    {
-      id: 1,
-      name: "Americana Playlist Challenge",
-      type: "Social Media",
-      platform: "TikTok + Instagram",
-      startDate: "Dec 1, 2024",
-      endDate: "Dec 31, 2024",
-      status: "active" as const,
-      budget: 2500,
-      spent: 1840,
-      impressions: 125000,
-      engagement: 8400,
-      conversions: 245,
-      goal: "500 new listeners",
-      progress: 49,
-      description: "Users share their favorite Americana tracks for a chance to be featured on-air",
-    },
-    {
-      id: 2,
-      name: "Winter Concert Series Promo",
-      type: "Cross-Promotion",
-      platform: "All Channels",
-      startDate: "Dec 5, 2024",
-      endDate: "Dec 20, 2024",
-      status: "active" as const,
-      budget: 3000,
-      spent: 890,
-      impressions: 45000,
-      engagement: 3200,
-      conversions: 78,
-      goal: "200 event signups",
-      progress: 39,
-      description: "Promote upcoming live concerts featuring our artists",
-    },
-    {
-      id: 3,
-      name: "Free Trial Extension",
-      type: "Email Campaign",
-      platform: "Email + Web",
-      startDate: "Dec 8, 2024",
-      endDate: "Dec 15, 2024",
-      status: "active" as const,
-      budget: 500,
-      spent: 125,
-      impressions: 8500,
-      engagement: 1200,
-      conversions: 156,
-      goal: "300 trial extensions",
-      progress: 52,
-      description: "Offer 30-day premium trial to inactive users",
-    },
-  ];
-
-  const upcomingCampaigns = [
-    {
-      name: "New Year New Music",
-      launchDate: "Jan 1, 2025",
-      type: "Content Series",
-      estimatedBudget: 4000,
-    },
-    {
-      name: "Valentines Duets",
-      launchDate: "Feb 1, 2025",
-      type: "Artist Collaboration",
-      estimatedBudget: 2000,
-    },
-  ];
-
-  const stats = {
-    totalActive: 3,
-    totalBudget: 6000,
-    totalSpent: 2855,
-    totalConversions: 479,
-    avgConversionRate: 4.2,
-    roi: 285,
+interface CampaignData {
+  id: string;
+  name: string;
+  type: string;
+  status: string;
+  targetAudience: string;
+  channel: string;
+  managedBy: string;
+  goalType: string;
+  goalTarget: number;
+  goalReached: number;
+  startDate: string;
+  endDate: string | null;
+  metrics: {
+    totalResponses: number;
+    conversions: number;
+    conversionRate: number;
+    progress: number;
   };
+}
 
-  const channelPerformance = [
-    { channel: "TikTok", campaigns: 5, conversions: 342, cpa: "$7.30", roi: "320%" },
-    { channel: "Instagram", campaigns: 4, conversions: 198, cpa: "$12.60", roi: "240%" },
-    { channel: "Email", campaigns: 3, conversions: 287, cpa: "$4.20", roi: "410%" },
-    { channel: "YouTube", campaigns: 2, conversions: 123, cpa: "$18.90", roi: "180%" },
-  ];
+export default function GrowthCampaignsPage() {
+  const [campaigns, setCampaigns] = useState<CampaignData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [launching, setLaunching] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    type: "viral_push",
+    targetAudience: "new_listeners",
+    goalType: "listeners",
+    goalTarget: 100,
+  });
+
+  useEffect(() => {
+    fetchCampaigns();
+  }, []);
+
+  async function fetchCampaigns() {
+    try {
+      const res = await fetch("/api/elliot/campaigns?status=all");
+      if (res.ok) {
+        const data = await res.json();
+        setCampaigns(data.campaigns || []);
+      }
+    } catch (error) {
+      console.error("Error fetching campaigns:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleLaunchCampaign(e: React.FormEvent) {
+    e.preventDefault();
+    setLaunching(true);
+    try {
+      const res = await fetch("/api/elliot/campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setShowForm(false);
+        setFormData({ name: "", type: "viral_push", targetAudience: "new_listeners", goalType: "listeners", goalTarget: 100 });
+        await fetchCampaigns();
+      }
+    } catch (error) {
+      console.error("Error launching campaign:", error);
+    } finally {
+      setLaunching(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading campaigns...</div>
+      </main>
+    );
+  }
+
+  const activeCampaigns = campaigns.filter((c) => c.status === "active");
+  const completedCampaigns = campaigns.filter((c) => c.status === "completed");
+  const totalConversions = campaigns.reduce((sum, c) => sum + (c.metrics?.conversions || 0), 0);
+  const totalResponses = campaigns.reduce((sum, c) => sum + (c.metrics?.totalResponses || 0), 0);
+  const avgConversionRate = totalResponses > 0 ? Math.round((totalConversions / totalResponses) * 100 * 10) / 10 : 0;
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
@@ -119,28 +121,118 @@ export default function GrowthCampaignsPage() {
           <MetricCard
             icon={<Zap className="w-6 h-6 text-purple-600" />}
             label="Active Campaigns"
-            value={stats.totalActive}
+            value={activeCampaigns.length}
             subtitle="running now"
           />
           <MetricCard
-            icon={<DollarSign className="w-6 h-6 text-green-600" />}
-            label="Budget Utilization"
-            value={`$${stats.totalSpent.toLocaleString()}`}
-            subtitle={`of $${stats.totalBudget.toLocaleString()} (${((stats.totalSpent / stats.totalBudget) * 100).toFixed(0)}%)`}
+            icon={<Target className="w-6 h-6 text-green-600" />}
+            label="Total Campaigns"
+            value={campaigns.length}
+            subtitle={`${completedCampaigns.length} completed`}
           />
           <MetricCard
             icon={<Users className="w-6 h-6 text-blue-600" />}
             label="Total Conversions"
-            value={stats.totalConversions}
-            subtitle="new listeners this month"
+            value={totalConversions}
+            subtitle="from campaign responses"
           />
           <MetricCard
             icon={<TrendingUp className="w-6 h-6 text-orange-600" />}
-            label="Average ROI"
-            value={`${stats.roi}%`}
-            subtitle={`${stats.avgConversionRate}% conversion rate`}
+            label="Conversion Rate"
+            value={`${avgConversionRate}%`}
+            subtitle={`${totalResponses} total responses`}
           />
         </section>
+
+        {/* Campaign Launch Form */}
+        {showForm && (
+          <section className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-bold mb-6">Launch New Campaign</h2>
+            <form onSubmit={handleLaunchCampaign} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Name</label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="e.g., Summer Listening Challenge"
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Type</label>
+                  <select
+                    value={formData.type}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  >
+                    <option value="artist_referral">Artist Referral</option>
+                    <option value="viral_push">Viral Push</option>
+                    <option value="habit_builder">Habit Builder</option>
+                    <option value="community_event">Community Event</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Target Audience</label>
+                  <select
+                    value={formData.targetAudience}
+                    onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  >
+                    <option value="new_listeners">New Listeners</option>
+                    <option value="at_risk">At Risk</option>
+                    <option value="power_users">Power Users</option>
+                    <option value="all">All Listeners</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Goal Type</label>
+                  <select
+                    value={formData.goalType}
+                    onChange={(e) => setFormData({ ...formData, goalType: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  >
+                    <option value="listeners">New Listeners</option>
+                    <option value="sessions">Sessions</option>
+                    <option value="retention">Retention</option>
+                    <option value="virality">Virality</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Goal Target</label>
+                  <input
+                    type="number"
+                    value={formData.goalTarget}
+                    onChange={(e) => setFormData({ ...formData, goalTarget: parseInt(e.target.value) || 0 })}
+                    required
+                    min={1}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <button
+                  type="submit"
+                  disabled={launching || !formData.name}
+                  className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
+                >
+                  {launching ? "Launching..." : "Launch Campaign"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                  className="text-gray-600 hover:text-gray-900 px-4 py-2"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </section>
+        )}
 
         {/* Active Campaigns */}
         <section className="bg-white rounded-xl shadow-lg p-6">
@@ -151,51 +243,40 @@ export default function GrowthCampaignsPage() {
                 Currently running growth initiatives
               </p>
             </div>
-            <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-              Create New Campaign
-            </button>
+            {!showForm && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                Create New Campaign
+              </button>
+            )}
           </div>
 
           <div className="space-y-4">
-            {activeCampaigns.map((campaign) => (
-              <CampaignCard key={campaign.id} {...campaign} />
-            ))}
+            {activeCampaigns.length > 0 ? (
+              activeCampaigns.map((campaign) => (
+                <CampaignCard key={campaign.id} campaign={campaign} />
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No active campaigns. Launch your first campaign to get started.
+              </div>
+            )}
           </div>
         </section>
 
-        {/* Channel Performance */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-6">Channel Performance</h2>
-          <p className="text-gray-600 text-sm mb-6">
-            Compare effectiveness across marketing channels
-          </p>
-
-          <div className="space-y-3">
-            {channelPerformance.map((channel) => (
-              <ChannelRow key={channel.channel} {...channel} />
-            ))}
-          </div>
-        </section>
-
-        {/* Upcoming Campaigns */}
-        <section className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-6">Upcoming Campaigns</h2>
-          <p className="text-gray-600 text-sm mb-6">
-            Campaigns in planning or scheduled to launch
-          </p>
-
-          <div className="space-y-3">
-            {upcomingCampaigns.map((campaign, idx) => (
-              <UpcomingCampaignRow key={idx} {...campaign} />
-            ))}
-          </div>
-
-          <div className="mt-6 text-center">
-            <button className="text-purple-600 hover:text-purple-700 font-semibold">
-              View Campaign Calendar →
-            </button>
-          </div>
-        </section>
+        {/* Completed Campaigns */}
+        {completedCampaigns.length > 0 && (
+          <section className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-bold mb-6">Completed Campaigns</h2>
+            <div className="space-y-4">
+              {completedCampaigns.map((campaign) => (
+                <CampaignCard key={campaign.id} campaign={campaign} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Quick Actions */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -246,138 +327,65 @@ function MetricCard({
   );
 }
 
-function CampaignCard({
-  name,
-  type,
-  platform,
-  startDate,
-  endDate,
-  budget,
-  spent,
-  impressions,
-  engagement,
-  conversions,
-  goal,
-  progress,
-  description,
-  status,
-}: {
-  name: string;
-  type: string;
-  platform: string;
-  startDate: string;
-  endDate: string;
-  budget: number;
-  spent: number;
-  impressions: number;
-  engagement: number;
-  conversions: number;
-  goal: string;
-  progress: number;
-  description: string;
-  status: "active" | "paused" | "completed";
-}) {
+function CampaignCard({ campaign }: { campaign: CampaignData }) {
   const statusConfig: Record<string, { bg: string; text: string; label: string; border: string }> = {
-    active: { bg: "bg-green-100", text: "text-green-700", label: "🟢 Active", border: "border-green-300" },
-    paused: { bg: "bg-yellow-100", text: "text-yellow-700", label: "⏸️ Paused", border: "border-yellow-300" },
-    completed: { bg: "bg-gray-100", text: "text-gray-700", label: "✅ Completed", border: "border-gray-300" },
+    active: { bg: "bg-green-100", text: "text-green-700", label: "Active", border: "border-green-300" },
+    paused: { bg: "bg-yellow-100", text: "text-yellow-700", label: "Paused", border: "border-yellow-300" },
+    completed: { bg: "bg-gray-100", text: "text-gray-700", label: "Completed", border: "border-gray-300" },
   };
-  const config = statusConfig[status];
+  const config = statusConfig[campaign.status] || statusConfig.active;
+  const progress = campaign.metrics?.progress || 0;
 
   return (
     <div className={`border-2 ${config.border} rounded-lg p-5 bg-white`}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-1">
-            <h3 className="text-lg font-bold text-gray-900">{name}</h3>
+            <h3 className="text-lg font-bold text-gray-900">{campaign.name}</h3>
             <span className={`text-xs px-2 py-1 rounded-full ${config.bg} ${config.text} font-medium`}>
               {config.label}
             </span>
           </div>
-          <p className="text-sm text-gray-600 mb-2">{description}</p>
           <div className="flex items-center space-x-4 text-xs text-gray-500">
-            <span>{type}</span>
+            <span>{campaign.type}</span>
             <span>•</span>
-            <span>{platform}</span>
+            <span>Managed by {campaign.managedBy}</span>
             <span>•</span>
-            <span>{startDate} - {endDate}</span>
+            <span>Target: {campaign.targetAudience}</span>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-5 gap-4 mb-4">
+      <div className="grid grid-cols-4 gap-4 mb-4">
         <div className="text-center">
-          <div className="text-xs text-gray-600 mb-1">Impressions</div>
-          <div className="text-lg font-bold text-gray-900">{(impressions / 1000).toFixed(0)}k</div>
-        </div>
-        <div className="text-center">
-          <div className="text-xs text-gray-600 mb-1">Engagement</div>
-          <div className="text-lg font-bold text-gray-900">{(engagement / 1000).toFixed(1)}k</div>
+          <div className="text-xs text-gray-600 mb-1">Responses</div>
+          <div className="text-lg font-bold text-gray-900">{campaign.metrics?.totalResponses || 0}</div>
         </div>
         <div className="text-center">
           <div className="text-xs text-gray-600 mb-1">Conversions</div>
-          <div className="text-lg font-bold text-green-600">{conversions}</div>
+          <div className="text-lg font-bold text-green-600">{campaign.metrics?.conversions || 0}</div>
         </div>
         <div className="text-center">
-          <div className="text-xs text-gray-600 mb-1">Budget</div>
-          <div className="text-lg font-bold text-gray-900">${spent}/{budget}</div>
+          <div className="text-xs text-gray-600 mb-1">Conv. Rate</div>
+          <div className="text-lg font-bold text-purple-600">{(campaign.metrics?.conversionRate || 0).toFixed(1)}%</div>
         </div>
         <div className="text-center">
-          <div className="text-xs text-gray-600 mb-1">CPA</div>
-          <div className="text-lg font-bold text-purple-600">${(spent / conversions).toFixed(2)}</div>
+          <div className="text-xs text-gray-600 mb-1">Goal</div>
+          <div className="text-lg font-bold text-gray-900">{campaign.goalReached}/{campaign.goalTarget}</div>
         </div>
       </div>
 
       <div>
         <div className="flex items-center justify-between text-sm mb-2">
-          <span className="text-gray-600">Goal Progress: {goal}</span>
-          <span className="font-semibold text-gray-900">{progress}%</span>
+          <span className="text-gray-600">Goal Progress: {campaign.goalType}</span>
+          <span className="font-semibold text-gray-900">{Math.round(progress)}%</span>
         </div>
         <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
           <div
             className="bg-gradient-to-r from-purple-500 to-pink-600 h-full transition-all"
-            style={{ width: `${progress}%` }}
+            style={{ width: `${Math.min(100, progress)}%` }}
           />
         </div>
-      </div>
-    </div>
-  );
-}
-
-function ChannelRow({ channel, campaigns, conversions, cpa, roi }: any) {
-  return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-      <div className="flex-1">
-        <div className="font-semibold text-gray-900">{channel}</div>
-        <div className="text-sm text-gray-600">{campaigns} active campaigns</div>
-      </div>
-      <div className="flex items-center space-x-8 text-sm">
-        <div className="text-center">
-          <div className="text-green-600 font-bold">{conversions}</div>
-          <div className="text-xs text-gray-500">conversions</div>
-        </div>
-        <div className="text-center">
-          <div className="text-purple-600 font-bold">{cpa}</div>
-          <div className="text-xs text-gray-500">CPA</div>
-        </div>
-        <div className="text-center">
-          <div className="text-blue-600 font-bold">{roi}</div>
-          <div className="text-xs text-gray-500">ROI</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function UpcomingCampaignRow({ name, launchDate, type, estimatedBudget }: any) {
-  return (
-    <div className="flex items-center justify-between p-4 bg-white rounded-lg border-2 border-purple-200">
-      <div className="flex-1">
-        <div className="font-semibold text-gray-900">{name}</div>
-        <div className="text-sm text-gray-600">{type} • Budget: ${estimatedBudget.toLocaleString()}</div>
-      </div>
-      <div className="text-sm text-purple-600 font-medium">
-        Launches {launchDate}
       </div>
     </div>
   );

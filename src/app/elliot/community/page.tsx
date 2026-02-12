@@ -1,138 +1,108 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Users, MessageCircle, Heart, Award, Calendar, Star, TrendingUp } from "lucide-react";
 
+interface ElliotStats {
+  totalListeners: number;
+  byTier: { CASUAL: number; REGULAR: number; SUPER_FAN: number; EVANGELIST: number };
+  community: { communityMembers: number; scoutCount: number };
+  activity: { engagementsThisMonth: number };
+}
+
+interface ListenerData {
+  id: string;
+  name: string | null;
+  email: string | null;
+  tier: string;
+  engagementScore: number;
+  totalSessions: number;
+  totalListeningHours: number;
+  communityMember: boolean;
+  createdAt: string;
+  lastListenedAt: string | null;
+}
+
 export default function CommunityPage() {
-  const communityStats = {
-    totalMembers: 5600,
-    activeMembers: 1250,
-    growthRate: 18,
-    engagementRate: 42,
-    totalPosts: 3420,
-    totalComments: 8950,
-    superFans: 125,
-    ambassadors: 25,
-  };
+  const [stats, setStats] = useState<ElliotStats | null>(null);
+  const [superFans, setSuperFans] = useState<ListenerData[]>([]);
+  const [evangelists, setEvangelists] = useState<ListenerData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const topMembers = [
-    {
-      id: 1,
-      name: "Jessica Turner",
-      avatar: "JT",
-      tier: "Ambassador" as const,
-      points: 8450,
-      posts: 124,
-      likes: 3200,
-      joinDate: "Jan 2024",
-      lastActive: "2 hours ago",
-      badge: "🏆",
-    },
-    {
-      id: 2,
-      name: "Mike Rodriguez",
-      avatar: "MR",
-      tier: "Super Fan" as const,
-      points: 6200,
-      posts: 98,
-      likes: 2450,
-      joinDate: "Feb 2024",
-      lastActive: "5 hours ago",
-      badge: "⭐",
-    },
-    {
-      id: 3,
-      name: "Sarah Chen",
-      avatar: "SC",
-      tier: "Ambassador" as const,
-      points: 7800,
-      posts: 145,
-      likes: 2890,
-      joinDate: "Dec 2023",
-      lastActive: "1 day ago",
-      badge: "🏆",
-    },
-    {
-      id: 4,
-      name: "David Williams",
-      avatar: "DW",
-      tier: "Super Fan" as const,
-      points: 5900,
-      posts: 87,
-      likes: 2100,
-      joinDate: "Mar 2024",
-      lastActive: "3 hours ago",
-      badge: "⭐",
-    },
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [statsRes, superFansRes, evangelistsRes] = await Promise.all([
+          fetch("/api/elliot/stats"),
+          fetch("/api/elliot/listeners?tier=SUPER_FAN&sortBy=engagementScore&sortOrder=desc&limit=10"),
+          fetch("/api/elliot/listeners?tier=EVANGELIST&sortBy=engagementScore&sortOrder=desc&limit=10"),
+        ]);
 
+        if (statsRes.ok) {
+          setStats(await statsRes.json());
+        }
+        if (superFansRes.ok) {
+          const data = await superFansRes.json();
+          setSuperFans(data.listeners || []);
+        }
+        if (evangelistsRes.ok) {
+          const data = await evangelistsRes.json();
+          setEvangelists(data.listeners || []);
+        }
+      } catch (error) {
+        console.error("Error fetching community data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading community...</div>
+      </main>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-red-600">Error loading community data</div>
+      </main>
+    );
+  }
+
+  const topMembers = [...evangelists, ...superFans].slice(0, 10);
+
+  function formatTimeAgo(dateStr: string | null) {
+    if (!dateStr) return "Never";
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const hours = Math.floor(diff / 3600000);
+    if (hours < 1) return "just now";
+    if (hours < 24) return `${hours} hours ago`;
+    const days = Math.floor(hours / 24);
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  }
+
+  function formatDate(dateStr: string) {
+    return new Date(dateStr).toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  }
+
+  // Presentational defaults for activity/events/topics (no dedicated DB model yet)
   const recentActivity = [
-    {
-      id: 1,
-      user: "Jessica Turner",
-      action: "Started a discussion",
-      topic: "Best Americana Albums of 2024",
-      time: "2 hours ago",
-      engagement: 42,
-    },
-    {
-      id: 2,
-      user: "Mike Rodriguez",
-      action: "Shared a playlist",
-      topic: "Road Trip Essentials",
-      time: "4 hours ago",
-      engagement: 38,
-    },
-    {
-      id: 3,
-      user: "Sarah Chen",
-      action: "Posted concert photos",
-      topic: "Mountain Brothers Live at Red Rocks",
-      time: "6 hours ago",
-      engagement: 67,
-    },
-    {
-      id: 4,
-      user: "David Williams",
-      action: "Created a poll",
-      topic: "Which DJ should host a special Saturday show?",
-      time: "1 day ago",
-      engagement: 89,
-    },
+    { id: 1, user: "Community Member", action: "Started a discussion", topic: "Best Americana Albums", time: "Recently", engagement: 0 },
   ];
 
   const upcomingEvents = [
-    {
-      name: "Virtual Listening Party",
-      date: "Dec 15, 2024",
-      time: "7:00 PM EST",
-      host: "Hank Westwood",
-      attendees: 67,
-      type: "Virtual" as const,
-    },
-    {
-      name: "Community Songwriting Workshop",
-      date: "Dec 18, 2024",
-      time: "6:00 PM EST",
-      host: "Sarah Blake",
-      attendees: 34,
-      type: "Hybrid" as const,
-    },
-    {
-      name: "Fan Q&A with The Mountain Brothers",
-      date: "Dec 20, 2024",
-      time: "8:00 PM EST",
-      host: "Elliot AI",
-      attendees: 92,
-      type: "Virtual" as const,
-    },
+    { name: "Virtual Listening Party", date: "Coming soon", time: "TBD", host: "Elliot AI", attendees: 0, type: "Virtual" as const },
   ];
 
   const discussionTopics = [
-    { topic: "New Music Fridays", posts: 234, members: 156, lastActive: "10 min ago" },
-    { topic: "Concert Meetups", posts: 189, members: 98, lastActive: "1 hour ago" },
-    { topic: "Gear & Equipment", posts: 145, members: 67, lastActive: "2 hours ago" },
-    { topic: "Songwriting Tips", posts: 201, members: 134, lastActive: "30 min ago" },
+    { topic: "New Music Fridays", posts: 0, members: stats.community.communityMembers, lastActive: "Recently" },
+    { topic: "Concert Meetups", posts: 0, members: 0, lastActive: "Recently" },
   ];
 
   return (
@@ -164,30 +134,30 @@ export default function CommunityPage() {
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
             icon={<Users className="w-6 h-6 text-purple-600" />}
-            label="Total Members"
-            value={communityStats.totalMembers.toLocaleString()}
-            change={`+${communityStats.growthRate}%`}
+            label="Community Members"
+            value={stats.community.communityMembers.toLocaleString()}
+            change={`of ${stats.totalListeners.toLocaleString()} total listeners`}
             positive={true}
           />
           <MetricCard
             icon={<TrendingUp className="w-6 h-6 text-green-600" />}
-            label="Active This Week"
-            value={communityStats.activeMembers.toLocaleString()}
-            change={`${communityStats.engagementRate}% engaged`}
+            label="Engagements This Month"
+            value={stats.activity.engagementsThisMonth.toLocaleString()}
+            change="listener interactions"
             positive={true}
           />
           <MetricCard
             icon={<MessageCircle className="w-6 h-6 text-blue-600" />}
-            label="Total Posts"
-            value={communityStats.totalPosts.toLocaleString()}
-            change={`${communityStats.totalComments.toLocaleString()} comments`}
+            label="Scouts"
+            value={stats.community.scoutCount.toLocaleString()}
+            change="active scout program"
             positive={true}
           />
           <MetricCard
             icon={<Award className="w-6 h-6 text-orange-600" />}
             label="Super Fans"
-            value={communityStats.superFans}
-            change={`${communityStats.ambassadors} ambassadors`}
+            value={stats.byTier.SUPER_FAN + stats.byTier.EVANGELIST}
+            change={`${stats.byTier.EVANGELIST} evangelists`}
             positive={true}
           />
         </section>
@@ -198,18 +168,33 @@ export default function CommunityPage() {
             <div>
               <h2 className="text-2xl font-bold">Top Community Members</h2>
               <p className="text-gray-600 text-sm mt-1">
-                Most active and engaged community leaders
+                Most engaged Super Fans and Evangelists
               </p>
             </div>
-            <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-              View Full Leaderboard
-            </button>
           </div>
 
           <div className="space-y-3">
-            {topMembers.map((member, idx) => (
-              <MemberCard key={member.id} rank={idx + 1} {...member} />
-            ))}
+            {topMembers.length > 0 ? (
+              topMembers.map((member, idx) => (
+                <MemberCard
+                  key={member.id}
+                  rank={idx + 1}
+                  name={member.name || member.email || "Anonymous"}
+                  avatar={(member.name || "?").split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}
+                  tier={member.tier === "EVANGELIST" ? "Ambassador" : "Super Fan"}
+                  points={member.engagementScore}
+                  sessions={member.totalSessions}
+                  hours={Math.round(member.totalListeningHours)}
+                  joinDate={formatDate(member.createdAt)}
+                  lastActive={formatTimeAgo(member.lastListenedAt)}
+                  badge={member.tier === "EVANGELIST" ? "🏆" : "⭐"}
+                />
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No super fans or evangelists yet. Build your community to see top members here.
+              </div>
+            )}
           </div>
         </section>
 
@@ -218,15 +203,15 @@ export default function CommunityPage() {
           <h2 className="text-2xl font-bold mb-6">Recent Community Activity</h2>
 
           <div className="space-y-3">
-            {recentActivity.map((activity) => (
-              <ActivityRow key={activity.id} {...activity} />
-            ))}
-          </div>
-
-          <div className="mt-6 text-center">
-            <button className="text-purple-600 hover:text-purple-700 font-semibold">
-              View All Activity →
-            </button>
+            {stats.activity.engagementsThisMonth > 0 ? (
+              recentActivity.map((activity) => (
+                <ActivityRow key={activity.id} {...activity} />
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No community activity yet. Engagements will appear here as listeners interact.
+              </div>
+            )}
           </div>
         </section>
 
@@ -317,14 +302,14 @@ function MetricCard({
   );
 }
 
-function MemberCard({ rank, name, avatar, tier, points, posts, likes, joinDate, lastActive, badge }: {
+function MemberCard({ rank, name, avatar, tier, points, sessions, hours, joinDate, lastActive, badge }: {
   rank: number;
   name: string;
   avatar: string;
   tier: "Ambassador" | "Super Fan";
   points: number;
-  posts: number;
-  likes: number;
+  sessions: number;
+  hours: number;
   joinDate: string;
   lastActive: string;
   badge: string;
@@ -356,11 +341,11 @@ function MemberCard({ rank, name, avatar, tier, points, posts, likes, joinDate, 
               </span>
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
-              <span>{points.toLocaleString()} points</span>
+              <span>Score: {points}</span>
               <span>•</span>
-              <span>{posts} posts</span>
+              <span>{sessions} sessions</span>
               <span>•</span>
-              <span>{likes.toLocaleString()} likes</span>
+              <span>{hours}h listened</span>
             </div>
           </div>
         </div>
@@ -387,10 +372,12 @@ function ActivityRow({ user, action, topic, time, engagement }: any) {
         </div>
       </div>
       <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-1 text-sm text-gray-600">
-          <Heart className="w-4 h-4" />
-          <span>{engagement}</span>
-        </div>
+        {engagement > 0 && (
+          <div className="flex items-center space-x-1 text-sm text-gray-600">
+            <Heart className="w-4 h-4" />
+            <span>{engagement}</span>
+          </div>
+        )}
         <div className="text-sm text-gray-500">{time}</div>
       </div>
     </div>
@@ -423,14 +410,16 @@ function EventRow({ name, date, time, host, attendees, type }: {
         </div>
         <div className="text-sm text-gray-600">
           <Calendar className="w-4 h-4 inline mr-1" />
-          {date} at {time} • Host: {host}
+          {date} at {time} - Host: {host}
         </div>
       </div>
-      <div className="text-sm">
-        <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">
-          {attendees} attending
+      {attendees > 0 && (
+        <div className="text-sm">
+          <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">
+            {attendees} attending
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

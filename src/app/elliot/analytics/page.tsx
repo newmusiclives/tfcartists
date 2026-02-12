@@ -1,29 +1,64 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Users, TrendingUp, Clock, Target, BarChart3, Activity } from "lucide-react";
 
+interface ElliotStats {
+  totalListeners: number;
+  byStatus: Record<string, number>;
+  byTier: { CASUAL: number; REGULAR: number; SUPER_FAN: number; EVANGELIST: number };
+  behavior: { totalSessions: number; totalListeningHours: number; avgSessionLength: number; avgStreak: number };
+  growth: { newThisWeek: number; newThisMonth: number; churnedThisWeek: number; returningListenerPercent: number };
+}
+
 export default function ListenerAnalyticsPage() {
-  const stats = {
-    dailyActiveUsers: 1250,
-    weeklyActiveUsers: 3400,
-    monthlyActiveUsers: 5600,
-    avgSessionLength: 28, // minutes
-    totalSessions: 8500,
-    totalListeningHours: 3967,
-    returningListeners: 52, // percent
-    newListeners: 180,
-    churnedListeners: 45,
-    listeningStreak: 8, // days average
-  };
+  const [stats, setStats] = useState<ElliotStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("/api/elliot/stats");
+        if (res.ok) {
+          setStats(await res.json());
+        }
+      } catch (error) {
+        console.error("Error fetching analytics data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading analytics...</div>
+      </main>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-red-600">Error loading analytics data</div>
+      </main>
+    );
+  }
+
+  const totalByTier = stats.byTier.CASUAL + stats.byTier.REGULAR + stats.byTier.SUPER_FAN + stats.byTier.EVANGELIST;
+  const tierPercent = (count: number) => totalByTier > 0 ? Math.round((count / totalByTier) * 100) : 0;
 
   const listenerTiers = [
-    { tier: "Casual", count: 680, percentage: 54, sessions: "1-2/week", color: "blue" as const },
-    { tier: "Regular", count: 420, percentage: 34, sessions: "3-4/week", color: "green" as const },
-    { tier: "Super Fan", count: 125, percentage: 10, sessions: "5+/week", color: "purple" as const },
-    { tier: "Evangelist", count: 25, percentage: 2, sessions: "Daily + Shares", color: "orange" as const },
+    { tier: "Casual", count: stats.byTier.CASUAL, percentage: tierPercent(stats.byTier.CASUAL), sessions: "1-2/week", color: "blue" as const },
+    { tier: "Regular", count: stats.byTier.REGULAR, percentage: tierPercent(stats.byTier.REGULAR), sessions: "3-4/week", color: "green" as const },
+    { tier: "Super Fan", count: stats.byTier.SUPER_FAN, percentage: tierPercent(stats.byTier.SUPER_FAN), sessions: "5+/week", color: "purple" as const },
+    { tier: "Evangelist", count: stats.byTier.EVANGELIST, percentage: tierPercent(stats.byTier.EVANGELIST), sessions: "Daily + Shares", color: "orange" as const },
   ];
 
+  // Presentational defaults (no DB model for time slots/devices yet)
   const timeSlotData = [
     { slot: "Morning (6am-10am)", listeners: 450, avgSession: 32, topDJ: "Hank Westwood" },
     { slot: "Midday (10am-2pm)", listeners: 280, avgSession: 22, topDJ: "Loretta Merrick" },
@@ -75,31 +110,31 @@ export default function ListenerAnalyticsPage() {
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
             icon={<Users className="w-6 h-6 text-indigo-600" />}
-            label="Daily Active Users"
-            value={stats.dailyActiveUsers.toLocaleString()}
-            change="+12%"
+            label="Total Listeners"
+            value={stats.totalListeners.toLocaleString()}
+            change={`+${stats.growth.newThisMonth} this month`}
             positive={true}
           />
           <MetricCard
             icon={<TrendingUp className="w-6 h-6 text-green-600" />}
-            label="Weekly Active"
-            value={stats.weeklyActiveUsers.toLocaleString()}
-            change="+18%"
-            positive={true}
+            label="New This Week"
+            value={stats.growth.newThisWeek.toLocaleString()}
+            change={`${stats.growth.churnedThisWeek} churned`}
+            positive={stats.growth.newThisWeek > stats.growth.churnedThisWeek}
           />
           <MetricCard
             icon={<Clock className="w-6 h-6 text-purple-600" />}
             label="Avg Session"
-            value={`${stats.avgSessionLength} min`}
-            change="+3 min"
+            value={`${stats.behavior.avgSessionLength} min`}
+            change="Target: 25-40 min"
             positive={true}
           />
           <MetricCard
             icon={<Target className="w-6 h-6 text-orange-600" />}
             label="Retention Rate"
-            value={`${stats.returningListeners}%`}
-            change="+5%"
-            positive={true}
+            value={`${stats.growth.returningListenerPercent}%`}
+            change="Target: 50-60%"
+            positive={stats.growth.returningListenerPercent >= 50}
           />
         </section>
 
@@ -107,7 +142,7 @@ export default function ListenerAnalyticsPage() {
         <section className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Listener Tier Distribution</h2>
           <p className="text-gray-600 text-sm mb-6">
-            Current listener base: {stats.monthlyActiveUsers.toLocaleString()} monthly active users
+            Current listener base: {totalByTier.toLocaleString()} listeners
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -120,7 +155,7 @@ export default function ListenerAnalyticsPage() {
             <div className="bg-indigo-50 rounded-lg p-4">
               <h3 className="font-semibold text-indigo-900 mb-2">Tier Progression Goal</h3>
               <p className="text-sm text-indigo-700">
-                Focus: Convert Casual listeners to Regular (+15% target). Currently at {listenerTiers[0].count} casual listeners.
+                Focus: Convert Casual listeners to Regular (+15% target). Currently at {stats.byTier.CASUAL} casual listeners.
               </p>
             </div>
           </div>
@@ -192,18 +227,18 @@ export default function ListenerAnalyticsPage() {
         {/* Stats Summary */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatBox
-            label="Total Sessions This Month"
-            value={stats.totalSessions.toLocaleString()}
+            label="Total Sessions"
+            value={stats.behavior.totalSessions.toLocaleString()}
             icon={<Activity className="w-8 h-8 text-blue-600" />}
           />
           <StatBox
             label="Total Listening Hours"
-            value={stats.totalListeningHours.toLocaleString()}
+            value={Math.round(stats.behavior.totalListeningHours).toLocaleString()}
             icon={<Clock className="w-8 h-8 text-green-600" />}
           />
           <StatBox
             label="Avg Listening Streak"
-            value={`${stats.listeningStreak} days`}
+            value={`${stats.behavior.avgStreak} days`}
             icon={<TrendingUp className="w-8 h-8 text-purple-600" />}
           />
         </section>
@@ -233,7 +268,7 @@ function MetricCard({
       </div>
       <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
       <div className={`text-xs font-semibold ${positive ? 'text-green-600' : 'text-red-600'}`}>
-        {change} from last week
+        {change}
       </div>
     </div>
   );

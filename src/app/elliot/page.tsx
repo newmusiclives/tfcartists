@@ -1,99 +1,134 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Users, TrendingUp, Heart, BarChart3, Video, Share2, Clock, Target, UserCircle } from "lucide-react";
 
+interface ElliotStats {
+  totalListeners: number;
+  byStatus: Record<string, number>;
+  byTier: { CASUAL: number; REGULAR: number; SUPER_FAN: number; EVANGELIST: number };
+  behavior: { totalSessions: number; totalListeningHours: number; avgSessionLength: number; avgStreak: number };
+  growth: { newThisWeek: number; newThisMonth: number; churnedThisWeek: number; returningListenerPercent: number };
+  content: { totalContent: number; totalViews: number; totalShares: number; totalConversions: number };
+  campaigns: { activeCampaigns: number; totalGoalReached: number; totalGoalTarget: number };
+  community: { communityMembers: number; scoutCount: number };
+}
+
+interface ContentItem {
+  id: string;
+  title: string;
+  platform: string;
+  views: number;
+  shares: number;
+  newListeners: number;
+}
+
+interface CampaignItem {
+  id: string;
+  name: string;
+  managedBy: string;
+  goalTarget: number;
+  goalReached: number;
+  metrics: { progress: number };
+}
+
 export default function ElliotDashboardPage() {
-  // Mock data - in production this would come from the database
-  const stats = {
-    // Core Metrics
-    dailyActiveUsers: 1250,
-    weeklyActiveUsers: 3400,
-    monthlyActiveUsers: 5600,
-    avgSessionLength: 28, // minutes
-    returningListenerPercent: 52,
+  const [stats, setStats] = useState<ElliotStats | null>(null);
+  const [viralContent, setViralContent] = useState<ContentItem[]>([]);
+  const [campaigns, setCampaigns] = useState<CampaignItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    // Growth
-    newListenersThisWeek: 180,
-    newListenersLastWeek: 145,
-    growthRate: 24, // percent
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [statsRes, contentRes, campaignsRes] = await Promise.all([
+          fetch("/api/elliot/stats"),
+          fetch("/api/elliot/content?status=all&limit=4"),
+          fetch("/api/elliot/campaigns?status=active"),
+        ]);
 
-    // Engagement
-    totalSessions: 8500,
-    totalListeningHours: 3967,
-    listeningStreakAvg: 8, // days
+        if (statsRes.ok) {
+          setStats(await statsRes.json());
+        }
+        if (contentRes.ok) {
+          const data = await contentRes.json();
+          setViralContent(data.content || []);
+        }
+        if (campaignsRes.ok) {
+          const data = await campaignsRes.json();
+          setCampaigns((data.campaigns || []).slice(0, 4));
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
 
-    // Team Performance
-    viralViews: 485000,
-    viralShares: 12400,
-    artistReferrals: 340,
-    communityMembers: 680,
-    activeCampaigns: 4,
-  };
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading dashboard...</div>
+      </main>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-red-600">Error loading dashboard data</div>
+      </main>
+    );
+  }
+
+  const totalByTier = stats.byTier.CASUAL + stats.byTier.REGULAR + stats.byTier.SUPER_FAN + stats.byTier.EVANGELIST;
+  const tierPercent = (count: number) => totalByTier > 0 ? Math.round((count / totalByTier) * 100) : 0;
 
   const teamMembers = [
     {
       name: "Elliot Brooks",
       role: "AI Director",
       avatar: "🟦",
-      status: "Designing retention campaign",
-      lastActivity: "2 min ago",
-      kpi: "DAU: 1,250",
+      status: "Managing growth engine",
+      lastActivity: "Active",
+      kpi: `${stats.totalListeners} listeners`,
     },
     {
       name: "Nova Lane",
       role: "Social Amplification",
       avatar: "🟪",
-      status: "Posted viral TikTok",
-      lastActivity: "15 min ago",
-      kpi: "485k views",
+      status: "Creating viral content",
+      lastActivity: "Active",
+      kpi: `${stats.content.totalViews.toLocaleString()} views`,
     },
     {
       name: "River Maxwell",
       role: "Artist Activation",
       avatar: "🟩",
-      status: "Sent 28 share packs",
-      lastActivity: "1 hour ago",
-      kpi: "340 referrals",
+      status: "Activating artist referrals",
+      lastActivity: "Active",
+      kpi: `${stats.content.totalConversions} conversions`,
     },
     {
       name: "Sage Hart",
       role: "Community & Loyalty",
       avatar: "🟧",
-      status: "Running listening party",
-      lastActivity: "30 min ago",
-      kpi: "680 members",
+      status: "Building community",
+      lastActivity: "Active",
+      kpi: `${stats.community.communityMembers} members`,
     },
     {
       name: "Orion Pike",
       role: "Data & Habits",
       avatar: "🟥",
-      status: "Analyzing peak times",
-      lastActivity: "5 min ago",
-      kpi: "52% retention",
+      status: "Analyzing retention",
+      lastActivity: "Active",
+      kpi: `${stats.growth.returningListenerPercent}% retention`,
     },
   ];
-
-  const viralContent = [
-    { title: "Hank's Sunrise Philosophy", platform: "TikTok", views: 125000, shares: 3200, conversions: 45 },
-    { title: "Who Is Sarah Blake?", platform: "Instagram", views: 98000, shares: 2800, conversions: 32 },
-    { title: "Americana Roadtrip Vibes", platform: "YouTube", views: 156000, shares: 4100, conversions: 58 },
-    { title: "This Song Stopped Me", platform: "TikTok", views: 106000, shares: 2300, conversions: 38 },
-  ];
-
-  const activeCampaigns = [
-    { name: "Artist Referral Blast", owner: "River", progress: 68, target: "500 shares", reached: 340 },
-    { name: "Viral Moment Push", owner: "Nova", progress: 85, target: "1M views", reached: 850000 },
-    { name: "Habit Builder Sprint", owner: "Orion", progress: 42, target: "100 regulars", reached: 42 },
-    { name: "Community Event", owner: "Sage", progress: 90, target: "200 members", reached: 180 },
-  ];
-
-  const listenerTiers = {
-    casual: 680,      // 1-2 sessions/week
-    regular: 420,     // 3-4 sessions/week
-    superFan: 125,    // 5+ sessions/week
-    evangelist: 25,   // Shares content, refers others
-  };
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
@@ -133,32 +168,30 @@ export default function ElliotDashboardPage() {
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
             icon={<Users className="w-6 h-6 text-indigo-600" />}
-            label="Daily Active Users"
-            value={stats.dailyActiveUsers.toLocaleString()}
-            subtitle={`+${stats.newListenersThisWeek} this week`}
-            change={"+24%"}
+            label="Total Listeners"
+            value={stats.totalListeners.toLocaleString()}
+            subtitle={`+${stats.growth.newThisWeek} this week`}
             color="indigo"
           />
           <MetricCard
             icon={<Clock className="w-6 h-6 text-purple-600" />}
             label="Avg Session Length"
-            value={`${stats.avgSessionLength} min`}
+            value={`${stats.behavior.avgSessionLength} min`}
             subtitle="Target: 25-40 min"
             color="purple"
           />
           <MetricCard
             icon={<TrendingUp className="w-6 h-6 text-green-600" />}
             label="Returning Listeners"
-            value={`${stats.returningListenerPercent}%`}
+            value={`${stats.growth.returningListenerPercent}%`}
             subtitle="Target: 50-60%"
-            change="+8%"
             color="green"
           />
           <MetricCard
             icon={<Share2 className="w-6 h-6 text-pink-600" />}
-            label="Artist Referrals"
-            value={stats.artistReferrals.toString()}
-            subtitle="From 340 artists"
+            label="Content Conversions"
+            value={stats.content.totalConversions.toString()}
+            subtitle={`From ${stats.content.totalContent} pieces`}
             color="pink"
           />
         </section>
@@ -180,36 +213,36 @@ export default function ElliotDashboardPage() {
         <section className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Listener Distribution by Tier</h2>
           <p className="text-gray-600 text-sm mb-6">
-            Total: {Object.values(listenerTiers).reduce((a, b) => a + b, 0).toLocaleString()} listeners across 4 engagement tiers
+            Total: {totalByTier.toLocaleString()} listeners across 4 engagement tiers
           </p>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <ListenerTierCard
               tier="Casual"
-              count={listenerTiers.casual}
+              count={stats.byTier.CASUAL}
               description="1-2 sessions/week"
               color="blue"
-              percentage={54}
+              percentage={tierPercent(stats.byTier.CASUAL)}
             />
             <ListenerTierCard
               tier="Regular"
-              count={listenerTiers.regular}
+              count={stats.byTier.REGULAR}
               description="3-4 sessions/week"
               color="green"
-              percentage={34}
+              percentage={tierPercent(stats.byTier.REGULAR)}
             />
             <ListenerTierCard
               tier="Super Fan"
-              count={listenerTiers.superFan}
+              count={stats.byTier.SUPER_FAN}
               description="5+ sessions/week"
               color="purple"
-              percentage={10}
+              percentage={tierPercent(stats.byTier.SUPER_FAN)}
             />
             <ListenerTierCard
               tier="Evangelist"
-              count={listenerTiers.evangelist}
+              count={stats.byTier.EVANGELIST}
               description="Shares & refers"
               color="pink"
-              percentage={2}
+              percentage={tierPercent(stats.byTier.EVANGELIST)}
             />
           </div>
         </section>
@@ -223,7 +256,7 @@ export default function ElliotDashboardPage() {
                 <span>Viral Content Performance</span>
               </h2>
               <p className="text-gray-600 text-sm mt-1">
-                {stats.viralViews.toLocaleString()} total views, {stats.viralShares.toLocaleString()} shares this month
+                {stats.content.totalViews.toLocaleString()} total views, {stats.content.totalShares.toLocaleString()} shares
               </p>
             </div>
             <Link
@@ -234,9 +267,22 @@ export default function ElliotDashboardPage() {
             </Link>
           </div>
           <div className="space-y-3">
-            {viralContent.map((content, idx) => (
-              <ViralContentRow key={idx} {...content} />
-            ))}
+            {viralContent.length > 0 ? (
+              viralContent.map((content) => (
+                <ViralContentRow
+                  key={content.id}
+                  title={content.title}
+                  platform={content.platform}
+                  views={content.views}
+                  shares={content.shares}
+                  conversions={content.newListeners}
+                />
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No content yet. Create your first viral content piece.
+              </div>
+            )}
           </div>
         </section>
 
@@ -249,7 +295,7 @@ export default function ElliotDashboardPage() {
                 <span>Active Growth Campaigns</span>
               </h2>
               <p className="text-gray-600 text-sm mt-1">
-                {stats.activeCampaigns} campaigns in progress
+                {stats.campaigns.activeCampaigns} campaigns in progress
               </p>
             </div>
             <Link
@@ -260,9 +306,22 @@ export default function ElliotDashboardPage() {
             </Link>
           </div>
           <div className="space-y-4">
-            {activeCampaigns.map((campaign, idx) => (
-              <CampaignCard key={idx} {...campaign} />
-            ))}
+            {campaigns.length > 0 ? (
+              campaigns.map((campaign) => (
+                <CampaignCard
+                  key={campaign.id}
+                  name={campaign.name}
+                  owner={campaign.managedBy}
+                  progress={campaign.metrics?.progress || 0}
+                  target={`${campaign.goalTarget}`}
+                  reached={campaign.goalReached}
+                />
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                No active campaigns. Launch your first growth campaign.
+              </div>
+            )}
           </div>
         </section>
 
@@ -272,19 +331,19 @@ export default function ElliotDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <BehaviorStat
               label="Total Sessions"
-              value={stats.totalSessions.toLocaleString()}
-              subtitle="This month"
+              value={stats.behavior.totalSessions.toLocaleString()}
+              subtitle="All time"
               icon={<BarChart3 className="w-5 h-5 text-indigo-600" />}
             />
             <BehaviorStat
               label="Total Listening Hours"
-              value={stats.totalListeningHours.toLocaleString()}
-              subtitle="This month"
+              value={Math.round(stats.behavior.totalListeningHours).toLocaleString()}
+              subtitle="All time"
               icon={<Clock className="w-5 h-5 text-purple-600" />}
             />
             <BehaviorStat
               label="Avg Listening Streak"
-              value={`${stats.listeningStreakAvg} days`}
+              value={`${stats.behavior.avgStreak} days`}
               subtitle="Consecutive days"
               icon={<TrendingUp className="w-5 h-5 text-green-600" />}
             />
@@ -446,11 +505,11 @@ function ViralContentRow({
       </div>
       <div className="flex items-center space-x-6 text-sm">
         <div className="text-center">
-          <div className="font-semibold text-gray-900">{(views / 1000).toFixed(0)}k</div>
+          <div className="font-semibold text-gray-900">{views >= 1000 ? `${(views / 1000).toFixed(0)}k` : views}</div>
           <div className="text-xs text-gray-500">views</div>
         </div>
         <div className="text-center">
-          <div className="font-semibold text-purple-600">{(shares / 1000).toFixed(1)}k</div>
+          <div className="font-semibold text-purple-600">{shares >= 1000 ? `${(shares / 1000).toFixed(1)}k` : shares}</div>
           <div className="text-xs text-gray-500">shares</div>
         </div>
         <div className="text-center">
@@ -483,14 +542,14 @@ function CampaignCard({
           <div className="text-sm text-gray-600">Managed by {owner}</div>
         </div>
         <div className="text-right">
-          <div className="text-sm font-semibold text-gray-900">{progress}%</div>
+          <div className="text-sm font-semibold text-gray-900">{Math.round(progress)}%</div>
           <div className="text-xs text-gray-500">complete</div>
         </div>
       </div>
       <div className="bg-gray-200 rounded-full h-2 overflow-hidden mb-2">
         <div
           className="bg-green-600 h-full rounded-full transition-all"
-          style={{ width: `${progress}%` }}
+          style={{ width: `${Math.min(100, progress)}%` }}
         />
       </div>
       <div className="flex items-center justify-between text-xs text-gray-600">
