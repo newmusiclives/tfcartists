@@ -40,3 +40,6 @@ prisma/*.db-journal
 
 # Local Netlify folder
 .netlify
+
+# Deno
+deno.lock
