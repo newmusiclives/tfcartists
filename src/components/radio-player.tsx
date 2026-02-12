@@ -22,7 +22,6 @@ export function RadioPlayer() {
   const [volume, setVolume] = useState(75);
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "playing" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -67,21 +66,11 @@ export function RadioPlayer() {
 
   const handlePlay = useCallback(() => {
     const audio = audioRef.current;
-    if (!audio) {
-      setErrorMsg("No audio element");
-      setStatus("error");
-      return;
-    }
+    if (!audio) return;
 
     setStatus("loading");
-    setErrorMsg("");
-
-    // Set src with cache-bust
     audio.src = `${STREAM_URL}?_t=${Date.now()}`;
-
-    // Use play() — the "playing" event handler below will confirm success
-    audio.play().catch((err: Error) => {
-      setErrorMsg(`play(): ${err.name} - ${err.message}`);
+    audio.play().catch(() => {
       setStatus("error");
     });
   }, []);
@@ -94,7 +83,6 @@ export function RadioPlayer() {
     }
     setIsPlaying(false);
     setStatus("idle");
-    setErrorMsg("");
     stopPolling();
   }, [stopPolling]);
 
@@ -106,26 +94,17 @@ export function RadioPlayer() {
     }
   }, [isPlaying, status, handlePlay, handlePause]);
 
-  // Audio event: playback actually started
   const onPlaying = useCallback(() => {
     setIsPlaying(true);
     setStatus("playing");
-    setErrorMsg("");
     startPolling();
   }, [startPolling]);
 
-  // Audio event: error occurred
   const onError = useCallback(() => {
-    const audio = audioRef.current;
-    const mediaErr = audio?.error;
-    const code = mediaErr?.code ?? "?";
-    const msg = mediaErr?.message ?? "unknown";
-    setErrorMsg(`MediaError ${code}: ${msg}`);
     setStatus("error");
     setIsPlaying(false);
   }, []);
 
-  // Audio event: stream ended
   const onEnded = useCallback(() => {
     setIsPlaying(false);
     setStatus("idle");
@@ -171,14 +150,14 @@ export function RadioPlayer() {
             <div className="min-w-0">
               <div className="text-sm font-bold text-amber-100 truncate">
                 {showError
-                  ? "Stream Error"
+                  ? "Stream unavailable"
                   : showLoading
                     ? "Connecting..."
                     : trackTitle}
               </div>
               <div className="text-xs text-amber-300/80 truncate">
                 {showError
-                  ? errorMsg
+                  ? "Tap play to retry"
                   : showLoading
                     ? "Buffering stream..."
                     : showActive
@@ -253,9 +232,7 @@ export function RadioPlayer() {
                   ? "bg-green-500/20 text-green-400 border border-green-500/30"
                   : showLoading
                     ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                    : showError
-                      ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                      : "bg-gray-500/20 text-gray-400 border border-gray-500/30"
+                    : "bg-gray-500/20 text-gray-400 border border-gray-500/30"
               }`}
             >
               <span
@@ -264,9 +241,7 @@ export function RadioPlayer() {
                     ? "bg-green-400 animate-pulse"
                     : showLoading
                       ? "bg-blue-400 animate-pulse"
-                      : showError
-                        ? "bg-red-400"
-                        : "bg-gray-500"
+                      : "bg-gray-500"
                 }`}
               />
               <span>
@@ -274,9 +249,7 @@ export function RadioPlayer() {
                   ? "ON AIR"
                   : showLoading
                     ? "LOADING"
-                    : showError
-                      ? "ERROR"
-                      : "OFFLINE"}
+                    : "OFFLINE"}
               </span>
             </div>
 
