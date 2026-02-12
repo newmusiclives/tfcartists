@@ -16,13 +16,6 @@
 # Note: Scheduled functions require Netlify Pro plan or higher
 # Schedules are defined in netlify/functions/*.ts files using @netlify/functions
 
-# Proxy stream from tfc-radio (same-origin avoids cross-origin audio issues)
-[[redirects]]
-  from = "/stream/*"
-  to = "https://tfc-radio.netlify.app/stream/:splat"
-  status = 200
-  force = true
-
 # Headers for security
 [[headers]]
   for = "/*"
