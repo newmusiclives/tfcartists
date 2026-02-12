@@ -2,11 +2,9 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Play, Pause, Volume2, VolumeX, Radio } from "lucide-react";
-import Image from "next/image";
 
 const STREAM_URL = "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
-const NOW_PLAYING_URL =
-  "https://tfc-radio-backend-production.up.railway.app/api/now_playing";
+const NOW_PLAYING_URL = "/api/now-playing";
 const POLL_INTERVAL = 10_000;
 
 interface NowPlaying {
@@ -135,16 +133,12 @@ export function RadioPlayer() {
         <div className="flex items-center justify-between h-16">
           {/* Left: Artwork + Track Info */}
           <div className="flex items-center space-x-3 min-w-0 flex-1">
-            {artworkUrl && showActive ? (
-              <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden">
-                <Image
-                  src={artworkUrl}
-                  alt={trackTitle}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              </div>
+            {artworkUrl && (showActive || showLoading) ? (
+              <img
+                src={artworkUrl}
+                alt={trackTitle}
+                className="w-10 h-10 flex-shrink-0 rounded object-cover"
+              />
             ) : (
               <Radio className="w-5 h-5 text-amber-400 flex-shrink-0" />
             )}

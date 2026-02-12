@@ -139,11 +139,15 @@ export default function AdminDashboard() {
           fetch("/api/artists?limit=10"),
         ]);
 
-        const statsData = await statsRes.json();
-        const artistsData = await artistsRes.json();
+        if (statsRes.ok) {
+          const statsData = await statsRes.json();
+          if (statsData.artists) setStats(statsData);
+        }
 
-        setStats(statsData);
-        setArtists(artistsData.artists);
+        if (artistsRes.ok) {
+          const artistsData = await artistsRes.json();
+          if (Array.isArray(artistsData.artists)) setArtists(artistsData.artists);
+        }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
