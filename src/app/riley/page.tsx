@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Users, Music, DollarSign, TrendingUp, Upload, CheckCircle, Clock, XCircle, Search, UserCircle } from "lucide-react";
+import { ArrowLeft, Users, Music, DollarSign, TrendingUp, Upload, CheckCircle, Clock, XCircle, Search, UserCircle, Play, Zap } from "lucide-react";
 import { ARTIST_CAPACITY, AIRPLAY_TIER_SHARES, AIRPLAY_TIER_PRICING, AIRPLAY_TIER_PLAYS_PER_MONTH } from "@/lib/calculations/station-capacity";
 
 interface RileyStats {
@@ -24,11 +24,26 @@ interface SubmissionItem {
   createdAt: string;
 }
 
+interface AutomationResult {
+  success: boolean;
+  message?: string;
+  results?: {
+    followUps: number;
+    showReminders: number;
+    wins: number;
+    errors: number;
+  };
+  dryRun?: boolean;
+  error?: string;
+}
+
 export default function RileyDashboardPage() {
   const [stats, setStats] = useState<RileyStats | null>(null);
   const [recentSubmissions, setRecentSubmissions] = useState<SubmissionItem[]>([]);
   const [upgradeArtists, setUpgradeArtists] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [automationRunning, setAutomationRunning] = useState(false);
+  const [automationResult, setAutomationResult] = useState<AutomationResult | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -68,6 +83,23 @@ export default function RileyDashboardPage() {
     }
     fetchData();
   }, []);
+
+  async function runDailyAutomation(dryRun: boolean) {
+    setAutomationRunning(true);
+    setAutomationResult(null);
+    try {
+      const res = await fetch(`/api/cron/riley-daily?dry_run=${dryRun}`);
+      const data = await res.json();
+      setAutomationResult({ ...data, dryRun });
+    } catch (error) {
+      setAutomationResult({
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to run automation",
+      });
+    } finally {
+      setAutomationRunning(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -292,6 +324,76 @@ export default function RileyDashboardPage() {
               View All Opportunities →
             </Link>
           </div>
+        </section>
+
+        {/* Riley Automation Controls */}
+        <section className="bg-white rounded-xl shadow-lg p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-2xl font-bold">Riley Automation</h2>
+              <p className="text-gray-600 text-sm mt-1">
+                Run Riley&apos;s daily automation: follow-ups, show reminders, and win celebrations
+              </p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => runDailyAutomation(true)}
+                disabled={automationRunning}
+                className="inline-flex items-center space-x-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Play className="w-4 h-4" />
+                <span>{automationRunning ? "Running..." : "Dry Run"}</span>
+              </button>
+              <button
+                onClick={() => runDailyAutomation(false)}
+                disabled={automationRunning}
+                className="inline-flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Zap className="w-4 h-4" />
+                <span>{automationRunning ? "Running..." : "Run Daily Automation"}</span>
+              </button>
+            </div>
+          </div>
+
+          {automationResult && (
+            <div className={`mt-4 p-4 rounded-lg ${automationResult.success ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"}`}>
+              <div className="flex items-center space-x-2 mb-2">
+                {automationResult.success ? (
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                ) : (
+                  <XCircle className="w-5 h-5 text-red-600" />
+                )}
+                <span className={`font-semibold ${automationResult.success ? "text-green-700" : "text-red-700"}`}>
+                  {automationResult.success
+                    ? automationResult.dryRun ? "Dry Run Complete" : "Automation Complete"
+                    : "Automation Failed"}
+                </span>
+              </div>
+              {automationResult.results && (
+                <div className="grid grid-cols-4 gap-4 mt-3">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-purple-600">{automationResult.results.followUps}</div>
+                    <div className="text-xs text-gray-600">Follow-ups{automationResult.dryRun ? " (planned)" : " sent"}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600">{automationResult.results.showReminders}</div>
+                    <div className="text-xs text-gray-600">Show reminders{automationResult.dryRun ? " (planned)" : " sent"}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">{automationResult.results.wins}</div>
+                    <div className="text-xs text-gray-600">Wins{automationResult.dryRun ? " (planned)" : " celebrated"}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-red-600">{automationResult.results.errors}</div>
+                    <div className="text-xs text-gray-600">Errors</div>
+                  </div>
+                </div>
+              )}
+              {automationResult.error && (
+                <p className="text-sm text-red-600 mt-2">{automationResult.error}</p>
+              )}
+            </div>
+          )}
         </section>
 
         {/* Quick Actions */}

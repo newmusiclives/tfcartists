@@ -24,20 +24,26 @@ import { env } from "@/lib/env";
  */
 export async function GET(req: NextRequest) {
   try {
-    // Verify cron secret (security)
-    const authHeader = req.headers.get("authorization");
-    const cronSecret = env.CRON_SECRET;
-    if (!cronSecret) {
-      logger.error("CRON_SECRET not configured");
-      return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+    const isDev = process.env.NODE_ENV === "development";
+    const url = new URL(req.url);
+    const dryRun = url.searchParams.get("dry_run") === "true";
+
+    // Verify cron secret (skip in development for manual dashboard triggers)
+    if (!isDev) {
+      const authHeader = req.headers.get("authorization");
+      const cronSecret = env.CRON_SECRET;
+      if (!cronSecret) {
+        logger.error("CRON_SECRET not configured");
+        return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+      }
+
+      if (authHeader !== `Bearer ${cronSecret}`) {
+        logger.warn("Unauthorized cron attempt", { path: "/api/cron/riley-daily" });
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
     }
 
-    if (authHeader !== `Bearer ${cronSecret}`) {
-      logger.warn("Unauthorized cron attempt", { path: "/api/cron/riley-daily" });
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    logger.info("Starting Riley daily automation");
+    logger.info("Starting Riley daily automation", { dryRun });
 
     const results = {
       followUps: 0,
@@ -71,16 +77,18 @@ export async function GET(req: NextRequest) {
           intent = "educate_product";
         }
 
-        await riley.sendMessage(artist.id, "", intent);
+        if (!dryRun) {
+          await riley.sendMessage(artist.id, "", intent);
 
-        // Schedule next follow-up in 3-5 days
-        const nextFollowUp = new Date();
-        nextFollowUp.setDate(nextFollowUp.getDate() + Math.floor(Math.random() * 3) + 3);
+          // Schedule next follow-up in 3-5 days
+          const nextFollowUp = new Date();
+          nextFollowUp.setDate(nextFollowUp.getDate() + Math.floor(Math.random() * 3) + 3);
 
-        await prisma.artist.update({
-          where: { id: artist.id },
-          data: { nextFollowUpAt: nextFollowUp },
-        });
+          await prisma.artist.update({
+            where: { id: artist.id },
+            data: { nextFollowUpAt: nextFollowUp },
+          });
+        }
 
         results.followUps++;
       } catch (error) {
@@ -105,12 +113,14 @@ export async function GET(req: NextRequest) {
 
     for (const show of upcomingShows) {
       try {
-        await riley.sendMessage(show.artistId, "", "send_reminder");
+        if (!dryRun) {
+          await riley.sendMessage(show.artistId, "", "send_reminder");
 
-        await prisma.show.update({
-          where: { id: show.id },
-          data: { status: "REMINDED" },
-        });
+          await prisma.show.update({
+            where: { id: show.id },
+            data: { status: "REMINDED" },
+          });
+        }
 
         results.showReminders++;
       } catch (error) {
@@ -135,12 +145,14 @@ export async function GET(req: NextRequest) {
 
     for (const win of recentWins) {
       try {
-        await riley.sendMessage(win.artistId, "", "celebrate_win");
+        if (!dryRun) {
+          await riley.sendMessage(win.artistId, "", "celebrate_win");
 
-        await prisma.donation.update({
-          where: { id: win.id },
-          data: { celebratedBy: "riley" },
-        });
+          await prisma.donation.update({
+            where: { id: win.id },
+            data: { celebratedBy: "riley" },
+          });
+        }
 
         results.wins++;
       } catch (error) {
@@ -149,11 +161,14 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    logger.info("Riley daily automation completed", results);
+    logger.info("Riley daily automation completed", { ...results, dryRun });
 
     return NextResponse.json({
       success: true,
-      message: "Riley daily automation completed",
+      message: dryRun
+        ? "Riley daily automation dry run completed (no messages sent)"
+        : "Riley daily automation completed",
+      dryRun,
       results,
       timestamp: new Date().toISOString(),
     });

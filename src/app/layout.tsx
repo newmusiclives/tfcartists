@@ -9,8 +9,8 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "TrueFans RADIO - Riley AI Sales System",
-  description: "AI-powered artist acquisition and engagement platform",
+  title: "North Country Radio — TrueFans RADIO Network",
+  description: "AI-powered Americana and Country radio station championing independent artists",
 };
 
 export default function RootLayout({

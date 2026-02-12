@@ -15,6 +15,7 @@ import {
   CalendarDays,
   Music,
   Target,
+  Award,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -22,6 +23,8 @@ export function SharedNav() {
   const pathname = usePathname();
   const [rileyOpen, setRileyOpen] = useState(false);
   const [harperOpen, setHarperOpen] = useState(false);
+  const [cassidyOpen, setCassidyOpen] = useState(false);
+  const [elliotOpen, setElliotOpen] = useState(false);
   const [stationOpen, setStationOpen] = useState(false);
   const [opportunitiesOpen, setOpportunitiesOpen] = useState(false);
 
@@ -32,9 +35,9 @@ export function SharedNav() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Home */}
-          <Link href="/admin" className="flex items-center space-x-2 font-bold text-xl text-purple-600 hover:text-purple-700">
+          <Link href="/admin" className="flex items-center space-x-2 font-bold text-xl text-amber-700 hover:text-amber-800">
             <Radio className="w-6 h-6" />
-            <span>TrueFans RADIO™</span>
+            <span>North Country Radio</span>
           </Link>
 
           {/* Navigation Links */}
@@ -180,20 +183,113 @@ export function SharedNav() {
               )}
             </div>
 
-            {/* Elliot Team */}
-            <Link
-              href="/elliot"
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                isActive("/elliot")
-                  ? "bg-purple-100 text-purple-700"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              <div className="flex items-center space-x-1">
+            {/* Cassidy Team Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setCassidyOpen(!cassidyOpen)}
+                onBlur={() => setTimeout(() => setCassidyOpen(false), 200)}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
+                  isActive("/cassidy")
+                    ? "bg-purple-100 text-purple-700"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <Award className="w-4 h-4" />
+                <span>Cassidy Team</span>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+              {cassidyOpen && (
+                <div className="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border py-1 z-50">
+                  <Link
+                    href="/cassidy"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/cassidy/submissions"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Review Queue
+                  </Link>
+                  <Link
+                    href="/cassidy/tier-management"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Tier Management
+                  </Link>
+                  <Link
+                    href="/cassidy/rotation"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Rotation Planner
+                  </Link>
+                  <Link
+                    href="/cassidy/team"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Panel Members
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Elliot Team Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setElliotOpen(!elliotOpen)}
+                onBlur={() => setTimeout(() => setElliotOpen(false), 200)}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
+                  isActive("/elliot")
+                    ? "bg-purple-100 text-purple-700"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
                 <TrendingUp className="w-4 h-4" />
                 <span>Elliot Team</span>
-              </div>
-            </Link>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+              {elliotOpen && (
+                <div className="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border py-1 z-50">
+                  <Link
+                    href="/elliot"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/elliot/analytics"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Listener Analytics
+                  </Link>
+                  <Link
+                    href="/elliot/campaigns"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Growth Campaigns
+                  </Link>
+                  <Link
+                    href="/elliot/content"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Viral Content
+                  </Link>
+                  <Link
+                    href="/elliot/community"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Community Hub
+                  </Link>
+                  <Link
+                    href="/elliot/team"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-purple-50"
+                  >
+                    Team Members
+                  </Link>
+                </div>
+              )}
+            </div>
 
             {/* Opportunities Dropdown */}
             <div className="relative">

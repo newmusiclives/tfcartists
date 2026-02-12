@@ -735,11 +735,13 @@ async function seedStation() {
   // Station
   await prisma.station.create({
     data: {
-      name: "TrueFans Radio",
-      callSign: "TFR",
-      tagline: "Where the music finds you",
-      description: "TrueFans Radio is an AI-powered Americana and Country radio station that champions independent artists.",
+      name: "North Country Radio",
+      callSign: "NCR",
+      tagline: "Where the music finds you.",
+      description: "North Country Radio is an AI-powered Americana and Country radio station on the TrueFans RADIO Network that champions independent artists through free airplay, community-driven curation, and direct fan support.",
       genre: "Americana, Country, Singer-Songwriter",
+      primaryColor: "#B45309",
+      secondaryColor: "#EA580C",
       maxTracksPerMonth: 8640,
       maxAdsPerMonth: 17280,
       maxArtistCapacity: 340,

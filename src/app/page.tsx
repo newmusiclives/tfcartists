@@ -1,16 +1,16 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award } from "lucide-react";
+import { ArrowRight, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award } from "lucide-react";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       {/* Navigation */}
       <nav className="border-b bg-white/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <Sparkles className="w-6 h-6 text-purple-600" />
-              <span className="font-bold text-xl">TrueFans RADIO</span>
+              <Radio className="w-6 h-6 text-amber-700" />
+              <span className="font-bold text-xl text-amber-700">North Country Radio</span>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -70,34 +70,34 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-20">
         <div className="text-center">
-          <div className="inline-flex items-center space-x-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">
-            <Sparkles className="w-4 h-4" />
-            <span>TrueFans Internal System</span>
+          <div className="inline-flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
+            <Radio className="w-4 h-4" />
+            <span>TrueFans RADIO Network — Station #1</span>
           </div>
 
           <h1 className="mt-6 text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 leading-[1.1] tracking-tight">
-            TrueFans RADIO
-            <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-green-600 to-blue-600">
-              Complete Radio Growth Ecosystem
+            North Country Radio
+            <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-700 via-orange-600 to-amber-600">
+              Where the music finds you.
             </span>
           </h1>
 
           <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Riley's team finds and onboards artists. Cassidy's team reviews submissions and assigns rotation tiers. Harper's team secures sponsors to fund the stations.
-            Elliot's team builds a passionate listener community that grows itself through viral content, artist fan activation, and habit formation.
+            Riley&apos;s team finds and onboards artists. Cassidy&apos;s team reviews submissions and assigns rotation tiers. Harper&apos;s team secures sponsors to fund the station.
+            Elliot&apos;s team builds a passionate listener community that grows itself through viral content, artist fan activation, and habit formation.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/admin"
-              className="inline-flex items-center space-x-2 bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition-colors shadow-lg hover:shadow-xl"
+              className="inline-flex items-center space-x-2 bg-amber-700 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-amber-800 transition-colors shadow-lg hover:shadow-xl"
             >
               <span>Admin Dashboard</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/airplay"
-              className="inline-flex items-center space-x-2 border-2 border-purple-300 text-purple-700 px-8 py-4 rounded-lg text-lg font-semibold hover:border-purple-400 transition-colors"
+              className="inline-flex items-center space-x-2 border-2 border-amber-400 text-amber-700 px-8 py-4 rounded-lg text-lg font-semibold hover:border-amber-500 transition-colors"
             >
               <span>Airplay Tiers</span>
             </Link>
@@ -253,7 +253,7 @@ export default function HomePage() {
           <Step
             number="3"
             title="Dual Signup"
-            description="TrueFans RADIO account + FREE radio airplay"
+            description="North Country Radio account + FREE radio airplay"
           />
           <Step
             number="4"
@@ -269,7 +269,7 @@ export default function HomePage() {
       </section>
 
       {/* System Status */}
-      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-20">
+      <section className="bg-gradient-to-r from-amber-700 to-orange-600 text-white py-20">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-4xl font-bold mb-12 text-center">
             System Overview
@@ -277,24 +277,24 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">3</div>
-              <div className="text-purple-100">Active Artists</div>
-              <div className="text-sm text-purple-200 mt-2">Riley's Pipeline</div>
+              <div className="text-amber-100">Active Artists</div>
+              <div className="text-sm text-amber-200 mt-2">Riley's Pipeline</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">$127.50</div>
-              <div className="text-purple-100">Total Raised</div>
-              <div className="text-sm text-purple-200 mt-2">Via TrueFans RADIO</div>
+              <div className="text-amber-100">Total Raised</div>
+              <div className="text-sm text-amber-200 mt-2">Via North Country Radio</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">31</div>
-              <div className="text-purple-100">Total Shares</div>
-              <div className="text-sm text-purple-200 mt-2">In Artist Pool</div>
+              <div className="text-amber-100">Total Shares</div>
+              <div className="text-sm text-amber-200 mt-2">In Artist Pool</div>
             </div>
           </div>
           <div className="mt-8 text-center">
             <Link
               href="/admin"
-              className="inline-flex items-center space-x-2 bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-xl"
+              className="inline-flex items-center space-x-2 bg-white text-amber-700 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-xl"
             >
               <span>View Full Dashboard</span>
               <ArrowRight className="w-5 h-5" />
@@ -337,7 +337,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p>&copy; 2024 TrueFans Internal System. Riley + Cassidy + Harper + Elliot AI Teams.</p>
+            <p>&copy; 2025 North Country Radio — A TrueFans RADIO Network Station. Riley + Cassidy + Harper + Elliot AI Teams.</p>
           </div>
         </div>
       </footer>
@@ -358,7 +358,7 @@ function StatCard({ icon, value, label }: { icon: React.ReactNode; value: string
 function Step({ number, title, description }: { number: string; title: string; description: string }) {
   return (
     <div className="text-center">
-      <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-600 text-white rounded-full text-xl font-bold mb-4">
+      <div className="inline-flex items-center justify-center w-12 h-12 bg-amber-700 text-white rounded-full text-xl font-bold mb-4">
         {number}
       </div>
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
