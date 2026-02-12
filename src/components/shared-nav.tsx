@@ -16,6 +16,7 @@ import {
   Music,
   Target,
   Award,
+  Globe,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -341,6 +342,19 @@ export function SharedNav() {
                 </div>
               )}
             </div>
+
+            {/* Network Link */}
+            <Link
+              href="/network"
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
+                isActive("/network")
+                  ? "bg-purple-100 text-purple-700"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              <Globe className="w-4 h-4" />
+              <span>Network</span>
+            </Link>
 
             {/* Station & Tools Dropdown */}
             <div className="relative">

@@ -152,52 +152,8 @@ export const authConfig: NextAuthConfig = {
       }
       return session;
     },
-    async authorized({ auth, request }) {
-      const { pathname } = request.nextUrl;
-
-      // Public routes (no auth required)
-      const publicRoutes = ["/", "/login"];
-      if (publicRoutes.includes(pathname)) {
-        return true;
-      }
-
-      // Require authentication for all other routes
-      const isAuthenticated = !!auth?.user;
-
-      if (!isAuthenticated) {
-        return false;
-      }
-
-      // Role-based access control
-      const userRole = auth.user.role;
-
-      // Admin can access everything
-      if (userRole === "admin") {
-        return true;
-      }
-
-      // Team-specific access
-      if (pathname.startsWith("/riley") && userRole !== "riley") {
-        return false;
-      }
-
-      if (pathname.startsWith("/harper") && userRole !== "harper") {
-        return false;
-      }
-
-      if (pathname.startsWith("/elliot") && userRole !== "elliot") {
-        return false;
-      }
-
-      if (pathname.startsWith("/cassidy") && userRole !== "cassidy") {
-        return false;
-      }
-
-      // API routes require authentication
-      if (pathname.startsWith("/api")) {
-        return isAuthenticated;
-      }
-
+    async authorized() {
+      // All pages are public — auth is optional for role-based UI
       return true;
     },
   },
