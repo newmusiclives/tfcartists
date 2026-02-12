@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 
 const STATION_DEFAULTS = {
   name: "North Country Radio",
@@ -20,8 +21,19 @@ const STATION_DEFAULTS = {
  * GET /api/station
  * Returns the station singleton config from DB, with fallback defaults
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // If no database is configured, return defaults immediately
+  if (!process.env.DATABASE_URL) {
+    return NextResponse.json({
+      source: "defaults",
+      ...STATION_DEFAULTS,
+    });
+  }
+
   try {
+    // Dynamic import to avoid module-level crash when DB is unavailable
+    const { prisma } = await import("@/lib/db");
+
     const station = await prisma.station.findFirst({
       where: { isActive: true },
     });
@@ -51,7 +63,7 @@ export async function GET() {
       isActive: station.isActive,
     });
   } catch (error) {
-    // If DB is unavailable, return defaults
+    // If DB query fails, return defaults
     return NextResponse.json({
       source: "defaults",
       ...STATION_DEFAULTS,
