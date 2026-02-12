@@ -180,10 +180,10 @@ export default function DJsPage() {
               icon={<Moon className="w-8 h-8 text-purple-600" />}
             />
             <WeekendDJCard
-              name="Carmen Vasquez"
-              show="Saturday Sessions"
+              name="Levi Bridges"
+              show="The Melody Trail"
               time="Saturday, 3:00pm – 6:00pm"
-              focus="Modern country hits and deep cuts: Kacey Musgraves, Chris Stapleton, Maren Morris, Brothers Osborne — prime time curator"
+              focus="Outdoor country anthems: Ian Munsick, Parker McCollum, Riley Green — weekend adventure soundtrack"
               icon={<Compass className="w-8 h-8 text-green-600" />}
             />
           </div>

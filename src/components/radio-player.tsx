@@ -69,11 +69,12 @@ export function RadioPlayer() {
     if (!audio) return;
 
     setStatus("loading");
+    fetchNowPlaying(); // Fetch metadata immediately on play
     audio.src = `${STREAM_URL}?_t=${Date.now()}`;
     audio.play().catch(() => {
       setStatus("error");
     });
-  }, []);
+  }, [fetchNowPlaying]);
 
   const handlePause = useCallback(() => {
     const audio = audioRef.current;
