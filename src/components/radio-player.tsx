@@ -28,8 +28,19 @@ export function RadioPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const frozenRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastTimeRef = useRef(0);
   const backoffRef = useRef(2000);
+  const volumeRef = useRef(volume);
+  const wantPlayRef = useRef(false);
+
+  // Keep volume ref in sync
+  useEffect(() => {
+    volumeRef.current = volume;
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
 
   const fetchNowPlaying = useCallback(async () => {
     try {
@@ -63,81 +74,98 @@ export function RadioPlayer() {
     }
   }, []);
 
-  const connectStream = useCallback(() => {
-    // Tear down old audio element completely
+  const teardownAudio = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.removeAttribute("src");
       audioRef.current.load();
       audioRef.current = null;
     }
+  }, []);
 
-    const audio = new Audio(
-      `${STREAM_URL}?_t=${Date.now()}`
-    );
-    audio.volume = volume / 100;
+  // Core stream connect — uses refs to avoid stale closures
+  const connectStream = useCallback(() => {
+    teardownAudio();
+
+    // Don't reconnect if user paused
+    if (!wantPlayRef.current) return;
+
+    const audio = new Audio(`${STREAM_URL}?_t=${Date.now()}`);
+    audio.volume = volumeRef.current / 100;
+    audio.preload = "none";
     audioRef.current = audio;
     lastTimeRef.current = 0;
 
-    audio.addEventListener("playing", () => {
+    const onPlaying = () => {
       setIsReconnecting(false);
       setIsPlaying(true);
       backoffRef.current = 2000;
-    });
+    };
 
-    audio.addEventListener("error", () => {
-      handleStreamError();
-    });
+    const onError = () => {
+      if (!wantPlayRef.current) return;
+      setIsReconnecting(true);
+      const delay = backoffRef.current;
+      backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
+      reconnectRef.current = setTimeout(() => {
+        connectStream();
+      }, delay);
+    };
 
-    audio.addEventListener("stalled", () => {
-      handleStreamError();
-    });
+    audio.addEventListener("playing", onPlaying);
+    audio.addEventListener("error", onError);
 
     audio.play().catch(() => {
-      handleStreamError();
+      // play() rejected — trigger reconnect
+      if (!wantPlayRef.current) return;
+      setIsReconnecting(true);
+      const delay = backoffRef.current;
+      backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
+      reconnectRef.current = setTimeout(() => {
+        connectStream();
+      }, delay);
     });
-  }, [volume]);
-
-  const handleStreamError = useCallback(() => {
-    setIsReconnecting(true);
-    const delay = backoffRef.current;
-    backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
-    setTimeout(() => {
-      connectStream();
-    }, delay);
-  }, [connectStream]);
+  }, [teardownAudio]);
 
   const startFrozenCheck = useCallback(() => {
     stopFrozenCheck();
     frozenRef.current = setInterval(() => {
       const audio = audioRef.current;
-      if (!audio || audio.paused) return;
+      if (!audio || audio.paused || !wantPlayRef.current) return;
       if (audio.currentTime === lastTimeRef.current) {
         // Stream is frozen — reconnect
-        handleStreamError();
+        setIsReconnecting(true);
+        const delay = backoffRef.current;
+        backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
+        teardownAudio();
+        reconnectRef.current = setTimeout(() => {
+          connectStream();
+        }, delay);
       }
       lastTimeRef.current = audio.currentTime;
     }, FROZEN_THRESHOLD);
-  }, [stopFrozenCheck, handleStreamError]);
+  }, [stopFrozenCheck, teardownAudio, connectStream]);
 
   const handlePlay = useCallback(() => {
+    wantPlayRef.current = true;
+    backoffRef.current = 2000;
     connectStream();
     startPolling();
     startFrozenCheck();
   }, [connectStream, startPolling, startFrozenCheck]);
 
   const handlePause = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.removeAttribute("src");
-      audioRef.current.load();
-      audioRef.current = null;
+    wantPlayRef.current = false;
+    if (reconnectRef.current) {
+      clearTimeout(reconnectRef.current);
+      reconnectRef.current = null;
     }
+    teardownAudio();
     setIsPlaying(false);
     setIsReconnecting(false);
     stopPolling();
     stopFrozenCheck();
-  }, [stopPolling, stopFrozenCheck]);
+  }, [teardownAudio, stopPolling, stopFrozenCheck]);
 
   const togglePlayPause = useCallback(() => {
     if (isPlaying || isReconnecting) {
@@ -147,16 +175,10 @@ export function RadioPlayer() {
     }
   }, [isPlaying, isReconnecting, handlePlay, handlePause]);
 
-  // Sync volume to audio element
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
-    }
-  }, [volume]);
-
   // Cleanup on unmount
   useEffect(() => {
     return () => {
+      wantPlayRef.current = false;
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.removeAttribute("src");
@@ -164,6 +186,7 @@ export function RadioPlayer() {
       }
       if (pollRef.current) clearInterval(pollRef.current);
       if (frozenRef.current) clearInterval(frozenRef.current);
+      if (reconnectRef.current) clearTimeout(reconnectRef.current);
     };
   }, []);
 
