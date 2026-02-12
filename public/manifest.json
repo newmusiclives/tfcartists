@@ -1,0 +1,22 @@
+{
+  "name": "North Country Radio",
+  "short_name": "NCR Radio",
+  "description": "Americana & Country — TrueFans RADIO Network",
+  "start_url": "/player",
+  "display": "standalone",
+  "background_color": "#78350f",
+  "theme_color": "#78350f",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

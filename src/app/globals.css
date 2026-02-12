@@ -58,6 +58,13 @@
   }
 }
 
+/* Standalone PWA mode — safe area support */
+@media (display-mode: standalone) {
+  body {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
 /* Radio player equalizer animation */
 @keyframes equalizer {
   0%, 100% { height: 4px; }

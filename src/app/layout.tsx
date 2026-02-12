@@ -12,6 +12,22 @@ export const revalidate = 0;
 export const metadata: Metadata = {
   title: "North Country Radio — TrueFans RADIO Network",
   description: "AI-powered Americana and Country radio station championing independent artists",
+  manifest: "/manifest.json",
+  themeColor: "#78350f",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "NCR Radio",
+  },
+  icons: {
+    icon: "/icons/icon-192.png",
+    apple: "/apple-touch-icon.png",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+  },
 };
 
 export default function RootLayout({
