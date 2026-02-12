@@ -25,7 +25,7 @@ export function RadioPlayer() {
   const [isReconnecting, setIsReconnecting] = useState(false);
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioElRef = useRef<HTMLAudioElement | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const frozenRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -34,11 +34,11 @@ export function RadioPlayer() {
   const volumeRef = useRef(volume);
   const wantPlayRef = useRef(false);
 
-  // Keep volume ref in sync
+  // Keep volume ref in sync and apply to audio element
   useEffect(() => {
     volumeRef.current = volume;
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
+    if (audioElRef.current) {
+      audioElRef.current.volume = volume / 100;
     }
   }, [volume]);
 
@@ -74,77 +74,77 @@ export function RadioPlayer() {
     }
   }, []);
 
-  const teardownAudio = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.removeAttribute("src");
-      audioRef.current.load();
-      audioRef.current = null;
-    }
-  }, []);
-
-  // Core stream connect — uses refs to avoid stale closures
+  // Connect to the stream using a DOM audio element
   const connectStream = useCallback(() => {
-    teardownAudio();
+    // Tear down any existing audio
+    if (audioElRef.current) {
+      audioElRef.current.pause();
+      audioElRef.current.src = "";
+      audioElRef.current.load();
+      audioElRef.current.remove();
+      audioElRef.current = null;
+    }
 
-    // Don't reconnect if user paused
     if (!wantPlayRef.current) return;
 
-    const audio = new Audio(`${STREAM_URL}?_t=${Date.now()}`);
+    // Create a real DOM element — more reliable for live streams than new Audio()
+    const audio = document.createElement("audio");
+    audio.crossOrigin = "anonymous";
     audio.volume = volumeRef.current / 100;
-    audio.preload = "none";
-    audioRef.current = audio;
+    audioElRef.current = audio;
     lastTimeRef.current = 0;
 
-    const onPlaying = () => {
+    audio.addEventListener("playing", () => {
       setIsReconnecting(false);
       setIsPlaying(true);
       backoffRef.current = 2000;
-    };
-
-    const onError = () => {
-      if (!wantPlayRef.current) return;
-      setIsReconnecting(true);
-      const delay = backoffRef.current;
-      backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
-      reconnectRef.current = setTimeout(() => {
-        connectStream();
-      }, delay);
-    };
-
-    audio.addEventListener("playing", onPlaying);
-    audio.addEventListener("error", onError);
-
-    audio.play().catch(() => {
-      // play() rejected — trigger reconnect
-      if (!wantPlayRef.current) return;
-      setIsReconnecting(true);
-      const delay = backoffRef.current;
-      backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
-      reconnectRef.current = setTimeout(() => {
-        connectStream();
-      }, delay);
     });
-  }, [teardownAudio]);
+
+    audio.addEventListener("error", () => {
+      if (!wantPlayRef.current) return;
+      setIsReconnecting(true);
+      const delay = backoffRef.current;
+      backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
+      reconnectRef.current = setTimeout(() => connectStream(), delay);
+    });
+
+    // Set src and play — cache-bust to avoid stale CDN responses
+    audio.src = `${STREAM_URL}?_t=${Date.now()}`;
+    audio.load();
+
+    const playPromise = audio.play();
+    if (playPromise) {
+      playPromise.catch(() => {
+        if (!wantPlayRef.current) return;
+        setIsReconnecting(true);
+        const delay = backoffRef.current;
+        backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
+        reconnectRef.current = setTimeout(() => connectStream(), delay);
+      });
+    }
+  }, []);
 
   const startFrozenCheck = useCallback(() => {
     stopFrozenCheck();
     frozenRef.current = setInterval(() => {
-      const audio = audioRef.current;
+      const audio = audioElRef.current;
       if (!audio || audio.paused || !wantPlayRef.current) return;
       if (audio.currentTime === lastTimeRef.current) {
-        // Stream is frozen — reconnect
         setIsReconnecting(true);
         const delay = backoffRef.current;
         backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
-        teardownAudio();
-        reconnectRef.current = setTimeout(() => {
-          connectStream();
-        }, delay);
+        if (audioElRef.current) {
+          audioElRef.current.pause();
+          audioElRef.current.src = "";
+          audioElRef.current.load();
+          audioElRef.current.remove();
+          audioElRef.current = null;
+        }
+        reconnectRef.current = setTimeout(() => connectStream(), delay);
       }
       lastTimeRef.current = audio.currentTime;
     }, FROZEN_THRESHOLD);
-  }, [stopFrozenCheck, teardownAudio, connectStream]);
+  }, [stopFrozenCheck, connectStream]);
 
   const handlePlay = useCallback(() => {
     wantPlayRef.current = true;
@@ -160,12 +160,18 @@ export function RadioPlayer() {
       clearTimeout(reconnectRef.current);
       reconnectRef.current = null;
     }
-    teardownAudio();
+    if (audioElRef.current) {
+      audioElRef.current.pause();
+      audioElRef.current.src = "";
+      audioElRef.current.load();
+      audioElRef.current.remove();
+      audioElRef.current = null;
+    }
     setIsPlaying(false);
     setIsReconnecting(false);
     stopPolling();
     stopFrozenCheck();
-  }, [teardownAudio, stopPolling, stopFrozenCheck]);
+  }, [stopPolling, stopFrozenCheck]);
 
   const togglePlayPause = useCallback(() => {
     if (isPlaying || isReconnecting) {
@@ -179,10 +185,10 @@ export function RadioPlayer() {
   useEffect(() => {
     return () => {
       wantPlayRef.current = false;
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.removeAttribute("src");
-        audioRef.current.load();
+      if (audioElRef.current) {
+        audioElRef.current.pause();
+        audioElRef.current.src = "";
+        audioElRef.current.remove();
       }
       if (pollRef.current) clearInterval(pollRef.current);
       if (frozenRef.current) clearInterval(frozenRef.current);
@@ -202,7 +208,6 @@ export function RadioPlayer() {
         <div className="flex items-center justify-between h-16">
           {/* Left: Artwork + Track Info */}
           <div className="flex items-center space-x-3 min-w-0 flex-1">
-            {/* Album Art */}
             {artworkUrl && isPlaying ? (
               <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden">
                 <Image
@@ -232,7 +237,6 @@ export function RadioPlayer() {
 
           {/* Center: Play Button + Equalizer */}
           <div className="flex items-center space-x-4">
-            {/* Equalizer Bars (left) */}
             <div className="hidden sm:flex items-end space-x-0.5 h-6">
               {[1, 2, 3, 4, 5].map((bar) => (
                 <div
@@ -254,7 +258,6 @@ export function RadioPlayer() {
               ))}
             </div>
 
-            {/* Play/Pause */}
             <button
               onClick={togglePlayPause}
               className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 transition-colors flex items-center justify-center shadow-lg"
@@ -267,7 +270,6 @@ export function RadioPlayer() {
               )}
             </button>
 
-            {/* Equalizer Bars (right) */}
             <div className="hidden sm:flex items-end space-x-0.5 h-6">
               {[6, 7, 8, 9, 10].map((bar) => (
                 <div
@@ -292,7 +294,6 @@ export function RadioPlayer() {
 
           {/* Right: Status + Volume */}
           <div className="flex items-center space-x-4 flex-1 justify-end">
-            {/* On Air Badge */}
             <div
               className={`hidden md:flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold ${
                 isPlaying && !isReconnecting
@@ -320,14 +321,12 @@ export function RadioPlayer() {
               </span>
             </div>
 
-            {/* Listener Count */}
             <div className="hidden lg:block text-xs text-amber-300/70">
               {isPlaying && listenerCount != null
                 ? `${listenerCount.toLocaleString()} listener${listenerCount !== 1 ? "s" : ""}`
                 : "---"}
             </div>
 
-            {/* Volume */}
             <div className="hidden sm:flex items-center space-x-2">
               <button
                 onClick={() => setVolume((v) => (v > 0 ? 0 : 75))}
