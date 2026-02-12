@@ -183,11 +183,11 @@ export default function NetworkPage() {
                 {activeStation.genre}
               </p>
               <Link
-                href="/"
+                href="/station"
                 className="inline-flex items-center space-x-2 bg-amber-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-amber-800 transition-colors"
               >
                 <Radio className="w-4 h-4" />
-                <span>Listen Now</span>
+                <span>Go to Station</span>
               </Link>
             </div>
           </div>
