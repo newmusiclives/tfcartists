@@ -1,43 +1,226 @@
 "use client";
 
-import { useState } from "react";
-import { Play, Pause, Volume2, Radio } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Play, Pause, Volume2, VolumeX, Radio } from "lucide-react";
+import Image from "next/image";
+
+const STREAM_URL = "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
+const NOW_PLAYING_URL =
+  "https://tfc-radio-backend-production.up.railway.app/api/now_playing";
+const POLL_INTERVAL = 10_000;
+const FROZEN_THRESHOLD = 15_000;
+const MAX_BACKOFF = 30_000;
+
+interface NowPlaying {
+  title: string;
+  artist_name: string;
+  artwork_url: string;
+  listener_count: number;
+  dj_name: string;
+}
 
 export function RadioPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(75);
+  const [isReconnecting, setIsReconnecting] = useState(false);
+  const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const frozenRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lastTimeRef = useRef(0);
+  const backoffRef = useRef(2000);
+
+  const fetchNowPlaying = useCallback(async () => {
+    try {
+      const res = await fetch(NOW_PLAYING_URL, { cache: "no-store" });
+      if (res.ok) {
+        const data: NowPlaying = await res.json();
+        setNowPlaying(data);
+      }
+    } catch {
+      // Silently ignore — metadata is non-critical
+    }
+  }, []);
+
+  const startPolling = useCallback(() => {
+    if (pollRef.current) clearInterval(pollRef.current);
+    fetchNowPlaying();
+    pollRef.current = setInterval(fetchNowPlaying, POLL_INTERVAL);
+  }, [fetchNowPlaying]);
+
+  const stopPolling = useCallback(() => {
+    if (pollRef.current) {
+      clearInterval(pollRef.current);
+      pollRef.current = null;
+    }
+  }, []);
+
+  const stopFrozenCheck = useCallback(() => {
+    if (frozenRef.current) {
+      clearInterval(frozenRef.current);
+      frozenRef.current = null;
+    }
+  }, []);
+
+  const connectStream = useCallback(() => {
+    // Tear down old audio element completely
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.removeAttribute("src");
+      audioRef.current.load();
+      audioRef.current = null;
+    }
+
+    const audio = new Audio(
+      `${STREAM_URL}?_t=${Date.now()}`
+    );
+    audio.volume = volume / 100;
+    audioRef.current = audio;
+    lastTimeRef.current = 0;
+
+    audio.addEventListener("playing", () => {
+      setIsReconnecting(false);
+      setIsPlaying(true);
+      backoffRef.current = 2000;
+    });
+
+    audio.addEventListener("error", () => {
+      handleStreamError();
+    });
+
+    audio.addEventListener("stalled", () => {
+      handleStreamError();
+    });
+
+    audio.play().catch(() => {
+      handleStreamError();
+    });
+  }, [volume]);
+
+  const handleStreamError = useCallback(() => {
+    setIsReconnecting(true);
+    const delay = backoffRef.current;
+    backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF);
+    setTimeout(() => {
+      connectStream();
+    }, delay);
+  }, [connectStream]);
+
+  const startFrozenCheck = useCallback(() => {
+    stopFrozenCheck();
+    frozenRef.current = setInterval(() => {
+      const audio = audioRef.current;
+      if (!audio || audio.paused) return;
+      if (audio.currentTime === lastTimeRef.current) {
+        // Stream is frozen — reconnect
+        handleStreamError();
+      }
+      lastTimeRef.current = audio.currentTime;
+    }, FROZEN_THRESHOLD);
+  }, [stopFrozenCheck, handleStreamError]);
+
+  const handlePlay = useCallback(() => {
+    connectStream();
+    startPolling();
+    startFrozenCheck();
+  }, [connectStream, startPolling, startFrozenCheck]);
+
+  const handlePause = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.removeAttribute("src");
+      audioRef.current.load();
+      audioRef.current = null;
+    }
+    setIsPlaying(false);
+    setIsReconnecting(false);
+    stopPolling();
+    stopFrozenCheck();
+  }, [stopPolling, stopFrozenCheck]);
+
+  const togglePlayPause = useCallback(() => {
+    if (isPlaying || isReconnecting) {
+      handlePause();
+    } else {
+      handlePlay();
+    }
+  }, [isPlaying, isReconnecting, handlePlay, handlePause]);
+
+  // Sync volume to audio element
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.removeAttribute("src");
+        audioRef.current.load();
+      }
+      if (pollRef.current) clearInterval(pollRef.current);
+      if (frozenRef.current) clearInterval(frozenRef.current);
+    };
+  }, []);
+
+  const trackTitle = nowPlaying?.title || "North Country Radio";
+  const trackArtist = nowPlaying?.artist_name || "Americana & Country";
+  const djName = nowPlaying?.dj_name;
+  const listenerCount = nowPlaying?.listener_count;
+  const artworkUrl = nowPlaying?.artwork_url;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-amber-900 via-amber-800 to-orange-900 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-t border-amber-700/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Station Info */}
-          <div className="flex items-center space-x-3 min-w-0">
-            <Radio className="w-5 h-5 text-amber-400 flex-shrink-0" />
+          {/* Left: Artwork + Track Info */}
+          <div className="flex items-center space-x-3 min-w-0 flex-1">
+            {/* Album Art */}
+            {artworkUrl && isPlaying ? (
+              <div className="relative w-10 h-10 flex-shrink-0 rounded overflow-hidden">
+                <Image
+                  src={artworkUrl}
+                  alt={trackTitle}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+            ) : (
+              <Radio className="w-5 h-5 text-amber-400 flex-shrink-0" />
+            )}
             <div className="min-w-0">
               <div className="text-sm font-bold text-amber-100 truncate">
-                North Country Radio
+                {isReconnecting ? "Reconnecting..." : trackTitle}
               </div>
               <div className="text-xs text-amber-300/80 truncate">
-                Now Playing &middot; Americana &amp; Country
+                {isReconnecting
+                  ? "Stream interrupted"
+                  : isPlaying
+                    ? `${trackArtist}${djName ? ` · DJ ${djName}` : ""}`
+                    : "Click play to listen"}
               </div>
             </div>
           </div>
 
           {/* Center: Play Button + Equalizer */}
           <div className="flex items-center space-x-4">
-            {/* Equalizer Bars */}
+            {/* Equalizer Bars (left) */}
             <div className="hidden sm:flex items-end space-x-0.5 h-6">
               {[1, 2, 3, 4, 5].map((bar) => (
                 <div
                   key={bar}
                   className={`w-1 rounded-full ${
-                    isPlaying
+                    isPlaying && !isReconnecting
                       ? "bg-green-400 animate-equalizer"
                       : "bg-amber-600 h-1"
                   }`}
                   style={
-                    isPlaying
+                    isPlaying && !isReconnecting
                       ? {
                           animationDelay: `${bar * 0.15}s`,
                           animationDuration: `${0.4 + bar * 0.1}s`,
@@ -50,29 +233,29 @@ export function RadioPlayer() {
 
             {/* Play/Pause */}
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
+              onClick={togglePlayPause}
               className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 transition-colors flex items-center justify-center shadow-lg"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
-              {isPlaying ? (
+              {isPlaying || isReconnecting ? (
                 <Pause className="w-5 h-5 text-amber-950" />
               ) : (
                 <Play className="w-5 h-5 text-amber-950 ml-0.5" />
               )}
             </button>
 
-            {/* Equalizer Bars (right side) */}
+            {/* Equalizer Bars (right) */}
             <div className="hidden sm:flex items-end space-x-0.5 h-6">
               {[6, 7, 8, 9, 10].map((bar) => (
                 <div
                   key={bar}
                   className={`w-1 rounded-full ${
-                    isPlaying
+                    isPlaying && !isReconnecting
                       ? "bg-green-400 animate-equalizer"
                       : "bg-amber-600 h-1"
                   }`}
                   style={
-                    isPlaying
+                    isPlaying && !isReconnecting
                       ? {
                           animationDelay: `${bar * 0.12}s`,
                           animationDuration: `${0.5 + (bar - 5) * 0.08}s`,
@@ -85,31 +268,55 @@ export function RadioPlayer() {
           </div>
 
           {/* Right: Status + Volume */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-1 justify-end">
             {/* On Air Badge */}
             <div
               className={`hidden md:flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                isPlaying
+                isPlaying && !isReconnecting
                   ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                  : "bg-gray-500/20 text-gray-400 border border-gray-500/30"
+                  : isReconnecting
+                    ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                    : "bg-gray-500/20 text-gray-400 border border-gray-500/30"
               }`}
             >
               <span
                 className={`w-2 h-2 rounded-full ${
-                  isPlaying ? "bg-green-400 animate-pulse" : "bg-gray-500"
+                  isPlaying && !isReconnecting
+                    ? "bg-green-400 animate-pulse"
+                    : isReconnecting
+                      ? "bg-yellow-400 animate-pulse"
+                      : "bg-gray-500"
                 }`}
               />
-              <span>{isPlaying ? "ON AIR" : "OFFLINE"}</span>
+              <span>
+                {isPlaying && !isReconnecting
+                  ? "ON AIR"
+                  : isReconnecting
+                    ? "RECONNECTING"
+                    : "OFFLINE"}
+              </span>
             </div>
 
             {/* Listener Count */}
             <div className="hidden lg:block text-xs text-amber-300/70">
-              {isPlaying ? "1,247 listeners" : "---"}
+              {isPlaying && listenerCount != null
+                ? `${listenerCount.toLocaleString()} listener${listenerCount !== 1 ? "s" : ""}`
+                : "---"}
             </div>
 
             {/* Volume */}
             <div className="hidden sm:flex items-center space-x-2">
-              <Volume2 className="w-4 h-4 text-amber-400" />
+              <button
+                onClick={() => setVolume((v) => (v > 0 ? 0 : 75))}
+                className="text-amber-400 hover:text-amber-300 transition-colors"
+                aria-label={volume === 0 ? "Unmute" : "Mute"}
+              >
+                {volume === 0 ? (
+                  <VolumeX className="w-4 h-4" />
+                ) : (
+                  <Volume2 className="w-4 h-4" />
+                )}
+              </button>
               <input
                 type="range"
                 min="0"
