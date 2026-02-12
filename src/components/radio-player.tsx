@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Play, Pause, Volume2, VolumeX, Radio } from "lucide-react";
 import Image from "next/image";
 
-const STREAM_URL = "/api/stream";
+const STREAM_URL = "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
 const NOW_PLAYING_URL =
   "https://tfc-radio-backend-production.up.railway.app/api/now_playing";
 const POLL_INTERVAL = 10_000;
