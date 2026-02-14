@@ -98,13 +98,13 @@ export default function DJEditorPage() {
                     <Image
                       src={dj.photoUrl}
                       alt={dj.name}
-                      width={56}
-                      height={56}
-                      className="w-14 h-14 rounded-full object-cover flex-shrink-0"
+                      width={72}
+                      height={72}
+                      className="w-[72px] h-[72px] rounded-full object-cover flex-shrink-0 ring-2 ring-purple-100"
                     />
                   ) : (
                     <div
-                      className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                      className="w-[72px] h-[72px] rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0"
                       style={{ backgroundColor: dj.colorPrimary || "#6b7280" }}
                     >
                       {dj.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
