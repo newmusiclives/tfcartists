@@ -351,30 +351,41 @@ export default function ElliotDashboardPage() {
         </section>
 
         {/* Quick Actions */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           <QuickActionCard
-            title="Listener Analytics"
-            description="Deep dive into listener behavior and trends"
-            href="/elliot/analytics"
-            icon={<BarChart3 className="w-8 h-8 text-indigo-600" />}
+            title="Growth Strategy"
+            description="Overall listener growth engine coordination"
+            href="/elliot"
+            icon={<Users className="w-8 h-8 text-blue-600" />}
+            managedBy="Elliot Brooks"
           />
           <QuickActionCard
             title="Viral Content"
             description="Create and track social content performance"
             href="/elliot/content"
             icon={<Video className="w-8 h-8 text-purple-600" />}
+            managedBy="Nova Lane"
           />
           <QuickActionCard
-            title="Growth Campaigns"
-            description="Launch and manage acquisition campaigns"
+            title="Artist Activation"
+            description="Convert artist fans into station listeners"
             href="/elliot/campaigns"
             icon={<Target className="w-8 h-8 text-green-600" />}
+            managedBy="River Maxwell"
           />
           <QuickActionCard
             title="Community"
             description="Manage Discord/Facebook communities"
             href="/elliot/community"
             icon={<Heart className="w-8 h-8 text-pink-600" />}
+            managedBy="Sage Hart"
+          />
+          <QuickActionCard
+            title="Listener Analytics"
+            description="Behavior patterns and habit formation"
+            href="/elliot/analytics"
+            icon={<BarChart3 className="w-8 h-8 text-indigo-600" />}
+            managedBy="Orion Pike"
           />
         </section>
       </div>
@@ -588,17 +599,22 @@ function QuickActionCard({
   description,
   href,
   icon,
+  managedBy,
 }: {
   title: string;
   description: string;
   href: string;
   icon: React.ReactNode;
+  managedBy?: string;
 }) {
   return (
     <Link href={href} className="block">
       <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border-2 border-transparent hover:border-indigo-300">
         <div className="mb-3">{icon}</div>
-        <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
+        {managedBy && (
+          <p className="text-xs text-indigo-600 font-medium mb-1">Managed by {managedBy}</p>
+        )}
         <p className="text-sm text-gray-600">{description}</p>
       </div>
     </Link>

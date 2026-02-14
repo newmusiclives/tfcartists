@@ -110,6 +110,33 @@ export default function HarperDashboardPage() {
           />
         </section>
 
+        {/* Team Members */}
+        <section className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
+            <Building2 className="w-6 h-6 text-green-600" />
+            <span>Team Members</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {[
+              { name: "Harper AI", role: "Sponsor Sales Director", avatar: "HA", color: "bg-green-100 text-green-600", status: "Identifying upsell opportunities", kpi: `${stats.dealsInNegotiation} in negotiation` },
+              { name: "Blake Morrison", role: "Outreach & Business Dev", avatar: "BM", color: "bg-blue-100 text-blue-600", status: "Prospecting new sponsors", kpi: `${stats.scheduledCallbacks} scheduled calls` },
+              { name: "Cameron Wells", role: "Account Management", avatar: "CW", color: "bg-indigo-100 text-indigo-600", status: "Managing sponsor accounts", kpi: `${stats.totalSponsors} sponsors` },
+              { name: "Dakota Chen", role: "Ad Operations & QC", avatar: "DC", color: "bg-purple-100 text-purple-600", status: "Scheduling ad spots", kpi: "720 spots/month" },
+              { name: "Riley Nguyen", role: "Billing & Revenue", avatar: "RN", color: "bg-emerald-100 text-emerald-600", status: "Processing invoices", kpi: `$${stats.totalRevenue.toLocaleString()}` },
+            ].map((member, idx) => (
+              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 hover:border-green-300 transition-colors">
+                <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>
+                <div className="font-semibold text-gray-900 text-sm">{member.name}</div>
+                <div className="text-xs text-gray-600 mb-2">{member.role}</div>
+                <div className="text-xs text-green-600 mb-2 truncate">{member.status}</div>
+                <div className="mt-2 pt-2 border-t border-gray-200">
+                  <div className="text-xs font-semibold text-gray-700">{member.kpi}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Revenue Breakdown */}
         <section className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Revenue Distribution</h2>
@@ -304,6 +331,7 @@ export default function HarperDashboardPage() {
             href="/harper/pipeline"
             icon={<GitBranch className="w-8 h-8 text-green-600" />}
             badge={8}
+            managedBy="Harper AI"
           />
           <QuickActionCard
             title="Sponsor Outreach"
@@ -311,12 +339,14 @@ export default function HarperDashboardPage() {
             href="/harper/outreach"
             icon={<Send className="w-8 h-8 text-blue-600" />}
             badge={12}
+            managedBy="Blake Morrison"
           />
           <QuickActionCard
             title="Automated Workflows"
             description="Sponsor acquisition automation"
             href="/harper/workflows"
             icon={<TrendingUp className="w-8 h-8 text-purple-600" />}
+            managedBy="Harper AI"
           />
           <QuickActionCard
             title="Manage Sponsors"
@@ -324,18 +354,21 @@ export default function HarperDashboardPage() {
             href="/harper/sponsors"
             icon={<Building2 className="w-8 h-8 text-green-600" />}
             badge={stats.totalSponsors}
+            managedBy="Cameron Wells"
           />
           <QuickActionCard
             title="Ad Operations"
             description="Schedule and manage ad spots"
             href="/harper/operations"
             icon={<Radio className="w-8 h-8 text-orange-600" />}
+            managedBy="Dakota Chen"
           />
           <QuickActionCard
             title="Billing & Revenue"
             description="Invoicing and revenue distribution"
             href="/harper/billing"
             icon={<CreditCard className="w-8 h-8 text-blue-600" />}
+            managedBy="Riley Nguyen"
           />
           <QuickActionCard
             title="Call Schedule"
@@ -343,12 +376,14 @@ export default function HarperDashboardPage() {
             href="/harper/calls"
             icon={<Phone className="w-8 h-8 text-blue-600" />}
             badge={stats.scheduledCallbacks}
+            managedBy="Blake Morrison"
           />
           <QuickActionCard
             title="Ad Inventory"
             description="Manage ad spots and scheduling"
             href="/harper/inventory"
             icon={<Calendar className="w-8 h-8 text-purple-600" />}
+            managedBy="Dakota Chen"
           />
         </section>
       </div>
@@ -578,12 +613,14 @@ function QuickActionCard({
   href,
   icon,
   badge,
+  managedBy,
 }: {
   title: string;
   description: string;
   href: string;
   icon: React.ReactNode;
   badge?: number;
+  managedBy?: string;
 }) {
   return (
     <Link href={href} className="block">
@@ -596,7 +633,10 @@ function QuickActionCard({
             </div>
           )}
         </div>
-        <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
+        {managedBy && (
+          <p className="text-xs text-green-600 font-medium mb-1">Managed by {managedBy}</p>
+        )}
         <p className="text-sm text-gray-600">{description}</p>
       </div>
     </Link>

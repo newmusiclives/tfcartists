@@ -137,6 +137,34 @@ export default function CassidyDashboardPage() {
           />
         </section>
 
+        {/* Panel Members */}
+        <section className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
+            <Users className="w-6 h-6 text-teal-600" />
+            <span>Expert Panel Members</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+            {[
+              { name: "Cassidy Monroe", role: "Music Director", avatar: "CM", color: "bg-teal-100 text-teal-600", status: "Final tier decisions", kpi: `${stats.submissionsThisMonth} reviewed` },
+              { name: "Dakota Wells", role: "Production Engineer", avatar: "DW", color: "bg-cyan-100 text-cyan-600", status: "Technical assessment", kpi: "Audio quality" },
+              { name: "Maya Reeves", role: "Program Director", avatar: "MR", color: "bg-blue-100 text-blue-600", status: "Rotation planning", kpi: "Playlist strategy" },
+              { name: "Jesse Coleman", role: "Artist Relations", avatar: "JC", color: "bg-indigo-100 text-indigo-600", status: "Performance evaluation", kpi: "Artist development" },
+              { name: "Dr. Sam Chen", role: "Musicologist", avatar: "SC", color: "bg-purple-100 text-purple-600", status: "Cultural analysis", kpi: "Genre context" },
+              { name: "Whitley Cross", role: "Audience Development", avatar: "WC", color: "bg-emerald-100 text-emerald-600", status: "Growth analysis", kpi: "Market positioning" },
+            ].map((member, idx) => (
+              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 hover:border-teal-300 transition-colors">
+                <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>
+                <div className="font-semibold text-gray-900 text-sm">{member.name}</div>
+                <div className="text-xs text-gray-600 mb-2">{member.role}</div>
+                <div className="text-xs text-teal-600 mb-2 truncate">{member.status}</div>
+                <div className="mt-2 pt-2 border-t border-gray-200">
+                  <div className="text-xs font-semibold text-gray-700">{member.kpi}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Tier Distribution */}
         <section className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Artist Distribution by Tier</h2>
@@ -311,6 +339,7 @@ export default function CassidyDashboardPage() {
             icon={<Music className="w-6 h-6" />}
             color="teal"
             badge={stats.pendingSubmissions.toString()}
+            managedBy="Cassidy Monroe"
           />
           <QuickLink
             href="/cassidy/tier-management"
@@ -318,6 +347,7 @@ export default function CassidyDashboardPage() {
             description="Artist distribution"
             icon={<BarChart3 className="w-6 h-6" />}
             color="blue"
+            managedBy="Maya Reeves"
           />
           <QuickLink
             href="/cassidy/rotation"
@@ -325,6 +355,7 @@ export default function CassidyDashboardPage() {
             description="80/20 progress"
             icon={<Radio className="w-6 h-6" />}
             color="purple"
+            managedBy="Whitley Cross"
           />
           <QuickLink
             href="/cassidy/team"
@@ -532,6 +563,7 @@ function QuickLink({
   icon,
   color,
   badge,
+  managedBy,
 }: {
   href: string;
   title: string;
@@ -539,6 +571,7 @@ function QuickLink({
   icon: React.ReactNode;
   color: string;
   badge?: string;
+  managedBy?: string;
 }) {
   const colorClasses: Record<string, string> = {
     teal: "bg-teal-100 text-teal-600 hover:bg-teal-200",
@@ -558,6 +591,9 @@ function QuickLink({
         {icon}
         <div>
           <div className="font-bold text-lg mb-1">{title}</div>
+          {managedBy && (
+            <div className="text-xs font-semibold opacity-90 mb-1">Managed by {managedBy}</div>
+          )}
           <div className="text-sm opacity-80">{description}</div>
         </div>
       </div>

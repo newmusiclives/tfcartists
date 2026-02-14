@@ -84,6 +84,10 @@ async function clearAll() {
     prisma.judge.deleteMany(),
     prisma.programmingBlock.deleteMany(),
     prisma.trackPlayback.deleteMany(),
+    prisma.stationImagingVoice.deleteMany(),
+    prisma.clockAssignment.deleteMany(),
+    prisma.clockTemplate.deleteMany(),
+    prisma.song.deleteMany(),
     prisma.dJShow.deleteMany(),
     prisma.dJ.deleteMany(),
     prisma.station.deleteMany(),
@@ -105,6 +109,10 @@ async function clearAll() {
     prisma.conversation.deleteMany(),
     prisma.artist.deleteMany(),
     prisma.config.deleteMany(),
+    prisma.featureSchedule.deleteMany(),
+    prisma.featureContent.deleteMany(),
+    prisma.featureType.deleteMany(),
+    prisma.showTransition.deleteMany(),
   ]);
   console.log("All tables cleared.");
 }
@@ -594,7 +602,7 @@ async function seedListeners() {
         status,
         tier,
         listeningStreak: status === "POWER_USER" ? randomInt(10, 60) : randomInt(0, 14),
-        preferredDJ: pick(["hank", "june", "aj", "loretta", null]),
+        preferredDJ: pick(["hank", "loretta", "doc", "cody", "jo", "paul", "ezra", "levi", "sam", "ruby", "mark", "iris", null]),
         notificationsEnabled: Math.random() > 0.4,
         communityMember: Math.random() > 0.5,
       },
@@ -609,7 +617,7 @@ async function seedListeners() {
 async function seedListeningSessions(listeners: any[]) {
   console.log("Seeding listening sessions...");
   const timeSlots = ["morning", "midday", "evening", "late_night"];
-  const djs = ["hank", "june", "aj", "loretta", "merle"];
+  const djs = ["hank", "loretta", "doc", "cody", "jo", "paul", "ezra", "levi", "sam", "ruby", "mark", "iris"];
   const sessions: any[] = [];
 
   for (let i = 0; i < 120; i++) {
@@ -728,20 +736,28 @@ async function seedCampaigns(listeners: any[]) {
   console.log("  Created 5 campaigns with 25 responses");
 }
 
-// ============ DJs (6) + DJ SHOWS + STATION ============
+// ============ DJs (12) + DJ SHOWS + STATION ============
 async function seedStation() {
-  console.log("Seeding station, DJs, and shows...");
+  console.log("Seeding station, DJs, shows, clocks, and assignments...");
 
-  // Station
-  await prisma.station.create({
+  // Station with new fields
+  const station = await prisma.station.create({
     data: {
       name: "North Country Radio",
       callSign: "NCR",
       tagline: "Where the music finds you.",
       description: "North Country Radio is an AI-powered Americana and Country radio station on the TrueFans RADIO Network that champions independent artists through free airplay, community-driven curation, and direct fan support.",
       genre: "Americana, Country, Singer-Songwriter",
+      stationCode: "ncr",
+      formatType: "americana",
+      musicEra: "mixed",
       primaryColor: "#B45309",
       secondaryColor: "#EA580C",
+      streamBitrate: 128,
+      streamFormat: "mp3",
+      subscriptionTier: "pro",
+      setupStep: 5,
+      setupComplete: true,
       maxTracksPerMonth: 8640,
       maxAdsPerMonth: 17280,
       maxArtistCapacity: 340,
@@ -751,14 +767,23 @@ async function seedStation() {
     },
   });
 
-  // DJs
+  // DJs — all 12 from the NCR schedule, attached to station
   const djData = [
-    { name: "Hank Westwood", slug: "hank-westwood", bio: "Blue-collar poet of the morning airwaves", vibe: "Working-class pride", tagline: "Pour the coffee. Fire up the engine.", weekend: false, primary: "#8B4513", secondary: "#D2691E" },
-    { name: "Loretta Merrick", slug: "loretta-merrick", bio: "Desert folk storyteller with a penchant for vinyl", vibe: "Southwestern mystic", tagline: "Let the desert sing.", weekend: false, primary: "#CD853F", secondary: "#DEB887" },
-    { name: "AJ Thornton", slug: "aj-thornton", bio: "Late night blues and soul groove master", vibe: "Smooth midnight vibes", tagline: "Night falls. Music rises.", weekend: false, primary: "#191970", secondary: "#483D8B" },
-    { name: "Merle Santiago", slug: "merle-santiago", bio: "Honky-tonk historian with encyclopedic music knowledge", vibe: "Vintage country authenticity", tagline: "Real country. Real stories.", weekend: false, primary: "#8B0000", secondary: "#DC143C" },
-    { name: "June Wilder", slug: "june-wilder", bio: "Weekend wanderer and folk music curator", vibe: "Free-spirited weekend energy", tagline: "Wander free.", weekend: true, primary: "#2E8B57", secondary: "#3CB371" },
-    { name: "Tex Montana", slug: "tex-montana", bio: "Rodeo-bred weekend warrior of the airwaves", vibe: "Saturday night energy", tagline: "Ride on.", weekend: true, primary: "#B8860B", secondary: "#DAA520" },
+    // WEEKDAY DJs (Mon-Fri, 6am-6pm)
+    { name: "Hank Westwood", slug: "hank-westwood", bio: "Construction foreman by day, grew up on 90s country radio, discovered modern Americana through his daughter's Spotify. Blue-collar heart with contemporary country soul.", age: "Late 40s", background: "Construction foreman by day, grew up on 90s country radio, discovered modern Americana through his daughter's Spotify", vibe: "Blue-collar heart with contemporary country soul, bridge between classic and modern", tagline: "Pour the coffee. Fire up the engine. Let's roll.", voiceDesc: "Gravel and warmth, like coffee and worn denim", musicalFocus: "Contemporary country blend: Chris Stapleton, Zach Bryan, Tyler Childers mixed with classic working-class anthems", traits: '["grounded","genre-bridge","authenticity-advocate","morning-motivation"]', weekend: false, primary: "#B45309", secondary: "#EA580C" },
+    { name: "Loretta Merrick", slug: "loretta-merrick", bio: "British expat, discovered Kacey Musgraves at 16, moved to Nashville at 25. Now champions the new wave of country storytellers from abroad.", age: "35", background: "British expat, discovered Kacey Musgraves at 16, moved to Nashville at 25. Champions the new wave of country storytellers from abroad.", vibe: "Transatlantic country curator, connects UK and US modern Americana scenes", tagline: "Somewhere between the M6 and the Mississippi.", voiceDesc: "Soft English accent with Nashville twang, musical code-switching", musicalFocus: "Contemporary country storytellers: Kacey Musgraves, Margo Price, Sierra Ferrell, Molly Tuttle, Brandi Carlile", traits: '["global-perspective","new-traditionalist","discovery-champion","transatlantic"]', weekend: false, primary: "#EA580C", secondary: "#DC2626" },
+    { name: "Marcus 'Doc' Holloway", slug: "doc-holloway", bio: "Former A&R scout who discovered indie country artists before they broke. Now curates deep cuts across generations, connecting Merle Haggard to Zach Bryan.", age: "Mid-50s", background: "Former A&R scout, discovered indie country artists before they broke. Now curates deep cuts across generations.", vibe: "Genre historian who connects Merle Haggard to Zach Bryan, shows how country evolved", tagline: "The songs you forgot you loved.", voiceDesc: "Deep, warm baritone with encyclopedic knowledge", musicalFocus: "Cross-generational country: Sturgill Simpson, The War and Treaty, Colter Wall, mixed with deep album tracks from legends", traits: '["timeline-builder","story-connector","artist-champion","album-thinker"]', weekend: false, primary: "#7C3AED", secondary: "#4F46E5" },
+    { name: "Cody Rampart", slug: "cody-rampart", bio: "Touring musician for 15 years, seen every dive bar from Austin to Asheville. Now champions the new outlaws with afternoon drive energy.", age: "Early 40s", background: "Touring musician for 15 years, seen every dive bar from Austin to Asheville. Now champions the new outlaws.", vibe: "Afternoon drive energy with modern outlaw country rebel spirit", tagline: "The road's wide open. Let's ride.", voiceDesc: "Raspy, road-worn, full of lived experience", musicalFocus: "Modern outlaw country: Zach Bryan, Ian Munsick, Cody Jinks, Flatland Cavalry, mixed with classic road anthems", traits: '["new-outlaw-champion","lived-experience","intimate-storyteller","genre-rebel"]', weekend: false, primary: "#E11D48", secondary: "#DB2777" },
+    // SATURDAY DJs
+    { name: "Jo McAllister", slug: "jo-mcallister", bio: "Saturday morning voice of the working class. Jo brings contemporary blue-collar country stories with a modern sound to start the weekend right.", age: "Early 30s", background: "Grew up in a steel town, found country music as a lifeline", vibe: "Contemporary working-class country energy", tagline: "Steel towns and steel guitars.", voiceDesc: "Warm, relatable, like your favorite coworker telling stories", musicalFocus: "Contemporary working-class country: Tyler Childers, Zach Bryan, The War and Treaty — blue-collar stories, modern sound", traits: '["working-class","relatable","modern","authentic"]', weekend: true, primary: "#374151", secondary: "#6B7280" },
+    { name: "Paul Saunders", slug: "paul-saunders", bio: "FOUNDER of TrueFans CONNECT & TrueFans RADIO Network. Paul brings mission-driven Americana storytelling to Saturday mornings.", age: "Late 40s", background: "Creator of TrueFans CONNECT & TrueFans RADIO Network. Lifelong music advocate and community builder.", vibe: "Mission-driven Americana curator, the heart of the network", tagline: "Music that means something.", voiceDesc: "Conversational, passionate, like a friend sharing his favorite record", musicalFocus: "Contemporary Americana storytellers, mission-driven music, independent artists championed by the network", traits: '["founder","visionary","community-builder","artist-champion"]', weekend: true, primary: "#D97706", secondary: "#F59E0B" },
+    { name: "Ezra Stone", slug: "ezra-stone", bio: "Curator of the contemplative side of country. Ezra brings modern melancholic country and introspective Americana to Saturday afternoons.", age: "Late 20s", background: "Former literature student who found his voice in the space between poetry and country music", vibe: "Twilight contemplation, introspective Americana", tagline: "The quiet songs hit hardest.", voiceDesc: "Soft, thoughtful, like a late-night conversation", musicalFocus: "Modern melancholic country: Phoebe Bridgers, Noah Kahan, Kacey Musgraves' introspective side — twilight contemplation", traits: '["contemplative","literary","introspective","gentle"]', weekend: true, primary: "#7C3AED", secondary: "#8B5CF6" },
+    { name: "Levi Bridges", slug: "levi-bridges", bio: "Weekend adventure DJ bringing outdoor country anthems and feel-good energy to Saturday afternoons.", age: "Mid-30s", background: "Outdoor enthusiast and country music lover who believes the best songs sound better with the windows down", vibe: "Weekend adventure soundtrack energy", tagline: "Windows down. Volume up.", voiceDesc: "Bright, energetic, like sunshine through the truck window", musicalFocus: "Outdoor country anthems: Ian Munsick, Parker McCollum, Riley Green — weekend adventure soundtrack", traits: '["adventurous","energetic","feel-good","outdoor-lover"]', weekend: true, primary: "#059669", secondary: "#10B981" },
+    // SUNDAY DJs
+    { name: "Sam Turnbull", slug: "sam-turnbull", bio: "Sunday morning voice of raw authenticity. Sam strips country down to its bones — acoustic, honest, and real.", age: "Early 40s", background: "Recording engineer turned DJ who fell in love with the raw, unproduced sound", vibe: "Stripped-down, raw and authentic Sunday mornings", tagline: "No polish. Just truth.", voiceDesc: "Quiet, honest, like someone playing guitar on the porch at dawn", musicalFocus: "Stripped-down modern country: acoustic sessions from Zach Bryan, Sierra Ferrell, Molly Tuttle — raw and authentic", traits: '["raw","authentic","minimalist","dawn-seeker"]', weekend: true, primary: "#DC2626", secondary: "#EF4444" },
+    { name: "Ruby Finch", slug: "ruby-finch", bio: "Sunday mid-morning curator of new traditional country and modern bluegrass. Ruby finds the thread connecting old-time music to today's innovators.", age: "Late 20s", background: "Grew up at bluegrass festivals, learned fiddle before she learned to read", vibe: "Modern bluegrass meets contemporary Americana", tagline: "Old roots, new branches.", voiceDesc: "Bright and musical, with an Appalachian lilt", musicalFocus: "New traditional country: Molly Tuttle, Billy Strings, Sierra Ferrell — modern bluegrass meets contemporary Americana", traits: '["traditional","innovative","bluegrass-rooted","joyful"]', weekend: true, primary: "#EA580C", secondary: "#F97316" },
+    { name: "Mark Faulkner", slug: "mark-faulkner", bio: "Sunday afternoon voice of Texas country and red dirt. Mark brings the dusty roads and barroom stories to life.", age: "Late 40s", background: "Texas native who grew up on dance halls and red dirt roads", vibe: "Modern Texas country meets contemporary Nashville", tagline: "Dust on the boots. Songs in the heart.", voiceDesc: "Deep Texas drawl, warm and inviting", musicalFocus: "Modern Texas country: Cody Johnson, Parker McCollum, Flatland Cavalry — red dirt meets contemporary Nashville", traits: '["texas-proud","traditional","storyteller","dance-hall-tested"]', weekend: true, primary: "#B45309", secondary: "#D97706" },
+    { name: "Iris Langley", slug: "iris-langley", bio: "Sunday evening voice of intimate storytelling. Iris closes the weekend with contemporary singer-songwriters who bare their souls.", age: "Early 30s", background: "Former music journalist who knows every lyric tells a story worth hearing", vibe: "Intimate storytelling for the modern era", tagline: "Every song is someone's truth.", voiceDesc: "Gentle, intimate, like a friend sharing secrets", musicalFocus: "Contemporary singer-songwriters: Maren Morris, Brandi Carlile, Jason Isbell — intimate storytelling for the modern era", traits: '["intimate","empathetic","literary","soul-seeker"]', weekend: true, primary: "#4F46E5", secondary: "#6366F1" },
   ];
 
   const djs: any[] = [];
@@ -768,72 +793,593 @@ async function seedStation() {
         name: d.name,
         slug: d.slug,
         bio: d.bio,
+        age: d.age,
+        background: d.background,
         vibe: d.vibe,
         tagline: d.tagline,
+        voiceDescription: d.voiceDesc,
+        musicalFocus: d.musicalFocus,
+        personalityTraits: d.traits,
         isActive: true,
         isWeekend: d.weekend,
         colorPrimary: d.primary,
         colorSecondary: d.secondary,
+        stationId: station.id,
         priority: djs.length,
+        voiceStability: 0.75,
+        voiceSimilarityBoost: 0.75,
+        gptTemperature: 0.8,
       },
     });
     djs.push(dj);
   }
 
   // DJ Shows (weekly schedule)
-  const weekdayDjs = djs.filter(d => !d.isWeekend);
-  const weekendDjs = djs.filter(d => d.isWeekend);
-  const showSlots = [
-    { name: "Sunrise & Steel", start: "06:00", end: "10:00", dur: 240, mood: "Morning ritual" },
-    { name: "Midday Mesa", start: "10:00", end: "14:00", dur: 240, mood: "Laid-back midday" },
-    { name: "Afternoon Drive", start: "14:00", end: "18:00", dur: 240, mood: "Upbeat commute" },
-    { name: "Evening Porch", start: "18:00", end: "22:00", dur: 240, mood: "Wind-down storytelling" },
+  // Weekday: Hank 6-9, Loretta 9-12, Doc 12-3, Cody 3-6
+  // Saturday: Jo 6-9, Paul 9-12, Ezra 12-3, Levi 3-6
+  // Sunday: Sam 6-9, Ruby 9-12, Mark 12-3, Iris 3-6
+  const hank = djs.find(d => d.slug === "hank-westwood")!;
+  const loretta = djs.find(d => d.slug === "loretta-merrick")!;
+  const doc = djs.find(d => d.slug === "doc-holloway")!;
+  const cody = djs.find(d => d.slug === "cody-rampart")!;
+  const jo = djs.find(d => d.slug === "jo-mcallister")!;
+  const paul = djs.find(d => d.slug === "paul-saunders")!;
+  const ezra = djs.find(d => d.slug === "ezra-stone")!;
+  const levi = djs.find(d => d.slug === "levi-bridges")!;
+  const sam = djs.find(d => d.slug === "sam-turnbull")!;
+  const ruby = djs.find(d => d.slug === "ruby-finch")!;
+  const mark = djs.find(d => d.slug === "mark-faulkner")!;
+  const iris = djs.find(d => d.slug === "iris-langley")!;
+
+  const weekdayShows = [
+    { dj: hank, name: "Sunrise & Steel", start: "06:00", end: "09:00", dur: 180, mood: "Morning ritual — coffee and country" },
+    { dj: loretta, name: "The Transatlantic Sessions", start: "09:00", end: "12:00", dur: 180, mood: "UK meets Nashville storytelling" },
+    { dj: doc, name: "The Deep Cuts", start: "12:00", end: "15:00", dur: 180, mood: "Cross-generational country connections" },
+    { dj: cody, name: "The Open Road", start: "15:00", end: "18:00", dur: 180, mood: "Afternoon drive with outlaw energy" },
   ];
 
-  let showIdx = 0;
-  for (let day = 1; day <= 5; day++) { // Mon-Fri
-    for (let s = 0; s < showSlots.length; s++) {
-      const slot = showSlots[s];
-      const dj = weekdayDjs[s % weekdayDjs.length];
+  const saturdayShows = [
+    { dj: jo, name: "Steel Town Saturday", start: "06:00", end: "09:00", dur: 180, mood: "Working-class weekend warmup" },
+    { dj: paul, name: "The Founder's Hour", start: "09:00", end: "12:00", dur: 180, mood: "Mission-driven Americana" },
+    { dj: ezra, name: "Twilight Contemplation", start: "12:00", end: "15:00", dur: 180, mood: "Introspective Americana" },
+    { dj: levi, name: "Windows Down", start: "15:00", end: "18:00", dur: 180, mood: "Weekend adventure soundtrack" },
+  ];
+
+  const sundayShows = [
+    { dj: sam, name: "Porch Sessions", start: "06:00", end: "09:00", dur: 180, mood: "Stripped-down acoustic Sunday" },
+    { dj: ruby, name: "Old Roots New Branches", start: "09:00", end: "12:00", dur: 180, mood: "Modern bluegrass and traditional" },
+    { dj: mark, name: "Red Dirt Sunday", start: "12:00", end: "15:00", dur: 180, mood: "Texas country and dance hall" },
+    { dj: iris, name: "Sunday Confessions", start: "15:00", end: "18:00", dur: 180, mood: "Intimate storytelling to close the weekend" },
+  ];
+
+  let showCount = 0;
+  // Weekday shows (Mon=1 through Fri=5)
+  for (let day = 1; day <= 5; day++) {
+    for (const s of weekdayShows) {
       await prisma.dJShow.create({
         data: {
-          djId: dj.id,
-          name: `${slot.name} with ${dj.name.split(" ")[0]}`,
-          slug: `${slot.name.toLowerCase().replace(/ /g, "-")}-${dj.name.split(" ")[0].toLowerCase()}-${day}`,
+          djId: s.dj.id,
+          name: `${s.name} with ${s.dj.name.split(" ")[0]}`,
+          slug: `${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${day}`,
           dayOfWeek: day,
-          startTime: slot.start,
-          endTime: slot.end,
-          duration: slot.dur,
-          mood: slot.mood,
+          startTime: s.start,
+          endTime: s.end,
+          duration: s.dur,
+          mood: s.mood,
           isActive: true,
         },
       });
-      showIdx++;
+      showCount++;
     }
   }
+  // Saturday shows (day=6)
+  for (const s of saturdayShows) {
+    await prisma.dJShow.create({
+      data: {
+        djId: s.dj.id,
+        name: `${s.name} with ${s.dj.name.split(" ")[0]}`,
+        slug: `${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-sat`,
+        dayOfWeek: 6,
+        startTime: s.start,
+        endTime: s.end,
+        duration: s.dur,
+        mood: s.mood,
+        isActive: true,
+      },
+    });
+    showCount++;
+  }
+  // Sunday shows (day=0)
+  for (const s of sundayShows) {
+    await prisma.dJShow.create({
+      data: {
+        djId: s.dj.id,
+        name: `${s.name} with ${s.dj.name.split(" ")[0]}`,
+        slug: `${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-sun`,
+        dayOfWeek: 0,
+        startTime: s.start,
+        endTime: s.end,
+        duration: s.dur,
+        mood: s.mood,
+        isActive: true,
+      },
+    });
+    showCount++;
+  }
 
-  // Weekend shows
-  for (let day = 0; day <= 6; day += 6) { // Sun and Sat
-    for (let s = 0; s < 2; s++) {
-      const dj = weekendDjs[s % weekendDjs.length];
-      await prisma.dJShow.create({
-        data: {
-          djId: dj.id,
-          name: `Weekend with ${dj.name.split(" ")[0]}`,
-          slug: `weekend-${dj.name.split(" ")[0].toLowerCase()}-${day}-${s}`,
-          dayOfWeek: day,
-          startTime: s === 0 ? "08:00" : "14:00",
-          endTime: s === 0 ? "14:00" : "20:00",
-          duration: 360,
-          mood: "Weekend vibes",
-          isActive: true,
-        },
+  // =========== CLOCK TEMPLATES ===========
+  const clockTemplateData = [
+    {
+      name: "Morning Drive",
+      description: "High-energy start to the day with familiar hits and upbeat tracks",
+      clockType: "morning_drive",
+      tempo: "upbeat",
+      energyLevel: "high",
+      hitsPerHour: 8,
+      indiePerHour: 2,
+      genderBalanceTarget: 0.45,
+      pattern: [
+        { position: 1, minute: 0, duration: 3, category: "TOH", type: "station_id", notes: "Top of hour ID" },
+        { position: 2, minute: 0, duration: 4, category: "A", type: "song", notes: "Hit opener" },
+        { position: 3, minute: 4, duration: 4, category: "A", type: "song", notes: "Second hit" },
+        { position: 4, minute: 8, duration: 2, category: "DJ", type: "voice_break", notes: "Morning greeting" },
+        { position: 5, minute: 10, duration: 4, category: "B", type: "song", notes: "Fast tempo" },
+        { position: 6, minute: 14, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 7, minute: 18, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor spot" },
+        { position: 8, minute: 19, duration: 4, category: "C", type: "song", notes: "Medium tempo" },
+        { position: 9, minute: 23, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 10, minute: 27, duration: 2, category: "DJ", type: "voice_break", notes: "Song intro" },
+        { position: 11, minute: 29, duration: 4, category: "B", type: "song", notes: "Fast tempo" },
+        { position: 12, minute: 33, duration: 4, category: "E", type: "song", notes: "Indie spotlight" },
+        { position: 13, minute: 37, duration: 1, category: "Imaging", type: "sweeper", notes: "Station sweeper" },
+        { position: 14, minute: 38, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 15, minute: 42, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 16, minute: 46, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor spot" },
+        { position: 17, minute: 47, duration: 4, category: "B", type: "song", notes: "Fast tempo" },
+        { position: 18, minute: 51, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 19, minute: 55, duration: 2, category: "Feature", type: "feature", notes: "Artist spotlight" },
+        { position: 20, minute: 57, duration: 3, category: "E", type: "song", notes: "Indie closer" },
+      ],
+    },
+    {
+      name: "Midday Mix",
+      description: "Relaxed midday blend with a mix of hits and deeper cuts",
+      clockType: "midday",
+      tempo: "moderate",
+      energyLevel: "medium",
+      hitsPerHour: 6,
+      indiePerHour: 3,
+      genderBalanceTarget: 0.5,
+      pattern: [
+        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Top of hour" },
+        { position: 2, minute: 0, duration: 4, category: "A", type: "song", notes: "Hit opener" },
+        { position: 3, minute: 4, duration: 4, category: "C", type: "song", notes: "Medium tempo" },
+        { position: 4, minute: 8, duration: 2, category: "DJ", type: "voice_break", notes: "Midday check-in" },
+        { position: 5, minute: 10, duration: 4, category: "B", type: "song", notes: "Uptempo" },
+        { position: 6, minute: 14, duration: 4, category: "E", type: "song", notes: "Indie pick" },
+        { position: 7, minute: 18, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
+        { position: 8, minute: 19, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 9, minute: 23, duration: 4, category: "D", type: "song", notes: "Slow ballad" },
+        { position: 10, minute: 27, duration: 2, category: "DJ", type: "voice_break", notes: "Song context" },
+        { position: 11, minute: 29, duration: 4, category: "C", type: "song", notes: "Medium" },
+        { position: 12, minute: 33, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 13, minute: 37, duration: 1, category: "Imaging", type: "sweeper", notes: "Sweeper" },
+        { position: 14, minute: 38, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 15, minute: 42, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 16, minute: 46, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
+        { position: 17, minute: 47, duration: 4, category: "C", type: "song", notes: "Medium" },
+        { position: 18, minute: 51, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 19, minute: 55, duration: 2, category: "Feature", type: "feature", notes: "New release" },
+        { position: 20, minute: 57, duration: 3, category: "E", type: "song", notes: "Indie closer" },
+      ],
+    },
+    {
+      name: "Evening Laid Back",
+      description: "Mellow evening programming with slower tempos and storytelling",
+      clockType: "evening",
+      tempo: "laid_back",
+      energyLevel: "low",
+      hitsPerHour: 5,
+      indiePerHour: 4,
+      genderBalanceTarget: 0.5,
+      pattern: [
+        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Evening ID" },
+        { position: 2, minute: 0, duration: 5, category: "D", type: "song", notes: "Slow opener" },
+        { position: 3, minute: 5, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 4, minute: 9, duration: 3, category: "DJ", type: "voice_break", notes: "Evening story" },
+        { position: 5, minute: 12, duration: 5, category: "D", type: "song", notes: "Deep cut" },
+        { position: 6, minute: 17, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 7, minute: 21, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
+        { position: 8, minute: 22, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 9, minute: 26, duration: 5, category: "C", type: "song", notes: "Medium" },
+        { position: 10, minute: 31, duration: 2, category: "DJ", type: "voice_break", notes: "Artist story" },
+        { position: 11, minute: 33, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 12, minute: 37, duration: 5, category: "D", type: "song", notes: "Ballad" },
+        { position: 13, minute: 42, duration: 1, category: "Imaging", type: "sweeper", notes: "Night sweeper" },
+        { position: 14, minute: 43, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 15, minute: 47, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 16, minute: 51, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
+        { position: 17, minute: 52, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 18, minute: 56, duration: 2, category: "Feature", type: "feature", notes: "Songwriter session" },
+        { position: 19, minute: 58, duration: 4, category: "E", type: "song", notes: "Indie closer" },
+        { position: 20, minute: 58, duration: 2, category: "D", type: "song", notes: "Night wind-down" },
+      ],
+    },
+    {
+      name: "Weekend Discovery",
+      description: "Weekend programming focused on new finds and indie artists",
+      clockType: "weekend",
+      tempo: "moderate",
+      energyLevel: "medium",
+      hitsPerHour: 4,
+      indiePerHour: 6,
+      genderBalanceTarget: 0.55,
+      pattern: [
+        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Weekend ID" },
+        { position: 2, minute: 0, duration: 4, category: "E", type: "song", notes: "Indie opener" },
+        { position: 3, minute: 4, duration: 4, category: "E", type: "song", notes: "New discovery" },
+        { position: 4, minute: 8, duration: 3, category: "DJ", type: "voice_break", notes: "Weekend intro" },
+        { position: 5, minute: 11, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 6, minute: 15, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 7, minute: 19, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
+        { position: 8, minute: 20, duration: 4, category: "C", type: "song", notes: "Medium" },
+        { position: 9, minute: 24, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 10, minute: 28, duration: 2, category: "DJ", type: "voice_break", notes: "Artist intro" },
+        { position: 11, minute: 30, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 12, minute: 34, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 13, minute: 38, duration: 1, category: "Imaging", type: "sweeper", notes: "Weekend sweeper" },
+        { position: 14, minute: 39, duration: 4, category: "B", type: "song", notes: "Uptempo" },
+        { position: 15, minute: 43, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 16, minute: 47, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
+        { position: 17, minute: 48, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 18, minute: 52, duration: 3, category: "Feature", type: "feature", notes: "New artist showcase" },
+        { position: 19, minute: 55, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 20, minute: 59, duration: 1, category: "E", type: "song", notes: "Indie closer" },
+      ],
+    },
+    {
+      name: "Late Night Road",
+      description: "After-hours programming with mellow deep cuts and road music",
+      clockType: "late_night",
+      tempo: "laid_back",
+      energyLevel: "low",
+      hitsPerHour: 3,
+      indiePerHour: 5,
+      genderBalanceTarget: 0.4,
+      pattern: [
+        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Late night ID" },
+        { position: 2, minute: 0, duration: 5, category: "D", type: "song", notes: "Slow opener" },
+        { position: 3, minute: 5, duration: 5, category: "D", type: "song", notes: "Deep cut" },
+        { position: 4, minute: 10, duration: 2, category: "DJ", type: "voice_break", notes: "Late night whisper" },
+        { position: 5, minute: 12, duration: 5, category: "E", type: "song", notes: "Indie gem" },
+        { position: 6, minute: 17, duration: 5, category: "D", type: "song", notes: "Road song" },
+        { position: 7, minute: 22, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 8, minute: 26, duration: 5, category: "E", type: "song", notes: "Indie" },
+        { position: 9, minute: 31, duration: 1, category: "Imaging", type: "sweeper", notes: "Night sweeper" },
+        { position: 10, minute: 32, duration: 5, category: "D", type: "song", notes: "Ballad" },
+        { position: 11, minute: 37, duration: 5, category: "E", type: "song", notes: "Indie" },
+        { position: 12, minute: 42, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 13, minute: 46, duration: 5, category: "D", type: "song", notes: "Deep cut" },
+        { position: 14, minute: 51, duration: 5, category: "E", type: "song", notes: "Indie" },
+        { position: 15, minute: 56, duration: 4, category: "A", type: "song", notes: "Hit closer" },
+        { position: 16, minute: 56, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 17, minute: 56, duration: 4, category: "D", type: "song", notes: "Slow" },
+        { position: 18, minute: 56, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 19, minute: 56, duration: 4, category: "D", type: "song", notes: "Slow closer" },
+        { position: 20, minute: 59, duration: 1, category: "Imaging", type: "sweeper", notes: "Night closer" },
+      ],
+    },
+  ];
+
+  const clockTemplates: any[] = [];
+  for (const ct of clockTemplateData) {
+    const template = await prisma.clockTemplate.create({
+      data: {
+        stationId: station.id,
+        name: ct.name,
+        description: ct.description,
+        clockType: ct.clockType,
+        tempo: ct.tempo,
+        energyLevel: ct.energyLevel,
+        hitsPerHour: ct.hitsPerHour,
+        indiePerHour: ct.indiePerHour,
+        genderBalanceTarget: ct.genderBalanceTarget,
+        clockPattern: JSON.stringify(ct.pattern),
+        isActive: true,
+      },
+    });
+    clockTemplates.push(template);
+  }
+
+  // =========== CLOCK ASSIGNMENTS ===========
+  // Weekday: Hank=Morning, Loretta=Midday, Doc=Midday, Cody=Evening
+  // Saturday: Jo=Weekend, Paul=Weekend, Ezra=Weekend, Levi=Weekend
+  // Sunday: Sam=Weekend, Ruby=Weekend, Mark=Weekend, Iris=Evening
+  // Late Night (6pm-6am) = automation (Late Night Road clock)
+  const morningClock = clockTemplates.find(c => c.clockType === "morning_drive")!;
+  const middayClock = clockTemplates.find(c => c.clockType === "midday")!;
+  const eveningClock = clockTemplates.find(c => c.clockType === "evening")!;
+  const weekendClock = clockTemplates.find(c => c.clockType === "weekend")!;
+  const lateNightClock = clockTemplates.find(c => c.clockType === "late_night")!;
+
+  const assignments = [
+    // Weekday DJs
+    { djId: hank.id, clockTemplateId: morningClock.id, dayType: "weekday", start: "06:00", end: "09:00" },
+    { djId: loretta.id, clockTemplateId: middayClock.id, dayType: "weekday", start: "09:00", end: "12:00" },
+    { djId: doc.id, clockTemplateId: middayClock.id, dayType: "weekday", start: "12:00", end: "15:00" },
+    { djId: cody.id, clockTemplateId: eveningClock.id, dayType: "weekday", start: "15:00", end: "18:00" },
+    // Saturday DJs
+    { djId: jo.id, clockTemplateId: weekendClock.id, dayType: "saturday", start: "06:00", end: "09:00" },
+    { djId: paul.id, clockTemplateId: weekendClock.id, dayType: "saturday", start: "09:00", end: "12:00" },
+    { djId: ezra.id, clockTemplateId: weekendClock.id, dayType: "saturday", start: "12:00", end: "15:00" },
+    { djId: levi.id, clockTemplateId: weekendClock.id, dayType: "saturday", start: "15:00", end: "18:00" },
+    // Sunday DJs
+    { djId: sam.id, clockTemplateId: weekendClock.id, dayType: "sunday", start: "06:00", end: "09:00" },
+    { djId: ruby.id, clockTemplateId: weekendClock.id, dayType: "sunday", start: "09:00", end: "12:00" },
+    { djId: mark.id, clockTemplateId: weekendClock.id, dayType: "sunday", start: "12:00", end: "15:00" },
+    { djId: iris.id, clockTemplateId: eveningClock.id, dayType: "sunday", start: "15:00", end: "18:00" },
+  ];
+
+  for (const a of assignments) {
+    await prisma.clockAssignment.create({
+      data: {
+        stationId: station.id,
+        djId: a.djId,
+        clockTemplateId: a.clockTemplateId,
+        dayType: a.dayType,
+        timeSlotStart: a.start,
+        timeSlotEnd: a.end,
+        isActive: true,
+      },
+    });
+  }
+
+  // =========== IMAGING VOICES ===========
+  await prisma.stationImagingVoice.create({
+    data: {
+      stationId: station.id,
+      displayName: "NCR Voice - Male",
+      voiceType: "male",
+      usageTypes: "id,promo,sweeper",
+      voiceStability: 0.8,
+      voiceSimilarityBoost: 0.8,
+      voiceStyle: 0.6,
+      isActive: true,
+    },
+  });
+  await prisma.stationImagingVoice.create({
+    data: {
+      stationId: station.id,
+      displayName: "NCR Voice - Female",
+      voiceType: "female",
+      usageTypes: "promo,sweeper",
+      voiceStability: 0.75,
+      voiceSimilarityBoost: 0.85,
+      voiceStyle: 0.5,
+      isActive: true,
+    },
+  });
+
+  console.log(`  Created station (NCR), ${djs.length} DJs, ${showCount} DJ shows, ${clockTemplates.length} clock templates, ${assignments.length} clock assignments, 2 imaging voices`);
+  return { station, djs };
+}
+
+// ============ SONGS (~1200) ============
+async function seedSongs(stationId: string) {
+  console.log("Seeding music library (~1200 songs)...");
+
+  // Realistic Americana/Country artist names (200 unique artists)
+  const artistFirstNames = [
+    "Hank", "Loretta", "Willie", "Patsy", "Johnny", "Dolly", "Waylon", "Tammy",
+    "Merle", "Emmylou", "George", "Reba", "Buck", "Kitty", "Glen", "Crystal",
+    "Chet", "Brenda", "Conway", "Barbara", "Charley", "Jeannie", "Marty", "Bobbie",
+    "Kris", "Tanya", "Porter", "Dottie", "Vince", "Faith", "Alan", "Shania",
+    "Tim", "Trisha", "Garth", "Martina", "Clint", "Lee Ann", "George", "Jo Dee",
+    "Tyler", "Sierra", "Zach", "Maren", "Jason", "Kacey", "Sturgill", "Brandi",
+    "Colter", "Molly", "Chris", "Amanda", "Cody", "Sierra", "Parker", "Ashley",
+    "Luke", "Carly", "Morgan", "Lainey", "Billy", "Phoebe", "Noah", "Waxahatchee",
+    "Ian", "Margo", "Charley", "Allison", "Marcus", "Adia", "Hailey", "Drayton",
+    "Wyatt", "Bella", "Travis", "Amelia", "Sawyer", "Nora", "Clayton", "Rosie",
+    "Dalton", "Ruby", "Emmett", "Pearl", "Jesse", "Violet", "Austin", "Sage",
+    "Boone", "Hazel", "Arlo", "Mavis", "Otis", "Bonnie", "Elijah", "Daisy",
+  ];
+  const artistLastNames = [
+    "Williams", "Cash", "Nelson", "Haggard", "Jennings", "Parton", "Cline", "Jones",
+    "Harris", "Lynn", "McEntire", "Owens", "Wells", "Campbell", "Gayle", "Atkins",
+    "Lee", "Twitty", "Mandrell", "Pride", "Seely", "Robbins", "Gentry", "Kristofferson",
+    "Tucker", "Wagoner", "West", "Gill", "Hill", "Jackson", "Twain", "McGraw",
+    "Yearwood", "Brooks", "McBride", "Black", "Womack", "Strait", "Messina",
+    "Childers", "Ferrell", "Bryan", "Morris", "Isbell", "Musgraves", "Simpson", "Carlile",
+    "Wall", "Tuttle", "Stapleton", "Shires", "Jinks", "Hull", "McCollum", "McBryde",
+    "Combs", "Pearce", "Wallen", "Wilson", "Strings", "Bridgers", "Kahan", "Aldridge",
+    "Munsick", "Price", "Crockett", "Russell", "King", "Victoria", "Whitters", "Farren",
+    "Flores", "White", "Landreth", "Rateliff", "Jurado", "Prine", "Earle", "Van Zandt",
+    "Clark", "Crowell", "Lovett", "Keen", "McMurtry", "Bowen", "Moreland", "Turnpike",
+    "Flatland", "Midland", "Highwomen", "Pistol", "Caamp", "Trampled", "Watchhouse", "Shovels",
+  ];
+
+  // Song title components for generating realistic titles
+  const titleStarts = [
+    "Long", "Broken", "Whiskey", "Midnight", "Dusty", "Silver", "Golden", "Lonely",
+    "Thunder", "Fading", "Burning", "Rolling", "Drifting", "Lost", "Wild", "Old",
+    "Red", "Blue", "Dark", "Cold", "Sweet", "Bitter", "High", "Low",
+    "Deep", "Last", "First", "Empty", "Back", "Down", "Highway", "Mountain",
+    "River", "Prairie", "Canyon", "Desert", "Sunset", "Sunrise", "Moonlight", "Starlight",
+    "Neon", "Gravel", "Barroom", "Honky Tonk", "Outlaw", "Ramblin'", "Troubadour", "Heartbreak",
+  ];
+  const titleEnds = [
+    "Road", "Song", "Blues", "Night", "Morning", "Light", "Rain", "Wind",
+    "Sky", "Moon", "Sun", "Fire", "Water", "Dust", "Stone", "Heart",
+    "Home", "Town", "County", "Ridge", "Creek", "Hollow", "Valley", "Bridge",
+    "Train", "Mile", "Dream", "Memory", "Prayer", "Whisper", "Thunder", "Lullaby",
+    "Serenade", "Ballad", "Waltz", "Two-Step", "Reckoning", "Redemption", "Revival", "Requiem",
+    "Confession", "Testimony", "Gospel", "Hymn", "Anthem", "Elegy", "Farewell", "Promise",
+  ];
+  const standalones = [
+    "Amarillo by Morning", "Traveller", "Feathered Indians", "Cover Me Up", "Something to Talk About",
+    "Pancho and Lefty", "Mama Tried", "Ring of Fire", "Folsom Prison Blues", "Crazy",
+    "I Walk the Line", "Blue Eyes Crying in the Rain", "Jolene", "Coal Miner's Daughter",
+    "The Devil Went Down to Georgia", "Friends in Low Places", "The Dance", "Live Like You Were Dying",
+    "Humble and Kind", "Tin Man", "Broken Halos", "Whiskey Glasses", "Die a Happy Man",
+    "Tennessee Whiskey", "Strawberry Wine", "Fast Car", "Wagon Wheel", "Take Me Home Country Roads",
+    "Gentle on My Mind", "Sunday Mornin' Comin' Down", "Highwayman", "Mamas Don't Let Your Babies",
+    "On the Road Again", "Always on My Mind", "He Stopped Loving Her Today", "Stand by Your Man",
+    "I Fall to Pieces", "Walking After Midnight", "Your Cheatin' Heart", "I'm So Lonesome I Could Cry",
+    "Guitars Cadillacs", "Ain't Livin' Long Like This", "Tulsa Time", "Copperhead Road",
+    "Guitar Town", "Luxury Liner", "Boulder to Birmingham", "Wrecking Ball",
+    "Car Wheels on a Gravel Road", "Passionate Kisses", "Southeastern", "Elephant",
+    "Metamodern Sounds in Country Music", "A Sailor's Guide to Earth", "From a Room: Volume 1",
+    "Golden Hour", "Star-Crossed", "The Ballad of Dood and Juanita", "Raising Sand",
+    "In These Silent Days", "Crooked Tree", "All American Made", "Living Proof",
+    "Pageant Material", "Same Trailer Different Park", "The Weight of These Wings",
+    "Cry Pretty", "Gaslighter", "The Highwomen", "Lady Like", "Nightfall",
+    "Punisher", "I Know the End", "Stick Season", "Northern Attitude",
+    "Long Violent History", "Starting Over", "Cuttin' Grass", "Sound & Fury",
+    "Childers", "Long Way from Ampurdán", "Mercury Lane", "Hell or High Water",
+    "Ain't Always the Cowboy", "Yellowstone Theme", "House of Blues", "Whiskey Myers",
+    "Burn It Down", "Something in the Orange", "Sun to Me", "Revival",
+    "Chasin' You", "More Than My Hometown", "Sand in My Boots", "Wasted on You",
+    "Half of My Hometown", "You Should Probably Leave", "Fancy Like", "Buy Dirt",
+  ];
+
+  const albums = [
+    "Heartland Sessions", "Dust & Diamonds", "Roadside Americana", "Porch Light",
+    "Midnight Meridian", "Lonesome Highway", "Copper & Gold", "Wildflower",
+    "Troubadour Tales", "Outlaw Gospel", "Red Dirt Revival", "Canyon Echoes",
+    "Appalachian Spring", "Texas Sun", "Nashville Skyline", "Bakersfield Sound",
+    "Muscle Shoals Sessions", "Austin City Limits Live", "Ryman Auditorium",
+    "Songs from the Road", "Front Porch Favorites", "Barn Burner", "Slow Burn",
+    "The Great Divide", "Honky Tonk Highway", "Neon Church", "Silver Tongue",
+    "Broken Compass", "Tall Tales", "Ghost Town Blues", "Sunday Morning Coming Down",
+    "The Long Way Home", "Wanderlust", "Crooked River", "Mountain Standard Time",
+    "Plains & Simple", "Sagebrush & Starlight", "Last Call", "First Light",
+    "Hallelujah Nights", "Desperate Man", "Tequila Little Time", "What You See",
+    null, null, null, null, // ~10% singles with no album
+  ];
+
+  const songGenres = [
+    "Americana", "Americana", "Americana", "Americana",
+    "Country", "Country", "Country",
+    "Alt-Country", "Alt-Country",
+    "Singer-Songwriter", "Singer-Songwriter",
+    "Folk", "Folk",
+    "Bluegrass", "Blues",
+    "Outlaw Country", "Texas Country", "Red Dirt",
+    "Roots Rock", "Southern Rock", "Country Rock",
+    "Western Swing", "Indie Folk",
+  ];
+
+  const musicalKeys = ["C", "D", "E", "F", "G", "A", "B", "Am", "Bm", "Cm", "Dm", "Em", "Fm", "Gm", "F#m", "C#m", "Bb", "Eb", "Ab"];
+
+  // Distribution: A=15%, B=20%, C=30%, D=15%, E=20%
+  const categoryWeights = [
+    ...Array(150).fill("A"),   // Hits
+    ...Array(200).fill("B"),   // Fast
+    ...Array(300).fill("C"),   // Medium
+    ...Array(150).fill("D"),   // Slow
+    ...Array(200).fill("E"),   // Indie
+  ];
+
+  const genderWeights = [
+    ...Array(40).fill("male"),
+    ...Array(35).fill("female"),
+    ...Array(15).fill("mixed"),
+    ...Array(5).fill("instrumental"),
+    ...Array(5).fill("unknown"),
+  ];
+
+  function genTitle(): string {
+    if (Math.random() < 0.3) return pick(standalones);
+    if (Math.random() < 0.4) return `${pick(titleStarts)} ${pick(titleEnds)}`;
+    // Two-word combos and variants
+    const variants = [
+      () => `The ${pick(titleStarts)} ${pick(titleEnds)}`,
+      () => `${pick(titleStarts)} ${pick(titleEnds)} ${pick(["Blues", "Waltz", "Song", "Lullaby"])}`,
+      () => `${pick(["Letter to", "Song for", "Ode to", "Ballad of", "Hymn for"])} ${pick(titleStarts)} ${pick(titleEnds)}`,
+      () => `${pick(titleStarts)}`,
+    ];
+    return pick(variants)();
+  }
+
+  function genArtistName(): string {
+    return `${pick(artistFirstNames)} ${pick(artistLastNames)}`;
+  }
+
+  function tempoFromBpm(bpm: number): string {
+    if (bpm < 70) return "very_slow";
+    if (bpm < 95) return "slow";
+    if (bpm < 125) return "medium";
+    if (bpm < 150) return "fast";
+    return "very_fast";
+  }
+
+  // Generate ~1200 songs in batches of 100 for performance
+  const TOTAL_SONGS = 1200;
+  const BATCH_SIZE = 100;
+  let created = 0;
+
+  // Pre-generate a pool of ~200 unique artist names to reuse (realistic: artists have multiple songs)
+  const artistPool: string[] = [];
+  for (let i = 0; i < 200; i++) {
+    artistPool.push(genArtistName());
+  }
+
+  for (let batch = 0; batch < Math.ceil(TOTAL_SONGS / BATCH_SIZE); batch++) {
+    const batchSize = Math.min(BATCH_SIZE, TOTAL_SONGS - created);
+    const songs: any[] = [];
+
+    for (let i = 0; i < batchSize; i++) {
+      const category = pick(categoryWeights);
+      const gender = pick(genderWeights);
+
+      // BPM varies by category
+      let bpm: number;
+      switch (category) {
+        case "A": bpm = randomInt(100, 145); break; // Hits — uptempo
+        case "B": bpm = randomInt(120, 165); break; // Fast
+        case "C": bpm = randomInt(90, 130); break;  // Medium
+        case "D": bpm = randomInt(60, 95); break;   // Slow
+        case "E": bpm = randomInt(80, 140); break;  // Indie — varied
+        default: bpm = randomInt(90, 130);
+      }
+
+      const energy = category === "A" ? randomFloat(0.6, 0.95)
+        : category === "B" ? randomFloat(0.7, 1.0)
+        : category === "C" ? randomFloat(0.4, 0.7)
+        : category === "D" ? randomFloat(0.1, 0.45)
+        : randomFloat(0.3, 0.8);
+
+      // Pick artist — 70% from pool (repeat artists), 30% fresh
+      const artistName = Math.random() < 0.7 ? pick(artistPool) : genArtistName();
+
+      songs.push({
+        stationId,
+        title: genTitle(),
+        artistName,
+        album: pick(albums),
+        duration: randomInt(165, 330), // 2:45 to 5:30
+        genre: pick(songGenres),
+        bpm,
+        musicalKey: pick(musicalKeys),
+        energy,
+        rotationCategory: category,
+        vocalGender: gender,
+        tempoCategory: tempoFromBpm(bpm),
+        isActive: Math.random() < 0.92, // 8% inactive
+        playCount: category === "A" ? randomInt(50, 500)
+          : category === "B" ? randomInt(20, 200)
+          : category === "C" ? randomInt(10, 150)
+          : category === "D" ? randomInt(5, 80)
+          : randomInt(1, 60),
+        lastPlayedAt: Math.random() < 0.85 ? randomDate(14) : null,
       });
     }
+
+    await prisma.song.createMany({ data: songs });
+    created += batchSize;
   }
 
-  console.log(`  Created station, ${djs.length} DJs, and ${showIdx + 4} DJ shows`);
-  return djs;
+  console.log(`  Created ${created} songs in the music library`);
 }
 
 // ============ ACTIVITY LOGS ============
@@ -960,6 +1506,156 @@ async function seedRevenue(artists: any[]) {
   console.log("  Created 3 months of revenue pool and earnings records");
 }
 
+// ============ FEATURE TYPES (34 types) ============
+async function seedFeatureTypes() {
+  console.log("Seeding feature types...");
+
+  const types = [
+    // All Shows
+    { id: "artist_quickies", name: "Artist Quickies", description: "30-second fun facts about the artist currently playing", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Share a quick, fun fact about {artist_name} in the style of {dj_name}. Keep it under 30 seconds of speaking time." },
+    { id: "song_story", name: "Song Story", description: "The backstory behind how a song was written or recorded", category: "all_shows", suggestedDuration: 45, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Tell the story behind '{song_title}' by {artist_name}. Include any interesting recording or writing details. Keep it conversational for {dj_name}." },
+    { id: "this_day_in_music", name: "This Day in Music", description: "What happened on this date in music history", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Share what happened on {date} in country/Americana music history. Make it interesting and relevant for {dj_name}'s audience." },
+    { id: "genre_connection", name: "Genre Connection", description: "How two different genres or artists are connected", category: "all_shows", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Explain how {genre1} and {genre2} are connected through {artist_name}. {dj_name} style." },
+    { id: "cover_story", name: "Cover Story", description: "Compare an original song to a notable cover version", category: "all_shows", suggestedDuration: 45, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Compare the original '{song_title}' by {original_artist} to the cover by {cover_artist}. Ask listeners which version they prefer. {dj_name} style." },
+    { id: "album_deep_dive", name: "Album Deep Dive", description: "Spotlight on a classic or new album", category: "all_shows", suggestedDuration: 60, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Give a brief deep dive into the album '{album_title}' by {artist_name}. Why it matters. {dj_name} perspective." },
+    { id: "songwriter_spotlight", name: "Songwriter Spotlight", description: "Highlight the songwriter behind hits", category: "all_shows", suggestedDuration: 45, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Spotlight songwriter {songwriter} and their contributions to {genre}. {dj_name} style." },
+    { id: "listener_dedication", name: "Listener Dedication", description: "Read a listener's song dedication", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} reads a dedication from {from_name} to {to_name}: '{message}'. Introduce '{song_title}' by {artist_name}." },
+    { id: "instrument_spotlight", name: "Instrument Spotlight", description: "Highlight a unique instrument in the current song", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Highlight the {instrument} in '{song_title}' by {artist_name}. What makes it special. {dj_name} style." },
+    { id: "producer_profile", name: "Producer Profile", description: "Quick profile of the song's producer", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Quick profile of producer {producer} who worked on '{song_title}'. {dj_name} style." },
+    { id: "music_trivia", name: "Music Trivia", description: "Quick trivia question about country/Americana music", category: "all_shows", suggestedDuration: 30, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Create a fun {genre} music trivia question. Give the answer after a beat. {dj_name} style." },
+    { id: "new_release_alert", name: "New Release Alert", description: "Highlight a brand new song or album release", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Announce the new release '{song_title}' by {artist_name}. Build excitement. {dj_name} style." },
+    { id: "vinyl_corner", name: "Vinyl Corner", description: "Feature a classic record worth tracking down on vinyl", category: "all_shows", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Recommend '{album_title}' by {artist_name} as a vinyl worth hunting for. Why it sounds better on wax. {dj_name} style." },
+    { id: "tour_alert", name: "Tour Alert", description: "Upcoming tour dates for featured artists", category: "all_shows", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Let listeners know {artist_name} is touring. Encourage them to check dates. {dj_name} style." },
+    { id: "fan_poll", name: "Fan Poll", description: "Quick listener poll about music preferences", category: "all_shows", suggestedDuration: 25, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Ask listeners a fun poll question about {topic} related to {genre}. {dj_name} style." },
+    { id: "lyric_breakdown", name: "Lyric Breakdown", description: "Break down a particularly powerful lyric", category: "all_shows", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Break down a powerful lyric from '{song_title}' by {artist_name}. What makes it resonate. {dj_name} style." },
+    { id: "musical_journey", name: "Musical Journey", description: "Trace an artist's evolution across albums", category: "all_shows", suggestedDuration: 50, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Trace {artist_name}'s musical journey and evolution. Key turning points. {dj_name} style." },
+    { id: "road_trip_pick", name: "Road Trip Pick", description: "Perfect song for a road trip playlist", category: "all_shows", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} recommends '{song_title}' by {artist_name} as the perfect road trip song. Why it works." },
+    { id: "indie_discovery", name: "Indie Discovery", description: "Spotlight on an unsigned or independent artist", category: "all_shows", suggestedDuration: 45, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Introduce indie artist {artist_name} to the audience. What makes them special. {dj_name} style." },
+    { id: "then_and_now", name: "Then & Now", description: "Compare a classic sound to a modern equivalent", category: "all_shows", suggestedDuration: 40, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Compare a classic {genre} sound to {artist_name}'s modern take. What changed, what stayed. {dj_name} style." },
+    // Morning Only
+    { id: "morning_weather", name: "Morning Weather", description: "Brief weather report with personality", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} gives a brief morning weather update. Current conditions: {weather}. Add personality." },
+    { id: "morning_motivation", name: "Morning Motivation", description: "Inspirational quote or thought to start the day", category: "morning_only", suggestedDuration: 25, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} shares a morning motivational thought related to {topic}. Keep it genuine and warm." },
+    { id: "coffee_talk", name: "Coffee Talk", description: "Casual morning banter topic", category: "morning_only", suggestedDuration: 30, includesPoll: true, includesCallIn: true, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} starts a casual morning conversation about {topic}. Invite listeners to text in." },
+    { id: "morning_news_beat", name: "Morning News Beat", description: "Quick music industry news roundup", category: "morning_only", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} shares a quick music industry news beat. Keep it light and relevant to {genre} fans." },
+    { id: "sunrise_set", name: "Sunrise Set", description: "Curated 3-song block for the morning commute", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} introduces a curated sunrise set themed around {theme}. Set the mood for the morning." },
+    { id: "wake_up_call", name: "Wake Up Call", description: "Energetic segment to get listeners going", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} delivers an energetic wake-up call. Theme: {theme}. Get listeners pumped for the day." },
+    { id: "commuter_countdown", name: "Commuter Countdown", description: "Top 5 countdown for the morning drive", category: "morning_only", suggestedDuration: 30, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} teases the morning commuter countdown. Theme: {theme}. Build anticipation." },
+    { id: "morning_request_hour", name: "Morning Request Hour", description: "Open the lines for listener requests", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: true, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} opens the morning request hour. Encourage listeners to text or call in their picks." },
+    { id: "local_spotlight", name: "Local Spotlight", description: "Highlight a local artist or venue", category: "morning_only", suggestedDuration: 35, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} spotlights local artist {artist_name}. Where to see them, what makes them worth checking out." },
+    { id: "throwback_thursday", name: "Throwback Thursday", description: "Classic song from a specific year", category: "morning_only", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} takes us back to {year} with '{song_title}' by {artist_name}. Set the nostalgic scene." },
+    { id: "good_news_minute", name: "Good News Minute", description: "Positive news story from the music world", category: "morning_only", suggestedDuration: 25, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} shares a good news story from the {genre} world. Keep it uplifting and genuine." },
+    { id: "battle_of_the_bands", name: "Battle of the Bands", description: "Listeners vote between two songs", category: "morning_only", suggestedDuration: 25, includesPoll: true, includesCallIn: true, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} sets up a Battle of the Bands between two {genre} tracks. Get listeners voting!" },
+    { id: "morning_mixtape", name: "Morning Mixtape", description: "Themed mini-set curated by the DJ", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} introduces a morning mixtape themed around {theme}. Three songs that go perfectly together." },
+    { id: "behind_the_mic", name: "Behind the Mic", description: "DJ shares a personal music memory or story", category: "morning_only", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} shares a personal memory connected to {artist_name} or '{song_title}'. Make it authentic and heartfelt." },
+  ];
+
+  for (const t of types) {
+    await prisma.featureType.create({ data: t });
+  }
+  console.log(`  Created ${types.length} feature types`);
+}
+
+// ============ SHOW TRANSITIONS ============
+async function seedShowTransitions(stationId: string, djs: any[]) {
+  console.log("Seeding show transitions...");
+
+  const hank = djs.find((d: any) => d.slug === "hank-westwood")!;
+  const loretta = djs.find((d: any) => d.slug === "loretta-merrick")!;
+  const doc = djs.find((d: any) => d.slug === "doc-holloway")!;
+  const cody = djs.find((d: any) => d.slug === "cody-rampart")!;
+
+  const transitions = [
+    // Show intros
+    { transitionType: "show_intro", name: "Sunrise & Steel Intro", scriptText: "Good morning, North Country. Hank Westwood here. Pour the coffee, fire up the engine — let's get this day started with some music that means something.", durationSeconds: 12, fromDjId: null, toDjId: hank.id, timeContext: "morning_drive", hourOfDay: 6 },
+    { transitionType: "show_intro", name: "Transatlantic Sessions Intro", scriptText: "Hello, darlings. Loretta Merrick here, somewhere between the M6 and the Mississippi. Let's discover some stories together.", durationSeconds: 10, fromDjId: null, toDjId: loretta.id, timeContext: "midday", hourOfDay: 9 },
+    { transitionType: "show_intro", name: "Deep Cuts Intro", scriptText: "Doc Holloway here. Time to dig into the record crate. The songs you forgot you loved — and a few you've never heard before.", durationSeconds: 10, fromDjId: null, toDjId: doc.id, timeContext: "midday", hourOfDay: 12 },
+    { transitionType: "show_intro", name: "Open Road Intro", scriptText: "Cody Rampart. The road's wide open and the speakers are up. Let's ride.", durationSeconds: 8, fromDjId: null, toDjId: cody.id, timeContext: "evening", hourOfDay: 15 },
+
+    // Show outros
+    { transitionType: "show_outro", name: "Sunrise & Steel Outro", scriptText: "That's my time, North Country. Keep your boots on the ground and your radio turned up. Hank out.", durationSeconds: 8, fromDjId: hank.id, toDjId: null, timeContext: "morning_drive", hourOfDay: 9 },
+    { transitionType: "show_outro", name: "Transatlantic Sessions Outro", scriptText: "That's all from me today, loves. Keep discovering. Loretta Merrick, signing off.", durationSeconds: 8, fromDjId: loretta.id, toDjId: null, timeContext: "midday", hourOfDay: 12 },
+    { transitionType: "show_outro", name: "Deep Cuts Outro", scriptText: "Doc Holloway, closing the crate for today. Remember — the best songs are the ones you haven't heard yet.", durationSeconds: 8, fromDjId: doc.id, toDjId: null, timeContext: "midday", hourOfDay: 15 },
+    { transitionType: "show_outro", name: "Open Road Outro", scriptText: "End of the road for today. Cody Rampart, pulling over. See you tomorrow.", durationSeconds: 7, fromDjId: cody.id, toDjId: null, timeContext: "evening", hourOfDay: 18 },
+
+    // DJ Handoffs
+    { transitionType: "handoff", name: "Morning to Midday Handoff", scriptText: "Alright, I'm handing the keys to Loretta Merrick. She's got stories from both sides of the Atlantic. Take it away, Loretta.", durationSeconds: 10, fromDjId: hank.id, toDjId: loretta.id, handoffGroupId: "morning-midday", handoffPart: 1, handoffPartName: "Farewell", hourOfDay: 9 },
+    { transitionType: "handoff", name: "Morning to Midday Response", scriptText: "Thanks, Hank. I'll take it from here. Let's see what stories the music has for us today.", durationSeconds: 7, fromDjId: loretta.id, toDjId: null, handoffGroupId: "morning-midday", handoffPart: 2, handoffPartName: "Response", hourOfDay: 9 },
+    { transitionType: "handoff", name: "Midday to Afternoon Handoff", scriptText: "Time to pass the mic to Doc Holloway. He's got deep cuts you didn't know you needed.", durationSeconds: 8, fromDjId: loretta.id, toDjId: doc.id, handoffGroupId: "midday-afternoon", handoffPart: 1, handoffPartName: "Farewell", hourOfDay: 12 },
+    { transitionType: "handoff", name: "Midday to Afternoon Response", scriptText: "Loretta always leaves me inspired. Let's dig into the crate and find something special.", durationSeconds: 7, fromDjId: doc.id, toDjId: null, handoffGroupId: "midday-afternoon", handoffPart: 2, handoffPartName: "Response", hourOfDay: 12 },
+    { transitionType: "handoff", name: "Afternoon to Drive Handoff", scriptText: "Handing off to Cody Rampart for the afternoon drive. Keep those windows down, Cody.", durationSeconds: 8, fromDjId: doc.id, toDjId: cody.id, handoffGroupId: "afternoon-drive", handoffPart: 1, handoffPartName: "Farewell", hourOfDay: 15 },
+    { transitionType: "handoff", name: "Afternoon to Drive Response", scriptText: "Windows down, volume up. Let's make this drive count. Cody Rampart's got you.", durationSeconds: 7, fromDjId: cody.id, toDjId: null, handoffGroupId: "afternoon-drive", handoffPart: 2, handoffPartName: "Response", hourOfDay: 15 },
+  ];
+
+  for (const t of transitions) {
+    await prisma.showTransition.create({
+      data: {
+        stationId,
+        transitionType: t.transitionType,
+        name: t.name,
+        scriptText: t.scriptText,
+        durationSeconds: t.durationSeconds,
+        fromDjId: t.fromDjId,
+        toDjId: t.toDjId,
+        timeContext: t.timeContext || null,
+        hourOfDay: t.hourOfDay || null,
+        handoffGroupId: t.handoffGroupId || null,
+        handoffPart: t.handoffPart || null,
+        handoffPartName: t.handoffPartName || null,
+        isActive: true,
+      },
+    });
+  }
+  console.log(`  Created ${transitions.length} show transitions (intros, outros, handoffs)`);
+}
+
+// ============ FEATURE SCHEDULES ============
+async function seedFeatureSchedules(stationId: string, djs: any[]) {
+  console.log("Seeding feature schedules...");
+
+  const featureTypes = await prisma.featureType.findMany();
+  const allShowFeatures = featureTypes.filter(f => f.category === "all_shows");
+  const morningFeatures = featureTypes.filter(f => f.category === "morning_only");
+
+  let count = 0;
+  for (const dj of djs) {
+    // All DJs get all_shows features
+    for (const ft of allShowFeatures) {
+      await prisma.featureSchedule.create({
+        data: {
+          stationId,
+          featureTypeId: ft.id,
+          djId: dj.id,
+          djName: dj.name,
+          frequencyPerShow: ft.id === "artist_quickies" ? 3 : ft.id === "song_story" ? 2 : 1,
+          minSongsBetween: 3,
+          priority: ft.id === "artist_quickies" ? 9 : ft.id === "song_story" ? 8 : 5,
+          isActive: true,
+        },
+      });
+      count++;
+    }
+    // Only weekday morning DJs get morning features
+    if (!dj.isWeekend && dj.slug === "hank-westwood") {
+      for (const ft of morningFeatures) {
+        await prisma.featureSchedule.create({
+          data: {
+            stationId,
+            featureTypeId: ft.id,
+            djId: dj.id,
+            djName: dj.name,
+            frequencyPerShow: 1,
+            minSongsBetween: 4,
+            priority: 6,
+            isActive: true,
+          },
+        });
+        count++;
+      }
+    }
+  }
+  console.log(`  Created ${count} feature schedules`);
+}
+
 // ============ MAIN ============
 async function main() {
   console.log("🌱 Comprehensive seed: ALL TEAMS\n");
@@ -983,7 +1679,11 @@ async function main() {
   await seedViralContent(artists);
   await seedCampaigns(listeners);
 
-  await seedStation();
+  const { station, djs: stationDjs } = await seedStation();
+  await seedSongs(station.id);
+  await seedFeatureTypes();
+  await seedShowTransitions(station.id, stationDjs);
+  await seedFeatureSchedules(station.id, stationDjs);
   await seedActivityLogs(artists, sponsors, listeners);
   await seedRevenue(artists);
 
@@ -997,7 +1697,14 @@ Summary:
   - 60 Listeners with sessions
   - 12 Viral content items
   - 5 Growth campaigns
-  - 6 DJs with weekly schedule
+  - 12 DJs with weekly schedule (attached to NCR station)
+  - 1,200 Songs in the music library (A/B/C/D/E rotation)
+  - 5 Clock templates with full 20-slot patterns
+  - 12 Clock assignments (DJ-to-clock mappings)
+  - 2 Imaging voices
+  - 34 Feature types (20 all-shows + 14 morning-only)
+  - 14 Show transitions (intros, outros, handoffs)
+  - Feature schedules for all DJs
   - 3 Months of revenue data
   - 100+ Activity log entries
   `);

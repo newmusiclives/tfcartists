@@ -782,10 +782,23 @@ model DJ {
   personalityTraits String? // JSON array of traits
   musicalFocus String?      // Description of music they play
 
+  // AI Voice config
+  voiceProfileId     String?  // ElevenLabs voice ID
+  voiceStability     Float    @default(0.75)
+  voiceSimilarityBoost Float  @default(0.75)
+
+  // AI Personality config
+  gptSystemPrompt    String?  // AI personality prompt
+  gptTemperature     Float    @default(0.8)
+
   // Visual identity
   photoUrl    String?
   colorPrimary String?   // Hex color for show branding
   colorSecondary String?
+
+  // Station relation
+  stationId   String?
+  station     Station?  @relation("StationDJs", fields: [stationId], references: [id], onDelete: SetNull)
 
   // Status
   isActive    Boolean  @default(true)
@@ -795,11 +808,13 @@ model DJ {
   // Relationships
   shows       DJShow[]
   trackPlays  TrackPlayback[]
+  clockAssignments ClockAssignment[]
 
   metadata    Json?
 
   @@index([isActive])
   @@index([slug])
+  @@index([stationId])
 }
 
 // DJ Shows/Time Slots
@@ -936,6 +951,11 @@ model Station {
   callSign    String?  // "NCR"
   tagline     String?  // "Where the music finds you"
   description String?
+  stationCode String?  @unique // URL-safe slug ("ncr", "southern-soul")
+
+  // Format
+  formatType  String?  // "americana", "country", "rock", "jazz", "blues", "folk"
+  musicEra    String?  // "classic", "modern", "mixed"
 
   // Branding
   logoUrl     String?
@@ -954,13 +974,72 @@ model Station {
   primeHoursStart    String @default("06:00")
   primeHoursEnd      String @default("18:00")
 
-  // Stream URLs
+  // Stream config
   streamUrl          String?
   backupStreamUrl    String?
+  streamBitrate      Int     @default(128)
+  streamFormat       String  @default("mp3")
+
+  // Crossfade
+  crossfadeEnabled   Boolean @default(true)
+  crossfadeDuration  Float   @default(3.0)
+  crossfadeStartNext Float   @default(1.5)
+  crossfadeFadeIn    Float   @default(0.8)
+  crossfadeFadeOut   Float   @default(1.5)
+  crossfadeCurve     String  @default("equal_power")
+
+  // Normalization
+  normalizationEnabled Boolean @default(true)
+  normalizationTarget  Float   @default(-14.0)
+  normalizationWindow  Float   @default(0.1)
+  normalizationGainMax Float   @default(10.0)
+  normalizationGainMin Float   @default(-10.0)
+
+  // Compression
+  compressionEnabled   Boolean @default(true)
+  compressionAttack    Float   @default(50.0)
+  compressionRelease   Float   @default(400.0)
+  compressionRatio     Float   @default(3.0)
+  compressionThreshold Float   @default(-15.0)
+  compressionKnee      Float   @default(1.0)
+
+  // EQ (3-band)
+  eqEnabled   Boolean @default(false)
+  eqLowFreq   Int     @default(100)
+  eqLowGain   Float   @default(2.0)
+  eqMidFreq   Int     @default(1000)
+  eqMidGain   Float   @default(0.0)
+  eqHighFreq  Int     @default(8000)
+  eqHighGain  Float   @default(1.0)
+
+  // DJ Voice Ducking
+  duckingEnabled Boolean @default(true)
+  duckingAmount  Float   @default(-8.0)
+  duckingAttack  Float   @default(200.0)
+  duckingRelease Float   @default(500.0)
+
+  // Subscription
+  subscriptionTier   String  @default("starter") // "free", "starter", "pro", "enterprise"
+
+  // Owner info
+  ownerName          String?
+  ownerEmail         String?
+
+  // Setup wizard
+  setupStep          Int     @default(0)
+  setupComplete      Boolean @default(false)
 
   // Status
   isActive           Boolean @default(true)
   launchDate         DateTime?
+
+  // Relations
+  songs              Song[]
+  clockTemplates     ClockTemplate[]
+  clockAssignments   ClockAssignment[]
+  imagingVoices      StationImagingVoice[]
+  stationDJs         DJ[]    @relation("StationDJs")
+  showTransitions    ShowTransition[]
 
   metadata    Json?
 }
@@ -1819,4 +1898,320 @@ model SponsorBulkPurchase {
   @@index([growthPartnerId])
   @@index([expiresAt])
   @@index([isExpired])
+}
+
+// =============================================================================
+// STATION MANAGEMENT SYSTEM - Songs, Clocks, Assignments, Imaging
+// =============================================================================
+
+// Song in a station's music library
+model Song {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station
+  stationId       String
+  station         Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // Track info
+  title           String
+  artistName      String
+  album           String?
+  duration        Int?     // seconds
+  genre           String?
+
+  // File
+  fileUrl         String?
+  artworkUrl      String?
+
+  // Music metadata
+  bpm             Int?
+  musicalKey      String?  // "C", "Am", "F#m"
+  energy          Float?   // 0-1
+
+  // Cue points
+  introEnd          Float?
+  outroStart        Float?
+  crossfadeStart    Float?
+  crossfadeDuration Float?  @default(3.0)
+  mixInPoint        Float?
+  mixOutPoint       Float?
+  hookStart         Float?
+  hookEnd           Float?
+  cueDetectionMethod String? // "manual" or "ai_detected"
+  cueConfidence     Float?   // 0-1
+  cueNotes          String?
+
+  // Rotation
+  rotationCategory String  @default("C") // A/B/C/D/E — Hits/Fast/Medium/Slow/Indie
+  vocalGender     String   @default("unknown") // male/female/mixed/instrumental/unknown
+  tempoCategory   String   @default("medium") // very_slow/slow/medium/fast/very_fast
+
+  // Status
+  isActive        Boolean  @default(true)
+  playCount       Int      @default(0)
+  lastPlayedAt    DateTime?
+
+  metadata        Json?
+
+  @@index([stationId])
+  @@index([rotationCategory])
+  @@index([isActive])
+}
+
+// Clock template for scheduling music rotation
+model ClockTemplate {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station
+  stationId       String
+  station         Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // Template info
+  name            String   // "Morning Drive", "Midday Mix"
+  description     String?
+  clockType       String   @default("midday") // morning_drive/midday/evening/late_night/weekend
+
+  // Music parameters
+  tempo           String?  // "upbeat", "moderate", "laid_back"
+  energyLevel     String?  // "high", "medium", "low"
+  hitsPerHour     Int      @default(6)
+  indiePerHour    Int      @default(3)
+  genderBalanceTarget Float @default(0.5) // 0-1, target female ratio
+
+  // Clock pattern: array of 20 slot objects per hour
+  // Each: {position, minute, duration, category, type, notes}
+  clockPattern    String?  // JSON string (SQLite doesn't support Json natively here)
+
+  // Transition overrides (override station defaults)
+  transitionCrossfadeDuration Float?
+  transitionCurve             String?
+
+  // Status
+  isActive        Boolean  @default(true)
+
+  // Relations
+  assignments     ClockAssignment[]
+
+  metadata        Json?
+
+  @@index([stationId])
+  @@index([clockType])
+}
+
+// Maps DJs to clock templates for specific time slots
+model ClockAssignment {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station
+  stationId       String
+  station         Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // DJ
+  djId            String
+  dj              DJ       @relation(fields: [djId], references: [id], onDelete: Cascade)
+
+  // Clock template
+  clockTemplateId String
+  clockTemplate   ClockTemplate @relation(fields: [clockTemplateId], references: [id], onDelete: Cascade)
+
+  // Schedule
+  dayType         String   @default("all") // weekday/saturday/sunday/all
+  timeSlotStart   String   // "06:00"
+  timeSlotEnd     String   // "09:00"
+
+  // Priority
+  priority        Int      @default(0)
+  isActive        Boolean  @default(true)
+
+  metadata        Json?
+
+  @@unique([djId, dayType, timeSlotStart])
+  @@index([stationId])
+  @@index([djId])
+  @@index([clockTemplateId])
+}
+
+// Station imaging voices for promos, IDs, sweepers
+model StationImagingVoice {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station
+  stationId       String
+  station         Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // Voice info
+  displayName     String   // "Station Voice - Male"
+  voiceType       String   @default("male") // male/female
+
+  // ElevenLabs config
+  elevenlabsVoiceId String?
+  voiceStability  Float    @default(0.75)
+  voiceSimilarityBoost Float @default(0.75)
+  voiceStyle      Float    @default(0.5)
+
+  // Usage
+  usageTypes      String   @default("id") // comma-separated: "promo,id,sweeper"
+  isActive        Boolean  @default(true)
+
+  metadata        Json?
+
+  @@index([stationId])
+}
+
+// Show transitions (intros, outros, handoffs between DJs)
+model ShowTransition {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station
+  stationId       String
+  station         Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // Transition config
+  transitionType  String   // "show_intro", "show_outro", "handoff"
+  name            String
+  description     String?
+
+  // Schedule context
+  dayOfWeek       Int?     // 0-6
+  hourOfDay       Int?     // 0-23
+  timeContext      String?  // "morning_drive", "midday", etc.
+
+  // Content
+  scriptText      String?  // Script for AI voice generation
+  audioFilePath   String?  // Pre-recorded audio URL
+  durationSeconds Float    @default(15.0)
+
+  // DJ references
+  fromDjId        String?
+  toDjId          String?
+
+  // Handoff grouping
+  handoffGroupId  String?
+  handoffPart     Int?     // Order within group
+  handoffPartName String?  // "Intro", "Response", "Farewell", "Launch"
+
+  // Status
+  isActive        Boolean  @default(true)
+  priority        Int      @default(0)
+
+  metadata        Json?
+
+  @@index([stationId])
+  @@index([transitionType])
+  @@index([handoffGroupId])
+}
+
+// =============================================================================
+// SHOW FEATURES - AI-generated radio show segments
+// =============================================================================
+
+// Feature type definitions (34 types: artist quickies, trivia, weather, etc.)
+model FeatureType {
+  id                    String   @id // slug like "artist_quickies"
+  createdAt             DateTime @default(now())
+
+  name                  String   // "Artist Quickies"
+  description           String?
+  category              String   // "all_shows" or "morning_only"
+
+  // AI generation
+  gptPromptTemplate     String?  // Template with {artist_name}, {song_title}, etc.
+  suggestedDuration     Int      @default(30) // seconds
+
+  // Engagement flags
+  includesPoll          Boolean  @default(false)
+  includesCallIn        Boolean  @default(false)
+  socialMediaFriendly   Boolean  @default(false)
+
+  // Sponsorship
+  allowsSponsorship     Boolean  @default(true)
+
+  isActive              Boolean  @default(true)
+
+  // Relations
+  content               FeatureContent[]
+  schedules             FeatureSchedule[]
+
+  @@index([category])
+}
+
+// Generated feature content cache
+model FeatureContent {
+  id                    String   @id @default(cuid())
+  createdAt             DateTime @default(now())
+
+  // Station
+  stationId             String
+
+  // Feature type
+  featureTypeId         String
+  featureType           FeatureType @relation(fields: [featureTypeId], references: [id], onDelete: Cascade)
+
+  // Content
+  title                 String?
+  content               String   // The generated script/text
+  contextData           String?  // JSON: artist_name, song_title, etc.
+
+  // AI generation
+  generatedBy           String?  // "gpt-4", "gpt-4-turbo"
+  djPersonalityId       String?  // DJ it was generated for
+
+  // Usage
+  isUsed                Boolean  @default(false)
+  playedAt              DateTime?
+  playedByDj            String?
+
+  // Audio
+  audioFilePath         String?
+  audioDuration         Int?     // seconds
+
+  // Expiry
+  expiresAt             DateTime?
+
+  metadata              String?
+
+  @@index([stationId])
+  @@index([featureTypeId])
+  @@index([isUsed, stationId])
+  @@index([djPersonalityId])
+}
+
+// Feature schedule — what plays when for each DJ
+model FeatureSchedule {
+  id                    String   @id @default(cuid())
+  createdAt             DateTime @default(now())
+
+  // Station
+  stationId             String
+
+  // Feature type
+  featureTypeId         String
+  featureType           FeatureType @relation(fields: [featureTypeId], references: [id], onDelete: Cascade)
+
+  // DJ
+  djId                  String?
+  djName                String   // Denormalized for display
+
+  // Scheduling rules
+  frequencyPerShow      Int      @default(1)
+  minSongsBetween       Int      @default(3)
+  priority              Int      @default(5)
+
+  isActive              Boolean  @default(true)
+
+  metadata              String?
+
+  @@index([stationId])
+  @@index([djId])
+  @@index([featureTypeId])
 }

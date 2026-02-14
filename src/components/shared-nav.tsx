@@ -17,6 +17,14 @@ import {
   Target,
   Award,
   Globe,
+  Shield,
+  Settings,
+  Wand2,
+  Clock,
+  Mic,
+  SlidersHorizontal,
+  ArrowRightLeft,
+  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -27,6 +35,7 @@ export function SharedNav() {
   const [cassidyOpen, setCassidyOpen] = useState(false);
   const [elliotOpen, setElliotOpen] = useState(false);
   const [stationOpen, setStationOpen] = useState(false);
+  const [stationOpsOpen, setStationOpsOpen] = useState(false);
   const [opportunitiesOpen, setOpportunitiesOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path || pathname?.startsWith(path + "/");
@@ -55,6 +64,21 @@ export function SharedNav() {
               <div className="flex items-center space-x-1">
                 <Home className="w-4 h-4" />
                 <span>Admin</span>
+              </div>
+            </Link>
+
+            {/* Management */}
+            <Link
+              href="/management"
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isActive("/management")
+                  ? "bg-amber-100 text-amber-700"
+                  : "text-amber-700 hover:bg-amber-50"
+              }`}
+            >
+              <div className="flex items-center space-x-1">
+                <Shield className="w-4 h-4" />
+                <span>Management</span>
               </div>
             </Link>
 
@@ -338,6 +362,97 @@ export function SharedNav() {
                       <div className="font-semibold">For Sponsors</div>
                       <div className="text-xs text-gray-500">Referral Bonuses - Earn $50-250</div>
                     </div>
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Station Ops Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setStationOpsOpen(!stationOpsOpen)}
+                onBlur={() => setTimeout(() => setStationOpsOpen(false), 200)}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
+                  isActive("/station-admin")
+                    ? "bg-amber-100 text-amber-700"
+                    : "text-amber-700 hover:bg-amber-50"
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+                <span>Station Ops</span>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+              {stationOpsOpen && (
+                <div className="absolute right-0 mt-1 w-56 bg-white rounded-lg shadow-lg border py-1 z-50">
+                  <Link
+                    href="/station-admin"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <Settings className="w-4 h-4 text-amber-600" />
+                    <span>Station Admin Hub</span>
+                  </Link>
+                  <Link
+                    href="/station-admin/wizard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <Wand2 className="w-4 h-4 text-amber-600" />
+                    <span>Create Station</span>
+                  </Link>
+                  <Link
+                    href="/station-admin/clocks"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <Clock className="w-4 h-4 text-amber-600" />
+                    <span>Radio Clocks</span>
+                  </Link>
+                  <Link
+                    href="/station-admin/music"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <Music className="w-4 h-4 text-amber-600" />
+                    <span>Music Library</span>
+                  </Link>
+                  <Link
+                    href="/station-admin/dj-editor"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <Users className="w-4 h-4 text-amber-600" />
+                    <span>DJ Editor</span>
+                  </Link>
+                  <Link
+                    href="/station-admin/schedule-editor"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <CalendarDays className="w-4 h-4 text-amber-600" />
+                    <span>Schedule Editor</span>
+                  </Link>
+                  <Link
+                    href="/station-admin/imaging"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <Mic className="w-4 h-4 text-amber-600" />
+                    <span>Station Imaging</span>
+                  </Link>
+                  <Link
+                    href="/station-admin/features"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-600" />
+                    <span>Show Features</span>
+                  </Link>
+                  <Link
+                    href="/station-admin/stream"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <SlidersHorizontal className="w-4 h-4 text-amber-600" />
+                    <span>Stream Engineering</span>
+                  </Link>
+                  <Link
+                    href="/station-admin/transitions"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 flex items-center space-x-2"
+                  >
+                    <ArrowRightLeft className="w-4 h-4 text-amber-600" />
+                    <span>Show Transitions</span>
                   </Link>
                 </div>
               )}

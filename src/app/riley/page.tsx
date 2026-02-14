@@ -205,6 +205,33 @@ export default function RileyDashboardPage() {
           />
         </section>
 
+        {/* Team Members */}
+        <section className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
+            <Users className="w-6 h-6 text-purple-600" />
+            <span>Team Members</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {[
+              { name: "Riley Carpenter", role: "Team Lead & Strategy", avatar: "RC", color: "bg-purple-100 text-purple-600", status: "Managing upgrade opportunities", kpi: `${tierUpgradeOpportunities.length} opportunities` },
+              { name: "Grace Holland", role: "Outreach & Artist Relations", avatar: "GH", color: "bg-indigo-100 text-indigo-600", status: "Artist outreach & discovery", kpi: "Active leads" },
+              { name: "Marcus Tate", role: "Tier Management & Analytics", avatar: "MT", color: "bg-blue-100 text-blue-600", status: "Managing artist roster", kpi: `${stats.totalArtists} artists` },
+              { name: "Sienna Park", role: "Content Vetting & QC", avatar: "SP", color: "bg-green-100 text-green-600", status: "Reviewing submissions", kpi: `${stats.pendingSubmissions} pending` },
+              { name: "Jordan Cross", role: "Payment Processing", avatar: "JC", color: "bg-emerald-100 text-emerald-600", status: "Processing pool payments", kpi: `$${stats.monthlyRevenue.toLocaleString()}` },
+            ].map((member, idx) => (
+              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 hover:border-purple-300 transition-colors">
+                <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>
+                <div className="font-semibold text-gray-900 text-sm">{member.name}</div>
+                <div className="text-xs text-gray-600 mb-2">{member.role}</div>
+                <div className="text-xs text-purple-600 mb-2 truncate">{member.status}</div>
+                <div className="mt-2 pt-2 border-t border-gray-200">
+                  <div className="text-xs font-semibold text-gray-700">{member.kpi}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Artist Distribution by Tier */}
         <section className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Artist Distribution by Tier</h2>
@@ -404,6 +431,7 @@ export default function RileyDashboardPage() {
             href="/riley/pipeline"
             icon={<TrendingUp className="w-8 h-8 text-purple-600" />}
             badge={8}
+            managedBy="Riley Carpenter"
           />
           <QuickActionCard
             title="Artist Outreach"
@@ -411,6 +439,7 @@ export default function RileyDashboardPage() {
             href="/riley/outreach"
             icon={<Search className="w-8 h-8 text-indigo-600" />}
             badge={6}
+            managedBy="Grace Holland"
           />
           <QuickActionCard
             title="Review Submissions"
@@ -418,18 +447,21 @@ export default function RileyDashboardPage() {
             href="/riley/submissions"
             icon={<CheckCircle className="w-8 h-8 text-blue-600" />}
             badge={stats.pendingSubmissions}
+            managedBy="Sienna Park"
           />
           <QuickActionCard
             title="Manage Artists"
             description="View and manage all artists in the system"
             href="/riley/artists"
             icon={<Users className="w-8 h-8 text-orange-600" />}
+            managedBy="Marcus Tate"
           />
           <QuickActionCard
             title="Pool Share Calculator"
             description="Calculate artist earnings from sponsor pool"
             href="/riley/pool-calculator"
             icon={<DollarSign className="w-8 h-8 text-green-600" />}
+            managedBy="Jordan Cross"
           />
         </section>
       </div>
@@ -628,12 +660,14 @@ function QuickActionCard({
   href,
   icon,
   badge,
+  managedBy,
 }: {
   title: string;
   description: string;
   href: string;
   icon: React.ReactNode;
   badge?: number;
+  managedBy?: string;
 }) {
   return (
     <Link href={href} className="block">
@@ -646,7 +680,10 @@ function QuickActionCard({
             </div>
           )}
         </div>
-        <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
+        {managedBy && (
+          <p className="text-xs text-purple-600 font-medium mb-1">Managed by {managedBy}</p>
+        )}
         <p className="text-sm text-gray-600">{description}</p>
       </div>
     </Link>

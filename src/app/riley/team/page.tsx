@@ -427,7 +427,7 @@ export default function RileyTeamPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <QuickLink
               href="/riley/upgrade-opportunities"
-              title="Riley AI"
+              title="Riley Carpenter"
               description="Upgrade opportunities"
               icon={<Sparkles className="w-6 h-6" />}
               color="purple"

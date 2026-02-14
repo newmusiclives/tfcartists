@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award } from "lucide-react";
+import { ArrowRight, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award, Music, Settings } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -58,9 +58,17 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/onboard"
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-1"
               >
-                Get Started
+                <Music className="w-4 h-4" />
+                <span>Artists</span>
+              </Link>
+              <Link
+                href="/station-admin/wizard"
+                className="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors flex items-center space-x-1"
+              >
+                <Settings className="w-4 h-4" />
+                <span>Operators</span>
               </Link>
             </div>
           </div>
@@ -89,17 +97,20 @@ export default function HomePage() {
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/admin"
-              className="inline-flex items-center space-x-2 bg-amber-700 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-amber-800 transition-colors shadow-lg hover:shadow-xl"
+              href="/onboard"
+              className="inline-flex items-center space-x-2 bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition-colors shadow-lg hover:shadow-xl"
             >
-              <span>Admin Dashboard</span>
+              <Music className="w-5 h-5" />
+              <span>Artists: Submit Your Music</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
-              href="/airplay"
-              className="inline-flex items-center space-x-2 border-2 border-amber-400 text-amber-700 px-8 py-4 rounded-lg text-lg font-semibold hover:border-amber-500 transition-colors"
+              href="/station-admin/wizard"
+              className="inline-flex items-center space-x-2 bg-amber-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-amber-700 transition-colors shadow-lg hover:shadow-xl"
             >
-              <span>Airplay Tiers</span>
+              <Settings className="w-5 h-5" />
+              <span>Operators: Launch a Station</span>
+              <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
         </div>
