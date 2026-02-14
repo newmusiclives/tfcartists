@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { SharedNav } from "@/components/shared-nav";
 import { Users, Plus, Loader2 } from "lucide-react";
 
@@ -93,12 +94,22 @@ export default function DJEditorPage() {
                 className="bg-white rounded-xl p-5 shadow-sm border hover:shadow-md transition-shadow group"
               >
                 <div className="flex items-start gap-4">
-                  <div
-                    className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
-                    style={{ backgroundColor: dj.colorPrimary || "#6b7280" }}
-                  >
-                    {dj.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
-                  </div>
+                  {dj.photoUrl ? (
+                    <Image
+                      src={dj.photoUrl}
+                      alt={dj.name}
+                      width={56}
+                      height={56}
+                      className="w-14 h-14 rounded-full object-cover flex-shrink-0"
+                    />
+                  ) : (
+                    <div
+                      className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                      style={{ backgroundColor: dj.colorPrimary || "#6b7280" }}
+                    >
+                      {dj.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-gray-900 truncate group-hover:text-purple-700 transition-colors">

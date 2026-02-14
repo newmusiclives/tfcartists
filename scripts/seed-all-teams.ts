@@ -800,6 +800,7 @@ async function seedStation() {
         voiceDescription: d.voiceDesc,
         musicalFocus: d.musicalFocus,
         personalityTraits: d.traits,
+        photoUrl: `/djs/${d.slug}.png`,
         isActive: true,
         isWeekend: d.weekend,
         colorPrimary: d.primary,

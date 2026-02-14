@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { SharedNav } from "@/components/shared-nav";
-import { ArrowLeft, Save, Trash2, Loader2 } from "lucide-react";
+import { ArrowLeft, Save, Trash2, Loader2, Camera } from "lucide-react";
 
 interface DJDetail {
   id: string;
@@ -38,6 +39,7 @@ export default function DJEditorDetailPage() {
   const [dj, setDj] = useState<DJDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [generatingPhoto, setGeneratingPhoto] = useState(false);
 
   useEffect(() => {
     fetch(`/api/station-djs/${id}`)
@@ -79,6 +81,22 @@ export default function DJEditorDetailPage() {
     router.push("/station-admin/dj-editor");
   };
 
+  const generatePhoto = async () => {
+    if (!dj) return;
+    setGeneratingPhoto(true);
+    try {
+      const res = await fetch(`/api/station-djs/${id}/generate-photo`, { method: "POST" });
+      const data = await res.json();
+      if (data.photoUrl) {
+        setDj({ ...dj, photoUrl: data.photoUrl });
+      }
+    } catch {
+      // handle error
+    } finally {
+      setGeneratingPhoto(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -110,12 +128,16 @@ export default function DJEditorDetailPage() {
 
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div
-              className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold"
-              style={{ backgroundColor: dj.colorPrimary || "#6b7280" }}
-            >
-              {dj.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
-            </div>
+            {dj.photoUrl ? (
+              <Image src={dj.photoUrl} alt={dj.name} width={48} height={48} className="w-12 h-12 rounded-full object-cover" />
+            ) : (
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold"
+                style={{ backgroundColor: dj.colorPrimary || "#6b7280" }}
+              >
+                {dj.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+              </div>
+            )}
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{dj.name}</h1>
               {dj.tagline && <p className="text-gray-500 text-sm italic">{dj.tagline}</p>}
@@ -214,11 +236,31 @@ export default function DJEditorDetailPage() {
           {/* Visual */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
             <h2 className="font-semibold mb-4">Visual Identity</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
+            <div className="flex items-start gap-4 mb-4">
+              {dj.photoUrl ? (
+                <Image src={dj.photoUrl} alt={dj.name} width={96} height={96} className="w-24 h-24 rounded-xl object-cover border" />
+              ) : (
+                <div
+                  className="w-24 h-24 rounded-xl flex items-center justify-center text-white font-bold text-2xl"
+                  style={{ backgroundColor: dj.colorPrimary || "#6b7280" }}
+                >
+                  {dj.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                </div>
+              )}
+              <div className="flex-1">
                 <label className="text-xs text-gray-500 block mb-1">Photo URL</label>
                 <input type="text" value={dj.photoUrl || ""} onChange={(e) => setDj({ ...dj, photoUrl: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" />
+                <button
+                  onClick={generatePhoto}
+                  disabled={generatingPhoto}
+                  className="mt-2 bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-1.5"
+                >
+                  {generatingPhoto ? <Loader2 className="w-3 h-3 animate-spin" /> : <Camera className="w-3 h-3" />}
+                  {generatingPhoto ? "Generating..." : "Generate Photo"}
+                </button>
               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-xs text-gray-500 block mb-1">Primary Color</label>
                 <div className="flex gap-2">
