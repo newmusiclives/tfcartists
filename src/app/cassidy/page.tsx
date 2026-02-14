@@ -137,11 +137,11 @@ export default function CassidyDashboardPage() {
           />
         </section>
 
-        {/* Panel Members */}
+        {/* Team Members */}
         <section className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
             <Users className="w-6 h-6 text-teal-600" />
-            <span>Expert Panel Members</span>
+            <span>Team Members</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
             {[
@@ -359,8 +359,8 @@ export default function CassidyDashboardPage() {
           />
           <QuickLink
             href="/cassidy/team"
-            title="Panel Members"
-            description="6-person expert panel"
+            title="Team Members"
+            description="6-person expert team"
             icon={<Users className="w-6 h-6" />}
             color="cyan"
           />

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   Users,
@@ -24,6 +25,7 @@ interface TeamMember {
   avatar: string;
   color: string;
   icon: React.ReactNode;
+  photoUrl: string;
   responsibilities: string[];
   tools: string[];
   dashboardLink?: string;
@@ -43,6 +45,7 @@ export default function ElliotTeamPage() {
       title: "Team Lead & Strategy",
       avatar: "EB",
       color: "blue",
+      photoUrl: "/team/elliot-brooks.png",
       icon: <Target className="w-6 h-6" />,
       personality: "Warm, strategic, visionary - like Head of Audience at NPR/Spotify",
       responsibilities: [
@@ -68,6 +71,7 @@ export default function ElliotTeamPage() {
       title: "Viral Content Creator",
       avatar: "NL",
       color: "purple",
+      photoUrl: "/team/nova-lane.png",
       icon: <Share2 className="w-6 h-6" />,
       personality: "Energetic, fun, ultra-online - TikTok growth hacker meets content creator",
       responsibilities: [
@@ -93,6 +97,7 @@ export default function ElliotTeamPage() {
       title: "Bridge to Team Riley",
       avatar: "RM",
       color: "teal",
+      photoUrl: "/team/river-maxwell.png",
       icon: <UserPlus className="w-6 h-6" />,
       personality: "Empathetic, supportive, artist-first - bridge between artists and listeners",
       responsibilities: [
@@ -118,6 +123,7 @@ export default function ElliotTeamPage() {
       title: "Belonging Architect",
       avatar: "SH",
       color: "rose",
+      photoUrl: "/team/sage-hart.png",
       icon: <Heart className="w-6 h-6" />,
       personality: "Heart-centered, warm, community-builder - like a pastor meets community manager",
       responsibilities: [
@@ -143,6 +149,7 @@ export default function ElliotTeamPage() {
       title: "Behavioral Scientist",
       avatar: "OP",
       color: "indigo",
+      photoUrl: "/team/orion-pike.png",
       icon: <BarChart3 className="w-6 h-6" />,
       personality: "Analytical but human, strategic, pattern-finder - behavioral psychologist meets data scientist",
       responsibilities: [
@@ -318,9 +325,7 @@ export default function ElliotTeamPage() {
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start space-x-4">
-                        <div className={`w-16 h-16 ${colors.bg} ${colors.text} rounded-xl flex items-center justify-center text-xl font-bold`}>
-                          {member.avatar}
-                        </div>
+                        <Image src={member.photoUrl} alt={member.name} width={64} height={64} className="w-16 h-16 rounded-xl object-cover shadow-md" />
                         <div>
                           <div className="flex items-center space-x-3 mb-1">
                             <h4 className="text-xl font-bold text-gray-900">{member.name}</h4>

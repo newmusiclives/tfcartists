@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   Users,
@@ -24,6 +25,7 @@ interface TeamMember {
   avatar: string;
   color: string;
   icon: React.ReactNode;
+  photoUrl: string;
   responsibilities: string[];
   tools: string[];
   dashboardLink?: string;
@@ -42,6 +44,7 @@ export default function RileyTeamPage() {
       title: "Team Lead & Strategy",
       avatar: "RC",
       color: "purple",
+      photoUrl: "/team/riley-carpenter.png",
       icon: <Sparkles className="w-6 h-6" />,
       responsibilities: [
         "Overall team strategy and coordination",
@@ -66,6 +69,7 @@ export default function RileyTeamPage() {
       title: "First Contact Specialist",
       avatar: "GH",
       color: "indigo",
+      photoUrl: "/team/grace-holland.png",
       icon: <Search className="w-6 h-6" />,
       responsibilities: [
         "Artist discovery across social platforms",
@@ -90,6 +94,7 @@ export default function RileyTeamPage() {
       title: "Artist Success Manager",
       avatar: "MT",
       color: "blue",
+      photoUrl: "/team/marcus-tate.png",
       icon: <BarChart3 className="w-6 h-6" />,
       responsibilities: [
         "Artist roster management (340 artists)",
@@ -114,6 +119,7 @@ export default function RileyTeamPage() {
       title: "Quality Assurance Lead",
       avatar: "SP",
       color: "green",
+      photoUrl: "/team/sienna-park.png",
       icon: <CheckCircle className="w-6 h-6" />,
       responsibilities: [
         "Track submission review and approval",
@@ -138,6 +144,7 @@ export default function RileyTeamPage() {
       title: "Financial Operations",
       avatar: "JC",
       color: "emerald",
+      photoUrl: "/team/jordan-cross.png",
       icon: <DollarSign className="w-6 h-6" />,
       responsibilities: [
         "Monthly pool share calculations ($6,240/month)",
@@ -306,9 +313,7 @@ export default function RileyTeamPage() {
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start space-x-4">
-                        <div className={`w-16 h-16 ${colors.bg} ${colors.text} rounded-xl flex items-center justify-center text-xl font-bold`}>
-                          {member.avatar}
-                        </div>
+                        <Image src={member.photoUrl} alt={member.name} width={64} height={64} className="w-16 h-16 rounded-xl object-cover shadow-md" />
                         <div>
                           <div className="flex items-center space-x-3 mb-1">
                             <h4 className="text-xl font-bold text-gray-900">{member.name}</h4>

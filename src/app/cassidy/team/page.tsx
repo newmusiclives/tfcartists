@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   Users,
@@ -25,6 +26,7 @@ interface TeamMember {
   avatar: string;
   color: string;
   icon: React.ReactNode;
+  photoUrl: string;
   responsibilities: string[];
   tools: string[];
   dashboardLink?: string;
@@ -43,6 +45,7 @@ export default function CassidyTeamPage() {
       title: "Head of Curation & Final Authority",
       avatar: "CM",
       color: "teal",
+      photoUrl: "/team/cassidy-monroe.png",
       icon: <Award className="w-6 h-6" />,
       responsibilities: [
         "Final tier placement decisions (Bronze/Silver/Gold/Platinum)",
@@ -67,6 +70,7 @@ export default function CassidyTeamPage() {
       title: "Technical Assessment Specialist",
       avatar: "DW",
       color: "cyan",
+      photoUrl: "/team/dakota-wells.png",
       icon: <Headphones className="w-6 h-6" />,
       responsibilities: [
         "Production quality and warmth assessment",
@@ -90,6 +94,7 @@ export default function CassidyTeamPage() {
       title: "Commercial Viability & Playlist Strategy",
       avatar: "MR",
       color: "blue",
+      photoUrl: "/team/maya-reeves.png",
       icon: <Radio className="w-6 h-6" />,
       responsibilities: [
         "Rotation compatibility and flow assessment",
@@ -113,6 +118,7 @@ export default function CassidyTeamPage() {
       title: "Performance & Development Specialist",
       avatar: "JC",
       color: "indigo",
+      photoUrl: "/team/jesse-coleman.png",
       icon: <Mic className="w-6 h-6" />,
       responsibilities: [
         "Vocal performance and emotional delivery",
@@ -136,6 +142,7 @@ export default function CassidyTeamPage() {
       title: "Cultural Context & Artistic Merit",
       avatar: "SC",
       color: "purple",
+      photoUrl: "/team/dr-sam-chen.png",
       icon: <BookOpen className="w-6 h-6" />,
       responsibilities: [
         "Musical composition quality evaluation",
@@ -159,6 +166,7 @@ export default function CassidyTeamPage() {
       title: "Growth Potential & Analytics",
       avatar: "WC",
       color: "emerald",
+      photoUrl: "/team/whitley-cross.png",
       icon: <TrendingUp className="w-6 h-6" />,
       responsibilities: [
         "Market positioning and demographic analysis",
@@ -230,8 +238,8 @@ export default function CassidyTeamPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Cassidy's Panel</h1>
-                <p className="text-sm text-gray-600">Expert Submission Review & Rotation Curation</p>
+                <h1 className="text-xl font-bold text-gray-900">Cassidy's Team</h1>
+                <p className="text-sm text-gray-600">Submission Review & Rotation Curation</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -342,7 +350,7 @@ export default function CassidyTeamPage() {
 
         {/* Team Members */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">Expert Panel Members</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">Team Members</h3>
           <div className="space-y-6">
             {teamMembers.map((member) => {
               const colors = getColorClasses(member.color);
@@ -354,9 +362,7 @@ export default function CassidyTeamPage() {
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start space-x-4">
-                        <div className={`w-16 h-16 ${colors.bg} ${colors.text} rounded-xl flex items-center justify-center text-xl font-bold`}>
-                          {member.avatar}
-                        </div>
+                        <Image src={member.photoUrl} alt={member.name} width={64} height={64} className="w-16 h-16 rounded-xl object-cover shadow-md" />
                         <div>
                           <div className="flex items-center space-x-3 mb-1">
                             <h4 className="text-xl font-bold text-gray-900">{member.name}</h4>
