@@ -1,8 +1,20 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Play, Pause, Volume2, VolumeX, Radio, ExternalLink } from "lucide-react";
+import {
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Radio,
+  ExternalLink,
+  Share2,
+  Heart,
+  SkipForward,
+  Headphones,
+} from "lucide-react";
 import Link from "next/link";
+import { useStation } from "@/contexts/StationContext";
 
 const STREAM_URL = "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
 const NOW_PLAYING_URL = "/api/now-playing";
@@ -17,13 +29,17 @@ interface NowPlaying {
 }
 
 export default function PlayerPage() {
+  const { currentStation } = useStation();
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(75);
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "playing" | "error">("idle");
+  const [liked, setLiked] = useState(false);
+  const [sleepTimer, setSleepTimer] = useState<number | null>(null);
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const sleepRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -37,11 +53,23 @@ export default function PlayerPage() {
       if (res.ok) {
         const data: NowPlaying = await res.json();
         setNowPlaying(data);
+
+        // Update media session metadata
+        if ("mediaSession" in navigator && data.title) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: data.title,
+            artist: data.artist_name,
+            album: currentStation.name,
+            ...(data.artwork_url
+              ? { artwork: [{ src: data.artwork_url, sizes: "512x512", type: "image/jpeg" }] }
+              : {}),
+          });
+        }
       }
     } catch {
       // Non-critical
     }
-  }, []);
+  }, [currentStation.name]);
 
   const startPolling = useCallback(() => {
     if (pollRef.current) clearInterval(pollRef.current);
@@ -59,7 +87,16 @@ export default function PlayerPage() {
   useEffect(() => {
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
+      if (sleepRef.current) clearTimeout(sleepRef.current);
     };
+  }, []);
+
+  // Setup Media Session API handlers
+  useEffect(() => {
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.setActionHandler("play", () => handlePlay());
+      navigator.mediaSession.setActionHandler("pause", () => handlePause());
+    }
   }, []);
 
   const handlePlay = useCallback(() => {
@@ -108,7 +145,40 @@ export default function PlayerPage() {
     setStatus("idle");
   }, []);
 
-  const trackTitle = nowPlaying?.title || "North Country Radio";
+  const handleShare = useCallback(async () => {
+    const shareData = {
+      title: nowPlaying?.title || currentStation.name,
+      text: nowPlaying
+        ? `Listening to "${nowPlaying.title}" by ${nowPlaying.artist_name} on ${currentStation.name}`
+        : `Listen to ${currentStation.name}`,
+      url: window.location.origin,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`);
+      }
+    } catch {
+      // User cancelled or not supported
+    }
+  }, [nowPlaying, currentStation.name]);
+
+  const startSleepTimer = useCallback((minutes: number) => {
+    if (sleepRef.current) clearTimeout(sleepRef.current);
+    setSleepTimer(minutes);
+    sleepRef.current = setTimeout(() => {
+      handlePause();
+      setSleepTimer(null);
+    }, minutes * 60_000);
+  }, [handlePause]);
+
+  const cancelSleepTimer = useCallback(() => {
+    if (sleepRef.current) clearTimeout(sleepRef.current);
+    setSleepTimer(null);
+  }, []);
+
+  const trackTitle = nowPlaying?.title || currentStation.name;
   const trackArtist = nowPlaying?.artist_name || "Americana & Country";
   const djName = nowPlaying?.dj_name;
   const listenerCount = nowPlaying?.listener_count;
@@ -133,7 +203,7 @@ export default function PlayerPage() {
         <div className="flex items-center justify-center gap-2.5 pt-6 pb-2 flex-shrink-0">
           <Radio className="w-4 h-4 text-amber-400" />
           <h1 className="text-base font-bold tracking-wide text-amber-100">
-            North Country Radio
+            {currentStation.name}
           </h1>
           <div
             className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
@@ -156,6 +226,14 @@ export default function PlayerPage() {
             {showActive ? "ON AIR" : showLoading ? "LOADING" : "OFFLINE"}
           </div>
         </div>
+
+        {/* Listener count */}
+        {showActive && listenerCount !== undefined && listenerCount > 0 && (
+          <div className="flex items-center justify-center gap-1.5 text-xs text-amber-300/60 flex-shrink-0">
+            <Headphones className="w-3 h-3" />
+            <span>{listenerCount} listening</span>
+          </div>
+        )}
 
         {/* Main Content — fills available space, centers children */}
         <div className="flex-1 flex flex-col items-center justify-center gap-4 py-4 min-h-0">
@@ -222,18 +300,37 @@ export default function PlayerPage() {
 
         {/* Controls — pinned to bottom */}
         <div className="flex flex-col items-center gap-4 pb-4 flex-shrink-0">
-          {/* Play/Pause Button */}
-          <button
-            onClick={togglePlayPause}
-            className="w-16 h-16 rounded-full bg-amber-500 hover:bg-amber-400 active:scale-95 transition-all flex items-center justify-center shadow-lg shadow-amber-900/50"
-            aria-label={isPlaying ? "Pause" : "Play"}
-          >
-            {isPlaying || showLoading ? (
-              <Pause className="w-7 h-7 text-amber-950" />
-            ) : (
-              <Play className="w-7 h-7 text-amber-950 ml-0.5" />
-            )}
-          </button>
+          {/* Action Buttons Row */}
+          <div className="flex items-center gap-6">
+            <button
+              onClick={() => setLiked(!liked)}
+              className={`transition-colors ${liked ? "text-red-400" : "text-amber-400/50 hover:text-amber-400"}`}
+              aria-label={liked ? "Unlike" : "Like"}
+            >
+              <Heart className={`w-5 h-5 ${liked ? "fill-current" : ""}`} />
+            </button>
+
+            {/* Play/Pause Button */}
+            <button
+              onClick={togglePlayPause}
+              className="w-16 h-16 rounded-full bg-amber-500 hover:bg-amber-400 active:scale-95 transition-all flex items-center justify-center shadow-lg shadow-amber-900/50"
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying || showLoading ? (
+                <Pause className="w-7 h-7 text-amber-950" />
+              ) : (
+                <Play className="w-7 h-7 text-amber-950 ml-0.5" />
+              )}
+            </button>
+
+            <button
+              onClick={handleShare}
+              className="text-amber-400/50 hover:text-amber-400 transition-colors"
+              aria-label="Share"
+            >
+              <Share2 className="w-5 h-5" />
+            </button>
+          </div>
 
           {/* Volume Slider */}
           <div className="flex items-center gap-3 w-full max-w-xs">
@@ -257,6 +354,31 @@ export default function PlayerPage() {
               className="flex-1 h-1.5 accent-amber-400 bg-amber-700 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-amber-400"
               aria-label="Volume"
             />
+          </div>
+
+          {/* Sleep Timer */}
+          <div className="flex items-center gap-3 text-xs">
+            {sleepTimer ? (
+              <button
+                onClick={cancelSleepTimer}
+                className="text-amber-400 hover:text-amber-300 px-3 py-1 rounded-full border border-amber-400/30"
+              >
+                Sleep timer: {sleepTimer}min (cancel)
+              </button>
+            ) : (
+              <div className="flex items-center gap-2 text-amber-400/40">
+                <span>Sleep:</span>
+                {[15, 30, 60].map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => startSleepTimer(m)}
+                    className="hover:text-amber-400 px-2 py-0.5 rounded-full border border-amber-400/20 hover:border-amber-400/40 transition-colors"
+                  >
+                    {m}m
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Open Full Site Link */}

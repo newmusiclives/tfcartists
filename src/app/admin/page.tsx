@@ -16,6 +16,8 @@ import {
   BarChart3,
   Calendar,
   MessageCircle,
+  Activity,
+  Wallet,
 } from "lucide-react";
 import { SharedNav } from "@/components/shared-nav";
 import { formatCurrency, getStatusColor } from "@/lib/utils";
@@ -539,11 +541,11 @@ export default function AdminDashboard() {
         {/* Quick Links */}
         <section className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           <QuickLink href="/admin/artists" label="All Artists" icon={<Users className="w-5 h-5" />} color="purple" />
-          <QuickLink href="/revenue" label="Revenue" icon={<DollarSign className="w-5 h-5" />} color="green" />
-          <QuickLink href="/airplay" label="Airplay Tiers" icon={<Radio className="w-5 h-5" />} color="blue" />
+          <QuickLink href="/admin/financials" label="Financials" icon={<Wallet className="w-5 h-5" />} color="green" />
+          <QuickLink href="/admin/stream-status" label="Stream" icon={<Activity className="w-5 h-5" />} color="blue" />
           <QuickLink href="/capacity" label="Capacity" icon={<BarChart3 className="w-5 h-5" />} color="orange" />
-          <QuickLink href="/schedule" label="DJ Schedule" icon={<Calendar className="w-5 h-5" />} color="pink" />
-          <QuickLink href="/network" label="Network" icon={<MessageCircle className="w-5 h-5" />} color="teal" />
+          <QuickLink href="/portal/artist" label="Artist Portal" icon={<Radio className="w-5 h-5" />} color="pink" />
+          <QuickLink href="/portal/sponsor" label="Sponsor Portal" icon={<Building2 className="w-5 h-5" />} color="teal" />
         </section>
       </main>
     </div>

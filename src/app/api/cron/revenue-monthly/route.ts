@@ -6,6 +6,8 @@ import {
   calculateMonthlyScoutCommissions,
   processScoutPayouts,
 } from "@/lib/scout/monthly-payout";
+import { sendEarningsNotification } from "@/lib/email";
+import { sendEarningsAlert } from "@/lib/sms";
 
 /**
  * Revenue Distribution Cron Job
@@ -180,6 +182,30 @@ export async function GET(req: NextRequest) {
       perShareValue,
       artistsCount: artists.length,
     });
+
+    // Send earnings notifications to artists with email/phone
+    const artistsWithContact = await prisma.artist.findMany({
+      where: {
+        id: { in: earningsRecords.map((e) => e.artistId) },
+        OR: [
+          { email: { not: null } },
+          { phone: { not: null } },
+        ],
+      },
+      select: { id: true, name: true, email: true, phone: true },
+    });
+
+    for (const a of artistsWithContact) {
+      const record = earningsRecords.find((e) => e.artistId === a.id);
+      if (!record || record.earnings <= 0) continue;
+
+      if (a.email) {
+        sendEarningsNotification(a.email, a.name, period, record.earnings).catch(() => {});
+      }
+      if (a.phone) {
+        sendEarningsAlert(a.phone, a.name, record.earnings, period).catch(() => {});
+      }
+    }
 
     // 6. Calculate Scout Commissions (from artist tier payments, not ad revenue pool)
     logger.info("Calculating scout commissions...");

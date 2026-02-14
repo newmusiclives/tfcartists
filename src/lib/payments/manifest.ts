@@ -318,8 +318,27 @@ class ManifestFinancial {
       throw new Error("Manifest webhook secret not configured");
     }
 
-    // TODO: Implement signature verification
-    // This depends on Manifest's specific webhook signing method
+    // HMAC-SHA256 signature verification
+    const crypto = await import("crypto");
+    const expectedSignature = crypto
+      .createHmac("sha256", webhookSecret)
+      .update(payload)
+      .digest("hex");
+
+    const sigPrefix = "sha256=";
+    const providedSig = signature.startsWith(sigPrefix)
+      ? signature.slice(sigPrefix.length)
+      : signature;
+
+    if (
+      !providedSig ||
+      !crypto.timingSafeEqual(
+        Buffer.from(expectedSignature, "hex"),
+        Buffer.from(providedSig, "hex")
+      )
+    ) {
+      throw new Error("Invalid webhook signature");
+    }
 
     const event = JSON.parse(payload);
 

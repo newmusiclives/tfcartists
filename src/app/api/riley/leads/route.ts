@@ -1,44 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
+import { handleApiError } from "@/lib/api/errors";
 
-// In production, these would come from database
-// For now, using in-memory storage for demonstration
-let leads = [
-  {
-    id: 1,
-    name: "Sarah Martinez",
-    genre: "Indie Folk",
-    location: "Burlington, VT",
-    source: "instagram",
-    socialHandle: "@sarahmartinezmusic",
-    email: "sarah@example.com",
-    followers: 2400,
-    lastShow: "The Higher Ground - Jan 15",
-    status: "new",
-    notes: "Strong engagement on recent posts. Has upcoming show at Nectar's.",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    name: "The Wanderers",
-    genre: "Americana",
-    location: "Montpelier, VT",
-    source: "venue",
-    email: "band@thewanderers.com",
-    phone: "(802) 555-0123",
-    website: "thewanderers.com",
-    lastShow: "Langdon Street Cafe - Jan 10",
-    status: "contacted",
-    firstContact: "Jan 18, 2024",
-    lastContact: "Jan 18, 2024",
-    nextFollowUp: "Jan 25, 2024",
-    notes: "Sent initial outreach email. Waiting for response.",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
+export const dynamic = "force-dynamic";
 
-// GET /api/riley/leads - Get all leads
+// GET /api/riley/leads - Get all leads (artists in discovery pipeline)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -46,88 +12,144 @@ export async function GET(request: NextRequest) {
     const source = searchParams.get("source");
     const search = searchParams.get("search");
 
-    let filteredLeads = [...leads];
+    const where: any = { deletedAt: null };
 
-    // Filter by status
+    // Filter by status (mapped to ArtistStatus)
     if (status && status !== "all") {
-      filteredLeads = filteredLeads.filter((lead) => lead.status === status);
+      const statusMap: Record<string, string> = {
+        new: "DISCOVERED",
+        contacted: "CONTACTED",
+        engaged: "ENGAGED",
+        qualified: "QUALIFIED",
+        onboarding: "ONBOARDING",
+        activated: "ACTIVATED",
+        active: "ACTIVE",
+      };
+      where.status = statusMap[status] || status.toUpperCase();
     }
 
     // Filter by source
     if (source && source !== "all") {
-      filteredLeads = filteredLeads.filter((lead) => lead.source === source);
+      where.discoverySource = source;
     }
 
     // Search filter
     if (search) {
-      const searchLower = search.toLowerCase();
-      filteredLeads = filteredLeads.filter(
-        (lead) =>
-          lead.name.toLowerCase().includes(searchLower) ||
-          lead.genre.toLowerCase().includes(searchLower) ||
-          lead.location.toLowerCase().includes(searchLower)
-      );
+      where.OR = [
+        { name: { contains: search } },
+        { genre: { contains: search } },
+        { email: { contains: search } },
+      ];
     }
+
+    const artists = await prisma.artist.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        name: true,
+        genre: true,
+        email: true,
+        phone: true,
+        discoverySource: true,
+        sourceHandle: true,
+        sourceUrl: true,
+        followerCount: true,
+        status: true,
+        pipelineStage: true,
+        lastContactedAt: true,
+        nextFollowUpAt: true,
+        nextShowVenue: true,
+        nextShowCity: true,
+        nextShowDate: true,
+        conversationCount: true,
+        airplayTier: true,
+        createdAt: true,
+        updatedAt: true,
+        metadata: true,
+      },
+    });
+
+    // Map to lead format for frontend compatibility
+    const leads = artists.map((a) => ({
+      id: a.id,
+      name: a.name,
+      genre: a.genre || "",
+      location: a.nextShowCity || "",
+      source: a.discoverySource,
+      socialHandle: a.sourceHandle,
+      email: a.email,
+      phone: a.phone,
+      website: a.sourceUrl,
+      followers: a.followerCount,
+      lastShow: a.nextShowVenue
+        ? `${a.nextShowVenue}${a.nextShowDate ? ` - ${new Date(a.nextShowDate).toLocaleDateString()}` : ""}`
+        : null,
+      status: a.pipelineStage,
+      firstContact: a.lastContactedAt?.toISOString() || null,
+      lastContact: a.lastContactedAt?.toISOString() || null,
+      nextFollowUp: a.nextFollowUpAt?.toISOString() || null,
+      notes: typeof a.metadata === "object" && a.metadata !== null ? (a.metadata as any).notes || "" : "",
+      airplayTier: a.airplayTier,
+      conversationCount: a.conversationCount,
+      createdAt: a.createdAt.toISOString(),
+      updatedAt: a.updatedAt.toISOString(),
+    }));
 
     return NextResponse.json({
       success: true,
-      data: filteredLeads,
-      count: filteredLeads.length,
+      data: leads,
+      count: leads.length,
     });
   } catch (error) {
-    console.error("Error fetching leads:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch leads" },
-      { status: 500 }
-    );
+    return handleApiError(error, "/api/riley/leads");
   }
 }
 
-// POST /api/riley/leads - Create new lead
+// POST /api/riley/leads - Create new lead (artist)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Validate required fields
-    if (!body.name || !body.genre || !body.location || !body.source) {
+    if (!body.name || !body.source) {
       return NextResponse.json(
-        { success: false, error: "Missing required fields" },
+        { success: false, error: "Name and source are required" },
         { status: 400 }
       );
     }
 
-    // Create new lead
-    const newLead = {
-      id: leads.length + 1,
-      name: body.name,
-      genre: body.genre,
-      location: body.location,
-      source: body.source,
-      socialHandle: body.socialHandle,
-      email: body.email,
-      phone: body.phone,
-      website: body.website,
-      followers: body.followers,
-      lastShow: body.lastShow,
-      status: "new",
-      notes: body.notes,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    leads.push(newLead);
+    const artist = await prisma.artist.create({
+      data: {
+        name: body.name,
+        genre: body.genre || null,
+        email: body.email || null,
+        phone: body.phone || null,
+        discoverySource: body.source,
+        sourceHandle: body.socialHandle || null,
+        sourceUrl: body.website || null,
+        followerCount: body.followers || null,
+        nextShowVenue: body.lastShow || null,
+        nextShowCity: body.location || null,
+        status: "DISCOVERED",
+        pipelineStage: "discovery",
+        metadata: body.notes ? { notes: body.notes } : undefined,
+      },
+    });
 
     return NextResponse.json({
       success: true,
-      data: newLead,
+      data: {
+        id: artist.id,
+        name: artist.name,
+        genre: artist.genre,
+        source: artist.discoverySource,
+        status: artist.pipelineStage,
+        createdAt: artist.createdAt.toISOString(),
+      },
       message: "Lead created successfully",
     });
   } catch (error) {
-    console.error("Error creating lead:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to create lead" },
-      { status: 500 }
-    );
+    return handleApiError(error, "/api/riley/leads");
   }
 }
 
@@ -143,37 +165,49 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const leadIndex = leads.findIndex((lead) => lead.id === body.id);
+    const statusMap: Record<string, { status: string; pipelineStage: string }> = {
+      new: { status: "DISCOVERED", pipelineStage: "discovery" },
+      contacted: { status: "CONTACTED", pipelineStage: "contacted" },
+      engaged: { status: "ENGAGED", pipelineStage: "engaged" },
+      qualified: { status: "QUALIFIED", pipelineStage: "qualified" },
+      onboarding: { status: "ONBOARDING", pipelineStage: "onboarding" },
+      activated: { status: "ACTIVATED", pipelineStage: "activated" },
+    };
 
-    if (leadIndex === -1) {
-      return NextResponse.json(
-        { success: false, error: "Lead not found" },
-        { status: 404 }
-      );
+    const updateData: any = {};
+    if (body.name) updateData.name = body.name;
+    if (body.genre) updateData.genre = body.genre;
+    if (body.email) updateData.email = body.email;
+    if (body.phone) updateData.phone = body.phone;
+    if (body.source) updateData.discoverySource = body.source;
+    if (body.socialHandle) updateData.sourceHandle = body.socialHandle;
+    if (body.website) updateData.sourceUrl = body.website;
+    if (body.followers !== undefined) updateData.followerCount = body.followers;
+    if (body.location) updateData.nextShowCity = body.location;
+    if (body.status && statusMap[body.status]) {
+      updateData.status = statusMap[body.status].status;
+      updateData.pipelineStage = statusMap[body.status].pipelineStage;
+    }
+    if (body.notes) {
+      updateData.metadata = { notes: body.notes };
     }
 
-    // Update lead
-    leads[leadIndex] = {
-      ...leads[leadIndex],
-      ...body,
-      updatedAt: new Date().toISOString(),
-    };
+    const artist = await prisma.artist.update({
+      where: { id: body.id },
+      data: updateData,
+    });
 
     return NextResponse.json({
       success: true,
-      data: leads[leadIndex],
+      data: { id: artist.id, name: artist.name },
       message: "Lead updated successfully",
     });
   } catch (error) {
-    console.error("Error updating lead:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to update lead" },
-      { status: 500 }
-    );
+    return handleApiError(error, "/api/riley/leads");
   }
 }
 
-// DELETE /api/riley/leads - Delete lead
+// DELETE /api/riley/leads - Soft delete lead
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -186,26 +220,16 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const leadIndex = leads.findIndex((lead) => lead.id === parseInt(id));
-
-    if (leadIndex === -1) {
-      return NextResponse.json(
-        { success: false, error: "Lead not found" },
-        { status: 404 }
-      );
-    }
-
-    leads.splice(leadIndex, 1);
+    await prisma.artist.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
 
     return NextResponse.json({
       success: true,
       message: "Lead deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting lead:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to delete lead" },
-      { status: 500 }
-    );
+    return handleApiError(error, "/api/riley/leads");
   }
 }
