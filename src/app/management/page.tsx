@@ -27,204 +27,7 @@ import {
   UserCircle,
 } from "lucide-react";
 import { SharedNav } from "@/components/shared-nav";
-
-// --- Station Build Playbook Phases ---
-interface PlaybookPhase {
-  id: string;
-  phase: number;
-  name: string;
-  team: string;
-  teamColor: string;
-  teamHref: string;
-  description: string;
-  tasks: { name: string; status: "done" | "in_progress" | "blocked" | "todo"; owner: string }[];
-}
-
-const PLAYBOOK_PHASES: PlaybookPhase[] = [
-  {
-    id: "foundation",
-    phase: 1,
-    name: "Station Foundation",
-    team: "Station Ops",
-    teamColor: "amber",
-    teamHref: "/station-admin",
-    description: "Core station infrastructure: identity, music library, DJs, schedule, and stream",
-    tasks: [
-      { name: "Station identity & branding", status: "done", owner: "Station Ops" },
-      { name: "Music library (1,200 songs)", status: "done", owner: "Station Ops" },
-      { name: "DJ roster (12 DJs configured)", status: "done", owner: "Station Ops" },
-      { name: "Schedule (24/7 coverage)", status: "done", owner: "Station Ops" },
-      { name: "Clock templates (5 rotation patterns)", status: "done", owner: "Station Ops" },
-      { name: "Show features (34 AI segments)", status: "done", owner: "Station Ops" },
-      { name: "Show transitions (14 intros/outros)", status: "done", owner: "Station Ops" },
-      { name: "Stream engineering & audio processing", status: "done", owner: "Station Ops" },
-    ],
-  },
-  {
-    id: "curation",
-    phase: 2,
-    name: "Content & Curation",
-    team: "Team Cassidy",
-    teamColor: "teal",
-    teamHref: "/cassidy",
-    description: "Rotation curation, tier structure, quality standards, and review pipeline",
-    tasks: [
-      { name: "Define tier structure (Bronze/Silver/Gold/Platinum)", status: "done", owner: "Cassidy Monroe" },
-      { name: "Set quality standards & review criteria", status: "done", owner: "Dakota Wells" },
-      { name: "Initial rotation curation (200 artists)", status: "in_progress", owner: "Maya Reeves" },
-      { name: "80/20 indie transformation plan", status: "in_progress", owner: "Cassidy Monroe" },
-      { name: "Progression pathway design", status: "in_progress", owner: "Jesse Coleman" },
-      { name: "Audience analytics baseline", status: "todo", owner: "Whitley Cross" },
-    ],
-  },
-  {
-    id: "artists",
-    phase: 3,
-    name: "Artist Acquisition",
-    team: "Team Riley",
-    teamColor: "purple",
-    teamHref: "/riley",
-    description: "Artist discovery, outreach, onboarding, tier subscriptions, and revenue pool",
-    tasks: [
-      { name: "Artist discovery pipeline active", status: "done", owner: "Grace Holland" },
-      { name: "Outreach campaigns running", status: "in_progress", owner: "Grace Holland" },
-      { name: "Tier subscription system live", status: "done", owner: "Marcus Tate" },
-      { name: "Pool share calculator operational", status: "done", owner: "Jordan Cross" },
-      { name: "Quality vetting pipeline active", status: "in_progress", owner: "Sienna Park" },
-      { name: "Upgrade opportunity engine active", status: "in_progress", owner: "Riley Carpenter" },
-      { name: "Hit 100 paying artists target", status: "todo", owner: "Riley Carpenter" },
-    ],
-  },
-  {
-    id: "revenue",
-    phase: 4,
-    name: "Revenue Generation",
-    team: "Team Harper",
-    teamColor: "green",
-    teamHref: "/harper",
-    description: "Sponsor acquisition, ad operations, billing, and artist pool distribution",
-    tasks: [
-      { name: "Sponsor tier packages defined", status: "done", owner: "Harper AI" },
-      { name: "Sponsor outreach pipeline active", status: "in_progress", owner: "Blake Morrison" },
-      { name: "Ad operations & scheduling live", status: "in_progress", owner: "Dakota Chen" },
-      { name: "Billing & invoicing system active", status: "in_progress", owner: "Riley Nguyen" },
-      { name: "Hit 50 sponsors target", status: "todo", owner: "Cameron Wells" },
-      { name: "Premium add-on upselling active", status: "todo", owner: "Harper AI" },
-      { name: "First artist pool payout processed", status: "todo", owner: "Riley Nguyen" },
-    ],
-  },
-  {
-    id: "growth",
-    phase: 5,
-    name: "Audience Growth",
-    team: "Team Elliot",
-    teamColor: "blue",
-    teamHref: "/elliot",
-    description: "Social content, community building, habit formation, and listener campaigns",
-    tasks: [
-      { name: "Social media accounts active", status: "done", owner: "Nova Lane" },
-      { name: "Viral content engine running", status: "in_progress", owner: "Nova Lane" },
-      { name: "Artist fan activation system", status: "in_progress", owner: "River Maxwell" },
-      { name: "Community platform (Discord/Facebook)", status: "todo", owner: "Sage Hart" },
-      { name: "Habit formation messaging", status: "todo", owner: "Orion Pike" },
-      { name: "Hit 500 DAU target", status: "todo", owner: "Elliot Brooks" },
-      { name: "First growth campaign launched", status: "todo", owner: "Elliot Brooks" },
-    ],
-  },
-];
-
-// --- Priority Actions ---
-interface PriorityAction {
-  id: string;
-  priority: "critical" | "high" | "medium";
-  title: string;
-  description: string;
-  team: string;
-  teamColor: string;
-  assignedTo: string;
-  href: string;
-  dueLabel: string;
-}
-
-const PRIORITY_ACTIONS: PriorityAction[] = [
-  {
-    id: "1",
-    priority: "critical",
-    title: "Complete initial rotation curation",
-    description: "Maya Reeves needs to finalize the initial 200-artist rotation with proper daypart programming",
-    team: "Cassidy",
-    teamColor: "teal",
-    assignedTo: "Maya Reeves",
-    href: "/cassidy/rotation",
-    dueLabel: "This week",
-  },
-  {
-    id: "2",
-    priority: "critical",
-    title: "Launch first sponsor outreach wave",
-    description: "Blake Morrison to contact 20 local businesses with sponsorship packages",
-    team: "Harper",
-    teamColor: "green",
-    assignedTo: "Blake Morrison",
-    href: "/harper/outreach",
-    dueLabel: "This week",
-  },
-  {
-    id: "3",
-    priority: "high",
-    title: "Scale artist outreach to 50 contacts/week",
-    description: "Grace Holland to increase outreach volume to hit 100 paying artists milestone",
-    team: "Riley",
-    teamColor: "purple",
-    assignedTo: "Grace Holland",
-    href: "/riley/outreach",
-    dueLabel: "Next 2 weeks",
-  },
-  {
-    id: "4",
-    priority: "high",
-    title: "Launch first viral content campaign",
-    description: "Nova Lane to produce 10 short-form videos showcasing DJ personalities and artist spotlights",
-    team: "Elliot",
-    teamColor: "blue",
-    assignedTo: "Nova Lane",
-    href: "/elliot/content",
-    dueLabel: "Next 2 weeks",
-  },
-  {
-    id: "5",
-    priority: "high",
-    title: "Set up community Discord server",
-    description: "Sage Hart to launch the listener community with welcome channels, listening parties, and challenges",
-    team: "Elliot",
-    teamColor: "blue",
-    assignedTo: "Sage Hart",
-    href: "/elliot/community",
-    dueLabel: "Next 2 weeks",
-  },
-  {
-    id: "6",
-    priority: "medium",
-    title: "Establish audience analytics baseline",
-    description: "Whitley Cross to set up tracking for listener demographics, engagement, and growth trends",
-    team: "Cassidy",
-    teamColor: "teal",
-    assignedTo: "Whitley Cross",
-    href: "/cassidy",
-    dueLabel: "This month",
-  },
-  {
-    id: "7",
-    priority: "medium",
-    title: "Process first artist pool payout",
-    description: "Riley Nguyen to run first monthly distribution once sponsor revenue reaches $5,000",
-    team: "Harper",
-    teamColor: "green",
-    assignedTo: "Riley Nguyen",
-    href: "/harper/billing",
-    dueLabel: "This month",
-  },
-];
+import { useStation } from "@/contexts/StationContext";
 
 // --- Management Team ---
 const MANAGEMENT_TEAM = [
@@ -254,45 +57,78 @@ const MANAGEMENT_TEAM = [
   },
 ];
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface StatsData {
+  kpis: any;
+  targets: any;
+  playbook: Record<string, { phase: number; name: string; team: string; total: number; done: number; progress: number }>;
+  playbookOverall: { total: number; completed: number; progress: number };
+  priorityActions: any[];
+}
+
+interface ActivityItem {
+  id: string;
+  team: string;
+  action: string;
+  details: string;
+  timestamp: string;
+  successful: boolean;
+}
+
 export default function ManagementDashboard() {
-  const [expandedPhase, setExpandedPhase] = useState<string | null>("curation");
+  const { currentStation } = useStation();
+  const [expandedPhase, setExpandedPhase] = useState<string | null>(null);
+  const [stats, setStats] = useState<StatsData | null>(null);
+  const [activity, setActivity] = useState<ActivityItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Calculate playbook progress
-  const totalTasks = PLAYBOOK_PHASES.reduce((sum, p) => sum + p.tasks.length, 0);
-  const completedTasks = PLAYBOOK_PHASES.reduce(
-    (sum, p) => sum + p.tasks.filter((t) => t.status === "done").length,
-    0
-  );
-  const inProgressTasks = PLAYBOOK_PHASES.reduce(
-    (sum, p) => sum + p.tasks.filter((t) => t.status === "in_progress").length,
-    0
-  );
-  const overallProgress = Math.round((completedTasks / totalTasks) * 100);
-
-  const getPhaseProgress = (phase: PlaybookPhase) => {
-    const done = phase.tasks.filter((t) => t.status === "done").length;
-    return Math.round((done / phase.tasks.length) * 100);
-  };
-
-  const getTeamHealth = (teamKey: string) => {
-    const phase = PLAYBOOK_PHASES.find((p) => p.id === teamKey);
-    if (!phase) return { score: 0, status: "unknown" };
-    const done = phase.tasks.filter((t) => t.status === "done").length;
-    const inProg = phase.tasks.filter((t) => t.status === "in_progress").length;
-    const pct = Math.round(((done + inProg * 0.5) / phase.tasks.length) * 100);
-    if (pct >= 80) return { score: pct, status: "healthy" };
-    if (pct >= 50) return { score: pct, status: "active" };
-    return { score: pct, status: "needs_attention" };
-  };
-
-  const statusIcon = (status: string) => {
-    switch (status) {
-      case "done": return <CheckCircle2 className="w-4 h-4 text-green-500" />;
-      case "in_progress": return <Play className="w-4 h-4 text-blue-500" />;
-      case "blocked": return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      default: return <Clock className="w-4 h-4 text-gray-400" />;
+  // Fetch live data
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [statsRes, activityRes] = await Promise.all([
+          fetch(`/api/management/stats?stationId=${currentStation.id}`, { cache: "no-store" }),
+          fetch("/api/management/activity?limit=10", { cache: "no-store" }),
+        ]);
+        if (statsRes.ok) {
+          setStats(await statsRes.json());
+        }
+        if (activityRes.ok) {
+          const data = await activityRes.json();
+          setActivity(data.activity || []);
+        }
+      } catch {
+        // Use empty state
+      } finally {
+        setLoading(false);
+      }
     }
-  };
+
+    fetchData();
+
+    // Auto-refresh every 30 seconds
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, [currentStation.id]);
+
+  const kpis = stats?.kpis;
+  const targets = stats?.targets;
+  const playbook = stats?.playbook;
+  const playbookOverall = stats?.playbookOverall;
+  const priorityActions = stats?.priorityActions || [];
+
+  const overallProgress = playbookOverall?.progress || 0;
+  const completedTasks = playbookOverall?.completed || 0;
+  const totalTasks = playbookOverall?.total || 0;
+
+  // Playbook phases for display
+  const playbookPhases = playbook ? [
+    { id: "foundation", teamColor: "amber", teamHref: "/station-admin", ...playbook.foundation },
+    { id: "curation", teamColor: "teal", teamHref: "/cassidy", ...playbook.curation },
+    { id: "artists", teamColor: "purple", teamHref: "/riley", ...playbook.artists },
+    { id: "revenue", teamColor: "green", teamHref: "/harper", ...playbook.revenue },
+    { id: "growth", teamColor: "blue", teamHref: "/elliot", ...playbook.growth },
+  ] : [];
 
   const priorityBadge = (priority: string) => {
     switch (priority) {
@@ -310,6 +146,10 @@ export default function ManagementDashboard() {
     blue: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-300", gradient: "from-blue-500 to-cyan-500" },
   };
 
+  const teamColorForName: Record<string, string> = {
+    Riley: "purple", Harper: "green", Cassidy: "teal", Elliot: "blue",
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <SharedNav />
@@ -324,7 +164,7 @@ export default function ManagementDashboard() {
                 <div>
                   <h1 className="text-3xl font-bold">Station Manager</h1>
                   <p className="text-amber-100">
-                    North Country Radio - Cross-Team Coordination & Playbook
+                    {currentStation.name} - Cross-Team Coordination & Playbook
                   </p>
                 </div>
               </div>
@@ -338,8 +178,12 @@ export default function ManagementDashboard() {
                   <div className="text-amber-200 text-sm">Tasks Complete</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold">{inProgressTasks}</div>
-                  <div className="text-amber-200 text-sm">In Progress</div>
+                  <div className="text-3xl font-bold">{kpis?.artistCount ?? "—"}</div>
+                  <div className="text-amber-200 text-sm">Artists</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold">{kpis?.listenerCount ?? "—"}</div>
+                  <div className="text-amber-200 text-sm">Listeners</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold">5</div>
@@ -348,6 +192,13 @@ export default function ManagementDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-3">
+              <Link
+                href="/management/launch-plan"
+                className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-lg text-amber-700 font-semibold hover:bg-amber-50 transition-colors"
+              >
+                <Zap className="w-4 h-4" />
+                <span>90-Day Launch Plan</span>
+              </Link>
               <Link
                 href="/management/team"
                 className="inline-flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors"
@@ -368,6 +219,13 @@ export default function ManagementDashboard() {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {loading && (
+          <div className="text-center py-12">
+            <div className="animate-spin w-8 h-8 border-4 border-amber-300 border-t-amber-700 rounded-full mx-auto mb-4" />
+            <p className="text-gray-600">Loading live station data...</p>
+          </div>
+        )}
+
         {/* Management Team Mini Cards */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {MANAGEMENT_TEAM.map((member, idx) => (
@@ -384,310 +242,254 @@ export default function ManagementDashboard() {
           ))}
         </section>
 
+        {/* Live KPIs */}
+        {kpis && targets && (
+          <section className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Live Station KPIs</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <KPICard
+                label="Monthly Revenue"
+                current={`$${kpis.totalRevenue.toLocaleString()}`}
+                target={`$${targets.revenue.toLocaleString()}`}
+                progress={Math.min(100, Math.round((kpis.totalRevenue / targets.revenue) * 100))}
+                color="green"
+                team="Harper + Riley"
+              />
+              <KPICard
+                label="Total Artists"
+                current={kpis.artistCount.toString()}
+                target={targets.artists.toString()}
+                progress={Math.min(100, Math.round((kpis.artistCount / targets.artists) * 100))}
+                color="purple"
+                team="Riley + Cassidy"
+              />
+              <KPICard
+                label="Active Sponsors"
+                current={kpis.activeSponsors.toString()}
+                target={targets.sponsors.toString()}
+                progress={Math.min(100, Math.round((kpis.activeSponsors / targets.sponsors) * 100))}
+                color="green"
+                team="Harper"
+              />
+              <KPICard
+                label="Listeners"
+                current={kpis.listenerCount.toLocaleString()}
+                target={targets.listeners.toLocaleString()}
+                progress={Math.min(100, Math.round((kpis.listenerCount / targets.listeners) * 100))}
+                color="blue"
+                team="Elliot"
+              />
+            </div>
+          </section>
+        )}
+
         {/* Team Health Overview */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Team Health & Progress</h2>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {PLAYBOOK_PHASES.map((phase) => {
-              const health = getTeamHealth(phase.id);
-              const progress = getPhaseProgress(phase);
-              const colors = teamColorMap[phase.teamColor];
-              const statusColors = {
-                healthy: "text-green-600 bg-green-50",
-                active: "text-blue-600 bg-blue-50",
-                needs_attention: "text-orange-600 bg-orange-50",
-                unknown: "text-gray-600 bg-gray-50",
-              }[health.status];
+        {playbookPhases.length > 0 && (
+          <section className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Team Health & Progress</h2>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              {playbookPhases.map((phase) => {
+                const colors = teamColorMap[phase.teamColor];
+                const healthStatus = phase.progress >= 80 ? "healthy" : phase.progress >= 40 ? "active" : "needs_attention";
+                const statusColors = {
+                  healthy: "text-green-600 bg-green-50",
+                  active: "text-blue-600 bg-blue-50",
+                  needs_attention: "text-orange-600 bg-orange-50",
+                }[healthStatus];
 
-              return (
-                <Link key={phase.id} href={phase.teamHref} className="block group">
-                  <div className={`rounded-lg p-4 border-2 ${colors.border} hover:shadow-md transition-all`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colors.bg} ${colors.text}`}>
-                        Phase {phase.phase}
-                      </span>
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${statusColors}`}>
-                        {health.status === "healthy" ? "Healthy" : health.status === "active" ? "Active" : "Needs Work"}
-                      </span>
+                return (
+                  <Link key={phase.id} href={phase.teamHref} className="block group">
+                    <div className={`rounded-lg p-4 border-2 ${colors.border} hover:shadow-md transition-all`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colors.bg} ${colors.text}`}>
+                          Phase {phase.phase}
+                        </span>
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${statusColors}`}>
+                          {healthStatus === "healthy" ? "Healthy" : healthStatus === "active" ? "Active" : "Needs Work"}
+                        </span>
+                      </div>
+                      <div className="font-bold text-gray-900 text-sm mb-1">{phase.team}</div>
+                      <div className="text-xs text-gray-600 mb-3">{phase.name}</div>
+                      <div className="bg-gray-200 rounded-full h-2 overflow-hidden mb-1">
+                        <div
+                          className={`h-full rounded-full bg-gradient-to-r ${colors.gradient}`}
+                          style={{ width: `${phase.progress}%` }}
+                        />
+                      </div>
+                      <div className="text-xs text-gray-500 text-right">{phase.done}/{phase.total} done</div>
                     </div>
-                    <div className="font-bold text-gray-900 text-sm mb-1">{phase.team}</div>
-                    <div className="text-xs text-gray-600 mb-3">{phase.name}</div>
-                    <div className="bg-gray-200 rounded-full h-2 overflow-hidden mb-1">
-                      <div
-                        className={`h-full rounded-full bg-gradient-to-r ${colors.gradient}`}
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-                    <div className="text-xs text-gray-500 text-right">{progress}% complete</div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Priority Actions */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">Priority Actions</h2>
-              <p className="text-sm text-gray-600 mt-1">
-                Cross-team tasks that need attention to keep the station build on track
-              </p>
+                  </Link>
+                );
+              })}
             </div>
-            <div className="flex items-center space-x-2 text-sm">
-              <span className="inline-flex items-center space-x-1 px-2 py-1 bg-red-50 text-red-700 rounded-full">
-                <span className="w-2 h-2 bg-red-500 rounded-full" />
-                <span className="font-medium">{PRIORITY_ACTIONS.filter((a) => a.priority === "critical").length} Critical</span>
-              </span>
-              <span className="inline-flex items-center space-x-1 px-2 py-1 bg-orange-50 text-orange-700 rounded-full">
-                <span className="w-2 h-2 bg-orange-500 rounded-full" />
-                <span className="font-medium">{PRIORITY_ACTIONS.filter((a) => a.priority === "high").length} High</span>
-              </span>
+          </section>
+        )}
+
+        {/* Priority Actions - from API */}
+        {priorityActions.length > 0 && (
+          <section className="bg-white rounded-xl shadow-sm p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Priority Actions</h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  Auto-generated from live data — actions to keep the station build on track
+                </p>
+              </div>
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="inline-flex items-center space-x-1 px-2 py-1 bg-red-50 text-red-700 rounded-full">
+                  <span className="w-2 h-2 bg-red-500 rounded-full" />
+                  <span className="font-medium">{priorityActions.filter((a: any) => a.priority === "critical").length} Critical</span>
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-3">
-            {PRIORITY_ACTIONS.map((action) => {
-              const colors = teamColorMap[action.teamColor];
-              return (
-                <Link key={action.id} href={action.href} className="block group">
-                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50/30 transition-all">
-                    <div className="flex items-center space-x-4 flex-1">
-                      {priorityBadge(action.priority)}
-                      <div className="flex-1">
-                        <div className="font-semibold text-gray-900">{action.title}</div>
-                        <div className="text-sm text-gray-600 mt-0.5">{action.description}</div>
+            <div className="space-y-3">
+              {priorityActions.map((action: any) => {
+                const colors = teamColorMap[action.teamColor] || teamColorMap.amber;
+                return (
+                  <Link key={action.id} href={action.href} className="block group">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50/30 transition-all">
+                      <div className="flex items-center space-x-4 flex-1">
+                        {priorityBadge(action.priority)}
+                        <div className="flex-1">
+                          <div className="font-semibold text-gray-900">{action.title}</div>
+                          <div className="text-sm text-gray-600 mt-0.5">{action.description}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4 ml-4">
+                        <div className="text-right">
+                          <div className={`text-xs font-bold ${colors.text}`}>Team {action.team}</div>
+                          <div className="text-xs text-gray-500">{action.dueLabel}</div>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
-                    <div className="flex items-center space-x-4 ml-4">
-                      <div className="text-right">
-                        <div className={`text-xs font-bold ${colors.text}`}>Team {action.team}</div>
-                        <div className="text-xs text-gray-500">{action.assignedTo}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-xs text-gray-500">{action.dueLabel}</div>
-                      </div>
-                      <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
-        {/* Station Build Playbook - Expandable Phases */}
+        {/* Station Build Progress */}
         <section className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-xl font-bold text-gray-900">Station Build Playbook</h2>
               <p className="text-sm text-gray-600 mt-1">
-                5-phase plan to build North Country Radio from foundation to full operation
+                5-phase plan to build {currentStation.name} from foundation to full operation
               </p>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5">
-                <span className="text-sm font-bold text-amber-700">{overallProgress}% Overall</span>
-              </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5">
+              <span className="text-sm font-bold text-amber-700">{overallProgress}% Overall</span>
             </div>
           </div>
 
-          {/* Overall progress bar */}
           <div className="mb-6">
-            <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-gray-600">Overall Station Build Progress</span>
-              <span className="font-bold text-gray-900">{completedTasks} of {totalTasks} tasks</span>
-            </div>
             <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-full transition-all"
                 style={{ width: `${overallProgress}%` }}
               />
             </div>
+            <div className="flex items-center justify-between text-sm mt-2">
+              <span className="text-gray-600">Overall Station Build Progress</span>
+              <span className="font-bold text-gray-900">{completedTasks} of {totalTasks} tasks</span>
+            </div>
           </div>
 
-          {/* Phase Sections */}
-          <div className="space-y-3">
-            {PLAYBOOK_PHASES.map((phase) => {
-              const isExpanded = expandedPhase === phase.id;
-              const progress = getPhaseProgress(phase);
-              const colors = teamColorMap[phase.teamColor];
-              const done = phase.tasks.filter((t) => t.status === "done").length;
-              const inProg = phase.tasks.filter((t) => t.status === "in_progress").length;
-
-              return (
-                <div key={phase.id} className={`border-2 rounded-lg overflow-hidden ${isExpanded ? colors.border : "border-gray-200"}`}>
-                  <button
-                    onClick={() => setExpandedPhase(isExpanded ? null : phase.id)}
-                    className={`w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors ${isExpanded ? colors.bg : ""}`}
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${colors.gradient} text-white flex items-center justify-center font-bold`}>
-                        {phase.phase}
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-900">{phase.name}</div>
-                        <div className="text-sm text-gray-600">
-                          {phase.team} - {phase.description}
+          {playbookPhases.length > 0 && (
+            <div className="space-y-3">
+              {playbookPhases.map((phase) => {
+                const isExpanded = expandedPhase === phase.id;
+                const colors = teamColorMap[phase.teamColor];
+                return (
+                  <div key={phase.id} className={`border-2 rounded-lg overflow-hidden ${isExpanded ? colors.border : "border-gray-200"}`}>
+                    <button
+                      onClick={() => setExpandedPhase(isExpanded ? null : phase.id)}
+                      className={`w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors ${isExpanded ? colors.bg : ""}`}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${colors.gradient} text-white flex items-center justify-center font-bold`}>
+                          {phase.phase}
+                        </div>
+                        <div>
+                          <div className="font-bold text-gray-900">{phase.name}</div>
+                          <div className="text-sm text-gray-600">{phase.team}</div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="text-right">
-                        <div className="text-sm font-bold text-gray-900">{done}/{phase.tasks.length}</div>
-                        <div className="text-xs text-gray-500">{inProg} in progress</div>
-                      </div>
-                      <div className="w-20">
-                        <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
-                          <div
-                            className={`h-full rounded-full bg-gradient-to-r ${colors.gradient}`}
-                            style={{ width: `${progress}%` }}
-                          />
+                      <div className="flex items-center space-x-4">
+                        <div className="text-right">
+                          <div className="text-sm font-bold text-gray-900">{phase.done}/{phase.total}</div>
                         </div>
-                        <div className="text-xs text-gray-500 text-right mt-0.5">{progress}%</div>
-                      </div>
-                      {isExpanded ? (
-                        <ChevronDown className="w-5 h-5 text-gray-400" />
-                      ) : (
-                        <ChevronRight className="w-5 h-5 text-gray-400" />
-                      )}
-                    </div>
-                  </button>
-
-                  {isExpanded && (
-                    <div className="border-t px-4 py-3 bg-white">
-                      <div className="space-y-2">
-                        {phase.tasks.map((task, idx) => (
-                          <div key={idx} className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50">
-                            <div className="flex items-center space-x-3">
-                              {statusIcon(task.status)}
-                              <span className={`text-sm ${task.status === "done" ? "text-gray-500 line-through" : "text-gray-900"}`}>
-                                {task.name}
-                              </span>
-                            </div>
-                            <div className="flex items-center space-x-3">
-                              <span className="text-xs text-gray-500">{task.owner}</span>
-                              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                                task.status === "done" ? "bg-green-100 text-green-700" :
-                                task.status === "in_progress" ? "bg-blue-100 text-blue-700" :
-                                task.status === "blocked" ? "bg-red-100 text-red-700" :
-                                "bg-gray-100 text-gray-600"
-                              }`}>
-                                {task.status === "done" ? "Done" : task.status === "in_progress" ? "Active" : task.status === "blocked" ? "Blocked" : "To Do"}
-                              </span>
-                            </div>
+                        <div className="w-20">
+                          <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
+                            <div
+                              className={`h-full rounded-full bg-gradient-to-r ${colors.gradient}`}
+                              style={{ width: `${phase.progress}%` }}
+                            />
                           </div>
-                        ))}
+                          <div className="text-xs text-gray-500 text-right mt-0.5">{phase.progress}%</div>
+                        </div>
+                        {isExpanded ? (
+                          <ChevronDown className="w-5 h-5 text-gray-400" />
+                        ) : (
+                          <ChevronRight className="w-5 h-5 text-gray-400" />
+                        )}
                       </div>
-                      <div className="mt-3 pt-3 border-t flex justify-end">
-                        <Link
-                          href={phase.teamHref}
-                          className={`inline-flex items-center space-x-2 text-sm font-medium ${colors.text} hover:underline`}
-                        >
-                          <span>Go to {phase.team} Dashboard</span>
-                          <ArrowRight className="w-4 h-4" />
-                        </Link>
+                    </button>
+
+                    {isExpanded && (
+                      <div className="border-t px-4 py-3 bg-white">
+                        <div className="mt-3 pt-3 flex justify-end">
+                          <Link
+                            href={phase.teamHref}
+                            className={`inline-flex items-center space-x-2 text-sm font-medium ${colors.text} hover:underline`}
+                          >
+                            <span>Go to {phase.team} Dashboard</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
+
+        {/* Activity Feed */}
+        {activity.length > 0 && (
+          <section className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Activity</h2>
+            <div className="space-y-3">
+              {activity.map((item) => {
+                const tc = teamColorMap[teamColorForName[item.team] || "amber"];
+                return (
+                  <div key={item.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${tc.bg} ${tc.text}`}>
+                      {item.team}
+                    </span>
+                    <span className="text-sm text-gray-900 flex-1">{item.details}</span>
+                    <span className="text-xs text-gray-500">
+                      {new Date(item.timestamp).toLocaleDateString()}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         {/* Cross-Team Dependencies */}
         <section className="bg-white rounded-xl shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Cross-Team Dependencies</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <DependencyCard
-              from="Riley (Artists)"
-              to="Cassidy (Curation)"
-              description="Artists discovered by Riley are submitted to Cassidy's panel for tier placement and rotation assignment"
-              status="active"
-              fromColor="purple"
-              toColor="teal"
-            />
-            <DependencyCard
-              from="Cassidy (Curation)"
-              to="Station Ops"
-              description="Tier placements feed into rotation clocks and DJ programming schedules"
-              status="active"
-              fromColor="teal"
-              toColor="amber"
-            />
-            <DependencyCard
-              from="Harper (Sponsors)"
-              to="Riley (Artists)"
-              description="80% of sponsor revenue flows to the artist pool, distributed by Jordan Cross"
-              status="pending"
-              fromColor="green"
-              toColor="purple"
-            />
-            <DependencyCard
-              from="Elliot (Growth)"
-              to="Harper (Sponsors)"
-              description="Listener metrics prove sponsor ROI; higher DAU enables premium pricing"
-              status="pending"
-              fromColor="blue"
-              toColor="green"
-            />
-            <DependencyCard
-              from="Riley (Artists)"
-              to="Elliot (Growth)"
-              description="Artist fans become station listeners through River Maxwell's activation system"
-              status="active"
-              fromColor="purple"
-              toColor="blue"
-            />
-            <DependencyCard
-              from="Cassidy (Curation)"
-              to="Harper (Sponsors)"
-              description="Gold/Platinum tier artists create premium sponsorship partnership opportunities"
-              status="pending"
-              fromColor="teal"
-              toColor="green"
-            />
-          </div>
-        </section>
-
-        {/* Station KPI Dashboard */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Station KPI Targets</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <KPICard
-              label="Monthly Revenue"
-              current="$26,150"
-              target="$50,000"
-              progress={52}
-              color="green"
-              team="Harper + Riley"
-            />
-            <KPICard
-              label="Artists in Rotation"
-              current="200"
-              target="340"
-              progress={59}
-              color="purple"
-              team="Riley + Cassidy"
-            />
-            <KPICard
-              label="Active Sponsors"
-              current="125"
-              target="200"
-              progress={63}
-              color="green"
-              team="Harper"
-            />
-            <KPICard
-              label="Daily Active Users"
-              current="1,250"
-              target="5,000"
-              progress={25}
-              color="blue"
-              team="Elliot"
-            />
+            <DependencyCard from="Riley (Artists)" to="Cassidy (Curation)" description="Artists discovered by Riley are submitted to Cassidy's panel for tier placement" status="active" fromColor="purple" toColor="teal" />
+            <DependencyCard from="Cassidy (Curation)" to="Station Ops" description="Tier placements feed into rotation clocks and DJ programming" status="active" fromColor="teal" toColor="amber" />
+            <DependencyCard from="Harper (Sponsors)" to="Riley (Artists)" description="80% of sponsor revenue flows to the artist pool" status="pending" fromColor="green" toColor="purple" />
+            <DependencyCard from="Elliot (Growth)" to="Harper (Sponsors)" description="Listener metrics prove sponsor ROI" status="pending" fromColor="blue" toColor="green" />
           </div>
         </section>
 
