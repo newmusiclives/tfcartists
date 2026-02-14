@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Sparkles, Calendar, MapPin } from "lucide-react";
+import { ArrowLeft, Sparkles, Calendar, MapPin, Radio, Music, Mic, BarChart3, DollarSign, Heart } from "lucide-react";
+import { useStation } from "@/contexts/StationContext";
 
 export default function OnboardPage() {
   const router = useRouter();
+  const { currentStation } = useStation();
+  const formRef = useRef<HTMLElement>(null);
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -20,6 +23,10 @@ export default function OnboardPage() {
     nextShowVenue: "",
     nextShowCity: "",
   });
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,13 +102,113 @@ export default function OnboardPage() {
             </Link>
             <div className="flex items-center space-x-2">
               <Sparkles className="w-5 h-5 text-purple-600" />
-              <span className="font-semibold">TrueFans RADIO</span>
+              <span className="font-semibold">{currentStation.name}</span>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-12">
+      {/* Hero Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-6">
+            <Radio className="w-8 h-8 text-purple-600" />
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+            Get Your Music on Real Radio
+          </h1>
+          <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
+            Join {currentStation.name} and reach thousands of real listeners every day.
+          </p>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+            We connect independent artists with passionate fans through live radio, curated playlists, and a community that actually supports your music career.
+          </p>
+          <button
+            onClick={scrollToForm}
+            className="bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition-colors shadow-lg"
+          >
+            Apply Now
+          </button>
+        </div>
+      </section>
+
+      {/* Benefits Grid */}
+      <section className="py-16 px-4 bg-white/60">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+            Why Artists Choose {currentStation.name}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {[
+              {
+                icon: Radio,
+                title: "Radio Airplay",
+                desc: "Your tracks played on a real station with live DJs, not just an algorithm.",
+              },
+              {
+                icon: BarChart3,
+                title: "Fan Analytics",
+                desc: "See who's listening, where they are, and how your audience is growing.",
+              },
+              {
+                icon: DollarSign,
+                title: "Revenue Sharing",
+                desc: "Earn from listener engagement and sponsor partnerships as your fanbase grows.",
+              },
+              {
+                icon: Heart,
+                title: "Artist Community",
+                desc: "Connect with fellow musicians, collaborate, and share stages together.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="bg-white rounded-xl p-6 shadow-sm border border-purple-100 hover:shadow-md transition-shadow"
+              >
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-purple-100 rounded-lg mb-4">
+                  <item.icon className="w-5 h-5 text-purple-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
+                <p className="text-sm text-gray-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+            How It Works
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+            {[
+              { step: "1", title: "Submit", desc: "Fill out a quick application with your info and music." },
+              { step: "2", title: "Get Reviewed", desc: "Our team listens to your tracks and gets in touch." },
+              { step: "3", title: "Get Airplay", desc: "Your music goes into rotation on the station." },
+              { step: "4", title: "Grow", desc: "Build your fanbase with analytics, events, and community." },
+            ].map((item) => (
+              <div key={item.step} className="text-center">
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-purple-600 text-white rounded-full font-bold mb-3">
+                  {item.step}
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
+                <p className="text-sm text-gray-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Transition */}
+      <section className="py-10 px-4 text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Ready to Get Started?</h2>
+        <p className="text-gray-600">It takes about 2 minutes.</p>
+      </section>
+
+      {/* Form */}
+      <main ref={formRef} className="max-w-2xl mx-auto px-4 py-12">
         {/* Progress Steps */}
         <div className="mb-8">
           <div className="flex items-center justify-center space-x-4 mb-4">
@@ -125,7 +232,7 @@ export default function OnboardPage() {
             {step === 1 && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Let's Get You Started
+                  Let&apos;s Get You Started
                 </h2>
 
                 <div>
@@ -232,12 +339,12 @@ export default function OnboardPage() {
             {step === 3 && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  When's Your Next Show?
+                  When&apos;s Your Next Show?
                 </h2>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                   <div className="text-sm text-blue-900">
-                    We'll help you try the 9-word line at your next show and get your first
+                    We&apos;ll help you try the 9-word line at your next show and get your first
                     win!
                   </div>
                 </div>
@@ -290,7 +397,7 @@ export default function OnboardPage() {
 
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="text-sm text-gray-600">
-                    Don't have a show scheduled? No problem! You can skip this and add it
+                    Don&apos;t have a show scheduled? No problem! You can skip this and add it
                     later.
                   </div>
                 </div>

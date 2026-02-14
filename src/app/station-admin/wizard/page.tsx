@@ -17,7 +17,9 @@ import {
   ChevronRight,
   FileText,
   RotateCcw,
+  Sparkles,
 } from "lucide-react";
+import { STATION_TEMPLATES, type StationTemplate } from "@/lib/station-templates";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -179,6 +181,36 @@ export default function StationWizard() {
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [stationId, setStationId] = useState<string | null>(null);
+
+  // Template
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+
+  const applyTemplate = (template: StationTemplate) => {
+    setSelectedTemplate(template.id);
+    setIdentity({
+      name: "",
+      callSign: "",
+      tagline: template.tagline,
+      description: template.description,
+      genre: template.genre,
+      formatType: template.formatType,
+      musicEra: template.musicEra,
+      primaryColor: template.primaryColor,
+      secondaryColor: template.secondaryColor,
+      logoUrl: "",
+    });
+    setDjs(template.djPresets.map((d) => ({
+      name: d.name,
+      tagline: d.tagline,
+      bio: d.bio,
+      traits: d.traits,
+      voiceDescription: d.voiceDescription,
+      colorPrimary: d.colorPrimary,
+      vibe: d.vibe,
+      age: d.age,
+      isWeekend: d.isWeekend,
+    })));
+  };
 
   // Step 0: Identity
   const [identity, setIdentity] = useState({
@@ -530,6 +562,44 @@ export default function StationWizard() {
           {step === 0 && (
             <div className="space-y-5">
               <h2 className="text-xl font-semibold mb-4">Station Identity</h2>
+
+              {/* Template Selection */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Sparkles className="w-4 h-4 text-amber-600" />
+                  <span className="text-sm font-medium text-gray-700">Start from a template or build from scratch</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                  <button
+                    onClick={() => {
+                      setSelectedTemplate(null);
+                      setIdentity({ name: "", callSign: "", tagline: "", description: "", genre: "Americana", formatType: "americana", musicEra: "mixed", primaryColor: "#b45309", secondaryColor: "#f59e0b", logoUrl: "" });
+                      setDjs([emptyDJ()]);
+                    }}
+                    className={`p-3 rounded-lg border-2 text-left transition-all text-xs ${
+                      selectedTemplate === null ? "border-amber-500 bg-amber-50" : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <div className="font-semibold text-gray-900">From Scratch</div>
+                    <div className="text-gray-500 mt-0.5">Custom setup</div>
+                  </button>
+                  {STATION_TEMPLATES.map((t) => (
+                    <button
+                      key={t.id}
+                      onClick={() => applyTemplate(t)}
+                      className={`p-3 rounded-lg border-2 text-left transition-all text-xs ${
+                        selectedTemplate === t.id ? "border-amber-500 bg-amber-50" : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: t.primaryColor }} />
+                        <span className="font-semibold text-gray-900 truncate">{t.name.replace(" Station", "")}</span>
+                      </div>
+                      <div className="text-gray-500 mt-0.5 truncate">{t.genre.split(",")[0]}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Form fields */}

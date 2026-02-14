@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Play, Pause, Volume2, VolumeX, Radio } from "lucide-react";
+import { useStation } from "@/contexts/StationContext";
 
 const STREAM_URL = "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
 const NOW_PLAYING_URL = "/api/now-playing";
@@ -16,13 +17,17 @@ interface NowPlaying {
 }
 
 export function RadioPlayer() {
+  const { currentStation } = useStation();
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(75);
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "playing" | "error">("idle");
+  const [xpToast, setXpToast] = useState<{ amount: number; visible: boolean }>({ amount: 0, visible: false });
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const sessionIdRef = useRef<string | null>(null);
+  const sessionStartRef = useRef<number | null>(null);
 
   // Sync volume to audio element
   useEffect(() => {
@@ -57,9 +62,70 @@ export function RadioPlayer() {
   }, []);
 
   useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Best-effort session end on page close
+      if (sessionIdRef.current && sessionStartRef.current) {
+        const duration = Math.round((Date.now() - sessionStartRef.current) / 1000);
+        navigator.sendBeacon(
+          "/api/listeners/sessions/end",
+          new Blob(
+            [JSON.stringify({ sessionId: sessionIdRef.current, duration })],
+            { type: "application/json" }
+          )
+        );
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       if (pollRef.current) clearInterval(pollRef.current);
     };
+  }, []);
+
+  const startSession = useCallback(async () => {
+    try {
+      const listenerId = localStorage.getItem("listenerId");
+      const res = await fetch("/api/listeners/sessions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ listenerId: listenerId || null }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        sessionIdRef.current = data.session?.id || null;
+        sessionStartRef.current = Date.now();
+      }
+    } catch {
+      // Non-critical
+    }
+  }, []);
+
+  const endSession = useCallback(async () => {
+    if (!sessionIdRef.current || !sessionStartRef.current) return;
+    const duration = Math.round((Date.now() - sessionStartRef.current) / 1000);
+    try {
+      const res = await fetch("/api/listeners/sessions", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: sessionIdRef.current,
+          duration,
+        }),
+      });
+
+      // Show XP toast if XP was awarded
+      if (res.ok) {
+        const data = await res.json();
+        if (data.xpAwarded && data.xpAwarded > 0 && localStorage.getItem("listenerId")) {
+          setXpToast({ amount: data.xpAwarded, visible: true });
+          setTimeout(() => setXpToast((t) => ({ ...t, visible: false })), 3000);
+        }
+      }
+    } catch {
+      // Non-critical
+    }
+    sessionIdRef.current = null;
+    sessionStartRef.current = null;
   }, []);
 
   const handlePlay = useCallback(() => {
@@ -68,11 +134,12 @@ export function RadioPlayer() {
 
     setStatus("loading");
     fetchNowPlaying(); // Fetch metadata immediately on play
+    startSession(); // Track listening session
     audio.src = `${STREAM_URL}?_t=${Date.now()}`;
     audio.play().catch(() => {
       setStatus("error");
     });
-  }, [fetchNowPlaying]);
+  }, [fetchNowPlaying, startSession]);
 
   const handlePause = useCallback(() => {
     const audio = audioRef.current;
@@ -83,7 +150,8 @@ export function RadioPlayer() {
     setIsPlaying(false);
     setStatus("idle");
     stopPolling();
-  }, [stopPolling]);
+    endSession();
+  }, [stopPolling, endSession]);
 
   const togglePlayPause = useCallback(() => {
     if (isPlaying || status === "loading") {
@@ -109,8 +177,8 @@ export function RadioPlayer() {
     setStatus("idle");
   }, []);
 
-  const trackTitle = nowPlaying?.title || "North Country Radio";
-  const trackArtist = nowPlaying?.artist_name || "Americana & Country";
+  const trackTitle = nowPlaying?.title || currentStation.name;
+  const trackArtist = nowPlaying?.artist_name || currentStation.genre;
   const djName = nowPlaying?.dj_name;
   const listenerCount = nowPlaying?.listener_count;
   const artworkUrl = nowPlaying?.artwork_url;
@@ -120,6 +188,15 @@ export function RadioPlayer() {
   const showError = status === "error";
 
   return (
+    <>
+      {/* XP Toast Notification */}
+      {xpToast.visible && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] animate-bounce">
+          <div className="bg-green-500 text-white px-4 py-2 rounded-full shadow-lg text-sm font-bold flex items-center space-x-2">
+            <span>+{xpToast.amount} XP</span>
+          </div>
+        </div>
+      )}
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-amber-900 via-amber-800 to-orange-900 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-t border-amber-700/50">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <audio
@@ -280,5 +357,6 @@ export function RadioPlayer() {
         </div>
       </div>
     </div>
+    </>
   );
 }

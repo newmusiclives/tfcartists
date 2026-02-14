@@ -20,6 +20,7 @@ import {
   Sparkles,
   ArrowRight,
 } from "lucide-react";
+import { useStation } from "@/contexts/StationContext";
 
 interface TeamMember {
   id: string;
@@ -39,6 +40,7 @@ interface TeamMember {
 }
 
 export default function ManagementTeamPage() {
+  const { currentStation } = useStation();
   const teamMembers: TeamMember[] = [
     {
       id: "morgan",
@@ -190,7 +192,7 @@ export default function ManagementTeamPage() {
             <div>
               <h2 className="text-3xl font-bold mb-2">Station Management</h2>
               <p className="text-amber-100 text-lg mb-4">
-                North Country Radio - Executive Leadership Team
+                {currentStation.name} - Executive Leadership Team
               </p>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
                 <div>

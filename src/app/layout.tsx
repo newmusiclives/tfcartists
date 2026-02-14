@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { RadioPlayer } from "@/components/radio-player";
+import { StationProvider } from "@/contexts/StationContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,14 +11,14 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "North Country Radio — TrueFans RADIO Network",
-  description: "AI-powered Americana and Country radio station championing independent artists",
+  title: "TrueFans RADIO Network",
+  description: "AI-powered radio stations championing independent artists",
   manifest: "/manifest.json",
   themeColor: "#78350f",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "NCR Radio",
+    title: "TrueFans RADIO",
   },
   icons: {
     icon: "/icons/icon-192.png",
@@ -38,8 +39,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="pb-16">{children}</div>
-        <RadioPlayer />
+        <StationProvider>
+          <div className="pb-16">{children}</div>
+          <RadioPlayer />
+        </StationProvider>
       </body>
     </html>
   );

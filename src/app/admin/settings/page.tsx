@@ -1,633 +1,444 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  Key,
   Settings,
-  Mail,
-  MessageSquare,
-  Radio,
-  DollarSign,
-  Save,
+  CheckCircle2,
+  XCircle,
   Eye,
   EyeOff,
-  Copy,
-  Check,
+  Save,
+  Loader2,
+  CreditCard,
+  Mail,
+  Smartphone,
+  Brain,
+  Shield,
+  Search,
+  Clock,
+  Database,
+  AlertTriangle,
   RefreshCw,
-  AlertCircle,
+  ExternalLink,
 } from "lucide-react";
+import { SharedNav } from "@/components/shared-nav";
 
-interface APIKey {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+interface SettingItem {
+  key: string;
+  category: string;
+  label: string;
+  encrypted: boolean;
+  hasValue: boolean;
+  source: "database" | "env" | "not_set";
+  maskedValue: string;
+  updatedAt: string | null;
+}
+
+interface CategoryConfig {
   id: string;
   name: string;
-  service: string;
-  key: string;
-  status: "active" | "inactive";
-  lastUsed?: string;
-  createdAt: string;
+  description: string;
+  icon: React.ReactNode;
+  color: string;
+  signupUrl?: string;
+  signupLabel?: string;
+  priority: "critical" | "high" | "medium" | "low";
 }
+
+const CATEGORIES: CategoryConfig[] = [
+  {
+    id: "payments",
+    name: "Manifest Financial",
+    description: "Payment processing for artist subscriptions, sponsor billing, and artist payouts",
+    icon: <CreditCard className="w-5 h-5" />,
+    color: "green",
+    priority: "critical",
+  },
+  {
+    id: "database",
+    name: "Database",
+    description: "PostgreSQL connection for production data persistence",
+    icon: <Database className="w-5 h-5" />,
+    color: "amber",
+    signupUrl: "https://neon.tech",
+    signupLabel: "Get free PostgreSQL at Neon.tech",
+    priority: "critical",
+  },
+  {
+    id: "email",
+    name: "Email (SendGrid)",
+    description: "Transactional email for artist onboarding, earnings notifications, and sponsor communications",
+    icon: <Mail className="w-5 h-5" />,
+    color: "blue",
+    signupUrl: "https://sendgrid.com",
+    signupLabel: "Sign up at SendGrid (free tier: 100 emails/day)",
+    priority: "high",
+  },
+  {
+    id: "sms",
+    name: "SMS (Twilio)",
+    description: "Text messages for artist outreach, show reminders, and earnings alerts",
+    icon: <Smartphone className="w-5 h-5" />,
+    color: "purple",
+    signupUrl: "https://twilio.com",
+    signupLabel: "Sign up at Twilio (~$5/month)",
+    priority: "high",
+  },
+  {
+    id: "ai",
+    name: "AI Providers",
+    description: "OpenAI and/or Anthropic for Riley, Harper, Cassidy, and Elliot AI capabilities",
+    icon: <Brain className="w-5 h-5" />,
+    color: "indigo",
+    priority: "high",
+  },
+  {
+    id: "auth",
+    name: "Authentication & Security",
+    description: "Session secrets and team login passwords — change defaults before launch",
+    icon: <Shield className="w-5 h-5" />,
+    color: "red",
+    priority: "critical",
+  },
+  {
+    id: "automation",
+    name: "Automation & Cron",
+    description: "Automated daily outreach, follow-ups, and monthly revenue distribution",
+    icon: <Clock className="w-5 h-5" />,
+    color: "orange",
+    priority: "medium",
+  },
+  {
+    id: "discovery",
+    name: "Discovery & Voice AI",
+    description: "Social media APIs for artist discovery and Vapi for AI voice calls",
+    icon: <Search className="w-5 h-5" />,
+    color: "teal",
+    priority: "low",
+  },
+  {
+    id: "monitoring",
+    name: "Monitoring & Performance",
+    description: "Error tracking (Sentry) and rate limiting (Upstash Redis)",
+    icon: <AlertTriangle className="w-5 h-5" />,
+    color: "gray",
+    priority: "low",
+  },
+];
+
+const colorMap: Record<string, { bg: string; border: string; text: string }> = {
+  green:  { bg: "bg-green-50",  border: "border-green-200",  text: "text-green-700" },
+  amber:  { bg: "bg-amber-50",  border: "border-amber-200",  text: "text-amber-700" },
+  blue:   { bg: "bg-blue-50",   border: "border-blue-200",   text: "text-blue-700" },
+  purple: { bg: "bg-purple-50", border: "border-purple-200", text: "text-purple-700" },
+  indigo: { bg: "bg-indigo-50", border: "border-indigo-200", text: "text-indigo-700" },
+  red:    { bg: "bg-red-50",    border: "border-red-200",    text: "text-red-700" },
+  orange: { bg: "bg-orange-50", border: "border-orange-200", text: "text-orange-700" },
+  teal:   { bg: "bg-teal-50",   border: "border-teal-200",   text: "text-teal-700" },
+  gray:   { bg: "bg-gray-50",   border: "border-gray-200",   text: "text-gray-700" },
+};
 
 export default function AdminSettingsPage() {
-  const [activeTab, setActiveTab] = useState<"api-keys" | "system" | "station">("api-keys");
-  const [showKey, setShowKey] = useState<Record<string, boolean>>({});
-  const [copied, setCopied] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+  const [settings, setSettings] = useState<SettingItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [showValues, setShowValues] = useState<Set<string>>(new Set());
+  const [saveMessage, setSaveMessage] = useState<{ key: string; type: "success" | "error"; text: string } | null>(null);
 
-  // Mock API keys - in production, these would come from secure backend
-  const [apiKeys, setApiKeys] = useState<APIKey[]>([
-    {
-      id: "1",
-      name: "SendGrid Email API",
-      service: "email",
-      key: "SG.xxxxxxxxxxxxxxxxxxxx.yyyyyyyyyyyyyyyyyyyyyyyy",
-      status: "active",
-      lastUsed: "2 hours ago",
-      createdAt: "Jan 15, 2024",
-    },
-    {
-      id: "2",
-      name: "Twilio SMS API",
-      service: "sms",
-      key: "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-      status: "active",
-      lastUsed: "5 hours ago",
-      createdAt: "Jan 15, 2024",
-    },
-    {
-      id: "3",
-      name: "Manifest Financial API",
-      service: "payment",
-      key: "mf_live_xxxxxxxxxxxxxxxxxxxxxxxx",
-      status: "active",
-      lastUsed: "1 day ago",
-      createdAt: "Jan 10, 2024",
-    },
-    {
-      id: "4",
-      name: "Instagram API",
-      service: "social",
-      key: "IGQxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-      status: "inactive",
-      createdAt: "Jan 5, 2024",
-    },
-    {
-      id: "5",
-      name: "Spotify API",
-      service: "music",
-      key: "BQDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-      status: "active",
-      lastUsed: "3 days ago",
-      createdAt: "Jan 1, 2024",
-    },
-  ]);
+  const fetchSettings = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/settings", { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        setSettings(data.settings || []);
+      }
+    } catch {
+      // handle error
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  // System settings
-  const [systemSettings, setSystemSettings] = useState({
-    stationName: "North Country Radio (NCR)",
-    stationUrl: "https://truefansradio.com",
-    adminEmail: "admin@truefansradio.com",
-    supportEmail: "support@truefansradio.com",
-    rileyEmail: "riley@truefansradio.com",
-    harperEmail: "harper@truefansradio.com",
-    timezone: "America/New_York",
-    autoApproveArtists: false,
-    requireEmailVerification: true,
-    enableSMSNotifications: true,
-  });
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
 
-  // Station settings
-  const [stationSettings, setStationSettings] = useState({
-    tracksPerHour: 12,
-    adSpotsPerHour: 24,
-    adSpotDuration: 15, // seconds
-    primeHoursStart: "06:00",
-    primeHoursEnd: "18:00",
-    artistPoolPercentage: 80,
-    stationRevenuePercentage: 20,
-    minimumTrackBitrate: 192, // kbps
-    maximumTrackSize: 10, // MB
-    allowedFormats: ["mp3", "wav", "flac"],
-  });
-
-  const toggleKeyVisibility = (id: string) => {
-    setShowKey((prev) => ({ ...prev, [id]: !prev[id] }));
+  const handleSave = async (key: string) => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key, value: editValue }),
+      });
+      if (res.ok) {
+        setSaveMessage({ key, type: "success", text: "Saved" });
+        setEditingKey(null);
+        setEditValue("");
+        await fetchSettings();
+      } else {
+        setSaveMessage({ key, type: "error", text: "Failed to save" });
+      }
+    } catch {
+      setSaveMessage({ key, type: "error", text: "Network error" });
+    } finally {
+      setSaving(false);
+      setTimeout(() => setSaveMessage(null), 3000);
+    }
   };
 
-  const copyToClipboard = (id: string, key: string) => {
-    navigator.clipboard.writeText(key);
-    setCopied(id);
-    setTimeout(() => setCopied(null), 2000);
+  const toggleShowValue = (key: string) => {
+    setShowValues((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      return next;
+    });
   };
 
-  const handleSaveSettings = async () => {
-    setIsSaving(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsSaving(false);
-    // Show success message
-    alert("Settings saved successfully!");
+  const getSettingsForCategory = (categoryId: string) =>
+    settings.filter((s) => s.category === categoryId);
+
+  const getCategoryStatus = (categoryId: string) => {
+    const catSettings = getSettingsForCategory(categoryId);
+    if (catSettings.length === 0) return "empty";
+    const configured = catSettings.filter((s) => s.hasValue).length;
+    if (configured === catSettings.length) return "complete";
+    if (configured > 0) return "partial";
+    return "not_configured";
   };
 
-  const getServiceIcon = (service: string) => {
-    const icons = {
-      email: <Mail className="w-5 h-5" />,
-      sms: <MessageSquare className="w-5 h-5" />,
-      payment: <DollarSign className="w-5 h-5" />,
-      social: <Radio className="w-5 h-5" />,
-      music: <Radio className="w-5 h-5" />,
-    };
-    return icons[service as keyof typeof icons] || <Key className="w-5 h-5" />;
+  const totalConfigured = settings.filter((s) => s.hasValue).length;
+  const totalSettings = settings.length;
+  const overallPct = totalSettings > 0 ? Math.round((totalConfigured / totalSettings) * 100) : 0;
+
+  const priorityLabel = (p: string) => {
+    switch (p) {
+      case "critical": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">REQUIRED</span>;
+      case "high": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">RECOMMENDED</span>;
+      case "medium": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">HELPFUL</span>;
+      case "low": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">OPTIONAL</span>;
+      default: return null;
+    }
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <div className="min-h-screen bg-gray-50">
+      <SharedNav />
+
       {/* Header */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Link href="/admin" className="text-gray-600 hover:text-gray-900 transition-colors">
-                <ArrowLeft className="w-5 h-5" />
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">System Settings</h1>
-                <p className="text-sm text-gray-600">Configure API keys and system preferences</p>
+      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black text-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Link href="/admin" className="text-gray-400 hover:text-white text-sm flex items-center gap-1">
+              <ArrowLeft className="w-4 h-4" /> Admin
+            </Link>
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <Settings className="w-8 h-8 text-gray-300" />
+                <h1 className="text-3xl font-bold">Service Connections</h1>
               </div>
+              <p className="text-gray-400">
+                Configure API keys and credentials for all platform services. Enter them when ready — the platform will use them automatically.
+              </p>
             </div>
-            <div className="flex items-center space-x-3">
-              <Link href="/admin" className="text-gray-600 hover:text-gray-900 text-sm">
-                Back to Dashboard
-              </Link>
+            <div className="text-right">
+              <div className="text-3xl font-bold">{totalConfigured}/{totalSettings}</div>
+              <div className="text-gray-400 text-sm">configured</div>
+              <div className="mt-2 w-32 h-2 bg-gray-700 rounded-full overflow-hidden">
+                <div className="h-full bg-green-500 rounded-full transition-all" style={{ width: `${overallPct}%` }} />
+              </div>
             </div>
           </div>
         </div>
-      </nav>
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Tabs */}
-        <div className="bg-white rounded-t-xl border-b">
-          <div className="flex space-x-2 p-2">
-            <TabButton active={activeTab === "api-keys"} onClick={() => setActiveTab("api-keys")} label="API Keys" icon={<Key className="w-4 h-4" />} />
-            <TabButton active={activeTab === "system"} onClick={() => setActiveTab("system")} label="System Settings" icon={<Settings className="w-4 h-4" />} />
-            <TabButton active={activeTab === "station"} onClick={() => setActiveTab("station")} label="Station Config" icon={<Radio className="w-4 h-4" />} />
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
           </div>
-        </div>
+        ) : (
+          <>
+            {/* Quick Status Overview */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {(["critical", "high", "medium", "low"] as const).map((priority) => {
+                const cats = CATEGORIES.filter((c) => c.priority === priority);
+                const catIds = cats.map((c) => c.id);
+                const catSettings = settings.filter((s) => catIds.includes(s.category));
+                const configured = catSettings.filter((s) => s.hasValue).length;
+                const total = catSettings.length;
+                const allDone = total > 0 && configured === total;
+                return (
+                  <div key={priority} className={`rounded-xl p-4 border ${allDone ? "bg-green-50 border-green-200" : "bg-white border-gray-200"}`}>
+                    <div className="flex items-center justify-between mb-1">
+                      {priorityLabel(priority)}
+                      {allDone ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <XCircle className="w-4 h-4 text-gray-300" />}
+                    </div>
+                    <div className="text-xl font-bold text-gray-900 mt-2">{configured}/{total}</div>
+                    <div className="text-xs text-gray-500">{cats.map((c) => c.name).join(", ")}</div>
+                  </div>
+                );
+              })}
+            </div>
 
-        {/* API Keys Tab */}
-        {activeTab === "api-keys" && (
-          <div className="bg-white rounded-b-xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">API Key Management</h2>
-                <p className="text-sm text-gray-600 mt-1">Configure external service integrations</p>
-              </div>
-              <button className="inline-flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                <Key className="w-4 h-4" />
-                <span>Add New Key</span>
+            {/* Category Sections */}
+            {CATEGORIES.map((cat) => {
+              const catSettings = getSettingsForCategory(cat.id);
+              const status = getCategoryStatus(cat.id);
+              const colors = colorMap[cat.color];
+              const configured = catSettings.filter((s) => s.hasValue).length;
+
+              return (
+                <section key={cat.id} className={`bg-white rounded-xl shadow-sm border-2 overflow-hidden ${status === "complete" ? "border-green-300" : colors.border}`}>
+                  {/* Category Header */}
+                  <div className={`px-6 py-4 ${colors.bg} border-b ${colors.border}`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={colors.text}>{cat.icon}</div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h2 className="text-lg font-bold text-gray-900">{cat.name}</h2>
+                            {priorityLabel(cat.priority)}
+                            {status === "complete" && (
+                              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 flex items-center gap-1">
+                                <CheckCircle2 className="w-3 h-3" /> Connected
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 mt-0.5">{cat.description}</p>
+                        </div>
+                      </div>
+                      <div className="text-sm font-bold text-gray-700">{configured}/{catSettings.length}</div>
+                    </div>
+                    {cat.signupUrl && status !== "complete" && (
+                      <a
+                        href={cat.signupUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`inline-flex items-center gap-1.5 text-sm mt-2 ${colors.text} hover:underline`}
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        {cat.signupLabel}
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Settings List */}
+                  <div className="divide-y">
+                    {catSettings.map((setting) => {
+                      const isEditing = editingKey === setting.key;
+                      const isShown = showValues.has(setting.key);
+                      const msg = saveMessage?.key === setting.key ? saveMessage : null;
+
+                      return (
+                        <div key={setting.key} className="px-6 py-4">
+                          <div className="flex items-center justify-between gap-4 flex-wrap">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="font-medium text-gray-900 text-sm">{setting.label}</span>
+                                {setting.hasValue ? (
+                                  <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                                ) : (
+                                  <XCircle className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                                )}
+                                {setting.source === "env" && setting.hasValue && (
+                                  <span className="text-xs text-gray-400">(from .env)</span>
+                                )}
+                                {setting.source === "database" && (
+                                  <span className="text-xs text-blue-500">(saved)</span>
+                                )}
+                                {msg && (
+                                  <span className={`text-xs font-bold ${msg.type === "success" ? "text-green-600" : "text-red-600"}`}>
+                                    {msg.text}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-xs text-gray-400 font-mono mt-0.5">{setting.key}</div>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              {setting.hasValue && !isEditing && (
+                                <>
+                                  {setting.encrypted && (
+                                    <button onClick={() => toggleShowValue(setting.key)} className="text-gray-400 hover:text-gray-600 p-1">
+                                      {isShown ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </button>
+                                  )}
+                                  <span className="text-sm text-gray-500 font-mono">
+                                    {setting.encrypted && !isShown ? setting.maskedValue : setting.maskedValue}
+                                  </span>
+                                </>
+                              )}
+
+                              {isEditing ? (
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type={setting.encrypted ? "password" : "text"}
+                                    value={editValue}
+                                    onChange={(e) => setEditValue(e.target.value)}
+                                    placeholder={`Enter ${setting.label}`}
+                                    className="border rounded-lg px-3 py-1.5 text-sm w-64 font-mono"
+                                    autoFocus
+                                    onKeyDown={(e) => { if (e.key === "Enter") handleSave(setting.key); }}
+                                  />
+                                  <button
+                                    onClick={() => handleSave(setting.key)}
+                                    disabled={saving}
+                                    className="bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
+                                  >
+                                    {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+                                    Save
+                                  </button>
+                                  <button
+                                    onClick={() => { setEditingKey(null); setEditValue(""); }}
+                                    className="text-gray-400 hover:text-gray-600 text-sm px-2 py-1.5"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => { setEditingKey(setting.key); setEditValue(""); }}
+                                  className={`text-sm px-3 py-1.5 rounded-lg font-medium ${
+                                    setting.hasValue
+                                      ? "text-gray-600 hover:bg-gray-100"
+                                      : `${colors.text} ${colors.bg} hover:opacity-80`
+                                  }`}
+                                >
+                                  {setting.hasValue ? "Update" : "Configure"}
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            })}
+
+            {/* Refresh */}
+            <div className="text-center pt-4">
+              <button
+                onClick={() => { setLoading(true); fetchSettings(); }}
+                className="text-gray-500 hover:text-gray-700 text-sm flex items-center gap-2 mx-auto"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Refresh connection status
               </button>
             </div>
-
-            <div className="space-y-4">
-              {apiKeys.map((apiKey) => (
-                <div key={apiKey.id} className="border rounded-lg p-4 hover:border-purple-300 transition-colors">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-3 flex-1">
-                      <div className={`p-2 rounded-lg ${apiKey.status === "active" ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-600"}`}>
-                        {getServiceIcon(apiKey.service)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-3 mb-2">
-                          <h3 className="font-semibold text-gray-900">{apiKey.name}</h3>
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              apiKey.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"
-                            }`}
-                          >
-                            {apiKey.status}
-                          </span>
-                          <span className="text-xs text-gray-500 capitalize">{apiKey.service}</span>
-                        </div>
-
-                        <div className="flex items-center space-x-2 mb-2">
-                          <code className="flex-1 bg-gray-100 px-3 py-2 rounded text-sm font-mono text-gray-700">
-                            {showKey[apiKey.id] ? apiKey.key : "•".repeat(apiKey.key.length)}
-                          </code>
-                          <button onClick={() => toggleKeyVisibility(apiKey.id)} className="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors">
-                            {showKey[apiKey.id] ? <EyeOff className="w-4 h-4 text-gray-600" /> : <Eye className="w-4 h-4 text-gray-600" />}
-                          </button>
-                          <button
-                            onClick={() => copyToClipboard(apiKey.id, apiKey.key)}
-                            className="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
-                          >
-                            {copied === apiKey.id ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-600" />}
-                          </button>
-                          <button className="p-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors">
-                            <RefreshCw className="w-4 h-4 text-gray-600" />
-                          </button>
-                        </div>
-
-                        <div className="flex items-center space-x-4 text-xs text-gray-500">
-                          <span>Created: {apiKey.createdAt}</span>
-                          {apiKey.lastUsed && <span>Last used: {apiKey.lastUsed}</span>}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
-                <div className="flex-1">
-                  <h4 className="font-medium text-blue-900 mb-1">Security Best Practices</h4>
-                  <ul className="text-sm text-blue-800 space-y-1">
-                    <li>• Never share API keys publicly or commit them to version control</li>
-                    <li>• Rotate keys regularly and immediately if compromised</li>
-                    <li>• Use environment variables for production deployments</li>
-                    <li>• Monitor API usage for unusual activity</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+          </>
         )}
-
-        {/* System Settings Tab */}
-        {activeTab === "system" && (
-          <div className="bg-white rounded-b-xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">System Configuration</h2>
-                <p className="text-sm text-gray-600 mt-1">General system settings and preferences</p>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              {/* Station Information */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Station Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Station Name</label>
-                    <input
-                      type="text"
-                      value={systemSettings.stationName}
-                      onChange={(e) => setSystemSettings({ ...systemSettings, stationName: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Station URL</label>
-                    <input
-                      type="url"
-                      value={systemSettings.stationUrl}
-                      onChange={(e) => setSystemSettings({ ...systemSettings, stationUrl: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Email Addresses */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Email Configuration</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Admin Email</label>
-                    <input
-                      type="email"
-                      value={systemSettings.adminEmail}
-                      onChange={(e) => setSystemSettings({ ...systemSettings, adminEmail: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Support Email</label>
-                    <input
-                      type="email"
-                      value={systemSettings.supportEmail}
-                      onChange={(e) => setSystemSettings({ ...systemSettings, supportEmail: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Riley Team Email</label>
-                    <input
-                      type="email"
-                      value={systemSettings.rileyEmail}
-                      onChange={(e) => setSystemSettings({ ...systemSettings, rileyEmail: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Harper Team Email</label>
-                    <input
-                      type="email"
-                      value={systemSettings.harperEmail}
-                      onChange={(e) => setSystemSettings({ ...systemSettings, harperEmail: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* System Preferences */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">System Preferences</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Timezone</label>
-                    <select
-                      value={systemSettings.timezone}
-                      onChange={(e) => setSystemSettings({ ...systemSettings, timezone: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    >
-                      <option value="America/New_York">Eastern Time (ET)</option>
-                      <option value="America/Chicago">Central Time (CT)</option>
-                      <option value="America/Denver">Mountain Time (MT)</option>
-                      <option value="America/Los_Angeles">Pacific Time (PT)</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={systemSettings.autoApproveArtists}
-                        onChange={(e) => setSystemSettings({ ...systemSettings, autoApproveArtists: e.target.checked })}
-                        className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                      />
-                      <div>
-                        <span className="text-sm font-medium text-gray-700">Auto-approve new artists</span>
-                        <p className="text-xs text-gray-500">Artists are automatically approved for FREE tier without manual review</p>
-                      </div>
-                    </label>
-
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={systemSettings.requireEmailVerification}
-                        onChange={(e) => setSystemSettings({ ...systemSettings, requireEmailVerification: e.target.checked })}
-                        className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                      />
-                      <div>
-                        <span className="text-sm font-medium text-gray-700">Require email verification</span>
-                        <p className="text-xs text-gray-500">Artists must verify their email address before submitting tracks</p>
-                      </div>
-                    </label>
-
-                    <label className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={systemSettings.enableSMSNotifications}
-                        onChange={(e) => setSystemSettings({ ...systemSettings, enableSMSNotifications: e.target.checked })}
-                        className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                      />
-                      <div>
-                        <span className="text-sm font-medium text-gray-700">Enable SMS notifications</span>
-                        <p className="text-xs text-gray-500">Send SMS notifications for important events (requires Twilio API)</p>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              {/* Save Button */}
-              <div className="pt-6 border-t">
-                <button
-                  onClick={handleSaveSettings}
-                  disabled={isSaving}
-                  className="inline-flex items-center space-x-2 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-                >
-                  {isSaving ? (
-                    <>
-                      <RefreshCw className="w-5 h-5 animate-spin" />
-                      <span>Saving...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Save className="w-5 h-5" />
-                      <span>Save System Settings</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Station Config Tab */}
-        {activeTab === "station" && (
-          <div className="bg-white rounded-b-xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">Station Configuration</h2>
-                <p className="text-sm text-gray-600 mt-1">Configure station capacity and revenue settings</p>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              {/* Airtime Configuration */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Airtime Configuration</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Tracks per Hour</label>
-                    <input
-                      type="number"
-                      value={stationSettings.tracksPerHour}
-                      onChange={(e) => setStationSettings({ ...stationSettings, tracksPerHour: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Ad Spots per Hour</label>
-                    <input
-                      type="number"
-                      value={stationSettings.adSpotsPerHour}
-                      onChange={(e) => setStationSettings({ ...stationSettings, adSpotsPerHour: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Ad Spot Duration (sec)</label>
-                    <input
-                      type="number"
-                      value={stationSettings.adSpotDuration}
-                      onChange={(e) => setStationSettings({ ...stationSettings, adSpotDuration: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Prime Hours */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Prime Hours</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Prime Hours Start</label>
-                    <input
-                      type="time"
-                      value={stationSettings.primeHoursStart}
-                      onChange={(e) => setStationSettings({ ...stationSettings, primeHoursStart: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Prime Hours End</label>
-                    <input
-                      type="time"
-                      value={stationSettings.primeHoursEnd}
-                      onChange={(e) => setStationSettings({ ...stationSettings, primeHoursEnd: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Revenue Split */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Distribution</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Artist Pool Percentage</label>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={stationSettings.artistPoolPercentage}
-                        onChange={(e) =>
-                          setStationSettings({
-                            ...stationSettings,
-                            artistPoolPercentage: parseInt(e.target.value),
-                            stationRevenuePercentage: 100 - parseInt(e.target.value),
-                          })
-                        }
-                        className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      />
-                      <span className="text-gray-600 font-medium">%</span>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Station Revenue Percentage</label>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={stationSettings.stationRevenuePercentage}
-                        onChange={(e) =>
-                          setStationSettings({
-                            ...stationSettings,
-                            stationRevenuePercentage: parseInt(e.target.value),
-                            artistPoolPercentage: 100 - parseInt(e.target.value),
-                          })
-                        }
-                        className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      />
-                      <span className="text-gray-600 font-medium">%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Track Requirements */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Track Requirements</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Minimum Bitrate (kbps)</label>
-                    <input
-                      type="number"
-                      value={stationSettings.minimumTrackBitrate}
-                      onChange={(e) => setStationSettings({ ...stationSettings, minimumTrackBitrate: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Maximum File Size (MB)</label>
-                    <input
-                      type="number"
-                      value={stationSettings.maximumTrackSize}
-                      onChange={(e) => setStationSettings({ ...stationSettings, maximumTrackSize: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Allowed Formats</label>
-                    <div className="space-y-2">
-                      {["mp3", "wav", "flac"].map((format) => (
-                        <label key={format} className="flex items-center space-x-2">
-                          <input
-                            type="checkbox"
-                            checked={stationSettings.allowedFormats.includes(format)}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setStationSettings({
-                                  ...stationSettings,
-                                  allowedFormats: [...stationSettings.allowedFormats, format],
-                                });
-                              } else {
-                                setStationSettings({
-                                  ...stationSettings,
-                                  allowedFormats: stationSettings.allowedFormats.filter((f) => f !== format),
-                                });
-                              }
-                            }}
-                            className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                          />
-                          <span className="text-sm text-gray-700 uppercase">{format}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Save Button */}
-              <div className="pt-6 border-t">
-                <button
-                  onClick={handleSaveSettings}
-                  disabled={isSaving}
-                  className="inline-flex items-center space-x-2 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-                >
-                  {isSaving ? (
-                    <>
-                      <RefreshCw className="w-5 h-5 animate-spin" />
-                      <span>Saving...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Save className="w-5 h-5" />
-                      <span>Save Station Config</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </main>
-  );
-}
-
-function TabButton({ active, onClick, label, icon }: { active: boolean; onClick: () => void; label: string; icon: React.ReactNode }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-        active ? "bg-purple-100 text-purple-700" : "text-gray-600 hover:bg-gray-100"
-      }`}
-    >
-      {icon}
-      <span>{label}</span>
-    </button>
+      </main>
+    </div>
   );
 }

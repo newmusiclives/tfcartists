@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award, Music, Settings } from "lucide-react";
+import { ArrowRight, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award, Music, Settings, Building2 } from "lucide-react";
+import { StationName } from "@/components/station-name";
 
 export default function HomePage() {
   return (
@@ -10,7 +11,7 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <Radio className="w-6 h-6 text-amber-700" />
-              <span className="font-bold text-xl text-amber-700">North Country Radio</span>
+              <StationName className="font-bold text-xl text-amber-700" />
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -64,7 +65,14 @@ export default function HomePage() {
                 <span>Artists</span>
               </Link>
               <Link
-                href="/station-admin/wizard"
+                href="/sponsor"
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-1"
+              >
+                <Building2 className="w-4 h-4" />
+                <span>Sponsors</span>
+              </Link>
+              <Link
+                href="/operate"
                 className="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors flex items-center space-x-1"
               >
                 <Settings className="w-4 h-4" />
@@ -84,7 +92,7 @@ export default function HomePage() {
           </div>
 
           <h1 className="mt-6 text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 leading-[1.1] tracking-tight">
-            North Country Radio
+            <StationName />
             <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-700 via-orange-600 to-amber-600">
               Where the music finds you.
             </span>
@@ -105,11 +113,19 @@ export default function HomePage() {
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
-              href="/station-admin/wizard"
-              className="inline-flex items-center space-x-2 bg-amber-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-amber-700 transition-colors shadow-lg hover:shadow-xl"
+              href="/listen/register"
+              className="inline-flex items-center space-x-2 bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
             >
-              <Settings className="w-5 h-5" />
-              <span>Operators: Launch a Station</span>
+              <Radio className="w-5 h-5" />
+              <span>Listeners: Tune In</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href="/sponsor"
+              className="inline-flex items-center space-x-2 bg-green-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-700 transition-colors shadow-lg hover:shadow-xl"
+            >
+              <Building2 className="w-5 h-5" />
+              <span>Sponsors: Partner With Us</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -264,7 +280,7 @@ export default function HomePage() {
           <Step
             number="3"
             title="Dual Signup"
-            description="North Country Radio account + FREE radio airplay"
+            description="Station account + FREE radio airplay"
           />
           <Step
             number="4"
@@ -294,7 +310,7 @@ export default function HomePage() {
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">$127.50</div>
               <div className="text-amber-100">Total Raised</div>
-              <div className="text-sm text-amber-200 mt-2">Via North Country Radio</div>
+              <div className="text-sm text-amber-200 mt-2">Via TrueFans RADIO</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">31</div>
@@ -348,7 +364,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p>&copy; 2025 North Country Radio — A TrueFans RADIO Network Station. Riley + Cassidy + Harper + Elliot AI Teams.</p>
+            <p>&copy; 2025 TrueFans RADIO Network. Riley + Cassidy + Harper + Elliot AI Teams.</p>
           </div>
         </div>
       </footer>

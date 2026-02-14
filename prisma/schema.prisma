@@ -72,6 +72,11 @@ model Artist {
   airplayShares     Int         @default(1) // Shares in the Artist Pool
   lastTierUpgrade   DateTime?
 
+  // Embed & Gamification
+  embedListeners    Int      @default(0)  // listeners gained via embed
+  xpTotal           Int      @default(0)
+  xpLevel           Int      @default(1)
+
   // Relationships for airplay
   airplayPayments   AirplayPayment[]
 
@@ -572,6 +577,15 @@ model Listener {
   communityMember   Boolean  @default(false)
   discordId         String?
   facebookId        String?
+
+  // Referral tracking
+  referredByCode    String?   // referral code used at registration
+  referredByType    String?   // "scout", "artist", "sponsor", "listener"
+
+  // Gamification
+  xpTotal           Int      @default(0)
+  xpLevel           Int      @default(1)
+  badges            String?  // JSON array of badge IDs earned
 
   // Relationships
   sessions          ListeningSession[]
@@ -2214,4 +2228,67 @@ model FeatureSchedule {
   @@index([stationId])
   @@index([djId])
   @@index([featureTypeId])
+}
+
+// =============================================================================
+// EMBED EVENTS & GAMIFICATION
+// =============================================================================
+
+// Embed event tracking (widget plays from external sites)
+model EmbedEvent {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  sessionId         String?
+  referralCode      String?
+  referrerType      String?  // "scout", "artist", "sponsor", "listener"
+  referrerId        String?
+  listenerIp        String?  // hashed for privacy
+  device            String   @default("embed")
+  convertedToListener Boolean @default(false)
+  listenerId        String?
+
+  @@index([referralCode])
+  @@index([referrerId])
+  @@index([createdAt])
+}
+
+// XP transaction log for gamification
+model XPTransaction {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  userId      String   // listenerId, artistId, or sponsorId
+  userType    String   // "listener", "artist", "sponsor"
+  action      String   // "listen_session", "streak_bonus", "referral", "embed_play", etc.
+  xpAmount    Int
+  metadata    String?  // JSON metadata
+
+  @@index([userId, userType])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// Badge definitions for gamification
+model Badge {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String
+  icon        String   // emoji or icon name
+  category    String   // "listening", "social", "referral", "milestone", "embed", "artist", "sponsor"
+  xpRequired  Int?     // auto-award at XP threshold
+  condition   String   // machine-readable condition key
+
+  @@index([category])
+}
+
+// System configuration (API keys, credentials, settings)
+// Allows admin to configure services through the UI
+model SystemConfig {
+  key       String   @id
+  value     String
+  category  String   // "payments", "email", "sms", "ai", "auth", "discovery", "monitoring"
+  label     String   // Human-readable label
+  encrypted Boolean  @default(true) // Whether the value should be masked in UI
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
 }

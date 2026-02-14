@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Radio, Clock, Calendar } from "lucide-react";
+import { StationName } from "@/components/station-name";
 
 export default function SchedulePage() {
   return (
@@ -10,7 +11,7 @@ export default function SchedulePage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <Radio className="w-6 h-6 text-amber-700" />
-              <span className="font-bold text-xl text-gray-900">North Country Radio</span>
+              <StationName className="font-bold text-xl text-gray-900" />
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -313,7 +314,7 @@ export default function SchedulePage() {
       <footer className="bg-gray-900 text-gray-400 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-4">
-            <span className="text-2xl font-serif font-bold text-white">North Country Radio™</span>
+            <StationName className="text-2xl font-serif font-bold text-white" />
           </div>
           <p className="text-lg italic text-amber-400 mb-6">"Where the music finds you."</p>
           <p className="text-sm">
