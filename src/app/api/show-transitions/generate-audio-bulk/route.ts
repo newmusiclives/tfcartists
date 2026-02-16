@@ -7,6 +7,25 @@ import * as path from "path";
 
 export const dynamic = "force-dynamic";
 
+function saveAudioFile(buffer: Buffer, filename: string): string {
+  try {
+    const outputDir = path.join(
+      process.cwd(),
+      "public",
+      "audio",
+      "transitions"
+    );
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+    fs.writeFileSync(path.join(outputDir, filename), buffer);
+    return `/audio/transitions/${filename}`;
+  } catch {
+    // Serverless (Netlify) — read-only filesystem, store as data URI
+    return `data:audio/mpeg;base64,${buffer.toString("base64")}`;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -28,6 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Find all transitions with scripts but no audio
+    // Exclude data URI entries (already generated) along with file paths
     const transitions = await prisma.showTransition.findMany({
       where: {
         stationId,
@@ -45,15 +65,6 @@ export async function POST(request: NextRequest) {
     }
 
     const openai = new OpenAI({ apiKey });
-    const outputDir = path.join(
-      process.cwd(),
-      "public",
-      "audio",
-      "transitions"
-    );
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
 
     const results: Array<{
       id: string;
@@ -106,13 +117,16 @@ export async function POST(request: NextRequest) {
         const filename = `${safeName}${partSuffix}.mp3`;
 
         const buffer = Buffer.from(await response.arrayBuffer());
-        fs.writeFileSync(path.join(outputDir, filename), buffer);
+        const audioFilePath = saveAudioFile(buffer, filename);
 
-        const audioFilePath = `/audio/transitions/${filename}`;
-        await prisma.showTransition.update({
-          where: { id: transition.id },
-          data: { audioFilePath },
-        });
+        try {
+          await prisma.showTransition.update({
+            where: { id: transition.id },
+            data: { audioFilePath },
+          });
+        } catch {
+          // DB is read-only on Netlify — audio still returned in response
+        }
 
         results.push({
           id: transition.id,

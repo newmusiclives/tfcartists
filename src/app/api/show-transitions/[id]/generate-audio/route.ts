@@ -71,18 +71,9 @@ export async function POST(
       input: transition.scriptText,
     });
 
-    // Save the audio file
-    const outputDir = path.join(
-      process.cwd(),
-      "public",
-      "audio",
-      "transitions"
-    );
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
+    const buffer = Buffer.from(await response.arrayBuffer());
 
-    // Build filename: sanitize the transition name
+    // Build filename
     const safeName = transition.name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
@@ -91,16 +82,34 @@ export async function POST(
       transition.handoffPart !== null ? `-part${transition.handoffPart}` : "";
     const filename = `${safeName}${partSuffix}.mp3`;
 
-    const buffer = Buffer.from(await response.arrayBuffer());
-    const filePath = path.join(outputDir, filename);
-    fs.writeFileSync(filePath, buffer);
+    // Try saving to public/ (works locally), fall back to data URI for serverless
+    let audioFilePath: string;
+    try {
+      const outputDir = path.join(
+        process.cwd(),
+        "public",
+        "audio",
+        "transitions"
+      );
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+      fs.writeFileSync(path.join(outputDir, filename), buffer);
+      audioFilePath = `/audio/transitions/${filename}`;
+    } catch {
+      // Serverless (Netlify) — read-only filesystem, store as data URI
+      audioFilePath = `data:audio/mpeg;base64,${buffer.toString("base64")}`;
+    }
 
-    // Update database
-    const audioFilePath = `/audio/transitions/${filename}`;
-    await prisma.showTransition.update({
-      where: { id },
-      data: { audioFilePath },
-    });
+    // Try to persist to DB (fails on read-only SQLite in serverless)
+    try {
+      await prisma.showTransition.update({
+        where: { id },
+        data: { audioFilePath },
+      });
+    } catch {
+      // DB is read-only on Netlify — audio still returned in response
+    }
 
     return NextResponse.json({ audioFilePath, voice, filename });
   } catch (error) {
