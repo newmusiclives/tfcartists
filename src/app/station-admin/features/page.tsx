@@ -173,6 +173,13 @@ export default function ShowFeaturesPage() {
     ...djDisplayOrder.filter((name) => schedulesByDj[name]),
     ...Object.keys(schedulesByDj).filter((name) => !djDisplayOrder.includes(name)),
   ];
+  const weekdayDjs = ["Hank Westwood", "Loretta Merrick", "Marcus 'Doc' Holloway", "Cody Rampart"];
+  const saturdayDjs = ["Jo McAllister", "Paul Saunders", "Ezra Stone", "Levi Bridges"];
+  const sundayDjs = ["Sam Turnbull", "Ruby Finch", "Mark Faulkner", "Iris Langley"];
+  const djSectionLabel = (name: string) =>
+    weekdayDjs[0] === name ? "Weekday (Mon–Fri)" :
+    saturdayDjs[0] === name ? "Saturday" :
+    sundayDjs[0] === name ? "Sunday" : null;
 
   const tabs: { id: Tab; label: string; icon: React.ElementType; count?: number }[] = [
     { id: "types", label: "Feature Types", icon: LayoutGrid, count: featureTypes.length },
@@ -624,11 +631,16 @@ export default function ShowFeaturesPage() {
               <div className="space-y-6">
                 {orderedDjNames.map((djName) => {
                   const djSchedules = schedulesByDj[djName];
+                  const sectionLabel = djSectionLabel(djName);
                   return (
-                  <div
-                    key={djName}
-                    className="bg-white rounded-xl shadow-sm border overflow-hidden"
-                  >
+                  <div key={djName}>
+                    {sectionLabel && (
+                      <div className="flex items-center gap-3 mb-3 mt-2">
+                        <h2 className="text-lg font-bold text-gray-800">{sectionLabel}</h2>
+                        <div className="flex-1 h-px bg-gray-200" />
+                      </div>
+                    )}
+                    <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
                     <div className="bg-gray-50 px-4 py-3 border-b">
                       <h3 className="font-semibold text-gray-900">
                         {djName}
@@ -700,6 +712,7 @@ export default function ShowFeaturesPage() {
                           ))}
                       </tbody>
                     </table>
+                  </div>
                   </div>
                   );
                 })}
