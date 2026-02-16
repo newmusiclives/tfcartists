@@ -10,6 +10,10 @@ import {
   Pencil,
   X,
   Save,
+  Mic,
+  Play,
+  Square,
+  CheckCircle2,
 } from "lucide-react";
 
 interface DJ {
@@ -73,6 +77,93 @@ export default function ShowTransitionsPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [generatingId, setGeneratingId] = useState<string | null>(null);
+  const [generatingAll, setGeneratingAll] = useState(false);
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const [audioRef, setAudioRef] = useState<HTMLAudioElement | null>(null);
+
+  const generateAudio = async (transitionId: string) => {
+    setGeneratingId(transitionId);
+    try {
+      const res = await fetch(
+        `/api/show-transitions/${transitionId}/generate-audio`,
+        { method: "POST" }
+      );
+      const data = await res.json();
+      if (data.audioFilePath) {
+        setTransitions(
+          transitions.map((t) =>
+            t.id === transitionId
+              ? { ...t, audioFilePath: data.audioFilePath }
+              : t
+          )
+        );
+      }
+    } catch {
+      // silent
+    } finally {
+      setGeneratingId(null);
+    }
+  };
+
+  const generateAllAudio = async () => {
+    if (!stationId) return;
+    setGeneratingAll(true);
+    try {
+      const res = await fetch("/api/show-transitions/generate-audio-bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stationId }),
+      });
+      const data = await res.json();
+      if (data.results) {
+        const updated = new Map(
+          data.results
+            .filter((r: { success: boolean }) => r.success)
+            .map((r: { id: string; audioFilePath: string }) => [
+              r.id,
+              r.audioFilePath,
+            ])
+        );
+        setTransitions(
+          transitions.map((t) =>
+            updated.has(t.id)
+              ? { ...t, audioFilePath: updated.get(t.id) as string }
+              : t
+          )
+        );
+      }
+    } catch {
+      // silent
+    } finally {
+      setGeneratingAll(false);
+    }
+  };
+
+  const togglePlay = (transition: ShowTransition) => {
+    if (playingId === transition.id && audioRef) {
+      audioRef.pause();
+      audioRef.currentTime = 0;
+      setPlayingId(null);
+      setAudioRef(null);
+      return;
+    }
+
+    // Stop any currently playing audio
+    if (audioRef) {
+      audioRef.pause();
+      audioRef.currentTime = 0;
+    }
+
+    const audio = new Audio(transition.audioFilePath!);
+    audio.addEventListener("ended", () => {
+      setPlayingId(null);
+      setAudioRef(null);
+    });
+    audio.play();
+    setPlayingId(transition.id);
+    setAudioRef(audio);
+  };
 
   useEffect(() => {
     fetch("/api/stations")
@@ -179,17 +270,31 @@ export default function ShowTransitionsPage() {
               Manage show intros, outros, and DJ handoffs
             </p>
           </div>
-          <button
-            onClick={() => {
-              setForm(EMPTY_FORM);
-              setEditingId(null);
-              setShowForm(true);
-            }}
-            className="bg-amber-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-amber-700 flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            Add Transition
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={generateAllAudio}
+              disabled={generatingAll || !transitions.some((t) => t.scriptText && !t.audioFilePath)}
+              className="bg-indigo-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2"
+            >
+              {generatingAll ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Mic className="w-4 h-4" />
+              )}
+              {generatingAll ? "Generating..." : "Generate All Audio"}
+            </button>
+            <button
+              onClick={() => {
+                setForm(EMPTY_FORM);
+                setEditingId(null);
+                setShowForm(true);
+              }}
+              className="bg-amber-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-amber-700 flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Add Transition
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -286,6 +391,38 @@ export default function ShowTransitionsPage() {
                         )}
                       </div>
                       <div className="flex items-center gap-1">
+                        {t.audioFilePath ? (
+                          <>
+                            <span className="text-green-500 mr-1" title="Audio ready">
+                              <CheckCircle2 className="w-4 h-4" />
+                            </span>
+                            <button
+                              onClick={() => togglePlay(t)}
+                              className="p-1.5 text-gray-400 hover:text-green-600 transition-colors"
+                              title={playingId === t.id ? "Stop" : "Play"}
+                            >
+                              {playingId === t.id ? (
+                                <Square className="w-4 h-4" />
+                              ) : (
+                                <Play className="w-4 h-4" />
+                              )}
+                            </button>
+                          </>
+                        ) : null}
+                        {t.scriptText && (
+                          <button
+                            onClick={() => generateAudio(t.id)}
+                            disabled={generatingId === t.id}
+                            className="p-1.5 text-gray-400 hover:text-indigo-600 transition-colors disabled:opacity-50"
+                            title={t.audioFilePath ? "Regenerate audio" : "Generate audio"}
+                          >
+                            {generatingId === t.id ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <Mic className="w-4 h-4" />
+                            )}
+                          </button>
+                        )}
                         <button
                           onClick={() => editTransition(t)}
                           className="p-1.5 text-gray-400 hover:text-amber-600 transition-colors"

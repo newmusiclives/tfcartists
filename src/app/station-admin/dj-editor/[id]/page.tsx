@@ -23,6 +23,7 @@ interface DJDetail {
   voiceProfileId: string | null;
   voiceStability: number;
   voiceSimilarityBoost: number;
+  ttsVoice: string | null;
   gptSystemPrompt: string | null;
   gptTemperature: number;
   photoUrl: string | null;
@@ -198,7 +199,7 @@ export default function DJEditorDetailPage() {
           {/* Voice Config */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
             <h2 className="font-semibold mb-4">Voice Configuration</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="text-xs text-gray-500 block mb-1">Voice Description</label>
                 <input type="text" value={dj.voiceDescription || ""} onChange={(e) => setDj({ ...dj, voiceDescription: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" />
@@ -206,6 +207,26 @@ export default function DJEditorDetailPage() {
               <div>
                 <label className="text-xs text-gray-500 block mb-1">ElevenLabs Voice ID</label>
                 <input type="text" value={dj.voiceProfileId || ""} onChange={(e) => setDj({ ...dj, voiceProfileId: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm font-mono" placeholder="voice_abc123..." />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1">OpenAI TTS Voice</label>
+                <select
+                  value={dj.ttsVoice || ""}
+                  onChange={(e) => setDj({ ...dj, ttsVoice: e.target.value || null })}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                >
+                  <option value="">Not set</option>
+                  <option value="alloy">Alloy</option>
+                  <option value="ash">Ash</option>
+                  <option value="ballad">Ballad</option>
+                  <option value="coral">Coral</option>
+                  <option value="echo">Echo</option>
+                  <option value="fable">Fable</option>
+                  <option value="nova">Nova</option>
+                  <option value="onyx">Onyx</option>
+                  <option value="sage">Sage</option>
+                  <option value="shimmer">Shimmer</option>
+                </select>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4">
