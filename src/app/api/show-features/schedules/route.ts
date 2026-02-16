@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
     const schedules = await prisma.featureSchedule.findMany({
       where: { stationId },
-      include: { featureType: { select: { name: true, category: true } } },
+      include: { featureType: { select: { name: true, category: true, trackPlacement: true } } },
       orderBy: [{ djName: "asc" }, { priority: "desc" }],
     });
 
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     const schedule = await prisma.featureSchedule.create({
       data: { stationId, featureTypeId, djId, djName, frequencyPerShow: frequencyPerShow || 1, minSongsBetween: minSongsBetween || 3, priority: priority || 5 },
-      include: { featureType: { select: { name: true, category: true } } },
+      include: { featureType: { select: { name: true, category: true, trackPlacement: true } } },
     });
 
     return NextResponse.json({ schedule }, { status: 201 });

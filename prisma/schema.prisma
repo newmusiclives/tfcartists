@@ -2139,6 +2139,7 @@ model FeatureType {
   name                  String   // "Artist Quickies"
   description           String?
   category              String   // "all_shows" or "morning_only"
+  trackPlacement        String?  // "before" | "after" | null
 
   // AI generation
   gptPromptTemplate     String?  // Template with {artist_name}, {song_title}, etc.
@@ -2181,6 +2182,7 @@ model FeatureContent {
   // AI generation
   generatedBy           String?  // "gpt-4", "gpt-4-turbo"
   djPersonalityId       String?  // DJ it was generated for
+  relatedSongId         String?  // Song linked to this feature (before/after)
 
   // Usage
   isUsed                Boolean  @default(false)

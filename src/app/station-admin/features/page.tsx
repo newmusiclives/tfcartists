@@ -19,6 +19,7 @@ interface FeatureType {
   name: string;
   description: string | null;
   category: string;
+  trackPlacement: string | null; // "before" | "after" | null
   suggestedDuration: number;
   includesPoll: boolean;
   includesCallIn: boolean;
@@ -34,7 +35,7 @@ interface FeatureSchedule {
   frequencyPerShow: number;
   minSongsBetween: number;
   priority: number;
-  featureType: { name: string; category: string };
+  featureType: { name: string; category: string; trackPlacement: string | null };
 }
 
 interface DJ {
@@ -240,9 +241,21 @@ export default function ShowFeaturesPage() {
                       <h3 className="font-semibold text-gray-900 text-sm">
                         {ft.name}
                       </h3>
-                      <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
-                        {ft.suggestedDuration}s
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {ft.trackPlacement === "before" && (
+                          <span className="text-[10px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-medium">
+                            Song → Talk
+                          </span>
+                        )}
+                        {ft.trackPlacement === "after" && (
+                          <span className="text-[10px] bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded font-medium">
+                            Talk → Song
+                          </span>
+                        )}
+                        <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
+                          {ft.suggestedDuration}s
+                        </span>
+                      </div>
                     </div>
                     <p className="text-xs text-gray-500 mb-3">
                       {ft.description}
@@ -286,9 +299,21 @@ export default function ShowFeaturesPage() {
                       <h3 className="font-semibold text-gray-900 text-sm">
                         {ft.name}
                       </h3>
-                      <span className="text-[10px] bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded">
-                        {ft.suggestedDuration}s
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {ft.trackPlacement === "before" && (
+                          <span className="text-[10px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-medium">
+                            Song → Talk
+                          </span>
+                        )}
+                        {ft.trackPlacement === "after" && (
+                          <span className="text-[10px] bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded font-medium">
+                            Talk → Song
+                          </span>
+                        )}
+                        <span className="text-[10px] bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded">
+                          {ft.suggestedDuration}s
+                        </span>
+                      </div>
                     </div>
                     <p className="text-xs text-gray-500 mb-3">
                       {ft.description}
@@ -605,6 +630,9 @@ export default function ShowFeaturesPage() {
                             Feature
                           </th>
                           <th className="text-center px-4 py-2 text-xs font-medium text-gray-500">
+                            Track
+                          </th>
+                          <th className="text-center px-4 py-2 text-xs font-medium text-gray-500">
                             Freq/Show
                           </th>
                           <th className="text-center px-4 py-2 text-xs font-medium text-gray-500">
@@ -622,6 +650,21 @@ export default function ShowFeaturesPage() {
                             <tr key={s.id} className="hover:bg-gray-50">
                               <td className="px-4 py-2 text-sm text-gray-900">
                                 {s.featureType.name}
+                              </td>
+                              <td className="px-4 py-2 text-center">
+                                {s.featureType.trackPlacement === "before" ? (
+                                  <span className="text-[10px] font-medium bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">
+                                    Before
+                                  </span>
+                                ) : s.featureType.trackPlacement === "after" ? (
+                                  <span className="text-[10px] font-medium bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full">
+                                    After
+                                  </span>
+                                ) : (
+                                  <span className="text-[10px] text-gray-400">
+                                    —
+                                  </span>
+                                )}
                               </td>
                               <td className="px-4 py-2 text-sm text-gray-600 text-center">
                                 {s.frequencyPerShow}x

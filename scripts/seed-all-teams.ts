@@ -920,26 +920,29 @@ async function seedStation() {
       indiePerHour: 2,
       genderBalanceTarget: 0.45,
       pattern: [
-        { position: 1, minute: 0, duration: 3, category: "TOH", type: "station_id", notes: "Top of hour ID" },
+        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Morning TOH — imaging voice over music bed" },
         { position: 2, minute: 0, duration: 4, category: "A", type: "song", notes: "Hit opener" },
         { position: 3, minute: 4, duration: 4, category: "A", type: "song", notes: "Second hit" },
-        { position: 4, minute: 8, duration: 2, category: "DJ", type: "voice_break", notes: "Morning greeting" },
-        { position: 5, minute: 10, duration: 4, category: "B", type: "song", notes: "Fast tempo" },
-        { position: 6, minute: 14, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 7, minute: 18, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor spot" },
-        { position: 8, minute: 19, duration: 4, category: "C", type: "song", notes: "Medium tempo" },
-        { position: 9, minute: 23, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 10, minute: 27, duration: 2, category: "DJ", type: "voice_break", notes: "Song intro" },
-        { position: 11, minute: 29, duration: 4, category: "B", type: "song", notes: "Fast tempo" },
-        { position: 12, minute: 33, duration: 4, category: "E", type: "song", notes: "Indie spotlight" },
-        { position: 13, minute: 37, duration: 1, category: "Imaging", type: "sweeper", notes: "Station sweeper" },
-        { position: 14, minute: 38, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 15, minute: 42, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 16, minute: 46, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor spot" },
-        { position: 17, minute: 47, duration: 4, category: "B", type: "song", notes: "Fast tempo" },
-        { position: 18, minute: 51, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 19, minute: 55, duration: 2, category: "Feature", type: "feature", notes: "Artist spotlight" },
-        { position: 20, minute: 57, duration: 3, category: "E", type: "song", notes: "Indie closer" },
+        { position: 4, minute: 8, duration: 0.25, category: "DJ", type: "voice_break", notes: "Morning greeting" },
+        { position: 5, minute: 9, duration: 4, category: "B", type: "song", notes: "Fast tempo" },
+        { position: 6, minute: 13, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 7, minute: 17, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 1" },
+        { position: 8, minute: 18, duration: 4, category: "C", type: "song", notes: "Medium tempo", featureSlot: 1, featuredTrack: "before" },
+        { position: 9, minute: 22, duration: 0.5, category: "Feature", type: "feature", notes: "Artist spotlight", featureSlot: 1 },
+        { position: 10, minute: 23, duration: 4, category: "A", type: "song", notes: "Hit", featureSlot: 1, featuredTrack: "after" },
+        { position: 11, minute: 27, duration: 0.25, category: "DJ", type: "voice_break", notes: "Song intro" },
+        { position: 12, minute: 28, duration: 4, category: "B", type: "song", notes: "Fast tempo" },
+        { position: 13, minute: 32, duration: 4, category: "E", type: "song", notes: "Indie spotlight" },
+        { position: 14, minute: 36, duration: 1, category: "Imaging", type: "sweeper", notes: "Imaging voice sweeper w/ music bed" },
+        { position: 15, minute: 37, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 2" },
+        { position: 16, minute: 38, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 17, minute: 42, duration: 4, category: "B", type: "song", notes: "Fast tempo", featureSlot: 2, featuredTrack: "before" },
+        { position: 18, minute: 46, duration: 0.5, category: "Feature", type: "feature", notes: "New release", featureSlot: 2 },
+        { position: 19, minute: 47, duration: 0.25, category: "DJ", type: "voice_break", notes: "Back-sell / tease" },
+        { position: 20, minute: 48, duration: 4, category: "A", type: "song", notes: "Hit", featureSlot: 2, featuredTrack: "after" },
+        { position: 21, minute: 52, duration: 4, category: "E", type: "song", notes: "Indie closer" },
+        { position: 22, minute: 56, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 3" },
+        { position: 23, minute: 57, duration: 3, category: "A", type: "song", notes: "Closer" },
       ],
     },
     {
@@ -952,26 +955,29 @@ async function seedStation() {
       indiePerHour: 3,
       genderBalanceTarget: 0.5,
       pattern: [
-        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Top of hour" },
+        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Standard TOH — imaging voice over music bed" },
         { position: 2, minute: 0, duration: 4, category: "A", type: "song", notes: "Hit opener" },
         { position: 3, minute: 4, duration: 4, category: "C", type: "song", notes: "Medium tempo" },
-        { position: 4, minute: 8, duration: 2, category: "DJ", type: "voice_break", notes: "Midday check-in" },
-        { position: 5, minute: 10, duration: 4, category: "B", type: "song", notes: "Uptempo" },
-        { position: 6, minute: 14, duration: 4, category: "E", type: "song", notes: "Indie pick" },
-        { position: 7, minute: 18, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
-        { position: 8, minute: 19, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 9, minute: 23, duration: 4, category: "D", type: "song", notes: "Slow ballad" },
-        { position: 10, minute: 27, duration: 2, category: "DJ", type: "voice_break", notes: "Song context" },
-        { position: 11, minute: 29, duration: 4, category: "C", type: "song", notes: "Medium" },
-        { position: 12, minute: 33, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 13, minute: 37, duration: 1, category: "Imaging", type: "sweeper", notes: "Sweeper" },
-        { position: 14, minute: 38, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 15, minute: 42, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 16, minute: 46, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
-        { position: 17, minute: 47, duration: 4, category: "C", type: "song", notes: "Medium" },
-        { position: 18, minute: 51, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 19, minute: 55, duration: 2, category: "Feature", type: "feature", notes: "New release" },
-        { position: 20, minute: 57, duration: 3, category: "E", type: "song", notes: "Indie closer" },
+        { position: 4, minute: 8, duration: 0.25, category: "DJ", type: "voice_break", notes: "Midday check-in" },
+        { position: 5, minute: 9, duration: 4, category: "C", type: "song", notes: "Medium tempo" },
+        { position: 6, minute: 13, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 7, minute: 17, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 1" },
+        { position: 8, minute: 18, duration: 4, category: "D", type: "song", notes: "Slow ballad", featureSlot: 1, featuredTrack: "before" },
+        { position: 9, minute: 22, duration: 0.5, category: "Feature", type: "feature", notes: "New release", featureSlot: 1 },
+        { position: 10, minute: 23, duration: 4, category: "E", type: "song", notes: "Indie pick", featureSlot: 1, featuredTrack: "after" },
+        { position: 11, minute: 27, duration: 0.25, category: "DJ", type: "voice_break", notes: "Song context" },
+        { position: 12, minute: 28, duration: 4, category: "C", type: "song", notes: "Medium" },
+        { position: 13, minute: 32, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 14, minute: 36, duration: 1, category: "Imaging", type: "sweeper", notes: "Imaging voice sweeper w/ music bed" },
+        { position: 15, minute: 37, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 2" },
+        { position: 16, minute: 38, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 17, minute: 42, duration: 4, category: "A", type: "song", notes: "Hit", featureSlot: 2, featuredTrack: "before" },
+        { position: 18, minute: 46, duration: 0.5, category: "Feature", type: "feature", notes: "Artist spotlight", featureSlot: 2 },
+        { position: 19, minute: 47, duration: 0.25, category: "DJ", type: "voice_break", notes: "Back-sell / tease" },
+        { position: 20, minute: 48, duration: 4, category: "C", type: "song", notes: "Medium", featureSlot: 2, featuredTrack: "after" },
+        { position: 21, minute: 52, duration: 4, category: "E", type: "song", notes: "Indie closer" },
+        { position: 22, minute: 56, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 3" },
+        { position: 23, minute: 57, duration: 3, category: "A", type: "song", notes: "Closer" },
       ],
     },
     {
@@ -984,26 +990,29 @@ async function seedStation() {
       indiePerHour: 4,
       genderBalanceTarget: 0.5,
       pattern: [
-        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Evening ID" },
-        { position: 2, minute: 0, duration: 5, category: "D", type: "song", notes: "Slow opener" },
-        { position: 3, minute: 5, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 4, minute: 9, duration: 3, category: "DJ", type: "voice_break", notes: "Evening story" },
-        { position: 5, minute: 12, duration: 5, category: "D", type: "song", notes: "Deep cut" },
-        { position: 6, minute: 17, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 7, minute: 21, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
-        { position: 8, minute: 22, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 9, minute: 26, duration: 5, category: "C", type: "song", notes: "Medium" },
-        { position: 10, minute: 31, duration: 2, category: "DJ", type: "voice_break", notes: "Artist story" },
-        { position: 11, minute: 33, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 12, minute: 37, duration: 5, category: "D", type: "song", notes: "Ballad" },
-        { position: 13, minute: 42, duration: 1, category: "Imaging", type: "sweeper", notes: "Night sweeper" },
-        { position: 14, minute: 43, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 15, minute: 47, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 16, minute: 51, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
-        { position: 17, minute: 52, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 18, minute: 56, duration: 2, category: "Feature", type: "feature", notes: "Songwriter session" },
-        { position: 19, minute: 58, duration: 4, category: "E", type: "song", notes: "Indie closer" },
-        { position: 20, minute: 58, duration: 2, category: "D", type: "song", notes: "Night wind-down" },
+        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Evening TOH — imaging voice over music bed" },
+        { position: 2, minute: 0, duration: 4, category: "D", type: "song", notes: "Slow opener" },
+        { position: 3, minute: 4, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 4, minute: 8, duration: 0.25, category: "DJ", type: "voice_break", notes: "Evening story" },
+        { position: 5, minute: 9, duration: 4, category: "D", type: "song", notes: "Deep cut" },
+        { position: 6, minute: 13, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 7, minute: 17, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 1" },
+        { position: 8, minute: 18, duration: 4, category: "A", type: "song", notes: "Hit", featureSlot: 1, featuredTrack: "before" },
+        { position: 9, minute: 22, duration: 0.5, category: "Feature", type: "feature", notes: "Songwriter session", featureSlot: 1 },
+        { position: 10, minute: 23, duration: 4, category: "C", type: "song", notes: "Medium", featureSlot: 1, featuredTrack: "after" },
+        { position: 11, minute: 27, duration: 0.25, category: "DJ", type: "voice_break", notes: "Artist story" },
+        { position: 12, minute: 28, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 13, minute: 32, duration: 4, category: "D", type: "song", notes: "Ballad" },
+        { position: 14, minute: 36, duration: 1, category: "Imaging", type: "sweeper", notes: "Imaging voice sweeper w/ music bed" },
+        { position: 15, minute: 37, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 2" },
+        { position: 16, minute: 38, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 17, minute: 42, duration: 4, category: "E", type: "song", notes: "Indie", featureSlot: 2, featuredTrack: "before" },
+        { position: 18, minute: 46, duration: 0.5, category: "Feature", type: "feature", notes: "Album deep dive", featureSlot: 2 },
+        { position: 19, minute: 47, duration: 0.25, category: "DJ", type: "voice_break", notes: "Back-sell / tease" },
+        { position: 20, minute: 48, duration: 4, category: "D", type: "song", notes: "Deep cut", featureSlot: 2, featuredTrack: "after" },
+        { position: 21, minute: 52, duration: 4, category: "E", type: "song", notes: "Indie closer" },
+        { position: 22, minute: 56, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 3" },
+        { position: 23, minute: 57, duration: 3, category: "D", type: "song", notes: "Night wind-down" },
       ],
     },
     {
@@ -1016,58 +1025,60 @@ async function seedStation() {
       indiePerHour: 6,
       genderBalanceTarget: 0.55,
       pattern: [
-        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Weekend ID" },
+        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Weekend TOH — imaging voice over music bed" },
         { position: 2, minute: 0, duration: 4, category: "E", type: "song", notes: "Indie opener" },
         { position: 3, minute: 4, duration: 4, category: "E", type: "song", notes: "New discovery" },
-        { position: 4, minute: 8, duration: 3, category: "DJ", type: "voice_break", notes: "Weekend intro" },
-        { position: 5, minute: 11, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 6, minute: 15, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 7, minute: 19, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
-        { position: 8, minute: 20, duration: 4, category: "C", type: "song", notes: "Medium" },
-        { position: 9, minute: 24, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 10, minute: 28, duration: 2, category: "DJ", type: "voice_break", notes: "Artist intro" },
-        { position: 11, minute: 30, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 12, minute: 34, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 13, minute: 38, duration: 1, category: "Imaging", type: "sweeper", notes: "Weekend sweeper" },
-        { position: 14, minute: 39, duration: 4, category: "B", type: "song", notes: "Uptempo" },
-        { position: 15, minute: 43, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 16, minute: 47, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor" },
-        { position: 17, minute: 48, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 18, minute: 52, duration: 3, category: "Feature", type: "feature", notes: "New artist showcase" },
-        { position: 19, minute: 55, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 20, minute: 59, duration: 1, category: "E", type: "song", notes: "Indie closer" },
+        { position: 4, minute: 8, duration: 0.25, category: "DJ", type: "voice_break", notes: "Weekend intro" },
+        { position: 5, minute: 9, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 6, minute: 13, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 7, minute: 17, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 1" },
+        { position: 8, minute: 18, duration: 4, category: "C", type: "song", notes: "Medium", featureSlot: 1, featuredTrack: "before" },
+        { position: 9, minute: 22, duration: 0.5, category: "Feature", type: "feature", notes: "New artist showcase", featureSlot: 1 },
+        { position: 10, minute: 23, duration: 4, category: "E", type: "song", notes: "Indie", featureSlot: 1, featuredTrack: "after" },
+        { position: 11, minute: 27, duration: 0.25, category: "DJ", type: "voice_break", notes: "Artist intro" },
+        { position: 12, minute: 28, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 13, minute: 32, duration: 4, category: "E", type: "song", notes: "Indie" },
+        { position: 14, minute: 36, duration: 1, category: "Imaging", type: "sweeper", notes: "Imaging voice sweeper w/ music bed" },
+        { position: 15, minute: 37, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 2" },
+        { position: 16, minute: 38, duration: 4, category: "B", type: "song", notes: "Uptempo" },
+        { position: 17, minute: 42, duration: 4, category: "E", type: "song", notes: "Indie", featureSlot: 2, featuredTrack: "before" },
+        { position: 18, minute: 46, duration: 0.5, category: "Feature", type: "feature", notes: "Indie spotlight", featureSlot: 2 },
+        { position: 19, minute: 47, duration: 0.25, category: "DJ", type: "voice_break", notes: "Back-sell / tease" },
+        { position: 20, minute: 48, duration: 4, category: "A", type: "song", notes: "Hit", featureSlot: 2, featuredTrack: "after" },
+        { position: 21, minute: 52, duration: 4, category: "E", type: "song", notes: "Indie closer" },
+        { position: 22, minute: 56, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 3" },
+        { position: 23, minute: 57, duration: 3, category: "E", type: "song", notes: "Discovery closer" },
       ],
     },
     {
       name: "Late Night Road",
-      description: "After-hours programming with mellow deep cuts and road music",
+      description: "After-hours automation with mellow deep cuts and road music",
       clockType: "late_night",
       tempo: "laid_back",
       energyLevel: "low",
-      hitsPerHour: 3,
-      indiePerHour: 5,
+      hitsPerHour: 2,
+      indiePerHour: 4,
       genderBalanceTarget: 0.4,
       pattern: [
-        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Late night ID" },
+        { position: 1, minute: 0, duration: 2, category: "TOH", type: "station_id", notes: "Late night TOH — imaging voice over ambient bed" },
         { position: 2, minute: 0, duration: 5, category: "D", type: "song", notes: "Slow opener" },
         { position: 3, minute: 5, duration: 5, category: "D", type: "song", notes: "Deep cut" },
-        { position: 4, minute: 10, duration: 2, category: "DJ", type: "voice_break", notes: "Late night whisper" },
-        { position: 5, minute: 12, duration: 5, category: "E", type: "song", notes: "Indie gem" },
-        { position: 6, minute: 17, duration: 5, category: "D", type: "song", notes: "Road song" },
-        { position: 7, minute: 22, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 8, minute: 26, duration: 5, category: "E", type: "song", notes: "Indie" },
-        { position: 9, minute: 31, duration: 1, category: "Imaging", type: "sweeper", notes: "Night sweeper" },
-        { position: 10, minute: 32, duration: 5, category: "D", type: "song", notes: "Ballad" },
-        { position: 11, minute: 37, duration: 5, category: "E", type: "song", notes: "Indie" },
-        { position: 12, minute: 42, duration: 4, category: "A", type: "song", notes: "Hit" },
-        { position: 13, minute: 46, duration: 5, category: "D", type: "song", notes: "Deep cut" },
-        { position: 14, minute: 51, duration: 5, category: "E", type: "song", notes: "Indie" },
-        { position: 15, minute: 56, duration: 4, category: "A", type: "song", notes: "Hit closer" },
-        { position: 16, minute: 56, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 17, minute: 56, duration: 4, category: "D", type: "song", notes: "Slow" },
-        { position: 18, minute: 56, duration: 4, category: "E", type: "song", notes: "Indie" },
-        { position: 19, minute: 56, duration: 4, category: "D", type: "song", notes: "Slow closer" },
-        { position: 20, minute: 59, duration: 1, category: "Imaging", type: "sweeper", notes: "Night closer" },
+        { position: 4, minute: 10, duration: 5, category: "E", type: "song", notes: "Indie gem" },
+        { position: 5, minute: 15, duration: 1, category: "Imaging", type: "sweeper", notes: "Imaging voice sweeper w/ ambient bed" },
+        { position: 6, minute: 16, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 1" },
+        { position: 7, minute: 17, duration: 5, category: "D", type: "song", notes: "Road song" },
+        { position: 8, minute: 22, duration: 5, category: "E", type: "song", notes: "Indie" },
+        { position: 9, minute: 27, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 10, minute: 31, duration: 1, category: "Imaging", type: "sweeper", notes: "Imaging voice sweeper w/ ambient bed" },
+        { position: 11, minute: 32, duration: 5, category: "D", type: "song", notes: "Ballad" },
+        { position: 12, minute: 37, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 2" },
+        { position: 13, minute: 38, duration: 5, category: "E", type: "song", notes: "Indie" },
+        { position: 14, minute: 43, duration: 4, category: "A", type: "song", notes: "Hit" },
+        { position: 15, minute: 47, duration: 5, category: "D", type: "song", notes: "Deep cut" },
+        { position: 16, minute: 52, duration: 1, category: "Imaging", type: "sweeper", notes: "Imaging voice sweeper w/ ambient bed" },
+        { position: 17, minute: 53, duration: 1, category: "Sponsor", type: "ad", notes: "Sponsor break 3" },
+        { position: 18, minute: 54, duration: 5, category: "E", type: "song", notes: "Indie" },
+        { position: 19, minute: 59, duration: 1, category: "D", type: "song", notes: "Night wind-down" },
       ],
     },
   ];
@@ -1136,28 +1147,72 @@ async function seedStation() {
   }
 
   // =========== IMAGING VOICES ===========
+  // These are dedicated imaging voices — NOT the DJs.
+  // Deep authoritative male + strong powerful female, both distinct from on-air DJ personalities.
   await prisma.stationImagingVoice.create({
     data: {
       stationId: station.id,
-      displayName: "NCR Voice - Male",
+      displayName: "The Voice of NCR",
       voiceType: "male",
       usageTypes: "id,promo,sweeper",
-      voiceStability: 0.8,
-      voiceSimilarityBoost: 0.8,
-      voiceStyle: 0.6,
+      voiceStability: 0.85,
+      voiceSimilarityBoost: 0.9,
+      voiceStyle: 0.7,
       isActive: true,
+      metadata: {
+        voiceCharacter: "Deep, resonant, authoritative male voice — think classic radio imaging. Full bass, commanding presence, cinematic weight. NOT a DJ personality — this is the voice of the station itself.",
+        scripts: {
+          station_id: [
+            { label: "Standard TOH", text: "This... is North Country Radio. Where the music finds you.", musicBed: "Slow acoustic guitar swell with light pedal steel, building to resolve on 'finds you'" },
+            { label: "Morning TOH", text: "Good morning. You're locked in to North Country Radio. Where the music finds you.", musicBed: "Bright fingerpicked acoustic intro, rooster crow SFX at open, warm pad underneath" },
+            { label: "Evening TOH", text: "The sun's going down, but the music never stops. North Country Radio. Where the music finds you.", musicBed: "Mellow slide guitar over ambient pad, crickets SFX fade in/out" },
+            { label: "Weekend TOH", text: "It's the weekend on North Country Radio. Kick back. Turn it up. Where the music finds you.", musicBed: "Upbeat acoustic strum pattern, light brush drums, bass groove" },
+          ],
+          sweeper: [
+            { label: "Quick hit", text: "North Country Radio.", musicBed: "Single acoustic guitar chord hit with reverb tail, 3 seconds" },
+            { label: "Tagline", text: "North Country Radio... where the music finds you.", musicBed: "Pedal steel lick over warm pad, 5 seconds" },
+            { label: "Between songs", text: "More music. Less talk. North Country Radio.", musicBed: "Snappy acoustic riff, kick drum hit, 4 seconds" },
+            { label: "Deep night", text: "Still here. Still playing. North Country Radio.", musicBed: "Low ambient drone with single piano note, 4 seconds" },
+          ],
+          promo: [
+            { label: "Station promo", text: "Real artists. Real music. No algorithms, no playlists — just people who love the sound. This is North Country Radio. Where the music finds you.", musicBed: "Full band bed: acoustic guitar, upright bass, light drums, fiddle accent — 15 seconds, fade under voice" },
+            { label: "Artist promo", text: "Every song on North Country Radio comes from an independent artist who deserves to be heard. No major labels. No gatekeepers. Just great music. Where the music finds you.", musicBed: "Fingerpicked acoustic guitar with harmonica accent, warm and intimate, 15 seconds" },
+          ],
+        },
+      },
     },
   });
   await prisma.stationImagingVoice.create({
     data: {
       stationId: station.id,
-      displayName: "NCR Voice - Female",
+      displayName: "NCR Power Voice",
       voiceType: "female",
-      usageTypes: "promo,sweeper",
-      voiceStability: 0.75,
-      voiceSimilarityBoost: 0.85,
-      voiceStyle: 0.5,
+      usageTypes: "id,promo,sweeper",
+      voiceStability: 0.8,
+      voiceSimilarityBoost: 0.9,
+      voiceStyle: 0.65,
       isActive: true,
+      metadata: {
+        voiceCharacter: "Strong, confident, powerful female voice — commanding and warm, with a slight Southern edge. Cuts through music beds cleanly. NOT a DJ personality — this is the station's power voice for high-energy imaging.",
+        scripts: {
+          station_id: [
+            { label: "Standard TOH", text: "You're listening to North Country Radio. Where the music finds you.", musicBed: "Driving acoustic strum with stomping kick, builds to tagline" },
+            { label: "Morning TOH", text: "Rise and shine, it's North Country Radio. Where the music finds you.", musicBed: "Bright mandolin riff with upright bass, energetic open" },
+            { label: "Afternoon TOH", text: "All afternoon long — North Country Radio. Where the music finds you.", musicBed: "Mid-tempo acoustic groove, brushed snare, relaxed but confident" },
+            { label: "Late night TOH", text: "Through the night... North Country Radio. Where the music finds you.", musicBed: "Sparse piano with ambient pad, soft and atmospheric" },
+          ],
+          sweeper: [
+            { label: "Quick hit", text: "North Country Radio!", musicBed: "Punchy banjo stab with reverb, 2 seconds" },
+            { label: "Tagline", text: "Where the music finds you — North Country Radio.", musicBed: "Fiddle swell into acoustic resolve, 5 seconds" },
+            { label: "Energy bump", text: "Turn. It. Up. North Country Radio.", musicBed: "Three stomps then full acoustic hit, 4 seconds" },
+            { label: "Smooth", text: "The sound of the heartland. North Country Radio.", musicBed: "Pedal steel melody over soft pad, 5 seconds" },
+          ],
+          promo: [
+            { label: "Station promo", text: "Independent music. Powered by fans. Supported by community. This is North Country Radio — where the music finds you.", musicBed: "Anthemic acoustic build: guitar, drums, bass rising together — 12 seconds with big resolve" },
+            { label: "Discovery promo", text: "Your next favorite artist is playing right now. You just don't know it yet. North Country Radio. Where the music finds you.", musicBed: "Mysterious fingerpicked intro building to bright acoustic payoff, 12 seconds" },
+          ],
+        },
+      },
     },
   });
 
@@ -1513,41 +1568,44 @@ async function seedFeatureTypes() {
 
   const types = [
     // All Shows
-    { id: "artist_quickies", name: "Artist Quickies", description: "30-second fun facts about the artist currently playing", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Share a quick, fun fact about {artist_name} in the style of {dj_name}. Keep it under 30 seconds of speaking time." },
-    { id: "song_story", name: "Song Story", description: "The backstory behind how a song was written or recorded", category: "all_shows", suggestedDuration: 45, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Tell the story behind '{song_title}' by {artist_name}. Include any interesting recording or writing details. Keep it conversational for {dj_name}." },
-    { id: "this_day_in_music", name: "This Day in Music", description: "What happened on this date in music history", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Share what happened on {date} in country/Americana music history. Make it interesting and relevant for {dj_name}'s audience." },
-    { id: "genre_connection", name: "Genre Connection", description: "How two different genres or artists are connected", category: "all_shows", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Explain how {genre1} and {genre2} are connected through {artist_name}. {dj_name} style." },
-    { id: "cover_story", name: "Cover Story", description: "Compare an original song to a notable cover version", category: "all_shows", suggestedDuration: 45, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Compare the original '{song_title}' by {original_artist} to the cover by {cover_artist}. Ask listeners which version they prefer. {dj_name} style." },
-    { id: "album_deep_dive", name: "Album Deep Dive", description: "Spotlight on a classic or new album", category: "all_shows", suggestedDuration: 60, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Give a brief deep dive into the album '{album_title}' by {artist_name}. Why it matters. {dj_name} perspective." },
-    { id: "songwriter_spotlight", name: "Songwriter Spotlight", description: "Highlight the songwriter behind hits", category: "all_shows", suggestedDuration: 45, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Spotlight songwriter {songwriter} and their contributions to {genre}. {dj_name} style." },
-    { id: "listener_dedication", name: "Listener Dedication", description: "Read a listener's song dedication", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} reads a dedication from {from_name} to {to_name}: '{message}'. Introduce '{song_title}' by {artist_name}." },
-    { id: "instrument_spotlight", name: "Instrument Spotlight", description: "Highlight a unique instrument in the current song", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Highlight the {instrument} in '{song_title}' by {artist_name}. What makes it special. {dj_name} style." },
-    { id: "producer_profile", name: "Producer Profile", description: "Quick profile of the song's producer", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Quick profile of producer {producer} who worked on '{song_title}'. {dj_name} style." },
-    { id: "music_trivia", name: "Music Trivia", description: "Quick trivia question about country/Americana music", category: "all_shows", suggestedDuration: 30, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Create a fun {genre} music trivia question. Give the answer after a beat. {dj_name} style." },
-    { id: "new_release_alert", name: "New Release Alert", description: "Highlight a brand new song or album release", category: "all_shows", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Announce the new release '{song_title}' by {artist_name}. Build excitement. {dj_name} style." },
-    { id: "vinyl_corner", name: "Vinyl Corner", description: "Feature a classic record worth tracking down on vinyl", category: "all_shows", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Recommend '{album_title}' by {artist_name} as a vinyl worth hunting for. Why it sounds better on wax. {dj_name} style." },
-    { id: "tour_alert", name: "Tour Alert", description: "Upcoming tour dates for featured artists", category: "all_shows", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Let listeners know {artist_name} is touring. Encourage them to check dates. {dj_name} style." },
-    { id: "fan_poll", name: "Fan Poll", description: "Quick listener poll about music preferences", category: "all_shows", suggestedDuration: 25, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Ask listeners a fun poll question about {topic} related to {genre}. {dj_name} style." },
-    { id: "lyric_breakdown", name: "Lyric Breakdown", description: "Break down a particularly powerful lyric", category: "all_shows", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Break down a powerful lyric from '{song_title}' by {artist_name}. What makes it resonate. {dj_name} style." },
-    { id: "musical_journey", name: "Musical Journey", description: "Trace an artist's evolution across albums", category: "all_shows", suggestedDuration: 50, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Trace {artist_name}'s musical journey and evolution. Key turning points. {dj_name} style." },
-    { id: "road_trip_pick", name: "Road Trip Pick", description: "Perfect song for a road trip playlist", category: "all_shows", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} recommends '{song_title}' by {artist_name} as the perfect road trip song. Why it works." },
-    { id: "indie_discovery", name: "Indie Discovery", description: "Spotlight on an unsigned or independent artist", category: "all_shows", suggestedDuration: 45, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Introduce indie artist {artist_name} to the audience. What makes them special. {dj_name} style." },
-    { id: "then_and_now", name: "Then & Now", description: "Compare a classic sound to a modern equivalent", category: "all_shows", suggestedDuration: 40, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Compare a classic {genre} sound to {artist_name}'s modern take. What changed, what stayed. {dj_name} style." },
-    // Morning Only
-    { id: "morning_weather", name: "Morning Weather", description: "Brief weather report with personality", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} gives a brief morning weather update. Current conditions: {weather}. Add personality." },
-    { id: "morning_motivation", name: "Morning Motivation", description: "Inspirational quote or thought to start the day", category: "morning_only", suggestedDuration: 25, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} shares a morning motivational thought related to {topic}. Keep it genuine and warm." },
-    { id: "coffee_talk", name: "Coffee Talk", description: "Casual morning banter topic", category: "morning_only", suggestedDuration: 30, includesPoll: true, includesCallIn: true, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} starts a casual morning conversation about {topic}. Invite listeners to text in." },
-    { id: "morning_news_beat", name: "Morning News Beat", description: "Quick music industry news roundup", category: "morning_only", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} shares a quick music industry news beat. Keep it light and relevant to {genre} fans." },
-    { id: "sunrise_set", name: "Sunrise Set", description: "Curated 3-song block for the morning commute", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} introduces a curated sunrise set themed around {theme}. Set the mood for the morning." },
-    { id: "wake_up_call", name: "Wake Up Call", description: "Energetic segment to get listeners going", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} delivers an energetic wake-up call. Theme: {theme}. Get listeners pumped for the day." },
-    { id: "commuter_countdown", name: "Commuter Countdown", description: "Top 5 countdown for the morning drive", category: "morning_only", suggestedDuration: 30, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} teases the morning commuter countdown. Theme: {theme}. Build anticipation." },
-    { id: "morning_request_hour", name: "Morning Request Hour", description: "Open the lines for listener requests", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: true, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} opens the morning request hour. Encourage listeners to text or call in their picks." },
-    { id: "local_spotlight", name: "Local Spotlight", description: "Highlight a local artist or venue", category: "morning_only", suggestedDuration: 35, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} spotlights local artist {artist_name}. Where to see them, what makes them worth checking out." },
-    { id: "throwback_thursday", name: "Throwback Thursday", description: "Classic song from a specific year", category: "morning_only", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} takes us back to {year} with '{song_title}' by {artist_name}. Set the nostalgic scene." },
-    { id: "good_news_minute", name: "Good News Minute", description: "Positive news story from the music world", category: "morning_only", suggestedDuration: 25, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} shares a good news story from the {genre} world. Keep it uplifting and genuine." },
-    { id: "battle_of_the_bands", name: "Battle of the Bands", description: "Listeners vote between two songs", category: "morning_only", suggestedDuration: 25, includesPoll: true, includesCallIn: true, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} sets up a Battle of the Bands between two {genre} tracks. Get listeners voting!" },
-    { id: "morning_mixtape", name: "Morning Mixtape", description: "Themed mini-set curated by the DJ", category: "morning_only", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} introduces a morning mixtape themed around {theme}. Three songs that go perfectly together." },
-    { id: "behind_the_mic", name: "Behind the Mic", description: "DJ shares a personal music memory or story", category: "morning_only", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} shares a personal memory connected to {artist_name} or '{song_title}'. Make it authentic and heartfelt." },
+    // "before" = song plays first, then feature talks about it
+    // "after" = feature introduces, then song plays
+    // null = standalone, no track link
+    { id: "artist_quickies", name: "Artist Quickies", description: "30-second fun facts about the artist currently playing", category: "all_shows", trackPlacement: "before", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Share a quick, fun fact about {artist_name} in the style of {dj_name}. Keep it under 30 seconds of speaking time." },
+    { id: "song_story", name: "Song Story", description: "The backstory behind how a song was written or recorded", category: "all_shows", trackPlacement: "before", suggestedDuration: 45, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Tell the story behind '{song_title}' by {artist_name}. Include any interesting recording or writing details. Keep it conversational for {dj_name}." },
+    { id: "this_day_in_music", name: "This Day in Music", description: "What happened on this date in music history", category: "all_shows", trackPlacement: null, suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Share what happened on {date} in country/Americana music history. Make it interesting and relevant for {dj_name}'s audience." },
+    { id: "genre_connection", name: "Genre Connection", description: "How two different genres or artists are connected", category: "all_shows", trackPlacement: "before", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Explain how {genre1} and {genre2} are connected through {artist_name}. {dj_name} style." },
+    { id: "cover_story", name: "Cover Story", description: "Compare an original song to a notable cover version", category: "all_shows", trackPlacement: "before", suggestedDuration: 45, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Compare the original '{song_title}' by {original_artist} to the cover by {cover_artist}. Ask listeners which version they prefer. {dj_name} style." },
+    { id: "album_deep_dive", name: "Album Deep Dive", description: "Spotlight on a classic or new album", category: "all_shows", trackPlacement: "after", suggestedDuration: 60, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Give a brief deep dive into the album '{album_title}' by {artist_name}. Why it matters. {dj_name} perspective." },
+    { id: "songwriter_spotlight", name: "Songwriter Spotlight", description: "Highlight the songwriter behind hits", category: "all_shows", trackPlacement: null, suggestedDuration: 45, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Spotlight songwriter {songwriter} and their contributions to {genre}. {dj_name} style." },
+    { id: "listener_dedication", name: "Listener Dedication", description: "Read a listener's song dedication", category: "all_shows", trackPlacement: "after", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} reads a dedication from {from_name} to {to_name}: '{message}'. Introduce '{song_title}' by {artist_name}." },
+    { id: "instrument_spotlight", name: "Instrument Spotlight", description: "Highlight a unique instrument in the current song", category: "all_shows", trackPlacement: "before", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Highlight the {instrument} in '{song_title}' by {artist_name}. What makes it special. {dj_name} style." },
+    { id: "producer_profile", name: "Producer Profile", description: "Quick profile of the song's producer", category: "all_shows", trackPlacement: "before", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Quick profile of producer {producer} who worked on '{song_title}'. {dj_name} style." },
+    { id: "music_trivia", name: "Music Trivia", description: "Quick trivia question about country/Americana music", category: "all_shows", trackPlacement: null, suggestedDuration: 30, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Create a fun {genre} music trivia question. Give the answer after a beat. {dj_name} style." },
+    { id: "new_release_alert", name: "New Release Alert", description: "Highlight a brand new song or album release", category: "all_shows", trackPlacement: "after", suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Announce the new release '{song_title}' by {artist_name}. Build excitement. {dj_name} style." },
+    { id: "vinyl_corner", name: "Vinyl Corner", description: "Feature a classic record worth tracking down on vinyl", category: "all_shows", trackPlacement: "after", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Recommend '{album_title}' by {artist_name} as a vinyl worth hunting for. Why it sounds better on wax. {dj_name} style." },
+    { id: "tour_alert", name: "Tour Alert", description: "Upcoming tour dates for featured artists", category: "all_shows", trackPlacement: null, suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Let listeners know {artist_name} is touring. Encourage them to check dates. {dj_name} style." },
+    { id: "fan_poll", name: "Fan Poll", description: "Quick listener poll about music preferences", category: "all_shows", trackPlacement: null, suggestedDuration: 25, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Ask listeners a fun poll question about {topic} related to {genre}. {dj_name} style." },
+    { id: "lyric_breakdown", name: "Lyric Breakdown", description: "Break down a particularly powerful lyric", category: "all_shows", trackPlacement: "before", suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Break down a powerful lyric from '{song_title}' by {artist_name}. What makes it resonate. {dj_name} style." },
+    { id: "musical_journey", name: "Musical Journey", description: "Trace an artist's evolution across albums", category: "all_shows", trackPlacement: null, suggestedDuration: 50, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "Trace {artist_name}'s musical journey and evolution. Key turning points. {dj_name} style." },
+    { id: "road_trip_pick", name: "Road Trip Pick", description: "Perfect song for a road trip playlist", category: "all_shows", trackPlacement: "after", suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} recommends '{song_title}' by {artist_name} as the perfect road trip song. Why it works." },
+    { id: "indie_discovery", name: "Indie Discovery", description: "Spotlight on an unsigned or independent artist", category: "all_shows", trackPlacement: "after", suggestedDuration: 45, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Introduce indie artist {artist_name} to the audience. What makes them special. {dj_name} style." },
+    { id: "then_and_now", name: "Then & Now", description: "Compare a classic sound to a modern equivalent", category: "all_shows", trackPlacement: "before", suggestedDuration: 40, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "Compare a classic {genre} sound to {artist_name}'s modern take. What changed, what stayed. {dj_name} style." },
+    // Morning Only (all null trackPlacement — standalone segments)
+    { id: "morning_weather", name: "Morning Weather", description: "Brief weather report with personality", category: "morning_only", trackPlacement: null, suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} gives a brief morning weather update. Current conditions: {weather}. Add personality." },
+    { id: "morning_motivation", name: "Morning Motivation", description: "Inspirational quote or thought to start the day", category: "morning_only", trackPlacement: null, suggestedDuration: 25, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} shares a morning motivational thought related to {topic}. Keep it genuine and warm." },
+    { id: "coffee_talk", name: "Coffee Talk", description: "Casual morning banter topic", category: "morning_only", trackPlacement: null, suggestedDuration: 30, includesPoll: true, includesCallIn: true, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} starts a casual morning conversation about {topic}. Invite listeners to text in." },
+    { id: "morning_news_beat", name: "Morning News Beat", description: "Quick music industry news roundup", category: "morning_only", trackPlacement: null, suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} shares a quick music industry news beat. Keep it light and relevant to {genre} fans." },
+    { id: "sunrise_set", name: "Sunrise Set", description: "Curated 3-song block for the morning commute", category: "morning_only", trackPlacement: null, suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} introduces a curated sunrise set themed around {theme}. Set the mood for the morning." },
+    { id: "wake_up_call", name: "Wake Up Call", description: "Energetic segment to get listeners going", category: "morning_only", trackPlacement: null, suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} delivers an energetic wake-up call. Theme: {theme}. Get listeners pumped for the day." },
+    { id: "commuter_countdown", name: "Commuter Countdown", description: "Top 5 countdown for the morning drive", category: "morning_only", trackPlacement: null, suggestedDuration: 30, includesPoll: true, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} teases the morning commuter countdown. Theme: {theme}. Build anticipation." },
+    { id: "morning_request_hour", name: "Morning Request Hour", description: "Open the lines for listener requests", category: "morning_only", trackPlacement: null, suggestedDuration: 20, includesPoll: false, includesCallIn: true, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} opens the morning request hour. Encourage listeners to text or call in their picks." },
+    { id: "local_spotlight", name: "Local Spotlight", description: "Highlight a local artist or venue", category: "morning_only", trackPlacement: "after", suggestedDuration: 35, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} spotlights local artist {artist_name}. Where to see them, what makes them worth checking out." },
+    { id: "throwback_thursday", name: "Throwback Thursday", description: "Classic song from a specific year", category: "morning_only", trackPlacement: null, suggestedDuration: 30, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} takes us back to {year} with '{song_title}' by {artist_name}. Set the nostalgic scene." },
+    { id: "good_news_minute", name: "Good News Minute", description: "Positive news story from the music world", category: "morning_only", trackPlacement: null, suggestedDuration: 25, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} shares a good news story from the {genre} world. Keep it uplifting and genuine." },
+    { id: "battle_of_the_bands", name: "Battle of the Bands", description: "Listeners vote between two songs", category: "morning_only", trackPlacement: null, suggestedDuration: 25, includesPoll: true, includesCallIn: true, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} sets up a Battle of the Bands between two {genre} tracks. Get listeners voting!" },
+    { id: "morning_mixtape", name: "Morning Mixtape", description: "Themed mini-set curated by the DJ", category: "morning_only", trackPlacement: null, suggestedDuration: 20, includesPoll: false, includesCallIn: false, socialMediaFriendly: false, gptPromptTemplate: "{dj_name} introduces a morning mixtape themed around {theme}. Three songs that go perfectly together." },
+    { id: "behind_the_mic", name: "Behind the Mic", description: "DJ shares a personal music memory or story", category: "morning_only", trackPlacement: null, suggestedDuration: 40, includesPoll: false, includesCallIn: false, socialMediaFriendly: true, gptPromptTemplate: "{dj_name} shares a personal memory connected to {artist_name} or '{song_title}'. Make it authentic and heartfelt." },
   ];
 
   for (const t of types) {
@@ -1609,35 +1667,108 @@ async function seedShowTransitions(stationId: string, djs: any[]) {
   console.log(`  Created ${transitions.length} show transitions (intros, outros, handoffs)`);
 }
 
-// ============ FEATURE SCHEDULES ============
+// ============ FEATURE SCHEDULES (DJ-curated per clock type) ============
 async function seedFeatureSchedules(stationId: string, djs: any[]) {
-  console.log("Seeding feature schedules...");
+  console.log("Seeding feature schedules (DJ-curated)...");
 
-  const featureTypes = await prisma.featureType.findMany();
-  const allShowFeatures = featureTypes.filter(f => f.category === "all_shows");
-  const morningFeatures = featureTypes.filter(f => f.category === "morning_only");
+  // Curated feature lists per clock type
+  // { featureTypeId, priority, frequencyPerShow }
+  const morningDriveFeatures = [
+    { id: "artist_quickies", priority: 9, freq: 3 },
+    { id: "song_story", priority: 8, freq: 2 },
+    { id: "new_release_alert", priority: 7, freq: 1 },
+    { id: "this_day_in_music", priority: 7, freq: 1 },
+    { id: "cover_story", priority: 6, freq: 1 },
+    { id: "road_trip_pick", priority: 6, freq: 1 },
+    { id: "music_trivia", priority: 5, freq: 1 },
+    { id: "fan_poll", priority: 5, freq: 1 },
+    { id: "tour_alert", priority: 4, freq: 1 },
+    { id: "then_and_now", priority: 4, freq: 1 },
+  ];
+
+  const middayFeatures = [
+    { id: "song_story", priority: 9, freq: 2 },
+    { id: "artist_quickies", priority: 8, freq: 2 },
+    { id: "songwriter_spotlight", priority: 8, freq: 1 },
+    { id: "album_deep_dive", priority: 7, freq: 1 },
+    { id: "cover_story", priority: 6, freq: 1 },
+    { id: "genre_connection", priority: 6, freq: 1 },
+    { id: "lyric_breakdown", priority: 6, freq: 1 },
+    { id: "new_release_alert", priority: 5, freq: 1 },
+    { id: "indie_discovery", priority: 5, freq: 1 },
+    { id: "then_and_now", priority: 4, freq: 1 },
+  ];
+
+  const eveningFeatures = [
+    { id: "song_story", priority: 9, freq: 2 },
+    { id: "album_deep_dive", priority: 9, freq: 1 },
+    { id: "songwriter_spotlight", priority: 8, freq: 1 },
+    { id: "lyric_breakdown", priority: 8, freq: 1 },
+    { id: "musical_journey", priority: 7, freq: 1 },
+    { id: "vinyl_corner", priority: 7, freq: 1 },
+    { id: "instrument_spotlight", priority: 6, freq: 1 },
+    { id: "producer_profile", priority: 6, freq: 1 },
+    { id: "listener_dedication", priority: 5, freq: 1 },
+    { id: "indie_discovery", priority: 5, freq: 1 },
+  ];
+
+  const weekendFeatures = [
+    { id: "indie_discovery", priority: 9, freq: 1 },
+    { id: "new_release_alert", priority: 9, freq: 1 },
+    { id: "artist_quickies", priority: 8, freq: 2 },
+    { id: "song_story", priority: 7, freq: 1 },
+    { id: "album_deep_dive", priority: 6, freq: 1 },
+    { id: "road_trip_pick", priority: 6, freq: 1 },
+    { id: "tour_alert", priority: 6, freq: 1 },
+    { id: "cover_story", priority: 5, freq: 1 },
+    { id: "fan_poll", priority: 5, freq: 1 },
+    { id: "music_trivia", priority: 4, freq: 1 },
+  ];
+
+  // Morning-only features (all priority 6, freq 1) — only for Hank
+  const morningOnlyFeatures = await prisma.featureType.findMany({ where: { category: "morning_only" } });
+
+  // Map DJ slugs to clock types
+  const djClockMap: Record<string, typeof morningDriveFeatures> = {
+    "hank-westwood": morningDriveFeatures,
+    "loretta-merrick": middayFeatures,
+    "doc-holloway": middayFeatures,
+    "cody-rampart": eveningFeatures,
+    "jo-mcallister": weekendFeatures,
+    "paul-saunders": weekendFeatures,
+    "ezra-stone": weekendFeatures,
+    "levi-bridges": weekendFeatures,
+    "sam-turnbull": weekendFeatures,
+    "ruby-finch": weekendFeatures,
+    "mark-faulkner": weekendFeatures,
+    "iris-langley": eveningFeatures,
+  };
 
   let count = 0;
   for (const dj of djs) {
-    // All DJs get all_shows features
-    for (const ft of allShowFeatures) {
+    const features = djClockMap[dj.slug];
+    if (!features) continue;
+
+    // Clock-type curated features
+    for (const f of features) {
       await prisma.featureSchedule.create({
         data: {
           stationId,
-          featureTypeId: ft.id,
+          featureTypeId: f.id,
           djId: dj.id,
           djName: dj.name,
-          frequencyPerShow: ft.id === "artist_quickies" ? 3 : ft.id === "song_story" ? 2 : 1,
+          frequencyPerShow: f.freq,
           minSongsBetween: 3,
-          priority: ft.id === "artist_quickies" ? 9 : ft.id === "song_story" ? 8 : 5,
+          priority: f.priority,
           isActive: true,
         },
       });
       count++;
     }
-    // Only weekday morning DJs get morning features
-    if (!dj.isWeekend && dj.slug === "hank-westwood") {
-      for (const ft of morningFeatures) {
+
+    // Morning-only features — only Hank gets these
+    if (dj.slug === "hank-westwood") {
+      for (const ft of morningOnlyFeatures) {
         await prisma.featureSchedule.create({
           data: {
             stationId,
@@ -1654,7 +1785,7 @@ async function seedFeatureSchedules(stationId: string, djs: any[]) {
       }
     }
   }
-  console.log(`  Created ${count} feature schedules`);
+  console.log(`  Created ${count} feature schedules (curated per clock type)`);
 }
 
 // ============ MAIN ============
@@ -1700,12 +1831,12 @@ Summary:
   - 5 Growth campaigns
   - 12 DJs with weekly schedule (attached to NCR station)
   - 1,200 Songs in the music library (A/B/C/D/E rotation)
-  - 5 Clock templates with full 20-slot patterns
+  - 5 Clock templates (4 live 23-slot, 1 automation 19-slot)
   - 12 Clock assignments (DJ-to-clock mappings)
   - 2 Imaging voices
   - 34 Feature types (20 all-shows + 14 morning-only)
   - 14 Show transitions (intros, outros, handoffs)
-  - Feature schedules for all DJs
+  - ~134 Feature schedules (DJ-curated per clock type)
   - 3 Months of revenue data
   - 100+ Activity log entries
   `);

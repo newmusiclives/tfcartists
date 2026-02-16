@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       for (const t of types) {
         await prisma.featureType.upsert({
           where: { id: t.id },
-          update: { name: t.name, description: t.description, category: t.category, gptPromptTemplate: t.gptPromptTemplate, suggestedDuration: t.suggestedDuration, includesPoll: t.includesPoll, includesCallIn: t.includesCallIn, socialMediaFriendly: t.socialMediaFriendly },
+          update: { name: t.name, description: t.description, category: t.category, trackPlacement: t.trackPlacement, gptPromptTemplate: t.gptPromptTemplate, suggestedDuration: t.suggestedDuration, includesPoll: t.includesPoll, includesCallIn: t.includesCallIn, socialMediaFriendly: t.socialMediaFriendly },
           create: t,
         });
         count++;
