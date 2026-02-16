@@ -155,7 +155,12 @@ export default function ShowFeaturesPage() {
   const allShows = featureTypes.filter((f) => f.category === "all_shows");
   const morningOnly = featureTypes.filter((f) => f.category === "morning_only");
 
-  // Group schedules by DJ
+  // Group schedules by DJ, ordered: weekday first, then Saturday, then Sunday
+  const djDisplayOrder = [
+    "Hank Westwood", "Loretta Merrick", "Marcus 'Doc' Holloway", "Cody Rampart",
+    "Jo McAllister", "Paul Saunders", "Ezra Stone", "Levi Bridges",
+    "Sam Turnbull", "Ruby Finch", "Mark Faulkner", "Iris Langley",
+  ];
   const schedulesByDj = schedules.reduce(
     (acc, s) => {
       if (!acc[s.djName]) acc[s.djName] = [];
@@ -164,6 +169,10 @@ export default function ShowFeaturesPage() {
     },
     {} as Record<string, FeatureSchedule[]>
   );
+  const orderedDjNames = [
+    ...djDisplayOrder.filter((name) => schedulesByDj[name]),
+    ...Object.keys(schedulesByDj).filter((name) => !djDisplayOrder.includes(name)),
+  ];
 
   const tabs: { id: Tab; label: string; icon: React.ElementType; count?: number }[] = [
     { id: "types", label: "Feature Types", icon: LayoutGrid, count: featureTypes.length },
@@ -613,7 +622,9 @@ export default function ShowFeaturesPage() {
               </div>
             ) : (
               <div className="space-y-6">
-                {Object.entries(schedulesByDj).map(([djName, djSchedules]) => (
+                {orderedDjNames.map((djName) => {
+                  const djSchedules = schedulesByDj[djName];
+                  return (
                   <div
                     key={djName}
                     className="bg-white rounded-xl shadow-sm border overflow-hidden"
@@ -690,7 +701,8 @@ export default function ShowFeaturesPage() {
                       </tbody>
                     </table>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
