@@ -1240,7 +1240,7 @@ async function seedSongs(stationId: string) {
     "Ain't Always the Cowboy", "Yellowstone Theme", "House of Blues", "Whiskey Myers",
     "Burn It Down", "Something in the Orange", "Sun to Me", "Revival",
     "Chasin' You", "More Than My Hometown", "Sand in My Boots", "Wasted on You",
-    "Half of My Hometown", "You Should Probably Leave", "Fancy Like", "Buy Dirt",
+    "Half of My Hometown", "You Should Probabely Leave", "Fancy Like", "Buy Dirt",
   ];
 
   const albums = [
@@ -1568,7 +1568,7 @@ async function seedShowTransitions(stationId: string, djs: any[]) {
   const transitions = [
     // Show intros
     { transitionType: "show_intro", name: "Sunrise & Steel Intro", scriptText: "Good morning, North Country. Hank Westwood here. Pour the coffee, fire up the engine — let's get this day started with some music that means something.", durationSeconds: 12, fromDjId: null, toDjId: hank.id, timeContext: "morning_drive", hourOfDay: 6 },
-    { transitionType: "show_intro", name: "Transatlantic Sessions Intro", scriptText: "Alright, bab! Loretta Merrick here, somewhere between the M6 and the Mississippi. Grab yourself a cuppa — we've got some bostin stories to share today.", durationSeconds: 12, fromDjId: null, toDjId: loretta.id, timeContext: "midday", hourOfDay: 9 },
+    { transitionType: "show_intro", name: "Transatlantic Sessions Intro", scriptText: "Alright, babe! Loretta Merrick here, somewhere between the M6 and the Mississippi. Grab yourself a cuppa — we've got some bustin stories to share today.", durationSeconds: 12, fromDjId: null, toDjId: loretta.id, timeContext: "midday", hourOfDay: 9 },
     { transitionType: "show_intro", name: "Deep Cuts Intro", scriptText: "Doc Holloway here. Time to dig into the record crate. The songs you forgot you loved — and a few you've never heard before.", durationSeconds: 10, fromDjId: null, toDjId: doc.id, timeContext: "midday", hourOfDay: 12 },
     { transitionType: "show_intro", name: "Open Road Intro", scriptText: "Cody Rampart. The road's wide open and the speakers are up. Let's ride.", durationSeconds: 8, fromDjId: null, toDjId: cody.id, timeContext: "evening", hourOfDay: 15 },
 
@@ -1580,8 +1580,8 @@ async function seedShowTransitions(stationId: string, djs: any[]) {
 
     // DJ Handoffs
     { transitionType: "handoff", name: "Morning to Midday Handoff", scriptText: "Alright, I'm handing the keys to Loretta Merrick. She's got stories from both sides of the Atlantic. Take it away, Loretta.", durationSeconds: 10, fromDjId: hank.id, toDjId: loretta.id, handoffGroupId: "morning-midday", handoffPart: 1, handoffPartName: "Farewell", hourOfDay: 9 },
-    { transitionType: "handoff", name: "Morning to Midday Response", scriptText: "Cheers, Hank, bab! I'll take it from here. Right then, let's see what bostin stories the music's got for us today.", durationSeconds: 8, fromDjId: loretta.id, toDjId: null, handoffGroupId: "morning-midday", handoffPart: 2, handoffPartName: "Response", hourOfDay: 9 },
-    { transitionType: "handoff", name: "Midday to Afternoon Handoff", scriptText: "Right, I'm handing you over to Doc Holloway now, ar kid. He's got deep cuts you didn't know you needed. Go on, Doc — you'll be bostin!", durationSeconds: 9, fromDjId: loretta.id, toDjId: doc.id, handoffGroupId: "midday-afternoon", handoffPart: 1, handoffPartName: "Farewell", hourOfDay: 12 },
+    { transitionType: "handoff", name: "Morning to Midday Response", scriptText: "Cheers, Hank, babe! I'll take it from here. Right then, let's see what bustin stories the music's got for us today.", durationSeconds: 8, fromDjId: loretta.id, toDjId: null, handoffGroupId: "morning-midday", handoffPart: 2, handoffPartName: "Response", hourOfDay: 9 },
+    { transitionType: "handoff", name: "Midday to Afternoon Handoff", scriptText: "Right, I'm handing you over to Doc Holloway now, ar kid. He's got deep cuts you didn't know you needed. Go on, Doc — you'll be bustin!", durationSeconds: 9, fromDjId: loretta.id, toDjId: doc.id, handoffGroupId: "midday-afternoon", handoffPart: 1, handoffPartName: "Farewell", hourOfDay: 12 },
     { transitionType: "handoff", name: "Midday to Afternoon Response", scriptText: "Loretta always leaves me inspired. Let's dig into the crate and find something special.", durationSeconds: 7, fromDjId: doc.id, toDjId: null, handoffGroupId: "midday-afternoon", handoffPart: 2, handoffPartName: "Response", hourOfDay: 12 },
     { transitionType: "handoff", name: "Afternoon to Drive Handoff", scriptText: "Handing off to Cody Rampart for the afternoon drive. Keep those windows down, Cody.", durationSeconds: 8, fromDjId: doc.id, toDjId: cody.id, handoffGroupId: "afternoon-drive", handoffPart: 1, handoffPartName: "Farewell", hourOfDay: 15 },
     { transitionType: "handoff", name: "Afternoon to Drive Response", scriptText: "Windows down, volume up. Let's make this drive count. Cody Rampart's got you.", durationSeconds: 7, fromDjId: cody.id, toDjId: null, handoffGroupId: "afternoon-drive", handoffPart: 2, handoffPartName: "Response", hourOfDay: 15 },
