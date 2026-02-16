@@ -12,6 +12,7 @@ import {
   MessageSquare,
   Phone,
   Share2,
+  Music,
 } from "lucide-react";
 
 interface FeatureType {
@@ -45,6 +46,51 @@ interface DJ {
 
 type Tab = "types" | "generate" | "content" | "schedules" | "analytics";
 
+function FeatureCard({ ft, accentColor, clockTypes }: { ft: FeatureType; accentColor: "orange" | "teal" | "gray"; clockTypes: string[] }) {
+  const borderClass =
+    accentColor === "orange" ? "border-l-orange-400" :
+    accentColor === "teal" ? "border-l-teal-400" :
+    "border-l-gray-300";
+  return (
+    <div className={`bg-white rounded-xl p-4 shadow-sm border border-l-4 ${borderClass} hover:shadow-md transition-shadow`}>
+      <div className="flex items-start justify-between mb-2">
+        <h3 className="font-semibold text-gray-900 text-sm">{ft.name}</h3>
+        <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
+          {ft.suggestedDuration}s
+        </span>
+      </div>
+      <p className="text-xs text-gray-500 mb-3">{ft.description}</p>
+      <div className="flex flex-wrap gap-1.5">
+        {ft.category === "morning_only" && (
+          <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">Morning Only</span>
+        )}
+        {ft.includesPoll && (
+          <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+            <MessageSquare className="w-3 h-3" /> Poll
+          </span>
+        )}
+        {ft.includesCallIn && (
+          <span className="text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+            <Phone className="w-3 h-3" /> Call-in
+          </span>
+        )}
+        {ft.socialMediaFriendly && (
+          <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+            <Share2 className="w-3 h-3" /> Social
+          </span>
+        )}
+      </div>
+      {clockTypes.length > 0 && (
+        <div className="mt-2 pt-2 border-t">
+          <p className="text-[10px] text-gray-400">
+            Used by: <span className="text-gray-500">{clockTypes.join(", ")}</span>
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ShowFeaturesPage() {
   const [activeTab, setActiveTab] = useState<Tab>("types");
   const [featureTypes, setFeatureTypes] = useState<FeatureType[]>([]);
@@ -67,15 +113,18 @@ export default function ShowFeaturesPage() {
         if (stations.length > 0) {
           const sid = stations[0].id;
           setStationId(sid);
-          const [ftRes, djRes] = await Promise.all([
+          const [ftRes, djRes, schedRes] = await Promise.all([
             fetch(`/api/show-features?stationId=${sid}`),
             fetch(`/api/station-djs?stationId=${sid}`),
+            fetch(`/api/show-features/schedules?stationId=${sid}`),
           ]);
           const ftData = await ftRes.json();
           const djData = await djRes.json();
+          const schedData = await schedRes.json();
           setFeatureTypes(ftData.featureTypes || []);
           setContentStats(ftData.contentStats || {});
           setDjs(djData.djs || []);
+          setSchedules(schedData.schedules || []);
         }
       })
       .catch(() => {})
@@ -154,6 +203,31 @@ export default function ShowFeaturesPage() {
   const selectedFt = featureTypes.find((f) => f.id === genForm.featureTypeId);
   const allShows = featureTypes.filter((f) => f.category === "all_shows");
   const morningOnly = featureTypes.filter((f) => f.category === "morning_only");
+
+  // DJ name → clock type mapping
+  const djToClockType: Record<string, string> = {
+    "Hank Westwood": "Morning Drive",
+    "Loretta Merrick": "Midday",
+    "Marcus 'Doc' Holloway": "Midday",
+    "Cody Rampart": "Evening",
+    "Iris Langley": "Evening",
+  };
+
+  // Build featureClockTypes map from schedules
+  const featureClockTypes: Record<string, string[]> = {};
+  schedules.forEach((s) => {
+    const clockType = djToClockType[s.djName] || "Weekend";
+    if (!featureClockTypes[s.featureTypeId]) featureClockTypes[s.featureTypeId] = [];
+    if (!featureClockTypes[s.featureTypeId].includes(clockType)) {
+      featureClockTypes[s.featureTypeId].push(clockType);
+    }
+  });
+
+  // Group features by track placement
+  const beforeFeatures = featureTypes.filter((f) => f.trackPlacement === "before");
+  const afterFeatures = featureTypes.filter((f) => f.trackPlacement === "after");
+  const standaloneAll = featureTypes.filter((f) => !f.trackPlacement && f.category === "all_shows");
+  const standaloneMorning = featureTypes.filter((f) => !f.trackPlacement && f.category === "morning_only");
 
   // Group schedules by DJ, ordered: weekday first, then Saturday, then Sunday
   const djDisplayOrder = [
@@ -240,124 +314,125 @@ export default function ShowFeaturesPage() {
         {/* Feature Types Tab */}
         {activeTab === "types" && (
           <div className="space-y-8">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-1">
-                All Shows ({allShows.length})
+            {/* How Features Work */}
+            <div className="bg-white rounded-xl p-5 shadow-sm border">
+              <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <Music className="w-4 h-4 text-amber-600" />
+                How Features Work
               </h2>
-              <p className="text-sm text-gray-500 mb-4">
-                Can play anytime, any DJ
+              <p className="text-xs text-gray-600 mb-3">
+                Every live clock has <span className="font-semibold">2 feature slots per hour</span>. Each slot sits between two songs &mdash; the feature can reference the song before it, the song after it, or stand alone.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {allShows.map((ft) => (
-                  <div
-                    key={ft.id}
-                    className="bg-white rounded-xl p-4 shadow-sm border hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900 text-sm">
-                        {ft.name}
-                      </h3>
-                      <div className="flex items-center gap-1.5">
-                        {ft.trackPlacement === "before" && (
-                          <span className="text-[10px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-medium">
-                            Song → Talk
-                          </span>
-                        )}
-                        {ft.trackPlacement === "after" && (
-                          <span className="text-[10px] bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded font-medium">
-                            Talk → Song
-                          </span>
-                        )}
-                        <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
-                          {ft.suggestedDuration}s
-                        </span>
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-500 mb-3">
-                      {ft.description}
-                    </p>
-                    <div className="flex gap-1.5">
-                      {ft.includesPoll && (
-                        <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                          <MessageSquare className="w-3 h-3" /> Poll
-                        </span>
-                      )}
-                      {ft.includesCallIn && (
-                        <span className="text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                          <Phone className="w-3 h-3" /> Call-in
-                        </span>
-                      )}
-                      {ft.socialMediaFriendly && (
-                        <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                          <Share2 className="w-3 h-3" /> Social
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-center justify-center gap-1.5 text-xs py-3 bg-gray-50 rounded-lg">
+                <span className="bg-amber-100 text-amber-800 font-medium px-3 py-1.5 rounded">Song</span>
+                <span className="text-gray-400">&rarr;</span>
+                <span className="bg-indigo-100 text-indigo-800 font-semibold px-3 py-1.5 rounded border border-indigo-200">FEATURE</span>
+                <span className="text-gray-400">&rarr;</span>
+                <span className="bg-amber-100 text-amber-800 font-medium px-3 py-1.5 rounded">Song</span>
+              </div>
+              <div className="grid grid-cols-3 gap-3 mt-3 text-[11px]">
+                <div className="flex items-start gap-1.5">
+                  <span className="w-2 h-2 mt-1 rounded-full bg-orange-400 shrink-0" />
+                  <span className="text-gray-600"><span className="font-medium text-gray-700">Song &rarr; Talk:</span> Song plays first, then the DJ talks about it</span>
+                </div>
+                <div className="flex items-start gap-1.5">
+                  <span className="w-2 h-2 mt-1 rounded-full bg-teal-400 shrink-0" />
+                  <span className="text-gray-600"><span className="font-medium text-gray-700">Talk &rarr; Song:</span> DJ introduces the feature, then the song plays</span>
+                </div>
+                <div className="flex items-start gap-1.5">
+                  <span className="w-2 h-2 mt-1 rounded-full bg-gray-400 shrink-0" />
+                  <span className="text-gray-600"><span className="font-medium text-gray-700">Standalone:</span> Independent segment &mdash; no track link</span>
+                </div>
               </div>
             </div>
 
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-1">
-                Morning Shows Only ({morningOnly.length})
-              </h2>
-              <p className="text-sm text-gray-500 mb-4">
-                M-F 6am-2pm drive time
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {morningOnly.map((ft) => (
-                  <div
-                    key={ft.id}
-                    className="bg-white rounded-xl p-4 shadow-sm border border-amber-200 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900 text-sm">
-                        {ft.name}
-                      </h3>
-                      <div className="flex items-center gap-1.5">
-                        {ft.trackPlacement === "before" && (
-                          <span className="text-[10px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-medium">
-                            Song → Talk
-                          </span>
-                        )}
-                        {ft.trackPlacement === "after" && (
-                          <span className="text-[10px] bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded font-medium">
-                            Talk → Song
-                          </span>
-                        )}
-                        <span className="text-[10px] bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded">
-                          {ft.suggestedDuration}s
-                        </span>
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-500 mb-3">
-                      {ft.description}
-                    </p>
-                    <div className="flex gap-1.5">
-                      <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded">
-                        Morning Only
-                      </span>
-                      {ft.includesPoll && (
-                        <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                          <MessageSquare className="w-3 h-3" /> Poll
-                        </span>
-                      )}
-                      {ft.includesCallIn && (
-                        <span className="text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                          <Phone className="w-3 h-3" /> Call-in
-                        </span>
-                      )}
-                      {ft.socialMediaFriendly && (
-                        <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                          <Share2 className="w-3 h-3" /> Social
-                        </span>
-                      )}
+            {/* Song → Talk (before features) */}
+            {beforeFeatures.length > 0 && (
+              <div>
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="w-3 h-3 rounded-full bg-orange-400" />
+                    <h2 className="text-lg font-semibold text-gray-900">Song &rarr; Talk</h2>
+                    <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">{beforeFeatures.length}</span>
+                  </div>
+                  <p className="text-sm text-gray-500 ml-5">Song plays first, then the DJ talks about it</p>
+                  <div className="flex items-center gap-1 text-[10px] mt-2 ml-5">
+                    <span className="bg-orange-200 text-orange-800 font-semibold px-2 py-1 rounded">Song plays</span>
+                    <span className="text-gray-400">&rarr;</span>
+                    <span className="bg-orange-100 text-orange-700 px-2 py-1 rounded border border-orange-200">Feature talks about it</span>
+                    <span className="text-gray-400">&rarr;</span>
+                    <span className="bg-gray-100 text-gray-500 px-2 py-1 rounded">Next song</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {beforeFeatures.map((ft) => (
+                    <FeatureCard key={ft.id} ft={ft} accentColor="orange" clockTypes={featureClockTypes[ft.id] || []} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Talk → Song (after features) */}
+            {afterFeatures.length > 0 && (
+              <div>
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="w-3 h-3 rounded-full bg-teal-400" />
+                    <h2 className="text-lg font-semibold text-gray-900">Talk &rarr; Song</h2>
+                    <span className="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-medium">{afterFeatures.length}</span>
+                  </div>
+                  <p className="text-sm text-gray-500 ml-5">DJ introduces the feature, then the song plays</p>
+                  <div className="flex items-center gap-1 text-[10px] mt-2 ml-5">
+                    <span className="bg-gray-100 text-gray-500 px-2 py-1 rounded">Previous song</span>
+                    <span className="text-gray-400">&rarr;</span>
+                    <span className="bg-teal-100 text-teal-700 px-2 py-1 rounded border border-teal-200">Feature introduces</span>
+                    <span className="text-gray-400">&rarr;</span>
+                    <span className="bg-teal-200 text-teal-800 font-semibold px-2 py-1 rounded">Song plays</span>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {afterFeatures.map((ft) => (
+                    <FeatureCard key={ft.id} ft={ft} accentColor="teal" clockTypes={featureClockTypes[ft.id] || []} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Standalone Features */}
+            {(standaloneAll.length > 0 || standaloneMorning.length > 0) && (
+              <div>
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="w-3 h-3 rounded-full bg-gray-400" />
+                    <h2 className="text-lg font-semibold text-gray-900">Standalone</h2>
+                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium">{standaloneAll.length + standaloneMorning.length}</span>
+                  </div>
+                  <p className="text-sm text-gray-500 ml-5">Independent segments &mdash; no track link</p>
+                </div>
+
+                {standaloneAll.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">All Shows ({standaloneAll.length})</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {standaloneAll.map((ft) => (
+                        <FeatureCard key={ft.id} ft={ft} accentColor="gray" clockTypes={featureClockTypes[ft.id] || []} />
+                      ))}
                     </div>
                   </div>
-                ))}
+                )}
+
+                {standaloneMorning.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">Morning Only ({standaloneMorning.length})</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {standaloneMorning.map((ft) => (
+                        <FeatureCard key={ft.id} ft={ft} accentColor="gray" clockTypes={featureClockTypes[ft.id] || []} />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
 
             {featureTypes.length === 0 && (
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-8 text-center">
