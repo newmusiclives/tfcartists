@@ -800,7 +800,8 @@ model DJ {
   voiceProfileId     String?  // ElevenLabs voice ID
   voiceStability     Float    @default(0.75)
   voiceSimilarityBoost Float  @default(0.75)
-  ttsVoice           String?  // OpenAI TTS voice: alloy, ash, ballad, coral, echo, fable, nova, onyx, sage, shimmer
+  ttsVoice           String?  // TTS voice name (OpenAI: alloy, ash, etc. Gemini: Leda, Zephyr, etc.)
+  ttsProvider        String   @default("openai") // "openai" or "gemini"
 
   // AI Personality config
   gptSystemPrompt    String?  // AI personality prompt
