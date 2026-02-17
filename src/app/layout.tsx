@@ -40,7 +40,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <StationProvider>
-          <div className="pb-16">{children}</div>
+          <div className="pb-24">{children}</div>
           <RadioPlayer />
         </StationProvider>
       </body>
