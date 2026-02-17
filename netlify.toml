@@ -8,9 +8,8 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
 
-# Include SQLite database in serverless function bundles
 [functions]
-  included_files = ["prisma/dev.db", "prisma/schema.prisma"]
+  included_files = ["prisma/schema.prisma"]
 
 # Next.js Plugin - handles API routes, SSR, and static pages automatically
 [[plugins]]

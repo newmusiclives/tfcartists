@@ -5,18 +5,9 @@ generator client {
 }
 
 datasource db {
-  // Use SQLite for development (file:./dev.db)
-  // Use PostgreSQL for production (postgresql://...)
-  // Prisma will use the appropriate provider based on DATABASE_URL
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-// NOTE: For production deployment with PostgreSQL:
-// 1. Change provider to "postgresql"
-// 2. Set DATABASE_URL to your PostgreSQL connection string
-// 3. Run: npx prisma db push
-// 4. Or use migrations: npx prisma migrate deploy
 
 // Artist data and status
 model Artist {
