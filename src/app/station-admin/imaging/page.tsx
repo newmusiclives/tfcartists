@@ -2,7 +2,23 @@
 
 import { useEffect, useState } from "react";
 import { SharedNav } from "@/components/shared-nav";
-import { Mic, Plus, X, Loader2, Save, Trash2 } from "lucide-react";
+import { Mic, Plus, X, Loader2, Save, Trash2, ChevronDown, ChevronRight, Music, FileText } from "lucide-react";
+
+interface ImagingScript {
+  label: string;
+  text: string;
+  musicBed: string;
+}
+
+interface ImagingMetadata {
+  voiceCharacter?: string;
+  scripts?: {
+    station_id?: ImagingScript[];
+    sweeper?: ImagingScript[];
+    promo?: ImagingScript[];
+    commercial?: ImagingScript[];
+  };
+}
 
 interface ImagingVoice {
   id: string;
@@ -14,6 +30,7 @@ interface ImagingVoice {
   voiceStyle: number;
   usageTypes: string;
   isActive: boolean;
+  metadata?: ImagingMetadata | null;
 }
 
 const USAGE_OPTIONS = ["promo", "id", "sweeper"];
@@ -24,6 +41,7 @@ export default function StationImagingPage() {
   const [stationId, setStationId] = useState<string | null>(null);
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState<ImagingVoice | null>(null);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [newVoice, setNewVoice] = useState({
     displayName: "",
     voiceType: "male",
@@ -216,6 +234,13 @@ export default function StationImagingPage() {
                     </div>
                   </div>
 
+                  {/* Voice character description */}
+                  {voice.metadata?.voiceCharacter && (
+                    <p className="mt-3 text-sm text-gray-600 italic border-l-2 border-gray-200 pl-3">
+                      {voice.metadata.voiceCharacter}
+                    </p>
+                  )}
+
                   {isEditing && (
                     <div className="mt-4 pt-4 border-t space-y-4">
                       <div className="grid grid-cols-2 gap-4">
@@ -274,6 +299,56 @@ export default function StationImagingPage() {
                         <input type="checkbox" checked={current.isActive} onChange={(e) => setEditing({ ...current, isActive: e.target.checked })} className="rounded" />
                         <span className="text-sm">Active</span>
                       </label>
+                    </div>
+                  )}
+
+                  {/* Production Scripts */}
+                  {voice.metadata?.scripts && (
+                    <div className="mt-3">
+                      <button
+                        onClick={() => setExpanded(prev => ({ ...prev, [voice.id]: !prev[voice.id] }))}
+                        className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-gray-900"
+                      >
+                        {expanded[voice.id] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                        <FileText className="w-4 h-4" />
+                        Production Scripts
+                      </button>
+                      {expanded[voice.id] && (
+                        <div className="mt-3 space-y-4">
+                          {(["station_id", "sweeper", "promo", "commercial"] as const).map((scriptType) => {
+                            const scripts = voice.metadata?.scripts?.[scriptType];
+                            if (!scripts || scripts.length === 0) return null;
+                            const typeLabels: Record<string, string> = { station_id: "Station IDs", sweeper: "Sweepers", promo: "Promos", commercial: "Commercials" };
+                            const typeBg: Record<string, string> = { station_id: "bg-amber-50 border-amber-200", sweeper: "bg-blue-50 border-blue-200", promo: "bg-purple-50 border-purple-200", commercial: "bg-green-50 border-green-200" };
+                            const typeTag: Record<string, string> = { station_id: "bg-amber-100 text-amber-700", sweeper: "bg-blue-100 text-blue-700", promo: "bg-purple-100 text-purple-700", commercial: "bg-green-100 text-green-700" };
+                            return (
+                              <div key={scriptType}>
+                                <span className={`inline-block text-xs font-semibold px-2 py-0.5 rounded-full mb-2 ${typeTag[scriptType]}`}>
+                                  {typeLabels[scriptType]}
+                                </span>
+                                <div className="space-y-2">
+                                  {scripts.map((script, i) => (
+                                    <div key={i} className={`rounded-lg border p-3 ${typeBg[scriptType]}`}>
+                                      <div className="flex items-start justify-between gap-2">
+                                        <div className="flex-1">
+                                          <span className="text-xs font-medium text-gray-500">{script.label}</span>
+                                          <p className="text-sm font-medium text-gray-900 mt-0.5">&ldquo;{script.text}&rdquo;</p>
+                                        </div>
+                                      </div>
+                                      {script.musicBed && (
+                                        <div className="flex items-start gap-1.5 mt-2 pt-2 border-t border-gray-200/50">
+                                          <Music className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
+                                          <p className="text-xs text-gray-500">{script.musicBed}</p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
