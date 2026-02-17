@@ -27,6 +27,8 @@ interface DJDetail {
   ttsProvider: string;
   gptSystemPrompt: string | null;
   gptTemperature: number;
+  catchPhrases: string | null;
+  additionalKnowledge: string | null;
   photoUrl: string | null;
   colorPrimary: string | null;
   colorSecondary: string | null;
@@ -180,20 +182,41 @@ export default function DJEditorDetailPage() {
               </div>
             </div>
             <div className="mt-4">
-              <label className="text-xs text-gray-500 block mb-1">Bio</label>
-              <textarea value={dj.bio} onChange={(e) => setDj({ ...dj, bio: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={4} />
-            </div>
-            <div className="mt-4">
-              <label className="text-xs text-gray-500 block mb-1">Background</label>
-              <textarea value={dj.background || ""} onChange={(e) => setDj({ ...dj, background: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={3} />
-            </div>
-            <div className="mt-4">
               <label className="text-xs text-gray-500 block mb-1">Musical Focus</label>
               <input type="text" value={dj.musicalFocus || ""} onChange={(e) => setDj({ ...dj, musicalFocus: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" />
             </div>
             <div className="mt-4">
               <label className="text-xs text-gray-500 block mb-1">Personality Traits (comma-separated)</label>
               <input type="text" value={dj.personalityTraits || ""} onChange={(e) => setDj({ ...dj, personalityTraits: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="warm, folksy, philosophical" />
+            </div>
+          </div>
+
+          {/* Character & Personality */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border">
+            <h2 className="font-semibold mb-4">Character & Personality</h2>
+            <div>
+              <label className="text-xs text-gray-500 block mb-1">Bio</label>
+              <p className="text-xs text-gray-400 mb-1">Public-facing biography — who this DJ is to the listener.</p>
+              <textarea value={dj.bio} onChange={(e) => setDj({ ...dj, bio: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Back Story</label>
+              <p className="text-xs text-gray-400 mb-1">Internal character background — life history, motivations, formative experiences.</p>
+              <textarea value={dj.background || ""} onChange={(e) => setDj({ ...dj, background: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Catch Phrases</label>
+              <textarea value={dj.catchPhrases || ""} onChange={(e) => setDj({ ...dj, catchPhrases: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={4} placeholder="One phrase per line&#10;e.g. Pour the coffee. Fire up the engine." />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Full AI Prompt</label>
+              <p className="text-xs text-gray-400 mb-1">The system prompt sent to the AI when generating DJ dialogue.</p>
+              <textarea value={dj.gptSystemPrompt || ""} onChange={(e) => setDj({ ...dj, gptSystemPrompt: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm font-mono" rows={8} placeholder="You are a radio DJ named..." />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Additional Knowledge</label>
+              <p className="text-xs text-gray-400 mb-1">Extra context the AI can reference — opinions, pet peeves, favorite stories, local knowledge.</p>
+              <textarea value={dj.additionalKnowledge || ""} onChange={(e) => setDj({ ...dj, additionalKnowledge: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Things this character knows, believes, or cares about..." />
             </div>
           </div>
 
@@ -273,16 +296,13 @@ export default function DJEditorDetailPage() {
             </div>
           </div>
 
-          {/* AI Config */}
+          {/* AI Settings */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
-            <h2 className="font-semibold mb-4">AI Personality</h2>
+            <h2 className="font-semibold mb-4">AI Settings</h2>
             <div>
-              <label className="text-xs text-gray-500 block mb-1">GPT System Prompt</label>
-              <textarea value={dj.gptSystemPrompt || ""} onChange={(e) => setDj({ ...dj, gptSystemPrompt: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm font-mono" rows={5} placeholder="You are a radio DJ named..." />
-            </div>
-            <div className="mt-4">
               <label className="text-xs text-gray-500 block mb-1">GPT Temperature: {dj.gptTemperature}</label>
               <input type="range" min="0" max="1" step="0.05" value={dj.gptTemperature} onChange={(e) => setDj({ ...dj, gptTemperature: parseFloat(e.target.value) })} className="w-full" />
+              <p className="text-xs text-gray-400 mt-1">Lower = more consistent, higher = more creative. Default: 0.8</p>
             </div>
           </div>
 

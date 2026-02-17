@@ -798,6 +798,10 @@ model DJ {
   gptSystemPrompt    String?  // AI personality prompt
   gptTemperature     Float    @default(0.8)
 
+  // Character & Personality
+  catchPhrases        String?  // Signature phrases, one per line
+  additionalKnowledge String?  // Extra character knowledge for AI context
+
   // Visual identity
   photoUrl    String?
   colorPrimary String?   // Hex color for show branding
