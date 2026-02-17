@@ -18,7 +18,7 @@ import {
 export default function ArtistOpportunityPage() {
   const [capacity, setCapacity] = useState<"60" | "100">("60");
 
-  // Scout earning models based on capacity
+  // Scout earning models based on capacity - reconciled with budget caps
   const scoutModel = capacity === "60" ? {
     totalScouts: 60,
     commissions: {
@@ -33,13 +33,14 @@ export default function ArtistOpportunityPage() {
       artists10: "$50 one-time bonus",
     },
     tiers: {
-      elite: { name: "Elite (Top 20%)", count: 12, range: "$60-$100/mo", description: "No cap - unlimited earning!" },
-      strong: { name: "Strong (Next 20%)", count: 12, range: "$30-$50/mo", description: "High performers" },
-      active: { name: "Active (Next 30%)", count: 18, range: "$15-$25/mo", description: "Regular activity" },
-      developing: { name: "Developing (30%)", count: 18, range: "$5-$12/mo", description: "Getting started" },
+      elite: { name: "Elite (Top 20%)", count: 12, range: "$55-$80/mo", cap: "$80/mo", description: "Top earners — highest cap" },
+      strong: { name: "Strong (Next 20%)", count: 12, range: "$25-$45/mo", cap: "$45/mo", description: "High performers" },
+      active: { name: "Active (Next 30%)", count: 18, range: "$10-$22/mo", cap: "$22/mo", description: "Regular activity" },
+      developing: { name: "Developing (30%)", count: 18, range: "$3-$10/mo", cap: "$10/mo", description: "Getting started" },
     },
+    budget: 1800,
     average: 30,
-    dualRole: 110,
+    dualRole: 70,
   } : {
     totalScouts: 100,
     commissions: {
@@ -54,23 +55,24 @@ export default function ArtistOpportunityPage() {
       artists10: "$50 one-time bonus",
     },
     tiers: {
-      elite: { name: "Elite (Top 20%)", count: 20, range: "$70-$120/mo", description: "No cap - unlimited earning!" },
-      strong: { name: "Strong (Next 20%)", count: 20, range: "$35-$60/mo", description: "High performers" },
-      active: { name: "Active (Next 30%)", count: 30, range: "$18-$30/mo", description: "Regular activity" },
-      developing: { name: "Developing (30%)", count: 30, range: "$6-$15/mo", description: "Getting started" },
+      elite: { name: "Elite (Top 20%)", count: 20, range: "$60-$95/mo", cap: "$95/mo", description: "Top earners — highest cap" },
+      strong: { name: "Strong (Next 20%)", count: 20, range: "$28-$50/mo", cap: "$50/mo", description: "High performers" },
+      active: { name: "Active (Next 30%)", count: 30, range: "$10-$22/mo", cap: "$22/mo", description: "Regular activity" },
+      developing: { name: "Developing (30%)", count: 30, range: "$3-$10/mo", cap: "$10/mo", description: "Getting started" },
     },
+    budget: 3000,
     average: 30,
-    dualRole: 135,
+    dualRole: 75,
   };
 
   const examples = capacity === "60" ? [
-    { name: "Sarah (Elite Artist Promoter)", artists: 15, tier: "Elite", monthly: "$85", annual: "$1,020", description: "Refers 1-2 artists per month, active in community" },
-    { name: "Marcus (Strong Artist Promoter)", artists: 8, tier: "Strong", monthly: "$42", annual: "$504", description: "Refers artist every 2 months, helps with onboarding" },
-    { name: "Jamie (Active Artist Promoter)", artists: 5, tier: "Active", monthly: "$20", annual: "$240", description: "Occasional referrals, word-of-mouth promotion" },
+    { name: "Sarah (Elite Promoter)", artists: 15, tier: "Elite", monthly: "$72", annual: "$864", description: "Refers 1-2 artists per month, active in community. Cap: $80/mo" },
+    { name: "Marcus (Strong Promoter)", artists: 8, tier: "Strong", monthly: "$38", annual: "$456", description: "Refers artist every 2 months, helps with onboarding. Cap: $45/mo" },
+    { name: "Jamie (Active Promoter)", artists: 5, tier: "Active", monthly: "$16", annual: "$192", description: "Occasional referrals, word-of-mouth. Cap: $22/mo" },
   ] : [
-    { name: "Sarah (Elite Artist Promoter)", artists: 20, tier: "Elite", monthly: "$95", annual: "$1,140", description: "Refers 1-2 artists per month, active in community" },
-    { name: "Marcus (Strong Artist Promoter)", artists: 12, tier: "Strong", monthly: "$48", annual: "$576", description: "Refers artist every 2 months, helps with onboarding" },
-    { name: "Jamie (Active Artist Promoter)", artists: 7, tier: "Active", monthly: "$24", annual: "$288", description: "Occasional referrals, word-of-mouth promotion" },
+    { name: "Sarah (Elite Promoter)", artists: 20, tier: "Elite", monthly: "$80", annual: "$960", description: "Refers 1-2 artists per month, active in community. Cap: $95/mo" },
+    { name: "Marcus (Strong Promoter)", artists: 12, tier: "Strong", monthly: "$42", annual: "$504", description: "Refers artist every 2 months, helps with onboarding. Cap: $50/mo" },
+    { name: "Jamie (Active Promoter)", artists: 7, tier: "Active", monthly: "$18", annual: "$216", description: "Occasional referrals, word-of-mouth. Cap: $22/mo" },
   ];
 
   return (
@@ -88,7 +90,7 @@ export default function ArtistOpportunityPage() {
               <div>
                 <h1 className="text-4xl font-bold text-gray-900">Artist Earning Opportunity</h1>
                 <p className="text-xl text-gray-600 mt-2">
-                  Become an Artist Promoter - Earn up to ${scoutModel.tiers.elite.range.split('-')[1]}/month by referring artists
+                  Become an Artist Promoter - Earn up to {scoutModel.tiers.elite.cap} by referring artists
                 </p>
               </div>
             </div>
@@ -130,7 +132,7 @@ export default function ArtistOpportunityPage() {
               <Check className="w-6 h-6 flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-bold text-lg mb-1">Earn Passive Income</h3>
-                <p className="text-orange-100">Get paid for helping fellow artists discover TrueFans RADIO. Elite artist promoters earn $60-$120/month!</p>
+                <p className="text-orange-100">Get paid for helping fellow artists discover TrueFans RADIO. Elite promoters earn up to {scoutModel.tiers.elite.cap}!</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
@@ -143,8 +145,8 @@ export default function ArtistOpportunityPage() {
             <div className="flex items-start space-x-3">
               <Check className="w-6 h-6 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="font-bold text-lg mb-1">No Limits for Top Performers</h3>
-                <p className="text-orange-100">Top 20% of artist promoters have NO EARNING CAP. The more artists you refer, the more you earn!</p>
+                <h3 className="font-bold text-lg mb-1">Tiered Earning Caps</h3>
+                <p className="text-orange-100">Higher tiers unlock higher monthly caps. Top 20% earn up to {scoutModel.tiers.elite.cap}!</p>
               </div>
             </div>
           </div>
@@ -225,7 +227,7 @@ export default function ArtistOpportunityPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-gradient-to-br from-yellow-50 to-orange-100 rounded-lg p-6 border-4 border-yellow-400 relative">
               <div className="absolute -top-3 -right-3 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                NO CAP!
+                TOP TIER
               </div>
               <div className="text-3xl mb-2">👑</div>
               <h3 className="font-bold text-lg text-gray-900 mb-1">{scoutModel.tiers.elite.name}</h3>
@@ -313,26 +315,26 @@ export default function ArtistOpportunityPage() {
                   <li>• Refer fellow artists</li>
                   <li>• Earn commissions on subscriptions</li>
                   <li>• Get milestone bonuses</li>
-                  <li>• Average: ${scoutModel.average}/month</li>
+                  <li>• Average: ~${scoutModel.average}/month</li>
                 </ul>
               </div>
               <div>
                 <h3 className="font-bold text-xl mb-2">+ As Listener Promoter (Listeners/Sponsors)</h3>
                 <ul className="space-y-1 text-sm">
-                  <li>• Bring in listeners ($0.50 each)</li>
-                  <li>• Refer sponsors (10% commission)</li>
-                  <li>• Premium conversions ($1 bonus)</li>
-                  <li>• Average: $44/month additional</li>
+                  <li>• Bring in listeners ($0.50 each, capped)</li>
+                  <li>• Refer sponsors (10% commission, capped)</li>
+                  <li>• Premium conversions ($1 bonus, capped)</li>
+                  <li>• Average: ~$40/month additional</li>
                 </ul>
               </div>
             </div>
           </div>
 
           <div className="text-center bg-yellow-400 text-gray-900 rounded-lg p-6">
-            <div className="text-sm font-semibold mb-2">Total Dual-Role Earning Potential</div>
-            <div className="text-5xl font-bold mb-2">${scoutModel.dualRole}/month</div>
-            <div className="text-xl font-semibold">${scoutModel.dualRole * 12}/year</div>
-            <p className="text-sm mt-3">That's a sustainable side income while supporting independent artists!</p>
+            <div className="text-sm font-semibold mb-2">Realistic Dual-Role Combined Average</div>
+            <div className="text-5xl font-bold mb-2">~${scoutModel.dualRole}/month</div>
+            <div className="text-xl font-semibold">~${scoutModel.dualRole * 12}/year</div>
+            <p className="text-sm mt-3">Per-tier and per-stream caps apply to both roles. Budget: ${scoutModel.budget.toLocaleString()}/mo (promoter) + GP pool.</p>
           </div>
         </div>
 

@@ -20,50 +20,52 @@ import {
 export default function ListenerOpportunityPage() {
   const [capacity, setCapacity] = useState<"60" | "100">("60");
 
-  // Listener earning models based on capacity
+  // Listener earning models based on capacity - reconciled with budget caps
   const gpModel = capacity === "60" ? {
     totallisteners: 25,
+    budget: 1100,
     commissions: {
-      listenerBounties: "$0.50 per active listener/month",
-      artistDiscovery: "8% of artist subscriptions (no cap)",
-      artistDevelopment: "12% of artist upgrades (no cap)",
-      sponsorReferral: "10% of sponsor contracts",
-      premiumBonus: "$1 per premium conversion",
+      listenerBounties: "$0.50 per active listener/month (cap $30/mo)",
+      artistDiscovery: "8% of artist subscriptions (cap $50/mo)",
+      artistDevelopment: "12% of artist upgrades (cap $40/mo)",
+      sponsorReferral: "10% of sponsor contracts (cap $50/mo)",
+      premiumBonus: "$1 per premium conversion (cap $20/mo)",
     },
     earnings: {
-      listenerFocused: { listeners: 30, monthly: "$15+", description: "Build listener community" },
-      artistHelper: { artists: 5, monthly: "$25+", description: "Help artists grow" },
-      sponsorConnector: { sponsors: 1, monthly: "$50+", description: "Connect local businesses" },
-      allRounder: { combined: "all", monthly: "$44+", description: "Do a bit of everything" },
+      listenerFocused: { listeners: 30, monthly: "$15", description: "Build listener community" },
+      artistHelper: { artists: 5, monthly: "$22", description: "Help artists grow" },
+      sponsorConnector: { sponsors: 1, monthly: "$40", description: "Connect local businesses" },
+      allRounder: { combined: "all", monthly: "$44", description: "Do a bit of everything" },
     },
     average: 44,
-    dualRole: 110,
+    dualRole: 70,
     examples: {
-      light: { name: "Casual Promoter", listeners: 15, monthly: "$12-18", annual: "$144-216" },
-      medium: { name: "Active Advocate", listeners: 50, artists: 3, monthly: "$35-50", annual: "$420-600" },
-      heavy: { name: "Power Listener Promoter", listeners: 100, artists: 8, sponsors: 1, monthly: "$75-95", annual: "$900-1,140" },
+      light: { name: "Casual Promoter", listeners: 15, monthly: "$10-15", annual: "$120-180" },
+      medium: { name: "Active Advocate", listeners: 50, artists: 3, monthly: "$30-42", annual: "$360-504" },
+      heavy: { name: "Power Listener Promoter", listeners: 100, artists: 8, sponsors: 1, monthly: "$60-80", annual: "$720-960" },
     }
   } : {
     totallisteners: 42,
+    budget: 1833,
     commissions: {
-      listenerBounties: "$0.50 per active listener/month",
-      artistDiscovery: "8% of artist subscriptions (no cap)",
-      artistDevelopment: "12% of artist upgrades (no cap)",
-      sponsorReferral: "10% of sponsor contracts",
-      premiumBonus: "$1 per premium conversion",
+      listenerBounties: "$0.50 per active listener/month (cap $40/mo)",
+      artistDiscovery: "8% of artist subscriptions (cap $60/mo)",
+      artistDevelopment: "12% of artist upgrades (cap $50/mo)",
+      sponsorReferral: "10% of sponsor contracts (cap $60/mo)",
+      premiumBonus: "$1 per premium conversion (cap $25/mo)",
     },
     earnings: {
-      listenerFocused: { listeners: 50, monthly: "$25+", description: "Build listener community" },
-      artistHelper: { artists: 8, monthly: "$35+", description: "Help artists grow" },
-      sponsorConnector: { sponsors: 2, monthly: "$100+", description: "Connect local businesses" },
-      allRounder: { combined: "all", monthly: "$52+", description: "Do a bit of everything" },
+      listenerFocused: { listeners: 50, monthly: "$25", description: "Build listener community" },
+      artistHelper: { artists: 8, monthly: "$30", description: "Help artists grow" },
+      sponsorConnector: { sponsors: 2, monthly: "$55", description: "Connect local businesses" },
+      allRounder: { combined: "all", monthly: "$44", description: "Do a bit of everything" },
     },
     average: 44,
-    dualRole: 135,
+    dualRole: 75,
     examples: {
-      light: { name: "Casual Promoter", listeners: 25, monthly: "$15-22", annual: "$180-264" },
-      medium: { name: "Active Advocate", listeners: 75, artists: 5, monthly: "$45-65", annual: "$540-780" },
-      heavy: { name: "Power Listener Promoter", listeners: 150, artists: 12, sponsors: 2, monthly: "$95-125", annual: "$1,140-1,500" },
+      light: { name: "Casual Promoter", listeners: 25, monthly: "$12-18", annual: "$144-216" },
+      medium: { name: "Active Advocate", listeners: 75, artists: 5, monthly: "$35-50", annual: "$420-600" },
+      heavy: { name: "Power Listener Promoter", listeners: 150, artists: 12, sponsors: 2, monthly: "$70-95", annual: "$840-1,140" },
     }
   };
 
@@ -130,8 +132,8 @@ export default function ListenerOpportunityPage() {
             <div className="flex items-start space-x-3">
               <Check className="w-6 h-6 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="font-bold text-lg mb-1">No Earning Caps</h3>
-                <p className="text-blue-100">Unlike artist promoters, listeners have unlimited earning potential on all streams!</p>
+                <h3 className="font-bold text-lg mb-1">5 Income Streams</h3>
+                <p className="text-blue-100">Earn from listeners, artists, sponsors, and premium conversions — per-stream caps apply.</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
@@ -165,7 +167,7 @@ export default function ListenerOpportunityPage() {
             <div className="bg-purple-50 rounded-lg p-5 border-2 border-purple-300">
               <div className="flex items-center justify-between mb-3">
                 <Music className="w-8 h-8 text-purple-600" />
-                <span className="text-xs font-semibold text-purple-600 bg-purple-100 px-2 py-1 rounded">NO CAP</span>
+                <span className="text-xs font-semibold text-purple-600 bg-purple-100 px-2 py-1 rounded">CAPPED</span>
               </div>
               <h3 className="font-bold text-lg text-gray-900 mb-2">Artist Discovery</h3>
               <div className="text-2xl font-bold text-purple-600 mb-2">{gpModel.commissions.artistDiscovery}</div>
@@ -175,7 +177,7 @@ export default function ListenerOpportunityPage() {
             <div className="bg-green-50 rounded-lg p-5 border-2 border-green-300">
               <div className="flex items-center justify-between mb-3">
                 <TrendingUp className="w-8 h-8 text-green-600" />
-                <span className="text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded">NO CAP</span>
+                <span className="text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded">CAPPED</span>
               </div>
               <h3 className="font-bold text-lg text-gray-900 mb-2">Artist Development</h3>
               <div className="text-2xl font-bold text-green-600 mb-2">{gpModel.commissions.artistDevelopment}</div>
@@ -208,11 +210,11 @@ export default function ListenerOpportunityPage() {
               </div>
               <div className="flex items-center justify-between mb-3">
                 <Sparkles className="w-8 h-8 text-pink-600" />
-                <span className="text-xs font-semibold text-pink-600 bg-pink-100 px-2 py-1 rounded">UNLIMITED</span>
+                <span className="text-xs font-semibold text-pink-600 bg-pink-100 px-2 py-1 rounded">COMBINED</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Stack All Streams!</h3>
-              <div className="text-2xl font-bold text-pink-600 mb-2">$44+/mo avg</div>
-              <p className="text-sm text-gray-600">Combine all income sources for maximum earnings</p>
+              <h3 className="font-bold text-lg text-gray-900 mb-2">Stack All Streams</h3>
+              <div className="text-2xl font-bold text-pink-600 mb-2">~$44/mo avg</div>
+              <p className="text-sm text-gray-600">Combine income sources (per-stream caps apply)</p>
             </div>
           </div>
         </div>
@@ -337,10 +339,10 @@ export default function ListenerOpportunityPage() {
           </div>
 
           <div className="text-center bg-yellow-400 text-gray-900 rounded-lg p-6">
-            <div className="text-sm font-semibold mb-2">Combined Dual-Role Earning Potential</div>
-            <div className="text-5xl font-bold mb-2">${gpModel.dualRole}/month</div>
-            <div className="text-xl font-semibold">${gpModel.dualRole * 12}/year</div>
-            <p className="text-sm mt-3">Turn your passion for music into sustainable income!</p>
+            <div className="text-sm font-semibold mb-2">Realistic Dual-Role Combined Average</div>
+            <div className="text-5xl font-bold mb-2">~${gpModel.dualRole}/month</div>
+            <div className="text-xl font-semibold">~${gpModel.dualRole * 12}/year</div>
+            <p className="text-sm mt-3">Per-tier and per-stream caps apply to both roles. Total budget: ${gpModel.budget.toLocaleString()}/mo (listener) + promoter pool.</p>
           </div>
         </div>
 
@@ -353,8 +355,8 @@ export default function ListenerOpportunityPage() {
                 <Check className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 mb-1">No Earning Caps</h3>
-                <p className="text-sm text-gray-600">Unlike artist promoters, ALL your Listener earnings are uncapped!</p>
+                <h3 className="font-bold text-gray-900 mb-1">Per-Stream Caps</h3>
+                <p className="text-sm text-gray-600">Each income stream has a monthly cap to ensure sustainable payouts for all promoters.</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">

@@ -194,8 +194,8 @@ export default function SponsorOpportunityPage() {
 
           <div className="mt-6 bg-green-50 border-2 border-green-300 rounded-lg p-4">
             <p className="text-sm text-green-800">
-              <strong>💡 Pro Tip:</strong> You receive 50% of the sponsor's first month payment, paid immediately upon their signup!
-              The higher the tier you refer, the more you earn.
+              <strong>How it works:</strong> You receive 50% of the sponsor's first month payment as a one-time bonus upon their signup.
+              The higher the tier you refer, the more you earn. These bonuses are budgeted from the station's sponsor acquisition reserve.
             </p>
           </div>
         </div>

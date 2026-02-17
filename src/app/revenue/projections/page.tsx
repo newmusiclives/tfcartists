@@ -20,16 +20,16 @@ export default function RevenueProjectionsPage() {
   const [capacity, setCapacity] = useState<"60" | "100">("60");
 
   // ======================================================================
-  // 60% CAPACITY MODEL - OPTIMIZED FOR MAX INCENTIVES
+  // 60% CAPACITY MODEL - RECONCILED (all promises match budget)
   // ======================================================================
   const capacity60 = {
     metadata: {
       artists: 300,
       sponsors: 72,
       listeners: 6000,
-      referralArtists: 60, // REDUCED from 90 - Quality over quantity
-      growthPartners: 25, // INCREASED from 18 - More opportunities
-      premiumListeners: 600, // 10% conversion
+      referralArtists: 60,
+      growthPartners: 25,
+      premiumListeners: 240, // 4% conversion (industry realistic)
     },
     revenue: {
       artistSubscriptions: {
@@ -46,34 +46,34 @@ export default function RevenueProjectionsPage() {
         PLATINUM: 6 * 500,
         total: 18150,
       },
-      // NEW REVENUE STREAMS - Maximize earnings without breaking artist pool
-      listenerPremium: 600 * 3, // $1,800 - Premium features (ad-free, early access, downloads)
+      listenerPremium: 240 * 3, // $720 - 4% conversion (realistic for niche radio)
       platformFees: 200, // Transaction fees on donations/tips (2%)
       sponsoredContent: 300, // Sponsored playlist slots, featured artists
-      total: 24800, // UP from $22,500
+      total: 23720,
     },
     expenses: {
       artistPool: 18150 * 0.8, // $14,520 - 80% of sponsor revenue (PROTECTED)
-      scoutCommissions: 1800, // 3x INCREASE - Tiered system, no cap for top 20%
-      gpCommissions: 1100, // 3x INCREASE - Enhanced opportunities + dual-role
-      operations: 1380, // REDUCED - Ultra-lean, AI-powered
-      total: 18800,
+      scoutCommissions: 1800, // Tiered system with per-tier caps
+      gpCommissions: 1100, // Multi-stream earning model
+      sponsorAcquisition: 300, // Referral bonuses (50% of first month, amortized)
+      operations: 2500, // Hosting, licensing, bandwidth, tools
+      total: 20220,
     },
-    profit: 6000, // EXACTLY $6,000 target maintained
-    profitMargin: 24.2,
+    profit: 3500,
+    profitMargin: 14.8,
   };
 
   // ======================================================================
-  // 100% CAPACITY MODEL - OPTIMIZED FOR MAX INCENTIVES
+  // 100% CAPACITY MODEL - RECONCILED (all promises match budget)
   // ======================================================================
   const capacity100 = {
     metadata: {
       artists: 500,
       sponsors: 120,
       listeners: 10000,
-      referralArtists: 100, // REDUCED from 150 - Quality over quantity
-      growthPartners: 42, // INCREASED from 30 - More opportunities
-      premiumListeners: 1000, // 10% conversion
+      referralArtists: 100,
+      growthPartners: 42,
+      premiumListeners: 400, // 4% conversion (industry realistic)
     },
     revenue: {
       artistSubscriptions: {
@@ -90,80 +90,80 @@ export default function RevenueProjectionsPage() {
         PLATINUM: 10 * 500,
         total: 22250,
       },
-      // NEW REVENUE STREAMS - Maximize earnings without breaking artist pool
-      listenerPremium: 1000 * 3, // $3,000 - Premium features (ad-free, early access, downloads)
+      listenerPremium: 400 * 3, // $1,200 - 4% conversion (realistic for niche radio)
       platformFees: 333, // Transaction fees on donations/tips (2%)
       sponsoredContent: 500, // Sponsored playlist slots, featured artists
-      total: 36083, // UP from $32,250
+      total: 34283,
     },
     expenses: {
       artistPool: 22250 * 0.8, // $17,800 - 80% of sponsor revenue (PROTECTED)
-      scoutCommissions: 3000, // 3x INCREASE - Tiered system, no cap for top 20%
-      gpCommissions: 1833, // 3x INCREASE - Enhanced opportunities + dual-role
-      operations: 2300, // REDUCED - Ultra-lean, AI-powered
-      total: 24933,
+      scoutCommissions: 3000, // Tiered system with per-tier caps
+      gpCommissions: 1833, // Multi-stream earning model
+      sponsorAcquisition: 500, // Referral bonuses (50% of first month, amortized)
+      operations: 3500, // Hosting, licensing, bandwidth, tools
+      total: 26633,
     },
-    profit: 11150, // INCREASED from $9,484
-    profitMargin: 30.9,
+    profit: 7650,
+    profitMargin: 22.3,
   };
 
   const current = capacity === "60" ? capacity60 : capacity100;
 
-  // ENHANCED Artist Referral Commission System - Tiered Performance Model
+  // Artist Referral Commission System - Tiered with per-tier caps
   const scoutCommissionBreakdown = capacity === "60" ? {
-    first3Months: { rate: "20%", amount: 400 }, // INCREASED from 15%
-    ongoing: { rate: "12%", amount: 350 }, // INCREASED from 7%
-    prepurchase: { rate: "25%", amount: 280 }, // INCREASED from 20%
-    upgradeBonuses: { amount: 120, per: "$10" }, // DOUBLED
-    influenceBonuses: { amount: 80, per: "$2" }, // DOUBLED
-    milestoneBonus5Artists: { amount: 270, total: 9 }, // NEW: $30 × 9 artists
-    milestoneBonus10Artists: { amount: 300, total: 6 }, // NEW: $50 × 6 artists
+    first3Months: { rate: "20%", amount: 400 },
+    ongoing: { rate: "12%", amount: 350 },
+    prepurchase: { rate: "25%", amount: 280 },
+    upgradeBonuses: { amount: 120, per: "$10" },
+    influenceBonuses: { amount: 80, per: "$2" },
+    milestoneBonus5Artists: { amount: 270, total: 9 }, // $30 × 9 (one-time, amortized)
+    milestoneBonus10Artists: { amount: 300, total: 6 }, // $50 × 6 (one-time, amortized)
   } : {
-    first3Months: { rate: "20%", amount: 667 }, // INCREASED
-    ongoing: { rate: "12%", amount: 583 }, // INCREASED
-    prepurchase: { rate: "25%", amount: 467 }, // INCREASED
-    upgradeBonuses: { amount: 200, per: "$10" }, // DOUBLED
-    influenceBonuses: { amount: 133, per: "$2" }, // DOUBLED
-    milestoneBonus5Artists: { amount: 450, total: 15 }, // NEW: $30 × 15 artists
-    milestoneBonus10Artists: { amount: 500, total: 10 }, // NEW: $50 × 10 artists
+    first3Months: { rate: "20%", amount: 667 },
+    ongoing: { rate: "12%", amount: 583 },
+    prepurchase: { rate: "25%", amount: 467 },
+    upgradeBonuses: { amount: 200, per: "$10" },
+    influenceBonuses: { amount: 133, per: "$2" },
+    milestoneBonus5Artists: { amount: 450, total: 15 }, // $30 × 15 (one-time, amortized)
+    milestoneBonus10Artists: { amount: 500, total: 10 }, // $50 × 10 (one-time, amortized)
   };
 
-  // ENHANCED Listener Commission System - More Opportunities
+  // Listener Commission System - Multi-stream with caps
   const gpCommissionBreakdown = capacity === "60" ? {
-    listenerBounties: { rate: "$0.50", listeners: 750, amount: 375 }, // DOUBLED rate + more listeners
-    artistDiscovery: { rate: "8%", cap: "REMOVED", amount: 200 }, // INCREASED, no cap
-    artistDevelopment: { rate: "12%", cap: "REMOVED", amount: 180 }, // INCREASED, no cap
-    sponsorReferral: { rate: "10%", amount: 150, status: "NEW" }, // NEW revenue stream
-    premiumListenerBonus: { rate: "$1", listeners: 90, amount: 90 }, // NEW: Premium conversion bonus
-    dualRoleBonus: { amount: 105, count: 15, status: "NEW" }, // NEW: $7/month × 15 dual-role
+    listenerBounties: { rate: "$0.50", listeners: 750, amount: 375, cap: "$30/mo" },
+    artistDiscovery: { rate: "8%", cap: "$50/mo", amount: 200 },
+    artistDevelopment: { rate: "12%", cap: "$40/mo", amount: 180 },
+    sponsorReferral: { rate: "10%", amount: 150, cap: "$50/mo" },
+    premiumListenerBonus: { rate: "$1", listeners: 90, amount: 90, cap: "$20/mo" },
+    dualRoleBonus: { amount: 105, count: 15 },
   } : {
-    listenerBounties: { rate: "$0.50", listeners: 1250, amount: 625 }, // DOUBLED rate + more listeners
-    artistDiscovery: { rate: "8%", cap: "REMOVED", amount: 333 }, // INCREASED, no cap
-    artistDevelopment: { rate: "12%", cap: "REMOVED", amount: 300 }, // INCREASED, no cap
-    sponsorReferral: { rate: "10%", amount: 250, status: "NEW" }, // NEW revenue stream
-    premiumListenerBonus: { rate: "$1", listeners: 150, amount: 150 }, // NEW: Premium conversion bonus
-    dualRoleBonus: { amount: 175, count: 25, status: "NEW" }, // NEW: $7/month × 25 dual-role
+    listenerBounties: { rate: "$0.50", listeners: 1250, amount: 625, cap: "$40/mo" },
+    artistDiscovery: { rate: "8%", cap: "$60/mo", amount: 333 },
+    artistDevelopment: { rate: "12%", cap: "$50/mo", amount: 300 },
+    sponsorReferral: { rate: "10%", amount: 250, cap: "$60/mo" },
+    premiumListenerBonus: { rate: "$1", listeners: 150, amount: 150, cap: "$25/mo" },
+    dualRoleBonus: { amount: 175, count: 25 },
   };
 
-  // SCOUT PERFORMANCE TIERS - Quality over quantity
+  // Artist Promoter Performance Tiers - capped to fit budget
   const scoutTiers = capacity === "60" ? {
-    tier1: { name: "Elite (Top 20%)", artists: 12, avgEarning: 75, range: "$60-$100" },
-    tier2: { name: "Strong (Next 20%)", artists: 12, avgEarning: 40, range: "$30-$50" },
-    tier3: { name: "Active (Next 30%)", artists: 18, avgEarning: 20, range: "$15-$25" },
-    tier4: { name: "Developing (30%)", artists: 18, avgEarning: 8, range: "$5-$12" },
+    tier1: { name: "Elite (Top 20%)", artists: 12, avgEarning: 67, range: "$55-$80", cap: "$80" },
+    tier2: { name: "Strong (Next 20%)", artists: 12, avgEarning: 35, range: "$25-$45", cap: "$45" },
+    tier3: { name: "Active (Next 30%)", artists: 18, avgEarning: 16, range: "$10-$22", cap: "$22" },
+    tier4: { name: "Developing (30%)", artists: 18, avgEarning: 6, range: "$3-$10", cap: "$10" },
   } : {
-    tier1: { name: "Elite (Top 20%)", artists: 20, avgEarning: 90, range: "$70-$120" },
-    tier2: { name: "Strong (Next 20%)", artists: 20, avgEarning: 48, range: "$35-$60" },
-    tier3: { name: "Active (Next 30%)", artists: 30, avgEarning: 24, range: "$18-$30" },
-    tier4: { name: "Developing (30%)", artists: 30, avgEarning: 10, range: "$6-$15" },
+    tier1: { name: "Elite (Top 20%)", artists: 20, avgEarning: 75, range: "$60-$95", cap: "$95" },
+    tier2: { name: "Strong (Next 20%)", artists: 20, avgEarning: 38, range: "$28-$50", cap: "$50" },
+    tier3: { name: "Active (Next 30%)", artists: 30, avgEarning: 15, range: "$10-$22", cap: "$22" },
+    tier4: { name: "Developing (30%)", artists: 30, avgEarning: 5, range: "$3-$10", cap: "$10" },
   };
 
   const avgEarnings = {
     artistFromPool: current.expenses.artistPool / current.metadata.artists,
     scoutMonthly: current.expenses.scoutCommissions / current.metadata.referralArtists,
-    scoutTop20: capacity === "60" ? 75 : 90, // Elite tier average
+    scoutTop20: capacity === "60" ? 67 : 75, // Elite tier average
     gpMonthly: current.expenses.gpCommissions / current.metadata.growthPartners,
-    dualRole: capacity === "60" ? 110 : 135, // Artist Promoter + Listener combined
+    dualRole: capacity === "60" ? 70 : 75, // Realistic combined (not additive of averages)
   };
 
   return (
@@ -179,7 +179,7 @@ export default function RevenueProjectionsPage() {
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Revenue Projections</h1>
                 <p className="text-gray-600">
-                  Sustainable financial model with $6K+ monthly profit
+                  Reconciled financial model — all promises backed by budget
                 </p>
               </div>
             </div>
@@ -221,7 +221,7 @@ export default function RevenueProjectionsPage() {
               <div>
                 <div className="text-sm text-green-100">Target Achieved</div>
                 <div className="text-2xl font-bold">
-                  {capacity === "60" ? "$6,000+" : "$9,000+"} Monthly Profit
+                  {capacity === "60" ? "$3,500" : "$7,650"} Monthly Profit
                 </div>
               </div>
             </div>
@@ -297,8 +297,8 @@ export default function RevenueProjectionsPage() {
                 <div className="font-bold">${current.expenses.artistPool.toLocaleString()}</div>
               </div>
               <div>
-                <div className="text-red-100">Operations</div>
-                <div className="font-bold">${(current.expenses.scoutCommissions + current.expenses.gpCommissions + current.expenses.operations).toLocaleString()}</div>
+                <div className="text-red-100">Commissions + Ops</div>
+                <div className="font-bold">${(current.expenses.scoutCommissions + current.expenses.gpCommissions + current.expenses.sponsorAcquisition + current.expenses.operations).toLocaleString()}</div>
               </div>
             </div>
           </div>
@@ -408,7 +408,7 @@ export default function RevenueProjectionsPage() {
                 </div>
               </div>
               <div className="mt-3 bg-blue-50 border border-blue-200 rounded p-3 text-sm text-blue-800">
-                <strong>💡 Key Insight:</strong> These new revenue streams fund 3x higher scout/Listener commissions while protecting the 80% artist pool and maintaining ${current.profit.toLocaleString()}/month profit!
+                <strong>💡 Key Insight:</strong> These additional streams supplement core revenue. All promoter payouts are capped to fit within budget while maintaining the 80% artist pool and ${current.profit.toLocaleString()}/month profit.
               </div>
             </div>
           </div>
@@ -444,9 +444,9 @@ export default function RevenueProjectionsPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                     <Award className="w-5 h-5 mr-2 text-orange-500" />
-                    Artist Referral Commissions (3x INCREASED - Tiered Performance Model)
+                    Artist Promoter Commissions (Tiered, Capped)
                   </h3>
-                  <p className="text-sm text-gray-600">{current.metadata.referralArtists} participating artists (reduced from {capacity === "60" ? "90" : "150"})</p>
+                  <p className="text-sm text-gray-600">{current.metadata.referralArtists} promoters with per-tier earning caps</p>
                 </div>
                 <span className="text-2xl font-bold text-orange-600">
                   ${current.expenses.scoutCommissions.toLocaleString()}
@@ -510,12 +510,12 @@ export default function RevenueProjectionsPage() {
                 </div>
               </div>
 
-              {/* Cap Removed for Top 20% */}
+              {/* Caps per tier */}
               <div className="mt-3 bg-green-50 border-2 border-green-300 rounded p-2 text-xs">
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
                   <div className="text-green-800">
-                    <strong>NO CAP for Top 20%!</strong> Elite artists ({scoutTiers.tier1.artists} artists) can earn ${scoutTiers.tier1.range}/month. Remaining artists have performance-based caps.
+                    <strong>Per-tier caps ensure budget sustainability.</strong> Elite cap: ${scoutTiers.tier1.cap}/mo, Strong: ${scoutTiers.tier2.cap}/mo, Active: ${scoutTiers.tier3.cap}/mo, Developing: ${scoutTiers.tier4.cap}/mo.
                   </div>
                 </div>
               </div>
@@ -527,9 +527,9 @@ export default function RevenueProjectionsPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                     <Zap className="w-5 h-5 mr-2 text-blue-500" />
-                    Listener Promotion Commissions (3x INCREASED - Multi-Stream Model)
+                    Listener Promoter Commissions (Multi-Stream, Capped)
                   </h3>
-                  <p className="text-sm text-gray-600">{current.metadata.growthPartners} GPs - Multiple earning opportunities + dual-role potential</p>
+                  <p className="text-sm text-gray-600">{current.metadata.growthPartners} promoters with per-stream earning caps</p>
                 </div>
                 <span className="text-2xl font-bold text-blue-600">
                   ${current.expenses.gpCommissions.toLocaleString()}
@@ -558,54 +558,69 @@ export default function RevenueProjectionsPage() {
                 </div>
               </div>
 
-              {/* NEW Revenue Streams */}
+              {/* Additional Revenue Streams */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs mb-3">
                 <div className="bg-gradient-to-r from-green-100 to-green-200 rounded p-2 border-2 border-green-400">
-                  <div className="text-green-800 font-semibold">✨ Sponsor Referral (NEW)</div>
+                  <div className="text-green-800 font-semibold">Sponsor Referral</div>
                   <div className="text-green-900 font-bold">{gpCommissionBreakdown.sponsorReferral.rate} commission</div>
                   <div className="text-green-700">${gpCommissionBreakdown.sponsorReferral.amount}</div>
+                  <div className="text-xs text-gray-500">Cap: {gpCommissionBreakdown.sponsorReferral.cap}</div>
                 </div>
                 <div className="bg-gradient-to-r from-green-100 to-green-200 rounded p-2 border-2 border-green-400">
-                  <div className="text-green-800 font-semibold">✨ Premium Listener Bonus (NEW)</div>
+                  <div className="text-green-800 font-semibold">Premium Listener Bonus</div>
                   <div className="text-green-900 font-bold">{gpCommissionBreakdown.premiumListenerBonus.rate} per conversion</div>
                   <div className="text-green-700">${gpCommissionBreakdown.premiumListenerBonus.amount}</div>
+                  <div className="text-xs text-gray-500">Cap: {gpCommissionBreakdown.premiumListenerBonus.cap}</div>
                 </div>
                 <div className="bg-gradient-to-r from-purple-100 to-purple-200 rounded p-2 border-2 border-purple-400">
-                  <div className="text-purple-800 font-semibold">✨ Dual-Role Bonus (NEW)</div>
-                  <div className="text-purple-900 font-bold">{gpCommissionBreakdown.dualRoleBonus.count} artists</div>
+                  <div className="text-purple-800 font-semibold">Dual-Role Bonus</div>
+                  <div className="text-purple-900 font-bold">{gpCommissionBreakdown.dualRoleBonus.count} participants</div>
                   <div className="text-purple-700">${gpCommissionBreakdown.dualRoleBonus.amount} total</div>
                 </div>
               </div>
 
-              {/* Key Enhancements */}
+              {/* Budget Integrity */}
               <div className="mt-3 bg-gradient-to-r from-blue-100 to-purple-100 border-2 border-blue-300 rounded p-3 text-xs">
-                <div className="font-bold text-blue-900 mb-2">🚀 Major Enhancements:</div>
+                <div className="font-bold text-blue-900 mb-2">Budget Integrity:</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-1 text-blue-800">
                   <div className="flex items-start space-x-1">
                     <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
-                    <span>Listener bounties DOUBLED to $0.50/active</span>
+                    <span>Listener bounties: $0.50/active (capped {gpCommissionBreakdown.listenerBounties.cap})</span>
                   </div>
                   <div className="flex items-start space-x-1">
                     <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
-                    <span>Artist commissions INCREASED (8% / 12%)</span>
+                    <span>Artist commissions: 8% / 12% (capped per stream)</span>
                   </div>
                   <div className="flex items-start space-x-1">
                     <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
-                    <span>Caps REMOVED - unlimited earning potential</span>
+                    <span>Per-stream caps ensure total stays within ${current.expenses.gpCommissions.toLocaleString()} budget</span>
                   </div>
                   <div className="flex items-start space-x-1">
                     <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
-                    <span>NEW sponsor referral commissions (10%)</span>
+                    <span>Sponsor referral: 10% (capped {gpCommissionBreakdown.sponsorReferral.cap})</span>
                   </div>
                   <div className="flex items-start space-x-1">
                     <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
-                    <span>NEW premium listener conversion bonuses</span>
+                    <span>Premium conversion: $1 each (capped {gpCommissionBreakdown.premiumListenerBonus.cap})</span>
                   </div>
                   <div className="flex items-start space-x-1">
                     <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
-                    <span>Dual-role earning (Artist Promoter + Listener = ${avgEarnings.dualRole}/mo avg)</span>
+                    <span>Dual-role combined: ~${avgEarnings.dualRole}/mo realistic average</span>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Sponsor Acquisition Reserve */}
+            <div className="border-l-4 border-yellow-500 pl-4 bg-yellow-50 rounded-r-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Sponsor Acquisition Reserve</h3>
+                  <p className="text-sm text-gray-600">Referral bonuses (50% of first month, amortized monthly)</p>
+                </div>
+                <span className="text-2xl font-bold text-yellow-600">
+                  ${current.expenses.sponsorAcquisition.toLocaleString()}
+                </span>
               </div>
             </div>
 
@@ -613,8 +628,8 @@ export default function RevenueProjectionsPage() {
             <div className="border-l-4 border-gray-500 pl-4 bg-gray-50 rounded-r-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Operational Expenses (Lean & AI-Powered)</h3>
-                  <p className="text-sm text-gray-600">Platform, minimal team, marketing</p>
+                  <h3 className="text-lg font-semibold text-gray-900">Operational Expenses</h3>
+                  <p className="text-sm text-gray-600">Hosting, streaming, licensing (ASCAP/BMI), bandwidth, tools</p>
                 </div>
                 <span className="text-2xl font-bold text-gray-600">
                   ${current.expenses.operations.toLocaleString()}
@@ -656,7 +671,7 @@ export default function RevenueProjectionsPage() {
 
         {/* Average Earnings - ENHANCED */}
         <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-6">💰 Enhanced Earning Opportunities - All Roles</h2>
+          <h2 className="text-2xl font-bold mb-6">Earning Opportunities - All Roles (Budget-Backed)</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border-2 border-purple-200">
@@ -678,15 +693,15 @@ export default function RevenueProjectionsPage() {
               <div className="flex items-center justify-between mb-3">
                 <Award className="w-8 h-8 text-orange-600" />
                 <div className="text-right">
-                  <div className="text-sm text-orange-700 font-bold">Artists (AVG)</div>
+                  <div className="text-sm text-orange-700 font-bold">Promoters (AVG)</div>
                   <div className="text-xs text-orange-600">{current.metadata.referralArtists} active</div>
                 </div>
               </div>
               <div className="text-3xl font-bold text-orange-700">
                 ${avgEarnings.scoutMonthly.toFixed(2)}
               </div>
-              <div className="text-xs text-green-600 mt-1 font-bold">⬆️ 5x INCREASE from $6.67</div>
-              <div className="text-xs text-orange-600 mt-1">Top 20%: ${avgEarnings.scoutTop20}/mo avg</div>
+              <div className="text-xs text-orange-600 mt-1">Elite avg: ${avgEarnings.scoutTop20}/mo</div>
+              <div className="text-xs text-gray-500 mt-1">Per-tier caps apply</div>
             </div>
 
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-300 ring-2 ring-blue-400">
@@ -700,8 +715,8 @@ export default function RevenueProjectionsPage() {
               <div className="text-3xl font-bold text-blue-700">
                 ${avgEarnings.gpMonthly.toFixed(2)}
               </div>
-              <div className="text-xs text-green-600 mt-1 font-bold">⬆️ 3x INCREASE from ${capacity === "60" ? "$21" : "$21"}</div>
-              <div className="text-xs text-blue-600 mt-1">Multi-stream earning model</div>
+              <div className="text-xs text-blue-600 mt-1">Multi-stream, per-stream caps</div>
+              <div className="text-xs text-gray-500 mt-1">5 income streams available</div>
             </div>
 
             <div className="bg-gradient-to-br from-green-50 via-yellow-50 to-pink-50 rounded-lg p-6 border-4 border-green-400 shadow-xl">
@@ -718,64 +733,63 @@ export default function RevenueProjectionsPage() {
               <div className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-blue-600 bg-clip-text text-transparent">
                 ${avgEarnings.dualRole}
               </div>
-              <div className="text-xs text-green-700 mt-1 font-bold">⬆️ 15x+ from previous model!</div>
-              <div className="text-xs text-gray-600 mt-1">Combined earning streams</div>
+              <div className="text-xs text-green-700 mt-1 font-bold">Realistic combined average</div>
+              <div className="text-xs text-gray-600 mt-1">Both roles, per-tier caps apply</div>
             </div>
           </div>
 
           <div className="mt-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 border-2 border-green-300">
             <p className="text-sm text-gray-800">
-              <strong className="text-green-700">🚀 Game-Changing Improvements:</strong> Artist referral commissions increased 3x through new revenue streams (premium listeners, platform fees, sponsored content).
-              Tiered performance model rewards top performers with NO CAPS. Listener Promoters get 3x more through enhanced multi-stream model.
-              Dual-role participants can earn <strong className="text-green-700">${avgEarnings.dualRole}+/month</strong> - a sustainable income opportunity!
+              <strong className="text-green-700">Reconciled Model:</strong> Every payout promise is backed by budget with per-tier and per-stream caps.
+              Sponsor referral acquisition costs are budgeted. Operations include licensing, hosting, and bandwidth at realistic levels.
               <br/><br/>
-              <strong className="text-purple-700">✅ 80% Artist Pool:</strong> PROTECTED and unchanged.
-              <strong className="text-blue-700">✅ Station Profit:</strong> Maintained at ${current.profit.toLocaleString()}/month (${(current.profit * 12).toLocaleString()}/year).
+              <strong className="text-purple-700">80% Artist Pool:</strong> ${current.expenses.artistPool.toLocaleString()}/mo PROTECTED.
+              <strong className="text-blue-700"> Station Profit:</strong> ${current.profit.toLocaleString()}/month (${(current.profit * 12).toLocaleString()}/year) at {current.profitMargin}% margin.
               <br/>
-              <strong className="text-green-700">🎯 Result:</strong> Everyone earns more, artists stay protected, station stays profitable!
+              <strong className="text-green-700">Result:</strong> Sustainable payouts, honest caps, no unfunded promises.
             </p>
           </div>
         </div>
 
-        {/* MAXIMIZED INCENTIVE MODEL - Summary */}
+        {/* RECONCILED MODEL - Summary */}
         <div className="bg-gradient-to-br from-green-600 via-blue-600 to-purple-600 rounded-xl shadow-2xl p-8 text-white">
-          <h2 className="text-3xl font-bold mb-6 text-center">🚀 Maximized Incentive Model - Everyone Wins!</h2>
+          <h2 className="text-3xl font-bold mb-6 text-center">Reconciled Financial Model</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-xl font-semibold mb-4 text-yellow-200">💰 New Revenue Streams</h3>
+              <h3 className="text-xl font-semibold mb-4 text-yellow-200">Revenue Streams</h3>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span><strong>Premium Listeners:</strong> ${current.revenue.listenerPremium.toLocaleString()}/mo (10% conversion @ $3/mo)</span>
+                  <span><strong>Sponsors:</strong> ${current.revenue.sponsorRevenue.total.toLocaleString()}/mo ({current.metadata.sponsors} sponsors)</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span><strong>Platform Fees:</strong> ${current.revenue.platformFees}/mo (2% on donations/tips)</span>
+                  <span><strong>Artist Subs:</strong> ${current.revenue.artistSubscriptions.total.toLocaleString()}/mo ({current.metadata.artists} artists)</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span><strong>Sponsored Content:</strong> ${current.revenue.sponsoredContent}/mo (featured placements)</span>
+                  <span><strong>Premium Listeners:</strong> ${current.revenue.listenerPremium.toLocaleString()}/mo (4% conversion @ $3/mo)</span>
                 </li>
                 <li className="flex items-start">
-                  <TrendingUp className="w-5 h-5 text-yellow-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="text-yellow-200 font-bold">Total New Revenue: ${(current.revenue.listenerPremium + current.revenue.platformFees + current.revenue.sponsoredContent).toLocaleString()}/mo</span>
+                  <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
+                  <span><strong>Other:</strong> ${(current.revenue.platformFees + current.revenue.sponsoredContent).toLocaleString()}/mo (fees + sponsored content)</span>
                 </li>
               </ul>
 
-              <h3 className="text-xl font-semibold mb-4 mt-6 text-yellow-200">⚡ Artist Referral Enhancements (3x Budget)</h3>
+              <h3 className="text-xl font-semibold mb-4 mt-6 text-yellow-200">Artist Promoter Model</h3>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Commissions: <strong>20% / 12% / 25%</strong> (up from 15% / 7% / 20%)</span>
+                  <span>Commissions: <strong>20% / 12% / 25%</strong></span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Bonuses: <strong>$10 / $2</strong> (doubled from $5 / $1)</span>
+                  <span>Upgrade/influence bonuses: <strong>$10 / $2</strong></span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span><strong>NO CAP for top 20%</strong> - Elite artists earn ${scoutTiers.tier1.range}/mo</span>
+                  <span>Per-tier caps: Elite ${scoutTiers.tier1.cap}, Strong ${scoutTiers.tier2.cap}, Active ${scoutTiers.tier3.cap}</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
@@ -783,53 +797,53 @@ export default function RevenueProjectionsPage() {
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Quality &gt; Quantity: {current.metadata.referralArtists} artists (reduced from {capacity === "60" ? "90" : "150"})</span>
+                  <span>Total budget: <strong>${current.expenses.scoutCommissions.toLocaleString()}/mo</strong> for {current.metadata.referralArtists} promoters</span>
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold mb-4 text-yellow-200">⚡ Listener Enhancements (3x Budget)</h3>
+              <h3 className="text-xl font-semibold mb-4 text-yellow-200">Listener Promoter Model</h3>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Listener bounties: <strong>$0.50/active</strong> (doubled from $0.25)</span>
+                  <span>Listener bounties: <strong>$0.50/active</strong> (capped per person)</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Artist commissions: <strong>8% / 12%</strong> (increased from 5% / 8%)</span>
+                  <span>Artist commissions: <strong>8% / 12%</strong> (capped per stream)</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span><strong>Caps REMOVED</strong> - Unlimited earning potential</span>
+                  <span>Sponsor referral: <strong>10%</strong> (capped per person)</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span><strong>NEW:</strong> Sponsor referral commissions (10%)</span>
+                  <span>Premium conversion: <strong>$1 each</strong> (capped per person)</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span><strong>NEW:</strong> Premium listener conversion bonus ($1 each)</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span><strong>NEW:</strong> Dual-role bonus (Artist Promoter + Listener = ${avgEarnings.dualRole}/mo avg)</span>
+                  <span>Total budget: <strong>${current.expenses.gpCommissions.toLocaleString()}/mo</strong> for {current.metadata.growthPartners} promoters</span>
                 </li>
               </ul>
 
-              <h3 className="text-xl font-semibold mb-4 mt-6 text-yellow-200">✅ Protected & Maintained</h3>
+              <h3 className="text-xl font-semibold mb-4 mt-6 text-yellow-200">Protected Commitments</h3>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-yellow-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="font-bold text-yellow-100">80% artist pool - ${current.expenses.artistPool.toLocaleString()}/mo (UNCHANGED)</span>
+                  <span className="font-bold text-yellow-100">80% artist pool: ${current.expenses.artistPool.toLocaleString()}/mo</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-yellow-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="font-bold text-yellow-100">Station profit - ${current.profit.toLocaleString()}/mo (TARGET MET)</span>
+                  <span className="font-bold text-yellow-100">Station profit: ${current.profit.toLocaleString()}/mo ({current.profitMargin}% margin)</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-yellow-300 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Operations: ${current.expenses.operations.toLocaleString()}/mo (lean & AI-powered)</span>
+                  <span>Operations: ${current.expenses.operations.toLocaleString()}/mo (hosting, licensing, tools)</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-yellow-300 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Sponsor acquisition: ${current.expenses.sponsorAcquisition.toLocaleString()}/mo reserve</span>
                 </li>
               </ul>
             </div>
@@ -837,7 +851,7 @@ export default function RevenueProjectionsPage() {
 
           <div className="mt-8 pt-6 border-t-2 border-white/30">
             <div className="text-center">
-              <div className="text-sm text-green-200 mb-3 font-semibold">🎯 THE PERFECT BALANCE ACHIEVED</div>
+              <div className="text-sm text-green-200 mb-3 font-semibold">FULLY RECONCILED - EVERY DOLLAR ACCOUNTED FOR</div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <div className="text-2xl font-bold text-yellow-300">${current.profit.toLocaleString()}/mo</div>
@@ -845,20 +859,20 @@ export default function RevenueProjectionsPage() {
                   <div className="text-xs text-green-300">${(current.profit * 12).toLocaleString()}/year</div>
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-                  <div className="text-2xl font-bold text-yellow-300">{avgEarnings.scoutMonthly.toFixed(0)}x</div>
-                  <div className="text-sm text-white/80">Artist Referral Income Increase</div>
-                  <div className="text-xs text-green-300">From $6.67 → ${avgEarnings.scoutMonthly}</div>
+                  <div className="text-2xl font-bold text-yellow-300">${current.expenses.artistPool.toLocaleString()}</div>
+                  <div className="text-sm text-white/80">Artist Pool (Protected)</div>
+                  <div className="text-xs text-green-300">80% of sponsor revenue</div>
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-                  <div className="text-2xl font-bold text-yellow-300">3x</div>
-                  <div className="text-sm text-white/80">Listener Income Increase</div>
-                  <div className="text-xs text-green-300">Multi-stream model</div>
+                  <div className="text-2xl font-bold text-yellow-300">${(current.expenses.scoutCommissions + current.expenses.gpCommissions).toLocaleString()}</div>
+                  <div className="text-sm text-white/80">Promoter Payouts</div>
+                  <div className="text-xs text-green-300">Capped and budget-backed</div>
                 </div>
               </div>
               <div className="text-lg text-white font-semibold bg-gradient-to-r from-green-400/20 to-blue-400/20 rounded-lg p-4">
-                🏆 Maximum incentives for {current.metadata.referralArtists} artists & {current.metadata.growthPartners} GPs<br/>
-                🎨 Protected earnings for {current.metadata.artists} artists<br/>
-                💰 Sustainable ${(current.profit * 12).toLocaleString()}/year profit for the station
+                {current.metadata.referralArtists} artist promoters + {current.metadata.growthPartners} listener promoters with honest, capped earnings<br/>
+                {current.metadata.artists} artists with protected pool income<br/>
+                ${(current.profit * 12).toLocaleString()}/year sustainable station profit
               </div>
             </div>
           </div>
