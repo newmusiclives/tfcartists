@@ -29,6 +29,12 @@ interface DJDetail {
   gptTemperature: number;
   catchPhrases: string | null;
   additionalKnowledge: string | null;
+  hometown: string | null;
+  showFormat: string | null;
+  onAirStyle: string | null;
+  quirksAndHabits: string | null;
+  atmosphere: string | null;
+  philosophy: string | null;
   photoUrl: string | null;
   colorPrimary: string | null;
   colorSecondary: string | null;
@@ -160,80 +166,121 @@ export default function DJEditorDetailPage() {
         </div>
 
         <div className="space-y-6">
-          {/* Basic Info */}
+          {/* Section 1: Identity */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
-            <h2 className="font-semibold mb-4">Basic Info</h2>
+            <h2 className="font-semibold mb-4">Identity</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Name</label>
+                <label className="text-xs text-gray-500 block mb-1">Stage Name</label>
                 <input type="text" value={dj.name} onChange={(e) => setDj({ ...dj, name: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" />
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Tagline</label>
-                <input type="text" value={dj.tagline || ""} onChange={(e) => setDj({ ...dj, tagline: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" />
+                <label className="text-xs text-gray-500 block mb-1">Real Name</label>
+                <input type="text" value={dj.fullName || ""} onChange={(e) => setDj({ ...dj, fullName: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Full legal or character name" />
               </div>
               <div>
                 <label className="text-xs text-gray-500 block mb-1">Age</label>
                 <input type="text" value={dj.age || ""} onChange={(e) => setDj({ ...dj, age: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Late 40s" />
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Vibe</label>
-                <input type="text" value={dj.vibe || ""} onChange={(e) => setDj({ ...dj, vibe: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" />
+                <label className="text-xs text-gray-500 block mb-1">Hometown</label>
+                <input type="text" value={dj.hometown || ""} onChange={(e) => setDj({ ...dj, hometown: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Austin, TX" />
               </div>
             </div>
             <div className="mt-4">
-              <label className="text-xs text-gray-500 block mb-1">Musical Focus</label>
-              <input type="text" value={dj.musicalFocus || ""} onChange={(e) => setDj({ ...dj, musicalFocus: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" />
+              <label className="text-xs text-gray-500 block mb-1">Show Format</label>
+              <input type="text" value={dj.showFormat || ""} onChange={(e) => setDj({ ...dj, showFormat: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Morning Drive Americana" />
             </div>
-            <div className="mt-4">
-              <label className="text-xs text-gray-500 block mb-1">Personality Traits (comma-separated)</label>
-              <input type="text" value={dj.personalityTraits || ""} onChange={(e) => setDj({ ...dj, personalityTraits: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="warm, folksy, philosophical" />
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <label className="text-xs text-gray-500 block mb-1">Tagline</label>
+                <input type="text" value={dj.tagline || ""} onChange={(e) => setDj({ ...dj, tagline: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Pour the coffee. Fire up the engine." />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1">Vibe</label>
+                <input type="text" value={dj.vibe || ""} onChange={(e) => setDj({ ...dj, vibe: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" placeholder="Blue-collar optimism" />
+              </div>
             </div>
           </div>
 
-          {/* Character & Personality */}
+          {/* Section 2: Biography & Backstory */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
-            <h2 className="font-semibold mb-4">Character & Personality</h2>
+            <h2 className="font-semibold mb-4">Biography & Backstory</h2>
             <div>
-              <label className="text-xs text-gray-500 block mb-1">Bio</label>
+              <label className="text-xs text-gray-500 block mb-1">Short On-Air Bio</label>
               <p className="text-xs text-gray-400 mb-1">Public-facing biography — who this DJ is to the listener.</p>
               <textarea value={dj.bio} onChange={(e) => setDj({ ...dj, bio: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} />
             </div>
             <div className="mt-4">
-              <label className="text-xs text-gray-500 block mb-1">Back Story</label>
-              <p className="text-xs text-gray-400 mb-1">Internal character background — life history, motivations, formative experiences.</p>
-              <textarea value={dj.background || ""} onChange={(e) => setDj({ ...dj, background: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} />
-            </div>
-            <div className="mt-4">
-              <label className="text-xs text-gray-500 block mb-1">Catch Phrases</label>
-              <textarea value={dj.catchPhrases || ""} onChange={(e) => setDj({ ...dj, catchPhrases: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={4} placeholder="One phrase per line&#10;e.g. Pour the coffee. Fire up the engine." />
-            </div>
-            <div className="mt-4">
-              <label className="text-xs text-gray-500 block mb-1">Full AI Prompt</label>
-              <p className="text-xs text-gray-400 mb-1">The system prompt sent to the AI when generating DJ dialogue.</p>
-              <textarea value={dj.gptSystemPrompt || ""} onChange={(e) => setDj({ ...dj, gptSystemPrompt: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm font-mono" rows={8} placeholder="You are a radio DJ named..." />
-            </div>
-            <div className="mt-4">
-              <label className="text-xs text-gray-500 block mb-1">Additional Knowledge</label>
-              <p className="text-xs text-gray-400 mb-1">Extra context the AI can reference — opinions, pet peeves, favorite stories, local knowledge.</p>
-              <textarea value={dj.additionalKnowledge || ""} onChange={(e) => setDj({ ...dj, additionalKnowledge: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Things this character knows, believes, or cares about..." />
+              <label className="text-xs text-gray-500 block mb-1">Extended Backstory</label>
+              <p className="text-xs text-gray-400 mb-1">Internal character background — life history, motivations, formative experiences. Not shown to listeners.</p>
+              <textarea value={dj.background || ""} onChange={(e) => setDj({ ...dj, background: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={8} />
             </div>
           </div>
 
-          {/* Voice Config */}
+          {/* Section 3: Personality & Behavior */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border">
+            <h2 className="font-semibold mb-4">Personality & Behavior</h2>
+            <div>
+              <label className="text-xs text-gray-500 block mb-1">Core Personality Traits</label>
+              <p className="text-xs text-gray-400 mb-1">One trait per line — who this person is at their core.</p>
+              <textarea value={dj.personalityTraits || ""} onChange={(e) => setDj({ ...dj, personalityTraits: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={4} placeholder="warm&#10;folksy&#10;philosophical&#10;dry humor" />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Catch Phrases</label>
+              <p className="text-xs text-gray-400 mb-1">Signature phrases this DJ uses on air, one per line.</p>
+              <textarea value={dj.catchPhrases || ""} onChange={(e) => setDj({ ...dj, catchPhrases: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={4} placeholder="Pour the coffee. Fire up the engine.&#10;That's the good stuff right there." />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Quirks & Habits</label>
+              <p className="text-xs text-gray-400 mb-1">Recurring bits, pet peeves, studio behaviors — the little things that make this character feel real.</p>
+              <textarea value={dj.quirksAndHabits || ""} onChange={(e) => setDj({ ...dj, quirksAndHabits: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={4} placeholder="Always taps the mic twice before speaking&#10;Hates when people call it 'country pop'" />
+            </div>
+          </div>
+
+          {/* Section 4: Voice & On-Air Presence */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border">
+            <h2 className="font-semibold mb-4">Voice & On-Air Presence</h2>
+            <div>
+              <label className="text-xs text-gray-500 block mb-1">Voice Profile</label>
+              <p className="text-xs text-gray-400 mb-1">How this DJ sounds — tone, pacing, energy, accent, delivery style.</p>
+              <textarea value={dj.voiceDescription || ""} onChange={(e) => setDj({ ...dj, voiceDescription: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Tone: Warm and gravelly&#10;Pacing: Unhurried, lets moments breathe&#10;Energy: Calm confidence, never rushed&#10;Accent: Slight Texas drawl&#10;Delivery: Conversational, like talking to a friend" />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">On-Air Style</label>
+              <p className="text-xs text-gray-400 mb-1">How they run the show — intros, interviews, listener interaction, humor, emotional tone.</p>
+              <textarea value={dj.onAirStyle || ""} onChange={(e) => setDj({ ...dj, onAirStyle: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Song intros: Brief story about the artist or song&#10;Interviews: Relaxed, lets guests talk&#10;Listener talk: Warm, uses first names&#10;Humor: Dry, self-deprecating&#10;Emotional tone: Genuine, never performative" />
+            </div>
+          </div>
+
+          {/* Section 5: Musical Identity */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border">
+            <h2 className="font-semibold mb-4">Musical Identity</h2>
+            <div>
+              <label className="text-xs text-gray-500 block mb-1">Musical Identity</label>
+              <p className="text-xs text-gray-400 mb-1">Genres, championed artists, and philosophy toward music selection.</p>
+              <textarea value={dj.musicalFocus || ""} onChange={(e) => setDj({ ...dj, musicalFocus: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Genres: Americana, alt-country, folk, roots rock&#10;Champions: Jason Isbell, Sturgill Simpson, Tyler Childers&#10;Philosophy: Real songs by real people about real life" />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Signature Atmosphere</label>
+              <p className="text-xs text-gray-400 mb-1">The sensory mood of the show — what it feels like to listen.</p>
+              <textarea value={dj.atmosphere || ""} onChange={(e) => setDj({ ...dj, atmosphere: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={4} placeholder="Like sitting on a porch at dawn with a cup of black coffee, watching the sun come up over the hills..." />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Guiding Philosophy</label>
+              <p className="text-xs text-gray-400 mb-1">This DJ's core belief about music, radio, and connection.</p>
+              <textarea value={dj.philosophy || ""} onChange={(e) => setDj({ ...dj, philosophy: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={3} placeholder="Music is the thread that holds working people together..." />
+            </div>
+          </div>
+
+          {/* Section 6: Voice Configuration (technical) */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
             <h2 className="font-semibold mb-4">Voice Configuration</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Voice Description</label>
-                <input type="text" value={dj.voiceDescription || ""} onChange={(e) => setDj({ ...dj, voiceDescription: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" />
-              </div>
-              <div>
                 <label className="text-xs text-gray-500 block mb-1">ElevenLabs Voice ID</label>
                 <input type="text" value={dj.voiceProfileId || ""} onChange={(e) => setDj({ ...dj, voiceProfileId: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm font-mono" placeholder="voice_abc123..." />
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
                 <label className="text-xs text-gray-500 block mb-1">TTS Provider</label>
                 <select
@@ -245,6 +292,8 @@ export default function DJEditorDetailPage() {
                   <option value="gemini">Google Gemini</option>
                 </select>
               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
                 <label className="text-xs text-gray-500 block mb-1">TTS Voice</label>
                 {(dj.ttsProvider || "openai") === "openai" ? (
@@ -283,6 +332,7 @@ export default function DJEditorDetailPage() {
                   </select>
                 )}
               </div>
+              <div />
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
@@ -296,7 +346,7 @@ export default function DJEditorDetailPage() {
             </div>
           </div>
 
-          {/* AI Settings */}
+          {/* Section 7: AI Settings */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
             <h2 className="font-semibold mb-4">AI Settings</h2>
             <div>
@@ -304,9 +354,19 @@ export default function DJEditorDetailPage() {
               <input type="range" min="0" max="1" step="0.05" value={dj.gptTemperature} onChange={(e) => setDj({ ...dj, gptTemperature: parseFloat(e.target.value) })} className="w-full" />
               <p className="text-xs text-gray-400 mt-1">Lower = more consistent, higher = more creative. Default: 0.8</p>
             </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Full AI Prompt</label>
+              <p className="text-xs text-gray-400 mb-1">The system prompt sent to the AI when generating DJ dialogue.</p>
+              <textarea value={dj.gptSystemPrompt || ""} onChange={(e) => setDj({ ...dj, gptSystemPrompt: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm font-mono" rows={8} placeholder="You are a radio DJ named..." />
+            </div>
+            <div className="mt-4">
+              <label className="text-xs text-gray-500 block mb-1">Additional Knowledge</label>
+              <p className="text-xs text-gray-400 mb-1">Extra context the AI can reference — opinions, pet peeves, favorite stories, local knowledge.</p>
+              <textarea value={dj.additionalKnowledge || ""} onChange={(e) => setDj({ ...dj, additionalKnowledge: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Things this character knows, believes, or cares about..." />
+            </div>
           </div>
 
-          {/* Visual */}
+          {/* Section 8: Visual Identity */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
             <h2 className="font-semibold mb-4">Visual Identity</h2>
             <div className="flex items-start gap-6 mb-4">
@@ -351,7 +411,7 @@ export default function DJEditorDetailPage() {
             </div>
           </div>
 
-          {/* Toggles */}
+          {/* Section 9: Status */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
             <h2 className="font-semibold mb-4">Status</h2>
             <div className="flex gap-6">

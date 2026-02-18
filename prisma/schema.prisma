@@ -802,6 +802,14 @@ model DJ {
   catchPhrases        String?  // Signature phrases, one per line
   additionalKnowledge String?  // Extra character knowledge for AI context
 
+  // Expanded character profile
+  hometown        String?  // "Austin, TX", "Small town outside Nashville"
+  showFormat      String?  // "Morning Drive Americana", "The Afternoon Hang"
+  onAirStyle      String?  // How they intro songs, interview, talk to listeners, humor, tone
+  quirksAndHabits String?  // Recurring bits, pet peeves, studio behaviors
+  atmosphere      String?  // Sensory mood of the show — what it feels like to listen
+  philosophy      String?  // Guiding belief about music, radio, and connection
+
   // Visual identity
   photoUrl    String?
   colorPrimary String?   // Hex color for show branding
