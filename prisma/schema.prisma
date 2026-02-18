@@ -1059,6 +1059,8 @@ model Station {
   imagingVoices      StationImagingVoice[]
   stationDJs         DJ[]    @relation("StationDJs")
   showTransitions    ShowTransition[]
+  musicBeds          MusicBed[]
+  sponsorAds         SponsorAd[]
 
   metadata    Json?
 }
@@ -2298,4 +2300,83 @@ model SystemConfig {
   updatedAt DateTime @updatedAt
 
   @@index([category])
+}
+
+// =============================================================================
+// MUSIC BEDS & SPONSOR AD ROTATION
+// =============================================================================
+
+// Instrumental music bed files for ad/promo mixing
+model MusicBed {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station
+  stationId       String
+  station         Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // File info
+  name            String
+  fileName        String
+  filePath        String   // e.g. "/audio/music-beds/upbeat-01.mp3"
+  durationSeconds Float?
+
+  // Classification
+  category        String   @default("general") // "upbeat", "soft", "corporate", "country", "general"
+
+  // Status
+  isActive        Boolean  @default(true)
+
+  // Relations
+  sponsorAds      SponsorAd[]
+
+  metadata        Json?
+
+  @@index([stationId])
+  @@index([category])
+  @@index([isActive])
+}
+
+// Sponsor ad records for even rotation scheduling
+model SponsorAd {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station
+  stationId       String
+  station         Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // Sponsor reference (optional FK)
+  sponsorId       String?
+  sponsorName     String
+
+  // Ad content
+  adTitle         String
+  scriptText      String?
+  musicBedId      String?
+  musicBed        MusicBed? @relation(fields: [musicBedId], references: [id], onDelete: SetNull)
+
+  // Audio
+  audioFilePath   String?
+  durationSeconds Float?
+
+  // Tier & scheduling
+  tier            String   @default("bronze") // "bronze", "silver", "gold", "platinum"
+  weight          Int      @default(1)        // For weighted rotation
+
+  // Status
+  isActive        Boolean  @default(true)
+
+  // Rotation tracking
+  playCount       Int      @default(0)
+  lastPlayedAt    DateTime?
+
+  metadata        Json?
+
+  @@index([stationId])
+  @@index([isActive])
+  @@index([lastPlayedAt])
+  @@index([tier])
 }

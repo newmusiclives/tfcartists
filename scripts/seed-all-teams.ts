@@ -84,6 +84,8 @@ async function clearAll() {
     prisma.judge.deleteMany(),
     prisma.programmingBlock.deleteMany(),
     prisma.trackPlayback.deleteMany(),
+    prisma.sponsorAd.deleteMany(),
+    prisma.musicBed.deleteMany(),
     prisma.stationImagingVoice.deleteMany(),
     prisma.clockAssignment.deleteMany(),
     prisma.clockTemplate.deleteMany(),
@@ -1805,6 +1807,39 @@ async function seedFeatureSchedules(stationId: string, djs: any[]) {
 }
 
 // ============ MAIN ============
+// ============ SPONSOR ADS (8 demo ads for rotation) ============
+async function seedSponsorAds(stationId: string) {
+  console.log("Seeding sponsor ads...");
+  const demoAds = [
+    { sponsor: "Mountain Brew Coffee", title: "Morning Coffee Special", script: "Start your morning right with Mountain Brew Coffee. Locally roasted, community loved. Visit mountainbrew.com.", tier: "silver", duration: 15 },
+    { sponsor: "Heritage Bakery", title: "Fresh Daily Pastries", script: "Heritage Bakery — fresh bread, homemade pastries, and the warmth of a family kitchen. Stop by on Main Street.", tier: "silver", duration: 15 },
+    { sponsor: "Cornerstone Insurance", title: "Auto Insurance Savings", script: "Cornerstone Insurance protects what matters most. Auto, home, and life — get a free quote today at cornerstone-ins.com.", tier: "platinum", duration: 30 },
+    { sponsor: "Summit Outdoor Gear", title: "Spring Hiking Sale", script: "Summit Outdoor Gear — gear up for adventure. Twenty percent off all hiking boots this month. summitgear.com.", tier: "gold", duration: 20 },
+    { sponsor: "Maple Street Brewery", title: "New Seasonal IPA", script: "Maple Street Brewery's new Trailhead IPA is here. Crisp, hoppy, and brewed right here in town. Tap room open daily.", tier: "gold", duration: 20 },
+    { sponsor: "Green Mountain Distillery", title: "Craft Spirits Tasting", script: "Green Mountain Distillery invites you to our weekend tasting room. Small batch whiskey and gin, crafted with care.", tier: "bronze", duration: 15 },
+    { sponsor: "Wildflower Florist", title: "Fresh Arrangements Weekly", script: "Wildflower Florist — beautiful blooms for every occasion. Order online or visit us downtown. wildflowershop.com.", tier: "bronze", duration: 15 },
+    { sponsor: "TrueFans CONNECT", title: "Support Independent Artists", script: "TrueFans CONNECT — the platform where fans become patrons. Support the artists you love. truefans.connect.", tier: "gold", duration: 20 },
+  ];
+
+  for (const ad of demoAds) {
+    const playCount = randomInt(0, 40);
+    await prisma.sponsorAd.create({
+      data: {
+        stationId,
+        sponsorName: ad.sponsor,
+        adTitle: ad.title,
+        scriptText: ad.script,
+        tier: ad.tier,
+        durationSeconds: ad.duration,
+        isActive: true,
+        playCount,
+        lastPlayedAt: playCount > 0 ? randomDate(7) : null,
+      },
+    });
+  }
+  console.log(`  Created ${demoAds.length} sponsor ads`);
+}
+
 async function main() {
   console.log("🌱 Comprehensive seed: ALL TEAMS\n");
 
@@ -1832,6 +1867,7 @@ async function main() {
   await seedFeatureTypes();
   await seedShowTransitions(station.id, stationDjs);
   await seedFeatureSchedules(station.id, stationDjs);
+  await seedSponsorAds(station.id);
   await seedActivityLogs(artists, sponsors, listeners);
   await seedRevenue(artists);
 
@@ -1854,6 +1890,7 @@ Summary:
   - 14 Show transitions (intros, outros, handoffs)
   - ~134 Feature schedules (DJ-curated per clock type)
   - 3 Months of revenue data
+  - 8 Sponsor ads (even rotation demo)
   - 100+ Activity log entries
   `);
 }

@@ -16,6 +16,7 @@ import {
   ArrowRightLeft,
   Sparkles,
   Paintbrush,
+  Megaphone,
 } from "lucide-react";
 
 interface Station {
@@ -108,6 +109,13 @@ const actionCards = [
     href: "/station-admin/transitions",
     icon: ArrowRightLeft,
     color: "bg-cyan-500",
+  },
+  {
+    title: "Sponsor Ads",
+    description: "Manage sponsor ads, music beds, and rotation scheduling",
+    href: "/station-admin/sponsor-ads",
+    icon: Megaphone,
+    color: "bg-green-500",
   },
 ];
 
