@@ -111,8 +111,8 @@ export function SharedNav() {
                   <ChevronDown className={`w-3 h-3 transition-transform ${openMenu === "teams" ? "rotate-180" : ""}`} />
                 </button>
                 {openMenu === "teams" && (
-                  <div className="absolute left-1/2 -translate-x-1/2 mt-1 w-[800px] bg-white rounded-xl shadow-xl border py-4 px-2 z-50">
-                    <div className="grid grid-cols-5 gap-1">
+                  <div className="absolute right-0 mt-1 w-[880px] bg-white rounded-xl shadow-xl border py-4 px-3 z-50">
+                    <div className="grid grid-cols-5 gap-2">
                       {/* Riley */}
                       <div>
                         <div className="px-3 py-1.5 text-xs font-bold text-purple-600 uppercase tracking-wider flex items-center space-x-1">

@@ -138,8 +138,8 @@ export default function HomePage() {
         </div>
 
         {/* Team Stats */}
-        <div className="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8">
-          <div className="bg-white rounded-xl p-8 shadow-lg">
+        <div className="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-8">
+          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-3">
             <div className="flex items-center space-x-3 mb-4">
               <Users className="w-10 h-10 text-purple-600" />
               <div>
@@ -171,7 +171,7 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-8 shadow-lg">
+          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-3">
             <div className="flex items-center space-x-3 mb-4">
               <DollarSign className="w-10 h-10 text-green-600" />
               <div>
@@ -203,7 +203,7 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-8 shadow-lg">
+          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Award className="w-10 h-10 text-teal-600" />
               <div>
@@ -235,7 +235,7 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-8 shadow-lg">
+          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Target className="w-10 h-10 text-blue-600" />
               <div>
@@ -267,7 +267,7 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-8 shadow-lg">
+          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Radio className="w-10 h-10 text-rose-600" />
               <div>
