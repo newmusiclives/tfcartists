@@ -26,6 +26,7 @@ import {
   SlidersHorizontal,
   ArrowRightLeft,
   Sparkles,
+  Paintbrush,
   Menu,
   X,
   ChevronRight,
@@ -233,6 +234,9 @@ export function SharedNav() {
                     </Link>
                     <Link href="/station-admin/imaging" className={activeLinkClass("/station-admin/imaging", "amber")}>
                       <span className="flex items-center space-x-2"><Mic className="w-4 h-4 text-amber-600" /><span>Station Imaging</span></span>
+                    </Link>
+                    <Link href="/station-admin/branding" className={activeLinkClass("/station-admin/branding", "amber")}>
+                      <span className="flex items-center space-x-2"><Paintbrush className="w-4 h-4 text-amber-600" /><span>Station Branding</span></span>
                     </Link>
                     <Link href="/station-admin/features" className={activeLinkClass("/station-admin/features", "amber")}>
                       <span className="flex items-center space-x-2"><Sparkles className="w-4 h-4 text-amber-600" /><span>Show Features</span></span>
@@ -572,6 +576,7 @@ export function SharedNav() {
                   <Link href="/station-admin/dj-editor" className="block px-4 py-2 text-sm text-gray-600">DJ Editor</Link>
                   <Link href="/station-admin/schedule-editor" className="block px-4 py-2 text-sm text-gray-600">Schedule Editor</Link>
                   <Link href="/station-admin/imaging" className="block px-4 py-2 text-sm text-gray-600">Station Imaging</Link>
+                  <Link href="/station-admin/branding" className="block px-4 py-2 text-sm text-gray-600">Station Branding</Link>
                   <Link href="/station-admin/features" className="block px-4 py-2 text-sm text-gray-600">Show Features</Link>
                   <Link href="/station-admin/stream" className="block px-4 py-2 text-sm text-gray-600">Stream Engineering</Link>
                   <Link href="/station-admin/transitions" className="block px-4 py-2 text-sm text-gray-600">Show Transitions</Link>

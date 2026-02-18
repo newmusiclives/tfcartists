@@ -15,6 +15,7 @@ import {
   SlidersHorizontal,
   ArrowRightLeft,
   Sparkles,
+  Paintbrush,
 } from "lucide-react";
 
 interface Station {
@@ -79,6 +80,13 @@ const actionCards = [
     href: "/station-admin/imaging",
     icon: Mic,
     color: "bg-rose-500",
+  },
+  {
+    title: "Station Branding",
+    description: "Brand identity, colors, and imaging script library",
+    href: "/station-admin/branding",
+    icon: Paintbrush,
+    color: "bg-amber-500",
   },
   {
     title: "Show Features",
