@@ -9,8 +9,6 @@ import {
   Clock,
   BarChart3,
   AlertTriangle,
-  CheckCircle,
-  TrendingUp,
 } from "lucide-react";
 
 interface SponsorAd {

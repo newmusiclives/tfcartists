@@ -8,32 +8,29 @@ import {
   Clock,
   Users,
   CheckCircle,
-  AlertTriangle,
-  Radio,
-  BarChart3,
 } from "lucide-react";
 
 const DJ_SCHEDULE = {
   weekday: [
-    { time: "6:00 AM - 9:00 AM", dj: "Hank Williams III", daypart: "Morning Drive", status: "live" },
-    { time: "9:00 AM - 12:00 PM", dj: "Loretta Lynn", daypart: "Mid-Morning", status: "live" },
-    { time: "12:00 PM - 3:00 PM", dj: "Doc Watson", daypart: "Midday", status: "live" },
-    { time: "3:00 PM - 6:00 PM", dj: "Cody Jinks", daypart: "Afternoon Drive", status: "live" },
-    { time: "6:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
+    { time: "6:00 AM - 10:00 AM", dj: "Hank Westwood", daypart: "Morning Drive", status: "live" },
+    { time: "10:00 AM - 2:00 PM", dj: "Loretta Merrick", daypart: "Midday", status: "live" },
+    { time: "2:00 PM - 6:00 PM", dj: "Marcus 'Doc' Holloway", daypart: "Afternoon", status: "live" },
+    { time: "6:00 PM - 10:00 PM", dj: "Cody Rampart", daypart: "Evening", status: "live" },
+    { time: "10:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
   ],
   saturday: [
-    { time: "6:00 AM - 9:00 AM", dj: "Jo Dee Messina", daypart: "Morning Drive", status: "live" },
-    { time: "9:00 AM - 12:00 PM", dj: "Paul Cauthen", daypart: "Mid-Morning", status: "live" },
-    { time: "12:00 PM - 3:00 PM", dj: "Ezra Lee", daypart: "Midday", status: "live" },
-    { time: "3:00 PM - 6:00 PM", dj: "Carmen Rodriguez", daypart: "Afternoon Drive", status: "live" },
-    { time: "6:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
+    { time: "6:00 AM - 10:00 AM", dj: "Jo McAllister", daypart: "Morning Drive", status: "live" },
+    { time: "10:00 AM - 2:00 PM", dj: "Paul Saunders", daypart: "Midday", status: "live" },
+    { time: "2:00 PM - 6:00 PM", dj: "Ezra Stone", daypart: "Afternoon", status: "live" },
+    { time: "6:00 PM - 10:00 PM", dj: "Levi Bridges", daypart: "Evening", status: "live" },
+    { time: "10:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
   ],
   sunday: [
-    { time: "6:00 AM - 9:00 AM", dj: "Sam Hunt", daypart: "Morning Drive", status: "live" },
-    { time: "9:00 AM - 12:00 PM", dj: "Ruby Amanfu", daypart: "Mid-Morning", status: "live" },
-    { time: "12:00 PM - 3:00 PM", dj: "Mark Chesnutt", daypart: "Midday", status: "live" },
-    { time: "3:00 PM - 6:00 PM", dj: "Iris DeMent", daypart: "Afternoon Drive", status: "live" },
-    { time: "6:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
+    { time: "6:00 AM - 10:00 AM", dj: "Sam Turnbull", daypart: "Morning Drive", status: "live" },
+    { time: "10:00 AM - 2:00 PM", dj: "Ruby Finch", daypart: "Midday", status: "live" },
+    { time: "2:00 PM - 6:00 PM", dj: "Mark Faulkner", daypart: "Afternoon", status: "live" },
+    { time: "6:00 PM - 10:00 PM", dj: "Iris Langley", daypart: "Evening", status: "live" },
+    { time: "10:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
   ],
 };
 
@@ -113,8 +110,8 @@ export default function ProgrammingPage() {
               <Clock className="w-6 h-6 text-rose-600" />
               <div className="text-sm font-medium text-gray-600">Live Hours/Day</div>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">12</div>
-            <div className="text-xs text-rose-600">6am - 6pm daily</div>
+            <div className="text-3xl font-bold text-gray-900 mb-1">16</div>
+            <div className="text-xs text-rose-600">6am - 10pm daily</div>
           </div>
         </section>
 
@@ -216,10 +213,10 @@ export default function ProgrammingPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Show Prep Status</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
-              { dj: "Hank", shift: "Morning Drive", prep: "Ready", color: "green" },
-              { dj: "Loretta", shift: "Mid-Morning", prep: "Ready", color: "green" },
-              { dj: "Doc", shift: "Midday", prep: "In Progress", color: "yellow" },
-              { dj: "Cody", shift: "Afternoon", prep: "Pending", color: "gray" },
+              { dj: "Hank Westwood", shift: "Morning Drive", prep: "Ready", color: "green" },
+              { dj: "Loretta Merrick", shift: "Midday", prep: "Ready", color: "green" },
+              { dj: "Doc Holloway", shift: "Afternoon", prep: "In Progress", color: "yellow" },
+              { dj: "Cody Rampart", shift: "Evening", prep: "Pending", color: "gray" },
             ].map((item, idx) => (
               <div key={idx} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                 <div className="flex items-center justify-between mb-2">

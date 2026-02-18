@@ -10,7 +10,6 @@ import {
   Users,
   Star,
   TrendingUp,
-  ThumbsUp,
 } from "lucide-react";
 
 const RECENT_REQUESTS = [

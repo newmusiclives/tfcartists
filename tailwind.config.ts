@@ -6,6 +6,12 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    // Dynamic color classes used in shared-nav.tsx activeLinkClass template literals
+    { pattern: /bg-(rose|purple|blue|amber|green)-(50|700)/ },
+    { pattern: /text-(rose|purple|blue|amber|green)-700/ },
+    { pattern: /hover:bg-(rose|purple|blue|amber|green)-50/ },
+  ],
   theme: {
     extend: {
       colors: {

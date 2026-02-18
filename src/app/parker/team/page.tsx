@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -11,10 +12,6 @@ import {
   Megaphone,
   MessageCircle,
   Shield,
-  BarChart3,
-  CheckCircle,
-  Clock,
-  Settings,
 } from "lucide-react";
 
 interface TeamMember {
@@ -313,7 +310,7 @@ export default function ParkerTeamPage() {
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start space-x-4">
-                        <Image src={member.photoUrl} alt={member.name} width={64} height={64} className="w-16 h-16 rounded-xl object-cover shadow-md" />
+                        <TeamAvatar src={member.photoUrl} alt={member.name} initials={member.avatar} color={member.color} />
                         <div>
                           <div className="flex items-center space-x-3 mb-1">
                             <h4 className="text-xl font-bold text-gray-900">{member.name}</h4>
@@ -536,5 +533,46 @@ function QuickLink({
         </div>
       </div>
     </Link>
+  );
+}
+
+function TeamAvatar({
+  src,
+  alt,
+  initials,
+  color,
+}: {
+  src: string;
+  alt: string;
+  initials: string;
+  color: string;
+}) {
+  const [imgError, setImgError] = useState(false);
+
+  const bgColors: Record<string, string> = {
+    rose: "bg-rose-100 text-rose-600",
+    indigo: "bg-indigo-100 text-indigo-600",
+    violet: "bg-violet-100 text-violet-600",
+    orange: "bg-orange-100 text-orange-600",
+    teal: "bg-teal-100 text-teal-600",
+  };
+
+  if (imgError) {
+    return (
+      <div className={`w-16 h-16 rounded-xl shadow-md flex items-center justify-center text-lg font-bold ${bgColors[color] || bgColors.rose}`}>
+        {initials}
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={64}
+      height={64}
+      className="w-16 h-16 rounded-xl object-cover shadow-md"
+      onError={() => setImgError(true)}
+    />
   );
 }

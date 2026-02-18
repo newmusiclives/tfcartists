@@ -15,7 +15,6 @@ import {
   BarChart3,
   MessageCircle,
   CheckCircle,
-  AlertTriangle,
   Shield,
 } from "lucide-react";
 
@@ -77,6 +76,17 @@ export default function ParkerDashboardPage() {
     );
   }
 
+  if (!stationData && activeAds === 0) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-600 font-semibold mb-2">Unable to load station data</div>
+          <button onClick={() => window.location.reload()} className="text-rose-600 hover:underline text-sm">Try again</button>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50">
       {/* Header */}
@@ -116,28 +126,24 @@ export default function ParkerDashboardPage() {
             label="Songs in Library"
             value={songCount}
             subtitle="Music library"
-            color="rose"
           />
           <MetricCard
             icon={<Users className="w-6 h-6 text-indigo-600" />}
             label="Active DJs"
             value={djCount}
             subtitle="Station roster"
-            color="indigo"
           />
           <MetricCard
             icon={<Clock className="w-6 h-6 text-violet-600" />}
             label="Clock Templates"
             value={clockCount}
             subtitle="Format clocks"
-            color="violet"
           />
           <MetricCard
             icon={<Megaphone className="w-6 h-6 text-orange-600" />}
             label="Active Ads"
             value={activeAds}
             subtitle="Sponsor spots"
-            color="orange"
           />
         </section>
 
@@ -255,7 +261,6 @@ function MetricCard({
   label: string;
   value: string | number;
   subtitle: string;
-  color: string;
 }) {
   return (
     <div className="bg-white rounded-xl p-6 shadow-lg">

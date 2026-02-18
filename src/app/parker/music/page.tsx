@@ -9,14 +9,7 @@ import {
   BarChart3,
   RefreshCw,
   TrendingUp,
-  Clock,
 } from "lucide-react";
-
-interface StationData {
-  _count?: {
-    songs?: number;
-  };
-}
 
 const ROTATION_CATEGORIES = [
   { name: "Heavy", description: "Current hits, high frequency", count: 35, color: "rose", pct: 15 },
