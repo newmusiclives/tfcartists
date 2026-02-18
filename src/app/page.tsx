@@ -139,7 +139,72 @@ export default function HomePage() {
 
         {/* Team Stats */}
         <div className="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-8">
-          {/* Row 1: 3 tiles */}
+          {/* Row 1: Riley + Harper centered */}
+          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2 lg:col-start-2">
+            <div className="flex items-center space-x-3 mb-4">
+              <Users className="w-10 h-10 text-purple-600" />
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Riley's Team</h3>
+                <p className="text-sm text-gray-600">Artist Acquisition</p>
+              </div>
+            </div>
+            <ul className="space-y-2 text-gray-700">
+              <li className="flex items-center space-x-2">
+                <span className="text-purple-600">✓</span>
+                <span>Discovers emerging artists</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-purple-600">✓</span>
+                <span>Automated outreach campaigns</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-purple-600">✓</span>
+                <span>Activates FREE radio airplay</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-purple-600">✓</span>
+                <span>Manages upgrade opportunities</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-purple-600">✓</span>
+                <span>300 artists, $4,350/month</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
+            <div className="flex items-center space-x-3 mb-4">
+              <DollarSign className="w-10 h-10 text-green-600" />
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Harper's Team</h3>
+                <p className="text-sm text-gray-600">Sponsor Acquisition</p>
+              </div>
+            </div>
+            <ul className="space-y-2 text-gray-700">
+              <li className="flex items-center space-x-2">
+                <span className="text-green-600">✓</span>
+                <span>Music-related businesses</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-green-600">✓</span>
+                <span>Local craft makers & venues</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-green-600">✓</span>
+                <span>Community sponsor outreach</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-green-600">✓</span>
+                <span>4-tier sponsorship packages</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-green-600">✓</span>
+                <span>72 sponsors, $18,150/month</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Row 2: Cassidy, Elliot, Parker */}
           <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Award className="w-10 h-10 text-teal-600" />
@@ -236,70 +301,6 @@ export default function HomePage() {
             </ul>
           </div>
 
-          {/* Row 2: 2 wider tiles */}
-          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-3">
-            <div className="flex items-center space-x-3 mb-4">
-              <Users className="w-10 h-10 text-purple-600" />
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Riley's Team</h3>
-                <p className="text-sm text-gray-600">Artist Acquisition</p>
-              </div>
-            </div>
-            <ul className="space-y-2 text-gray-700">
-              <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
-                <span>Discovers emerging artists</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
-                <span>Automated outreach campaigns</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
-                <span>Activates FREE radio airplay</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
-                <span>Manages upgrade opportunities</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
-                <span>300 artists, $4,350/month</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-3">
-            <div className="flex items-center space-x-3 mb-4">
-              <DollarSign className="w-10 h-10 text-green-600" />
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Harper's Team</h3>
-                <p className="text-sm text-gray-600">Sponsor Acquisition</p>
-              </div>
-            </div>
-            <ul className="space-y-2 text-gray-700">
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>Music-related businesses</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>Local craft makers & venues</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>Community sponsor outreach</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>4-tier sponsorship packages</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>72 sponsors, $18,150/month</span>
-              </li>
-            </ul>
-          </div>
         </div>
       </section>
 
