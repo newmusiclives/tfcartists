@@ -15,7 +15,11 @@ function pick<T>(arr: T[]): T {
 }
 
 function todayFormatted(): string {
-  return new Date().toLocaleDateString("en-US", { month: "long", day: "numeric" });
+  return new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+}
+
+function todayDayName(): string {
+  return new Date().toLocaleDateString("en-US", { weekday: "long" });
 }
 
 function djFirstName(fullName: string): string {
@@ -59,6 +63,7 @@ function fillTemplate(template: string, dj: string, song?: SongData): string {
   script = script.replace(/\{from_name\}/g, "a fan");
   script = script.replace(/\{to_name\}/g, "someone special");
   script = script.replace(/\{message\}/g, "thinking of you");
+  script = script.replace(/\{day_name\}/g, todayDayName());
 
   return script;
 }
@@ -118,6 +123,22 @@ export async function GET(req: NextRequest) {
           template: sched.featureType.gptPromptTemplate,
         });
       }
+    }
+
+    // 5b. Expire stale unused content (older than 18 hours) so day-specific
+    //     references like {date} and {day_name} stay accurate
+    const staleThreshold = new Date(Date.now() - 18 * 60 * 60 * 1000);
+    const { count: expired } = await prisma.featureContent.updateMany({
+      where: {
+        stationId: station.id,
+        isUsed: false,
+        generatedBy: "auto",
+        createdAt: { lt: staleThreshold },
+      },
+      data: { isUsed: true },
+    });
+    if (expired > 0) {
+      logger.info("Expired stale feature content", { expired });
     }
 
     let generated = 0;
@@ -207,12 +228,13 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    logger.info("Features-daily cron completed", { generated, skipped, byDj });
+    logger.info("Features-daily cron completed", { generated, skipped, expired, byDj });
 
     return NextResponse.json({
       success: true,
       generated,
       skipped,
+      expired,
       byDj,
       timestamp: new Date().toISOString(),
     });

@@ -156,7 +156,7 @@ export default function ShowFeaturesPage() {
     script = script.replace(/\{genre1\}/g, genForm.genre || "Americana");
     script = script.replace(/\{genre2\}/g, "Country");
     script = script.replace(/\{dj_name\}/g, dj?.name || "the DJ");
-    script = script.replace(/\{date\}/g, new Date().toLocaleDateString("en-US", { month: "long", day: "numeric" }));
+    script = script.replace(/\{date\}/g, new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
     script = script.replace(/\{original_artist\}/g, genForm.artistName || "the original artist");
     script = script.replace(/\{cover_artist\}/g, "a cover artist");
     script = script.replace(/\{album_title\}/g, "the album");
@@ -164,13 +164,14 @@ export default function ShowFeaturesPage() {
     script = script.replace(/\{listener_name\}/g, "a listener");
     script = script.replace(/\{producer\}/g, genForm.artistName || "the producer");
     script = script.replace(/\{instrument\}/g, "guitar");
-    script = script.replace(/\{year\}/g, "2024");
+    script = script.replace(/\{year\}/g, String(new Date().getFullYear()));
     script = script.replace(/\{topic\}/g, "music and life");
     script = script.replace(/\{weather\}/g, "sunny and clear");
     script = script.replace(/\{theme\}/g, "feel-good classics");
     script = script.replace(/\{from_name\}/g, "a fan");
     script = script.replace(/\{to_name\}/g, "someone special");
     script = script.replace(/\{message\}/g, "thinking of you");
+    script = script.replace(/\{day_name\}/g, new Date().toLocaleDateString("en-US", { weekday: "long" }));
 
     try {
       const res = await fetch("/api/show-features", {
