@@ -34,7 +34,7 @@ import {
 import { StationSwitcher } from "@/components/station-switcher";
 
 type MenuId = "teams" | "station" | "opportunities" | null;
-type MobileSection = "teams" | "riley" | "harper" | "cassidy" | "elliot" | "station" | "stationOps" | "opportunities" | null;
+type MobileSection = "teams" | "riley" | "harper" | "cassidy" | "elliot" | "parker" | "station" | "stationOps" | "opportunities" | null;
 
 export function SharedNav() {
   const pathname = usePathname();
@@ -101,7 +101,7 @@ export function SharedNav() {
                 <button
                   onClick={() => toggleMenu("teams")}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
-                    isActive("/riley") || isActive("/harper") || isActive("/cassidy") || isActive("/elliot")
+                    isActive("/riley") || isActive("/harper") || isActive("/cassidy") || isActive("/elliot") || isActive("/parker")
                       ? "bg-purple-100 text-purple-700"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
@@ -111,8 +111,8 @@ export function SharedNav() {
                   <ChevronDown className={`w-3 h-3 transition-transform ${openMenu === "teams" ? "rotate-180" : ""}`} />
                 </button>
                 {openMenu === "teams" && (
-                  <div className="absolute left-1/2 -translate-x-1/2 mt-1 w-[640px] bg-white rounded-xl shadow-xl border py-4 px-2 z-50">
-                    <div className="grid grid-cols-4 gap-1">
+                  <div className="absolute left-1/2 -translate-x-1/2 mt-1 w-[800px] bg-white rounded-xl shadow-xl border py-4 px-2 z-50">
+                    <div className="grid grid-cols-5 gap-1">
                       {/* Riley */}
                       <div>
                         <div className="px-3 py-1.5 text-xs font-bold text-purple-600 uppercase tracking-wider flex items-center space-x-1">
@@ -168,6 +168,20 @@ export function SharedNav() {
                         <Link href="/elliot/content" className={activeLinkClass("/elliot/content", "green")}>Viral Content</Link>
                         <Link href="/elliot/community" className={activeLinkClass("/elliot/community", "green")}>Community Hub</Link>
                         <Link href="/elliot/team" className={activeLinkClass("/elliot/team", "green")}>Team Members</Link>
+                      </div>
+
+                      {/* Parker */}
+                      <div>
+                        <div className="px-3 py-1.5 text-xs font-bold text-rose-600 uppercase tracking-wider flex items-center space-x-1">
+                          <Radio className="w-3 h-3" />
+                          <span>Parker Team</span>
+                        </div>
+                        <Link href="/parker" className={activeLinkClass("/parker", "rose")}>Dashboard</Link>
+                        <Link href="/parker/programming" className={activeLinkClass("/parker/programming", "rose")}>Programming</Link>
+                        <Link href="/parker/music" className={activeLinkClass("/parker/music", "rose")}>Music</Link>
+                        <Link href="/parker/traffic" className={activeLinkClass("/parker/traffic", "rose")}>Traffic</Link>
+                        <Link href="/parker/listeners" className={activeLinkClass("/parker/listeners", "rose")}>Listeners</Link>
+                        <Link href="/parker/team" className={activeLinkClass("/parker/team", "rose")}>Team</Link>
                       </div>
                     </div>
                   </div>
@@ -339,7 +353,7 @@ export function SharedNav() {
                 <button
                   onClick={() => toggleMenu("teams")}
                   className={`px-2.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
-                    isActive("/riley") || isActive("/harper") || isActive("/cassidy") || isActive("/elliot")
+                    isActive("/riley") || isActive("/harper") || isActive("/cassidy") || isActive("/elliot") || isActive("/parker")
                       ? "bg-purple-100 text-purple-700"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
@@ -349,7 +363,7 @@ export function SharedNav() {
                   <ChevronDown className="w-3 h-3" />
                 </button>
                 {openMenu === "teams" && (
-                  <div className="absolute left-0 mt-1 w-[480px] bg-white rounded-xl shadow-xl border py-4 px-2 z-50">
+                  <div className="absolute left-0 mt-1 w-[520px] bg-white rounded-xl shadow-xl border py-4 px-2 z-50">
                     <div className="grid grid-cols-2 gap-1">
                       {/* Riley */}
                       <div>
@@ -382,6 +396,15 @@ export function SharedNav() {
                         <Link href="/elliot" className={activeLinkClass("/elliot", "green")}>Dashboard</Link>
                         <Link href="/elliot/analytics" className={activeLinkClass("/elliot/analytics", "green")}>Analytics</Link>
                         <Link href="/elliot/campaigns" className={activeLinkClass("/elliot/campaigns", "green")}>Campaigns</Link>
+                      </div>
+                      {/* Parker */}
+                      <div className="mt-2">
+                        <div className="px-3 py-1.5 text-xs font-bold text-rose-600 uppercase tracking-wider">Parker Team</div>
+                        <Link href="/parker" className={activeLinkClass("/parker", "rose")}>Dashboard</Link>
+                        <Link href="/parker/programming" className={activeLinkClass("/parker/programming", "rose")}>Programming</Link>
+                        <Link href="/parker/music" className={activeLinkClass("/parker/music", "rose")}>Music</Link>
+                        <Link href="/parker/traffic" className={activeLinkClass("/parker/traffic", "rose")}>Traffic</Link>
+                        <Link href="/parker/listeners" className={activeLinkClass("/parker/listeners", "rose")}>Listeners</Link>
                       </div>
                     </div>
                   </div>
@@ -461,10 +484,10 @@ export function SharedNav() {
                   <Users className="w-5 h-5" />
                   <span className="font-medium">Teams</span>
                 </span>
-                <ChevronRight className={`w-4 h-4 transition-transform ${mobileSection === "teams" || mobileSection === "riley" || mobileSection === "harper" || mobileSection === "cassidy" || mobileSection === "elliot" ? "rotate-90" : ""}`} />
+                <ChevronRight className={`w-4 h-4 transition-transform ${mobileSection === "teams" || mobileSection === "riley" || mobileSection === "harper" || mobileSection === "cassidy" || mobileSection === "elliot" || mobileSection === "parker" ? "rotate-90" : ""}`} />
               </button>
 
-              {(mobileSection === "teams" || mobileSection === "riley" || mobileSection === "harper" || mobileSection === "cassidy" || mobileSection === "elliot") && (
+              {(mobileSection === "teams" || mobileSection === "riley" || mobileSection === "harper" || mobileSection === "cassidy" || mobileSection === "elliot" || mobileSection === "parker") && (
                 <div className="pl-4">
                   {/* Riley */}
                   <button
@@ -540,6 +563,25 @@ export function SharedNav() {
                       <Link href="/elliot/content" className="block px-4 py-2 text-sm text-gray-600 hover:text-green-700">Viral Content</Link>
                       <Link href="/elliot/community" className="block px-4 py-2 text-sm text-gray-600 hover:text-green-700">Community Hub</Link>
                       <Link href="/elliot/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-green-700">Team Members</Link>
+                    </div>
+                  )}
+
+                  {/* Parker */}
+                  <button
+                    onClick={() => toggleMobileSection("parker")}
+                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-rose-700"
+                  >
+                    <span className="font-semibold">Parker Team</span>
+                    <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "parker" ? "rotate-90" : ""}`} />
+                  </button>
+                  {mobileSection === "parker" && (
+                    <div className="pl-4 pb-2 space-y-0.5">
+                      <Link href="/parker" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Dashboard</Link>
+                      <Link href="/parker/programming" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Programming</Link>
+                      <Link href="/parker/music" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Music</Link>
+                      <Link href="/parker/traffic" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Traffic</Link>
+                      <Link href="/parker/listeners" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Listeners</Link>
+                      <Link href="/parker/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Team Members</Link>
                     </div>
                   )}
                 </div>

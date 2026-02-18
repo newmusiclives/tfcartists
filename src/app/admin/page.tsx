@@ -126,6 +126,19 @@ const teamSummaries = {
       { label: "Viral Views", value: "485k" },
     ],
   },
+  parker: {
+    name: "Parker's Team",
+    role: "Station Management",
+    color: "rose",
+    href: "/parker",
+    icon: Radio,
+    stats: [
+      { label: "Songs", value: "---" },
+      { label: "Active DJs", value: "---" },
+      { label: "Clock Templates", value: "---" },
+      { label: "Active Ads", value: "---" },
+    ],
+  },
 };
 
 export default function AdminDashboard() {
@@ -268,6 +281,7 @@ export default function AdminDashboard() {
                 teal: { border: "border-teal-200", iconBg: "bg-teal-100", iconText: "text-teal-600", badge: "bg-teal-600", hover: "hover:border-teal-400" },
                 green: { border: "border-green-200", iconBg: "bg-green-100", iconText: "text-green-600", badge: "bg-green-600", hover: "hover:border-green-400" },
                 blue: { border: "border-blue-200", iconBg: "bg-blue-100", iconText: "text-blue-600", badge: "bg-blue-600", hover: "hover:border-blue-400" },
+                rose: { border: "border-rose-200", iconBg: "bg-rose-100", iconText: "text-rose-600", badge: "bg-rose-600", hover: "hover:border-rose-400" },
               };
               const c = colorMap[team.color];
               const Icon = team.icon;
