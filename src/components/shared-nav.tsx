@@ -126,6 +126,7 @@ export function SharedNav() {
                         <Link href="/riley/submissions" className={activeLinkClass("/riley/submissions")}>Track Submissions</Link>
                         <Link href="/riley/pool-calculator" className={activeLinkClass("/riley/pool-calculator")}>Pool Calculator</Link>
                         <Link href="/riley/upgrade-opportunities" className={activeLinkClass("/riley/upgrade-opportunities")}>Upgrades</Link>
+                        <Link href="/riley/team" className={activeLinkClass("/riley/team")}>Team Members</Link>
                       </div>
 
                       {/* Harper */}
@@ -141,6 +142,7 @@ export function SharedNav() {
                         <Link href="/harper/calls" className={activeLinkClass("/harper/calls", "blue")}>Call Tracking</Link>
                         <Link href="/harper/billing" className={activeLinkClass("/harper/billing", "blue")}>Billing</Link>
                         <Link href="/harper/inventory" className={activeLinkClass("/harper/inventory", "blue")}>Ad Inventory</Link>
+                        <Link href="/harper/team" className={activeLinkClass("/harper/team", "blue")}>Team Members</Link>
                       </div>
 
                       {/* Cassidy */}
@@ -153,7 +155,7 @@ export function SharedNav() {
                         <Link href="/cassidy/submissions" className={activeLinkClass("/cassidy/submissions", "amber")}>Review Queue</Link>
                         <Link href="/cassidy/tier-management" className={activeLinkClass("/cassidy/tier-management", "amber")}>Tier Mgmt</Link>
                         <Link href="/cassidy/rotation" className={activeLinkClass("/cassidy/rotation", "amber")}>Rotation Planner</Link>
-                        <Link href="/cassidy/team" className={activeLinkClass("/cassidy/team", "amber")}>Panel Members</Link>
+                        <Link href="/cassidy/team" className={activeLinkClass("/cassidy/team", "amber")}>Team Members</Link>
                       </div>
 
                       {/* Elliot */}
@@ -181,7 +183,7 @@ export function SharedNav() {
                         <Link href="/parker/music" className={activeLinkClass("/parker/music", "rose")}>Music</Link>
                         <Link href="/parker/traffic" className={activeLinkClass("/parker/traffic", "rose")}>Traffic</Link>
                         <Link href="/parker/listeners" className={activeLinkClass("/parker/listeners", "rose")}>Listeners</Link>
-                        <Link href="/parker/team" className={activeLinkClass("/parker/team", "rose")}>Team</Link>
+                        <Link href="/parker/team" className={activeLinkClass("/parker/team", "rose")}>Team Members</Link>
                       </div>
                     </div>
                   </div>
@@ -373,6 +375,7 @@ export function SharedNav() {
                         <Link href="/riley/artists" className={activeLinkClass("/riley/artists")}>Artist List</Link>
                         <Link href="/riley/outreach" className={activeLinkClass("/riley/outreach")}>Outreach</Link>
                         <Link href="/riley/submissions" className={activeLinkClass("/riley/submissions")}>Submissions</Link>
+                        <Link href="/riley/team" className={activeLinkClass("/riley/team")}>Team Members</Link>
                       </div>
                       {/* Harper */}
                       <div>
@@ -382,6 +385,7 @@ export function SharedNav() {
                         <Link href="/harper/sponsors" className={activeLinkClass("/harper/sponsors", "blue")}>Sponsor List</Link>
                         <Link href="/harper/outreach" className={activeLinkClass("/harper/outreach", "blue")}>Outreach</Link>
                         <Link href="/harper/billing" className={activeLinkClass("/harper/billing", "blue")}>Billing</Link>
+                        <Link href="/harper/team" className={activeLinkClass("/harper/team", "blue")}>Team Members</Link>
                       </div>
                       {/* Cassidy */}
                       <div className="mt-2">
@@ -389,6 +393,7 @@ export function SharedNav() {
                         <Link href="/cassidy" className={activeLinkClass("/cassidy", "amber")}>Dashboard</Link>
                         <Link href="/cassidy/submissions" className={activeLinkClass("/cassidy/submissions", "amber")}>Review Queue</Link>
                         <Link href="/cassidy/rotation" className={activeLinkClass("/cassidy/rotation", "amber")}>Rotation</Link>
+                        <Link href="/cassidy/team" className={activeLinkClass("/cassidy/team", "amber")}>Team Members</Link>
                       </div>
                       {/* Elliot */}
                       <div className="mt-2">
@@ -396,6 +401,7 @@ export function SharedNav() {
                         <Link href="/elliot" className={activeLinkClass("/elliot", "green")}>Dashboard</Link>
                         <Link href="/elliot/analytics" className={activeLinkClass("/elliot/analytics", "green")}>Analytics</Link>
                         <Link href="/elliot/campaigns" className={activeLinkClass("/elliot/campaigns", "green")}>Campaigns</Link>
+                        <Link href="/elliot/team" className={activeLinkClass("/elliot/team", "green")}>Team Members</Link>
                       </div>
                       {/* Parker */}
                       <div className="mt-2">
@@ -405,6 +411,7 @@ export function SharedNav() {
                         <Link href="/parker/music" className={activeLinkClass("/parker/music", "rose")}>Music</Link>
                         <Link href="/parker/traffic" className={activeLinkClass("/parker/traffic", "rose")}>Traffic</Link>
                         <Link href="/parker/listeners" className={activeLinkClass("/parker/listeners", "rose")}>Listeners</Link>
+                        <Link href="/parker/team" className={activeLinkClass("/parker/team", "rose")}>Team Members</Link>
                       </div>
                     </div>
                   </div>
@@ -506,6 +513,7 @@ export function SharedNav() {
                       <Link href="/riley/submissions" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Track Submissions</Link>
                       <Link href="/riley/pool-calculator" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Pool Calculator</Link>
                       <Link href="/riley/upgrade-opportunities" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Upgrades</Link>
+                      <Link href="/riley/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Team Members</Link>
                     </div>
                   )}
 
@@ -526,6 +534,7 @@ export function SharedNav() {
                       <Link href="/harper/calls" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Call Tracking</Link>
                       <Link href="/harper/billing" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Billing</Link>
                       <Link href="/harper/inventory" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Ad Inventory</Link>
+                      <Link href="/harper/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Team Members</Link>
                     </div>
                   )}
 
@@ -543,7 +552,7 @@ export function SharedNav() {
                       <Link href="/cassidy/submissions" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Review Queue</Link>
                       <Link href="/cassidy/tier-management" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Tier Management</Link>
                       <Link href="/cassidy/rotation" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Rotation Planner</Link>
-                      <Link href="/cassidy/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Panel Members</Link>
+                      <Link href="/cassidy/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Team Members</Link>
                     </div>
                   )}
 
