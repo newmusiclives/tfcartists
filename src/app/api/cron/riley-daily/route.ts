@@ -6,7 +6,7 @@ import { env } from "@/lib/env";
 
 /**
  * Riley Daily Automation Cron Job
- * Runs every day at 9:00 AM
+ * Runs every day at 4:30 AM
  *
  * Tasks:
  * 1. Discover new artists from social media

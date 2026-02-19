@@ -1,6 +1,6 @@
 import { Handler, schedule } from "@netlify/functions";
 
-const handler: Handler = schedule("0 8 * * *", async () => {
+const handler: Handler = schedule("20 4 * * *", async () => {
   try {
     const baseUrl = process.env.URL || process.env.NEXTAUTH_URL || "http://localhost:3000";
     const cronSecret = process.env.CRON_SECRET || "development-secret";

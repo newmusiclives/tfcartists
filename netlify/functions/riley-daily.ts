@@ -1,6 +1,6 @@
 import { Handler, schedule } from "@netlify/functions";
 
-const handler: Handler = schedule("0 9 * * *", async () => {
+const handler: Handler = schedule("30 4 * * *", async () => {
   try {
     // Import the cron job logic from our API route
     const baseUrl = process.env.URL || process.env.NEXTAUTH_URL || "http://localhost:3000";

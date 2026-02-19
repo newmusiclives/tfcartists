@@ -5,7 +5,7 @@ import { env } from "@/lib/env";
 
 /**
  * Cassidy Daily Submission Review Cron Job
- * Runs every day at 8:00 AM
+ * Runs every day at 4:20 AM
  *
  * Tasks:
  * 1. Process pending submissions — auto-assign to judges via SubmissionReview

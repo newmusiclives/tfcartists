@@ -5,7 +5,7 @@ import { env } from "@/lib/env";
 
 /**
  * Elliot Daily Automation Cron Job
- * Runs every day at 11:00 AM
+ * Runs every day at 4:50 AM
  *
  * Tasks:
  * 1. Generate daily viral content (TikTok, Reel, Story)

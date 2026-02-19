@@ -5,7 +5,7 @@ import { env } from "@/lib/env";
 
 /**
  * Harper Daily Automation Cron Job
- * Runs every day at 10:00 AM
+ * Runs every day at 4:40 AM
  *
  * Tasks:
  * 1. Send follow-ups to sponsors in pipeline

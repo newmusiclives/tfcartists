@@ -5,7 +5,7 @@ import { env } from "@/lib/env";
 
 /**
  * Parker Daily Station Management Cron Job
- * Runs every day at 7:00 AM (before first live shift)
+ * Runs every day at 4:10 AM (before first live shift at 6 AM)
  *
  * Tasks:
  * 1. Audit schedule coverage — flag uncovered shifts
