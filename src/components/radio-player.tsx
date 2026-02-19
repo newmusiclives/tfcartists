@@ -28,6 +28,7 @@ export function RadioPlayer() {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const sessionIdRef = useRef<string | null>(null);
   const sessionStartRef = useRef<number | null>(null);
+  const lastTrackRef = useRef<string | null>(null);
 
   // Sync volume to audio element
   useEffect(() => {
@@ -42,6 +43,23 @@ export function RadioPlayer() {
       if (res.ok) {
         const data: NowPlaying = await res.json();
         setNowPlaying(data);
+
+        // Log track play when the song changes
+        const trackKey = `${data.title}|${data.artist_name}`;
+        if (data.title && data.artist_name && trackKey !== lastTrackRef.current) {
+          lastTrackRef.current = trackKey;
+          const listenerId = localStorage.getItem("listenerId");
+          fetch("/api/playback", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              trackTitle: data.title,
+              artistName: data.artist_name,
+              listenerId: listenerId || undefined,
+              sessionId: sessionIdRef.current || undefined,
+            }),
+          }).catch(() => {});
+        }
       }
     } catch {
       // Non-critical
