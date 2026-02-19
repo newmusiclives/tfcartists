@@ -92,7 +92,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-20">
         <div className="text-center">
-          <img src="/logos/ncr-logo.png" alt="North Country Radio" className="mx-auto h-28 sm:h-36 w-auto object-contain mb-6" />
+          <img src="/logos/ncr-logo.png" alt="North Country Radio" className="mx-auto h-44 sm:h-56 w-auto object-contain mb-6" />
 
           <div className="inline-flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
             <Radio className="w-4 h-4" />
