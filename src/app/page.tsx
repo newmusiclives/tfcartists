@@ -10,7 +10,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <Radio className="w-6 h-6 text-amber-700" />
+              <img src="/logos/ncr-logo.png" alt="NCR" className="h-8 w-auto object-contain" />
               <StationName className="font-bold text-xl text-amber-700" />
             </div>
             <div className="flex items-center space-x-4">

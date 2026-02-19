@@ -234,9 +234,7 @@ export default function EmbedPlayerPage() {
         <img src={artworkUrl} alt={trackTitle} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
       ) : (
         <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <svg width={sz * 0.4} height={sz * 0.4} viewBox="0 0 24 24" fill="none" stroke="rgba(251,191,36,0.4)" strokeWidth="1.5">
-            <circle cx="12" cy="12" r="10" /><path d="M12 8v8m-4-4h8" />
-          </svg>
+          <img src="/logos/ncr-logo.png" alt="NCR" style={{ width: sz * 0.5, height: sz * 0.5, objectFit: "contain", opacity: 0.5 }} />
         </div>
       )}
     </div>
@@ -260,7 +258,7 @@ export default function EmbedPlayerPage() {
         {/* Track info */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+            <img src="/logos/ncr-logo.png" alt="NCR" style={{ height: 16, width: "auto", objectFit: "contain" }} />
             <span style={{ fontSize: 9, fontWeight: 700, color: "#fde68a", letterSpacing: "0.05em" }}>NORTH COUNTRY RADIO</span>
             {statusBadge(true)}
           </div>
@@ -292,7 +290,7 @@ export default function EmbedPlayerPage() {
 
         {/* Station header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 16px 0" }}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+          <img src="/logos/ncr-logo.png" alt="NCR" style={{ height: 18, width: "auto", objectFit: "contain" }} />
           <span style={{ fontSize: 11, fontWeight: 700, color: "#fde68a", letterSpacing: "0.04em" }}>NORTH COUNTRY RADIO</span>
           {statusBadge(true)}
         </div>
@@ -350,7 +348,7 @@ export default function EmbedPlayerPage() {
 
       {/* Station branding */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, paddingTop: 16, paddingBottom: 6 }}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+        <img src="/logos/ncr-logo.png" alt="NCR" style={{ height: 24, width: "auto", objectFit: "contain" }} />
         <span style={{ fontSize: 13, fontWeight: 700, color: "#fde68a", letterSpacing: "0.04em" }}>North Country Radio</span>
         {statusBadge()}
       </div>

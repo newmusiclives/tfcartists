@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Copy, Check, Code, Radio, ExternalLink } from "lucide-react";
+import { Copy, Check, Code, ExternalLink } from "lucide-react";
 
 const BASE_URL = typeof window !== "undefined" ? window.location.origin : "https://truefans-radio.netlify.app";
 
@@ -40,7 +40,7 @@ export default function EmbedCodeGeneratorPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <a href="/" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
-              <Radio className="w-5 h-5" />
+              <img src="/logos/ncr-logo.png" alt="NCR" className="h-8 w-auto object-contain" />
               <span className="font-bold">TrueFans RADIO</span>
             </a>
             <a href="/listen/register" className="text-sm text-amber-600 hover:text-amber-700 flex items-center gap-1">

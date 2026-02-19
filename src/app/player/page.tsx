@@ -6,7 +6,6 @@ import {
   Pause,
   Volume2,
   VolumeX,
-  Radio,
   ExternalLink,
   Share2,
   Heart,
@@ -201,7 +200,7 @@ export default function PlayerPage() {
       <div className="min-h-[100dvh] flex flex-col px-6 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
         {/* Station Branding */}
         <div className="flex items-center justify-center gap-2.5 pt-6 pb-2 flex-shrink-0">
-          <Radio className="w-4 h-4 text-amber-400" />
+          <img src="/logos/ncr-logo.png" alt="NCR" className="h-8 w-auto object-contain" />
           <h1 className="text-base font-bold tracking-wide text-amber-100">
             {currentStation.name}
           </h1>
@@ -246,8 +245,8 @@ export default function PlayerPage() {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Radio className="w-16 h-16 text-amber-600/50" />
+              <div className="w-full h-full flex items-center justify-center p-6">
+                <img src="/logos/ncr-logo.png" alt="North Country Radio" className="w-full h-full object-contain opacity-50" />
               </div>
             )}
           </div>

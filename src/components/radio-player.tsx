@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Play, Pause, Volume2, VolumeX, Radio, Headphones } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Headphones } from "lucide-react";
 import { useStation } from "@/contexts/StationContext";
 
 const STREAM_URL = "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
@@ -246,13 +246,14 @@ export function RadioPlayer() {
                 </div>
               ) : (
                 <div className={`w-14 h-14 rounded-lg bg-amber-700/50 flex items-center justify-center shadow-lg ${showActive ? "ring-2 ring-green-400/60" : ""}`}>
-                  <Radio className="w-7 h-7 text-amber-400" />
+                  <img src="/logos/ncr-logo.png" alt="NCR" className="w-10 h-10 object-contain" />
                 </div>
               )}
             </button>
 
             <div className="min-w-0">
-              <div className="text-base font-bold text-white truncate">
+              <div className="text-base font-bold text-white truncate flex items-center gap-1.5">
+                <img src="/logos/ncr-logo.png" alt="" className="w-5 h-5 object-contain flex-shrink-0" />
                 {showError
                   ? "Stream unavailable"
                   : showLoading
