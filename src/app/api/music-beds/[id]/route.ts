@@ -1,16 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireRole } from "@/lib/api/auth";
 import * as fs from "fs";
 import * as path from "path";
-
-export const dynamic = "force-dynamic";
 
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await requireRole("admin");
+    if (!session) return unauthorized();
+
     const { id } = await params;
 
     const musicBed = await prisma.musicBed.findUnique({ where: { id } });

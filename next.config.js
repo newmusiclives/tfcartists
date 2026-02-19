@@ -5,9 +5,6 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '2mb',
     },
-    outputFileTracingIncludes: {
-      '/**': ['./prisma/dev.db'],
-    },
   },
 };
 

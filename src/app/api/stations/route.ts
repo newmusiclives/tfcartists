@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
-
-export const dynamic = "force-dynamic";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireAdmin } from "@/lib/api/auth";
 
 export async function GET(request: NextRequest) {
   try {
     const stations = await prisma.station.findMany({
       orderBy: { createdAt: "desc" },
+      take: 100,
       include: {
         _count: {
           select: {
@@ -27,6 +27,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireAdmin();
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const { name, callSign, tagline, description, genre, stationCode, formatType, musicEra, ownerName, ownerEmail, primaryColor, secondaryColor, logoUrl } = body;
 

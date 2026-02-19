@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const NOW_PLAYING_URL =
-  "https://tfc-radio-backend-production.up.railway.app/api/now_playing";
+  process.env.NOW_PLAYING_URL || "https://tfc-radio-backend-production.up.railway.app/api/now_playing";
 
 export const dynamic = "force-dynamic";
 

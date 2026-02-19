@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 
-const STREAM_URL = "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
+const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
 const NOW_PLAYING_URL = "/api/now-playing";
 const POLL_INTERVAL = 10_000;
 

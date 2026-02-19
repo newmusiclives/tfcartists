@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { upgradeAirplayTier, AirplayTier } from "@/lib/radio/airplay-system";
 import { auth } from "@/lib/auth/config";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { logger } from "@/lib/logger";
 
 /**
  * POST /api/airplay/upgrade
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
       message: `Successfully upgraded to ${tier}`,
     });
   } catch (error) {
-    console.error("Error upgrading airplay tier:", error);
+    logger.error("Error upgrading airplay tier", { error });
     return NextResponse.json(
       { error: "Failed to upgrade tier" },
       { status: 500 }

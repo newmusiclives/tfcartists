@@ -6,9 +6,8 @@ import { StationProvider } from "@/contexts/StationContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// Force dynamic rendering for all pages to prevent build-time data collection
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Allow ISR with 60-second revalidation for better performance
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "TrueFans RADIO Network",

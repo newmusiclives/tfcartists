@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { distributeRevenuePool, calculateRevenuePool, getCurrentPeriod } from "@/lib/radio/airplay-system";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 /**
  * GET /api/airplay/pool?period=2024-12
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest) {
       period,
     });
   } catch (error) {
-    console.error("Error fetching pool stats:", error);
+    logger.error("Error fetching pool stats", { error });
     return NextResponse.json(
       { error: "Failed to fetch pool stats" },
       { status: 500 }
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
       message: `Distributed revenue to ${distributedCount} artists`,
     });
   } catch (error) {
-    console.error("Error distributing pool:", error);
+    logger.error("Error distributing pool", { error });
     return NextResponse.json(
       { error: "Failed to distribute pool" },
       { status: 500 }

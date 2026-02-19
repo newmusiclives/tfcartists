@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Copy, Check, Code, ExternalLink } from "lucide-react";
 
-const BASE_URL = typeof window !== "undefined" ? window.location.origin : "https://truefans-radio.netlify.app";
+const BASE_URL = typeof window !== "undefined" ? window.location.origin : (process.env.NEXT_PUBLIC_SITE_URL || "https://truefans-radio.netlify.app");
 
 type Size = "compact" | "card" | "full";
 

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
+import { requireRole } from "@/lib/api/auth";
 
 /**
  * GET /api/artists
@@ -64,6 +65,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const {
       name,

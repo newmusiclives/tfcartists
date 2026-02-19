@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { logger } from "@/lib/logger";
 
 // In production, these would come from database
 let campaigns = [
@@ -93,7 +94,7 @@ export async function GET(request: NextRequest) {
       count: filteredCampaigns.length,
     });
   } catch (error) {
-    console.error("Error fetching campaigns:", error);
+    logger.error("Error fetching campaigns", { error });
     return NextResponse.json(
       { success: false, error: "Failed to fetch campaigns" },
       { status: 500 }
@@ -139,7 +140,7 @@ export async function POST(request: NextRequest) {
       message: "Campaign created successfully",
     });
   } catch (error) {
-    console.error("Error creating campaign:", error);
+    logger.error("Error creating campaign", { error });
     return NextResponse.json(
       { success: false, error: "Failed to create campaign" },
       { status: 500 }
@@ -183,7 +184,7 @@ export async function PUT(request: NextRequest) {
       message: "Campaign updated successfully",
     });
   } catch (error) {
-    console.error("Error updating campaign:", error);
+    logger.error("Error updating campaign", { error });
     return NextResponse.json(
       { success: false, error: "Failed to update campaign" },
       { status: 500 }
@@ -222,7 +223,7 @@ export async function DELETE(request: NextRequest) {
       message: "Campaign deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting campaign:", error);
+    logger.error("Error deleting campaign", { error });
     return NextResponse.json(
       { success: false, error: "Failed to delete campaign" },
       { status: 500 }

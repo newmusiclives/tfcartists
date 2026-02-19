@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth/config";
+import { logger } from "@/lib/logger";
 import type { AssignTierRequest } from "@/types/cassidy";
 
 /**
@@ -173,7 +174,7 @@ export async function POST(request: NextRequest) {
       },
     }, { status: 200 });
   } catch (error) {
-    console.error("Error assigning tier:", error);
+    logger.error("Error assigning tier", { error });
     return NextResponse.json(
       { error: "Failed to assign tier" },
       { status: 500 }

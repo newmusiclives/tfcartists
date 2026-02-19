@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { requireRole, pickFields } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+
+const ALLOWED_FIELDS = [
+  "name", "email", "phone", "genre", "bio", "website", "socialLinks",
+  "discoverySource", "sourceUrl", "sourceHandle", "pipelineStage",
+  "metadata", "conversationHistory",
+];
 
 /**
  * GET /api/artists/[id]
@@ -53,12 +61,15 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await requireRole("riley", "cassidy");
+    if (!session) return unauthorized();
+
     const { id } = await params;
     const body = await request.json();
 
     const artist = await prisma.artist.update({
       where: { id },
-      data: body,
+      data: pickFields(body, ALLOWED_FIELDS),
     });
 
     return NextResponse.json({ artist });

@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getArtistEarnings, getCurrentPeriod } from "@/lib/radio/airplay-system";
 import { logger } from "@/lib/logger";
-
-// Force dynamic rendering for this route (uses query parameters)
-export const dynamic = 'force-dynamic';
+import { unauthorized } from "@/lib/api/errors";
+import { requireAuth } from "@/lib/api/auth";
 
 /**
  * GET /api/airplay/earnings?artistId=xxx&period=2024-12
@@ -11,6 +10,9 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const searchParams = request.nextUrl.searchParams;
     const artistId = searchParams.get("artistId");
     const period = searchParams.get("period") || getCurrentPeriod();

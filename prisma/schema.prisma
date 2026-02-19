@@ -272,6 +272,7 @@ model AirplayPayment {
   @@index([artistId])
   @@index([period])
   @@index([status])
+  @@index([artistId, period])
 }
 
 // TrueFans RADIO Revenue Pool (monthly)
@@ -478,6 +479,7 @@ model Sponsorship {
   @@index([sponsorId])
   @@index([startDate])
   @@index([endDate])
+  @@index([sponsorId, status])
 }
 
 // Track submissions from artists
@@ -2299,6 +2301,7 @@ model SystemConfig {
   category  String   // "payments", "email", "sms", "ai", "auth", "discovery", "monitoring"
   label     String   // Human-readable label
   encrypted Boolean  @default(true) // Whether the value should be masked in UI
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([category])

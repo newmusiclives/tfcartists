@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
-
-export const dynamic = "force-dynamic";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireRole } from "@/lib/api/auth";
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,6 +11,7 @@ export async function GET(request: NextRequest) {
     const djs = await prisma.dJ.findMany({
       where,
       orderBy: { priority: "asc" },
+      take: 200,
       include: {
         shows: { where: { isActive: true }, select: { id: true, name: true, dayOfWeek: true, startTime: true, endTime: true } },
         _count: { select: { clockAssignments: true } },
@@ -26,6 +26,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("admin");
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const { name, slug, bio, stationId, ...rest } = body;
 

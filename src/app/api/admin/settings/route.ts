@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth/config";
 import { prisma } from "@/lib/db";
+
+async function requireAdmin() {
+  const session = await auth();
+  if (!session?.user?.role || session.user.role !== "admin") {
+    return null;
+  }
+  return session;
+}
 
 // All configurable settings with their metadata
 const CONFIG_DEFINITIONS: Record<string, { category: string; label: string; encrypted: boolean }> = {
@@ -63,6 +72,11 @@ function maskValue(value: string): string {
 
 // GET — read all settings with masked values
 export async function GET() {
+  const session = await requireAdmin();
+  if (!session) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   try {
     const dbConfigs = await prisma.systemConfig.findMany();
     const dbMap = new Map(dbConfigs.map((c) => [c.key, c]));
@@ -98,6 +112,11 @@ export async function GET() {
 
 // POST — save a setting
 export async function POST(req: NextRequest) {
+  const session = await requireAdmin();
+  if (!session) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   try {
     const body = await req.json();
     const { key, value } = body;

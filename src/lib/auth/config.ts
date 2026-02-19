@@ -2,6 +2,7 @@ import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
 
 // Define the credentials schema
 const loginSchema = z.object({
@@ -45,7 +46,7 @@ export const authConfig: NextAuthConfig = {
           // Admin user access
           if (username === "admin") {
             if (!env.ADMIN_PASSWORD) {
-              console.error("ADMIN_PASSWORD environment variable not set");
+              logger.error("ADMIN_PASSWORD environment variable not set");
               return null;
             }
             if (password === env.ADMIN_PASSWORD) {
@@ -61,7 +62,7 @@ export const authConfig: NextAuthConfig = {
           // Riley team access
           if (username === "riley") {
             if (!env.RILEY_PASSWORD) {
-              console.error("RILEY_PASSWORD environment variable not set");
+              logger.error("RILEY_PASSWORD environment variable not set");
               return null;
             }
             if (password === env.RILEY_PASSWORD) {
@@ -77,7 +78,7 @@ export const authConfig: NextAuthConfig = {
           // Harper team access
           if (username === "harper") {
             if (!env.HARPER_PASSWORD) {
-              console.error("HARPER_PASSWORD environment variable not set");
+              logger.error("HARPER_PASSWORD environment variable not set");
               return null;
             }
             if (password === env.HARPER_PASSWORD) {
@@ -93,7 +94,7 @@ export const authConfig: NextAuthConfig = {
           // Elliot team access
           if (username === "elliot") {
             if (!env.ELLIOT_PASSWORD) {
-              console.error("ELLIOT_PASSWORD environment variable not set");
+              logger.error("ELLIOT_PASSWORD environment variable not set");
               return null;
             }
             if (password === env.ELLIOT_PASSWORD) {
@@ -109,7 +110,7 @@ export const authConfig: NextAuthConfig = {
           // Cassidy team access
           if (username === "cassidy") {
             if (!env.CASSIDY_PASSWORD) {
-              console.error("CASSIDY_PASSWORD environment variable not set");
+              logger.error("CASSIDY_PASSWORD environment variable not set");
               return null;
             }
             if (password === env.CASSIDY_PASSWORD) {
@@ -125,7 +126,7 @@ export const authConfig: NextAuthConfig = {
           // Invalid credentials
           return null;
         } catch (error) {
-          console.error("Auth error:", error);
+          logger.error("Auth error", { error });
           return null;
         }
       },

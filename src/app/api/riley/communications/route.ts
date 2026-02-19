@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { logger } from "@/lib/logger";
 
 // In production, these would come from database
 let communications = [
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
       count: filteredCommunications.length,
     });
   } catch (error) {
-    console.error("Error fetching communications:", error);
+    logger.error("Error fetching communications", { error });
     return NextResponse.json(
       { success: false, error: "Failed to fetch communications" },
       { status: 500 }
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest) {
       message: "Communication logged successfully",
     });
   } catch (error) {
-    console.error("Error logging communication:", error);
+    logger.error("Error logging communication", { error });
     return NextResponse.json(
       { success: false, error: "Failed to log communication" },
       { status: 500 }
@@ -121,7 +122,7 @@ export async function PUT(request: NextRequest) {
       message: "Communication updated successfully",
     });
   } catch (error) {
-    console.error("Error updating communication:", error);
+    logger.error("Error updating communication", { error });
     return NextResponse.json(
       { success: false, error: "Failed to update communication" },
       { status: 500 }

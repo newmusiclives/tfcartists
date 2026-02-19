@@ -19,11 +19,4 @@
 # Note: Scheduled functions require Netlify Pro plan or higher
 # Schedules are defined in netlify/functions/*.ts files using @netlify/functions
 
-# Headers for security
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+# Security headers are managed in middleware.ts to avoid conflicts

@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireRole } from "@/lib/api/auth";
 import * as fs from "fs";
 import * as path from "path";
-
-export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,6 +18,7 @@ export async function GET(request: NextRequest) {
     const musicBeds = await prisma.musicBed.findMany({
       where: { stationId, isActive: true },
       orderBy: { createdAt: "desc" },
+      take: 200,
     });
 
     return NextResponse.json({ musicBeds });
@@ -29,6 +29,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("admin");
+    if (!session) return unauthorized();
+
     const formData = await request.formData();
     const stationId = formData.get("stationId") as string;
     const name = formData.get("name") as string;

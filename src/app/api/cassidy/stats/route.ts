@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { auth } from "@/lib/auth/config";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+import { logger } from "@/lib/logger";
 import type { CassidyStats } from "@/types/cassidy";
 
 /**
@@ -12,18 +14,8 @@ import type { CassidyStats } from "@/types/cassidy";
  */
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication (optional in development)
-    const session = await auth();
-    // Allow access without auth for development
-    // if (!session?.user) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
-
-    // Check role authorization
-    // const userRole = session?.user?.role;
-    // if (userRole !== "cassidy" && userRole !== "admin") {
-    //   return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    // }
+    const session = await requireRole("cassidy");
+    if (!session) return unauthorized();
 
     // Get current date range for "this month"
     const now = new Date();
@@ -202,7 +194,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(stats);
   } catch (error) {
-    console.error("Error fetching Cassidy stats:", error);
+    logger.error("Error fetching Cassidy stats", { error });
     return NextResponse.json(
       { error: "Failed to fetch statistics" },
       { status: 500 }

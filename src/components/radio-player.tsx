@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Play, Pause, Volume2, VolumeX, Headphones } from "lucide-react";
 import { useStation } from "@/contexts/StationContext";
 
-const STREAM_URL = "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
+const DEFAULT_STREAM_URL = "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
 const NOW_PLAYING_URL = "/api/now-playing";
 const POLL_INTERVAL = 10_000;
 
@@ -153,11 +153,12 @@ export function RadioPlayer() {
     setStatus("loading");
     fetchNowPlaying(); // Fetch metadata immediately on play
     startSession(); // Track listening session
-    audio.src = `${STREAM_URL}?_t=${Date.now()}`;
+    const streamUrl = currentStation.streamUrl || DEFAULT_STREAM_URL;
+    audio.src = `${streamUrl}?_t=${Date.now()}`;
     audio.play().catch(() => {
       setStatus("error");
     });
-  }, [fetchNowPlaying, startSession]);
+  }, [fetchNowPlaying, startSession, currentStation.streamUrl]);
 
   const handlePause = useCallback(() => {
     const audio = audioRef.current;

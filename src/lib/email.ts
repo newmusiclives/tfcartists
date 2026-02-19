@@ -23,7 +23,9 @@ interface EmailResult {
 }
 
 const SENDGRID_API_URL = "https://api.sendgrid.com/v3/mail/send";
-const DEFAULT_FROM = "TrueFans Radio <noreply@truefansradio.com>";
+const DEFAULT_FROM_NAME = process.env.SENDGRID_FROM_NAME || "TrueFans Radio";
+const DEFAULT_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || "noreply@truefansradio.com";
+const DEFAULT_FROM = `${DEFAULT_FROM_NAME} <${DEFAULT_FROM_EMAIL}>`;
 
 export async function sendEmail(params: SendEmailParams): Promise<EmailResult> {
   const apiKey = process.env.SENDGRID_API_KEY;
