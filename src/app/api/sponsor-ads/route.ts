@@ -16,22 +16,45 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Round-robin: return the next ad to play
+    // Weighted round-robin: pick the most overdue ad and auto-mark as played
     if (action === "next") {
-      const nextAd = await prisma.sponsorAd.findFirst({
+      const activeAds = await prisma.sponsorAd.findMany({
         where: { stationId, isActive: true },
-        orderBy: [
-          { lastPlayedAt: { sort: "asc", nulls: "first" } },
-          { playCount: "asc" },
-        ],
         include: { musicBed: true },
       });
 
-      if (!nextAd) {
+      if (activeAds.length === 0) {
         return NextResponse.json({ ad: null });
       }
 
-      return NextResponse.json({ ad: nextAd });
+      // Score each ad: playCount / weight (lower = more overdue)
+      // Among tied scores, prefer oldest lastPlayedAt (nulls first)
+      activeAds.sort((a, b) => {
+        const scoreA = a.playCount / (a.weight || 1);
+        const scoreB = b.playCount / (b.weight || 1);
+        if (scoreA !== scoreB) return scoreA - scoreB;
+        // Nulls (never played) come first
+        if (!a.lastPlayedAt && b.lastPlayedAt) return -1;
+        if (a.lastPlayedAt && !b.lastPlayedAt) return 1;
+        if (a.lastPlayedAt && b.lastPlayedAt) {
+          return a.lastPlayedAt.getTime() - b.lastPlayedAt.getTime();
+        }
+        return 0;
+      });
+
+      const chosen = activeAds[0];
+
+      // Auto-mark as played
+      const updatedAd = await prisma.sponsorAd.update({
+        where: { id: chosen.id },
+        data: {
+          playCount: { increment: 1 },
+          lastPlayedAt: new Date(),
+        },
+        include: { musicBed: true },
+      });
+
+      return NextResponse.json({ ad: updatedAd });
     }
 
     // Default: list all sponsor ads

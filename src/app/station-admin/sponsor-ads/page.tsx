@@ -15,6 +15,7 @@ import {
   Music,
   Clock,
   BarChart3,
+  Volume2,
 } from "lucide-react";
 
 interface MusicBedOption {
@@ -50,6 +51,7 @@ export default function SponsorAdsPage() {
   const [creating, setCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [generatingAudioId, setGeneratingAudioId] = useState<string | null>(null);
   const [audioEl] = useState(() =>
     typeof Audio !== "undefined" ? new Audio() : null
   );
@@ -202,6 +204,24 @@ export default function SponsorAdsPage() {
     });
     const data = await res.json();
     alert(data.message || "Audio generation complete");
+  };
+
+  const generateAdAudio = async (ad: SponsorAd) => {
+    setGeneratingAudioId(ad.id);
+    try {
+      const res = await fetch(`/api/sponsor-ads/${ad.id}/generate-audio`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (data.ad) {
+        setAds(ads.map((a) => (a.id === ad.id ? data.ad : a)));
+      } else {
+        alert(data.error || "Audio generation failed");
+      }
+    } catch {
+      alert("Audio generation failed");
+    }
+    setGeneratingAudioId(null);
   };
 
   const tierColor: Record<string, string> = {
@@ -471,6 +491,20 @@ export default function SponsorAdsPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 ml-4">
+                    {ad.scriptText && (
+                      <button
+                        onClick={() => generateAdAudio(ad)}
+                        disabled={generatingAudioId === ad.id}
+                        className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center hover:bg-blue-200 disabled:opacity-50"
+                        title={ad.audioFilePath ? "Regenerate audio" : "Generate audio"}
+                      >
+                        {generatingAudioId === ad.id ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Volume2 className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    )}
                     {ad.audioFilePath && (
                       <button
                         onClick={() => togglePlayAd(ad)}
