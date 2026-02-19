@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
 import {
-  generateWithOpenAI,
+  amplifyPcm,
+  pcmToWav,
   saveAudioFile,
 } from "@/lib/radio/voice-track-tts";
+import OpenAI from "openai";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +15,9 @@ const voiceMap: Record<string, string> = {
   male: "onyx",
   female: "nova",
 };
+
+// Voice gain — boost TTS voice so it sits above the music bed
+const VOICE_GAIN = 1.8;
 
 export async function POST(
   _request: NextRequest,
@@ -37,6 +42,14 @@ export async function POST(
       );
     }
 
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "OPENAI_API_KEY not configured" },
+        { status: 500 }
+      );
+    }
+
     // Pick voice from station's imaging voice settings
     let openaiVoice = "onyx";
     const imagingVoice = await prisma.stationImagingVoice.findFirst({
@@ -46,18 +59,28 @@ export async function POST(
       openaiVoice = voiceMap[imagingVoice.voiceType] || "onyx";
     }
 
-    const { buffer, ext } = await generateWithOpenAI(ad.scriptText, openaiVoice);
+    // Generate TTS as raw PCM so we can boost the voice volume
+    const openai = new OpenAI({ apiKey });
+    const response = await openai.audio.speech.create({
+      model: "tts-1-hd",
+      voice: openaiVoice as "onyx" | "nova" | "alloy" | "echo" | "fable" | "shimmer",
+      input: ad.scriptText,
+      response_format: "pcm",
+    });
+
+    const rawPcm = Buffer.from(await response.arrayBuffer());
+    const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
+    const wavBuffer = pcmToWav(boostedPcm);
 
     const safeName = ad.adTitle
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
-    const filename = `ad-${safeName}-${id.slice(-6)}.${ext}`;
-    const audioFilePath = saveAudioFile(buffer, "commercials", filename);
+    const filename = `ad-${safeName}-${id.slice(-6)}.wav`;
+    const audioFilePath = saveAudioFile(wavBuffer, "commercials", filename);
 
-    // Estimate duration (~150 words per minute)
-    const wordCount = ad.scriptText.split(/\s+/).length;
-    const durationSeconds = Math.round((wordCount / 150) * 60 * 10) / 10;
+    // Estimate duration from PCM length (24kHz, 16-bit mono = 48000 bytes/sec)
+    const durationSeconds = Math.round((rawPcm.length / 48000) * 10) / 10;
 
     const updatedAd = await prisma.sponsorAd.update({
       where: { id },

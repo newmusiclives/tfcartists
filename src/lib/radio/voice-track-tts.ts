@@ -38,6 +38,17 @@ export function pcmToWav(pcm: Buffer): Buffer {
   return Buffer.concat([header, pcm]);
 }
 
+/** Amplify 16-bit PCM samples by a gain factor, with hard clipping */
+export function amplifyPcm(pcm: Buffer, gain: number): Buffer {
+  const out = Buffer.alloc(pcm.length);
+  for (let i = 0; i < pcm.length; i += 2) {
+    const sample = pcm.readInt16LE(i);
+    const boosted = Math.max(-32768, Math.min(32767, Math.round(sample * gain)));
+    out.writeInt16LE(boosted, i);
+  }
+  return out;
+}
+
 export function saveAudioFile(buffer: Buffer, dir: string, filename: string): string {
   try {
     const outputDir = path.join(process.cwd(), "public", "audio", dir);
