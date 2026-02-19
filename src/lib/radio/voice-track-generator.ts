@@ -1,24 +1,21 @@
 /**
  * Voice Track Script Generator — generates AI DJ scripts for voice breaks
  * that correctly reference the prev/next songs in the actual playlist.
+ *
+ * Voice break positions and trackTypes are derived from the actual clock
+ * pattern slots — NOT hardcoded — so they work with any clock template.
  */
 
 import { prisma } from "@/lib/db";
 import { aiProvider } from "@/lib/ai/providers";
 import { logger } from "@/lib/logger";
 
-// Voice break positions in the clock pattern (standard positions)
-const VOICE_BREAK_CONFIG: { position: number; trackType: string; approxMinute: number }[] = [
-  { position: 4,  trackType: "intro",               approxMinute: 8 },
-  { position: 11, trackType: "back_announce_intro",  approxMinute: 27 },
-  { position: 19, trackType: "back_announce",        approxMinute: 47 },
-];
-
 interface ResolvedSlot {
   position: number;
   minute: number;
   type: string;
   category: string;
+  notes?: string;
   songId?: string;
   songTitle?: string;
   artistName?: string;
@@ -30,9 +27,63 @@ interface GenerateVoiceTracksResult {
 }
 
 /**
+ * Scan the playlist slots to find all voice_break positions and determine
+ * the correct trackType for each based on the immediately adjacent slots.
+ *
+ * trackType logic:
+ *   - If the slot immediately BEFORE the VB is a song → always forward-intro
+ *     (the listener just heard the song; the DJ should introduce what's NEXT)
+ *   - If there's a non-song slot (feature, ad, sweeper) between the previous
+ *     song and the VB → intro (the flow was broken; don't back-announce)
+ *   - Fallback: intro if a next song exists, otherwise generic personality moment
+ */
+function discoverVoiceBreaks(slots: ResolvedSlot[]): {
+  position: number;
+  trackType: string;
+  approxMinute: number;
+}[] {
+  const breaks: { position: number; trackType: string; approxMinute: number }[] = [];
+
+  for (const slot of slots) {
+    if (slot.type !== "voice_break") continue;
+
+    const nextSong = findNextSong(slots, slot.position);
+    const immediatePrev = slots.find((s) => s.position === slot.position - 1);
+    const prevIsSong = immediatePrev?.type === "song" && !!immediatePrev.songId;
+
+    let trackType: string;
+
+    if (prevIsSong && nextSong) {
+      // Song right before AND song ahead → back-announce + intro
+      trackType = "back_announce_intro";
+    } else if (nextSong) {
+      // No immediate song before (feature/ad/sweeper gap) → just intro the next song
+      trackType = "intro";
+    } else if (prevIsSong) {
+      // Song right before, nothing ahead → back-announce only
+      trackType = "back_announce";
+    } else {
+      // No adjacent songs at all → generic personality moment
+      trackType = "generic";
+    }
+
+    breaks.push({
+      position: slot.position,
+      trackType,
+      approxMinute: slot.minute,
+    });
+  }
+
+  return breaks;
+}
+
+/**
  * Generate voice track scripts for all voice breaks in an HourPlaylist.
  */
-export async function generateVoiceTrackScripts(hourPlaylistId: string): Promise<GenerateVoiceTracksResult> {
+export async function generateVoiceTrackScripts(
+  hourPlaylistId: string,
+  options?: { skipPositions?: number[] },
+): Promise<GenerateVoiceTracksResult> {
   const playlist = await prisma.hourPlaylist.findUnique({
     where: { id: hourPlaylistId },
   });
@@ -52,30 +103,26 @@ export async function generateVoiceTrackScripts(hourPlaylistId: string): Promise
   let generated = 0;
   const errors: string[] = [];
 
-  for (const vbConfig of VOICE_BREAK_CONFIG) {
+  const skipPositions = options?.skipPositions || [];
+
+  // Discover voice break positions and types from the actual clock pattern
+  const voiceBreaks = discoverVoiceBreaks(slots);
+
+  for (const vb of voiceBreaks) {
     try {
-      // Find the voice break slot in the clock
-      const vbSlot = slots.find(
-        (s) => s.position === vbConfig.position && s.type === "voice_break"
-      );
-      if (!vbSlot) {
-        // Voice break position not in this clock pattern — try matching by type
-        const altSlot = slots.find(
-          (s) => s.type === "voice_break" && !slots.some(
-            (existing) => existing.position === s.position && s !== existing
-          )
-        );
-        if (!altSlot) continue;
+      // Skip positions that will use generic tracks
+      if (skipPositions.includes(vb.position)) {
+        continue;
       }
 
-      // Find prev and next songs relative to this voice break
-      const prevSong = findPrevSong(slots, vbConfig.position);
-      const nextSong = findNextSong(slots, vbConfig.position);
+      // Find prev and next songs relative to this voice break's ACTUAL position
+      const prevSong = findPrevSong(slots, vb.position);
+      const nextSong = findNextSong(slots, vb.position);
 
       // Build the AI prompt
       const systemPrompt = buildSystemPrompt(dj);
       const userPrompt = buildUserPrompt(
-        vbConfig.trackType,
+        vb.trackType,
         dj.name.split(" ")[0] || dj.name,
         prevSong,
         nextSong,
@@ -98,7 +145,7 @@ export async function generateVoiceTrackScripts(hourPlaylistId: string): Promise
       const existingVt = await prisma.voiceTrack.findFirst({
         where: {
           hourPlaylistId,
-          position: vbConfig.position,
+          position: vb.position,
         },
       });
 
@@ -106,8 +153,8 @@ export async function generateVoiceTrackScripts(hourPlaylistId: string): Promise
         stationId: playlist.stationId,
         djId: playlist.djId,
         hourPlaylistId,
-        position: vbConfig.position,
-        trackType: vbConfig.trackType,
+        position: vb.position,
+        trackType: vb.trackType,
         prevSongId: prevSong?.songId || null,
         prevSongTitle: prevSong?.songTitle || null,
         prevArtistName: prevSong?.artistName || null,
@@ -118,7 +165,7 @@ export async function generateVoiceTrackScripts(hourPlaylistId: string): Promise
         status: "script_ready",
         airDate: playlist.airDate,
         hourOfDay: playlist.hourOfDay,
-        minuteOfHour: vbConfig.approxMinute,
+        minuteOfHour: vb.approxMinute,
       };
 
       if (existingVt) {
@@ -132,7 +179,7 @@ export async function generateVoiceTrackScripts(hourPlaylistId: string): Promise
 
       generated++;
     } catch (err) {
-      const msg = `VT position ${vbConfig.position}: ${err instanceof Error ? err.message : String(err)}`;
+      const msg = `VT position ${vb.position}: ${err instanceof Error ? err.message : String(err)}`;
       logger.error("Voice track script generation failed", { error: msg, hourPlaylistId });
       errors.push(msg);
     }
@@ -178,7 +225,7 @@ function findNextSong(
   return null;
 }
 
-function buildSystemPrompt(dj: {
+export function buildSystemPrompt(dj: {
   name: string;
   gptSystemPrompt: string | null;
   catchPhrases: string | null;
@@ -223,18 +270,20 @@ function buildUserPrompt(
 - Output ONLY the spoken text — no stage directions, no quotes, no labels`;
 
   if (trackType === "intro" && nextSong) {
-    return `Write a voice track where ${djFirstName} introduces the next song.
+    return `Write a voice track where ${djFirstName} introduces the next song. Focus ONLY on the upcoming song — do NOT mention or reference any previous song.
 Next up: "${nextSong.songTitle}" by ${nextSong.artistName}.
 Time of day: ${timeOfDay}.
-${rules}`;
+${rules}
+- IMPORTANT: Only talk about the upcoming song, not any song that already played`;
   }
 
   if (trackType === "back_announce_intro" && prevSong && nextSong) {
-    return `Write a voice track where ${djFirstName} back-announces the song that just played, then introduces the next one.
-Just played: "${prevSong.songTitle}" by ${prevSong.artistName}.
-Coming up: "${nextSong.songTitle}" by ${nextSong.artistName}.
+    return `Write a voice track where ${djFirstName} briefly acknowledges the song that just finished, then pivots to introduce the NEXT song. The main focus should be on what's coming up next.
+Just finished: "${prevSong.songTitle}" by ${prevSong.artistName}.
+Coming up next: "${nextSong.songTitle}" by ${nextSong.artistName}.
 Time of day: ${timeOfDay}.
-${rules}`;
+${rules}
+- IMPORTANT: Lead with a quick nod to the previous song, then shift focus to introducing the upcoming song`;
   }
 
   if (trackType === "back_announce" && prevSong) {
@@ -244,7 +293,7 @@ Time of day: ${timeOfDay}.
 ${rules}`;
   }
 
-  // Fallback for missing song context
+  // Fallback for missing song context or "generic" trackType
   return `Write a short, generic DJ voice track for ${djFirstName} during the ${timeOfDay}.
 ${rules}`;
 }

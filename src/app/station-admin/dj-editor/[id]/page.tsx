@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { SharedNav } from "@/components/shared-nav";
-import { ArrowLeft, Save, Trash2, Loader2, Camera } from "lucide-react";
+import { ArrowLeft, Save, Trash2, Loader2, Camera, Play, Pause, ToggleLeft, ToggleRight, Sparkles, Mic } from "lucide-react";
 
 interface DJDetail {
   id: string;
@@ -40,6 +40,19 @@ interface DJDetail {
   colorSecondary: string | null;
   isActive: boolean;
   isWeekend: boolean;
+  stationId: string | null;
+}
+
+interface GenericTrack {
+  id: string;
+  scriptText: string;
+  audioFilePath: string | null;
+  audioDuration: number | null;
+  category: string;
+  timeOfDay: string | null;
+  useCount: number;
+  isActive: boolean;
+  createdAt: string;
 }
 
 export default function DJEditorDetailPage() {
@@ -50,6 +63,11 @@ export default function DJEditorDetailPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [generatingPhoto, setGeneratingPhoto] = useState(false);
+  const [genericTracks, setGenericTracks] = useState<GenericTrack[]>([]);
+  const [genericLoading, setGenericLoading] = useState(false);
+  const [generatingBatch, setGeneratingBatch] = useState(false);
+  const [playingTrackId, setPlayingTrackId] = useState<string | null>(null);
+  const [audioRef] = useState<{ current: HTMLAudioElement | null }>({ current: null });
 
   useEffect(() => {
     fetch(`/api/station-djs/${id}`)
@@ -58,6 +76,63 @@ export default function DJEditorDetailPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [id]);
+
+  const loadGenericTracks = async () => {
+    setGenericLoading(true);
+    try {
+      const res = await fetch(`/api/voice-tracks/generic?djId=${id}`);
+      const data = await res.json();
+      setGenericTracks(data.tracks || []);
+    } catch { /* ignore */ }
+    setGenericLoading(false);
+  };
+
+  useEffect(() => {
+    if (id) loadGenericTracks();
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const generateBatch = async () => {
+    if (!dj?.stationId) return;
+    setGeneratingBatch(true);
+    try {
+      await fetch("/api/voice-tracks/generate-generic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stationId: dj.stationId, djId: id, count: 12 }),
+      });
+      await loadGenericTracks();
+    } catch { /* ignore */ }
+    setGeneratingBatch(false);
+  };
+
+  const toggleGenericTrack = async (trackId: string, active: boolean) => {
+    await fetch(`/api/voice-tracks/generic/${trackId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isActive: active }),
+    });
+    setGenericTracks((prev) => prev.map((t) => t.id === trackId ? { ...t, isActive: active } : t));
+  };
+
+  const deleteGenericTrack = async (trackId: string) => {
+    await fetch(`/api/voice-tracks/generic/${trackId}`, { method: "DELETE" });
+    setGenericTracks((prev) => prev.filter((t) => t.id !== trackId));
+  };
+
+  const playPreview = (trackId: string, audioPath: string | null) => {
+    if (!audioPath) return;
+    if (playingTrackId === trackId) {
+      audioRef.current?.pause();
+      setPlayingTrackId(null);
+      return;
+    }
+    if (audioRef.current) audioRef.current.pause();
+    const audio = new Audio(audioPath);
+    audio.onended = () => setPlayingTrackId(null);
+    audio.play();
+    audioRef.current = audio;
+    setPlayingTrackId(trackId);
+  };
 
   const save = async () => {
     if (!dj) return;
@@ -411,7 +486,83 @@ export default function DJEditorDetailPage() {
             </div>
           </div>
 
-          {/* Section 9: Status */}
+          {/* Section 9: Generic Voice Tracks */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="font-semibold flex items-center gap-2"><Mic className="w-4 h-4" /> Generic Voice Tracks</h2>
+                <p className="text-xs text-gray-400 mt-1">
+                  Pre-generated reusable voice breaks — saves 1 AI call per hour during daily cron.
+                  {genericTracks.length > 0 && (
+                    <span className="ml-1 font-medium text-gray-600">
+                      {genericTracks.length} total, {genericTracks.filter((t) => t.isActive).length} active
+                    </span>
+                  )}
+                </p>
+              </div>
+              <button
+                onClick={generateBatch}
+                disabled={generatingBatch || !dj.stationId}
+                className="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-purple-700 disabled:opacity-50 flex items-center gap-1.5"
+              >
+                {generatingBatch ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                {generatingBatch ? "Generating 12..." : "Generate Batch (12)"}
+              </button>
+            </div>
+
+            {genericLoading ? (
+              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-gray-400" /></div>
+            ) : genericTracks.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-6">No generic tracks yet. Click &quot;Generate Batch&quot; to create 12.</p>
+            ) : (
+              <div className="space-y-2 max-h-96 overflow-y-auto">
+                {genericTracks.map((track) => (
+                  <div key={track.id} className={`flex items-center gap-3 p-3 rounded-lg border ${track.isActive ? "bg-white" : "bg-gray-50 opacity-60"}`}>
+                    <button
+                      onClick={() => playPreview(track.id, track.audioFilePath)}
+                      disabled={!track.audioFilePath}
+                      className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-200 disabled:opacity-30"
+                    >
+                      {playingTrackId === track.id ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
+                          track.category === "personality" ? "bg-blue-100 text-blue-700" :
+                          track.category === "station_promo" ? "bg-green-100 text-green-700" :
+                          track.category === "time_check" ? "bg-yellow-100 text-yellow-700" :
+                          "bg-pink-100 text-pink-700"
+                        }`}>
+                          {track.category.replace("_", " ")}
+                        </span>
+                        {track.timeOfDay && (
+                          <span className="text-[10px] text-gray-400">{track.timeOfDay}</span>
+                        )}
+                        <span className="text-[10px] text-gray-400">used {track.useCount}x</span>
+                      </div>
+                      <p className="text-xs text-gray-600 truncate mt-0.5">{track.scriptText}</p>
+                    </div>
+                    <button
+                      onClick={() => toggleGenericTrack(track.id, !track.isActive)}
+                      className="flex-shrink-0 text-gray-400 hover:text-gray-600"
+                      title={track.isActive ? "Deactivate" : "Activate"}
+                    >
+                      {track.isActive ? <ToggleRight className="w-5 h-5 text-green-500" /> : <ToggleLeft className="w-5 h-5" />}
+                    </button>
+                    <button
+                      onClick={() => deleteGenericTrack(track.id)}
+                      className="flex-shrink-0 text-gray-300 hover:text-red-500"
+                      title="Delete"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Section 10: Status */}
           <div className="bg-white rounded-xl p-6 shadow-sm border">
             <h2 className="font-semibold mb-4">Status</h2>
             <div className="flex gap-6">

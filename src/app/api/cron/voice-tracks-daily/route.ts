@@ -107,6 +107,7 @@ export async function GET(req: NextRequest) {
       playlistsBuilt: 0,
       scriptsGenerated: 0,
       audioGenerated: 0,
+      genericTracksUsed: 0,
       featuresRelinked: 0,
       errors: [] as string[],
     };
@@ -129,21 +130,65 @@ export async function GET(req: NextRequest) {
           data: { status: "locked" },
         });
 
-        // 5c. Generate voice track scripts
-        const scripts = await generateVoiceTrackScripts(playlist.hourPlaylistId);
+        // 5c. Find the last voice break in the clock and try to replace it with a generic track
+        const lastVbPos = findLastVoiceBreakPosition(playlist.slots);
+        let genericSkipPositions: number[] = [];
+        if (lastVbPos !== null) {
+          const genericTrack = await pickGenericTrack(shift.djId, station.id);
+          if (genericTrack) {
+            const lastVbSlot = playlist.slots.find(
+              (s: { position: number }) => s.position === lastVbPos
+            );
+            await prisma.voiceTrack.create({
+              data: {
+                stationId: station.id,
+                djId: shift.djId,
+                hourPlaylistId: playlist.hourPlaylistId,
+                position: lastVbPos,
+                trackType: "generic",
+                scriptText: genericTrack.scriptText,
+                audioFilePath: genericTrack.audioFilePath,
+                audioDuration: genericTrack.audioDuration,
+                ttsVoice: genericTrack.ttsVoice,
+                ttsProvider: genericTrack.ttsProvider,
+                status: "audio_ready",
+                airDate: today,
+                hourOfDay: shift.hourOfDay,
+                minuteOfHour: lastVbSlot?.minute ?? 47,
+              },
+            });
+
+            await prisma.genericVoiceTrack.update({
+              where: { id: genericTrack.id },
+              data: {
+                useCount: { increment: 1 },
+                lastUsedAt: new Date(),
+              },
+            });
+
+            genericSkipPositions = [lastVbPos];
+            results.genericTracksUsed++;
+          }
+        }
+
+        // 5d. Generate voice track scripts (skip last VB position if generic was used)
+        const scripts = await generateVoiceTrackScripts(
+          playlist.hourPlaylistId,
+          genericSkipPositions.length > 0 ? { skipPositions: genericSkipPositions } : undefined,
+        );
         results.scriptsGenerated += scripts.generated;
         if (scripts.errors.length > 0) {
           results.errors.push(...scripts.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`));
         }
 
-        // 5d. Generate voice track audio
+        // 5e. Generate voice track audio (skips tracks already at audio_ready)
         const audio = await generateVoiceTrackAudio(playlist.hourPlaylistId);
         results.audioGenerated += audio.generated;
         if (audio.errors.length > 0) {
           results.errors.push(...audio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`));
         }
 
-        // 5e. Re-link feature content to actual adjacent songs
+        // 5f. Re-link feature content to actual adjacent songs
         const relinked = await relinkFeatures(station.id, shift.djId, playlist.hourPlaylistId, playlist.slots);
         results.featuresRelinked += relinked;
 
@@ -292,4 +337,38 @@ async function relinkFeatures(
   }
 
   return relinked;
+}
+
+/**
+ * Find the last voice_break position in the playlist slots.
+ * This is the slot that gets replaced by a generic track.
+ */
+function findLastVoiceBreakPosition(
+  slots: Array<{ position: number; type: string; minute?: number }>,
+): number | null {
+  const vbSlots = slots
+    .filter((s) => s.type === "voice_break")
+    .sort((a, b) => b.position - a.position);
+  return vbSlots.length > 0 ? vbSlots[0].position : null;
+}
+
+/**
+ * Pick the least-used active generic voice track for a DJ.
+ * Returns null if no generic tracks exist (fallback to full AI generation).
+ */
+async function pickGenericTrack(djId: string, stationId: string) {
+  const track = await prisma.genericVoiceTrack.findFirst({
+    where: {
+      djId,
+      stationId,
+      isActive: true,
+      audioFilePath: { not: null },
+    },
+    orderBy: [
+      { useCount: "asc" },
+      { lastUsedAt: "asc" },
+    ],
+  });
+
+  return track;
 }

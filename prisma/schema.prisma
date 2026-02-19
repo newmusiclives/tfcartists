@@ -828,6 +828,7 @@ model DJ {
   shows       DJShow[]
   trackPlays  TrackPlayback[]
   clockAssignments ClockAssignment[]
+  genericVoiceTracks GenericVoiceTrack[]
 
   metadata    Json?
 
@@ -1061,6 +1062,7 @@ model Station {
   showTransitions    ShowTransition[]
   musicBeds          MusicBed[]
   sponsorAds         SponsorAd[]
+  genericVoiceTracks GenericVoiceTrack[]
 
   metadata    Json?
 }
@@ -2466,4 +2468,38 @@ model VoiceTrack {
   @@index([hourPlaylistId])
   @@index([airDate, hourOfDay])
   @@index([status])
+}
+
+// Pre-generated, reusable generic voice tracks for DJs (personality moments, station promos, etc.)
+model GenericVoiceTrack {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  stationId       String
+  station         Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  djId            String
+  dj              DJ       @relation(fields: [djId], references: [id], onDelete: Cascade)
+
+  // Content
+  scriptText      String
+  audioFilePath   String?
+  audioDuration   Float?
+
+  // Categorization
+  category        String   @default("personality") // personality | station_promo | time_check | music_tease
+  timeOfDay       String?  // morning | midday | afternoon | null (any)
+
+  // TTS config used
+  ttsVoice        String?
+  ttsProvider     String?
+
+  // Rotation tracking
+  useCount        Int      @default(0)
+  lastUsedAt      DateTime?
+  isActive        Boolean  @default(true)
+
+  @@index([djId])
+  @@index([stationId])
+  @@index([useCount])
 }
