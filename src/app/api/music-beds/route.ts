@@ -42,22 +42,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Save file to public/audio/music-beds/
-    const outputDir = path.join(process.cwd(), "public", "audio", "music-beds");
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
-
     const safeName = name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
     const ext = path.extname(file.name) || ".mp3";
     const fileName = `${safeName}-${Date.now()}${ext}`;
-    const filePath = `/audio/music-beds/${fileName}`;
-
     const buffer = Buffer.from(await file.arrayBuffer());
-    fs.writeFileSync(path.join(outputDir, fileName), buffer);
+
+    // Save file to public/audio/music-beds/ (falls back to data URI on Netlify)
+    let filePath: string;
+    try {
+      const outputDir = path.join(process.cwd(), "public", "audio", "music-beds");
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+      fs.writeFileSync(path.join(outputDir, fileName), buffer);
+      filePath = `/audio/music-beds/${fileName}`;
+    } catch {
+      // Serverless (Netlify) — read-only filesystem, store as data URI
+      const mimeType = ext === ".wav" ? "audio/wav" : "audio/mpeg";
+      filePath = `data:${mimeType};base64,${buffer.toString("base64")}`;
+    }
 
     const musicBed = await prisma.musicBed.create({
       data: {

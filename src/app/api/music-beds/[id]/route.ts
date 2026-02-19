@@ -18,10 +18,16 @@ export async function DELETE(
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    // Delete the file from disk
-    const fullPath = path.join(process.cwd(), "public", musicBed.filePath);
-    if (fs.existsSync(fullPath)) {
-      fs.unlinkSync(fullPath);
+    // Delete the file from disk (skip for data URIs on Netlify)
+    if (!musicBed.filePath.startsWith("data:")) {
+      try {
+        const fullPath = path.join(process.cwd(), "public", musicBed.filePath);
+        if (fs.existsSync(fullPath)) {
+          fs.unlinkSync(fullPath);
+        }
+      } catch {
+        // Read-only filesystem on Netlify — just delete the DB record
+      }
     }
 
     await prisma.musicBed.delete({ where: { id } });
