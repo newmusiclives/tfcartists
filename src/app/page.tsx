@@ -92,16 +92,15 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-20">
         <div className="text-center">
-          <img src="/logos/ncr-logo.png" alt="North Country Radio" className="mx-auto h-44 sm:h-56 w-auto object-contain mb-6" />
+          <img src="/logos/ncr-logo.png" alt="North Country Radio" className="mx-auto h-56 sm:h-72 w-auto object-contain mb-4" />
 
           <div className="inline-flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
             <Radio className="w-4 h-4" />
             <span>TrueFans RADIO Network — Station #1</span>
           </div>
 
-          <h1 className="mt-6 text-5xl sm:text-6xl md:text-7xl font-bold text-gray-900 leading-[1.1] tracking-tight">
-            <StationName />
-            <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-700 via-orange-600 to-amber-600">
+          <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-700 via-orange-600 to-amber-600">
               Where the music finds you.
             </span>
           </h1>
