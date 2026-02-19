@@ -2380,3 +2380,90 @@ model SponsorAd {
   @@index([lastPlayedAt])
   @@index([tier])
 }
+
+// =============================================================================
+// HOUR PLAYLISTS & VOICE TRACKS
+// =============================================================================
+
+// A resolved, ordered playlist for one broadcast hour
+model HourPlaylist {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station + DJ
+  stationId       String
+  djId            String
+  clockTemplateId String
+
+  // Schedule
+  airDate         DateTime // Date of broadcast (date only, time ignored)
+  hourOfDay       Int      // 0-23
+
+  // Resolved slot data — JSON array of ordered slot objects
+  // Each: { position, minute, type, category, songId?, songTitle?, artistName?,
+  //         voiceTrackId?, featureContentId?, imagingType? }
+  slots           String   // JSON string
+
+  // Status
+  status          String   @default("draft") // draft | locked | aired | expired
+
+  // Relations
+  voiceTracks     VoiceTrack[]
+
+  @@unique([stationId, djId, airDate, hourOfDay])
+  @@index([stationId])
+  @@index([djId])
+  @@index([airDate])
+  @@index([status])
+}
+
+// A single DJ voice track tied to a specific hour playlist
+model VoiceTrack {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station + DJ
+  stationId       String
+  djId            String
+
+  // Link to hour playlist
+  hourPlaylistId  String
+  hourPlaylist    HourPlaylist @relation(fields: [hourPlaylistId], references: [id], onDelete: Cascade)
+
+  // Position in clock
+  position        Int      // Clock slot position (e.g. 4, 11, 19)
+  trackType       String   // "intro" | "back_announce_intro" | "back_announce"
+
+  // Song context for script generation
+  prevSongId      String?
+  prevSongTitle   String?
+  prevArtistName  String?
+  nextSongId      String?
+  nextSongTitle   String?
+  nextArtistName  String?
+
+  // Generated content
+  scriptText      String?
+  audioFilePath   String?
+  audioDuration   Float?   // seconds
+
+  // TTS config used
+  ttsVoice        String?
+  ttsProvider     String?
+
+  // Status
+  status          String   @default("pending") // pending | script_ready | audio_ready | aired | error
+
+  // Schedule context (denormalized for queries)
+  airDate         DateTime
+  hourOfDay       Int
+  minuteOfHour    Int?
+
+  @@index([stationId])
+  @@index([djId])
+  @@index([hourPlaylistId])
+  @@index([airDate, hourOfDay])
+  @@index([status])
+}
