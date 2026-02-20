@@ -218,9 +218,9 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // --- Resolve imaging for imaging/sweeper/station_id slots ---
+    // --- Resolve imaging for imaging/sweeper/promo/station_id slots ---
     const imagingSlots = slots.filter((s: { type: string }) =>
-      s.type === "sweeper" || s.type === "station_id" || s.type === "imaging"
+      s.type === "sweeper" || s.type === "promo" || s.type === "station_id" || s.type === "imaging"
     );
     const resolvedImaging = new Map<number, { type: string; audioFilePath: string | null }>();
 
@@ -359,7 +359,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Attach imaging data
-      if (slot.type === "sweeper" || slot.type === "station_id" || slot.type === "imaging") {
+      if (slot.type === "sweeper" || slot.type === "promo" || slot.type === "station_id" || slot.type === "imaging") {
         const img = resolvedImaging.get(slot.position as number);
         if (img) {
           entry.imaging = img;

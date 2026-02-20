@@ -12,6 +12,7 @@ interface ImagingScript {
   label: string;
   text: string;
   musicBed: string;
+  audioFilePath?: string;
 }
 
 interface ImagingMetadata {
@@ -155,6 +156,9 @@ export async function POST(request: NextRequest) {
             const filename = `${voiceSlug}-${scriptType}-${safeLabel}.wav`;
             const audioFilePath = saveAudioFile(wavBuffer, "imaging", filename);
 
+            // Store audioFilePath in the script metadata
+            script.audioFilePath = audioFilePath;
+
             results.push({
               voiceName: voice.displayName,
               type: scriptType,
@@ -173,6 +177,17 @@ export async function POST(request: NextRequest) {
             });
           }
         }
+      }
+    }
+
+    // Persist updated metadata (with audioFilePath) back to each voice
+    for (const voice of voices) {
+      const metadata = voice.metadata as ImagingMetadata | null;
+      if (metadata?.scripts) {
+        await prisma.stationImagingVoice.update({
+          where: { id: voice.id },
+          data: { metadata: JSON.parse(JSON.stringify(metadata)) },
+        });
       }
     }
 
