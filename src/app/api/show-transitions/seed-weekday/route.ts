@@ -6,12 +6,12 @@ import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
-// Weekday DJ schedule: slug, shift start hour, shift end hour
+// Weekday DJ schedule: slug, shift start hour, shift end hour, time description
 const WEEKDAY_DJS = [
-  { slug: "hank-westwood", startHour: 6, endHour: 9 },
-  { slug: "loretta-merrick", startHour: 9, endHour: 12 },
-  { slug: "doc-holloway", startHour: 12, endHour: 15 },
-  { slug: "cody-rampart", startHour: 15, endHour: 18 },
+  { slug: "hank-westwood", startHour: 6, endHour: 9, timeDesc: "6 AM to 9 AM morning" },
+  { slug: "loretta-merrick", startHour: 9, endHour: 12, timeDesc: "9 AM to noon midmorning" },
+  { slug: "doc-holloway", startHour: 12, endHour: 15, timeDesc: "noon to 3 PM afternoon" },
+  { slug: "cody-rampart", startHour: 15, endHour: 18, timeDesc: "3 PM to 6 PM afternoon drive" },
 ];
 
 // Handoff pairs: outgoing DJ index → incoming DJ index
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
       const persona = buildPersonaContext(dj);
       const script = await generateScript(
         persona,
-        `Write a 15-second show opening for ${dj.name} starting their shift on Nashville Country Radio. In character. Keep it natural and energetic. No stage directions, just the spoken words.`,
+        `Write a show opening for ${dj.name} starting their ${schedule.timeDesc} shift on North Country Radio. MUST be under 30 words. In character. No stage directions, just the spoken words.`,
         dj.gptTemperature
       );
 
@@ -162,7 +162,7 @@ export async function POST(request: NextRequest) {
       const persona = buildPersonaContext(dj);
       const script = await generateScript(
         persona,
-        `Write a 10-second sign-off for ${dj.name} ending their shift on Nashville Country Radio. In character. Warm and brief. No stage directions, just the spoken words.`,
+        `Write a sign-off for ${dj.name} ending their ${schedule.timeDesc} shift on North Country Radio. MUST be under 20 words. In character. Warm and brief. No stage directions, just the spoken words.`,
         dj.gptTemperature
       );
 
@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
         const fromPersona = buildPersonaContext(fromDj);
         const script1 = await generateScript(
           fromPersona,
-          `Write 10 seconds of ${fromDj.name} wrapping up their shift and tossing it over to ${toDj.name} who's up next on Nashville Country Radio. In character, warm and natural. No stage directions, just the spoken words.`,
+          `Write ${fromDj.name} tossing to ${toDj.name} on North Country Radio. MUST be under 20 words. In character. No stage directions, just the spoken words.`,
           fromDj.gptTemperature
         );
 
@@ -247,7 +247,7 @@ export async function POST(request: NextRequest) {
         const toPersona = buildPersonaContext(toDj);
         const script2 = await generateScript(
           toPersona,
-          `Write 10 seconds of ${toDj.name} taking over from ${fromDj.name} and greeting the listeners on Nashville Country Radio. In character, upbeat and welcoming. No stage directions, just the spoken words.`,
+          `Write ${toDj.name} taking over from ${fromDj.name} on North Country Radio. MUST be under 20 words. In character, upbeat. No stage directions, just the spoken words.`,
           toDj.gptTemperature
         );
 
