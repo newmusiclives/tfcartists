@@ -59,6 +59,8 @@ export interface BuildPlaylistOptions {
   clockTemplateId: string;
   airDate: Date;  // Date only (time ignored)
   hourOfDay: number;
+  /** Song IDs to exclude — used to prevent repeats across a DJ's multi-hour shift */
+  excludeSongIds?: Set<string>;
 }
 
 export interface BuildPlaylistResult {
@@ -124,7 +126,7 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
 
   // 4. Resolve each slot
   const resolvedSlots: ResolvedSlot[] = [];
-  const usedSongIds = new Set<string>();
+  const usedSongIds = new Set<string>(opts.excludeSongIds || []);
   const recentArtists: string[] = []; // Track artist order for separation
   const genderBalanceTarget = template.genderBalanceTarget || 0.5;
   let femaleCount = 0;

@@ -114,16 +114,31 @@ export async function GET(req: NextRequest) {
       errors: [] as string[],
     };
 
+    // Track songs used per DJ across their entire shift to prevent repeats
+    const djUsedSongs = new Map<string, Set<string>>();
+
     for (const shift of shiftHours) {
       try {
-        // 5a. Build playlist
+        // Get or create the used songs set for this DJ's shift
+        if (!djUsedSongs.has(shift.djId)) {
+          djUsedSongs.set(shift.djId, new Set<string>());
+        }
+        const excludeSongIds = djUsedSongs.get(shift.djId)!;
+
+        // 5a. Build playlist (excluding songs already used in earlier hours of this shift)
         const playlist = await buildHourPlaylist({
           stationId: station.id,
           djId: shift.djId,
           clockTemplateId: shift.clockTemplateId,
           airDate: today,
           hourOfDay: shift.hourOfDay,
+          excludeSongIds,
         });
+
+        // Add this hour's songs to the DJ's exclusion set
+        for (const slot of playlist.slots) {
+          if (slot.songId) excludeSongIds.add(slot.songId);
+        }
         results.playlistsBuilt++;
 
         // 5b. Lock the playlist

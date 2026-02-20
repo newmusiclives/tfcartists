@@ -270,27 +270,30 @@ function buildUserPrompt(
 - Output ONLY the spoken text — no stage directions, no quotes, no labels`;
 
   if (trackType === "intro" && nextSong) {
-    return `Write a voice track where ${djFirstName} introduces the next song. Focus ONLY on the upcoming song — do NOT mention or reference any previous song.
-Next up: "${nextSong.songTitle}" by ${nextSong.artistName}.
+    return `Write a voice track where ${djFirstName} introduces the UPCOMING song that is ABOUT TO PLAY.
+UPCOMING SONG (about to play): "${nextSong.songTitle}" by ${nextSong.artistName}
 Time of day: ${timeOfDay}.
 ${rules}
-- IMPORTANT: Only talk about the upcoming song, not any song that already played`;
+- CRITICAL: Only mention "${nextSong.songTitle}" — do NOT mention any other song`;
   }
 
   if (trackType === "back_announce_intro" && prevSong && nextSong) {
-    return `Write a voice track where ${djFirstName} briefly acknowledges the song that just finished, then pivots to introduce the NEXT song. The main focus should be on what's coming up next.
-Just finished: "${prevSong.songTitle}" by ${prevSong.artistName}.
-Coming up next: "${nextSong.songTitle}" by ${nextSong.artistName}.
+    return `Write a voice track where ${djFirstName} does two things in order:
+1. FIRST: A quick one-line nod to the song that JUST FINISHED: "${prevSong.songTitle}" by ${prevSong.artistName}
+2. THEN: Introduce the UPCOMING song that is ABOUT TO PLAY: "${nextSong.songTitle}" by ${nextSong.artistName}
 Time of day: ${timeOfDay}.
 ${rules}
-- IMPORTANT: Lead with a quick nod to the previous song, then shift focus to introducing the upcoming song`;
+- CRITICAL: "${prevSong.songTitle}" ALREADY PLAYED — do NOT introduce it as upcoming
+- CRITICAL: "${nextSong.songTitle}" is NEXT — introduce it as what's coming up
+- The main focus must be on the upcoming song "${nextSong.songTitle}"`;
   }
 
   if (trackType === "back_announce" && prevSong) {
-    return `Write a voice track where ${djFirstName} back-announces the song that just played.
-Just played: "${prevSong.songTitle}" by ${prevSong.artistName}.
+    return `Write a voice track where ${djFirstName} back-announces the song that JUST FINISHED PLAYING.
+JUST PLAYED: "${prevSong.songTitle}" by ${prevSong.artistName}
 Time of day: ${timeOfDay}.
-${rules}`;
+${rules}
+- Only mention "${prevSong.songTitle}" — do NOT introduce any upcoming song`;
   }
 
   // Fallback for missing song context or "generic" trackType
