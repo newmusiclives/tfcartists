@@ -6,6 +6,7 @@ import {
   generateWithGemini,
   saveAudioFile,
 } from "@/lib/radio/voice-track-tts";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const rateLimited = await withRateLimit(request, "ai");
+    if (rateLimited) return rateLimited;
+
     const { id } = await params;
 
     const transition = await prisma.showTransition.findUnique({

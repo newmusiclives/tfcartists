@@ -5,6 +5,8 @@ import { unauthorized } from "@/lib/api/errors";
 import { logger } from "@/lib/logger";
 import type { CassidyStats } from "@/types/cassidy";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/cassidy/stats
  *

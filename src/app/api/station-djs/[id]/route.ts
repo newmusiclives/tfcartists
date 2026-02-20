@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole, pickFields } from "@/lib/api/auth";
 
+export const dynamic = "force-dynamic";
+
 const ALLOWED_FIELDS = [
   "name", "slug", "bio", "background", "catchPhrases", "gptSystemPrompt",
   "additionalKnowledge", "gptTemperature", "ttsProvider", "ttsVoice",

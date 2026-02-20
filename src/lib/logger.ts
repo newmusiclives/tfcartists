@@ -4,16 +4,61 @@
  * Production-ready logging utility that:
  * - Only logs in development mode (prevents console pollution in production)
  * - Provides structured logging
- * - Can be easily integrated with external logging services (Sentry, Datadog, etc.)
+ * - Reports errors to Sentry via lightweight HTTP API in production
  */
 
 const isDevelopment = process.env.NODE_ENV === "development";
 const isTest = process.env.NODE_ENV === "test";
+const SENTRY_DSN = process.env.SENTRY_DSN;
 
 type LogLevel = "debug" | "info" | "warn" | "error";
 
 interface LogContext {
   [key: string]: any;
+}
+
+/**
+ * Lightweight Sentry error reporter using the HTTP API.
+ * Avoids the heavy @sentry/node SDK to stay within Netlify's function size limits.
+ */
+async function reportToSentry(message: string, level: "error" | "warning", context?: LogContext) {
+  if (!SENTRY_DSN) return;
+
+  try {
+    // Parse DSN: https://{key}@{host}/{project_id}
+    const dsnUrl = new URL(SENTRY_DSN);
+    const key = dsnUrl.username;
+    const projectId = dsnUrl.pathname.slice(1);
+    const host = dsnUrl.hostname;
+
+    const envelope = JSON.stringify({
+      event_id: crypto.randomUUID().replace(/-/g, ""),
+      sent_at: new Date().toISOString(),
+      dsn: SENTRY_DSN,
+    }) + "\n" +
+    JSON.stringify({ type: "event" }) + "\n" +
+    JSON.stringify({
+      event_id: crypto.randomUUID().replace(/-/g, ""),
+      timestamp: Date.now() / 1000,
+      platform: "node",
+      level,
+      message: { formatted: message },
+      extra: context,
+      environment: process.env.NODE_ENV || "production",
+      server_name: "truefans-radio",
+    });
+
+    await fetch(`https://${host}/api/${projectId}/envelope/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-sentry-envelope",
+        "X-Sentry-Auth": `Sentry sentry_version=7, sentry_client=truefans/1.0, sentry_key=${key}`,
+      },
+      body: envelope,
+    }).catch(() => {}); // Fire and forget
+  } catch {
+    // Silently fail - don't let error reporting cause errors
+  }
 }
 
 class Logger {
@@ -36,18 +81,14 @@ class Logger {
       return;
     }
 
-    // In production, you would send to external logging service
-    // For now, only log errors and warnings in production
-    if (level === "error" || level === "warn") {
-      const logData = {
-        timestamp,
-        level,
-        message,
-        ...context,
-      };
-
-      // TODO: Send to external logging service (Sentry, Datadog, CloudWatch, etc.)
-      console[level](JSON.stringify(logData));
+    // In production, log errors and warnings + report to Sentry
+    if (level === "error") {
+      const logData = { timestamp, level, message, ...context };
+      console.error(JSON.stringify(logData));
+      reportToSentry(message, "error", context);
+    } else if (level === "warn") {
+      const logData = { timestamp, level, message, ...context };
+      console.warn(JSON.stringify(logData));
     }
   }
 

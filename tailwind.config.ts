@@ -10,7 +10,10 @@ const config: Config = {
     // Dynamic color classes used in shared-nav.tsx activeLinkClass template literals
     { pattern: /bg-(rose|purple|blue|amber|green)-(50|700)/ },
     { pattern: /text-(rose|purple|blue|amber|green)-700/ },
-    { pattern: /hover:bg-(rose|purple|blue|amber|green)-50/ },
+    {
+      pattern: /bg-(rose|purple|blue|amber|green)-50/,
+      variants: ["hover"],
+    },
   ],
   theme: {
     extend: {

@@ -4,6 +4,8 @@ import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { auth } from "@/lib/auth/config";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/harper/message
  * Handle incoming sponsor message or send a message in an ongoing conversation

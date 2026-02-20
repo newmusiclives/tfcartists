@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, validationError } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
 
@@ -23,19 +23,40 @@ export async function POST(request: NextRequest) {
           continue;
         }
 
+        // Validate numeric field ranges
+        const duration = song.duration ? parseInt(song.duration) : null;
+        const bpm = song.bpm ? parseInt(song.bpm) : null;
+        const energy = song.energy ? parseFloat(song.energy) : null;
+
+        if (duration !== null && (duration <= 0 || duration >= 3600)) {
+          results.skipped++;
+          results.errors.push(`Skipped "${song.title}": duration must be positive and less than 3600`);
+          continue;
+        }
+        if (bpm !== null && (bpm < 20 || bpm > 300)) {
+          results.skipped++;
+          results.errors.push(`Skipped "${song.title}": bpm must be between 20 and 300`);
+          continue;
+        }
+        if (energy !== null && (energy < 0 || energy > 1)) {
+          results.skipped++;
+          results.errors.push(`Skipped "${song.title}": energy must be between 0 and 1`);
+          continue;
+        }
+
         await prisma.song.create({
           data: {
             stationId,
             title: song.title,
             artistName: song.artistName,
             album: song.album || null,
-            duration: song.duration ? parseInt(song.duration) : null,
+            duration,
             genre: song.genre || null,
             fileUrl: song.fileUrl || null,
             artworkUrl: song.artworkUrl || null,
-            bpm: song.bpm ? parseInt(song.bpm) : null,
+            bpm,
             musicalKey: song.musicalKey || null,
-            energy: song.energy ? parseFloat(song.energy) : null,
+            energy,
             rotationCategory: song.rotationCategory || "C",
             vocalGender: song.vocalGender || "unknown",
             tempoCategory: song.tempoCategory || "medium",

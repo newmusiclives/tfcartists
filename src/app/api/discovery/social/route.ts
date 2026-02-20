@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { socialDiscovery, DiscoveredArtist } from "@/lib/discovery/social-discovery";
 import { logger } from "@/lib/logger";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/discovery/social
  * Manually trigger social media discovery

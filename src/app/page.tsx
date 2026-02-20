@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award, Music, Settings, Building2 } from "lucide-react";
 import { StationName } from "@/components/station-name";
+
+export const metadata: Metadata = {
+  title: "TrueFans RADIO Network | AI-Powered Independent Radio",
+  description: "AI-powered radio stations championing independent artists. Discover emerging music, support real artists, and join a passionate listener community.",
+};
 
 export default function HomePage() {
   return (
@@ -10,7 +17,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <img src="/logos/ncr-logo.png" alt="NCR" className="h-8 w-auto object-contain" />
+              <Image src="/logos/ncr-logo.png" alt="NCR" width={32} height={32} className="h-8 w-auto object-contain" />
               <StationName className="font-bold text-xl text-amber-700" />
             </div>
             <div className="flex items-center space-x-4">
@@ -92,7 +99,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-20">
         <div className="text-center">
-          <img src="/logos/ncr-logo.png" alt="North Country Radio" className="mx-auto h-56 sm:h-72 w-auto object-contain mb-4" />
+          <Image src="/logos/ncr-logo.png" alt="North Country Radio" width={288} height={288} className="mx-auto h-56 sm:h-72 w-auto object-contain mb-4" />
 
           <div className="inline-flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
             <Radio className="w-4 h-4" />
@@ -412,8 +419,21 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p>&copy; 2025 TrueFans RADIO Network. Riley + Cassidy + Harper + Elliot + Parker AI Teams.</p>
+          <div className="mt-8 pt-8 border-t border-gray-800">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
+              <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
+                Privacy Policy
+              </Link>
+              <span className="hidden sm:inline text-gray-600">|</span>
+              <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
+                Terms of Service
+              </Link>
+              <span className="hidden sm:inline text-gray-600">|</span>
+              <Link href="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors">
+                Cookie Policy
+              </Link>
+            </div>
+            <p className="text-center">&copy; 2025 TrueFans RADIO Network. Riley + Cassidy + Harper + Elliot + Parker AI Teams.</p>
           </div>
         </div>
       </footer>

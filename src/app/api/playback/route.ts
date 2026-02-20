@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { requireAuth } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +11,9 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const {
       trackTitle,
@@ -82,6 +87,9 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const limit = Number(request.nextUrl.searchParams.get("limit")) || 20;
 
     const plays = await prisma.trackPlayback.findMany({

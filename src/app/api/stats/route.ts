@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { requireAdmin } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/stats
@@ -8,6 +12,9 @@ import { logger } from "@/lib/logger";
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAdmin();
+    if (!session) return unauthorized();
+
     // Get counts by status
     const totalArtists = await prisma.artist.count();
     const discovered = await prisma.artist.count({ where: { status: "DISCOVERED" } });

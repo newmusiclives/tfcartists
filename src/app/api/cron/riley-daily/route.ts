@@ -4,6 +4,8 @@ import { riley } from "@/lib/ai/riley-agent";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Riley Daily Automation Cron Job
  * Runs every day at 4:30 AM

@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireAdmin } from "@/lib/api/auth";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const stations = await prisma.station.findMany({

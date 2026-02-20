@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireRole } from "@/lib/api/auth";
+
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/riley/stats
@@ -8,6 +11,9 @@ import { handleApiError } from "@/lib/api/errors";
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 

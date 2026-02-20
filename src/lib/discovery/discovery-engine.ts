@@ -93,7 +93,7 @@ export class ArtistDiscoveryEngine {
    * Save discovered artists to database
    */
   async saveDiscoveredArtists(artists: DiscoveredArtist[]): Promise<void> {
-    console.log(`[Discovery] Saving ${artists.length} discovered artists...`);
+    logger.info(`[Discovery] Saving ${artists.length} discovered artists...`);
 
     for (const artist of artists) {
       // Check if artist already exists
@@ -107,7 +107,7 @@ export class ArtistDiscoveryEngine {
       });
 
       if (existing) {
-        console.log(`[Discovery] Artist already exists: ${artist.name}`);
+        logger.debug(`[Discovery] Artist already exists: ${artist.name}`);
         continue;
       }
 
@@ -139,7 +139,7 @@ export class ArtistDiscoveryEngine {
         },
       });
 
-      console.log(`[Discovery] Created artist: ${artist.name}`);
+      logger.info(`[Discovery] Created artist: ${artist.name}`);
     }
   }
 
@@ -162,7 +162,7 @@ export class ArtistDiscoveryEngine {
     // Save to database
     await this.saveDiscoveredArtists(discovered);
 
-    console.log(`[Discovery] Cycle complete. Found ${discovered.length} new artists.`);
+    logger.info(`[Discovery] Cycle complete. Found ${discovered.length} new artists.`);
     return discovered.length;
   }
 }

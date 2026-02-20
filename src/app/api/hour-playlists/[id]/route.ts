@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireAuth } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const { id } = await params;
 
     const playlist = await prisma.hourPlaylist.findUnique({
@@ -34,6 +38,9 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const { id } = await params;
     const body = await request.json();
     const { status } = body;

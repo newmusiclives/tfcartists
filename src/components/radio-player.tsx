@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { Play, Pause, Volume2, VolumeX, Headphones } from "lucide-react";
 import { useStation } from "@/contexts/StationContext";
 
@@ -216,7 +217,7 @@ export function RadioPlayer() {
           </div>
         </div>
       )}
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-amber-900 via-amber-800 to-orange-900 text-white shadow-[0_-6px_30px_rgba(0,0,0,0.4)] border-t border-amber-700/50">
+    <div role="region" aria-label="Radio player" className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-amber-900 via-amber-800 to-orange-900 text-white shadow-[0_-6px_30px_rgba(0,0,0,0.4)] border-t border-amber-700/50">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <audio
         ref={audioRef}
@@ -238,23 +239,25 @@ export function RadioPlayer() {
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {artworkUrl ? (
-                <div className={`w-14 h-14 rounded-lg overflow-hidden shadow-lg ${showActive ? "ring-2 ring-green-400/60" : ""}`}>
-                  <img
+                <div className={`relative w-14 h-14 rounded-lg overflow-hidden shadow-lg ${showActive ? "ring-2 ring-green-400/60" : ""}`}>
+                  <Image
                     src={artworkUrl}
                     alt={trackTitle}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    unoptimized
                   />
                 </div>
               ) : (
                 <div className={`w-14 h-14 rounded-lg bg-amber-700/50 flex items-center justify-center shadow-lg ${showActive ? "ring-2 ring-green-400/60" : ""}`}>
-                  <img src="/logos/ncr-logo.png" alt="NCR" className="w-10 h-10 object-contain" />
+                  <Image src="/logos/ncr-logo.png" alt="NCR" width={40} height={40} className="object-contain" />
                 </div>
               )}
             </button>
 
-            <div className="min-w-0">
+            <div className="min-w-0" aria-live="polite">
               <div className="text-base font-bold text-white truncate flex items-center gap-1.5">
-                <img src="/logos/ncr-logo.png" alt="" className="w-5 h-5 object-contain flex-shrink-0" />
+                <Image src="/logos/ncr-logo.png" alt="" width={20} height={20} className="object-contain flex-shrink-0" />
                 {showError
                   ? "Stream unavailable"
                   : showLoading
@@ -392,6 +395,9 @@ export function RadioPlayer() {
                 onChange={(e) => setVolume(Number(e.target.value))}
                 className="w-24 h-1.5 accent-amber-400 bg-amber-700 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-amber-400"
                 aria-label="Volume"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={volume}
               />
             </div>
           </div>

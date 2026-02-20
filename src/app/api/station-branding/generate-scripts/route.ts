@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { aiProvider } from "@/lib/ai/providers";
 import { handleApiError } from "@/lib/api/errors";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -110,6 +111,9 @@ Example: [{"label":"Morning ID 1","text":"This is North Country Radio...","music
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimited = await withRateLimit(request, "ai");
+    if (rateLimited) return rateLimited;
+
     const { stationId, category } = await request.json();
 
     if (!stationId || !category || !CATEGORY_CONFIGS[category]) {

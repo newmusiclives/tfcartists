@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { auth } from "@/lib/auth/config";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/payments/payouts
  * Create payouts for artist earnings

@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireAdmin } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAdmin();
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const stationId = searchParams.get("stationId");
 

@@ -9,6 +9,8 @@ import {
 import { sendEarningsNotification } from "@/lib/email";
 import { sendEarningsAlert } from "@/lib/sms";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Revenue Distribution Cron Job
  * Runs on the 1st of every month at 2:00 AM

@@ -4,6 +4,8 @@ import { logger } from "@/lib/logger";
 import { requireRole, pickFields } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
 
+export const dynamic = "force-dynamic";
+
 const ALLOWED_FIELDS = [
   "name", "email", "phone", "genre", "bio", "website", "socialLinks",
   "discoverySource", "sourceUrl", "sourceHandle", "pipelineStage",

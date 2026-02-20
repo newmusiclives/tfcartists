@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
 import { logger } from "@/lib/logger";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+
+export const dynamic = "force-dynamic";
 
 /**
  * POST /api/harper/calls
@@ -8,6 +12,9 @@ import { logger } from "@/lib/logger";
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const {
       sponsorId,
@@ -60,6 +67,9 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const sponsorId = searchParams.get("sponsorId");
 

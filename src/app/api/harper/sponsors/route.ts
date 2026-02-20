@@ -4,6 +4,8 @@ import { handleApiError, validationError, unauthorized } from "@/lib/api/errors"
 import { withPagination } from "@/lib/api/helpers";
 import { requireRole } from "@/lib/api/auth";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/harper/sponsors
  *
@@ -13,6 +15,9 @@ import { requireRole } from "@/lib/api/auth";
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const { page, limit, skip, sortBy, sortOrder, search } =
       withPagination(searchParams);

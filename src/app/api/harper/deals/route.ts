@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError, validationError, notFound } from "@/lib/api/errors";
+import { handleApiError, validationError, notFound, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
+import { requireRole } from "@/lib/api/auth";
+
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/harper/deals
@@ -12,12 +15,20 @@ import { withPagination } from "@/lib/api/helpers";
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const { page, limit, skip, sortBy, sortOrder } =
       withPagination(searchParams);
 
     // Filters
     const status = searchParams.get("status");
+
+    const validStatuses = ["active", "pending", "cancelled", "expired", "paused"];
+    if (status && !validStatuses.includes(status)) {
+      return validationError("Invalid status value", [{ field: "status", message: `Status must be one of: ${validStatuses.join(", ")}` }]);
+    }
 
     const where: any = {};
 
@@ -81,6 +92,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const body = await request.json();
 
     const { sponsorId, tier, monthlyAmount } = body;

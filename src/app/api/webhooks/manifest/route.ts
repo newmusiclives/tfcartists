@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { manifest } from "@/lib/payments/manifest";
 import { logger } from "@/lib/logger";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/webhooks/manifest
  * Webhook endpoint for Manifest Financial events

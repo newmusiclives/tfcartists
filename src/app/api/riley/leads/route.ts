@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireRole } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
 // GET /api/riley/leads - Get all leads (artists in discovery pipeline)
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const source = searchParams.get("source");
@@ -109,6 +113,9 @@ export async function GET(request: NextRequest) {
 // POST /api/riley/leads - Create new lead (artist)
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const body = await request.json();
 
     if (!body.name || !body.source) {
@@ -156,6 +163,9 @@ export async function POST(request: NextRequest) {
 // PUT /api/riley/leads - Update lead
 export async function PUT(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const body = await request.json();
 
     if (!body.id) {
@@ -210,6 +220,9 @@ export async function PUT(request: NextRequest) {
 // DELETE /api/riley/leads - Soft delete lead
 export async function DELETE(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 

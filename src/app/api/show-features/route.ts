@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireAuth } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
 // GET feature types + content stats
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const stationId = request.nextUrl.searchParams.get("stationId");
 
     // Feature types (always returned)
@@ -39,6 +43,9 @@ export async function GET(request: NextRequest) {
 // POST — generate content (or create feature type)
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const { action } = body;
 

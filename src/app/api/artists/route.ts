@@ -5,6 +5,8 @@ import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
 import { requireRole } from "@/lib/api/auth";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/artists
  * Get all artists with optional filters, pagination, search, tier filter

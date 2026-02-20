@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+
+export const dynamic = "force-dynamic";
 
 // In production, these would come from database
 let campaigns = [
@@ -68,6 +72,9 @@ let campaigns = [
 // GET /api/riley/campaigns - Get all campaigns
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const type = searchParams.get("type");
     const status = searchParams.get("status");
@@ -105,6 +112,9 @@ export async function GET(request: NextRequest) {
 // POST /api/riley/campaigns - Create new campaign
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const body = await request.json();
 
     // Validate required fields
@@ -151,6 +161,9 @@ export async function POST(request: NextRequest) {
 // PUT /api/riley/campaigns - Update campaign
 export async function PUT(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const body = await request.json();
 
     if (!body.id) {
@@ -195,6 +208,9 @@ export async function PUT(request: NextRequest) {
 // DELETE /api/riley/campaigns - Delete campaign
 export async function DELETE(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 

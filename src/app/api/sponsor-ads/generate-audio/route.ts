@@ -4,6 +4,7 @@ import { handleApiError } from "@/lib/api/errors";
 import OpenAI from "openai";
 import * as fs from "fs";
 import * as path from "path";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,9 @@ function saveAudioFile(buffer: Buffer, filename: string): string {
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimited = await withRateLimit(request, "ai");
+    if (rateLimited) return rateLimited;
+
     const body = await request.json();
     const { stationId } = body;
 

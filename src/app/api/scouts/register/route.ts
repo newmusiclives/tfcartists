@@ -5,6 +5,8 @@ import { logger } from "@/lib/logger";
 import { auth } from "@/lib/auth/config";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/scouts/register
  * Convert a listener to a scout

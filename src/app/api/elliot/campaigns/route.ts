@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { elliot } from "@/lib/ai/elliot-agent";
 import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/db";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+
+export const dynamic = "force-dynamic";
 
 /**
  * POST /api/elliot/campaigns
@@ -9,6 +13,9 @@ import { prisma } from "@/lib/db";
  */
 export async function POST(req: NextRequest) {
   try {
+    const session = await requireRole("elliot");
+    if (!session) return unauthorized();
+
     const body = await req.json();
     const { name, type, targetAudience, goalType, goalTarget } = body;
 
@@ -57,6 +64,9 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   try {
+    const session = await requireRole("elliot");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status") || "active";
 

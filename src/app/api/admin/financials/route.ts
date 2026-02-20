@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireAdmin } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
+    const session = await requireAdmin();
+    if (!session) return unauthorized();
+
     // Get current period
     const now = new Date();
     const currentPeriod = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;

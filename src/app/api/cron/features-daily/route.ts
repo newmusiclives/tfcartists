@@ -4,6 +4,8 @@ import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { pick, djFirstName, fillTemplate, type SongData } from "@/lib/radio/template-utils";
 
+export const dynamic = "force-dynamic";
+
 const POOL_TARGET = 3; // unused items per DJ per feature type
 
 export async function GET(req: NextRequest) {

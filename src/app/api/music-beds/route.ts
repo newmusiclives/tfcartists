@@ -5,6 +5,8 @@ import { requireRole } from "@/lib/api/auth";
 import * as fs from "fs";
 import * as path from "path";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const stationId = request.nextUrl.searchParams.get("stationId");

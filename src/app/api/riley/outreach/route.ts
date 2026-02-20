@@ -6,6 +6,8 @@ import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { withValidation, triggerOutreachSchema } from "@/lib/validation/schemas";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/riley/outreach
  * Trigger Riley to reach out to a specific artist

@@ -12,6 +12,7 @@ import {
   SkipForward,
   Headphones,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useStation } from "@/contexts/StationContext";
 
@@ -200,7 +201,7 @@ export default function PlayerPage() {
       <div className="min-h-[100dvh] flex flex-col px-6 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
         {/* Station Branding */}
         <div className="flex items-center justify-center gap-2.5 pt-6 pb-2 flex-shrink-0">
-          <img src="/logos/ncr-logo.png" alt="NCR" className="h-8 w-auto object-contain" />
+          <Image src="/logos/ncr-logo.png" alt="NCR" width={32} height={32} className="h-8 w-auto object-contain" />
           <h1 className="text-base font-bold tracking-wide text-amber-100">
             {currentStation.name}
           </h1>
@@ -237,16 +238,18 @@ export default function PlayerPage() {
         {/* Main Content — fills available space, centers children */}
         <div className="flex-1 flex flex-col items-center justify-center gap-4 py-4 min-h-0">
           {/* Album Artwork — scales with available space, max 256px */}
-          <div className="w-full max-w-[16rem] aspect-square flex-shrink rounded-2xl overflow-hidden shadow-2xl shadow-black/50 bg-amber-800/50">
+          <div className="relative w-full max-w-[16rem] aspect-square flex-shrink rounded-2xl overflow-hidden shadow-2xl shadow-black/50 bg-amber-800/50">
             {artworkUrl && (showActive || showLoading) ? (
-              <img
+              <Image
                 src={artworkUrl}
                 alt={trackTitle}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                unoptimized
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center p-6">
-                <img src="/logos/ncr-logo.png" alt="North Country Radio" className="w-full h-full object-contain opacity-50" />
+                <Image src="/logos/ncr-logo.png" alt="North Country Radio" width={192} height={192} className="w-full h-full object-contain opacity-50" />
               </div>
             )}
           </div>

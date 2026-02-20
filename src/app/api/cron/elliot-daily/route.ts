@@ -3,6 +3,8 @@ import { elliot } from "@/lib/ai/elliot-agent";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Elliot Daily Automation Cron Job
  * Runs every day at 4:50 AM

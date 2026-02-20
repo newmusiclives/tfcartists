@@ -3,6 +3,8 @@ import { elliot } from "@/lib/ai/elliot-agent";
 import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/elliot/engage
  * Engage with a specific listener

@@ -86,7 +86,7 @@ export function SharedNav() {
 
   return (
     <>
-      <nav ref={navRef} className="bg-white border-b sticky top-0 z-50 shadow-sm">
+      <nav ref={navRef} role="navigation" aria-label="Main navigation" className="bg-white border-b sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -316,6 +316,7 @@ export function SharedNav() {
                     pathname === "/admin" ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                   }`}
                   title="Admin"
+                  aria-current={pathname === "/admin" ? "page" : undefined}
                 >
                   <Home className="w-4 h-4" />
                   <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
@@ -328,6 +329,7 @@ export function SharedNav() {
                     isActive("/management") ? "bg-amber-100 text-amber-700" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                   }`}
                   title="Management"
+                  aria-current={isActive("/management") ? "page" : undefined}
                 >
                   <Shield className="w-4 h-4" />
                   <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
@@ -340,6 +342,7 @@ export function SharedNav() {
                     isActive("/network") ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                   }`}
                   title="Network"
+                  aria-current={isActive("/network") ? "page" : undefined}
                 >
                   <Globe className="w-4 h-4" />
                   <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
@@ -418,16 +421,16 @@ export function SharedNav() {
                 )}
               </div>
 
-              <Link href="/station" className={`p-2 rounded-lg text-sm font-medium transition-colors ${isActive("/station") || isActive("/station-admin") ? "bg-amber-100 text-amber-700" : "text-gray-500 hover:bg-gray-100"}`} title="Station">
+              <Link href="/station" className={`p-2 rounded-lg text-sm font-medium transition-colors ${isActive("/station") || isActive("/station-admin") ? "bg-amber-100 text-amber-700" : "text-gray-500 hover:bg-gray-100"}`} title="Station" aria-current={isActive("/station") ? "page" : undefined}>
                 <Radio className="w-4 h-4" />
               </Link>
-              <Link href="/admin" className={`p-2 rounded-lg transition-colors ${pathname === "/admin" ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100"}`} title="Admin">
+              <Link href="/admin" className={`p-2 rounded-lg transition-colors ${pathname === "/admin" ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100"}`} title="Admin" aria-current={pathname === "/admin" ? "page" : undefined}>
                 <Home className="w-4 h-4" />
               </Link>
-              <Link href="/management" className={`p-2 rounded-lg transition-colors ${isActive("/management") ? "bg-amber-100 text-amber-700" : "text-gray-500 hover:bg-gray-100"}`} title="Management">
+              <Link href="/management" className={`p-2 rounded-lg transition-colors ${isActive("/management") ? "bg-amber-100 text-amber-700" : "text-gray-500 hover:bg-gray-100"}`} title="Management" aria-current={isActive("/management") ? "page" : undefined}>
                 <Shield className="w-4 h-4" />
               </Link>
-              <Link href="/network" className={`p-2 rounded-lg transition-colors ${isActive("/network") ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100"}`} title="Network">
+              <Link href="/network" className={`p-2 rounded-lg transition-colors ${isActive("/network") ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100"}`} title="Network" aria-current={isActive("/network") ? "page" : undefined}>
                 <Globe className="w-4 h-4" />
               </Link>
             </div>
@@ -436,7 +439,8 @@ export function SharedNav() {
             <button
               onClick={() => setMobileOpen(true)}
               className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
-              aria-label="Open menu"
+              aria-label="Toggle mobile menu"
+              aria-expanded={mobileOpen}
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -469,13 +473,13 @@ export function SharedNav() {
 
             <div className="py-2">
               {/* Admin */}
-              <Link href="/admin" className={`flex items-center space-x-3 px-4 py-3 ${pathname === "/admin" ? "bg-purple-50 text-purple-700" : "text-gray-700"}`}>
+              <Link href="/admin" className={`flex items-center space-x-3 px-4 py-3 ${pathname === "/admin" ? "bg-purple-50 text-purple-700" : "text-gray-700"}`} aria-current={pathname === "/admin" ? "page" : undefined}>
                 <Home className="w-5 h-5" />
                 <span className="font-medium">Admin Home</span>
               </Link>
 
               {/* Management */}
-              <Link href="/management" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/management") ? "bg-amber-50 text-amber-700" : "text-gray-700"}`}>
+              <Link href="/management" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/management") ? "bg-amber-50 text-amber-700" : "text-gray-700"}`} aria-current={isActive("/management") ? "page" : undefined}>
                 <Shield className="w-5 h-5" />
                 <span className="font-medium">Management</span>
               </Link>
@@ -659,7 +663,7 @@ export function SharedNav() {
               <div className="border-t my-1" />
 
               {/* Quick Links */}
-              <Link href="/network" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/network") ? "bg-purple-50 text-purple-700" : "text-gray-700"}`}>
+              <Link href="/network" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/network") ? "bg-purple-50 text-purple-700" : "text-gray-700"}`} aria-current={isActive("/network") ? "page" : undefined}>
                 <Globe className="w-5 h-5" />
                 <span className="font-medium">Network</span>
               </Link>

@@ -14,7 +14,7 @@ const createPrismaClient = () => {
   if (isProduction && dbUrl.startsWith("postgresql")) {
     const separator = dbUrl.includes("?") ? "&" : "?";
     if (!dbUrl.includes("connection_limit")) {
-      dbUrl = `${dbUrl}${separator}connection_limit=5&pool_timeout=10`;
+      dbUrl = `${dbUrl}${separator}connection_limit=15&pool_timeout=10`;
     }
   }
 

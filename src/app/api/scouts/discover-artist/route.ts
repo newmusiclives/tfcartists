@@ -4,6 +4,8 @@ import { logger } from "@/lib/logger";
 import { auth } from "@/lib/auth/config";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/scouts/discover-artist
  * Submit a new artist discovery

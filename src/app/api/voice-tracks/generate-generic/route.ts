@@ -11,6 +11,7 @@ import {
   saveAudioFile,
 } from "@/lib/radio/voice-track-tts";
 import { logger } from "@/lib/logger";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +56,9 @@ function getTimeOfDayFromHour(startHour: number): string {
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimited = await withRateLimit(request, "ai");
+    if (rateLimited) return rateLimited;
+
     const body = await request.json();
     const { stationId, djId, count = 12 } = body;
 

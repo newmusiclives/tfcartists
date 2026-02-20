@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
 import type { AssignTierRequest } from "@/types/cassidy";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/cassidy/tiers/assign
  *

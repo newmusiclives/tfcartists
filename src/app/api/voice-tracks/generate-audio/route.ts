@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleApiError } from "@/lib/api/errors";
 import { generateVoiceTrackAudio } from "@/lib/radio/voice-track-tts";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimited = await withRateLimit(request, "ai");
+    if (rateLimited) return rateLimited;
+
     const body = await request.json();
     const { hourPlaylistId } = body;
 

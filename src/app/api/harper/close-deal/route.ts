@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
 import { logger } from "@/lib/logger";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/harper/close-deal
  * Close a sponsorship deal

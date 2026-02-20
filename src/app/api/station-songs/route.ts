@@ -4,6 +4,8 @@ import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
 import { requireRole } from "@/lib/api/auth";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;

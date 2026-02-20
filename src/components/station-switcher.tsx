@@ -53,6 +53,9 @@ export function StationSwitcher() {
       <button
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(!open); }}
         className="flex items-center space-x-2 font-bold text-amber-700 hover:text-amber-800 transition-colors"
+        aria-label="Select radio station"
+        aria-expanded={open}
+        aria-haspopup="listbox"
       >
         <Radio className="w-6 h-6 flex-shrink-0" />
         {/* Show call sign on small screens, full name on lg+ */}
@@ -73,7 +76,7 @@ export function StationSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border py-1 z-50">
+        <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border py-1 z-50" role="listbox" aria-label="Select radio station">
           <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b">
             Switch Station
           </div>
@@ -82,6 +85,8 @@ export function StationSwitcher() {
             return (
               <button
                 key={station.id}
+                role="option"
+                aria-selected={isSelected}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();

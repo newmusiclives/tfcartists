@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { distributeRevenuePool, calculateRevenuePool, getCurrentPeriod } from "@/lib/radio/airplay-system";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { requireAuth } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/airplay/pool?period=2024-12
@@ -9,6 +13,9 @@ import { logger } from "@/lib/logger";
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const searchParams = request.nextUrl.searchParams;
     const period = searchParams.get("period") || getCurrentPeriod();
 
@@ -38,6 +45,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const { period, totalAdRevenue } = body;
 

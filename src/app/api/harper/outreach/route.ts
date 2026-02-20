@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/harper/outreach
  * Send initial outreach message to a sponsor

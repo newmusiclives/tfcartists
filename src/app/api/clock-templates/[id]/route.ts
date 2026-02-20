@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireAuth } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const { id } = await params;
     const template = await prisma.clockTemplate.findUnique({
       where: { id },
@@ -24,6 +28,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const { id } = await params;
     const body = await request.json();
     const template = await prisma.clockTemplate.update({ where: { id }, data: body });
@@ -35,6 +42,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const { id } = await params;
     await prisma.clockTemplate.delete({ where: { id } });
     return NextResponse.json({ success: true });

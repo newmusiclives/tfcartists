@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
 import * as path from "path";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -104,6 +105,9 @@ async function generateWithGemini(
 
 export async function POST(request: NextRequest) {
   try {
+    const rateLimited = await withRateLimit(request, "ai");
+    if (rateLimited) return rateLimited;
+
     const body = await request.json();
     const { stationId } = body;
 

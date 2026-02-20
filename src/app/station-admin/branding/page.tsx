@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import { SharedNav } from "@/components/shared-nav";
 import {
   Paintbrush,
@@ -359,13 +360,13 @@ export default function StationBrandingPage() {
                     placeholder="https://..."
                   />
                   {station.logoUrl && (
-                    <img
+                    <Image
                       src={station.logoUrl}
                       alt="Logo"
+                      width={32}
+                      height={32}
                       className="w-8 h-8 rounded object-cover border"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = "none";
-                      }}
+                      unoptimized
                     />
                   )}
                 </div>

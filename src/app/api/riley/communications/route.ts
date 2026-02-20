@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+
+export const dynamic = "force-dynamic";
 
 // In production, these would come from database
 let communications = [
@@ -20,6 +24,9 @@ let communications = [
 // GET /api/riley/communications - Get all communications
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const leadId = searchParams.get("leadId");
 
@@ -49,6 +56,9 @@ export async function GET(request: NextRequest) {
 // POST /api/riley/communications - Log new communication
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const body = await request.json();
 
     // Validate required fields
@@ -92,6 +102,9 @@ export async function POST(request: NextRequest) {
 // PUT /api/riley/communications - Update communication status
 export async function PUT(request: NextRequest) {
   try {
+    const session = await requireRole("riley");
+    if (!session) return unauthorized();
+
     const body = await request.json();
 
     if (!body.id) {

@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
 import type { CreateSubmissionRequest, SubmissionListItem } from "@/types/cassidy";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/cassidy/submissions
  *

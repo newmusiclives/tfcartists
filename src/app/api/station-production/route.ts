@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireAuth } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +50,9 @@ type ProductionField = keyof typeof PRODUCTION_FIELDS;
 
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const stationId = request.nextUrl.searchParams.get("stationId");
     if (!stationId) {
       return NextResponse.json({ error: "stationId required" }, { status: 400 });
@@ -71,6 +75,9 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const { stationId, ...updates } = body;
 

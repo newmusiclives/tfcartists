@@ -122,7 +122,7 @@ const validateEnv = () => {
       console.warn("⚠️  Some features may not work without these variables.");
     }
 
-    console.log("✅ Production environment validation passed");
+    // Production environment validation passed
   }
 
   return env;

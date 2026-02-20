@@ -4,6 +4,8 @@ import { logger } from "@/lib/logger";
 import { unauthorized } from "@/lib/api/errors";
 import { requireAuth } from "@/lib/api/auth";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/airplay/earnings?artistId=xxx&period=2024-12
  * Get artist's radio earnings for a period

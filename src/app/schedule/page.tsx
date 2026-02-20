@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Radio, Clock, Calendar } from "lucide-react";
 import { StationName } from "@/components/station-name";
+
+export const metadata: Metadata = {
+  title: "Schedule | TrueFans RADIO",
+  description: "View the full 24/7 programming schedule for North Country Radio. Weekday and weekend DJ lineups, special programming, and show times.",
+};
 
 export default function SchedulePage() {
   return (

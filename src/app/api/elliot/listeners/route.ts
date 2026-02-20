@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
+import { requireRole } from "@/lib/api/auth";
+
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/elliot/listeners
@@ -8,6 +11,9 @@ import { handleApiError } from "@/lib/api/errors";
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireRole("elliot");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
 
     // Filtering
@@ -101,6 +107,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("elliot");
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const { name, email, phone, discoverySource, referringArtistId } = body;
 

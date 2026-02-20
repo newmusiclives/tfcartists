@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth/config";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { logger } from "@/lib/logger";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/airplay/upgrade
  * Upgrade an artist's airplay tier

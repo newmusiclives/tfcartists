@@ -1,19 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError } from "@/lib/api/errors";
+import { handleApiError, unauthorized, validationError } from "@/lib/api/errors";
 import { xpToNextLevel, checkBadges } from "@/lib/gamification/xp-engine";
+import { requireAuth } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
 // GET: Get gamification profile for a user
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
     const userType = searchParams.get("userType") || "listener";
 
     if (!userId) {
-      return NextResponse.json({ error: "userId is required" }, { status: 400 });
+      return validationError("userId is required", [{ field: "userId", message: "userId query parameter is required" }]);
+    }
+    const validUserTypes = ["listener", "artist", "sponsor", "scout"];
+    if (!validUserTypes.includes(userType)) {
+      return validationError("Invalid userType", [{ field: "userType", message: `userType must be one of: ${validUserTypes.join(", ")}` }]);
     }
 
     if (userType === "listener") {

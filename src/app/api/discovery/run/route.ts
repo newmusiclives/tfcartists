@@ -3,6 +3,8 @@ import { discoveryEngine } from "@/lib/discovery/discovery-engine";
 import { auth } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/discovery/run
  * Manually trigger a discovery cycle

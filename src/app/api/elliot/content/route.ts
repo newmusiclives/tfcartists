@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { elliot } from "@/lib/ai/elliot-agent";
 import { logger } from "@/lib/logger";
-import { auth } from "@/lib/auth/config";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+
+export const dynamic = "force-dynamic";
 
 /**
  * POST /api/elliot/content
@@ -9,13 +12,8 @@ import { auth } from "@/lib/auth/config";
  */
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    if (!["elliot", "admin"].includes(session.user.role || "")) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const session = await requireRole("elliot");
+    if (!session) return unauthorized();
 
     const body = await req.json();
     const { type, category, artistId, artistName, theme } = body;
@@ -62,10 +60,8 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const session = await requireRole("elliot");
+    if (!session) return unauthorized();
 
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status") || "draft";

@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
+
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/harper/communications
@@ -8,6 +12,9 @@ import { logger } from "@/lib/logger";
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const sponsorId = searchParams.get("sponsorId");
 

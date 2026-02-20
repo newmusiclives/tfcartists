@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireAdmin, pickFields } from "@/lib/api/auth";
 
+export const dynamic = "force-dynamic";
+
 const ALLOWED_FIELDS = [
   "name", "callSign", "tagline", "description", "genre", "formatType",
   "musicEra", "primaryColor", "secondaryColor", "logoUrl", "streamUrl",

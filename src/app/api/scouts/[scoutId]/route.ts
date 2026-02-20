@@ -4,6 +4,8 @@ import { getScoutLifetimeEarnings } from "@/lib/scout/monthly-payout";
 import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/scouts/[scoutId]
  * Get scout profile with stats

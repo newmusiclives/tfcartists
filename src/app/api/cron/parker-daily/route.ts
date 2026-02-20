@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Parker Daily Station Management Cron Job
  * Runs every day at 4:10 AM (before first live shift at 6 AM)

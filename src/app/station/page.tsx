@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Radio, Music, Users, DollarSign, Heart, TrendingUp, Clock, MapPin } from "lucide-react";
 import { StationName } from "@/components/station-name";
+
+export const metadata: Metadata = {
+  title: "Station | TrueFans RADIO",
+  description: "Explore North Country Radio, the flagship station of the TrueFans RADIO Network. 24/7 Americana, Country, and Singer-Songwriter programming.",
+};
 
 export default function StationPage() {
   return (

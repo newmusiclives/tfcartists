@@ -7,6 +7,7 @@ import {
   saveAudioFile,
 } from "@/lib/radio/voice-track-tts";
 import OpenAI from "openai";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -20,10 +21,13 @@ const voiceMap: Record<string, string> = {
 const VOICE_GAIN = 1.8;
 
 export async function POST(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const rateLimited = await withRateLimit(request, "ai");
+    if (rateLimited) return rateLimited;
+
     const { id } = await params;
 
     const ad = await prisma.sponsorAd.findUnique({

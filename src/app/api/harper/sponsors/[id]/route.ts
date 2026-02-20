@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError, notFound } from "@/lib/api/errors";
+import { handleApiError, notFound, unauthorized } from "@/lib/api/errors";
+import { requireRole } from "@/lib/api/auth";
+
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/harper/sponsors/[id]
@@ -12,6 +15,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const { id } = await params;
 
     const sponsor = await prisma.sponsor.findUnique({
@@ -55,6 +61,9 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const { id } = await params;
     const body = await request.json();
 

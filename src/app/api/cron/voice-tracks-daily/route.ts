@@ -7,6 +7,8 @@ import { generateVoiceTrackScripts } from "@/lib/radio/voice-track-generator";
 import { generateVoiceTrackAudio } from "@/lib/radio/voice-track-tts";
 import { fillTemplate, djFirstName, pick, type SongData } from "@/lib/radio/template-utils";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Voice Tracks Daily Cron
  *

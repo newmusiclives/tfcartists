@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Harper Daily Automation Cron Job
  * Runs every day at 4:40 AM

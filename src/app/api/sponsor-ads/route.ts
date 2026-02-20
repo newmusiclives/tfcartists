@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const stationId = request.nextUrl.searchParams.get("stationId");

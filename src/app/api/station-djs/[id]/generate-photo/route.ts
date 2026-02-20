@@ -4,6 +4,7 @@ import { handleApiError } from "@/lib/api/errors";
 import OpenAI from "openai";
 import * as fs from "fs";
 import * as path from "path";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const rateLimited = await withRateLimit(request, "ai");
+    if (rateLimited) return rateLimited;
+
     const { id } = await params;
 
     const apiKey = process.env.OPENAI_API_KEY;

@@ -4,6 +4,8 @@ import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { withValidation, handleArtistMessageSchema } from "@/lib/validation/schemas";
 
+export const dynamic = "force-dynamic";
+
 /**
  * POST /api/riley/message
  * Handle incoming messages from artists
