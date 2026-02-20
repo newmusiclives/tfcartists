@@ -141,16 +141,13 @@ export async function GET(request: NextRequest) {
     }
 
     // --- Resolve show transitions for this hour ---
-    const dayOfWeek = airDate.getDay(); // 0=Sun, 1=Mon...
-    const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
-
     type TransitionEntry = { id: string; type: string; name: string; audioFilePath: string | null; durationSeconds: number; handoffPart: number | null };
 
     let showIntro: TransitionEntry | null = null;
     let showOutro: TransitionEntry | null = null;
     const handoffParts: TransitionEntry[] = [];
 
-    if (isWeekday && DJ_SHIFT_STARTS[hourOfDay]) {
+    if (DJ_SHIFT_STARTS[hourOfDay]) {
       // This is the first hour of a DJ shift — look for show_intro
       const intro = await prisma.showTransition.findFirst({
         where: {
@@ -199,7 +196,7 @@ export async function GET(request: NextRequest) {
 
     // Check if this is the last hour of a shift (hour before a shift start)
     const nextHour = hourOfDay + 1;
-    if (isWeekday && DJ_SHIFT_STARTS[nextHour]) {
+    if (DJ_SHIFT_STARTS[nextHour]) {
       const outro = await prisma.showTransition.findFirst({
         where: {
           stationId,

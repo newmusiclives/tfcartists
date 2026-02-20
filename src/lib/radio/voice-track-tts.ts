@@ -5,6 +5,7 @@
 
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
@@ -78,6 +79,22 @@ export async function generateWithOpenAI(text: string, voice: string): Promise<{
   return { buffer: Buffer.from(await response.arrayBuffer()), ext: "mp3" };
 }
 
+/** Generate OpenAI TTS as raw PCM (24kHz 16-bit mono) for audio mixing */
+export async function generatePcmWithOpenAI(text: string, voice: string): Promise<Buffer> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) throw new Error("OPENAI_API_KEY not configured");
+
+  const openai = new OpenAI({ apiKey });
+  const response = await openai.audio.speech.create({
+    model: "tts-1-hd",
+    voice: voice as "alloy" | "ash" | "ballad" | "coral" | "echo" | "fable" | "nova" | "onyx" | "sage" | "shimmer",
+    input: text,
+    response_format: "pcm",
+  });
+
+  return Buffer.from(await response.arrayBuffer());
+}
+
 export async function generateWithGemini(text: string, voice: string): Promise<{ buffer: Buffer; ext: string }> {
   const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) throw new Error("GOOGLE_API_KEY not configured");
@@ -119,7 +136,7 @@ interface GenerateAudioResult {
 
 /**
  * Generate TTS audio for all voice tracks in an HourPlaylist that have
- * script_ready status.
+ * script_ready status. Optionally layers a music bed underneath the voice.
  */
 export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<GenerateAudioResult> {
   const voiceTracks = await prisma.voiceTrack.findMany({
@@ -138,11 +155,24 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
   const djId = voiceTracks[0].djId;
   const dj = await prisma.dJ.findUnique({
     where: { id: djId },
-    select: { ttsVoice: true, ttsProvider: true },
+    select: { ttsVoice: true, ttsProvider: true, stationId: true },
   });
 
   const voice = dj?.ttsVoice || "alloy";
   const provider = dj?.ttsProvider || "openai";
+
+  // Try to find an active music bed for voice tracks (prefer "soft" category)
+  let musicBedPath: string | null = null;
+  if (dj?.stationId) {
+    const bed = await prisma.musicBed.findFirst({
+      where: { stationId: dj.stationId, isActive: true, category: "soft" },
+    }) || await prisma.musicBed.findFirst({
+      where: { stationId: dj.stationId, isActive: true, category: "general" },
+    });
+    if (bed?.filePath) {
+      musicBedPath = bed.filePath;
+    }
+  }
 
   let generated = 0;
   const errors: string[] = [];
@@ -151,32 +181,72 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
     try {
       if (!vt.scriptText) continue;
 
-      let buffer: Buffer;
-      let ext: string;
+      // If we have a music bed, generate as PCM so we can mix
+      if (musicBedPath) {
+        let voicePcm: Buffer;
 
-      if (provider === "gemini") {
-        ({ buffer, ext } = await generateWithGemini(vt.scriptText, voice));
+        if (provider === "gemini") {
+          // Gemini returns WAV containing PCM — extract the PCM
+          const { buffer } = await generateWithGemini(vt.scriptText, voice);
+          // Skip the 44-byte WAV header to get raw PCM
+          voicePcm = buffer.subarray(44);
+        } else {
+          voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
+        }
+
+        // Boost voice slightly, then mix with bed
+        const boostedPcm = amplifyPcm(voicePcm, 1.5);
+        const mixedPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+          voiceGain: 1.0,
+          bedGain: 0.15, // subtle bed for voice tracks
+          fadeInMs: 300,
+          fadeOutMs: 800,
+        });
+
+        const wavBuffer = pcmToWav(mixedPcm);
+        const filename = `vt-${vt.id}.wav`;
+        const audioFilePath = saveAudioFile(wavBuffer, "voice-tracks", filename);
+
+        const audioDuration = Math.round((mixedPcm.length / 48000) * 10) / 10;
+
+        await prisma.voiceTrack.update({
+          where: { id: vt.id },
+          data: {
+            audioFilePath,
+            audioDuration,
+            ttsVoice: voice,
+            ttsProvider: provider,
+            status: "audio_ready",
+          },
+        });
       } else {
-        ({ buffer, ext } = await generateWithOpenAI(vt.scriptText, voice));
+        // No music bed — generate as before
+        let buffer: Buffer;
+        let ext: string;
+
+        if (provider === "gemini") {
+          ({ buffer, ext } = await generateWithGemini(vt.scriptText, voice));
+        } else {
+          ({ buffer, ext } = await generateWithOpenAI(vt.scriptText, voice));
+        }
+
+        const filename = `vt-${vt.id}.${ext}`;
+        const audioFilePath = saveAudioFile(buffer, "voice-tracks", filename);
+
+        const wordCount = vt.scriptText.split(/\s+/).length;
+        const audioDuration = Math.round((wordCount / 150) * 60 * 10) / 10;
+
+        await prisma.voiceTrack.update({
+          where: { id: vt.id },
+          data: {
+            audioFilePath,
+            audioDuration,
+            ttsVoice: voice,
+            ttsProvider: provider,
+            status: "audio_ready",
+          },
+        });
       }
-
-      const filename = `vt-${vt.id}.${ext}`;
-      const audioFilePath = saveAudioFile(buffer, "voice-tracks", filename);
-
-      // Estimate duration (~150 words per minute for spoken audio)
-      const wordCount = vt.scriptText.split(/\s+/).length;
-      const audioDuration = Math.round((wordCount / 150) * 60 * 10) / 10;
-
-      await prisma.voiceTrack.update({
-        where: { id: vt.id },
-        data: {
-          audioFilePath,
-          audioDuration,
-          ttsVoice: voice,
-          ttsProvider: provider,
-          status: "audio_ready",
-        },
-      });
 
       generated++;
     } catch (err) {
