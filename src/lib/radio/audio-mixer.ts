@@ -37,19 +37,24 @@ function convertToWavViaFfmpeg(inputBuffer: Buffer): Buffer | null {
     const outputPath = path.join(tmpDir, `output-${Date.now()}.wav`);
 
     fs.writeFileSync(inputPath, inputBuffer);
-    execSync(
-      `ffmpeg -y -i "${inputPath}" -ar 24000 -ac 1 -sample_fmt s16 "${outputPath}" 2>/dev/null`,
+    logger.info("ffmpeg: wrote temp input", { path: inputPath, size: inputBuffer.length });
+
+    const result = execSync(
+      `ffmpeg -y -i "${inputPath}" -ar 24000 -ac 1 -sample_fmt s16 "${outputPath}" 2>&1`,
       { timeout: 10000 }
     );
+    logger.info("ffmpeg: command completed", { output: result.toString().slice(-200) });
 
     const wavBuffer = fs.readFileSync(outputPath);
+    logger.info("ffmpeg: read WAV output", { size: wavBuffer.length });
 
     // Clean up temp files
     try { fs.unlinkSync(inputPath); } catch { /* ignore */ }
     try { fs.unlinkSync(outputPath); } catch { /* ignore */ }
 
     return wavBuffer;
-  } catch {
+  } catch (err) {
+    logger.error("ffmpeg conversion failed", { error: err instanceof Error ? err.message : String(err) });
     return null;
   }
 }
@@ -241,6 +246,7 @@ export function mixVoiceWithMusicBed(
         return voicePcm;
       }
       fileBuffer = Buffer.from(base64Match[1], "base64");
+      logger.info("Music bed: decoded data URI", { size: fileBuffer.length, header: fileBuffer.toString("ascii", 0, 4) });
     } else {
       // File path — resolve to absolute
       let resolvedPath = musicBedFilePath;
@@ -260,8 +266,10 @@ export function mixVoiceWithMusicBed(
     const header = fileBuffer.toString("ascii", 0, 4);
     if (header !== "RIFF") {
       // Not WAV — try to convert MP3 to WAV via ffmpeg
+      logger.info("Music bed: not WAV, attempting ffmpeg conversion", { headerBytes: fileBuffer.toString("hex", 0, 4) });
       const converted = convertToWavViaFfmpeg(fileBuffer);
       if (converted) {
+        logger.info("Music bed: ffmpeg conversion succeeded", { wavSize: converted.length });
         fileBuffer = converted;
       } else {
         logger.warn("Music bed is not WAV and ffmpeg conversion failed, returning voice-only", {

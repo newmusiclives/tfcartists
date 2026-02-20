@@ -23,8 +23,8 @@ interface ImagingMetadata {
   };
 }
 
-// Voice gain for imaging — slightly lower than ads
-const VOICE_GAIN = 1.5;
+// Voice gain for imaging — boost voice so it sits clearly above the bed
+const VOICE_GAIN = 2.5;
 
 // Map music bed description keywords to MusicBed categories
 function parseMusicBedCategory(description: string): string {
@@ -127,17 +127,20 @@ export async function POST(request: NextRequest) {
             let finalPcm = boostedPcm;
             let hasMusicBed = false;
 
-            if (script.musicBed && musicBeds.length > 0) {
-              const category = parseMusicBedCategory(script.musicBed);
-              // Try exact category match, then fall back to "general"
+            if (musicBeds.length > 0) {
+              const category = script.musicBed ? parseMusicBedCategory(script.musicBed) : "general";
+              // Prefer uploaded beds (data URIs = real music), then category match, then any
+              const uploadedBeds = musicBeds.filter((b) => b.filePath?.startsWith("data:"));
               const bed =
+                uploadedBeds.find((b) => b.category === category) ||
+                uploadedBeds[Math.floor(Math.random() * uploadedBeds.length)] ||
                 musicBeds.find((b) => b.category === category) ||
                 musicBeds.find((b) => b.category === "general");
 
               if (bed?.filePath) {
                 finalPcm = mixVoiceWithMusicBed(boostedPcm, bed.filePath, {
                   voiceGain: 1.0, // already boosted
-                  bedGain: 0.25,
+                  bedGain: 0.6,
                 });
                 hasMusicBed = true;
               }

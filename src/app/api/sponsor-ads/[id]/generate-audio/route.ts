@@ -18,8 +18,8 @@ const voiceMap: Record<string, string> = {
   female: "nova",
 };
 
-// Voice gain — boost TTS voice so it sits above the music bed
-const VOICE_GAIN = 1.8;
+// Voice gain — boost TTS voice so it sits clearly above the music bed
+const VOICE_GAIN = 2.5;
 
 export async function POST(
   request: NextRequest,
@@ -55,13 +55,17 @@ export async function POST(
       );
     }
 
-    // Pick voice from station's imaging voice settings
-    let openaiVoice = "onyx";
-    const imagingVoice = await prisma.stationImagingVoice.findFirst({
-      where: { stationId: ad.stationId, isActive: true },
-    });
-    if (imagingVoice) {
-      openaiVoice = voiceMap[imagingVoice.voiceType] || "onyx";
+    // Allow per-request voice override, otherwise pick from station imaging settings
+    const body = await request.json().catch(() => ({}));
+    let openaiVoice = (body as { voice?: string }).voice || "";
+    if (!openaiVoice) {
+      openaiVoice = "onyx";
+      const imagingVoice = await prisma.stationImagingVoice.findFirst({
+        where: { stationId: ad.stationId, isActive: true },
+      });
+      if (imagingVoice) {
+        openaiVoice = voiceMap[imagingVoice.voiceType] || "onyx";
+      }
     }
 
     // Generate TTS as raw PCM so we can boost the voice volume
@@ -81,7 +85,7 @@ export async function POST(
     if (ad.musicBed?.filePath) {
       finalPcm = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
         voiceGain: 1.0, // voice already boosted by VOICE_GAIN
-        bedGain: 0.25,
+        bedGain: 0.6,
       });
     }
 
