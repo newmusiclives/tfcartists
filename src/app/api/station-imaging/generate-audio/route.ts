@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
+import { amplifyPcm, pcmToWav, saveAudioFile } from "@/lib/radio/voice-track-tts";
+import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import OpenAI from "openai";
-import * as fs from "fs";
-import * as path from "path";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
@@ -23,22 +23,17 @@ interface ImagingMetadata {
   };
 }
 
-function saveAudioFile(buffer: Buffer, filename: string): string {
-  try {
-    const outputDir = path.join(
-      process.cwd(),
-      "public",
-      "audio",
-      "imaging"
-    );
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
-    fs.writeFileSync(path.join(outputDir, filename), buffer);
-    return `/audio/imaging/${filename}`;
-  } catch {
-    return `data:audio/mpeg;base64,${buffer.toString("base64")}`;
-  }
+// Voice gain for imaging — slightly lower than ads
+const VOICE_GAIN = 1.5;
+
+// Map music bed description keywords to MusicBed categories
+function parseMusicBedCategory(description: string): string {
+  const lower = description.toLowerCase();
+  if (lower.includes("soft") || lower.includes("gentle") || lower.includes("mellow")) return "soft";
+  if (lower.includes("upbeat") || lower.includes("energetic") || lower.includes("bright")) return "upbeat";
+  if (lower.includes("country") || lower.includes("americana") || lower.includes("twang")) return "country";
+  if (lower.includes("corporate") || lower.includes("professional")) return "corporate";
+  return "general";
 }
 
 export async function POST(request: NextRequest) {
@@ -77,6 +72,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Pre-load active music beds for this station (for matching by category)
+    const musicBeds = await prisma.musicBed.findMany({
+      where: { stationId, isActive: true },
+    });
+
     // Which script types to generate (default: all non-commercial)
     const scriptTypes = types || ["station_id", "sweeper", "promo"];
 
@@ -91,6 +91,7 @@ export async function POST(request: NextRequest) {
       label: string;
       success: boolean;
       audioFilePath?: string;
+      hasMusicBed?: boolean;
       error?: string;
     }> = [];
 
@@ -111,19 +112,45 @@ export async function POST(request: NextRequest) {
 
         for (const script of scripts) {
           try {
+            // Generate TTS as raw PCM for mixing
             const response = await openai.audio.speech.create({
               model: "tts-1-hd",
               voice: openaiVoice,
               input: script.text,
+              response_format: "pcm",
             });
 
-            const buffer = Buffer.from(await response.arrayBuffer());
+            const rawPcm = Buffer.from(await response.arrayBuffer());
+            const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
+
+            // Try to find a matching music bed by category
+            let finalPcm = boostedPcm;
+            let hasMusicBed = false;
+
+            if (script.musicBed && musicBeds.length > 0) {
+              const category = parseMusicBedCategory(script.musicBed);
+              // Try exact category match, then fall back to "general"
+              const bed =
+                musicBeds.find((b) => b.category === category) ||
+                musicBeds.find((b) => b.category === "general");
+
+              if (bed?.filePath) {
+                finalPcm = mixVoiceWithMusicBed(boostedPcm, bed.filePath, {
+                  voiceGain: 1.0, // already boosted
+                  bedGain: 0.25,
+                });
+                hasMusicBed = true;
+              }
+            }
+
+            const wavBuffer = pcmToWav(finalPcm);
+
             const safeLabel = script.label
               .toLowerCase()
               .replace(/[^a-z0-9]+/g, "-")
               .replace(/^-|-$/g, "");
-            const filename = `${voiceSlug}-${scriptType}-${safeLabel}.mp3`;
-            const audioFilePath = saveAudioFile(buffer, filename);
+            const filename = `${voiceSlug}-${scriptType}-${safeLabel}.wav`;
+            const audioFilePath = saveAudioFile(wavBuffer, "imaging", filename);
 
             results.push({
               voiceName: voice.displayName,
@@ -131,6 +158,7 @@ export async function POST(request: NextRequest) {
               label: script.label,
               success: true,
               audioFilePath,
+              hasMusicBed,
             });
           } catch (err) {
             results.push({

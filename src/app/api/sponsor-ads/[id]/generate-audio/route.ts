@@ -6,6 +6,7 @@ import {
   pcmToWav,
   saveAudioFile,
 } from "@/lib/radio/voice-track-tts";
+import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import OpenAI from "openai";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 
@@ -74,7 +75,17 @@ export async function POST(
 
     const rawPcm = Buffer.from(await response.arrayBuffer());
     const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
-    const wavBuffer = pcmToWav(boostedPcm);
+
+    // Mix with music bed if the ad has one assigned
+    let finalPcm = boostedPcm;
+    if (ad.musicBed?.filePath) {
+      finalPcm = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
+        voiceGain: 1.0, // voice already boosted by VOICE_GAIN
+        bedGain: 0.25,
+      });
+    }
+
+    const wavBuffer = pcmToWav(finalPcm);
 
     const safeName = ad.adTitle
       .toLowerCase()
@@ -84,7 +95,7 @@ export async function POST(
     const audioFilePath = saveAudioFile(wavBuffer, "commercials", filename);
 
     // Estimate duration from PCM length (24kHz, 16-bit mono = 48000 bytes/sec)
-    const durationSeconds = Math.round((rawPcm.length / 48000) * 10) / 10;
+    const durationSeconds = Math.round((finalPcm.length / 48000) * 10) / 10;
 
     const updatedAd = await prisma.sponsorAd.update({
       where: { id },
