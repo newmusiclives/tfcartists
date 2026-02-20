@@ -7,6 +7,7 @@
 
 import * as fs from "fs";
 import * as path from "path";
+import { execSync } from "child_process";
 import { logger } from "@/lib/logger";
 
 interface WavData {
@@ -21,6 +22,36 @@ interface MixOptions {
   bedGain?: number;    // default 0.25
   fadeInMs?: number;    // default 500
   fadeOutMs?: number;   // default 1500
+}
+
+/**
+ * Convert an audio buffer (MP3, etc.) to WAV via ffmpeg.
+ * Returns the WAV buffer or null if ffmpeg is unavailable.
+ */
+function convertToWavViaFfmpeg(inputBuffer: Buffer): Buffer | null {
+  try {
+    const tmpDir = path.join(process.cwd(), ".tmp-audio");
+    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+
+    const inputPath = path.join(tmpDir, `input-${Date.now()}.mp3`);
+    const outputPath = path.join(tmpDir, `output-${Date.now()}.wav`);
+
+    fs.writeFileSync(inputPath, inputBuffer);
+    execSync(
+      `ffmpeg -y -i "${inputPath}" -ar 24000 -ac 1 -sample_fmt s16 "${outputPath}" 2>/dev/null`,
+      { timeout: 10000 }
+    );
+
+    const wavBuffer = fs.readFileSync(outputPath);
+
+    // Clean up temp files
+    try { fs.unlinkSync(inputPath); } catch { /* ignore */ }
+    try { fs.unlinkSync(outputPath); } catch { /* ignore */ }
+
+    return wavBuffer;
+  } catch {
+    return null;
+  }
 }
 
 /** Parse a WAV file buffer and extract raw PCM data + format info */
@@ -200,24 +231,44 @@ export function mixVoiceWithMusicBed(
   const TARGET_RATE = 24000;
 
   try {
-    // Resolve the file path — could be a public-relative path or absolute
-    let resolvedPath = musicBedFilePath;
-    if (musicBedFilePath.startsWith("/audio/")) {
-      resolvedPath = path.join(process.cwd(), "public", musicBedFilePath);
+    let fileBuffer: Buffer;
+
+    if (musicBedFilePath.startsWith("data:")) {
+      // Data URI (base64-encoded) — uploaded on serverless (Netlify)
+      const base64Match = musicBedFilePath.match(/^data:[^;]+;base64,(.+)$/);
+      if (!base64Match) {
+        logger.warn("Invalid music bed data URI, returning voice-only");
+        return voicePcm;
+      }
+      fileBuffer = Buffer.from(base64Match[1], "base64");
+    } else {
+      // File path — resolve to absolute
+      let resolvedPath = musicBedFilePath;
+      if (musicBedFilePath.startsWith("/audio/")) {
+        resolvedPath = path.join(process.cwd(), "public", musicBedFilePath);
+      }
+
+      if (!fs.existsSync(resolvedPath)) {
+        logger.warn("Music bed file not found, returning voice-only", { path: musicBedFilePath });
+        return voicePcm;
+      }
+
+      fileBuffer = fs.readFileSync(resolvedPath);
     }
 
-    if (!fs.existsSync(resolvedPath)) {
-      logger.warn("Music bed file not found, returning voice-only", { path: musicBedFilePath });
-      return voicePcm;
-    }
-
-    const fileBuffer = fs.readFileSync(resolvedPath);
-
-    // Only WAV files are supported for mixing
+    // Check if the file is WAV format
     const header = fileBuffer.toString("ascii", 0, 4);
     if (header !== "RIFF") {
-      logger.warn("Music bed is not WAV format, returning voice-only", { path: musicBedFilePath });
-      return voicePcm;
+      // Not WAV — try to convert MP3 to WAV via ffmpeg
+      const converted = convertToWavViaFfmpeg(fileBuffer);
+      if (converted) {
+        fileBuffer = converted;
+      } else {
+        logger.warn("Music bed is not WAV and ffmpeg conversion failed, returning voice-only", {
+          path: musicBedFilePath.startsWith("data:") ? "data-uri" : musicBedFilePath,
+        });
+        return voicePcm;
+      }
     }
 
     const wav = parseWav(fileBuffer);
