@@ -25,7 +25,7 @@ interface ImagingMetadata {
 }
 
 // Voice gain for imaging — boost voice so it sits clearly above the bed
-const VOICE_GAIN = 2.5;
+const VOICE_GAIN = 3.2;
 
 // Map music bed description keywords to MusicBed categories
 function parseMusicBedCategory(description: string): string {
@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
               if (bed?.filePath) {
                 finalPcm = mixVoiceWithMusicBed(boostedPcm, bed.filePath, {
                   voiceGain: 1.0, // already boosted
-                  bedGain: 0.6,
+                  bedGain: 0.4,
                 });
                 hasMusicBed = true;
               }
