@@ -271,21 +271,31 @@ function buildUserPrompt(
 
   if (trackType === "intro" && nextSong) {
     return `Write a voice track where ${djFirstName} introduces the UPCOMING song that is ABOUT TO PLAY.
-UPCOMING SONG (about to play): "${nextSong.songTitle}" by ${nextSong.artistName}
+UPCOMING SONG (about to play NOW): "${nextSong.songTitle}" by ${nextSong.artistName}
 Time of day: ${timeOfDay}.
 ${rules}
-- CRITICAL: Only mention "${nextSong.songTitle}" — do NOT mention any other song`;
+- Use future/present phrasing: "Coming up..." / "Here's..." / "Now let's hear..."
+- CRITICAL: Only mention "${nextSong.songTitle}" — do NOT back-announce or mention any other song
+- CRITICAL: Do NOT use past tense like "that was" — this song has NOT played yet`;
   }
 
   if (trackType === "back_announce_intro" && prevSong && nextSong) {
-    return `Write a voice track where ${djFirstName} does two things in order:
-1. FIRST: A quick one-line nod to the song that JUST FINISHED: "${prevSong.songTitle}" by ${prevSong.artistName}
-2. THEN: Introduce the UPCOMING song that is ABOUT TO PLAY: "${nextSong.songTitle}" by ${nextSong.artistName}
+    return `Write a voice track where ${djFirstName} does two things in this exact order:
+
+STEP 1 — BACK-ANNOUNCE (past tense, already played, ONE short line only):
+Song: "${prevSong.songTitle}" by ${prevSong.artistName}
+Example phrasing: "That was..." / "You just heard..." / "Hope you enjoyed..."
+
+STEP 2 — FORWARD-INTRO (present/future tense, about to play, this is the MAIN FOCUS):
+Song: "${nextSong.songTitle}" by ${nextSong.artistName}
+Example phrasing: "Coming up next..." / "Now here's..." / "Let's get into..."
+
 Time of day: ${timeOfDay}.
 ${rules}
-- CRITICAL: "${prevSong.songTitle}" ALREADY PLAYED — do NOT introduce it as upcoming
-- CRITICAL: "${nextSong.songTitle}" is NEXT — introduce it as what's coming up
-- The main focus must be on the upcoming song "${nextSong.songTitle}"`;
+- CRITICAL: "${prevSong.songTitle}" is IN THE PAST — use past tense, do NOT say "coming up" or "next" for it
+- CRITICAL: "${nextSong.songTitle}" is IN THE FUTURE — use future/present tense, this is what's about to play
+- The back-announce of "${prevSong.songTitle}" must come FIRST and be BRIEF (one line)
+- The intro of "${nextSong.songTitle}" must come SECOND and be the main focus`;
   }
 
   if (trackType === "back_announce" && prevSong) {
