@@ -82,6 +82,7 @@ export async function POST(request: NextRequest) {
         additionalKnowledge: true,
         ttsVoice: true,
         ttsProvider: true,
+        voiceDescription: true,
         clockAssignments: {
           where: { stationId, isActive: true },
           select: { timeSlotStart: true },
@@ -136,7 +137,7 @@ export async function POST(request: NextRequest) {
         let ext: string;
 
         if (provider === "gemini") {
-          ({ buffer, ext } = await generateWithGemini(scriptText, voice));
+          ({ buffer, ext } = await generateWithGemini(scriptText, voice, dj.voiceDescription));
         } else {
           ({ buffer, ext } = await generateWithOpenAI(scriptText, voice));
         }

@@ -52,10 +52,11 @@ export async function POST(
 
     let voice = "alloy";
     let provider = "openai";
+    let voiceDesc: string | null = null;
     if (voiceDjId) {
       const dj = await prisma.dJ.findUnique({
         where: { id: voiceDjId },
-        select: { ttsVoice: true, ttsProvider: true },
+        select: { ttsVoice: true, ttsProvider: true, voiceDescription: true },
       });
       if (dj?.ttsVoice) {
         voice = dj.ttsVoice;
@@ -63,13 +64,14 @@ export async function POST(
       if (dj?.ttsProvider) {
         provider = dj.ttsProvider;
       }
+      voiceDesc = dj?.voiceDescription || null;
     }
 
     let buffer: Buffer;
     let ext: string;
 
     if (provider === "gemini") {
-      ({ buffer, ext } = await generateWithGemini(transition.scriptText, voice));
+      ({ buffer, ext } = await generateWithGemini(transition.scriptText, voice, voiceDesc));
     } else {
       ({ buffer, ext } = await generateWithOpenAI(transition.scriptText, voice));
     }

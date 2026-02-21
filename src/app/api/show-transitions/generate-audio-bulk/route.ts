@@ -73,9 +73,12 @@ async function generateWithOpenAI(
 async function generateWithGemini(
   ai: GoogleGenAI,
   text: string,
-  voice: string
+  voice: string,
+  voiceDirection?: string | null,
 ): Promise<{ buffer: Buffer; ext: string }> {
-  const prompt = `Speak in a warm West Midlands English accent from Birmingham, UK. Relaxed and friendly Brummie tone: "${text}"`;
+  const prompt = voiceDirection
+    ? `Voice direction: ${voiceDirection}\n\nSpeak this text: "${text}"`
+    : `"${text}"`;
 
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-preview-tts",
@@ -165,10 +168,11 @@ export async function POST(request: NextRequest) {
 
         let voice = "alloy";
         let provider = "openai";
+        let voiceDesc: string | null = null;
         if (voiceDjId) {
           const dj = await prisma.dJ.findUnique({
             where: { id: voiceDjId },
-            select: { ttsVoice: true, ttsProvider: true },
+            select: { ttsVoice: true, ttsProvider: true, voiceDescription: true },
           });
           if (dj?.ttsVoice) {
             voice = dj.ttsVoice;
@@ -176,6 +180,7 @@ export async function POST(request: NextRequest) {
           if (dj?.ttsProvider) {
             provider = dj.ttsProvider;
           }
+          voiceDesc = dj?.voiceDescription || null;
         }
 
         let buffer: Buffer;
@@ -187,7 +192,7 @@ export async function POST(request: NextRequest) {
             if (!apiKey) throw new Error("GOOGLE_API_KEY not configured");
             gemini = new GoogleGenAI({ apiKey });
           }
-          ({ buffer, ext } = await generateWithGemini(gemini, transition.scriptText!, voice));
+          ({ buffer, ext } = await generateWithGemini(gemini, transition.scriptText!, voice, voiceDesc));
         } else {
           if (!openai) {
             const apiKey = process.env.OPENAI_API_KEY;

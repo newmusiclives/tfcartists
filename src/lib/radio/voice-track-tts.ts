@@ -95,13 +95,16 @@ export async function generatePcmWithOpenAI(text: string, voice: string): Promis
   return Buffer.from(await response.arrayBuffer());
 }
 
-export async function generateWithGemini(text: string, voice: string): Promise<{ buffer: Buffer; ext: string }> {
+export async function generateWithGemini(text: string, voice: string, voiceDirection?: string | null): Promise<{ buffer: Buffer; ext: string }> {
   const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) throw new Error("GOOGLE_API_KEY not configured");
 
   const ai = new GoogleGenAI({ apiKey });
 
-  const prompt = `Speak in a warm West Midlands English accent from Birmingham, UK. Relaxed and friendly Brummie tone: "${text}"`;
+  const direction = voiceDirection
+    ? `Voice direction: ${voiceDirection}\n\nSpeak this text: "${text}"`
+    : `"${text}"`;
+  const prompt = direction;
 
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-preview-tts",
@@ -155,11 +158,12 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
   const djId = voiceTracks[0].djId;
   const dj = await prisma.dJ.findUnique({
     where: { id: djId },
-    select: { ttsVoice: true, ttsProvider: true, stationId: true },
+    select: { ttsVoice: true, ttsProvider: true, stationId: true, voiceDescription: true },
   });
 
   const voice = dj?.ttsVoice || "alloy";
   const provider = dj?.ttsProvider || "openai";
+  const voiceDirection = dj?.voiceDescription || null;
 
   // Try to find an active music bed for voice tracks (prefer "soft" category)
   let musicBedPath: string | null = null;
@@ -187,7 +191,7 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
 
         if (provider === "gemini") {
           // Gemini returns WAV containing PCM — extract the PCM
-          const { buffer } = await generateWithGemini(vt.scriptText, voice);
+          const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
           // Skip the 44-byte WAV header to get raw PCM
           voicePcm = buffer.subarray(44);
         } else {
@@ -225,7 +229,7 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
         let ext: string;
 
         if (provider === "gemini") {
-          ({ buffer, ext } = await generateWithGemini(vt.scriptText, voice));
+          ({ buffer, ext } = await generateWithGemini(vt.scriptText, voice, voiceDirection));
         } else {
           ({ buffer, ext } = await generateWithOpenAI(vt.scriptText, voice));
         }
@@ -304,10 +308,11 @@ export async function generateFeatureAudio(
   // Load DJ TTS config once
   const dj = await prisma.dJ.findUnique({
     where: { id: djId },
-    select: { ttsVoice: true, ttsProvider: true, stationId: true },
+    select: { ttsVoice: true, ttsProvider: true, stationId: true, voiceDescription: true },
   });
   const voice = dj?.ttsVoice || "alloy";
   const provider = dj?.ttsProvider || "openai";
+  const featureVoiceDirection = dj?.voiceDescription || null;
 
   // Try to find an active music bed (prefer "soft" → "general" fallback)
   let musicBedPath: string | null = null;
@@ -326,7 +331,7 @@ export async function generateFeatureAudio(
       if (musicBedPath) {
         let voicePcm: Buffer;
         if (provider === "gemini") {
-          const { buffer } = await generateWithGemini(fc.content, voice);
+          const { buffer } = await generateWithGemini(fc.content, voice, featureVoiceDirection);
           voicePcm = buffer.subarray(44);
         } else {
           voicePcm = await generatePcmWithOpenAI(fc.content, voice);
@@ -353,7 +358,7 @@ export async function generateFeatureAudio(
         let buffer: Buffer;
         let ext: string;
         if (provider === "gemini") {
-          ({ buffer, ext } = await generateWithGemini(fc.content, voice));
+          ({ buffer, ext } = await generateWithGemini(fc.content, voice, featureVoiceDirection));
         } else {
           ({ buffer, ext } = await generateWithOpenAI(fc.content, voice));
         }
