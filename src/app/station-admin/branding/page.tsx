@@ -156,15 +156,20 @@ export default function StationBrandingPage() {
     setSaving(true);
     try {
       const { id, ...fields } = station;
-      await fetch(`/api/stations/${id}`, {
+      const res = await fetch(`/api/stations/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(fields),
       });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert(`Save failed: ${err.error || res.statusText}`);
+        return;
+      }
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch {
-      // silent
+      alert("Save failed: network error");
     } finally {
       setSaving(false);
     }
@@ -182,6 +187,18 @@ export default function StationBrandingPage() {
       const data = await res.json();
       if (data.scripts) {
         setScripts(category, data.scripts);
+
+        // Auto-save to DB so scripts persist across page reloads
+        const meta = (station.metadata || {}) as Record<string, unknown>;
+        const existing = (meta.imagingScripts || {}) as Record<string, ImagingScript[]>;
+        const updatedMetadata = { ...meta, imagingScripts: { ...existing, [category]: data.scripts } };
+        await fetch(`/api/stations/${station.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ metadata: updatedMetadata }),
+        });
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
       }
     } catch {
       // silent

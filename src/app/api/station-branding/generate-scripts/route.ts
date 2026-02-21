@@ -54,15 +54,15 @@ Format: ${station.formatType || "americana"}`;
 
     case "sweeper":
       if (dj) {
-        instructions = `Write ${count} DJ-specific sweeper scripts (5-10 seconds spoken) for ${dj.name}.
-These are quick brand drops between songs, IN CHARACTER as ${dj.name}.
-
-DJ Personality:
-${dj.gptSystemPrompt || dj.vibe || "Warm, authentic radio personality"}
-Catch Phrases: ${dj.catchPhrases || "None specified"}
-${dj.additionalKnowledge ? `Additional Context: ${dj.additionalKnowledge}` : ""}
-
-Each sweeper should feel like ${dj.name} talking naturally between songs, using their voice and personality.`;
+        instructions = `Write ${count} sweeper scripts (5-10 seconds spoken) about ${dj.name}'s show on the station.
+IMPORTANT: These are read by a STATION IMAGING VOICE (an announcer), NOT by ${dj.name} themselves.
+- Speak ABOUT ${dj.name} in the third person (e.g., "You're listening to ${dj.name} on ${station.name}")
+- Do NOT write as if ${dj.name} is speaking — no first person ("I", "my show", etc.)
+- Quick, punchy brand drops that hype up ${dj.name}'s show
+- Reference what makes ${dj.name}'s show special:
+  ${dj.vibe ? `Vibe: ${dj.vibe}` : ""}
+  ${dj.onAirStyle ? `Style: ${dj.onAirStyle}` : ""}
+  ${dj.atmosphere ? `Atmosphere: ${dj.atmosphere}` : ""}`;
       } else {
         instructions = `Write ${count} general sweeper scripts (5-10 seconds spoken) for the station.
 These are quick brand drops between songs. No DJ personality — just the station brand.
@@ -72,16 +72,16 @@ Keep them punchy, warm, and varied in style.`;
 
     case "promo":
       if (dj) {
-        instructions = `Write ${count} show promo scripts (15-30 seconds spoken) for ${dj.name}'s show.
-
-DJ Profile:
-Show Format: ${dj.showFormat || "Live radio show"}
-On-Air Style: ${dj.onAirStyle || "Authentic and engaging"}
-Atmosphere: ${dj.atmosphere || "Warm and inviting"}
-${dj.catchPhrases ? `Catch Phrases: ${dj.catchPhrases}` : ""}
-${dj.additionalKnowledge ? `Additional Context: ${dj.additionalKnowledge}` : ""}
-
-Each promo should sell the experience of listening to ${dj.name}'s show, highlighting what makes it special.`;
+        instructions = `Write ${count} show promo scripts (15-30 seconds spoken) promoting ${dj.name}'s show.
+IMPORTANT: These are read by a STATION IMAGING VOICE (an announcer), NOT by ${dj.name} themselves.
+- Speak ABOUT ${dj.name} in the third person — sell the experience of tuning in
+- Do NOT write as if ${dj.name} is speaking — no first person ("I", "my", "me")
+- Highlight what makes ${dj.name}'s show a must-listen:
+  Show Format: ${dj.showFormat || "Live radio show"}
+  On-Air Style: ${dj.onAirStyle || "Authentic and engaging"}
+  Atmosphere: ${dj.atmosphere || "Warm and inviting"}
+  ${dj.additionalKnowledge ? `Additional Context: ${dj.additionalKnowledge}` : ""}
+- Example tone: "Catch ${dj.name} weekday mornings on ${station.name} — where the music finds you."`;
       } else {
         instructions = `Write ${count} general station promo scripts (15-30 seconds spoken).
 Highlight the station format, DJ lineup (weekday DJs: Hank Westwood 6-9am, Loretta Merrick 9am-12pm, Doc Holloway 12-3pm, Cody Rampart 3-6pm), and the listening experience.

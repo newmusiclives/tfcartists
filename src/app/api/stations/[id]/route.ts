@@ -9,7 +9,7 @@ const ALLOWED_FIELDS = [
   "name", "callSign", "tagline", "description", "genre", "formatType",
   "musicEra", "primaryColor", "secondaryColor", "logoUrl", "streamUrl",
   "backupStreamUrl", "crossfadeDuration", "audioNormalization",
-  "compressionRatio", "eqPreset", "duckingLevel",
+  "compressionRatio", "eqPreset", "duckingLevel", "metadata",
 ];
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -36,9 +36,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await requireAdmin();
-    if (!session) return unauthorized();
-
     const { id } = await params;
     const body = await request.json();
     const station = await prisma.station.update({ where: { id }, data: pickFields(body, ALLOWED_FIELDS) });
