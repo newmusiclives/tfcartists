@@ -68,6 +68,7 @@ export default function DJEditorDetailPage() {
   const [generatingBatch, setGeneratingBatch] = useState(false);
   const [playingTrackId, setPlayingTrackId] = useState<string | null>(null);
   const [audioRef] = useState<{ current: HTMLAudioElement | null }>({ current: null });
+  const [saveMessage, setSaveMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
     fetch(`/api/station-djs/${id}`)
@@ -137,6 +138,7 @@ export default function DJEditorDetailPage() {
   const save = async () => {
     if (!dj) return;
     setSaving(true);
+    setSaveMessage(null);
     try {
       const { id: _, ...data } = dj as any;
       delete data.shows;
@@ -148,13 +150,24 @@ export default function DJEditorDetailPage() {
       delete data.station;
       delete data.metadata;
       delete data.priority;
-      await fetch(`/api/station-djs/${id}`, {
+      const res = await fetch(`/api/station-djs/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          setSaveMessage({ type: "error", text: "Not authorized — sign in as admin to save changes." });
+        } else {
+          setSaveMessage({ type: "error", text: err.error || `Save failed (${res.status})` });
+        }
+        return;
+      }
+      setSaveMessage({ type: "success", text: "Saved!" });
+      setTimeout(() => setSaveMessage(null), 3000);
     } catch {
-      // handle error
+      setSaveMessage({ type: "error", text: "Network error — could not reach server." });
     } finally {
       setSaving(false);
     }
@@ -228,7 +241,12 @@ export default function DJEditorDetailPage() {
               {dj.tagline && <p className="text-gray-500 text-sm italic">{dj.tagline}</p>}
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
+            {saveMessage && (
+              <span className={`text-sm font-medium ${saveMessage.type === "success" ? "text-green-600" : "text-red-600"}`}>
+                {saveMessage.text}
+              </span>
+            )}
             <button onClick={save} disabled={saving} className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 flex items-center gap-2">
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Save

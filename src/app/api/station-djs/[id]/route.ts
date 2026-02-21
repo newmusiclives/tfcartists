@@ -6,9 +6,15 @@ import { requireRole, pickFields } from "@/lib/api/auth";
 export const dynamic = "force-dynamic";
 
 const ALLOWED_FIELDS = [
-  "name", "slug", "bio", "background", "catchPhrases", "gptSystemPrompt",
-  "additionalKnowledge", "gptTemperature", "ttsProvider", "ttsVoice",
-  "voiceProfileId", "photoUrl", "priority", "isActive",
+  "name", "slug", "fullName", "age", "hometown", "showFormat",
+  "bio", "background", "vibe", "tagline",
+  "voiceDescription", "personalityTraits", "musicalFocus",
+  "onAirStyle", "quirksAndHabits", "atmosphere", "philosophy",
+  "catchPhrases", "gptSystemPrompt", "additionalKnowledge", "gptTemperature",
+  "ttsProvider", "ttsVoice", "voiceProfileId",
+  "voiceStability", "voiceSimilarityBoost",
+  "photoUrl", "colorPrimary", "colorSecondary",
+  "priority", "isActive", "isWeekend",
 ];
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -32,9 +38,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await requireRole("admin");
-    if (!session) return unauthorized();
-
     const { id } = await params;
     const body = await request.json();
     const dj = await prisma.dJ.update({ where: { id }, data: pickFields(body, ALLOWED_FIELDS) });

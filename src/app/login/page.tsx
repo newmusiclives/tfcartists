@@ -28,7 +28,7 @@ function LoginForm() {
       });
 
       if (result?.error) {
-        setError("Invalid username or password");
+        setError(`Login failed: ${result.error} (status: ${result.status})`);
       } else if (result?.ok) {
         router.push(callbackUrl);
         router.refresh();

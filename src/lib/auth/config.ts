@@ -162,7 +162,8 @@ export const authConfig: NextAuthConfig = {
     strategy: "jwt",
     maxAge: 14 * 24 * 60 * 60, // 14 days
   },
-  secret: env.NEXTAUTH_SECRET,
+  trustHost: true,
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
