@@ -5,12 +5,9 @@ import { requireAuth } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
-// GET feature types + content stats
+// GET feature types + content stats (no auth — matches /api/stations pattern)
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const stationId = request.nextUrl.searchParams.get("stationId");
 
     // Feature types (always returned)

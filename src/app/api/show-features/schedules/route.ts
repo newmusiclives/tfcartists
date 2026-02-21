@@ -5,11 +5,9 @@ import { requireAuth } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
+// GET schedules (no auth — matches /api/stations pattern)
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const stationId = request.nextUrl.searchParams.get("stationId");
     if (!stationId) {
       return NextResponse.json({ error: "stationId required" }, { status: 400 });
