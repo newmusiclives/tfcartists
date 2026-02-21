@@ -26,6 +26,7 @@ interface FeatureType {
   includesCallIn: boolean;
   socialMediaFriendly: boolean;
   gptPromptTemplate: string | null;
+  preProducible: boolean;
 }
 
 interface FeatureSchedule {
@@ -78,6 +79,9 @@ function FeatureCard({ ft, accentColor, clockTypes }: { ft: FeatureType; accentC
           <span className="text-[10px] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
             <Share2 className="w-3 h-3" /> Social
           </span>
+        )}
+        {ft.preProducible && (
+          <span className="text-[10px] bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded">Pre-produced</span>
         )}
       </div>
       {clockTypes.length > 0 && (

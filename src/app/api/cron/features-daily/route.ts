@@ -78,6 +78,7 @@ export async function GET(req: NextRequest) {
         isUsed: false,
         generatedBy: "auto",
         createdAt: { lt: staleThreshold },
+        featureType: { preProducible: false }, // skip pre-producible (reusable TTS)
       },
       data: { isUsed: true },
     });
