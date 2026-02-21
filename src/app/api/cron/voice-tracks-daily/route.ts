@@ -4,7 +4,7 @@ import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { buildHourPlaylist } from "@/lib/radio/playlist-builder";
 import { generateVoiceTrackScripts } from "@/lib/radio/voice-track-generator";
-import { generateVoiceTrackAudio } from "@/lib/radio/voice-track-tts";
+import { generateVoiceTrackAudio, generateFeatureAudio } from "@/lib/radio/voice-track-tts";
 import { fillTemplate, djFirstName, pick, type SongData } from "@/lib/radio/template-utils";
 
 export const dynamic = "force-dynamic";
@@ -111,6 +111,7 @@ export async function GET(req: NextRequest) {
       audioGenerated: 0,
       genericTracksUsed: 0,
       featuresRelinked: 0,
+      featureAudioGenerated: 0,
       errors: [] as string[],
     };
 
@@ -208,6 +209,21 @@ export async function GET(req: NextRequest) {
         // 5f. Re-link feature content to actual adjacent songs
         const relinked = await relinkFeatures(station.id, shift.djId, playlist.hourPlaylistId, playlist.slots);
         results.featuresRelinked += relinked;
+
+        // 5g. Generate TTS audio for feature content
+        if (relinked > 0) {
+          const featureAudio = await generateFeatureAudio(
+            playlist.hourPlaylistId,
+            station.id,
+            shift.djId,
+          );
+          results.featureAudioGenerated += featureAudio.generated;
+          if (featureAudio.errors.length > 0) {
+            results.errors.push(
+              ...featureAudio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`)
+            );
+          }
+        }
 
         results.hoursProcessed++;
       } catch (err) {

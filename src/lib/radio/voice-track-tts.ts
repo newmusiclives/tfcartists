@@ -263,3 +263,119 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
 
   return { generated, errors };
 }
+
+/**
+ * Generate TTS audio for all FeatureContent items in an HourPlaylist that
+ * have content but no audioFilePath yet. Follows the same TTS + music-bed
+ * pattern as generateVoiceTrackAudio().
+ */
+export async function generateFeatureAudio(
+  hourPlaylistId: string,
+  stationId: string,
+  djId: string,
+): Promise<GenerateAudioResult> {
+  // Load playlist slots to find feature content IDs
+  const playlist = await prisma.hourPlaylist.findUnique({
+    where: { id: hourPlaylistId },
+    select: { slots: true },
+  });
+  if (!playlist?.slots) return { generated: 0, errors: [] };
+
+  const slots: Array<{ featureContentId?: string }> = JSON.parse(
+    typeof playlist.slots === "string" ? playlist.slots : JSON.stringify(playlist.slots),
+  );
+  const featureContentIds = slots
+    .filter((s) => s.featureContentId)
+    .map((s) => s.featureContentId!);
+
+  if (featureContentIds.length === 0) return { generated: 0, errors: [] };
+
+  // Load feature content records that still need audio
+  const features = await prisma.featureContent.findMany({
+    where: {
+      id: { in: featureContentIds },
+      audioFilePath: null,
+      content: { not: "" },
+    },
+  });
+
+  if (features.length === 0) return { generated: 0, errors: [] };
+
+  // Load DJ TTS config once
+  const dj = await prisma.dJ.findUnique({
+    where: { id: djId },
+    select: { ttsVoice: true, ttsProvider: true, stationId: true },
+  });
+  const voice = dj?.ttsVoice || "alloy";
+  const provider = dj?.ttsProvider || "openai";
+
+  // Try to find an active music bed (prefer "soft" → "general" fallback)
+  let musicBedPath: string | null = null;
+  const bed = await prisma.musicBed.findFirst({
+    where: { stationId, isActive: true, category: "soft" },
+  }) || await prisma.musicBed.findFirst({
+    where: { stationId, isActive: true, category: "general" },
+  });
+  if (bed?.filePath) musicBedPath = bed.filePath;
+
+  let generated = 0;
+  const errors: string[] = [];
+
+  for (const fc of features) {
+    try {
+      if (musicBedPath) {
+        let voicePcm: Buffer;
+        if (provider === "gemini") {
+          const { buffer } = await generateWithGemini(fc.content, voice);
+          voicePcm = buffer.subarray(44);
+        } else {
+          voicePcm = await generatePcmWithOpenAI(fc.content, voice);
+        }
+
+        const boostedPcm = amplifyPcm(voicePcm, 1.5);
+        const mixedPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+          voiceGain: 1.0,
+          bedGain: 0.15,
+          fadeInMs: 300,
+          fadeOutMs: 800,
+        });
+
+        const wavBuffer = pcmToWav(mixedPcm);
+        const filename = `fc-${fc.id}.wav`;
+        const audioFilePath = saveAudioFile(wavBuffer, "features", filename);
+        const audioDuration = Math.round((mixedPcm.length / 48000) * 10) / 10;
+
+        await prisma.featureContent.update({
+          where: { id: fc.id },
+          data: { audioFilePath, audioDuration },
+        });
+      } else {
+        let buffer: Buffer;
+        let ext: string;
+        if (provider === "gemini") {
+          ({ buffer, ext } = await generateWithGemini(fc.content, voice));
+        } else {
+          ({ buffer, ext } = await generateWithOpenAI(fc.content, voice));
+        }
+
+        const filename = `fc-${fc.id}.${ext}`;
+        const audioFilePath = saveAudioFile(buffer, "features", filename);
+        const wordCount = fc.content.split(/\s+/).length;
+        const audioDuration = Math.round((wordCount / 150) * 60 * 10) / 10;
+
+        await prisma.featureContent.update({
+          where: { id: fc.id },
+          data: { audioFilePath, audioDuration },
+        });
+      }
+
+      generated++;
+    } catch (err) {
+      const msg = `Feature ${fc.id}: ${err instanceof Error ? err.message : String(err)}`;
+      logger.error("Feature TTS failed", { error: msg, featureContentId: fc.id });
+      errors.push(msg);
+    }
+  }
+
+  return { generated, errors };
+}
