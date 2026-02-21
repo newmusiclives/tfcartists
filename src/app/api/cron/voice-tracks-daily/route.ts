@@ -280,7 +280,9 @@ async function relinkFeatures(
     // Find the adjacent song based on track placement
     let adjacentSong: { songId: string; songTitle: string; artistName: string } | null = null;
 
-    if (fSlot.featuredTrack === "before") {
+    const placement = fSlot.featuredTrack || "before"; // default: feature introduces the next song
+
+    if (placement === "before") {
       // Feature plays before the song — find next song
       const maxPos = Math.max(...slots.map((s) => s.position));
       for (let i = fSlot.position + 1; i <= maxPos; i++) {
@@ -290,7 +292,7 @@ async function relinkFeatures(
           break;
         }
       }
-    } else if (fSlot.featuredTrack === "after") {
+    } else if (placement === "after") {
       // Feature plays after the song — find prev song
       for (let i = fSlot.position - 1; i >= 0; i--) {
         const slot = slots.find((s) => s.position === i);
