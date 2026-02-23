@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 /**
  * Riley Daily Automation Cron Job
- * Runs every day at 4:30 AM
+ * Runs Mon-Sat at 4:30 AM (skips Sundays)
  *
  * Tasks:
  * 1. Discover new artists from social media
@@ -45,6 +45,18 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    // Skip Sundays — Riley works Mon-Sat only
+    const dayOfWeek = new Date().getUTCDay(); // 0 = Sunday
+    if (dayOfWeek === 0) {
+      logger.info("Riley daily automation skipped (Sunday)");
+      return NextResponse.json({
+        success: true,
+        message: "Skipped — Riley does not run on Sundays",
+        results: { followUps: 0, showReminders: 0, wins: 0, errors: 0 },
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     logger.info("Starting Riley daily automation", { dryRun });
 
     const results = {
@@ -64,7 +76,7 @@ export async function GET(req: NextRequest) {
           in: ["CONTACTED", "ENGAGED", "QUALIFIED"],
         },
       },
-      take: Number(env.RILEY_MAX_OUTREACH_PER_DAY) || 50,
+      take: Number(env.RILEY_MAX_OUTREACH_PER_DAY) || 100,
     });
 
     logger.info(`Found ${followUpArtists.length} artists needing follow-up`);

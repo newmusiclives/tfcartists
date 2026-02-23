@@ -42,6 +42,7 @@ export default function RileyDashboardPage() {
   const [recentSubmissions, setRecentSubmissions] = useState<SubmissionItem[]>([]);
   const [upgradeArtists, setUpgradeArtists] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [unauthorized, setUnauthorized] = useState(false);
   const [automationRunning, setAutomationRunning] = useState(false);
   const [automationResult, setAutomationResult] = useState<AutomationResult | null>(null);
 
@@ -53,6 +54,11 @@ export default function RileyDashboardPage() {
           fetch("/api/cassidy/submissions?limit=5"),
           fetch("/api/artists?tier=FREE&sortBy=engagementRate&sortOrder=desc&limit=3"),
         ]);
+
+        if (statsRes.status === 401) {
+          setUnauthorized(true);
+          return;
+        }
 
         if (statsRes.ok) {
           setStats(await statsRes.json());
@@ -105,6 +111,18 @@ export default function RileyDashboardPage() {
     return (
       <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
         <div className="text-gray-600">Loading dashboard...</div>
+      </main>
+    );
+  }
+
+  if (unauthorized) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
+          <p className="text-gray-600 mb-4">Sign in as Riley to access this dashboard.</p>
+          <Link href="/login?callbackUrl=/riley" className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">Sign In</Link>
+        </div>
       </main>
     );
   }

@@ -24,12 +24,14 @@ export default function CassidyDashboardPage() {
   const [recentSubmissions, setRecentSubmissions] = useState<SubmissionListItem[]>([]);
   const [progressionRequests, setProgressionRequests] = useState<ProgressionRequestListItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [unauthorized, setUnauthorized] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       try {
         // Fetch stats
         const statsRes = await fetch("/api/cassidy/stats");
+        if (statsRes.status === 401) { setUnauthorized(true); return; }
         if (statsRes.ok) {
           const statsData = await statsRes.json();
           setStats(statsData);
@@ -58,6 +60,18 @@ export default function CassidyDashboardPage() {
     return (
       <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 flex items-center justify-center">
         <div className="text-gray-600">Loading dashboard...</div>
+      </main>
+    );
+  }
+
+  if (unauthorized) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
+          <p className="text-gray-600 mb-4">Sign in as Cassidy to access this dashboard.</p>
+          <Link href="/login?callbackUrl=/cassidy" className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700">Sign In</Link>
+        </div>
       </main>
     );
   }

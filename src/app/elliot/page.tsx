@@ -38,6 +38,7 @@ export default function ElliotDashboardPage() {
   const [viralContent, setViralContent] = useState<ContentItem[]>([]);
   const [campaigns, setCampaigns] = useState<CampaignItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [unauthorized, setUnauthorized] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -48,6 +49,7 @@ export default function ElliotDashboardPage() {
           fetch("/api/elliot/campaigns?status=active"),
         ]);
 
+        if (statsRes.status === 401) { setUnauthorized(true); return; }
         if (statsRes.ok) {
           setStats(await statsRes.json());
         }
@@ -72,6 +74,18 @@ export default function ElliotDashboardPage() {
     return (
       <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-gray-600">Loading dashboard...</div>
+      </main>
+    );
+  }
+
+  if (unauthorized) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
+          <p className="text-gray-600 mb-4">Sign in as Elliot to access this dashboard.</p>
+          <Link href="/login?callbackUrl=/elliot" className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">Sign In</Link>
+        </div>
       </main>
     );
   }

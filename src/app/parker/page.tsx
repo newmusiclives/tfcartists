@@ -35,6 +35,7 @@ export default function ParkerDashboardPage() {
   const [stationData, setStationData] = useState<StationData | null>(null);
   const [activeAds, setActiveAds] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [unauthorized, setUnauthorized] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -44,6 +45,7 @@ export default function ParkerDashboardPage() {
           fetch("/api/sponsor-ads"),
         ]);
 
+        if (stationRes.status === 401) { setUnauthorized(true); return; }
         if (stationRes.ok) {
           const data = await stationRes.json();
           const station = data.stations?.[0] || data;
@@ -72,6 +74,18 @@ export default function ParkerDashboardPage() {
     return (
       <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50 flex items-center justify-center">
         <div className="text-gray-600">Loading dashboard...</div>
+      </main>
+    );
+  }
+
+  if (unauthorized) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
+          <p className="text-gray-600 mb-4">Sign in as Parker to access this dashboard.</p>
+          <Link href="/login?callbackUrl=/parker" className="bg-rose-600 text-white px-6 py-2 rounded-lg hover:bg-rose-700">Sign In</Link>
+        </div>
       </main>
     );
   }
