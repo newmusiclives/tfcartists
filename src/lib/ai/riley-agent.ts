@@ -153,11 +153,13 @@ export class RileyAgent {
       return;
     }
 
-    // Attempt message delivery
+    // Attempt message delivery (include pipeline stage for GHL tagging)
     const deliveryResult = await messageDelivery.send({
       to: deliveryAddress,
       content,
       channel: channel as MessageChannel,
+      artistName: artist.name,
+      pipelineStage: artist.pipelineStage,
     });
 
     // Log delivery result
@@ -276,8 +278,12 @@ export class RileyAgent {
     // Send Riley's response
     await this.sendMessage(artistId, response, intent, channel);
 
-    // Update artist pipeline stage based on intent
-    await this.updateArtistStage(artistId, intent);
+    // Update artist pipeline stage based on intent (+ sync to GHL)
+    await this.updateArtistStage(artistId, intent, {
+      phone: artist.phone,
+      email: artist.email,
+      name: artist.name,
+    });
 
     return response;
   }
@@ -340,8 +346,13 @@ export class RileyAgent {
 
   /**
    * Update artist's pipeline stage based on conversation progress
+   * Also syncs the new stage to GHL (tags + pipeline opportunity)
    */
-  private async updateArtistStage(artistId: string, intent: RileyIntent): Promise<void> {
+  private async updateArtistStage(
+    artistId: string,
+    intent: RileyIntent,
+    contact?: { phone?: string | null; email?: string | null; name: string }
+  ): Promise<void> {
     const stageMap: Record<RileyIntent, { status?: string; stage?: string }> = {
       initial_outreach: { status: "CONTACTED", stage: "contacted" },
       qualify_live_shows: { status: "ENGAGED", stage: "engaged" },
@@ -363,6 +374,16 @@ export class RileyAgent {
           ...(update.stage && { pipelineStage: update.stage }),
         },
       });
+
+      // Sync new stage to GHL (tag contact + move pipeline opportunity)
+      if (update.stage && contact) {
+        await messageDelivery.syncArtistStage({
+          phone: contact.phone || undefined,
+          email: contact.email || undefined,
+          name: contact.name,
+          stage: update.stage,
+        });
+      }
     }
   }
 }

@@ -6,8 +6,7 @@ import {
   calculateMonthlyScoutCommissions,
   processScoutPayouts,
 } from "@/lib/scout/monthly-payout";
-import { sendEarningsNotification } from "@/lib/email";
-import { sendEarningsAlert } from "@/lib/sms";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 export const dynamic = "force-dynamic";
 
@@ -206,10 +205,21 @@ export async function GET(req: NextRequest) {
       if (!record || record.earnings <= 0) continue;
 
       if (a.email) {
-        sendEarningsNotification(a.email, a.name, period, record.earnings).catch(() => {});
+        messageDelivery.send({
+          to: a.email,
+          content: `Hey ${a.name}, your TrueFans Radio earnings for ${period} are $${record.earnings.toFixed(2)}. Check your dashboard for details.`,
+          channel: "email",
+          subject: `Your TrueFans Radio Earnings for ${period}`,
+          artistName: a.name,
+        }).catch(() => {});
       }
       if (a.phone) {
-        sendEarningsAlert(a.phone, a.name, record.earnings, period).catch(() => {});
+        messageDelivery.send({
+          to: a.phone,
+          content: `${a.name}, your TrueFans Radio earnings for ${period} are $${record.earnings.toFixed(2)}. Check your dashboard for details.`,
+          channel: "sms",
+          artistName: a.name,
+        }).catch(() => {});
       }
     }
 

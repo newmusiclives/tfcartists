@@ -3,8 +3,10 @@ import { logger } from "@/lib/logger";
 
 /**
  * Message delivery service for SMS, Email, and Instagram
- * Integrates with Twilio, SendGrid, and Instagram API
+ * Integrates with GoHighLevel (SMS + Email) and Instagram API
  */
+
+const GHL_BASE_URL = "https://services.leadconnectorhq.com";
 
 export type MessageChannel = "sms" | "email" | "instagram";
 
@@ -21,14 +23,29 @@ export interface MessagePayload {
   channel: MessageChannel;
   from?: string; // Optional custom sender
   subject?: string; // Optional subject for email
+  artistName?: string; // Used for GHL contact upsert
+  pipelineStage?: string; // Current Riley pipeline stage for GHL tagging
 }
 
+/** Maps Riley pipeline stages to GHL contact tags */
+const RILEY_STAGE_TAGS: Record<string, string> = {
+  discovery: "Riley - Discovery",
+  contacted: "Riley - Contacted",
+  engaged: "Riley - Engaged",
+  qualified: "Riley - Qualified",
+  onboarding: "Riley - Onboarding",
+  activated: "Riley - Activated",
+  active: "Riley - Active",
+};
+
 class MessageDeliveryService {
+  private pipelineStageMap: Record<string, string> | null = null;
+
   /**
    * Send a message via the specified channel
    */
   async send(payload: MessagePayload): Promise<DeliveryResult> {
-    const { channel, to, content, from, subject } = payload;
+    const { channel, to, content, from, subject, artistName, pipelineStage } = payload;
 
     logger.info("Attempting message delivery", {
       channel,
@@ -39,9 +56,9 @@ class MessageDeliveryService {
     try {
       switch (channel) {
         case "sms":
-          return await this.sendSMS(to, content, from);
+          return await this.sendSMS(to, content, artistName, pipelineStage);
         case "email":
-          return await this.sendEmail(to, content, from, subject);
+          return await this.sendEmail(to, content, subject, artistName, pipelineStage);
         case "instagram":
           return await this.sendInstagram(to, content);
         default:
@@ -63,48 +80,234 @@ class MessageDeliveryService {
   }
 
   /**
-   * Send SMS via Twilio
+   * Build tags array for a GHL contact based on pipeline stage
+   */
+  private buildTags(pipelineStage?: string): string[] {
+    const tags = ["NCR Riley"];
+    if (pipelineStage) {
+      const stageTag = RILEY_STAGE_TAGS[pipelineStage];
+      if (stageTag) tags.push(stageTag);
+    }
+    return tags;
+  }
+
+  /**
+   * Upsert a contact in GoHighLevel (required before sending messages)
+   */
+  private async upsertGHLContact(opts: {
+    phone?: string;
+    email?: string;
+    name?: string;
+    tags?: string[];
+  }): Promise<string> {
+    const res = await fetch(`${GHL_BASE_URL}/contacts/upsert`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GHL_API_KEY}`,
+        Version: "2021-07-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        locationId: env.GHL_LOCATION_ID,
+        ...opts,
+      }),
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`GHL contact upsert failed (${res.status}): ${body}`);
+    }
+
+    const data = await res.json();
+    return data.contact.id;
+  }
+
+  /**
+   * Fetch and cache pipeline stage IDs from GHL
+   */
+  private async fetchPipelineStages(): Promise<Record<string, string>> {
+    if (this.pipelineStageMap) return this.pipelineStageMap;
+
+    const res = await fetch(
+      `${GHL_BASE_URL}/opportunities/pipelines?locationId=${env.GHL_LOCATION_ID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${env.GHL_API_KEY}`,
+          Version: "2021-07-28",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      logger.warn("Failed to fetch GHL pipelines", { status: res.status });
+      return {};
+    }
+
+    const data = await res.json();
+    const pipeline = data.pipelines?.find(
+      (p: any) => p.id === env.GHL_RILEY_PIPELINE_ID
+    );
+
+    if (!pipeline) {
+      logger.warn("Riley pipeline not found in GHL", {
+        pipelineId: env.GHL_RILEY_PIPELINE_ID,
+      });
+      return {};
+    }
+
+    this.pipelineStageMap = {};
+    for (const s of pipeline.stages) {
+      this.pipelineStageMap[s.name.toLowerCase()] = s.id;
+    }
+
+    logger.info("Cached GHL pipeline stages", {
+      stages: Object.keys(this.pipelineStageMap),
+    });
+
+    return this.pipelineStageMap;
+  }
+
+  /**
+   * Upsert an opportunity in the Riley pipeline (create or move to new stage)
+   */
+  private async upsertGHLOpportunity(
+    contactId: string,
+    stage: string,
+    artistName: string
+  ): Promise<void> {
+    const stageMap = await this.fetchPipelineStages();
+    const stageId = stageMap[stage.toLowerCase()];
+    if (!stageId) {
+      logger.warn("GHL pipeline stage not found", { stage, availableStages: Object.keys(stageMap) });
+      return;
+    }
+
+    const res = await fetch(`${GHL_BASE_URL}/opportunities/upsert`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GHL_API_KEY}`,
+        Version: "2021-07-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pipelineId: env.GHL_RILEY_PIPELINE_ID,
+        pipelineStageId: stageId,
+        locationId: env.GHL_LOCATION_ID,
+        contactId,
+        name: `${artistName} - Riley Pipeline`,
+        status: "open",
+      }),
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      logger.warn("GHL opportunity upsert failed", { status: res.status, body });
+    } else {
+      logger.info("GHL opportunity synced", { contactId, stage, artistName });
+    }
+  }
+
+  /**
+   * Sync an artist's pipeline stage to GHL (tags contact + moves opportunity)
+   * Called from riley-agent when a stage transition occurs.
+   */
+  async syncArtistStage(opts: {
+    phone?: string;
+    email?: string;
+    name?: string;
+    stage: string;
+  }): Promise<void> {
+    if (!env.GHL_API_KEY || !env.GHL_LOCATION_ID) return;
+
+    try {
+      const tags = this.buildTags(opts.stage);
+
+      const contactId = await this.upsertGHLContact({
+        phone: opts.phone,
+        email: opts.email,
+        name: opts.name,
+        tags,
+      });
+
+      // Move opportunity through pipeline if configured
+      if (env.GHL_RILEY_PIPELINE_ID) {
+        await this.upsertGHLOpportunity(
+          contactId,
+          opts.stage,
+          opts.name || "Unknown Artist"
+        );
+      }
+    } catch (error) {
+      // Don't let GHL sync failures break the Riley flow
+      logger.warn("Failed to sync artist stage to GHL", {
+        stage: opts.stage,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  /**
+   * Send SMS via GoHighLevel
    */
   private async sendSMS(
     to: string,
     content: string,
-    from?: string
+    name?: string,
+    pipelineStage?: string
   ): Promise<DeliveryResult> {
-    // Check if Twilio is configured
-    if (!env.TWILIO_ACCOUNT_SID || !env.TWILIO_AUTH_TOKEN || !env.TWILIO_PHONE_NUMBER) {
-      logger.warn("Twilio not configured, skipping SMS delivery", { to });
+    if (!env.GHL_API_KEY || !env.GHL_LOCATION_ID) {
+      logger.warn("GoHighLevel not configured, skipping SMS delivery", { to });
       return {
         success: false,
-        error: "Twilio credentials not configured",
+        error: "GoHighLevel not configured",
         channel: "sms",
       };
     }
 
     try {
-      // Import Twilio dynamically
-      const twilio = await import("twilio");
-      const client = twilio.default(env.TWILIO_ACCOUNT_SID, env.TWILIO_AUTH_TOKEN);
+      const tags = this.buildTags(pipelineStage);
+      const contactId = await this.upsertGHLContact({ phone: to, name, tags });
 
-      // Send SMS
-      const message = await client.messages.create({
-        to,
-        from: from || env.TWILIO_PHONE_NUMBER,
-        body: content,
+      // Sync pipeline opportunity if configured
+      if (env.GHL_RILEY_PIPELINE_ID && pipelineStage) {
+        await this.upsertGHLOpportunity(contactId, pipelineStage, name || "Unknown Artist");
+      }
+
+      const res = await fetch(`${GHL_BASE_URL}/conversations/messages`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.GHL_API_KEY}`,
+          Version: "2021-07-28",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "SMS",
+          contactId,
+          message: content,
+        }),
       });
 
-      logger.info("SMS sent successfully", {
-        messageId: message.sid,
+      if (!res.ok) {
+        const body = await res.text();
+        throw new Error(`GHL SMS send failed (${res.status}): ${body}`);
+      }
+
+      const data = await res.json();
+
+      logger.info("SMS sent successfully via GHL", {
+        messageId: data.messageId,
+        contactId,
         to: this.maskSensitiveData(to),
-        status: message.status,
       });
 
       return {
         success: true,
-        messageId: message.sid,
+        messageId: data.messageId,
         channel: "sms",
       };
     } catch (error) {
-      logger.error("Twilio SMS delivery failed", {
+      logger.error("GHL SMS delivery failed", {
         to: this.maskSensitiveData(to),
         error: error instanceof Error ? error.message : String(error),
       });
@@ -114,53 +317,69 @@ class MessageDeliveryService {
   }
 
   /**
-   * Send Email via SendGrid
+   * Send Email via GoHighLevel
    */
   private async sendEmail(
     to: string,
     content: string,
-    from?: string,
-    subject?: string
+    subject?: string,
+    name?: string,
+    pipelineStage?: string
   ): Promise<DeliveryResult> {
-    // Check if SendGrid is configured
-    if (!env.SENDGRID_API_KEY) {
-      logger.warn("SendGrid not configured, skipping email delivery", { to });
+    if (!env.GHL_API_KEY || !env.GHL_LOCATION_ID) {
+      logger.warn("GoHighLevel not configured, skipping email delivery", { to });
       return {
         success: false,
-        error: "SendGrid API key not configured",
+        error: "GoHighLevel not configured",
         channel: "email",
       };
     }
 
     try {
-      // Import SendGrid dynamically
-      const sgMail = await import("@sendgrid/mail");
-      sgMail.default.setApiKey(env.SENDGRID_API_KEY);
+      const tags = this.buildTags(pipelineStage);
+      const contactId = await this.upsertGHLContact({ email: to, name, tags });
 
-      // Send email
-      const msg = {
-        to,
-        from: from || "riley@northcountryradio.com",
-        subject: subject || "North Country Radio",
-        text: content,
-        html: this.formatEmailHTML(content),
-      };
+      // Sync pipeline opportunity if configured
+      if (env.GHL_RILEY_PIPELINE_ID && pipelineStage) {
+        await this.upsertGHLOpportunity(contactId, pipelineStage, name || "Unknown Artist");
+      }
 
-      const response = await sgMail.default.send(msg);
+      const res = await fetch(`${GHL_BASE_URL}/conversations/messages`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.GHL_API_KEY}`,
+          Version: "2021-07-28",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "Email",
+          contactId,
+          message: content,
+          subject: subject || "North Country Radio",
+          html: this.formatEmailHTML(content),
+        }),
+      });
 
-      logger.info("Email sent successfully", {
-        messageId: response[0].headers["x-message-id"],
+      if (!res.ok) {
+        const body = await res.text();
+        throw new Error(`GHL email send failed (${res.status}): ${body}`);
+      }
+
+      const data = await res.json();
+
+      logger.info("Email sent successfully via GHL", {
+        messageId: data.messageId,
+        contactId,
         to: this.maskSensitiveData(to),
-        statusCode: response[0].statusCode,
       });
 
       return {
         success: true,
-        messageId: response[0].headers["x-message-id"] as string,
+        messageId: data.messageId,
         channel: "email",
       };
     } catch (error) {
-      logger.error("SendGrid email delivery failed", {
+      logger.error("GHL email delivery failed", {
         to: this.maskSensitiveData(to),
         error: error instanceof Error ? error.message : String(error),
       });

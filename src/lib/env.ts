@@ -17,10 +17,9 @@ const envSchema = z.object({
   DEFAULT_AI_PROVIDER: z.enum(["openai", "claude"]).default("claude"),
 
   // Communication (optional for now, required for production)
-  TWILIO_ACCOUNT_SID: z.string().optional(),
-  TWILIO_AUTH_TOKEN: z.string().optional(),
-  TWILIO_PHONE_NUMBER: z.string().optional(),
-  SENDGRID_API_KEY: z.string().optional(),
+  GHL_API_KEY: z.string().optional(),
+  GHL_LOCATION_ID: z.string().optional(),
+  GHL_RILEY_PIPELINE_ID: z.string().optional(),
   INSTAGRAM_ACCESS_TOKEN: z.string().optional(),
 
   // Manifest Financial (payment processing)
@@ -107,8 +106,7 @@ const validateEnv = () => {
     // Optional but recommended variables
     if (!env.UPSTASH_REDIS_REST_URL) missingOptionalVars.push("UPSTASH_REDIS_REST_URL");
     if (!env.UPSTASH_REDIS_REST_TOKEN) missingOptionalVars.push("UPSTASH_REDIS_REST_TOKEN");
-    if (!env.TWILIO_ACCOUNT_SID) missingOptionalVars.push("TWILIO_ACCOUNT_SID");
-    if (!env.SENDGRID_API_KEY) missingOptionalVars.push("SENDGRID_API_KEY");
+    if (!env.GHL_API_KEY) missingOptionalVars.push("GHL_API_KEY");
 
     // Fail hard on missing critical variables
     if (missingCriticalVars.length > 0) {

@@ -19,15 +19,9 @@ const CONFIG_DEFINITIONS: Record<string, { category: string; label: string; encr
   MANIFEST_WEBHOOK_SECRET: { category: "payments", label: "Manifest Webhook Secret", encrypted: true },
   MANIFEST_BASE_URL: { category: "payments", label: "Manifest API Base URL", encrypted: false },
 
-  // Email (SendGrid)
-  SENDGRID_API_KEY: { category: "email", label: "SendGrid API Key", encrypted: true },
-  SENDGRID_FROM_EMAIL: { category: "email", label: "From Email Address", encrypted: false },
-  SENDGRID_FROM_NAME: { category: "email", label: "From Name", encrypted: false },
-
-  // SMS (Twilio)
-  TWILIO_ACCOUNT_SID: { category: "sms", label: "Twilio Account SID", encrypted: true },
-  TWILIO_AUTH_TOKEN: { category: "sms", label: "Twilio Auth Token", encrypted: true },
-  TWILIO_PHONE_NUMBER: { category: "sms", label: "Twilio Phone Number", encrypted: false },
+  // Messaging (GoHighLevel — SMS + Email)
+  GHL_API_KEY: { category: "messaging", label: "GoHighLevel API Key", encrypted: true },
+  GHL_LOCATION_ID: { category: "messaging", label: "GoHighLevel Location ID", encrypted: false },
 
   // AI Providers
   OPENAI_API_KEY: { category: "ai", label: "OpenAI API Key", encrypted: true },
