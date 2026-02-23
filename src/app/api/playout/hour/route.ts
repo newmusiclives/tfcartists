@@ -15,6 +15,20 @@ const HANDOFF_HOURS: Record<number, string> = {
   15: "doc-to-cody",
 };
 
+// Default durations (seconds) when actual duration is unknown
+const DEFAULT_DURATION: Record<string, number> = {
+  imaging: 8,
+  sweeper: 8,
+  promo: 15,
+  station_id: 8,
+  feature: 60,
+  voice_break: 15,
+  song: 210,
+  ad: 30,
+  commercial: 30,
+  transition: 10,
+};
+
 /**
  * GET /api/playout/hour — full program log for one broadcast hour.
  *
@@ -140,6 +154,9 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // --- Warnings for debugging ---
+    const warnings: string[] = [];
+
     // --- Resolve show transitions for this hour ---
     type TransitionEntry = { id: string; type: string; name: string; audioFilePath: string | null; durationSeconds: number; handoffPart: number | null };
 
@@ -167,6 +184,9 @@ export async function GET(request: NextRequest) {
           durationSeconds: intro.durationSeconds,
           handoffPart: intro.handoffPart,
         };
+        if (!intro.audioFilePath) {
+          warnings.push(`Show intro "${intro.name}" has no audioFilePath`);
+        }
       }
 
       // Check for handoff crosstalk at this hour
@@ -181,7 +201,13 @@ export async function GET(request: NextRequest) {
           },
           orderBy: { handoffPart: "asc" },
         });
+        if (parts.length === 0) {
+          warnings.push(`Handoff hour ${hourOfDay} (group "${handoffGroupId}") has no matching transitions`);
+        }
         for (const p of parts) {
+          if (!p.audioFilePath) {
+            warnings.push(`Handoff part ${p.handoffPart} "${p.name}" has no audioFilePath`);
+          }
           handoffParts.push({
             id: p.id,
             type: p.transitionType,
@@ -215,6 +241,9 @@ export async function GET(request: NextRequest) {
           durationSeconds: outro.durationSeconds,
           handoffPart: outro.handoffPart,
         };
+        if (!outro.audioFilePath) {
+          warnings.push(`Show outro "${outro.name}" has no audioFilePath`);
+        }
       }
     }
 
@@ -256,6 +285,8 @@ export async function GET(request: NextRequest) {
     // --- Assemble the full program log ---
     interface ProgramSlot {
       position: number;
+      sequenceOrder?: number;
+      cumulativeStartSec?: number;
       minute: number;
       type: string;
       category: string;
@@ -273,17 +304,18 @@ export async function GET(request: NextRequest) {
       };
       feature?: { id: string; title: string | null; content: string; audioFilePath: string | null };
       ad?: { id: string; sponsorName: string; adTitle: string; audioFilePath: string | null; durationSeconds: number | null };
-      transition?: { id: string; type: string; name: string; audioFilePath: string | null; handoffPart: number | null };
+      transition?: { id: string; type: string; name: string; audioFilePath: string | null; durationSeconds: number; handoffPart: number | null };
       imaging?: { type: string; audioFilePath: string | null };
     }
 
     const programLog: ProgramSlot[] = [];
 
-    // Prepend handoff parts + show intro at the very start of the hour
+    // Prepend handoff parts at distinct negative positions before show intro (-2)
     if (handoffParts.length > 0) {
-      for (const part of handoffParts) {
+      for (let idx = 0; idx < handoffParts.length; idx++) {
+        const part = handoffParts[idx];
         programLog.push({
-          position: -2 + (part.handoffPart ?? 0),
+          position: -(handoffParts.length + 2) + idx,
           minute: 0,
           type: "transition",
           category: "handoff",
@@ -292,9 +324,10 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Show intro at position -2 (always clear of handoff parts above and slot 0)
     if (showIntro) {
       programLog.push({
-        position: -1,
+        position: -2,
         minute: 0,
         type: "transition",
         category: "show_intro",
@@ -316,6 +349,9 @@ export async function GET(request: NextRequest) {
         const song = songMap.get(slot.songId as string);
         if (song) {
           entry.song = song;
+          if (!song.fileUrl) {
+            warnings.push(`Song "${song.title}" by ${song.artistName} (pos ${slot.position}) has no fileUrl`);
+          }
         }
       }
 
@@ -334,6 +370,8 @@ export async function GET(request: NextRequest) {
             nextSongTitle: vt.nextSongTitle,
             nextArtistName: vt.nextArtistName,
           };
+        } else {
+          warnings.push(`Voice break at position ${slot.position} has no audio_ready track`);
         }
       }
 
@@ -381,6 +419,30 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    // --- Sort by position and assign sequenceOrder + cumulativeStartSec ---
+    programLog.sort((a, b) => a.position - b.position);
+
+    let cumulativeSec = 0;
+    for (let i = 0; i < programLog.length; i++) {
+      const entry = programLog[i];
+      entry.sequenceOrder = i;
+      entry.cumulativeStartSec = cumulativeSec;
+
+      // Calculate this entry's duration for cumulative timing
+      let durationSec = DEFAULT_DURATION[entry.type] ?? 10;
+      if (entry.song?.duration != null) {
+        durationSec = entry.song.duration;
+      } else if (entry.voiceTrack?.audioDuration != null) {
+        durationSec = entry.voiceTrack.audioDuration;
+      } else if (entry.transition?.durationSeconds != null) {
+        durationSec = entry.transition.durationSeconds;
+      } else if (entry.ad?.durationSeconds != null) {
+        durationSec = entry.ad.durationSeconds;
+      }
+
+      cumulativeSec += durationSec;
+    }
+
     return NextResponse.json({
       playlistId: playlist.id,
       stationId: playlist.stationId,
@@ -389,6 +451,7 @@ export async function GET(request: NextRequest) {
       hourOfDay: playlist.hourOfDay,
       status: playlist.status,
       programLog,
+      warnings,
     });
   } catch (error) {
     return handleApiError(error, "/api/playout/hour");
