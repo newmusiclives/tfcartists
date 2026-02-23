@@ -1,73 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { requireRole } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
-
-// In production, these would come from database
-let campaigns = [
-  {
-    id: 1,
-    name: "Initial Artist Outreach",
-    description: "Introduce TrueFans RADIO and FREE airplay opportunity",
-    type: "initial",
-    status: "active",
-    stats: {
-      sent: 23,
-      opened: 18,
-      responded: 12,
-      converted: 8,
-    },
-    createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    name: "Track Submission Invitation",
-    description: "Follow-up with artists who showed interest",
-    type: "invitation",
-    status: "active",
-    stats: {
-      sent: 12,
-      opened: 10,
-      responded: 8,
-      converted: 6,
-    },
-    createdAt: "2024-01-05T00:00:00Z",
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: 3,
-    name: "Tier Upgrade Campaign",
-    description: "Invite FREE artists to upgrade to paid tiers",
-    type: "upgrade",
-    status: "active",
-    stats: {
-      sent: 15,
-      opened: 11,
-      responded: 5,
-      converted: 3,
-    },
-    createdAt: "2024-01-10T00:00:00Z",
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: 4,
-    name: "Re-engagement Campaign",
-    description: "Reconnect with artists who haven't responded",
-    type: "reengagement",
-    status: "active",
-    stats: {
-      sent: 8,
-      opened: 4,
-      responded: 2,
-      converted: 1,
-    },
-    createdAt: "2024-01-15T00:00:00Z",
-    updatedAt: new Date().toISOString(),
-  },
-];
 
 // GET /api/riley/campaigns - Get all campaigns
 export async function GET(request: NextRequest) {
@@ -79,26 +16,19 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get("type");
     const status = searchParams.get("status");
 
-    let filteredCampaigns = [...campaigns];
+    const where: Record<string, string> = {};
+    if (type) where.type = type;
+    if (status) where.status = status;
 
-    // Filter by type
-    if (type) {
-      filteredCampaigns = filteredCampaigns.filter(
-        (campaign) => campaign.type === type
-      );
-    }
-
-    // Filter by status
-    if (status) {
-      filteredCampaigns = filteredCampaigns.filter(
-        (campaign) => campaign.status === status
-      );
-    }
+    const campaigns = await prisma.rileyCampaign.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+    });
 
     return NextResponse.json({
       success: true,
-      data: filteredCampaigns,
-      count: filteredCampaigns.length,
+      data: campaigns,
+      count: campaigns.length,
     });
   } catch (error) {
     logger.error("Error fetching campaigns", { error });
@@ -125,28 +55,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create new campaign
-    const newCampaign = {
-      id: campaigns.length + 1,
-      name: body.name,
-      description: body.description || "",
-      type: body.type,
-      status: "draft",
-      stats: {
-        sent: 0,
-        opened: 0,
-        responded: 0,
-        converted: 0,
+    const campaign = await prisma.rileyCampaign.create({
+      data: {
+        name: body.name,
+        description: body.description || "",
+        type: body.type,
+        status: "draft",
       },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    campaigns.push(newCampaign);
+    });
 
     return NextResponse.json({
       success: true,
-      data: newCampaign,
+      data: campaign,
       message: "Campaign created successfully",
     });
   } catch (error) {
@@ -173,27 +93,26 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const campaignIndex = campaigns.findIndex(
-      (campaign) => campaign.id === body.id
-    );
+    const existing = await prisma.rileyCampaign.findUnique({
+      where: { id: body.id },
+    });
 
-    if (campaignIndex === -1) {
+    if (!existing) {
       return NextResponse.json(
         { success: false, error: "Campaign not found" },
         { status: 404 }
       );
     }
 
-    // Update campaign
-    campaigns[campaignIndex] = {
-      ...campaigns[campaignIndex],
-      ...body,
-      updatedAt: new Date().toISOString(),
-    };
+    const { id, ...updateFields } = body;
+    const campaign = await prisma.rileyCampaign.update({
+      where: { id },
+      data: updateFields,
+    });
 
     return NextResponse.json({
       success: true,
-      data: campaigns[campaignIndex],
+      data: campaign,
       message: "Campaign updated successfully",
     });
   } catch (error) {
@@ -221,18 +140,18 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const campaignIndex = campaigns.findIndex(
-      (campaign) => campaign.id === parseInt(id)
-    );
+    const existing = await prisma.rileyCampaign.findUnique({
+      where: { id },
+    });
 
-    if (campaignIndex === -1) {
+    if (!existing) {
       return NextResponse.json(
         { success: false, error: "Campaign not found" },
         { status: 404 }
       );
     }
 
-    campaigns.splice(campaignIndex, 1);
+    await prisma.rileyCampaign.delete({ where: { id } });
 
     return NextResponse.json({
       success: true,

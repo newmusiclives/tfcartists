@@ -107,6 +107,25 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Create Song record so placed track enters radio rotation
+    const station = await prisma.station.findFirst();
+    if (station) {
+      await prisma.song.create({
+        data: {
+          stationId: station.id,
+          title: submission.trackTitle,
+          artistName: submission.artistName,
+          fileUrl: submission.trackFileUrl,
+          duration: submission.trackDuration,
+          genre: submission.genre,
+          rotationCategory: "E",
+          tempoCategory: "medium",
+          vocalGender: "unknown",
+          isActive: true,
+        },
+      });
+    }
+
     // Create rotation slots if specified
     let rotationSlots: string[] = [];
     if (body.rotationIntegration?.replacesMainstreamSlot) {

@@ -249,6 +249,53 @@ model RileyActivity {
   successful  Boolean  @default(true)
 }
 
+// Riley outreach campaigns
+model RileyCampaign {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  name        String
+  description String?
+  type        String   // "initial", "invitation", "upgrade", "reengagement"
+  status      String   @default("draft") // "draft", "active", "paused", "completed"
+
+  // Denormalized stats
+  sent        Int      @default(0)
+  opened      Int      @default(0)
+  responded   Int      @default(0)
+  converted   Int      @default(0)
+
+  @@index([type])
+  @@index([status])
+}
+
+// Riley→artist communication audit log
+model RileyCommunication {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  artistId    String   // bare string, no FK — matches RileyActivity pattern
+  type        String   // "email", "sms", "phone", "social"
+  subject     String?
+  content     String?
+  status      String   @default("sent")
+
+  // Tracking timestamps
+  sentAt      DateTime?
+  openedAt    DateTime?
+  respondedAt DateTime?
+
+  // Campaign attribution
+  campaignId  String?
+
+  @@index([artistId])
+  @@index([type])
+  @@index([status])
+  @@index([campaignId])
+}
+
 // TrueFans RADIO Airplay Payments
 model AirplayPayment {
   id          String      @id @default(cuid())

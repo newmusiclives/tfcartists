@@ -1,25 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { requireRole } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
-
-// In production, these would come from database
-let communications = [
-  {
-    id: 1,
-    leadId: 2,
-    type: "email",
-    subject: "TrueFans RADIO - Get FREE Airplay",
-    content: "Initial outreach email...",
-    status: "sent",
-    sentAt: "2024-01-18T10:00:00Z",
-    openedAt: null,
-    respondedAt: null,
-    createdAt: new Date().toISOString(),
-  },
-];
 
 // GET /api/riley/communications - Get all communications
 export async function GET(request: NextRequest) {
@@ -30,19 +15,18 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const leadId = searchParams.get("leadId");
 
-    let filteredCommunications = [...communications];
+    const where: Record<string, string> = {};
+    if (leadId) where.artistId = leadId;
 
-    // Filter by lead ID
-    if (leadId) {
-      filteredCommunications = filteredCommunications.filter(
-        (comm) => comm.leadId === parseInt(leadId)
-      );
-    }
+    const communications = await prisma.rileyCommunication.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+    });
 
     return NextResponse.json({
       success: true,
-      data: filteredCommunications,
-      count: filteredCommunications.length,
+      data: communications,
+      count: communications.length,
     });
   } catch (error) {
     logger.error("Error fetching communications", { error });
@@ -69,25 +53,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create new communication record
-    const newCommunication = {
-      id: communications.length + 1,
-      leadId: body.leadId,
-      type: body.type, // email, phone, sms, social
-      subject: body.subject,
-      content: body.content,
-      status: body.status || "sent",
-      sentAt: new Date().toISOString(),
-      openedAt: body.openedAt || null,
-      respondedAt: body.respondedAt || null,
-      createdAt: new Date().toISOString(),
-    };
-
-    communications.push(newCommunication);
+    const communication = await prisma.rileyCommunication.create({
+      data: {
+        artistId: body.leadId,
+        type: body.type,
+        subject: body.subject,
+        content: body.content,
+        status: body.status || "sent",
+        sentAt: new Date(),
+        openedAt: body.openedAt ? new Date(body.openedAt) : null,
+        respondedAt: body.respondedAt ? new Date(body.respondedAt) : null,
+        campaignId: body.campaignId || null,
+      },
+    });
 
     return NextResponse.json({
       success: true,
-      data: newCommunication,
+      data: communication,
       message: "Communication logged successfully",
     });
   } catch (error) {
@@ -114,24 +96,26 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const commIndex = communications.findIndex((comm) => comm.id === body.id);
+    const existing = await prisma.rileyCommunication.findUnique({
+      where: { id: body.id },
+    });
 
-    if (commIndex === -1) {
+    if (!existing) {
       return NextResponse.json(
         { success: false, error: "Communication not found" },
         { status: 404 }
       );
     }
 
-    // Update communication
-    communications[commIndex] = {
-      ...communications[commIndex],
-      ...body,
-    };
+    const { id, ...updateFields } = body;
+    const communication = await prisma.rileyCommunication.update({
+      where: { id },
+      data: updateFields,
+    });
 
     return NextResponse.json({
       success: true,
-      data: communications[commIndex],
+      data: communication,
       message: "Communication updated successfully",
     });
   } catch (error) {

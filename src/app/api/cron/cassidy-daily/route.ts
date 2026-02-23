@@ -128,6 +128,9 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    // Fetch station once for Song creation
+    const station = await prisma.station.findFirst();
+
     for (const submission of judgedSubmissions) {
       try {
         await prisma.submission.update({
@@ -137,6 +140,25 @@ export async function GET(req: NextRequest) {
             awardedAt: submission.awardedAt || new Date(),
           },
         });
+
+        // Create Song record so placed track enters radio rotation
+        if (station && submission.trackFileUrl) {
+          await prisma.song.create({
+            data: {
+              stationId: station.id,
+              title: submission.trackTitle,
+              artistName: submission.artistName,
+              fileUrl: submission.trackFileUrl,
+              duration: submission.trackDuration,
+              genre: submission.genre,
+              rotationCategory: "E",
+              tempoCategory: "medium",
+              vocalGender: "unknown",
+              isActive: true,
+            },
+          });
+        }
+
         results.autoPlaced++;
       } catch (error) {
         logger.error("Auto-placement failed", { submissionId: submission.id, error });
