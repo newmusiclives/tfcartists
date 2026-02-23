@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { riley } from "@/lib/ai/riley-agent";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
+import { socialDiscovery } from "@/lib/discovery/social-discovery";
 
 export const dynamic = "force-dynamic";
 
@@ -60,13 +61,77 @@ export async function GET(req: NextRequest) {
     logger.info("Starting Riley daily automation", { dryRun });
 
     const results = {
+      discovered: 0,
+      imported: 0,
+      initialOutreach: 0,
       followUps: 0,
       showReminders: 0,
       wins: 0,
       errors: 0,
     };
 
-    // 1. Send follow-ups to artists who need them
+    // ── Step 0: Discover new artists from Spotify ──
+    try {
+      const discoveryResults = dryRun
+        ? { totalDiscovered: 0, imported: 0, platforms: {} }
+        : await socialDiscovery.runDailyDiscovery();
+
+      results.discovered = discoveryResults.totalDiscovered;
+      results.imported = discoveryResults.imported;
+
+      logger.info("Discovery step complete", {
+        discovered: discoveryResults.totalDiscovered,
+        imported: discoveryResults.imported,
+        platforms: discoveryResults.platforms,
+        dryRun,
+      });
+    } catch (error) {
+      logger.error("Discovery step failed", { error });
+      results.errors++;
+    }
+
+    // ── Step 0.5: Initial outreach to newly discovered artists with contact info ──
+    const newArtistsWithContact = await prisma.artist.findMany({
+      where: {
+        status: "DISCOVERED",
+        pipelineStage: "discovery",
+        lastContactedAt: null,
+        OR: [
+          { email: { not: null } },
+          { phone: { not: null } },
+        ],
+      },
+      take: 20, // Separate cap from the 100 follow-up limit
+    });
+
+    logger.info(`Found ${newArtistsWithContact.length} new artists with contact info for initial outreach`);
+
+    for (const artist of newArtistsWithContact) {
+      try {
+        if (!dryRun) {
+          await riley.sendMessage(artist.id, "", "initial_outreach");
+
+          // Schedule next follow-up in 3-5 days
+          const nextFollowUp = new Date();
+          nextFollowUp.setDate(nextFollowUp.getDate() + Math.floor(Math.random() * 3) + 3);
+
+          await prisma.artist.update({
+            where: { id: artist.id },
+            data: {
+              lastContactedAt: new Date(),
+              nextFollowUpAt: nextFollowUp,
+            },
+          });
+        }
+
+        results.initialOutreach++;
+      } catch (error) {
+        logger.error("Initial outreach failed", { artistId: artist.id, error });
+        results.errors++;
+      }
+    }
+
+    // ── Step 1: Send follow-ups to artists who need them ──
     const followUpArtists = await prisma.artist.findMany({
       where: {
         nextFollowUpAt: {
@@ -111,7 +176,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // 2. Send reminders for shows happening in next 24-48 hours
+    // ── Step 2: Send reminders for shows happening in next 24-48 hours ──
     const upcomingShows = await prisma.show.findMany({
       where: {
         date: {
@@ -143,7 +208,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // 3. Celebrate first wins (donations received in last 24 hours)
+    // ── Step 3: Celebrate first wins (donations received in last 24 hours) ──
     const recentWins = await prisma.donation.findMany({
       where: {
         createdAt: {

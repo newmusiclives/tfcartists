@@ -156,20 +156,10 @@ class SocialDiscoveryService {
   }
 
   /**
-   * Discover artists from Spotify
+   * Get a Spotify access token using client credentials
    */
-  async discoverFromSpotify(genres: string[], limit = 50): Promise<DiscoveredArtist[]> {
-    if (!env.SPOTIFY_CLIENT_ID || !env.SPOTIFY_CLIENT_SECRET) {
-      logger.warn("Spotify credentials not configured");
-      return [];
-    }
-
-    logger.info("Discovering artists from Spotify", { genres, limit });
-
-    const discovered: DiscoveredArtist[] = [];
-
+  private async getSpotifyToken(): Promise<string | null> {
     try {
-      // Get Spotify access token
       const tokenResponse = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: {
@@ -181,13 +171,44 @@ class SocialDiscoveryService {
         body: "grant_type=client_credentials",
       });
 
-      const tokenData = await tokenResponse.json();
-      const accessToken = tokenData.access_token;
+      if (!tokenResponse.ok) {
+        logger.error("Spotify token request failed", { status: tokenResponse.status });
+        return null;
+      }
 
-      // Search for artists by genre
+      const tokenData = await tokenResponse.json();
+      return tokenData.access_token;
+    } catch (error) {
+      logger.error("Spotify token request error", { error });
+      return null;
+    }
+  }
+
+  /**
+   * Discover artists from Spotify
+   * Targets small indie artists (<50k followers) with randomized offsets for variety
+   */
+  async discoverFromSpotify(genres: string[], limit = 20): Promise<DiscoveredArtist[]> {
+    if (!env.SPOTIFY_CLIENT_ID || !env.SPOTIFY_CLIENT_SECRET) {
+      logger.warn("Spotify credentials not configured");
+      return [];
+    }
+
+    logger.info("Discovering artists from Spotify", { genres, limit });
+
+    const discovered: DiscoveredArtist[] = [];
+    const seenIds = new Set<string>();
+
+    try {
+      const accessToken = await this.getSpotifyToken();
+      if (!accessToken) return [];
+
+      // Randomize offset so we get different artists each day (Spotify max offset is 1000)
+      const randomOffset = Math.floor(Math.random() * 200);
+
       for (const genre of genres) {
         const response = await fetch(
-          `https://api.spotify.com/v1/search?q=genre:${encodeURIComponent(genre)}&type=artist&limit=${limit}`,
+          `https://api.spotify.com/v1/search?q=genre:${encodeURIComponent(genre)}&type=artist&limit=${limit}&offset=${randomOffset}`,
           {
             headers: {
               "Authorization": `Bearer ${accessToken}`,
@@ -205,14 +226,20 @@ class SocialDiscoveryService {
 
         const data = await response.json();
 
-        // Extract artist information
         for (const artist of data.artists?.items || []) {
+          const followers = artist.followers?.total ?? 0;
+
+          // Skip mainstream acts (>50k followers) and deduplicate
+          if (followers > 50000) continue;
+          if (seenIds.has(artist.id)) continue;
+          seenIds.add(artist.id);
+
           discovered.push({
             name: artist.name,
             source: "spotify",
             sourceHandle: artist.id,
             sourceUrl: artist.external_urls?.spotify,
-            followerCount: artist.followers?.total,
+            followerCount: followers,
             genre: artist.genres?.[0],
           });
         }
@@ -220,6 +247,7 @@ class SocialDiscoveryService {
 
       logger.info("Spotify discovery complete", {
         found: discovered.length,
+        offset: randomOffset,
       });
 
     } catch (error) {
@@ -329,14 +357,19 @@ class SocialDiscoveryService {
     const tiktokArtists = await this.discoverFromTikTok(tiktokKeywords, 20);
     allDiscovered.push(...tiktokArtists);
 
-    // Spotify discovery
+    // Spotify discovery — expanded genre list for indie Americana/Country
     const spotifyGenres = [
       "americana",
       "alt-country",
       "folk",
       "singer-songwriter",
+      "roots-rock",
+      "outlaw-country",
+      "texas-country",
+      "red-dirt",
+      "bluegrass",
     ];
-    const spotifyArtists = await this.discoverFromSpotify(spotifyGenres, 20);
+    const spotifyArtists = await this.discoverFromSpotify(spotifyGenres, 10);
     allDiscovered.push(...spotifyArtists);
 
     // Import into database
