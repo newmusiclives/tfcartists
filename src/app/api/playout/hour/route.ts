@@ -111,13 +111,14 @@ export async function GET(request: NextRequest) {
     const adSlots = slots.filter((s: { type: string }) =>
       s.type === "ad" || s.type === "commercial"
     );
-    const resolvedAds = new Map<number, {
+    type ResolvedAd = {
       id: string;
       sponsorName: string;
       adTitle: string;
       audioFilePath: string | null;
       durationSeconds: number | null;
-    }>();
+    };
+    const resolvedAds = new Map<number, [ResolvedAd, ResolvedAd]>();
 
     if (adSlots.length > 0) {
       // Get all active ads sorted by weighted rotation (playCount/weight ASC)
@@ -140,16 +141,26 @@ export async function GET(request: NextRequest) {
           return 0;
         });
 
-        // Assign one ad per ad slot, cycling through available ads
+        // Assign two ads per ad slot, cycling through available ads
         for (let i = 0; i < adSlots.length; i++) {
-          const ad = activeAds[i % activeAds.length];
-          resolvedAds.set(adSlots[i].position as number, {
-            id: ad.id,
-            sponsorName: ad.sponsorName,
-            adTitle: ad.adTitle,
-            audioFilePath: ad.audioFilePath,
-            durationSeconds: ad.durationSeconds,
-          });
+          const ad1 = activeAds[(i * 2) % activeAds.length];
+          const ad2 = activeAds[(i * 2 + 1) % activeAds.length];
+          resolvedAds.set(adSlots[i].position as number, [
+            {
+              id: ad1.id,
+              sponsorName: ad1.sponsorName,
+              adTitle: ad1.adTitle,
+              audioFilePath: ad1.audioFilePath,
+              durationSeconds: ad1.durationSeconds,
+            },
+            {
+              id: ad2.id,
+              sponsorName: ad2.sponsorName,
+              adTitle: ad2.adTitle,
+              audioFilePath: ad2.audioFilePath,
+              durationSeconds: ad2.durationSeconds,
+            },
+          ]);
         }
       }
     }
@@ -253,7 +264,10 @@ export async function GET(request: NextRequest) {
     );
     const resolvedImaging = new Map<number, { type: string; audioFilePath: string | null }>();
 
-    if (imagingSlots.length > 0) {
+    // Station ID scripts for ad break bookends (populated during imaging resolution)
+    let stationIdScripts: Array<{ label: string; audioFilePath?: string }> = [];
+
+    if (imagingSlots.length > 0 || adSlots.length > 0) {
       // Find imaging voice with audio metadata
       const imagingVoice = await prisma.stationImagingVoice.findFirst({
         where: { stationId, isActive: true },
@@ -264,6 +278,8 @@ export async function GET(request: NextRequest) {
           scripts?: Record<string, Array<{ label: string; audioFilePath?: string }>>;
         };
         if (meta.scripts) {
+          stationIdScripts = meta.scripts["station_id"] || [];
+
           for (const slot of imagingSlots) {
             const slotType = slot.type as string;
             const scripts = meta.scripts[slotType] || meta.scripts["sweeper"] || [];
@@ -388,12 +404,56 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // Attach ad data
+      // Expand ad break into 4-element block: station_id, ad, ad, station_id
       if (slot.type === "ad" || slot.type === "commercial") {
-        const ad = resolvedAds.get(slot.position as number);
-        if (ad) {
-          entry.ad = ad;
-        }
+        const adPair = resolvedAds.get(slot.position as number);
+        const pos = slot.position as number;
+        const min = slot.minute as number;
+
+        // Pick a random station_id script for bookend entries
+        const pickStationId = () => {
+          if (stationIdScripts.length === 0) return undefined;
+          const pick = stationIdScripts[Math.floor(Math.random() * stationIdScripts.length)];
+          return pick.audioFilePath ? { type: "station_id", audioFilePath: pick.audioFilePath } : undefined;
+        };
+
+        // Station ID opener
+        programLog.push({
+          position: pos + 0.0,
+          minute: min,
+          type: "station_id",
+          category: "Imaging",
+          imaging: pickStationId(),
+        });
+
+        // Sponsor Ad 1
+        programLog.push({
+          position: pos + 0.1,
+          minute: min,
+          type: "ad",
+          category: "Sponsor",
+          ad: adPair?.[0],
+        });
+
+        // Sponsor Ad 2
+        programLog.push({
+          position: pos + 0.2,
+          minute: min,
+          type: "ad",
+          category: "Sponsor",
+          ad: adPair?.[1],
+        });
+
+        // Station ID closer
+        programLog.push({
+          position: pos + 0.3,
+          minute: min,
+          type: "station_id",
+          category: "Imaging",
+          imaging: pickStationId(),
+        });
+
+        continue; // Skip the normal programLog.push(entry)
       }
 
       // Attach imaging data

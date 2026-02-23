@@ -14,13 +14,24 @@ const REPEAT_COOLDOWN: Record<string, number> = {
   E: 8,
 };
 
-// Adjacent fallback categories
+// Adjacent fallback categories (used when a category has songs but none are
+// eligible due to cooldown / artist separation — NOT for empty categories)
 const FALLBACK_CATEGORIES: Record<string, string[]> = {
   A: ["B", "C"],
   B: ["C", "A"],
   C: ["B", "D"],
-  D: ["C", "E"],
+  D: ["C", "B"],
   E: ["D", "C"],
+};
+
+// When a category has zero songs, redistribute its clock slots to these
+// alternatives (cycled round-robin so slots spread across categories).
+const EMPTY_CATEGORY_REMAP: Record<string, string[]> = {
+  A: ["B", "C"],
+  B: ["A", "C"],
+  C: ["B", "D"],
+  D: ["C", "B"],
+  E: ["B", "C", "D"],
 };
 
 interface ClockSlot {
@@ -124,7 +135,17 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
     }
   }
 
-  // 4. Resolve each slot
+  // 4. Check category inventory — detect empty categories for redistribution
+  const categoryInventory = new Map<string, number>();
+  for (const song of allSongs) {
+    categoryInventory.set(
+      song.rotationCategory,
+      (categoryInventory.get(song.rotationCategory) || 0) + 1,
+    );
+  }
+  const remapCounters = new Map<string, number>();
+
+  // 5. Resolve each slot
   const resolvedSlots: ResolvedSlot[] = [];
   const usedSongIds = new Set<string>(opts.excludeSongIds || []);
   const recentArtists: string[] = []; // Track artist order for separation
@@ -137,9 +158,22 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
     const resolved: ResolvedSlot = { ...slot };
 
     if (slot.type === "song" && ["A", "B", "C", "D", "E"].includes(slot.category)) {
+      // If the requested category has zero songs, redistribute to a
+      // populated alternative (round-robin so slots spread evenly).
+      let effectiveCategory = slot.category;
+      if ((categoryInventory.get(slot.category) || 0) === 0) {
+        const remapOptions = (EMPTY_CATEGORY_REMAP[slot.category] || ["C"])
+          .filter((c) => (categoryInventory.get(c) || 0) > 0);
+        if (remapOptions.length > 0) {
+          const counter = remapCounters.get(slot.category) || 0;
+          effectiveCategory = remapOptions[counter % remapOptions.length];
+          remapCounters.set(slot.category, counter + 1);
+        }
+      }
+
       const song = selectSong({
         candidates: allSongs,
-        category: slot.category,
+        category: effectiveCategory,
         usedSongIds,
         recentArtists,
         recentPlayMap,
@@ -166,11 +200,11 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
     resolvedSlots.push(resolved);
   }
 
-  // 5. Normalize airDate to midnight
+  // 6. Normalize airDate to midnight
   const normalizedDate = new Date(airDate);
   normalizedDate.setHours(0, 0, 0, 0);
 
-  // 6. Save to DB
+  // 7. Save to DB
   const hourPlaylist = await prisma.hourPlaylist.upsert({
     where: {
       stationId_djId_airDate_hourOfDay: {
