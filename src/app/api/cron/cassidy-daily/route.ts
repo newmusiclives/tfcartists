@@ -105,7 +105,12 @@ export async function GET(req: NextRequest) {
               submissionId: submission.id,
               judgeId: nextJudge.id,
             },
-          }).catch(() => {}); // Ignore duplicate
+          }).catch((err) => {
+            // Ignore duplicate constraint, log other errors
+            if (!err.message?.includes("Unique constraint")) {
+              logger.error("Failed to create review assignment", { submissionId: submission.id, error: err.message });
+            }
+          });
 
           // Reset judging timer
           await prisma.submission.update({

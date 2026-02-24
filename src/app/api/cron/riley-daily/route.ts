@@ -106,29 +106,31 @@ export async function GET(req: NextRequest) {
 
     logger.info(`Found ${newArtistsWithContact.length} new artists with contact info for initial outreach`);
 
+    const outreachSuccesses: { id: string; nextFollowUpAt: Date }[] = [];
     for (const artist of newArtistsWithContact) {
       try {
         if (!dryRun) {
           await riley.sendMessage(artist.id, "", "initial_outreach");
-
-          // Schedule next follow-up in 3-5 days
           const nextFollowUp = new Date();
           nextFollowUp.setDate(nextFollowUp.getDate() + Math.floor(Math.random() * 3) + 3);
-
-          await prisma.artist.update({
-            where: { id: artist.id },
-            data: {
-              lastContactedAt: new Date(),
-              nextFollowUpAt: nextFollowUp,
-            },
-          });
+          outreachSuccesses.push({ id: artist.id, nextFollowUpAt: nextFollowUp });
         }
-
         results.initialOutreach++;
       } catch (error) {
         logger.error("Initial outreach failed", { artistId: artist.id, error });
         results.errors++;
       }
+    }
+    // Batch update all successful initial outreach contacts
+    if (outreachSuccesses.length > 0) {
+      await prisma.$transaction(
+        outreachSuccesses.map((s) =>
+          prisma.artist.update({
+            where: { id: s.id },
+            data: { lastContactedAt: new Date(), nextFollowUpAt: s.nextFollowUpAt },
+          })
+        )
+      );
     }
 
     // ── Step 1: Send follow-ups to artists who need them ──
@@ -146,9 +148,9 @@ export async function GET(req: NextRequest) {
 
     logger.info(`Found ${followUpArtists.length} artists needing follow-up`);
 
+    const followUpSuccesses: { id: string; nextFollowUpAt: Date }[] = [];
     for (const artist of followUpArtists) {
       try {
-        // Determine intent based on pipeline stage
         let intent: any = "qualify_live_shows";
         if (artist.pipelineStage === "qualified") {
           intent = "book_show";
@@ -158,22 +160,26 @@ export async function GET(req: NextRequest) {
 
         if (!dryRun) {
           await riley.sendMessage(artist.id, "", intent);
-
-          // Schedule next follow-up in 3-5 days
           const nextFollowUp = new Date();
           nextFollowUp.setDate(nextFollowUp.getDate() + Math.floor(Math.random() * 3) + 3);
-
-          await prisma.artist.update({
-            where: { id: artist.id },
-            data: { nextFollowUpAt: nextFollowUp },
-          });
+          followUpSuccesses.push({ id: artist.id, nextFollowUpAt: nextFollowUp });
         }
-
         results.followUps++;
       } catch (error) {
         logger.error("Follow-up failed", { artistId: artist.id, error });
         results.errors++;
       }
+    }
+    // Batch update all successful follow-ups
+    if (followUpSuccesses.length > 0) {
+      await prisma.$transaction(
+        followUpSuccesses.map((s) =>
+          prisma.artist.update({
+            where: { id: s.id },
+            data: { nextFollowUpAt: s.nextFollowUpAt },
+          })
+        )
+      );
     }
 
     // ── Step 2: Send reminders for shows happening in next 24-48 hours ──
@@ -190,22 +196,25 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    const remindedShowIds: string[] = [];
     for (const show of upcomingShows) {
       try {
         if (!dryRun) {
           await riley.sendMessage(show.artistId, "", "send_reminder");
-
-          await prisma.show.update({
-            where: { id: show.id },
-            data: { status: "REMINDED" },
-          });
+          remindedShowIds.push(show.id);
         }
-
         results.showReminders++;
       } catch (error) {
         logger.error("Show reminder failed", { showId: show.id, error });
         results.errors++;
       }
+    }
+    // Batch update all reminded shows
+    if (remindedShowIds.length > 0) {
+      await prisma.show.updateMany({
+        where: { id: { in: remindedShowIds } },
+        data: { status: "REMINDED" },
+      });
     }
 
     // ── Step 3: Celebrate first wins (donations received in last 24 hours) ──
@@ -222,22 +231,25 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    const celebratedWinIds: string[] = [];
     for (const win of recentWins) {
       try {
         if (!dryRun) {
           await riley.sendMessage(win.artistId, "", "celebrate_win");
-
-          await prisma.donation.update({
-            where: { id: win.id },
-            data: { celebratedBy: "riley" },
-          });
+          celebratedWinIds.push(win.id);
         }
-
         results.wins++;
       } catch (error) {
         logger.error("Win celebration failed", { donationId: win.id, error });
         results.errors++;
       }
+    }
+    // Batch update all celebrated wins
+    if (celebratedWinIds.length > 0) {
+      await prisma.donation.updateMany({
+        where: { id: { in: celebratedWinIds } },
+        data: { celebratedBy: "riley" },
+      });
     }
 
     logger.info("Riley daily automation completed", { ...results, dryRun });

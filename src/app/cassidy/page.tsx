@@ -471,27 +471,44 @@ function SubmissionRow({
   totalJudges: number;
 }) {
   const statusConfig: Record<string, { bg: string; text: string; icon: React.ReactNode; label: string }> = {
-    pending: {
+    PENDING: {
       bg: "bg-gray-100",
       text: "text-gray-700",
       icon: <Clock className="w-4 h-4" />,
       label: "Pending",
     },
-    in_review: {
+    IN_REVIEW: {
       bg: "bg-blue-100",
       text: "text-blue-700",
       icon: <BarChart3 className="w-4 h-4" />,
       label: "In Review",
     },
-    judged: {
+    JUDGED: {
       bg: "bg-green-100",
       text: "text-green-700",
       icon: <CheckCircle className="w-4 h-4" />,
       label: "Judged",
     },
+    PLACED: {
+      bg: "bg-teal-100",
+      text: "text-teal-700",
+      icon: <CheckCircle className="w-4 h-4" />,
+      label: "Placed",
+    },
+    NOT_PLACED: {
+      bg: "bg-red-100",
+      text: "text-red-700",
+      icon: <XCircle className="w-4 h-4" />,
+      label: "Not Placed",
+    },
   };
 
-  const config = statusConfig[status];
+  const config = statusConfig[status] || {
+    bg: "bg-gray-100",
+    text: "text-gray-700",
+    icon: <Clock className="w-4 h-4" />,
+    label: status,
+  };
 
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-teal-300 transition-colors">

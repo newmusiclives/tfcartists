@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
+import { logger } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,10 @@ export async function POST(request: NextRequest) {
     // Check Scout referral codes first
     const scout = await prisma.scout.findUnique({
       where: { referralCode },
-    }).catch(() => null);
+    }).catch((err) => {
+      logger.error("Failed to look up scout by referral code", { referralCode, error: err.message });
+      return null;
+    });
 
     if (scout) {
       referrerType = "scout";
@@ -38,8 +42,11 @@ export async function POST(request: NextRequest) {
           referralSource: "embed",
           convertedAt: new Date(),
         },
-      }).catch(() => {
-        // May already exist (unique constraint)
+      }).catch((err) => {
+        // May already exist (unique constraint) — log only if unexpected
+        if (!err.message?.includes("Unique constraint")) {
+          logger.error("Failed to create listener referral", { scoutId: scout.id, listenerId, error: err.message });
+        }
       });
 
       // Update scout stats
@@ -48,7 +55,9 @@ export async function POST(request: NextRequest) {
         data: {
           listenerReferrals: { increment: 1 },
         },
-      }).catch(() => {});
+      }).catch((err) => {
+        logger.error("Failed to increment scout referral count", { scoutId: scout.id, error: err.message });
+      });
 
       // Award XP to scout's listener account
       await prisma.xPTransaction.create({
@@ -59,18 +68,25 @@ export async function POST(request: NextRequest) {
           xpAmount: 100,
           metadata: JSON.stringify({ listenerId, referralCode }),
         },
-      }).catch(() => {});
+      }).catch((err) => {
+        logger.error("Failed to create XP transaction for referral", { listenerId: scout.listenerId, error: err.message });
+      });
 
       // Update listener XP
       await prisma.listener.update({
         where: { id: scout.listenerId },
         data: { xpTotal: { increment: 100 } },
-      }).catch(() => {});
+      }).catch((err) => {
+        logger.error("Failed to increment listener XP", { listenerId: scout.listenerId, error: err.message });
+      });
     } else {
       // Check SponsorGrowthPartner referral codes
       const partner = await prisma.sponsorGrowthPartner.findUnique({
         where: { referralCode },
-      }).catch(() => null);
+      }).catch((err) => {
+        logger.error("Failed to look up growth partner by referral code", { referralCode, error: err.message });
+        return null;
+      });
 
       if (partner) {
         referrerType = "sponsor";
@@ -84,8 +100,10 @@ export async function POST(request: NextRequest) {
             referralSource: "embed",
             convertedAt: new Date(),
           },
-        }).catch(() => {
-          // May already exist
+        }).catch((err) => {
+          if (!err.message?.includes("Unique constraint")) {
+            logger.error("Failed to create sponsor listener referral", { partnerId: partner.id, listenerId, error: err.message });
+          }
         });
 
         // Update partner stats
@@ -94,7 +112,9 @@ export async function POST(request: NextRequest) {
           data: {
             listenersReferred: { increment: 1 },
           },
-        }).catch(() => {});
+        }).catch((err) => {
+          logger.error("Failed to increment partner referral count", { partnerId: partner.id, error: err.message });
+        });
       }
     }
 
@@ -105,7 +125,9 @@ export async function POST(request: NextRequest) {
         referredByCode: referralCode,
         referredByType: referrerType,
       },
-    }).catch(() => {});
+    }).catch((err) => {
+      logger.error("Failed to update listener referral fields", { listenerId, error: err.message });
+    });
 
     return NextResponse.json({
       tracked: true,

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { requireRole } from "@/lib/api/auth";
+import { requireRole, pickFields } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
+
+const ALLOWED_UPDATE_FIELDS = [
+  "name", "description", "type", "status",
+];
 
 export const dynamic = "force-dynamic";
 
@@ -104,10 +108,10 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { id, ...updateFields } = body;
+    const { id } = body;
     const campaign = await prisma.rileyCampaign.update({
       where: { id },
-      data: updateFields,
+      data: pickFields(body, ALLOWED_UPDATE_FIELDS),
     });
 
     return NextResponse.json({

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
-import { requireRole } from "@/lib/api/auth";
+import { requireAuth, requireRole } from "@/lib/api/auth";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -9,6 +9,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const stationId = request.nextUrl.searchParams.get("stationId");
     if (!stationId) {
       return NextResponse.json(

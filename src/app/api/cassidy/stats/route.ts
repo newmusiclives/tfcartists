@@ -42,15 +42,15 @@ export async function GET(request: NextRequest) {
       // Count artists in each tier (most recent placement per artist)
       prisma.$queryRaw<Array<{ newTier: string; count: bigint }>>`
         SELECT
-          tp.newTier,
-          COUNT(DISTINCT tp.artistId) as count
-        FROM TierPlacement tp
+          tp."newTier",
+          COUNT(DISTINCT tp."artistId") as count
+        FROM "TierPlacement" tp
         INNER JOIN (
-          SELECT artistId, MAX(createdAt) as maxDate
-          FROM TierPlacement
-          GROUP BY artistId
-        ) latest ON tp.artistId = latest.artistId AND tp.createdAt = latest.maxDate
-        GROUP BY tp.newTier
+          SELECT "artistId", MAX("createdAt") as "maxDate"
+          FROM "TierPlacement"
+          GROUP BY "artistId"
+        ) latest ON tp."artistId" = latest."artistId" AND tp."createdAt" = latest."maxDate"
+        GROUP BY tp."newTier"
       `,
 
       // Submissions this month

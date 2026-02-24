@@ -36,6 +36,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const session = await requireAdmin();
+    if (!session) return unauthorized();
+
     const { id } = await params;
     const body = await request.json();
     const station = await prisma.station.update({ where: { id }, data: pickFields(body, ALLOWED_FIELDS) });

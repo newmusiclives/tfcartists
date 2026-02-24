@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
 import { logger } from "@/lib/logger";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +12,9 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(request: NextRequest) {
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const { sponsorId, tier, monthlyAmount, startDate } = body;
 

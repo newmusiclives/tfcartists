@@ -207,9 +207,10 @@ export async function checkRateLimit(
       error: error instanceof Error ? error.message : String(error),
     });
 
-    // On error, allow the request but log it
+    // Fail-closed in production (block request), fail-open in development
+    const isProduction = process.env.NODE_ENV === "production";
     return {
-      success: true,
+      success: !isProduction,
       error: "Rate limit check failed",
     };
   }

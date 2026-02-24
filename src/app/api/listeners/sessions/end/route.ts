@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +29,9 @@ export async function POST(request: NextRequest) {
         data: {
           totalListeningHours: { increment: hours },
         },
-      }).catch(() => {});
+      }).catch((err) => {
+        logger.error("Failed to update listener listening hours", { listenerId: session.listenerId, error: err.message });
+      });
     }
 
     return NextResponse.json({ success: true });

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAuth } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
+import { logger } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -70,7 +71,9 @@ export async function POST(request: NextRequest) {
           trackId: trackId || null,
           sessionId: sessionId || null,
         },
-      }).catch(() => {});
+      }).catch((err) => {
+        logger.error("Failed to log listener playback", { listenerId, trackTitle, error: err.message });
+      });
     }
 
     return NextResponse.json({ success: true, id: playback.id });

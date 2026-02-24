@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 // XP amounts for each action
 export const XP_ACTIONS = {
@@ -186,7 +187,9 @@ export async function checkBadges(
       await prisma.listener.update({
         where: { id: userId },
         data: { badges: JSON.stringify(updatedBadges) },
-      }).catch(() => {});
+      }).catch((err) => {
+        logger.error("Failed to save badges", { userId, error: err.message });
+      });
     }
   }
 

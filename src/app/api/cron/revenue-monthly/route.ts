@@ -211,7 +211,9 @@ export async function GET(req: NextRequest) {
           channel: "email",
           subject: `Your TrueFans Radio Earnings for ${period}`,
           artistName: a.name,
-        }).catch(() => {});
+        }).catch((err) => {
+          logger.error("Failed to send earnings email", { artistId: a.id, error: err.message });
+        });
       }
       if (a.phone) {
         messageDelivery.send({
@@ -219,7 +221,9 @@ export async function GET(req: NextRequest) {
           content: `${a.name}, your TrueFans Radio earnings for ${period} are $${record.earnings.toFixed(2)}. Check your dashboard for details.`,
           channel: "sms",
           artistName: a.name,
-        }).catch(() => {});
+        }).catch((err) => {
+          logger.error("Failed to send earnings SMS", { artistId: a.id, error: err.message });
+        });
       }
     }
 

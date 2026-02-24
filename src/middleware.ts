@@ -51,7 +51,7 @@ function addSecurityHeaders(response: NextResponse, pathname: string) {
   if (!isDev) {
     response.headers.set(
       "Strict-Transport-Security",
-      "max-age=31536000; includeSubDomains"
+      "max-age=31536000; includeSubDomains; preload"
     );
   }
 
@@ -138,6 +138,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.mp3$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.mp3$|.*\\.wav$|.*\\.ogg$).*)",
   ],
 };
