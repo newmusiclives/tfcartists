@@ -41,22 +41,16 @@ export default function HomePage() {
                 Admin
               </Link>
               <Link
+                href="/parker"
+                className="text-rose-600 hover:text-rose-700 font-medium transition-colors"
+              >
+                Parker
+              </Link>
+              <Link
                 href="/riley"
                 className="text-purple-600 hover:text-purple-700 font-medium transition-colors"
               >
                 Riley
-              </Link>
-              <Link
-                href="/harper"
-                className="text-green-600 hover:text-green-700 font-medium transition-colors"
-              >
-                Harper
-              </Link>
-              <Link
-                href="/elliot"
-                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
-              >
-                Elliot
               </Link>
               <Link
                 href="/cassidy"
@@ -65,10 +59,16 @@ export default function HomePage() {
                 Cassidy
               </Link>
               <Link
-                href="/parker"
-                className="text-rose-600 hover:text-rose-700 font-medium transition-colors"
+                href="/elliot"
+                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
               >
-                Parker
+                Elliot
+              </Link>
+              <Link
+                href="/harper"
+                className="text-green-600 hover:text-green-700 font-medium transition-colors"
+              >
+                Harper
               </Link>
               <Link
                 href="/onboard"
@@ -113,8 +113,8 @@ export default function HomePage() {
           </h1>
 
           <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Riley&apos;s team finds and onboards artists. Cassidy&apos;s team reviews submissions and assigns rotation tiers. Harper&apos;s team secures sponsors to fund the station.
-            Elliot&apos;s team builds a passionate listener community. Parker&apos;s team manages day-to-day station operations — programming, music, traffic, and listener services.
+            Parker&apos;s team manages day-to-day station operations — programming, music, traffic, and listener services. Riley&apos;s team finds and onboards artists. Cassidy&apos;s team reviews submissions and assigns rotation tiers.
+            Elliot&apos;s team builds a passionate listener community. Harper&apos;s team secures sponsors to fund the station.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -147,8 +147,40 @@ export default function HomePage() {
 
         {/* Team Stats */}
         <div className="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-8">
-          {/* Row 1: Riley + Harper centered */}
+          {/* Row 1: Parker + Riley centered */}
           <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2 lg:col-start-2">
+            <div className="flex items-center space-x-3 mb-4">
+              <Radio className="w-10 h-10 text-rose-600" />
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Parker&apos;s Team</h3>
+                <p className="text-sm text-gray-600">Station Management</p>
+              </div>
+            </div>
+            <ul className="space-y-2 text-gray-700">
+              <li className="flex items-center space-x-2">
+                <span className="text-rose-600">✓</span>
+                <span>Show scheduling & programming</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-rose-600">✓</span>
+                <span>Music rotation & library mgmt</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-rose-600">✓</span>
+                <span>Commercial traffic & ad ops</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-rose-600">✓</span>
+                <span>Listener services & engagement</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-rose-600">✓</span>
+                <span>FCC compliance, 24/7 operations</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Users className="w-10 h-10 text-purple-600" />
               <div>
@@ -180,39 +212,7 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
-            <div className="flex items-center space-x-3 mb-4">
-              <DollarSign className="w-10 h-10 text-green-600" />
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Harper's Team</h3>
-                <p className="text-sm text-gray-600">Sponsor Acquisition</p>
-              </div>
-            </div>
-            <ul className="space-y-2 text-gray-700">
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>Music-related businesses</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>Local craft makers & venues</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>Community sponsor outreach</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>4-tier sponsorship packages</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
-                <span>72 sponsors, $18,150/month</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Row 2: Cassidy, Elliot, Parker */}
+          {/* Row 2: Cassidy, Elliot, Harper */}
           <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Award className="w-10 h-10 text-teal-600" />
@@ -279,32 +279,32 @@ export default function HomePage() {
 
           <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <Radio className="w-10 h-10 text-rose-600" />
+              <DollarSign className="w-10 h-10 text-green-600" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Parker&apos;s Team</h3>
-                <p className="text-sm text-gray-600">Station Management</p>
+                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Harper's Team</h3>
+                <p className="text-sm text-gray-600">Sponsor Acquisition</p>
               </div>
             </div>
             <ul className="space-y-2 text-gray-700">
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
-                <span>Show scheduling & programming</span>
+                <span className="text-green-600">✓</span>
+                <span>Music-related businesses</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
-                <span>Music rotation & library mgmt</span>
+                <span className="text-green-600">✓</span>
+                <span>Local craft makers & venues</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
-                <span>Commercial traffic & ad ops</span>
+                <span className="text-green-600">✓</span>
+                <span>Community sponsor outreach</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
-                <span>Listener services & engagement</span>
+                <span className="text-green-600">✓</span>
+                <span>4-tier sponsorship packages</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
-                <span>FCC compliance, 24/7 operations</span>
+                <span className="text-green-600">✓</span>
+                <span>72 sponsors, $18,150/month</span>
               </li>
             </ul>
           </div>
@@ -384,6 +384,13 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 text-center md:text-left">
             <div>
+              <h3 className="text-white font-semibold mb-2">Parker's Team</h3>
+              <p className="text-sm">Station Management & Ops</p>
+              <Link href="/parker" className="text-xs hover:text-white transition-colors block mt-2">
+                View Dashboard →
+              </Link>
+            </div>
+            <div>
               <h3 className="text-white font-semibold mb-2">Riley's Team</h3>
               <p className="text-sm">Artist Acquisition & Onboarding</p>
               <Link href="/riley" className="text-xs hover:text-white transition-colors block mt-2">
@@ -398,13 +405,6 @@ export default function HomePage() {
               </Link>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-2">Harper's Team</h3>
-              <p className="text-sm">Sponsor Acquisition & Revenue</p>
-              <Link href="/harper" className="text-xs hover:text-white transition-colors block mt-2">
-                View Dashboard →
-              </Link>
-            </div>
-            <div>
               <h3 className="text-white font-semibold mb-2">Elliot's Team</h3>
               <p className="text-sm">Listener Growth & Retention</p>
               <Link href="/elliot" className="text-xs hover:text-white transition-colors block mt-2">
@@ -412,9 +412,9 @@ export default function HomePage() {
               </Link>
             </div>
             <div>
-              <h3 className="text-white font-semibold mb-2">Parker's Team</h3>
-              <p className="text-sm">Station Management & Ops</p>
-              <Link href="/parker" className="text-xs hover:text-white transition-colors block mt-2">
+              <h3 className="text-white font-semibold mb-2">Harper's Team</h3>
+              <p className="text-sm">Sponsor Acquisition & Revenue</p>
+              <Link href="/harper" className="text-xs hover:text-white transition-colors block mt-2">
                 View Dashboard →
               </Link>
             </div>
@@ -433,7 +433,7 @@ export default function HomePage() {
                 Cookie Policy
               </Link>
             </div>
-            <p className="text-center">&copy; 2025 TrueFans RADIO Network. Riley + Cassidy + Harper + Elliot + Parker AI Teams.</p>
+            <p className="text-center">&copy; 2025 TrueFans RADIO Network. Parker + Riley + Cassidy + Elliot + Harper AI Teams.</p>
           </div>
         </div>
       </footer>

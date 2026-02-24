@@ -113,6 +113,20 @@ export function SharedNav() {
                 {openMenu === "teams" && (
                   <div className="absolute right-0 mt-1 w-[880px] bg-white rounded-xl shadow-xl border py-4 px-3 z-50">
                     <div className="grid grid-cols-5 gap-2">
+                      {/* Parker */}
+                      <div>
+                        <div className="px-3 py-1.5 text-xs font-bold text-rose-600 uppercase tracking-wider flex items-center space-x-1">
+                          <Radio className="w-3 h-3" />
+                          <span>Parker Team</span>
+                        </div>
+                        <Link href="/parker" className={activeLinkClass("/parker", "rose")}>Dashboard</Link>
+                        <Link href="/parker/programming" className={activeLinkClass("/parker/programming", "rose")}>Programming</Link>
+                        <Link href="/parker/music" className={activeLinkClass("/parker/music", "rose")}>Music</Link>
+                        <Link href="/parker/traffic" className={activeLinkClass("/parker/traffic", "rose")}>Traffic</Link>
+                        <Link href="/parker/listeners" className={activeLinkClass("/parker/listeners", "rose")}>Listeners</Link>
+                        <Link href="/parker/team" className={activeLinkClass("/parker/team", "rose")}>Team Members</Link>
+                      </div>
+
                       {/* Riley */}
                       <div>
                         <div className="px-3 py-1.5 text-xs font-bold text-purple-600 uppercase tracking-wider flex items-center space-x-1">
@@ -127,22 +141,6 @@ export function SharedNav() {
                         <Link href="/riley/pool-calculator" className={activeLinkClass("/riley/pool-calculator")}>Pool Calculator</Link>
                         <Link href="/riley/upgrade-opportunities" className={activeLinkClass("/riley/upgrade-opportunities")}>Upgrades</Link>
                         <Link href="/riley/team" className={activeLinkClass("/riley/team")}>Team Members</Link>
-                      </div>
-
-                      {/* Harper */}
-                      <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center space-x-1">
-                          <Building2 className="w-3 h-3" />
-                          <span>Harper Team</span>
-                        </div>
-                        <Link href="/harper" className={activeLinkClass("/harper", "blue")}>Dashboard</Link>
-                        <Link href="/harper/pipeline" className={activeLinkClass("/harper/pipeline", "blue")}>Sponsor Pipeline</Link>
-                        <Link href="/harper/sponsors" className={activeLinkClass("/harper/sponsors", "blue")}>Sponsor List</Link>
-                        <Link href="/harper/outreach" className={activeLinkClass("/harper/outreach", "blue")}>Outreach Center</Link>
-                        <Link href="/harper/calls" className={activeLinkClass("/harper/calls", "blue")}>Call Tracking</Link>
-                        <Link href="/harper/billing" className={activeLinkClass("/harper/billing", "blue")}>Billing</Link>
-                        <Link href="/harper/inventory" className={activeLinkClass("/harper/inventory", "blue")}>Ad Inventory</Link>
-                        <Link href="/harper/team" className={activeLinkClass("/harper/team", "blue")}>Team Members</Link>
                       </div>
 
                       {/* Cassidy */}
@@ -172,18 +170,20 @@ export function SharedNav() {
                         <Link href="/elliot/team" className={activeLinkClass("/elliot/team", "green")}>Team Members</Link>
                       </div>
 
-                      {/* Parker */}
+                      {/* Harper */}
                       <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-rose-600 uppercase tracking-wider flex items-center space-x-1">
-                          <Radio className="w-3 h-3" />
-                          <span>Parker Team</span>
+                        <div className="px-3 py-1.5 text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center space-x-1">
+                          <Building2 className="w-3 h-3" />
+                          <span>Harper Team</span>
                         </div>
-                        <Link href="/parker" className={activeLinkClass("/parker", "rose")}>Dashboard</Link>
-                        <Link href="/parker/programming" className={activeLinkClass("/parker/programming", "rose")}>Programming</Link>
-                        <Link href="/parker/music" className={activeLinkClass("/parker/music", "rose")}>Music</Link>
-                        <Link href="/parker/traffic" className={activeLinkClass("/parker/traffic", "rose")}>Traffic</Link>
-                        <Link href="/parker/listeners" className={activeLinkClass("/parker/listeners", "rose")}>Listeners</Link>
-                        <Link href="/parker/team" className={activeLinkClass("/parker/team", "rose")}>Team Members</Link>
+                        <Link href="/harper" className={activeLinkClass("/harper", "blue")}>Dashboard</Link>
+                        <Link href="/harper/pipeline" className={activeLinkClass("/harper/pipeline", "blue")}>Sponsor Pipeline</Link>
+                        <Link href="/harper/sponsors" className={activeLinkClass("/harper/sponsors", "blue")}>Sponsor List</Link>
+                        <Link href="/harper/outreach" className={activeLinkClass("/harper/outreach", "blue")}>Outreach Center</Link>
+                        <Link href="/harper/calls" className={activeLinkClass("/harper/calls", "blue")}>Call Tracking</Link>
+                        <Link href="/harper/billing" className={activeLinkClass("/harper/billing", "blue")}>Billing</Link>
+                        <Link href="/harper/inventory" className={activeLinkClass("/harper/inventory", "blue")}>Ad Inventory</Link>
+                        <Link href="/harper/team" className={activeLinkClass("/harper/team", "blue")}>Team Members</Link>
                       </div>
                     </div>
                   </div>
@@ -370,6 +370,16 @@ export function SharedNav() {
                 {openMenu === "teams" && (
                   <div className="absolute left-0 mt-1 w-[520px] bg-white rounded-xl shadow-xl border py-4 px-2 z-50">
                     <div className="grid grid-cols-2 gap-1">
+                      {/* Parker */}
+                      <div>
+                        <div className="px-3 py-1.5 text-xs font-bold text-rose-600 uppercase tracking-wider">Parker Team</div>
+                        <Link href="/parker" className={activeLinkClass("/parker", "rose")}>Dashboard</Link>
+                        <Link href="/parker/programming" className={activeLinkClass("/parker/programming", "rose")}>Programming</Link>
+                        <Link href="/parker/music" className={activeLinkClass("/parker/music", "rose")}>Music</Link>
+                        <Link href="/parker/traffic" className={activeLinkClass("/parker/traffic", "rose")}>Traffic</Link>
+                        <Link href="/parker/listeners" className={activeLinkClass("/parker/listeners", "rose")}>Listeners</Link>
+                        <Link href="/parker/team" className={activeLinkClass("/parker/team", "rose")}>Team Members</Link>
+                      </div>
                       {/* Riley */}
                       <div>
                         <div className="px-3 py-1.5 text-xs font-bold text-purple-600 uppercase tracking-wider">Riley Team</div>
@@ -379,16 +389,6 @@ export function SharedNav() {
                         <Link href="/riley/outreach" className={activeLinkClass("/riley/outreach")}>Outreach</Link>
                         <Link href="/riley/submissions" className={activeLinkClass("/riley/submissions")}>Submissions</Link>
                         <Link href="/riley/team" className={activeLinkClass("/riley/team")}>Team Members</Link>
-                      </div>
-                      {/* Harper */}
-                      <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-blue-600 uppercase tracking-wider">Harper Team</div>
-                        <Link href="/harper" className={activeLinkClass("/harper", "blue")}>Dashboard</Link>
-                        <Link href="/harper/pipeline" className={activeLinkClass("/harper/pipeline", "blue")}>Sponsor Pipeline</Link>
-                        <Link href="/harper/sponsors" className={activeLinkClass("/harper/sponsors", "blue")}>Sponsor List</Link>
-                        <Link href="/harper/outreach" className={activeLinkClass("/harper/outreach", "blue")}>Outreach</Link>
-                        <Link href="/harper/billing" className={activeLinkClass("/harper/billing", "blue")}>Billing</Link>
-                        <Link href="/harper/team" className={activeLinkClass("/harper/team", "blue")}>Team Members</Link>
                       </div>
                       {/* Cassidy */}
                       <div className="mt-2">
@@ -406,15 +406,15 @@ export function SharedNav() {
                         <Link href="/elliot/campaigns" className={activeLinkClass("/elliot/campaigns", "green")}>Campaigns</Link>
                         <Link href="/elliot/team" className={activeLinkClass("/elliot/team", "green")}>Team Members</Link>
                       </div>
-                      {/* Parker */}
+                      {/* Harper */}
                       <div className="mt-2">
-                        <div className="px-3 py-1.5 text-xs font-bold text-rose-600 uppercase tracking-wider">Parker Team</div>
-                        <Link href="/parker" className={activeLinkClass("/parker", "rose")}>Dashboard</Link>
-                        <Link href="/parker/programming" className={activeLinkClass("/parker/programming", "rose")}>Programming</Link>
-                        <Link href="/parker/music" className={activeLinkClass("/parker/music", "rose")}>Music</Link>
-                        <Link href="/parker/traffic" className={activeLinkClass("/parker/traffic", "rose")}>Traffic</Link>
-                        <Link href="/parker/listeners" className={activeLinkClass("/parker/listeners", "rose")}>Listeners</Link>
-                        <Link href="/parker/team" className={activeLinkClass("/parker/team", "rose")}>Team Members</Link>
+                        <div className="px-3 py-1.5 text-xs font-bold text-blue-600 uppercase tracking-wider">Harper Team</div>
+                        <Link href="/harper" className={activeLinkClass("/harper", "blue")}>Dashboard</Link>
+                        <Link href="/harper/pipeline" className={activeLinkClass("/harper/pipeline", "blue")}>Sponsor Pipeline</Link>
+                        <Link href="/harper/sponsors" className={activeLinkClass("/harper/sponsors", "blue")}>Sponsor List</Link>
+                        <Link href="/harper/outreach" className={activeLinkClass("/harper/outreach", "blue")}>Outreach</Link>
+                        <Link href="/harper/billing" className={activeLinkClass("/harper/billing", "blue")}>Billing</Link>
+                        <Link href="/harper/team" className={activeLinkClass("/harper/team", "blue")}>Team Members</Link>
                       </div>
                     </div>
                   </div>
@@ -500,6 +500,25 @@ export function SharedNav() {
 
               {(mobileSection === "teams" || mobileSection === "riley" || mobileSection === "harper" || mobileSection === "cassidy" || mobileSection === "elliot" || mobileSection === "parker") && (
                 <div className="pl-4">
+                  {/* Parker */}
+                  <button
+                    onClick={() => toggleMobileSection("parker")}
+                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-rose-700"
+                  >
+                    <span className="font-semibold">Parker Team</span>
+                    <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "parker" ? "rotate-90" : ""}`} />
+                  </button>
+                  {mobileSection === "parker" && (
+                    <div className="pl-4 pb-2 space-y-0.5">
+                      <Link href="/parker" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Dashboard</Link>
+                      <Link href="/parker/programming" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Programming</Link>
+                      <Link href="/parker/music" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Music</Link>
+                      <Link href="/parker/traffic" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Traffic</Link>
+                      <Link href="/parker/listeners" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Listeners</Link>
+                      <Link href="/parker/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Team Members</Link>
+                    </div>
+                  )}
+
                   {/* Riley */}
                   <button
                     onClick={() => toggleMobileSection("riley")}
@@ -518,27 +537,6 @@ export function SharedNav() {
                       <Link href="/riley/pool-calculator" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Pool Calculator</Link>
                       <Link href="/riley/upgrade-opportunities" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Upgrades</Link>
                       <Link href="/riley/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Team Members</Link>
-                    </div>
-                  )}
-
-                  {/* Harper */}
-                  <button
-                    onClick={() => toggleMobileSection("harper")}
-                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-blue-700"
-                  >
-                    <span className="font-semibold">Harper Team</span>
-                    <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "harper" ? "rotate-90" : ""}`} />
-                  </button>
-                  {mobileSection === "harper" && (
-                    <div className="pl-4 pb-2 space-y-0.5">
-                      <Link href="/harper" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Dashboard</Link>
-                      <Link href="/harper/pipeline" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Sponsor Pipeline</Link>
-                      <Link href="/harper/sponsors" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Sponsor List</Link>
-                      <Link href="/harper/outreach" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Outreach Center</Link>
-                      <Link href="/harper/calls" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Call Tracking</Link>
-                      <Link href="/harper/billing" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Billing</Link>
-                      <Link href="/harper/inventory" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Ad Inventory</Link>
-                      <Link href="/harper/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Team Members</Link>
                     </div>
                   )}
 
@@ -579,22 +577,24 @@ export function SharedNav() {
                     </div>
                   )}
 
-                  {/* Parker */}
+                  {/* Harper */}
                   <button
-                    onClick={() => toggleMobileSection("parker")}
-                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-rose-700"
+                    onClick={() => toggleMobileSection("harper")}
+                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-blue-700"
                   >
-                    <span className="font-semibold">Parker Team</span>
-                    <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "parker" ? "rotate-90" : ""}`} />
+                    <span className="font-semibold">Harper Team</span>
+                    <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "harper" ? "rotate-90" : ""}`} />
                   </button>
-                  {mobileSection === "parker" && (
+                  {mobileSection === "harper" && (
                     <div className="pl-4 pb-2 space-y-0.5">
-                      <Link href="/parker" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Dashboard</Link>
-                      <Link href="/parker/programming" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Programming</Link>
-                      <Link href="/parker/music" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Music</Link>
-                      <Link href="/parker/traffic" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Traffic</Link>
-                      <Link href="/parker/listeners" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Listeners</Link>
-                      <Link href="/parker/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Team Members</Link>
+                      <Link href="/harper" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Dashboard</Link>
+                      <Link href="/harper/pipeline" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Sponsor Pipeline</Link>
+                      <Link href="/harper/sponsors" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Sponsor List</Link>
+                      <Link href="/harper/outreach" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Outreach Center</Link>
+                      <Link href="/harper/calls" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Call Tracking</Link>
+                      <Link href="/harper/billing" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Billing</Link>
+                      <Link href="/harper/inventory" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Ad Inventory</Link>
+                      <Link href="/harper/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Team Members</Link>
                     </div>
                   )}
                 </div>
