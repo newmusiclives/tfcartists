@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
+import { amplifyPcm, pcmToWav, saveAudioFile } from "@/lib/radio/voice-track-tts";
+import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
+import OpenAI from "openai";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +42,8 @@ export async function GET(req: NextRequest) {
       assigned: 0,
       staleReassigned: 0,
       autoPlaced: 0,
+      imagingRegenerated: 0,
+      adAudioGenerated: 0,
       errors: 0,
     };
 
@@ -75,6 +81,14 @@ export async function GET(req: NextRequest) {
               judgingStartedAt: new Date(),
             },
           });
+
+          // Sync IN_REVIEW to GHL
+          messageDelivery.syncCassidyStage({
+            email: submission.artistEmail || undefined,
+            name: submission.artistName,
+            trackTitle: submission.trackTitle,
+            stage: "in_review",
+          }).catch(() => {});
 
           results.assigned++;
         } catch (error) {
@@ -146,6 +160,15 @@ export async function GET(req: NextRequest) {
           },
         });
 
+        // Sync PLACED to GHL
+        messageDelivery.syncCassidyStage({
+          email: submission.artistEmail || undefined,
+          name: submission.artistName,
+          trackTitle: submission.trackTitle,
+          stage: "placed",
+          tier: submission.tierAwarded || undefined,
+        }).catch(() => {});
+
         // Create Song record so placed track enters radio rotation
         if (station && submission.trackFileUrl) {
           await prisma.song.create({
@@ -169,6 +192,151 @@ export async function GET(req: NextRequest) {
         logger.error("Auto-placement failed", { submissionId: submission.id, error });
         results.errors++;
       }
+    }
+
+    // 4. Regenerate imaging scripts that were generated without a music bed
+    if (station) {
+      try {
+        const activeMusicBeds = await prisma.musicBed.findMany({
+          where: { stationId: station.id, isActive: true },
+        });
+
+        if (activeMusicBeds.length > 0) {
+          const imagingVoices = await prisma.stationImagingVoice.findMany({
+            where: { stationId: station.id, isActive: true },
+          });
+
+          // Check if any scripts have audioFilePath but hasMusicBed is false/missing
+          let needsRegen = false;
+          for (const voice of imagingVoices) {
+            const metadata = voice.metadata as Record<string, unknown> | null;
+            const scripts = (metadata?.scripts || {}) as Record<string, Array<{ audioFilePath?: string; hasMusicBed?: boolean }>>;
+            for (const type of Object.keys(scripts)) {
+              for (const script of scripts[type] || []) {
+                if (script.audioFilePath && !script.hasMusicBed) {
+                  needsRegen = true;
+                  break;
+                }
+              }
+              if (needsRegen) break;
+            }
+            if (needsRegen) break;
+          }
+
+          if (needsRegen) {
+            logger.info("Imaging scripts need regeneration with music beds — triggering internal regen");
+
+            // Call the generate-audio route internally
+            const baseUrl = process.env.NEXTAUTH_URL || process.env.VERCEL_URL
+              ? `https://${process.env.VERCEL_URL}`
+              : "http://localhost:3000";
+
+            const regenResponse = await fetch(`${baseUrl}/api/station-imaging/generate-audio`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                stationId: station.id,
+                types: ["station_id", "sweeper", "promo"],
+              }),
+            });
+
+            if (regenResponse.ok) {
+              const regenData = await regenResponse.json();
+              const regenCount = regenData.results?.filter((r: { success: boolean }) => r.success).length || 0;
+              results.imagingRegenerated = regenCount;
+              logger.info("Imaging regeneration complete", { regenerated: regenCount });
+            } else {
+              logger.error("Imaging regeneration request failed", { status: regenResponse.status });
+              results.errors++;
+            }
+          }
+        }
+      } catch (error) {
+        logger.error("Imaging regeneration step failed", { error });
+        results.errors++;
+      }
+    }
+
+    // 5. Generate audio for sponsor ads that have scriptText but no audioFilePath
+    try {
+      const adsNeedingAudio = await prisma.sponsorAd.findMany({
+        where: {
+          scriptText: { not: null },
+          audioFilePath: null,
+          isActive: true,
+        },
+        include: { musicBed: true },
+      });
+
+      if (adsNeedingAudio.length > 0) {
+        const apiKey = process.env.OPENAI_API_KEY;
+        if (!apiKey) {
+          logger.warn("OPENAI_API_KEY not configured — skipping ad audio generation");
+        } else {
+          const openai = new OpenAI({ apiKey });
+
+          // Pick a default voice from station imaging settings
+          let openaiVoice: "onyx" | "nova" = "onyx";
+          if (station) {
+            const imagingVoice = await prisma.stationImagingVoice.findFirst({
+              where: { stationId: station.id, isActive: true },
+            });
+            if (imagingVoice?.voiceType === "female") {
+              openaiVoice = "nova";
+            }
+          }
+
+          logger.info(`Generating audio for ${adsNeedingAudio.length} sponsor ads`);
+
+          for (const ad of adsNeedingAudio) {
+            try {
+              const response = await openai.audio.speech.create({
+                model: "tts-1-hd",
+                voice: openaiVoice,
+                input: ad.scriptText!,
+                response_format: "pcm",
+              });
+
+              const rawPcm = Buffer.from(await response.arrayBuffer());
+              const boostedPcm = amplifyPcm(rawPcm, 2.5);
+
+              // Mix with music bed if the ad has one assigned
+              let finalPcm = boostedPcm;
+              if (ad.musicBed?.filePath) {
+                finalPcm = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
+                  voiceGain: 1.0,
+                  bedGain: 0.6,
+                });
+              }
+
+              const wavBuffer = pcmToWav(finalPcm);
+
+              const safeName = ad.adTitle
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-|-$/g, "");
+              const filename = `ad-${safeName}-${ad.id.slice(-6)}.wav`;
+              const audioFilePath = saveAudioFile(wavBuffer, "commercials", filename);
+
+              // Duration: 24kHz 16-bit mono = 48000 bytes/sec
+              const durationSeconds = Math.round((finalPcm.length / 48000) * 10) / 10;
+
+              await prisma.sponsorAd.update({
+                where: { id: ad.id },
+                data: { audioFilePath, durationSeconds },
+              });
+
+              results.adAudioGenerated++;
+            } catch (error) {
+              logger.error("Ad audio generation failed", { adId: ad.id, adTitle: ad.adTitle, error });
+              results.errors++;
+            }
+          }
+        }
+      }
+    } catch (error) {
+      logger.error("Ad audio generation step failed", { error });
+      results.errors++;
     }
 
     logger.info("Cassidy daily submission review completed", results);

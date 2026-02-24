@@ -4,6 +4,7 @@ import { riley } from "@/lib/ai/riley-agent";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { socialDiscovery } from "@/lib/discovery/social-discovery";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 export const dynamic = "force-dynamic";
 
@@ -67,6 +68,7 @@ export async function GET(req: NextRequest) {
       followUps: 0,
       showReminders: 0,
       wins: 0,
+      cassidyBridged: 0,
       errors: 0,
     };
 
@@ -250,6 +252,102 @@ export async function GET(req: NextRequest) {
         where: { id: { in: celebratedWinIds } },
         data: { celebratedBy: "riley" },
       });
+    }
+
+    // ── Step 4: Bridge QUALIFIED Spotify artists → Cassidy submissions ──
+    try {
+      const qualifiedSpotifyArtists = await prisma.artist.findMany({
+        where: {
+          status: "QUALIFIED",
+          discoverySource: "spotify",
+          sourceHandle: { not: null },
+        },
+      });
+
+      // Filter out artists that already have a Cassidy Submission
+      const artistIds = qualifiedSpotifyArtists.map((a) => a.id);
+      const existingSubmissions = artistIds.length > 0
+        ? await prisma.submission.findMany({
+            where: { artistId: { in: artistIds } },
+            select: { artistId: true },
+          })
+        : [];
+      const alreadySubmitted = new Set(existingSubmissions.map((s) => s.artistId));
+
+      const toBridge = qualifiedSpotifyArtists.filter((a) => !alreadySubmitted.has(a.id));
+
+      logger.info(`Found ${toBridge.length} qualified Spotify artists to bridge to Cassidy`);
+
+      for (const artist of toBridge) {
+        try {
+          // Fetch their top track from Spotify (need a preview URL)
+          const topTrack = dryRun
+            ? null
+            : await socialDiscovery.getSpotifyTopTrack(artist.sourceHandle!);
+
+          if (dryRun) {
+            results.cassidyBridged++;
+            continue;
+          }
+
+          if (!topTrack) {
+            logger.warn("Skipping artist — no Spotify preview URL", {
+              artistId: artist.id,
+              name: artist.name,
+            });
+            continue;
+          }
+
+          // Create Submission for Cassidy's review queue
+          await prisma.submission.create({
+            data: {
+              artistId: artist.id,
+              artistName: artist.name,
+              artistEmail: artist.email,
+              trackTitle: topTrack.trackTitle,
+              trackFileUrl: topTrack.previewUrl,
+              genre: artist.genre,
+              discoverySource: "spotify",
+              discoveredBy: "riley",
+              rileyContext: {
+                bridgedAt: new Date().toISOString(),
+                spotifyId: artist.sourceHandle,
+                albumName: topTrack.albumName,
+                followerCount: artist.followerCount,
+              },
+              status: "PENDING",
+            },
+          });
+
+          // Sync new Cassidy submission to GHL
+          messageDelivery.syncCassidyStage({
+            email: artist.email || undefined,
+            name: artist.name,
+            trackTitle: topTrack.trackTitle,
+            stage: "pending",
+          }).catch(() => {});
+
+          // Advance artist to onboarding stage
+          await prisma.artist.update({
+            where: { id: artist.id },
+            data: {
+              pipelineStage: "onboarding",
+              status: "ONBOARDING",
+            },
+          });
+
+          results.cassidyBridged++;
+        } catch (error) {
+          logger.error("Cassidy bridge failed for artist", {
+            artistId: artist.id,
+            error,
+          });
+          results.errors++;
+        }
+      }
+    } catch (error) {
+      logger.error("Cassidy bridge step failed", { error });
+      results.errors++;
     }
 
     logger.info("Riley daily automation completed", { ...results, dryRun });

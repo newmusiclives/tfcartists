@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 import type { SubmitReviewRequest } from "@/types/cassidy";
 
 export const dynamic = "force-dynamic";
@@ -112,6 +113,14 @@ export async function POST(request: NextRequest) {
           judgingStartedAt: new Date(),
         },
       });
+
+      // Sync IN_REVIEW to GHL
+      messageDelivery.syncCassidyStage({
+        email: submission.artistEmail || undefined,
+        name: submission.artistName,
+        trackTitle: submission.trackTitle,
+        stage: "in_review",
+      }).catch(() => {});
     }
 
     // Check if all judges have reviewed (update to JUDGED if so)
@@ -131,6 +140,14 @@ export async function POST(request: NextRequest) {
           judgingCompletedAt: new Date(),
         },
       });
+
+      // Sync JUDGED to GHL
+      messageDelivery.syncCassidyStage({
+        email: submission.artistEmail || undefined,
+        name: submission.artistName,
+        trackTitle: submission.trackTitle,
+        stage: "judged",
+      }).catch(() => {});
     }
 
     // Update judge's total submissions count

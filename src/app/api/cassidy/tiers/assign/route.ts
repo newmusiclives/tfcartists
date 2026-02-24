@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 import type { AssignTierRequest } from "@/types/cassidy";
 
 export const dynamic = "force-dynamic";
@@ -172,6 +173,16 @@ export async function POST(request: NextRequest) {
         successful: true,
       },
     });
+
+    // Sync PLACED with tier to GHL
+    messageDelivery.syncCassidyStage({
+      phone: submission.artistPhone || undefined,
+      email: submission.artistEmail || undefined,
+      name: submission.artistName,
+      trackTitle: submission.trackTitle,
+      stage: "placed",
+      tier: body.tierAwarded,
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,

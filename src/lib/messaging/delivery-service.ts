@@ -38,8 +38,23 @@ const RILEY_STAGE_TAGS: Record<string, string> = {
   active: "Riley - Active",
 };
 
+/** Maps Cassidy submission stages to GHL contact tags */
+const CASSIDY_STAGE_TAGS: Record<string, string> = {
+  pending: "Cassidy - Pending",
+  in_review: "Cassidy - In Review",
+  judged: "Cassidy - Judged",
+  placed: "Cassidy - Placed",
+  not_placed: "Cassidy - Not Placed",
+};
+
+function cassidyPlacedTag(tier: string): string {
+  const formatted = tier.charAt(0).toUpperCase() + tier.slice(1).toLowerCase();
+  return `Cassidy - Placed - ${formatted}`;
+}
+
 class MessageDeliveryService {
   private pipelineStageMap: Record<string, string> | null = null;
+  private cassidyPipelineStageMap: Record<string, string> | null = null;
 
   /**
    * Send a message via the specified channel
@@ -241,6 +256,146 @@ class MessageDeliveryService {
     } catch (error) {
       // Don't let GHL sync failures break the Riley flow
       logger.warn("Failed to sync artist stage to GHL", {
+        stage: opts.stage,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  /**
+   * Build tags array for a GHL contact based on Cassidy submission stage
+   */
+  private buildCassidyTags(stage: string, tier?: string): string[] {
+    const tags = ["NCR Cassidy"];
+    const stageTag = CASSIDY_STAGE_TAGS[stage];
+    if (stageTag) tags.push(stageTag);
+    if (tier && stage === "placed") {
+      tags.push(cassidyPlacedTag(tier));
+    }
+    return tags;
+  }
+
+  /**
+   * Fetch and cache Cassidy pipeline stage IDs from GHL
+   */
+  private async fetchCassidyPipelineStages(): Promise<Record<string, string>> {
+    if (this.cassidyPipelineStageMap) return this.cassidyPipelineStageMap;
+
+    const res = await fetch(
+      `${GHL_BASE_URL}/opportunities/pipelines?locationId=${env.GHL_LOCATION_ID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${env.GHL_API_KEY}`,
+          Version: "2021-07-28",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      logger.warn("Failed to fetch GHL pipelines for Cassidy", { status: res.status });
+      return {};
+    }
+
+    const data = await res.json();
+    const pipeline = data.pipelines?.find(
+      (p: any) => p.id === env.GHL_CASSIDY_PIPELINE_ID
+    );
+
+    if (!pipeline) {
+      logger.warn("Cassidy pipeline not found in GHL", {
+        pipelineId: env.GHL_CASSIDY_PIPELINE_ID,
+      });
+      return {};
+    }
+
+    this.cassidyPipelineStageMap = {};
+    for (const s of pipeline.stages) {
+      this.cassidyPipelineStageMap[s.name.toLowerCase().replace(/ /g, "_")] = s.id;
+    }
+
+    logger.info("Cached GHL Cassidy pipeline stages", {
+      stages: Object.keys(this.cassidyPipelineStageMap),
+    });
+
+    return this.cassidyPipelineStageMap;
+  }
+
+  /**
+   * Upsert an opportunity in the Cassidy pipeline (create or move to new stage)
+   */
+  private async upsertCassidyOpportunity(
+    contactId: string,
+    stage: string,
+    artistName: string,
+    trackTitle: string
+  ): Promise<void> {
+    const stageMap = await this.fetchCassidyPipelineStages();
+    const stageId = stageMap[stage.toLowerCase()];
+    if (!stageId) {
+      logger.warn("GHL Cassidy pipeline stage not found", { stage, availableStages: Object.keys(stageMap) });
+      return;
+    }
+
+    const res = await fetch(`${GHL_BASE_URL}/opportunities/upsert`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GHL_API_KEY}`,
+        Version: "2021-07-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pipelineId: env.GHL_CASSIDY_PIPELINE_ID,
+        pipelineStageId: stageId,
+        locationId: env.GHL_LOCATION_ID,
+        contactId,
+        name: `${artistName} - ${trackTitle}`,
+        status: "open",
+      }),
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      logger.warn("GHL Cassidy opportunity upsert failed", { status: res.status, body });
+    } else {
+      logger.info("GHL Cassidy opportunity synced", { contactId, stage, artistName, trackTitle });
+    }
+  }
+
+  /**
+   * Sync a submission's stage to GHL (tags contact + moves Cassidy opportunity)
+   * Called from Cassidy routes when a submission status transition occurs.
+   */
+  async syncCassidyStage(opts: {
+    phone?: string;
+    email?: string;
+    name: string;
+    trackTitle: string;
+    stage: string;
+    tier?: string;
+  }): Promise<void> {
+    if (!env.GHL_API_KEY || !env.GHL_LOCATION_ID) return;
+
+    try {
+      const tags = this.buildCassidyTags(opts.stage, opts.tier);
+
+      const contactId = await this.upsertGHLContact({
+        phone: opts.phone,
+        email: opts.email,
+        name: opts.name,
+        tags,
+      });
+
+      if (env.GHL_CASSIDY_PIPELINE_ID) {
+        await this.upsertCassidyOpportunity(
+          contactId,
+          opts.stage,
+          opts.name,
+          opts.trackTitle
+        );
+      }
+    } catch (error) {
+      logger.warn("Failed to sync Cassidy stage to GHL", {
         stage: opts.stage,
         error: error instanceof Error ? error.message : String(error),
       });
