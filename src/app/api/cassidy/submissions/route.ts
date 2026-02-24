@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
     // Check role authorization
     const userRole = session?.user?.role;
-    if (userRole !== "cassidy" && userRole !== "admin") {
+    if (userRole !== "cassidy" && userRole !== "riley" && userRole !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

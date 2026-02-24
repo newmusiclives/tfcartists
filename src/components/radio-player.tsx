@@ -30,6 +30,7 @@ export function RadioPlayer() {
   const sessionIdRef = useRef<string | null>(null);
   const sessionStartRef = useRef<number | null>(null);
   const lastTrackRef = useRef<string | null>(null);
+  const connectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sync volume to audio element
   useEffect(() => {
@@ -98,6 +99,7 @@ export function RadioPlayer() {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       if (pollRef.current) clearInterval(pollRef.current);
+      if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
     };
   }, []);
 
@@ -151,17 +153,31 @@ export function RadioPlayer() {
     const audio = audioRef.current;
     if (!audio) return;
 
+    // Clear any previous connection timeout
+    if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
+
     setStatus("loading");
-    fetchNowPlaying(); // Fetch metadata immediately on play
-    startSession(); // Track listening session
+    fetchNowPlaying();
+    startSession();
     const streamUrl = currentStation.streamUrl || DEFAULT_STREAM_URL;
     audio.src = `${streamUrl}?_t=${Date.now()}`;
     audio.play().catch(() => {
       setStatus("error");
     });
+
+    // Auto-timeout if stream doesn't connect within 15 seconds
+    connectTimeoutRef.current = setTimeout(() => {
+      if (!audio.currentTime && audio.src) {
+        audio.pause();
+        audio.src = "";
+        setIsPlaying(false);
+        setStatus("error");
+      }
+    }, 15_000);
   }, [fetchNowPlaying, startSession, currentStation.streamUrl]);
 
   const handlePause = useCallback(() => {
+    if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
     const audio = audioRef.current;
     if (audio) {
       audio.pause();
@@ -182,6 +198,7 @@ export function RadioPlayer() {
   }, [isPlaying, status, handlePlay, handlePause]);
 
   const onPlaying = useCallback(() => {
+    if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
     setIsPlaying(true);
     setStatus("playing");
     startPolling();
