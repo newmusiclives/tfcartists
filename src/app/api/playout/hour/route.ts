@@ -264,8 +264,8 @@ export async function GET(request: NextRequest) {
     );
     const resolvedImaging = new Map<number, { type: string; audioFilePath: string | null }>();
 
-    // Station ID scripts for ad break bookends (populated during imaging resolution)
-    let stationIdScripts: Array<{ label: string; audioFilePath?: string }> = [];
+    // Imaging voice metadata — shared between standalone imaging slots and ad break bookends
+    let imagingVoiceMeta: { scripts?: Record<string, Array<{ label: string; audioFilePath?: string }>> } | null = null;
 
     if (imagingSlots.length > 0 || adSlots.length > 0) {
       // Find imaging voice with audio metadata
@@ -274,15 +274,11 @@ export async function GET(request: NextRequest) {
       });
 
       if (imagingVoice?.metadata) {
-        const meta = imagingVoice.metadata as {
-          scripts?: Record<string, Array<{ label: string; audioFilePath?: string }>>;
-        };
-        if (meta.scripts) {
-          stationIdScripts = meta.scripts["station_id"] || [];
-
+        imagingVoiceMeta = imagingVoice.metadata as any;
+        if (imagingVoiceMeta?.scripts) {
           for (const slot of imagingSlots) {
             const slotType = slot.type as string;
-            const scripts = meta.scripts[slotType] || meta.scripts["sweeper"] || [];
+            const scripts = imagingVoiceMeta.scripts[slotType] || imagingVoiceMeta.scripts["sweeper"] || [];
             if (scripts.length > 0) {
               // Pick a random imaging script for variety
               const pick = scripts[Math.floor(Math.random() * scripts.length)];
@@ -404,26 +400,28 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // Expand ad break into 4-element block: station_id, ad, ad, station_id
+      // Expand ad break into 4-element block: sweeper, ad, ad, promo
       if (slot.type === "ad" || slot.type === "commercial") {
         const adPair = resolvedAds.get(slot.position as number);
         const pos = slot.position as number;
         const min = slot.minute as number;
 
-        // Pick a random station_id script for bookend entries
-        const pickStationId = () => {
-          if (stationIdScripts.length === 0) return undefined;
-          const pick = stationIdScripts[Math.floor(Math.random() * stationIdScripts.length)];
-          return pick.audioFilePath ? { type: "station_id", audioFilePath: pick.audioFilePath } : undefined;
+        // Pick a random imaging script by type
+        const pickImaging = (scriptType: string) => {
+          if (!imagingVoiceMeta?.scripts) return undefined;
+          const scripts = imagingVoiceMeta.scripts[scriptType] || [];
+          if (scripts.length === 0) return undefined;
+          const pick = scripts[Math.floor(Math.random() * scripts.length)];
+          return pick.audioFilePath ? { type: scriptType, audioFilePath: pick.audioFilePath } : undefined;
         };
 
-        // Station ID opener
+        // Sweeper opener (transition into the ad break)
         programLog.push({
           position: pos + 0.0,
           minute: min,
-          type: "station_id",
+          type: "sweeper",
           category: "Imaging",
-          imaging: pickStationId(),
+          imaging: pickImaging("sweeper"),
         });
 
         // Sponsor Ad 1
@@ -444,13 +442,13 @@ export async function GET(request: NextRequest) {
           ad: adPair?.[1],
         });
 
-        // Station ID closer
+        // Promo closer (transition back to music)
         programLog.push({
           position: pos + 0.3,
           minute: min,
-          type: "station_id",
+          type: "promo",
           category: "Imaging",
-          imaging: pickStationId(),
+          imaging: pickImaging("promo"),
         });
 
         continue; // Skip the normal programLog.push(entry)

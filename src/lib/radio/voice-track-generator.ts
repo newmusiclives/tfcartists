@@ -270,39 +270,45 @@ function buildUserPrompt(
 - Output ONLY the spoken text — no stage directions, no quotes, no labels`;
 
   if (trackType === "intro" && nextSong) {
-    return `Write a voice track where ${djFirstName} introduces the UPCOMING song that is ABOUT TO PLAY.
-UPCOMING SONG (about to play NOW): "${nextSong.songTitle}" by ${nextSong.artistName}
+    return `Write a voice track where ${djFirstName} introduces the NEXT song that is ABOUT TO PLAY.
+NEXT SONG (has NOT played yet): "${nextSong.songTitle}" by ${nextSong.artistName}
 Time of day: ${timeOfDay}.
 ${rules}
-- Use future/present phrasing: "Coming up..." / "Here's..." / "Now let's hear..."
-- CRITICAL: Only mention "${nextSong.songTitle}" — do NOT back-announce or mention any other song
-- CRITICAL: Do NOT use past tense like "that was" — this song has NOT played yet`;
+- MUST use future/present phrasing: "Coming up..." / "Here's..." / "Now let's hear..."
+- ONLY mention "${nextSong.songTitle}" — do NOT mention any other song by name
+- Do NOT use past tense like "that was" or "you just heard" — this song has NOT played yet
+- Do NOT reference or name any song that played earlier`;
   }
 
   if (trackType === "back_announce_intro" && prevSong && nextSong) {
     return `Write a voice track where ${djFirstName} does two things in this exact order:
 
-STEP 1 — BACK-ANNOUNCE (past tense, already played, ONE short line only):
-Song: "${prevSong.songTitle}" by ${prevSong.artistName}
-Example phrasing: "That was..." / "You just heard..." / "Hope you enjoyed..."
+STEP 1 — BACK-ANNOUNCE the song that ALREADY FINISHED PLAYING:
+Song that JUST PLAYED: "${prevSong.songTitle}" by ${prevSong.artistName}
+MUST use PAST tense: "That was..." / "You just heard..." / "Hope you enjoyed..."
+NEVER say "here's", "coming up", "next", or "let's hear" for this song — it ALREADY PLAYED.
 
-STEP 2 — FORWARD-INTRO (present/future tense, about to play, this is the MAIN FOCUS):
-Song: "${nextSong.songTitle}" by ${nextSong.artistName}
-Example phrasing: "Coming up next..." / "Now here's..." / "Let's get into..."
+STEP 2 — INTRODUCE the NEXT song that is ABOUT TO PLAY:
+Song ABOUT TO PLAY: "${nextSong.songTitle}" by ${nextSong.artistName}
+MUST use FUTURE/PRESENT tense: "Coming up..." / "Now here's..." / "Next up..."
+This is the MAIN FOCUS of the voice track.
 
 Time of day: ${timeOfDay}.
 ${rules}
-- CRITICAL: "${prevSong.songTitle}" is IN THE PAST — use past tense, do NOT say "coming up" or "next" for it
-- CRITICAL: "${nextSong.songTitle}" is IN THE FUTURE — use future/present tense, this is what's about to play
-- The back-announce of "${prevSong.songTitle}" must come FIRST and be BRIEF (one line)
-- The intro of "${nextSong.songTitle}" must come SECOND and be the main focus`;
+- WRONG example: "Here's ${prevSong.songTitle}" — NO! That song already played!
+- RIGHT example: "That was ${prevSong.songTitle}... Now here's ${nextSong.songTitle}"
+- The back-announce MUST come FIRST and be ONE short line only
+- The forward intro MUST come SECOND and be the main focus
+- Do NOT introduce or use future tense for "${prevSong.songTitle}" — it is FINISHED`;
   }
 
   if (trackType === "back_announce" && prevSong) {
-    return `Write a voice track where ${djFirstName} back-announces the song that JUST FINISHED PLAYING.
-JUST PLAYED: "${prevSong.songTitle}" by ${prevSong.artistName}
+    return `Write a voice track where ${djFirstName} comments on the song that JUST FINISHED PLAYING.
+SONG THAT JUST PLAYED: "${prevSong.songTitle}" by ${prevSong.artistName}
 Time of day: ${timeOfDay}.
 ${rules}
+- MUST use PAST tense: "That was..." / "You just heard..." / "What a track..."
+- NEVER say "here's", "coming up", or "next" — the song ALREADY PLAYED
 - Only mention "${prevSong.songTitle}" — do NOT introduce any upcoming song`;
   }
 
