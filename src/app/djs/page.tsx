@@ -95,7 +95,6 @@ function DJPhoto({ dj, size = 80 }: { dj: DJData; size?: number }) {
 
 function DJCard({ dj }: { dj: DJData }) {
   const traits = parseTraits(dj.personalityTraits);
-  const color = `bg-gradient-to-br from-[${dj.colorPrimary || "#b45309"}] to-[${dj.colorSecondary || "#d97706"}]`;
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -105,55 +104,49 @@ function DJCard({ dj }: { dj: DJData }) {
           background: `linear-gradient(to bottom right, ${dj.colorPrimary || "#b45309"}, ${dj.colorSecondary || "#d97706"})`,
         }}
       >
-        <div className="flex items-start space-x-4">
+        <div className="flex items-start space-x-5">
           <div className="flex-shrink-0">
-            <DJPhoto dj={dj} size={80} />
+            <DJPhoto dj={dj} size={96} />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h3 className="text-3xl font-serif font-bold mb-1">{dj.name}</h3>
-            {dj.shows[0] && <p className="text-xl font-medium mb-2">{dj.shows[0].name}</p>}
-            <p className="text-sm opacity-90 mb-3">{getShowTimeLabel(dj)}</p>
-            {dj.tagline && <p className="italic text-lg">&quot;{dj.tagline}&quot;</p>}
+            {dj.shows[0] && (
+              <p className="text-lg font-medium opacity-90">
+                {dj.shows[0].name} · {getShowTimeLabel(dj)}
+              </p>
+            )}
+            {dj.tagline && <p className="italic text-base mt-2 opacity-80">&quot;{dj.tagline}&quot;</p>}
           </div>
         </div>
       </div>
 
-      <div className="p-6 space-y-4">
-        {(dj.age || dj.background) && (
-          <div>
-            <h4 className="font-bold text-gray-900 mb-1">Character Profile</h4>
-            <p className="text-sm text-gray-600">
-              {dj.age && <><strong>Age:</strong> {dj.age}</>}
-              {dj.age && dj.background && " · "}
-              {dj.background && <><strong>Background:</strong> {dj.background}</>}
-            </p>
-          </div>
+      <div className="p-6">
+        {/* Short bio */}
+        {dj.bio && (
+          <p className="text-gray-700 leading-relaxed mb-4">{dj.bio.split("\n")[0]}</p>
         )}
 
-        {dj.vibe && (
-          <div>
-            <h4 className="font-bold text-gray-900 mb-1">Vibe</h4>
-            <p className="text-gray-700">{dj.vibe}</p>
-          </div>
-        )}
-
-        {dj.musicalFocus && (
-          <div>
-            <h4 className="font-bold text-gray-900 mb-1">Musical Focus</h4>
-            <p className="text-gray-700">{dj.musicalFocus}</p>
-          </div>
-        )}
-
-        {traits.length > 0 && (
-          <div>
-            <h4 className="font-bold text-gray-900 mb-2">Personality Traits</h4>
-            <ul className="space-y-1 text-sm text-gray-700">
-              {traits.map((trait, i) => (
-                <li key={i}>· {trait}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {/* Info row */}
+        <div className="flex flex-wrap gap-4 text-sm">
+          {dj.vibe && (
+            <div className="flex-1 min-w-[200px] bg-amber-50 rounded-lg p-3">
+              <span className="font-semibold text-amber-800 block mb-0.5">Vibe</span>
+              <span className="text-gray-700">{dj.vibe}</span>
+            </div>
+          )}
+          {traits.length > 0 && (
+            <div className="flex-1 min-w-[200px] bg-gray-50 rounded-lg p-3">
+              <span className="font-semibold text-gray-800 block mb-1">Personality</span>
+              <div className="flex flex-wrap gap-1.5">
+                {traits.map((trait, i) => (
+                  <span key={i} className="inline-block bg-white border border-gray-200 rounded-full px-2.5 py-0.5 text-xs text-gray-600">
+                    {trait}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -165,15 +158,17 @@ function WeekendDJCard({ dj }: { dj: DJData }) {
   return (
     <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 shadow-md">
       <div className="flex items-center space-x-3 mb-3">
-        <DJPhoto dj={dj} size={48} />
+        <DJPhoto dj={dj} size={56} />
         <div>
           <h3 className="text-xl font-bold text-gray-900">{dj.name}</h3>
-          {dj.shows[0] && <p className="text-base font-medium text-gray-700">{dj.shows[0].name}</p>}
+          <p className="text-sm text-gray-600">
+            {dj.shows[0] && <>{dj.shows[0].name} · </>}
+            {dayLabel}, {getShowTimeLabel(dj)}
+          </p>
         </div>
       </div>
-      <p className="text-base text-gray-600 mb-3">{dayLabel}, {getShowTimeLabel(dj)}</p>
-      {dj.musicalFocus && <p className="text-base text-gray-700">{dj.musicalFocus}</p>}
-      {dj.vibe && <p className="text-sm text-gray-500 mt-2 italic">{dj.vibe}</p>}
+      {dj.tagline && <p className="italic text-sm text-gray-500 mb-2">&quot;{dj.tagline}&quot;</p>}
+      {dj.bio && <p className="text-sm text-gray-700 leading-relaxed">{dj.bio.split("\n")[0]}</p>}
     </div>
   );
 }
@@ -190,7 +185,14 @@ export default function DJsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const weekdayDJs = djs.filter((dj) => !dj.isWeekend && dj.isActive);
+  const WEEKDAY_ORDER = ["Hank", "Loretta", "Doc", "Cody"];
+  const weekdayDJs = djs
+    .filter((dj) => !dj.isWeekend && dj.isActive)
+    .sort((a, b) => {
+      const aIdx = WEEKDAY_ORDER.findIndex((name) => a.name.startsWith(name));
+      const bIdx = WEEKDAY_ORDER.findIndex((name) => b.name.startsWith(name));
+      return (aIdx === -1 ? 999 : aIdx) - (bIdx === -1 ? 999 : bIdx);
+    });
   const saturdayDJs = djs.filter(
     (dj) => dj.isWeekend && dj.isActive && dj.shows.some((s) => s.dayOfWeek === 6)
   );
@@ -256,19 +258,6 @@ export default function DJsPage() {
             </section>
           )}
 
-          {/* Automation Note */}
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-            <div className="bg-gray-100 rounded-xl p-6 text-center">
-              <div className="flex items-center justify-center space-x-2 mb-2">
-                <Radio className="w-5 h-5 text-gray-500" />
-                <span className="font-bold text-gray-700">Overnight Automation</span>
-              </div>
-              <p className="text-gray-600">
-                6:00pm – 6:00am daily · Pure music, no DJ — curated playlists run through the night
-              </p>
-            </div>
-          </section>
-
           {/* Saturday DJs */}
           {saturdayDJs.length > 0 && (
             <section className="bg-white py-16">
@@ -300,6 +289,19 @@ export default function DJsPage() {
               </div>
             </section>
           )}
+
+          {/* Automation Note */}
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+            <div className="bg-gray-100 rounded-xl p-6 text-center">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <Radio className="w-5 h-5 text-gray-500" />
+                <span className="font-bold text-gray-700">Overnight Automation</span>
+              </div>
+              <p className="text-gray-600">
+                6:00pm – 6:00am daily · Pure music, no DJ — curated playlists run through the night
+              </p>
+            </div>
+          </section>
         </>
       )}
 
