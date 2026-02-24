@@ -165,14 +165,23 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
   const provider = dj?.ttsProvider || "openai";
   const voiceDirection = dj?.voiceDescription || null;
 
-  // Try to find an active music bed for voice tracks (prefer "soft" category)
+  // Try to find an active music bed for voice tracks
+  // Prefer real uploaded beds (MP3s) over synthetic pads, then prefer "soft" category
   let musicBedPath: string | null = null;
   if (dj?.stationId) {
-    const bed = await prisma.musicBed.findFirst({
-      where: { stationId: dj.stationId, isActive: true, category: "soft" },
-    }) || await prisma.musicBed.findFirst({
-      where: { stationId: dj.stationId, isActive: true, category: "general" },
+    const allBeds = await prisma.musicBed.findMany({
+      where: { stationId: dj.stationId, isActive: true },
     });
+    // Real uploaded beds: file-path based, not synthetic "pad" files
+    const realBeds = allBeds.filter((b) =>
+      b.filePath && !b.filePath.startsWith("data:") && !b.name.toLowerCase().includes("pad")
+    );
+    const bed =
+      realBeds.find((b) => b.category === "soft") ||
+      realBeds[0] ||
+      allBeds.find((b) => b.filePath && !b.filePath.startsWith("data:") && b.category === "soft") ||
+      allBeds.find((b) => b.filePath && !b.filePath.startsWith("data:") && b.category === "general") ||
+      allBeds.find((b) => b.filePath && !b.filePath.startsWith("data:"));
     if (bed?.filePath) {
       musicBedPath = bed.filePath;
     }
@@ -314,14 +323,21 @@ export async function generateFeatureAudio(
   const provider = dj?.ttsProvider || "openai";
   const featureVoiceDirection = dj?.voiceDescription || null;
 
-  // Try to find an active music bed (prefer "soft" → "general" fallback)
+  // Try to find an active music bed — prefer real uploads over synthetic pads
   let musicBedPath: string | null = null;
-  const bed = await prisma.musicBed.findFirst({
-    where: { stationId, isActive: true, category: "soft" },
-  }) || await prisma.musicBed.findFirst({
-    where: { stationId, isActive: true, category: "general" },
+  const allBeds = await prisma.musicBed.findMany({
+    where: { stationId, isActive: true },
   });
-  if (bed?.filePath) musicBedPath = bed.filePath;
+  const realBeds = allBeds.filter((b) =>
+    b.filePath && !b.filePath.startsWith("data:") && !b.name.toLowerCase().includes("pad")
+  );
+  const featureBed =
+    realBeds.find((b) => b.category === "soft") ||
+    realBeds[0] ||
+    allBeds.find((b) => b.filePath && !b.filePath.startsWith("data:") && b.category === "soft") ||
+    allBeds.find((b) => b.filePath && !b.filePath.startsWith("data:") && b.category === "general") ||
+    allBeds.find((b) => b.filePath && !b.filePath.startsWith("data:"));
+  if (featureBed?.filePath) musicBedPath = featureBed.filePath;
 
   let generated = 0;
   const errors: string[] = [];

@@ -30,11 +30,55 @@ const VOICE_GAIN = 3.2;
 // Map music bed description keywords to MusicBed categories
 function parseMusicBedCategory(description: string): string {
   const lower = description.toLowerCase();
-  if (lower.includes("soft") || lower.includes("gentle") || lower.includes("mellow")) return "soft";
-  if (lower.includes("upbeat") || lower.includes("energetic") || lower.includes("bright")) return "upbeat";
-  if (lower.includes("country") || lower.includes("americana") || lower.includes("twang")) return "country";
-  if (lower.includes("corporate") || lower.includes("professional")) return "corporate";
+  if (lower.includes("soft") || lower.includes("gentle") || lower.includes("mellow") || lower.includes("warm") || lower.includes("ambient")) return "soft";
+  if (lower.includes("upbeat") || lower.includes("energetic") || lower.includes("bright") || lower.includes("lively") || lower.includes("fun")) return "upbeat";
+  if (lower.includes("country") || lower.includes("americana") || lower.includes("twang") || lower.includes("folk") || lower.includes("roots")) return "country";
+  if (lower.includes("corporate") || lower.includes("professional") || lower.includes("clean")) return "corporate";
   return "general";
+}
+
+/**
+ * Select the best music bed for an imaging script.
+ *
+ * Priority:
+ * 1. Real uploaded file-path beds matching the desired category
+ * 2. Real uploaded file-path beds (any category — real music > synthetic)
+ * 3. Any bed matching the desired category (including synthetic)
+ * 4. Any active bed at all
+ */
+function selectMusicBed(
+  musicBeds: Array<{ id: string; filePath: string | null; category: string; name: string }>,
+  desiredCategory: string,
+): typeof musicBeds[number] | null {
+  if (musicBeds.length === 0) return null;
+
+  // Real uploaded beds have file paths like "/audio/music-beds/..." ending in .mp3
+  // Synthetic beds end in "-pad-*.wav" and are sine-wave generated
+  const isRealBed = (b: typeof musicBeds[number]) =>
+    b.filePath && !b.filePath.startsWith("data:") && !b.name.toLowerCase().includes("pad");
+
+  const realBeds = musicBeds.filter(isRealBed);
+  const allFileBeds = musicBeds.filter((b) => b.filePath && !b.filePath.startsWith("data:"));
+
+  // 1. Real uploaded bed matching category
+  const realMatch = realBeds.find((b) => b.category === desiredCategory);
+  if (realMatch) return realMatch;
+
+  // 2. Any real uploaded bed (real music always beats synthetic)
+  if (realBeds.length > 0) return realBeds[Math.floor(Math.random() * realBeds.length)];
+
+  // 3. Any file-path bed matching category
+  const categoryMatch = allFileBeds.find((b) => b.category === desiredCategory);
+  if (categoryMatch) return categoryMatch;
+
+  // 4. Any file-path bed at all
+  if (allFileBeds.length > 0) return allFileBeds[Math.floor(Math.random() * allFileBeds.length)];
+
+  // 5. Last resort: data URI beds
+  const dataBeds = musicBeds.filter((b) => b.filePath?.startsWith("data:"));
+  if (dataBeds.length > 0) return dataBeds[Math.floor(Math.random() * dataBeds.length)];
+
+  return null;
 }
 
 export async function POST(request: NextRequest) {
@@ -130,13 +174,7 @@ export async function POST(request: NextRequest) {
 
             if (musicBeds.length > 0) {
               const category = script.musicBed ? parseMusicBedCategory(script.musicBed) : "general";
-              // Prefer uploaded beds (data URIs = real music), then category match, then any
-              const uploadedBeds = musicBeds.filter((b) => b.filePath?.startsWith("data:"));
-              const bed =
-                uploadedBeds.find((b) => b.category === category) ||
-                uploadedBeds[Math.floor(Math.random() * uploadedBeds.length)] ||
-                musicBeds.find((b) => b.category === category) ||
-                musicBeds.find((b) => b.category === "general");
+              const bed = selectMusicBed(musicBeds, category);
 
               if (bed?.filePath) {
                 finalPcm = mixVoiceWithMusicBed(boostedPcm, bed.filePath, {
