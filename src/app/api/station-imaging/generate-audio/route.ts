@@ -13,6 +13,7 @@ interface ImagingScript {
   text: string;
   musicBed: string;
   audioFilePath?: string;
+  hasMusicBed?: boolean;
 }
 
 interface ImagingMetadata {
@@ -194,8 +195,9 @@ export async function POST(request: NextRequest) {
             const filename = `${voiceSlug}-${scriptType}-${safeLabel}.wav`;
             const audioFilePath = saveAudioFile(wavBuffer, "imaging", filename);
 
-            // Store audioFilePath in the script metadata
+            // Store audioFilePath and hasMusicBed in the script metadata
             script.audioFilePath = audioFilePath;
+            script.hasMusicBed = hasMusicBed;
 
             results.push({
               voiceName: voice.displayName,

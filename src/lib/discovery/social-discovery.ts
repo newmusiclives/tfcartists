@@ -258,6 +258,53 @@ class SocialDiscoveryService {
   }
 
   /**
+   * Fetch the top track with a preview URL for a Spotify artist.
+   * Returns the first track that has a preview_url (30-sec MP3), or null.
+   */
+  async getSpotifyTopTrack(
+    spotifyArtistId: string
+  ): Promise<{ trackTitle: string; previewUrl: string; albumName?: string } | null> {
+    const accessToken = await this.getSpotifyToken();
+    if (!accessToken) return null;
+
+    try {
+      const response = await fetch(
+        `https://api.spotify.com/v1/artists/${spotifyArtistId}/top-tracks?market=US`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+
+      if (!response.ok) {
+        logger.error("Spotify top-tracks request failed", {
+          status: response.status,
+          artistId: spotifyArtistId,
+        });
+        return null;
+      }
+
+      const data = await response.json();
+      const tracks = data.tracks || [];
+
+      for (const track of tracks) {
+        if (track.preview_url) {
+          return {
+            trackTitle: track.name,
+            previewUrl: track.preview_url,
+            albumName: track.album?.name,
+          };
+        }
+      }
+
+      logger.warn("No preview URL available for artist", { spotifyArtistId });
+      return null;
+    } catch (error) {
+      logger.error("Spotify top-tracks fetch failed", { spotifyArtistId, error });
+      return null;
+    }
+  }
+
+  /**
    * Import discovered artists into the database
    */
   async importArtists(artists: DiscoveredArtist[]): Promise<{
