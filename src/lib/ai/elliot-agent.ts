@@ -80,9 +80,12 @@ OUTPUT FORMAT (JSON):
       maxTokens: 800,
     });
 
-    // Parse JSON response
+    // Parse JSON response (strip markdown code fences if present)
     try {
-      const content = JSON.parse(response.content);
+      let raw = response.content.trim();
+      const fenceMatch = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (fenceMatch) raw = fenceMatch[1].trim();
+      const content = JSON.parse(raw);
 
       // Store in database
       const viralContent = await prisma.viralContent.create({

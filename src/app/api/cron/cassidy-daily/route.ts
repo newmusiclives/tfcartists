@@ -227,9 +227,8 @@ export async function GET(req: NextRequest) {
             logger.info("Imaging scripts need regeneration with music beds — triggering internal regen");
 
             // Call the generate-audio route internally
-            const baseUrl = process.env.NEXTAUTH_URL || process.env.VERCEL_URL
-              ? `https://${process.env.VERCEL_URL}`
-              : "http://localhost:3000";
+            const baseUrl = process.env.NEXTAUTH_URL
+              || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
             const regenResponse = await fetch(`${baseUrl}/api/station-imaging/generate-audio`, {
               method: "POST",

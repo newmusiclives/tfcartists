@@ -69,7 +69,7 @@ function harperTierTag(tier: string): string {
 
 /** Maps Elliot listener stages to GHL contact tags */
 const ELLIOT_STAGE_TAGS: Record<string, string> = {
-  new: "Elliot - New",
+  new_lead: "Elliot - New",
   engaged: "Elliot - Engaged",
   active: "Elliot - Active",
   at_risk: "Elliot - At Risk",
