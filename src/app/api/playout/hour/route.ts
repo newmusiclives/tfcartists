@@ -15,6 +15,10 @@ const HANDOFF_HOURS: Record<number, string> = {
   15: "doc-to-cody",
 };
 
+// Seconds of breathing room after a song before the next element starts.
+// Prevents the song's natural tail/decay from being clipped into ads or imaging.
+const SONG_TAIL_PAD_SEC = 1.5;
+
 // Default durations (seconds) when actual duration is unknown
 // Kept tight to minimize dead air — real radio has no silence between elements
 const DEFAULT_DURATION: Record<string, number> = {
@@ -504,6 +508,11 @@ export async function GET(request: NextRequest) {
       }
 
       cumulativeSec += durationSec;
+
+      // Add tail padding after songs so the natural decay isn't clipped
+      if (entry.type === "song") {
+        cumulativeSec += SONG_TAIL_PAD_SEC;
+      }
     }
 
     return NextResponse.json({
