@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
       phone: listener.phone || undefined,
       email: listener.email || undefined,
       name: listener.name || "Unknown Listener",
-      stage: "new_lead",
+      stage: "new",
     }).catch(() => {});
 
     return NextResponse.json({ success: true, listener }, { status: 201 });
