@@ -3,8 +3,9 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { buildHourPlaylist } from "@/lib/radio/playlist-builder";
-import { generateVoiceTrackScripts } from "@/lib/radio/voice-track-generator";
+import { generateVoiceTrackScripts, buildSystemPrompt } from "@/lib/radio/voice-track-generator";
 import { generateVoiceTrackAudio, generateFeatureAudio } from "@/lib/radio/voice-track-tts";
+import { aiProvider } from "@/lib/ai/providers";
 import { fillTemplate, djFirstName, pick, type SongData } from "@/lib/radio/template-utils";
 
 export const dynamic = "force-dynamic";
@@ -210,19 +211,17 @@ export async function GET(req: NextRequest) {
         const relinked = await relinkFeatures(station.id, shift.djId, playlist.hourPlaylistId, playlist.slots);
         results.featuresRelinked += relinked;
 
-        // 5g. Generate TTS audio for feature content
-        if (relinked > 0) {
-          const featureAudio = await generateFeatureAudio(
-            playlist.hourPlaylistId,
-            station.id,
-            shift.djId,
+        // 5g. Generate TTS audio for feature content (always run — content may exist from previous runs)
+        const featureAudio = await generateFeatureAudio(
+          playlist.hourPlaylistId,
+          station.id,
+          shift.djId,
+        );
+        results.featureAudioGenerated += featureAudio.generated;
+        if (featureAudio.errors.length > 0) {
+          results.errors.push(
+            ...featureAudio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`)
           );
-          results.featureAudioGenerated += featureAudio.generated;
-          if (featureAudio.errors.length > 0) {
-            results.errors.push(
-              ...featureAudio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`)
-            );
-          }
         }
 
         results.hoursProcessed++;
@@ -273,6 +272,14 @@ async function relinkFeatures(
   }>,
 ): Promise<number> {
   let relinked = 0;
+  const assignedIds = new Set<string>();
+
+  // Load DJ persona once for AI dialogue generation
+  const djPersona = await prisma.dJ.findUnique({
+    where: { id: djId },
+    select: { name: true, bio: true, gptSystemPrompt: true, catchPhrases: true, additionalKnowledge: true, gptTemperature: true },
+  });
+  if (!djPersona) return 0;
 
   const featureSlots = slots.filter((s) => s.type === "feature");
 
@@ -311,19 +318,13 @@ async function relinkFeatures(
         stationId,
         djPersonalityId: djId,
         isUsed: false,
+        ...(assignedIds.size > 0 ? { id: { notIn: [...assignedIds] } } : {}),
       },
       include: { featureType: true },
       orderBy: { createdAt: "desc" },
     });
 
     if (!featureContent || !featureContent.featureType.gptPromptTemplate) continue;
-
-    // Get DJ name for template
-    const dj = await prisma.dJ.findUnique({
-      where: { id: djId },
-      select: { name: true },
-    });
-    if (!dj) continue;
 
     // Get full song data
     const song = await prisma.song.findUnique({
@@ -335,17 +336,35 @@ async function relinkFeatures(
       ? { id: song.id, artistName: song.artistName, title: song.title, genre: song.genre, album: song.album }
       : undefined;
 
-    // Re-generate content with correct song
-    const newContent = fillTemplate(
+    // Fill the template with actual song/DJ data (produces an instruction prompt, not dialogue)
+    const filledPrompt = fillTemplate(
       featureContent.featureType.gptPromptTemplate,
-      djFirstName(dj.name),
+      djFirstName(djPersona.name),
       songData,
     );
+
+    // Use AI to generate actual spoken DJ dialogue from the filled template
+    const systemPrompt = buildSystemPrompt(djPersona);
+    const aiResponse = await aiProvider.chat(
+      [
+        { role: "system", content: systemPrompt },
+        {
+          role: "user",
+          content: `${filledPrompt}\n\nOutput ONLY the spoken text — no stage directions, no quotes, no labels. 2-4 sentences, 20-30 seconds when spoken.`,
+        },
+      ],
+      {
+        maxTokens: 200,
+        temperature: djPersona.gptTemperature || 0.8,
+      },
+    );
+    const newContent = aiResponse.content.trim();
 
     await prisma.featureContent.update({
       where: { id: featureContent.id },
       data: {
         content: newContent,
+        isUsed: true,
         relatedSongId: adjacentSong.songId,
         contextData: JSON.stringify({
           artistName: adjacentSong.artistName,
@@ -353,6 +372,8 @@ async function relinkFeatures(
         }),
       },
     });
+
+    assignedIds.add(featureContent.id);
 
     // Update the slot to reference this feature content
     const slotIdx = slots.findIndex((s) => s.position === fSlot.position);
