@@ -297,14 +297,16 @@ export async function GET(req: NextRequest) {
               });
 
               const rawPcm = Buffer.from(await response.arrayBuffer());
-              const boostedPcm = amplifyPcm(rawPcm, 2.5);
+              const boostedPcm = amplifyPcm(rawPcm, 3.5);
 
               // Mix with music bed if the ad has one assigned
               let finalPcm = boostedPcm;
               if (ad.musicBed?.filePath) {
                 finalPcm = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
                   voiceGain: 1.0,
-                  bedGain: 0.6,
+                  bedGain: 0.7,
+                  fadeInMs: 300,
+                  fadeOutMs: 800,
                 });
               }
 

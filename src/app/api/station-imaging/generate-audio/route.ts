@@ -14,6 +14,7 @@ interface ImagingScript {
   musicBed: string;
   audioFilePath?: string;
   hasMusicBed?: boolean;
+  audioDuration?: number;
 }
 
 interface ImagingMetadata {
@@ -25,8 +26,14 @@ interface ImagingMetadata {
   };
 }
 
-// Voice gain for imaging — boost voice so it sits clearly above the bed
-const VOICE_GAIN = 3.2;
+// Voice gain for imaging — boost voice so it punches through the bed like real radio
+const VOICE_GAIN = 4.5;
+
+// Use assertive/energetic voices for imaging (not the warm/calm DJ voices)
+const IMAGING_VOICE_MAP: Record<string, "echo" | "shimmer"> = {
+  male: "echo",      // assertive, punchy
+  female: "shimmer",  // bright, enthusiastic
+};
 
 // Map music bed description keywords to MusicBed categories
 function parseMusicBedCategory(description: string): string {
@@ -123,9 +130,10 @@ export async function POST(request: NextRequest) {
       where: { stationId, isActive: true },
     });
 
-    // Which script types to generate (default: all non-commercial)
-    const scriptTypes = types || ["station_id", "sweeper", "promo"];
+    // Which script types to generate (default: all including commercial)
+    const scriptTypes = types || ["station_id", "sweeper", "promo", "commercial"];
 
+    // Use onyx/nova as fallbacks, but prefer the energetic imaging voices
     const voiceMap: Record<string, "onyx" | "nova"> = {
       male: "onyx",
       female: "nova",
@@ -145,7 +153,8 @@ export async function POST(request: NextRequest) {
       const metadata = voice.metadata as ImagingMetadata | null;
       if (!metadata?.scripts) continue;
 
-      const openaiVoice = voiceMap[voice.voiceType] || "onyx";
+      // Use energetic imaging voices for punchier delivery
+      const openaiVoice = IMAGING_VOICE_MAP[voice.voiceType] || voiceMap[voice.voiceType] || "echo";
       const voiceSlug = voice.displayName
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
@@ -179,8 +188,10 @@ export async function POST(request: NextRequest) {
 
               if (bed?.filePath) {
                 finalPcm = mixVoiceWithMusicBed(boostedPcm, bed.filePath, {
-                  voiceGain: 1.0, // already boosted
-                  bedGain: 0.4,
+                  voiceGain: 1.0,   // already boosted by VOICE_GAIN
+                  bedGain: 0.55,    // music bed audible but not overpowering
+                  fadeInMs: 200,    // tight fade-in for punchy imaging
+                  fadeOutMs: 600,   // quick fade-out to next element
                 });
                 hasMusicBed = true;
               }
@@ -195,9 +206,13 @@ export async function POST(request: NextRequest) {
             const filename = `${voiceSlug}-${scriptType}-${safeLabel}.wav`;
             const audioFilePath = saveAudioFile(wavBuffer, "imaging", filename);
 
-            // Store audioFilePath and hasMusicBed in the script metadata
+            // Calculate actual audio duration (24kHz, 16-bit mono = 48000 bytes/sec)
+            const audioDuration = Math.round((finalPcm.length / 48000) * 10) / 10;
+
+            // Store audioFilePath, hasMusicBed, and audioDuration in the script metadata
             script.audioFilePath = audioFilePath;
             script.hasMusicBed = hasMusicBed;
+            script.audioDuration = audioDuration;
 
             results.push({
               voiceName: voice.displayName,

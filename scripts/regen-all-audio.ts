@@ -1,134 +1,113 @@
 /**
- * Regenerate all sponsor ad + imaging audio with uploaded music beds.
- * Run with: npx tsx scripts/regen-all-audio.ts
+ * Regenerate ALL station audio with improved settings:
+ * - Imaging (sweepers, promos, TOH, commercials) with music beds + energetic voices
+ * - Sponsor ads with louder voice + audible music beds
+ *
+ * Calls the API routes which have the updated audio settings.
+ * Requires dev server running: npm run dev
+ *
+ * Run: npx tsx scripts/regen-all-audio.ts
  */
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
-import OpenAI from "openai";
-import { mixVoiceWithMusicBed } from "../src/lib/radio/audio-mixer";
-import { amplifyPcm, pcmToWav, saveAudioFile } from "../src/lib/radio/voice-track-tts";
 
 const prisma = new PrismaClient();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-const VOICE_GAIN = 2.5;
-const BED_GAIN = 0.6;
-const voiceMap: Record<string, string> = { male: "onyx", female: "nova" };
 
 async function main() {
-  const stationId = "cmls8oc3c00ku7d3fgc19wrvl";
+  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
-  // Get uploaded beds (real music, stored as data URIs)
-  const uploadedBeds = await prisma.musicBed.findMany({
-    where: { stationId, isActive: true, filePath: { startsWith: "data:" } },
+  // 1. Get station ID
+  const station = await prisma.station.findFirst();
+  if (!station) {
+    console.error("No station found");
+    return;
+  }
+  console.log(`Station: ${station.name} (${station.id})`);
+  console.log(`API base: ${baseUrl}`);
+
+  // 2. Regenerate ALL imaging audio (sweepers, promos, station_id, commercial)
+  console.log("\n=== REGENERATING IMAGING AUDIO ===");
+  console.log("  Voices: echo (male), shimmer (female) — punchy radio imaging");
+  console.log("  Voice gain: 4.5x | Bed gain: 0.55 | Tight fades");
+
+  const imagingResponse = await fetch(`${baseUrl}/api/station-imaging/generate-audio`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      stationId: station.id,
+      types: ["station_id", "sweeper", "promo", "commercial"],
+    }),
   });
-  console.log("Uploaded beds:", uploadedBeds.length);
 
-  // --- SPONSOR ADS ---
+  if (imagingResponse.ok) {
+    const data = await imagingResponse.json();
+    console.log(`\nResult: ${data.message}`);
+    for (const r of data.results || []) {
+      const status = r.success ? "OK" : "FAIL";
+      const bed = r.hasMusicBed ? " +bed" : "";
+      const err = r.error ? ` ERROR: ${r.error}` : "";
+      console.log(`  [${status}] ${r.voiceName} | ${r.type} | ${r.label}${bed}${err}`);
+    }
+  } else {
+    const text = await imagingResponse.text();
+    console.error(`Imaging generation failed: ${imagingResponse.status} ${text}`);
+  }
+
+  // 3. Regenerate ALL sponsor ad audio
+  console.log("\n=== REGENERATING SPONSOR AD AUDIO ===");
+  console.log("  Voice gain: 3.5x | Bed gain: 0.7");
+
   const ads = await prisma.sponsorAd.findMany({
-    where: { stationId, isActive: true, scriptText: { not: null } },
+    where: { isActive: true, scriptText: { not: null } },
     include: { musicBed: true },
   });
+  console.log(`  Found ${ads.length} ads to regenerate\n`);
 
-  console.log(`\n=== SPONSOR ADS (${ads.length}) ===`);
   for (const ad of ads) {
     try {
-      const response = await openai.audio.speech.create({
-        model: "tts-1-hd",
-        voice: "shimmer",
-        input: ad.scriptText!,
-        response_format: "pcm",
+      const adResponse = await fetch(`${baseUrl}/api/sponsor-ads/${ad.id}/generate-audio`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
       });
 
-      const rawPcm = Buffer.from(await response.arrayBuffer());
-      const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
-
-      let finalPcm = boostedPcm;
-      if (ad.musicBed?.filePath) {
-        finalPcm = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
-          voiceGain: 1.0,
-          bedGain: BED_GAIN,
-        });
+      if (adResponse.ok) {
+        const adData = await adResponse.json();
+        const bed = ad.musicBed ? ` +bed[${ad.musicBed.name}]` : "";
+        console.log(`  [OK] ${ad.adTitle} (${adData.ad?.durationSeconds}s)${bed}`);
+      } else {
+        console.error(`  [FAIL] ${ad.adTitle}: HTTP ${adResponse.status}`);
       }
-
-      const wavBuffer = pcmToWav(finalPcm);
-      const safeName = ad.adTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-      const filename = `ad-${safeName}-${ad.id.slice(-6)}.wav`;
-      const audioFilePath = saveAudioFile(wavBuffer, "commercials", filename);
-      const dur = Math.round((finalPcm.length / 48000) * 10) / 10;
-
-      await prisma.sponsorAd.update({
-        where: { id: ad.id },
-        data: { audioFilePath, durationSeconds: dur },
-      });
-      console.log(`  OK: ${ad.sponsorName} - ${dur}s ${ad.musicBed ? "(+bed)" : "(no bed)"}`);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message.slice(0, 80) : String(err);
-      console.log(`  FAIL: ${ad.sponsorName} ${msg}`);
+    } catch (err) {
+      console.error(`  [ERROR] ${ad.adTitle}: ${err}`);
     }
   }
 
-  // --- IMAGING (sweepers, promos, station IDs) ---
-  const voices = await prisma.stationImagingVoice.findMany({
-    where: { stationId, isActive: true },
+  // 4. Verify results
+  console.log("\n=== VERIFICATION ===");
+  const voices = await prisma.stationImagingVoice.findMany({ where: { isActive: true } });
+  for (const v of voices) {
+    const meta = v.metadata as any;
+    const scripts = meta?.scripts || {};
+    for (const type of Object.keys(scripts)) {
+      const list = scripts[type] || [];
+      const withAudio = list.filter((s: any) => s.audioFilePath).length;
+      const withBed = list.filter((s: any) => s.hasMusicBed).length;
+      const withDur = list.filter((s: any) => s.audioDuration).length;
+      console.log(`  ${v.displayName} [${v.voiceType}] | ${type}: ${list.length} scripts, ${withAudio} audio, ${withBed} bed, ${withDur} duration`);
+    }
+  }
+
+  const updatedAds = await prisma.sponsorAd.findMany({
+    where: { isActive: true },
+    select: { adTitle: true, audioFilePath: true, durationSeconds: true },
   });
-
-  console.log("\n=== IMAGING AUDIO ===");
-  const scriptTypes = ["station_id", "sweeper", "promo"];
-
-  for (const voice of voices) {
-    const metadata = voice.metadata as {
-      scripts?: Record<string, Array<{ label: string; text: string; musicBed?: string }>>;
-    } | null;
-    if (!metadata?.scripts) continue;
-
-    const openaiVoice = voiceMap[voice.voiceType] || "onyx";
-    const voiceSlug = voice.displayName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-
-    for (const scriptType of scriptTypes) {
-      const scripts = metadata.scripts[scriptType];
-      if (!scripts || scripts.length === 0) continue;
-
-      for (const script of scripts) {
-        try {
-          const response = await openai.audio.speech.create({
-            model: "tts-1-hd",
-            voice: openaiVoice as "onyx" | "nova",
-            input: script.text,
-            response_format: "pcm",
-          });
-
-          const rawPcm = Buffer.from(await response.arrayBuffer());
-          const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
-
-          // Pick a random uploaded bed
-          let finalPcm = boostedPcm;
-          if (uploadedBeds.length > 0) {
-            const bed = uploadedBeds[Math.floor(Math.random() * uploadedBeds.length)];
-            finalPcm = mixVoiceWithMusicBed(boostedPcm, bed.filePath, {
-              voiceGain: 1.0,
-              bedGain: BED_GAIN,
-            });
-          }
-
-          const wavBuffer = pcmToWav(finalPcm);
-          const safeLabel = script.label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-          const filename = `${voiceSlug}-${scriptType}-${safeLabel}.wav`;
-          saveAudioFile(wavBuffer, "imaging", filename);
-          console.log(`  OK: ${voice.displayName} ${scriptType} ${script.label}`);
-        } catch (err: unknown) {
-          const msg = err instanceof Error ? err.message.slice(0, 80) : String(err);
-          console.log(`  FAIL: ${voice.displayName} ${scriptType} ${script.label} ${msg}`);
-        }
-      }
-    }
+  for (const ad of updatedAds) {
+    console.log(`  Ad: ${ad.adTitle} (${ad.durationSeconds}s)`);
   }
 
-  console.log("\nAll done!");
+  await prisma.$disconnect();
+  console.log("\nDone! Commit the regenerated audio files and deploy.");
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
+main().catch(console.error);

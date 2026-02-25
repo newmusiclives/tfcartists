@@ -18,8 +18,8 @@ const voiceMap: Record<string, string> = {
   female: "nova",
 };
 
-// Voice gain — boost TTS voice so it sits clearly above the music bed
-const VOICE_GAIN = 2.5;
+// Voice gain — boost TTS voice so it punches through the music bed
+const VOICE_GAIN = 3.5;
 
 export async function POST(
   request: NextRequest,
@@ -84,8 +84,10 @@ export async function POST(
     let finalPcm = boostedPcm;
     if (ad.musicBed?.filePath) {
       finalPcm = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
-        voiceGain: 1.0, // voice already boosted by VOICE_GAIN
-        bedGain: 0.6,
+        voiceGain: 1.0,   // voice already boosted by VOICE_GAIN
+        bedGain: 0.7,     // audible bed underneath the voice
+        fadeInMs: 300,
+        fadeOutMs: 800,
       });
     }
 

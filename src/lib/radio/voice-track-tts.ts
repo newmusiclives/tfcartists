@@ -207,13 +207,13 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
           voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
         }
 
-        // Boost voice slightly, then mix with bed
-        const boostedPcm = amplifyPcm(voicePcm, 1.5);
+        // Boost voice, then mix with bed underneath
+        const boostedPcm = amplifyPcm(voicePcm, 2.0);
         const mixedPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
-          bedGain: 0.15, // subtle bed for voice tracks
-          fadeInMs: 300,
-          fadeOutMs: 800,
+          bedGain: 0.25, // audible bed for a radio feel
+          fadeInMs: 200,
+          fadeOutMs: 600,
         });
 
         const wavBuffer = pcmToWav(mixedPcm);
@@ -353,12 +353,12 @@ export async function generateFeatureAudio(
           voicePcm = await generatePcmWithOpenAI(fc.content, voice);
         }
 
-        const boostedPcm = amplifyPcm(voicePcm, 1.5);
+        const boostedPcm = amplifyPcm(voicePcm, 2.0);
         const mixedPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
-          bedGain: 0.15,
-          fadeInMs: 300,
-          fadeOutMs: 800,
+          bedGain: 0.25,
+          fadeInMs: 200,
+          fadeOutMs: 600,
         });
 
         const wavBuffer = pcmToWav(mixedPcm);

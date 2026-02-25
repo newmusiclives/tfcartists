@@ -16,17 +16,18 @@ const HANDOFF_HOURS: Record<number, string> = {
 };
 
 // Default durations (seconds) when actual duration is unknown
+// Kept tight to minimize dead air — real radio has no silence between elements
 const DEFAULT_DURATION: Record<string, number> = {
-  imaging: 8,
-  sweeper: 8,
-  promo: 15,
-  station_id: 8,
-  feature: 60,
-  voice_break: 15,
+  imaging: 5,
+  sweeper: 5,
+  promo: 10,
+  station_id: 4,
+  feature: 45,
+  voice_break: 10,
   song: 210,
-  ad: 30,
-  commercial: 30,
-  transition: 10,
+  ad: 20,
+  commercial: 20,
+  transition: 8,
 };
 
 /**
@@ -262,10 +263,10 @@ export async function GET(request: NextRequest) {
     const imagingSlots = slots.filter((s: { type: string }) =>
       s.type === "sweeper" || s.type === "promo" || s.type === "station_id" || s.type === "imaging"
     );
-    const resolvedImaging = new Map<number, { type: string; audioFilePath: string | null }>();
+    const resolvedImaging = new Map<number, { type: string; audioFilePath: string | null; audioDuration?: number }>();
 
     // Imaging voice metadata — shared between standalone imaging slots and ad break bookends
-    let imagingVoiceMeta: { scripts?: Record<string, Array<{ label: string; audioFilePath?: string }>> } | null = null;
+    let imagingVoiceMeta: { scripts?: Record<string, Array<{ label: string; audioFilePath?: string; audioDuration?: number }>> } | null = null;
 
     if (imagingSlots.length > 0 || adSlots.length > 0) {
       // Find imaging voice with audio metadata
@@ -286,6 +287,7 @@ export async function GET(request: NextRequest) {
                 resolvedImaging.set(slot.position as number, {
                   type: slotType,
                   audioFilePath: pick.audioFilePath,
+                  audioDuration: pick.audioDuration,
                 });
               }
             }
@@ -317,7 +319,7 @@ export async function GET(request: NextRequest) {
       feature?: { id: string; title: string | null; content: string; audioFilePath: string | null };
       ad?: { id: string; sponsorName: string; adTitle: string; audioFilePath: string | null; durationSeconds: number | null };
       transition?: { id: string; type: string; name: string; audioFilePath: string | null; durationSeconds: number; handoffPart: number | null };
-      imaging?: { type: string; audioFilePath: string | null };
+      imaging?: { type: string; audioFilePath: string | null; audioDuration?: number };
     }
 
     const programLog: ProgramSlot[] = [];
@@ -412,7 +414,7 @@ export async function GET(request: NextRequest) {
           const scripts = imagingVoiceMeta.scripts[scriptType] || [];
           if (scripts.length === 0) return undefined;
           const pick = scripts[Math.floor(Math.random() * scripts.length)];
-          return pick.audioFilePath ? { type: scriptType, audioFilePath: pick.audioFilePath } : undefined;
+          return pick.audioFilePath ? { type: scriptType, audioFilePath: pick.audioFilePath, audioDuration: pick.audioDuration } : undefined;
         };
 
         // Sweeper opener (transition into the ad break)
@@ -487,7 +489,8 @@ export async function GET(request: NextRequest) {
       entry.cumulativeStartSec = cumulativeSec;
 
       // Calculate this entry's duration for cumulative timing
-      let durationSec = DEFAULT_DURATION[entry.type] ?? 10;
+      // Use actual measured duration whenever available to eliminate dead air
+      let durationSec = DEFAULT_DURATION[entry.type] ?? 8;
       if (entry.song?.duration != null) {
         durationSec = entry.song.duration;
       } else if (entry.voiceTrack?.audioDuration != null) {
@@ -496,6 +499,8 @@ export async function GET(request: NextRequest) {
         durationSec = entry.transition.durationSeconds;
       } else if (entry.ad?.durationSeconds != null) {
         durationSec = entry.ad.durationSeconds;
+      } else if (entry.imaging?.audioDuration != null) {
+        durationSec = entry.imaging.audioDuration;
       }
 
       cumulativeSec += durationSec;
