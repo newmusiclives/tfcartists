@@ -270,45 +270,51 @@ function buildUserPrompt(
 - Output ONLY the spoken text — no stage directions, no quotes, no labels`;
 
   if (trackType === "intro" && nextSong) {
-    return `Write a voice track where ${djFirstName} introduces the NEXT song that is ABOUT TO PLAY.
-NEXT SONG (has NOT played yet): "${nextSong.songTitle}" by ${nextSong.artistName}
+    return `You are writing a FORWARD INTRO. The song has NOT played yet. You are teasing it BEFORE it starts.
+
+${djFirstName} introduces the NEXT song that is ABOUT TO PLAY:
+"${nextSong.songTitle}" by ${nextSong.artistName}
+
 Time of day: ${timeOfDay}.
 ${rules}
-- MUST use future/present phrasing: "Coming up..." / "Here's..." / "Now let's hear..."
-- ONLY mention "${nextSong.songTitle}" — do NOT mention any other song by name
-- Do NOT use past tense like "that was" or "you just heard" — this song has NOT played yet
-- Do NOT reference or name any song that played earlier`;
+
+CRITICAL TENSE RULES — VIOLATION MEANS FAILURE:
+- MUST start with future/present phrasing: "Coming up..." / "Here's..." / "Next up..." / "Now let's hear..."
+- The words "that was", "you just heard", "we just listened to", "hope you enjoyed" are BANNED — this song has NOT played yet
+- ONLY mention "${nextSong.songTitle}" — do NOT reference any other song`;
   }
 
   if (trackType === "back_announce_intro" && prevSong && nextSong) {
-    return `Write a voice track where ${djFirstName} does two things in this exact order:
+    return `You are writing a BACK-ANNOUNCE + FORWARD INTRO. Two songs are referenced — get the tense RIGHT for each one.
 
-STEP 1 — BACK-ANNOUNCE the song that ALREADY FINISHED PLAYING:
-Song that JUST PLAYED: "${prevSong.songTitle}" by ${prevSong.artistName}
-MUST use PAST tense: "That was..." / "You just heard..." / "Hope you enjoyed..."
-NEVER say "here's", "coming up", "next", or "let's hear" for this song — it ALREADY PLAYED.
+SONG THAT ALREADY FINISHED (use PAST tense): "${prevSong.songTitle}" by ${prevSong.artistName}
+SONG ABOUT TO PLAY NEXT (use FUTURE tense): "${nextSong.songTitle}" by ${nextSong.artistName}
 
-STEP 2 — INTRODUCE the NEXT song that is ABOUT TO PLAY:
-Song ABOUT TO PLAY: "${nextSong.songTitle}" by ${nextSong.artistName}
-MUST use FUTURE/PRESENT tense: "Coming up..." / "Now here's..." / "Next up..."
-This is the MAIN FOCUS of the voice track.
+Structure: One short past-tense line about "${prevSong.songTitle}", then pivot to introduce "${nextSong.songTitle}".
 
 Time of day: ${timeOfDay}.
 ${rules}
-- WRONG example: "Here's ${prevSong.songTitle}" — NO! That song already played!
-- RIGHT example: "That was ${prevSong.songTitle}... Now here's ${nextSong.songTitle}"
-- The back-announce MUST come FIRST and be ONE short line only
-- The forward intro MUST come SECOND and be the main focus
-- Do NOT introduce or use future tense for "${prevSong.songTitle}" — it is FINISHED`;
+
+CRITICAL TENSE RULES — VIOLATION MEANS FAILURE:
+- "${prevSong.songTitle}" ALREADY PLAYED → use "That was..." / "You just heard..." — NEVER "here's" or "coming up"
+- "${nextSong.songTitle}" is ABOUT TO PLAY → use "Now here's..." / "Coming up..." / "Next up..." — NEVER "that was" or "you just heard"
+- CORRECT: "That was ${prevSong.songTitle} by ${prevSong.artistName}. Now here's ${nextSong.songTitle} by ${nextSong.artistName}."
+- WRONG: "That was ${nextSong.songTitle}" — NO! That song hasn't played yet!
+- WRONG: "Here's ${prevSong.songTitle}" — NO! That song already finished!
+- Back-announce FIRST (one line), then forward intro SECOND (main focus)`;
   }
 
   if (trackType === "back_announce" && prevSong) {
-    return `Write a voice track where ${djFirstName} comments on the song that JUST FINISHED PLAYING.
+    return `You are writing a BACK-ANNOUNCE ONLY. The song ALREADY FINISHED PLAYING. You are commenting on it AFTER it ended.
+
 SONG THAT JUST PLAYED: "${prevSong.songTitle}" by ${prevSong.artistName}
+
 Time of day: ${timeOfDay}.
 ${rules}
-- MUST use PAST tense: "That was..." / "You just heard..." / "What a track..."
-- NEVER say "here's", "coming up", or "next" — the song ALREADY PLAYED
+
+CRITICAL TENSE RULES — VIOLATION MEANS FAILURE:
+- MUST use PAST tense: "That was..." / "You just heard..." / "What a track from..."
+- The words "here's", "coming up", "next up", "let's hear" are BANNED — the song ALREADY PLAYED
 - Only mention "${prevSong.songTitle}" — do NOT introduce any upcoming song`;
   }
 
