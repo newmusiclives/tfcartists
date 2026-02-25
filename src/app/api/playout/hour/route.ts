@@ -126,14 +126,14 @@ export async function GET(request: NextRequest) {
     const resolvedAds = new Map<number, [ResolvedAd, ResolvedAd]>();
 
     if (adSlots.length > 0) {
-      // Get all active ads sorted by weighted rotation (playCount/weight ASC)
+      // Get all active ads with audio
       const activeAds = await prisma.sponsorAd.findMany({
         where: { stationId, isActive: true, audioFilePath: { not: null } },
-        orderBy: { lastPlayedAt: "asc" },
       });
 
       if (activeAds.length > 0) {
-        // Sort by weighted rotation score
+        // Sort by weighted rotation score (lowest plays-per-weight first)
+        // then by oldest lastPlayedAt — least-played ads surface first
         activeAds.sort((a, b) => {
           const scoreA = a.playCount / (a.weight || 1);
           const scoreB = b.playCount / (b.weight || 1);
@@ -146,10 +146,28 @@ export async function GET(request: NextRequest) {
           return 0;
         });
 
-        // Assign two ads per ad slot, cycling through available ads
+        // Pick ads for each slot, advancing through the sorted list
+        // and tracking which ads we've used so we don't repeat in the same hour
+        const usedIds = new Set<string>();
+        const pickNextAd = () => {
+          // First pass: pick the first unused ad from the sorted list
+          for (const ad of activeAds) {
+            if (!usedIds.has(ad.id)) {
+              usedIds.add(ad.id);
+              return ad;
+            }
+          }
+          // All used this hour — allow repeats, pick lowest rotation
+          return activeAds[0];
+        };
+
+        const adsToUpdate: string[] = [];
+
         for (let i = 0; i < adSlots.length; i++) {
-          const ad1 = activeAds[(i * 2) % activeAds.length];
-          const ad2 = activeAds[(i * 2 + 1) % activeAds.length];
+          const ad1 = pickNextAd();
+          const ad2 = pickNextAd();
+          adsToUpdate.push(ad1.id, ad2.id);
+
           resolvedAds.set(adSlots[i].position as number, [
             {
               id: ad1.id,
@@ -167,6 +185,16 @@ export async function GET(request: NextRequest) {
             },
           ]);
         }
+
+        // Update play counts so rotation actually progresses across hours
+        const uniqueAdIds = [...new Set(adsToUpdate)];
+        await prisma.sponsorAd.updateMany({
+          where: { id: { in: uniqueAdIds } },
+          data: {
+            playCount: { increment: 1 },
+            lastPlayedAt: new Date(),
+          },
+        });
       }
     }
 
