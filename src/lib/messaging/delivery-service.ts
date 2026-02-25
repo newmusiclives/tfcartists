@@ -52,9 +52,45 @@ function cassidyPlacedTag(tier: string): string {
   return `Cassidy - Placed - ${formatted}`;
 }
 
+/** Maps Harper sponsor stages to GHL contact tags */
+const HARPER_STAGE_TAGS: Record<string, string> = {
+  discovery: "Harper - Discovery",
+  contacted: "Harper - Contacted",
+  interested: "Harper - Interested",
+  negotiating: "Harper - Negotiating",
+  closed: "Harper - Closed",
+  active: "Harper - Active",
+};
+
+function harperTierTag(tier: string): string {
+  const formatted = tier.charAt(0).toUpperCase() + tier.slice(1).toLowerCase();
+  return `Harper - ${formatted}`;
+}
+
+/** Maps Elliot listener stages to GHL contact tags */
+const ELLIOT_STAGE_TAGS: Record<string, string> = {
+  new: "Elliot - New",
+  engaged: "Elliot - Engaged",
+  active: "Elliot - Active",
+  at_risk: "Elliot - At Risk",
+  power_user: "Elliot - Power User",
+};
+
+function elliotTierTag(tier: string): string {
+  const map: Record<string, string> = {
+    casual: "Elliot - Casual",
+    regular: "Elliot - Regular",
+    super_fan: "Elliot - Super Fan",
+    evangelist: "Elliot - Evangelist",
+  };
+  return map[tier.toLowerCase()] || `Elliot - ${tier.charAt(0).toUpperCase() + tier.slice(1).toLowerCase()}`;
+}
+
 class MessageDeliveryService {
   private pipelineStageMap: Record<string, string> | null = null;
   private cassidyPipelineStageMap: Record<string, string> | null = null;
+  private harperPipelineStageMap: Record<string, string> | null = null;
+  private elliotPipelineStageMap: Record<string, string> | null = null;
 
   /**
    * Send a message via the specified channel
@@ -396,6 +432,289 @@ class MessageDeliveryService {
       }
     } catch (error) {
       logger.warn("Failed to sync Cassidy stage to GHL", {
+        stage: opts.stage,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  // ── Harper Pipeline Methods ──
+
+  /**
+   * Build tags array for a GHL contact based on Harper sponsor stage
+   */
+  private buildHarperTags(stage: string, tier?: string): string[] {
+    const tags = ["NCR Harper"];
+    const stageTag = HARPER_STAGE_TAGS[stage];
+    if (stageTag) tags.push(stageTag);
+    if (tier) {
+      tags.push(harperTierTag(tier));
+    }
+    return tags;
+  }
+
+  /**
+   * Fetch and cache Harper pipeline stage IDs from GHL
+   */
+  private async fetchHarperPipelineStages(): Promise<Record<string, string>> {
+    if (this.harperPipelineStageMap) return this.harperPipelineStageMap;
+
+    const res = await fetch(
+      `${GHL_BASE_URL}/opportunities/pipelines?locationId=${env.GHL_LOCATION_ID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${env.GHL_API_KEY}`,
+          Version: "2021-07-28",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      logger.warn("Failed to fetch GHL pipelines for Harper", { status: res.status });
+      return {};
+    }
+
+    const data = await res.json();
+    const pipeline = data.pipelines?.find(
+      (p: any) => p.id === env.GHL_HARPER_PIPELINE_ID
+    );
+
+    if (!pipeline) {
+      logger.warn("Harper pipeline not found in GHL", {
+        pipelineId: env.GHL_HARPER_PIPELINE_ID,
+      });
+      return {};
+    }
+
+    this.harperPipelineStageMap = {};
+    for (const s of pipeline.stages) {
+      this.harperPipelineStageMap[s.name.toLowerCase()] = s.id;
+    }
+
+    logger.info("Cached GHL Harper pipeline stages", {
+      stages: Object.keys(this.harperPipelineStageMap),
+    });
+
+    return this.harperPipelineStageMap;
+  }
+
+  /**
+   * Upsert an opportunity in the Harper pipeline
+   */
+  private async upsertHarperOpportunity(
+    contactId: string,
+    stage: string,
+    businessName: string,
+    contactName?: string
+  ): Promise<void> {
+    const stageMap = await this.fetchHarperPipelineStages();
+    const stageId = stageMap[stage.toLowerCase()];
+    if (!stageId) {
+      logger.warn("GHL Harper pipeline stage not found", { stage, availableStages: Object.keys(stageMap) });
+      return;
+    }
+
+    const oppName = contactName
+      ? `${businessName} - ${contactName}`
+      : businessName;
+
+    const res = await fetch(`${GHL_BASE_URL}/opportunities/upsert`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GHL_API_KEY}`,
+        Version: "2021-07-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pipelineId: env.GHL_HARPER_PIPELINE_ID,
+        pipelineStageId: stageId,
+        locationId: env.GHL_LOCATION_ID,
+        contactId,
+        name: oppName,
+        status: "open",
+      }),
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      logger.warn("GHL Harper opportunity upsert failed", { status: res.status, body });
+    } else {
+      logger.info("GHL Harper opportunity synced", { contactId, stage, businessName });
+    }
+  }
+
+  /**
+   * Sync a sponsor's pipeline stage to GHL (tags contact + moves Harper opportunity)
+   */
+  async syncHarperStage(opts: {
+    phone?: string;
+    email?: string;
+    businessName: string;
+    contactName?: string;
+    stage: string;
+    tier?: string;
+  }): Promise<void> {
+    if (!env.GHL_API_KEY || !env.GHL_LOCATION_ID) return;
+
+    try {
+      const tags = this.buildHarperTags(opts.stage, opts.tier);
+
+      const contactId = await this.upsertGHLContact({
+        phone: opts.phone,
+        email: opts.email,
+        name: opts.contactName || opts.businessName,
+        tags,
+      });
+
+      if (env.GHL_HARPER_PIPELINE_ID) {
+        await this.upsertHarperOpportunity(
+          contactId,
+          opts.stage,
+          opts.businessName,
+          opts.contactName
+        );
+      }
+    } catch (error) {
+      logger.warn("Failed to sync Harper stage to GHL", {
+        stage: opts.stage,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  // ── Elliot Pipeline Methods ──
+
+  /**
+   * Build tags array for a GHL contact based on Elliot listener stage
+   */
+  private buildElliotTags(stage: string, tier?: string): string[] {
+    const tags = ["NCR Elliot"];
+    const stageTag = ELLIOT_STAGE_TAGS[stage];
+    if (stageTag) tags.push(stageTag);
+    if (tier) {
+      tags.push(elliotTierTag(tier));
+    }
+    return tags;
+  }
+
+  /**
+   * Fetch and cache Elliot pipeline stage IDs from GHL
+   */
+  private async fetchElliotPipelineStages(): Promise<Record<string, string>> {
+    if (this.elliotPipelineStageMap) return this.elliotPipelineStageMap;
+
+    const res = await fetch(
+      `${GHL_BASE_URL}/opportunities/pipelines?locationId=${env.GHL_LOCATION_ID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${env.GHL_API_KEY}`,
+          Version: "2021-07-28",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      logger.warn("Failed to fetch GHL pipelines for Elliot", { status: res.status });
+      return {};
+    }
+
+    const data = await res.json();
+    const pipeline = data.pipelines?.find(
+      (p: any) => p.id === env.GHL_ELLIOT_PIPELINE_ID
+    );
+
+    if (!pipeline) {
+      logger.warn("Elliot pipeline not found in GHL", {
+        pipelineId: env.GHL_ELLIOT_PIPELINE_ID,
+      });
+      return {};
+    }
+
+    this.elliotPipelineStageMap = {};
+    for (const s of pipeline.stages) {
+      this.elliotPipelineStageMap[s.name.toLowerCase().replace(/ /g, "_")] = s.id;
+    }
+
+    logger.info("Cached GHL Elliot pipeline stages", {
+      stages: Object.keys(this.elliotPipelineStageMap),
+    });
+
+    return this.elliotPipelineStageMap;
+  }
+
+  /**
+   * Upsert an opportunity in the Elliot pipeline
+   */
+  private async upsertElliotOpportunity(
+    contactId: string,
+    stage: string,
+    listenerName: string
+  ): Promise<void> {
+    const stageMap = await this.fetchElliotPipelineStages();
+    const stageId = stageMap[stage.toLowerCase()];
+    if (!stageId) {
+      logger.warn("GHL Elliot pipeline stage not found", { stage, availableStages: Object.keys(stageMap) });
+      return;
+    }
+
+    const res = await fetch(`${GHL_BASE_URL}/opportunities/upsert`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GHL_API_KEY}`,
+        Version: "2021-07-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pipelineId: env.GHL_ELLIOT_PIPELINE_ID,
+        pipelineStageId: stageId,
+        locationId: env.GHL_LOCATION_ID,
+        contactId,
+        name: listenerName,
+        status: "open",
+      }),
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      logger.warn("GHL Elliot opportunity upsert failed", { status: res.status, body });
+    } else {
+      logger.info("GHL Elliot opportunity synced", { contactId, stage, listenerName });
+    }
+  }
+
+  /**
+   * Sync a listener's stage to GHL (tags contact + moves Elliot opportunity)
+   */
+  async syncElliotStage(opts: {
+    phone?: string;
+    email?: string;
+    name: string;
+    stage: string;
+    tier?: string;
+  }): Promise<void> {
+    if (!env.GHL_API_KEY || !env.GHL_LOCATION_ID) return;
+
+    try {
+      const tags = this.buildElliotTags(opts.stage, opts.tier);
+
+      const contactId = await this.upsertGHLContact({
+        phone: opts.phone,
+        email: opts.email,
+        name: opts.name,
+        tags,
+      });
+
+      if (env.GHL_ELLIOT_PIPELINE_ID) {
+        await this.upsertElliotOpportunity(
+          contactId,
+          opts.stage,
+          opts.name || "Unknown Listener"
+        );
+      }
+    } catch (error) {
+      logger.warn("Failed to sync Elliot stage to GHL", {
         stage: opts.stage,
         error: error instanceof Error ? error.message : String(error),
       });

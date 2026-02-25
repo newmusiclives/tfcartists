@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { handleApiError, validationError, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
 import { requireRole } from "@/lib/api/auth";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 export const dynamic = "force-dynamic";
 
@@ -177,6 +178,15 @@ export async function POST(request: NextRequest) {
 
       return newSponsor;
     });
+
+    // Fire-and-forget GHL sync
+    messageDelivery.syncHarperStage({
+      phone: sponsor.phone || undefined,
+      email: sponsor.email || undefined,
+      businessName: sponsor.businessName,
+      contactName: sponsor.contactName || undefined,
+      stage: "discovery",
+    }).catch(() => {});
 
     return NextResponse.json({ sponsor }, { status: 201 });
   } catch (error) {

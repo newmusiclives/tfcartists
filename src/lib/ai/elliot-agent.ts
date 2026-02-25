@@ -2,6 +2,7 @@ import { aiProvider, AIMessage } from "./providers";
 import { ELLIOT_PERSONALITIES } from "./elliot-personalities";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 /**
  * Elliot Agent - Listener Growth Engine
@@ -294,7 +295,7 @@ Create a personalized, authentic message to engage this listener.`,
           },
         ],
       },
-      select: { id: true },
+      select: { id: true, name: true, email: true, phone: true },
     });
 
     // Update status to AT_RISK
@@ -308,6 +309,16 @@ Create a personalized, authentic message to engage this listener.`,
         status: "AT_RISK",
       },
     });
+
+    // Fire-and-forget GHL sync for each at-risk listener
+    for (const listener of atRiskListeners) {
+      messageDelivery.syncElliotStage({
+        phone: listener.phone || undefined,
+        email: listener.email || undefined,
+        name: listener.name || "Unknown Listener",
+        stage: "at_risk",
+      }).catch(() => {});
+    }
 
     logger.info("At-risk listeners identified", {
       count: atRiskListeners.length,
@@ -377,6 +388,14 @@ Create a personalized, authentic message to engage this listener.`,
       try {
         await this.engageListener(listener.id, "welcome");
         listenersEngaged++;
+
+        // Fire-and-forget GHL sync as engaged
+        messageDelivery.syncElliotStage({
+          phone: listener.phone || undefined,
+          email: listener.email || undefined,
+          name: listener.name || "Unknown Listener",
+          stage: "engaged",
+        }).catch(() => {});
       } catch (error) {
         logger.error("Failed to welcome listener", { listenerId: listener.id, error });
       }

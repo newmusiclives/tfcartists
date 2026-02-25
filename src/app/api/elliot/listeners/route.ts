@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 export const dynamic = "force-dynamic";
 
@@ -129,6 +130,14 @@ export async function POST(request: NextRequest) {
         referringArtistId,
       },
     });
+
+    // Fire-and-forget GHL sync
+    messageDelivery.syncElliotStage({
+      phone: listener.phone || undefined,
+      email: listener.email || undefined,
+      name: listener.name || "Unknown Listener",
+      stage: "new",
+    }).catch(() => {});
 
     return NextResponse.json({ success: true, listener }, { status: 201 });
   } catch (error) {

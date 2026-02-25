@@ -21,6 +21,8 @@ const envSchema = z.object({
   GHL_LOCATION_ID: z.string().optional(),
   GHL_RILEY_PIPELINE_ID: z.string().optional(),
   GHL_CASSIDY_PIPELINE_ID: z.string().optional(),
+  GHL_HARPER_PIPELINE_ID: z.string().optional(),
+  GHL_ELLIOT_PIPELINE_ID: z.string().optional(),
   INSTAGRAM_ACCESS_TOKEN: z.string().optional(),
 
   // Manifest Financial (payment processing)

@@ -3,6 +3,7 @@ import { HarperAgent } from "@/lib/ai/harper-agent";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +79,15 @@ partners@truefansradio.com`;
         nextFollowUpAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days
       },
     });
+
+    // Fire-and-forget GHL sync
+    messageDelivery.syncHarperStage({
+      phone: sponsor.phone || undefined,
+      email: sponsor.email || undefined,
+      businessName: sponsor.businessName,
+      contactName: sponsor.contactName || undefined,
+      stage: "contacted",
+    }).catch(() => {});
 
     logger.info("Harper outreach sent", { sponsorId, channel, template });
 

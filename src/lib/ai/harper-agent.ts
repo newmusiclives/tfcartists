@@ -320,10 +320,20 @@ export class HarperAgent {
     const newStage = stageMap[intent];
 
     if (newStage) {
-      await prisma.sponsor.update({
+      const sponsor = await prisma.sponsor.update({
         where: { id: sponsorId },
         data: { pipelineStage: newStage },
+        select: { phone: true, email: true, businessName: true, contactName: true },
       });
+
+      // Fire-and-forget GHL sync
+      messageDelivery.syncHarperStage({
+        phone: sponsor.phone || undefined,
+        email: sponsor.email || undefined,
+        businessName: sponsor.businessName,
+        contactName: sponsor.contactName || undefined,
+        stage: newStage.toLowerCase(),
+      }).catch(() => {});
 
       logger.info("Sponsor pipeline stage updated", { sponsorId, newStage, intent });
     }
@@ -339,7 +349,7 @@ export class HarperAgent {
     startDate?: Date
   ): Promise<{ sponsorship: any; paymentLink?: string }> {
     // Update sponsor status
-    await prisma.sponsor.update({
+    const updatedSponsor = await prisma.sponsor.update({
       where: { id: sponsorId },
       data: {
         pipelineStage: "closed",
@@ -350,7 +360,18 @@ export class HarperAgent {
           (startDate || new Date()).getTime() + 365 * 24 * 60 * 60 * 1000
         ), // 1 year
       },
+      select: { phone: true, email: true, businessName: true, contactName: true },
     });
+
+    // Fire-and-forget GHL sync with tier
+    messageDelivery.syncHarperStage({
+      phone: updatedSponsor.phone || undefined,
+      email: updatedSponsor.email || undefined,
+      businessName: updatedSponsor.businessName,
+      contactName: updatedSponsor.contactName || undefined,
+      stage: "closed",
+      tier: tier,
+    }).catch(() => {});
 
     // Create sponsorship record
     const adSpots: Record<string, number> = {

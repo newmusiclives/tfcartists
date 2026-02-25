@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { handleApiError, validationError, notFound, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
 import { requireRole } from "@/lib/api/auth";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 export const dynamic = "force-dynamic";
 
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
     // Check the sponsor exists
     const sponsor = await prisma.sponsor.findUnique({
       where: { id: sponsorId },
-      select: { id: true, businessName: true, deletedAt: true },
+      select: { id: true, businessName: true, contactName: true, email: true, phone: true, deletedAt: true },
     });
 
     if (!sponsor || sponsor.deletedAt) {
@@ -188,6 +189,16 @@ export async function POST(request: NextRequest) {
 
       return sponsorship;
     });
+
+    // Fire-and-forget GHL sync with tier
+    messageDelivery.syncHarperStage({
+      phone: sponsor.phone || undefined,
+      email: sponsor.email || undefined,
+      businessName: sponsor.businessName,
+      contactName: sponsor.contactName || undefined,
+      stage: "active",
+      tier: tier,
+    }).catch(() => {});
 
     return NextResponse.json({ deal }, { status: 201 });
   } catch (error) {
