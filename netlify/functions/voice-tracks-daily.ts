@@ -1,30 +1,26 @@
-import { Handler, schedule } from "@netlify/functions";
+import { schedule } from "@netlify/functions";
+import { runVoiceTracksDaily } from "../../src/lib/cron/voice-tracks-daily-runner";
 
-const handler: Handler = schedule("0 5 * * *", async () => {
+const handler = schedule("0 5 * * *", async () => {
   try {
-    const baseUrl = process.env.URL || process.env.NEXTAUTH_URL || "http://localhost:3000";
-    const cronSecret = process.env.CRON_SECRET || "development-secret";
+    console.log("Voice Tracks Daily Cron starting (direct runner)");
 
-    const response = await fetch(`${baseUrl}/api/cron/voice-tracks-daily`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${cronSecret}`,
-      },
-    });
+    const result = await runVoiceTracksDaily();
 
-    const result = await response.json();
-
-    console.log("Voice Tracks Daily Cron completed:", result);
+    console.log("Voice Tracks Daily Cron completed:", JSON.stringify(result));
 
     return {
-      statusCode: 200,
+      statusCode: result.success ? 200 : 500,
       body: JSON.stringify(result),
     };
   } catch (error) {
-    console.error("Voice Tracks Daily Cron failed:", error);
+    const message = error instanceof Error
+      ? `${error.message}\n${error.stack}`
+      : String(error);
+    console.error("Voice Tracks Daily Cron failed:", message);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Cron job failed" }),
+      body: JSON.stringify({ error: "Cron job failed", details: message }),
     };
   }
 });

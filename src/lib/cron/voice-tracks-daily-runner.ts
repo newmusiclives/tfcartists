@@ -1,0 +1,430 @@
+import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
+import { buildHourPlaylist } from "@/lib/radio/playlist-builder";
+import { generateVoiceTrackScripts, buildSystemPrompt } from "@/lib/radio/voice-track-generator";
+import { generateVoiceTrackAudio, generateFeatureAudio } from "@/lib/radio/voice-track-tts";
+import { aiProvider } from "@/lib/ai/providers";
+import { fillTemplate, djFirstName, type SongData } from "@/lib/radio/template-utils";
+
+interface ShiftHour {
+  djId: string;
+  djName: string;
+  clockTemplateId: string;
+  hourOfDay: number;
+}
+
+export interface VoiceTracksDailyResult {
+  success: boolean;
+  hoursProcessed: number;
+  playlistsBuilt: number;
+  scriptsGenerated: number;
+  audioGenerated: number;
+  genericTracksUsed: number;
+  featuresRelinked: number;
+  featureAudioGenerated: number;
+  errors: string[];
+  message?: string;
+  dayType?: string;
+  timestamp: string;
+}
+
+/**
+ * Voice Tracks Daily Cron — core business logic.
+ *
+ * Runs at 5:00 AM daily (after features-daily at 4 AM, before first DJ at 6 AM).
+ * For each DJ shift today:
+ *   1. Build HourPlaylist from clock template + song selection
+ *   2. Lock the playlist
+ *   3. Generate 3 voice track scripts (AI)
+ *   4. Generate 3 voice track audio files (TTS)
+ *   5. Re-link feature content to match actual adjacent songs
+ */
+export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
+  logger.info("Starting voice-tracks-daily cron");
+
+  // 1. Get station
+  const station = await prisma.station.findFirst();
+  if (!station) {
+    return {
+      success: false,
+      hoursProcessed: 0,
+      playlistsBuilt: 0,
+      scriptsGenerated: 0,
+      audioGenerated: 0,
+      genericTracksUsed: 0,
+      featuresRelinked: 0,
+      featureAudioGenerated: 0,
+      errors: ["No station found"],
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // 2. Determine today's day type
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dayOfWeek = today.getDay(); // 0=Sun, 6=Sat
+  const dayType = dayOfWeek === 0 ? "sunday" : dayOfWeek === 6 ? "saturday" : "weekday";
+
+  // 3. Get all active clock assignments for today
+  const assignments = await prisma.clockAssignment.findMany({
+    where: {
+      stationId: station.id,
+      isActive: true,
+      dayType: { in: [dayType, "all"] },
+    },
+    include: {
+      dj: { select: { id: true, name: true, isActive: true } },
+      clockTemplate: { select: { id: true, name: true, clockPattern: true } },
+    },
+    orderBy: { timeSlotStart: "asc" },
+  });
+
+  if (assignments.length === 0) {
+    logger.info("No clock assignments found for today", { dayType });
+    return {
+      success: true,
+      hoursProcessed: 0,
+      playlistsBuilt: 0,
+      scriptsGenerated: 0,
+      audioGenerated: 0,
+      genericTracksUsed: 0,
+      featuresRelinked: 0,
+      featureAudioGenerated: 0,
+      errors: [],
+      message: "No assignments for today",
+      dayType,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // 4. Expand assignments into individual hours
+  const shiftHours: ShiftHour[] = [];
+  for (const assignment of assignments) {
+    if (!assignment.dj?.isActive || !assignment.clockTemplate?.clockPattern) continue;
+
+    const startHour = parseInt(assignment.timeSlotStart.split(":")[0], 10);
+    const endHour = parseInt(assignment.timeSlotEnd.split(":")[0], 10);
+
+    for (let hour = startHour; hour < endHour; hour++) {
+      shiftHours.push({
+        djId: assignment.djId,
+        djName: assignment.dj.name,
+        clockTemplateId: assignment.clockTemplateId,
+        hourOfDay: hour,
+      });
+    }
+  }
+
+  logger.info(`Processing ${shiftHours.length} hours across ${assignments.length} shifts`);
+
+  // 5. Process each hour
+  const results = {
+    hoursProcessed: 0,
+    playlistsBuilt: 0,
+    scriptsGenerated: 0,
+    audioGenerated: 0,
+    genericTracksUsed: 0,
+    featuresRelinked: 0,
+    featureAudioGenerated: 0,
+    errors: [] as string[],
+  };
+
+  // Track songs used per DJ across their entire shift to prevent repeats
+  const djUsedSongs = new Map<string, Set<string>>();
+
+  for (const shift of shiftHours) {
+    try {
+      // Get or create the used songs set for this DJ's shift
+      if (!djUsedSongs.has(shift.djId)) {
+        djUsedSongs.set(shift.djId, new Set<string>());
+      }
+      const excludeSongIds = djUsedSongs.get(shift.djId)!;
+
+      // 5a. Build playlist (excluding songs already used in earlier hours of this shift)
+      const playlist = await buildHourPlaylist({
+        stationId: station.id,
+        djId: shift.djId,
+        clockTemplateId: shift.clockTemplateId,
+        airDate: today,
+        hourOfDay: shift.hourOfDay,
+        excludeSongIds,
+      });
+
+      // Add this hour's songs to the DJ's exclusion set
+      for (const slot of playlist.slots) {
+        if (slot.songId) excludeSongIds.add(slot.songId);
+      }
+      results.playlistsBuilt++;
+
+      // 5b. Lock the playlist
+      await prisma.hourPlaylist.update({
+        where: { id: playlist.hourPlaylistId },
+        data: { status: "locked" },
+      });
+
+      // 5c. Find the last voice break in the clock and try to replace it with a generic track
+      const lastVbPos = findLastVoiceBreakPosition(playlist.slots);
+      let genericSkipPositions: number[] = [];
+      if (lastVbPos !== null) {
+        const genericTrack = await pickGenericTrack(shift.djId, station.id);
+        if (genericTrack) {
+          const lastVbSlot = playlist.slots.find(
+            (s: { position: number }) => s.position === lastVbPos
+          );
+          await prisma.voiceTrack.create({
+            data: {
+              stationId: station.id,
+              djId: shift.djId,
+              hourPlaylistId: playlist.hourPlaylistId,
+              position: lastVbPos,
+              trackType: "generic",
+              scriptText: genericTrack.scriptText,
+              audioFilePath: genericTrack.audioFilePath,
+              audioDuration: genericTrack.audioDuration,
+              ttsVoice: genericTrack.ttsVoice,
+              ttsProvider: genericTrack.ttsProvider,
+              status: "audio_ready",
+              airDate: today,
+              hourOfDay: shift.hourOfDay,
+              minuteOfHour: lastVbSlot?.minute ?? 47,
+            },
+          });
+
+          await prisma.genericVoiceTrack.update({
+            where: { id: genericTrack.id },
+            data: {
+              useCount: { increment: 1 },
+              lastUsedAt: new Date(),
+            },
+          });
+
+          genericSkipPositions = [lastVbPos];
+          results.genericTracksUsed++;
+        }
+      }
+
+      // 5d. Generate voice track scripts (skip last VB position if generic was used)
+      const scripts = await generateVoiceTrackScripts(
+        playlist.hourPlaylistId,
+        genericSkipPositions.length > 0 ? { skipPositions: genericSkipPositions } : undefined,
+      );
+      results.scriptsGenerated += scripts.generated;
+      if (scripts.errors.length > 0) {
+        results.errors.push(...scripts.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`));
+      }
+
+      // 5e. Generate voice track audio (skips tracks already at audio_ready)
+      const audio = await generateVoiceTrackAudio(playlist.hourPlaylistId);
+      results.audioGenerated += audio.generated;
+      if (audio.errors.length > 0) {
+        results.errors.push(...audio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`));
+      }
+
+      // 5f. Re-link feature content to actual adjacent songs
+      const relinked = await relinkFeatures(station.id, shift.djId, playlist.hourPlaylistId, playlist.slots);
+      results.featuresRelinked += relinked;
+
+      // 5g. Generate TTS audio for feature content (always run — content may exist from previous runs)
+      const featureAudio = await generateFeatureAudio(
+        playlist.hourPlaylistId,
+        station.id,
+        shift.djId,
+      );
+      results.featureAudioGenerated += featureAudio.generated;
+      if (featureAudio.errors.length > 0) {
+        results.errors.push(
+          ...featureAudio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`)
+        );
+      }
+
+      results.hoursProcessed++;
+    } catch (err) {
+      const msg = `[${shift.djName} H${shift.hourOfDay}] ${err instanceof Error ? err.message : String(err)}`;
+      logger.error("Hour processing failed", { error: msg });
+      results.errors.push(msg);
+    }
+  }
+
+  logger.info("Voice-tracks-daily cron completed", results);
+
+  return {
+    success: true,
+    ...results,
+    timestamp: new Date().toISOString(),
+  };
+}
+
+/**
+ * Re-link feature content slots to match the actual adjacent songs in the playlist.
+ */
+async function relinkFeatures(
+  stationId: string,
+  djId: string,
+  hourPlaylistId: string,
+  slots: Array<{
+    position: number;
+    type: string;
+    category: string;
+    songId?: string;
+    songTitle?: string;
+    artistName?: string;
+    featureContentId?: string;
+    featureSlot?: number;
+    featuredTrack?: string;
+  }>,
+): Promise<number> {
+  let relinked = 0;
+  const assignedIds = new Set<string>();
+
+  // Load DJ persona once for AI dialogue generation
+  const djPersona = await prisma.dJ.findUnique({
+    where: { id: djId },
+    select: { name: true, bio: true, gptSystemPrompt: true, catchPhrases: true, additionalKnowledge: true, gptTemperature: true },
+  });
+  if (!djPersona) return 0;
+
+  const featureSlots = slots.filter((s) => s.type === "feature");
+
+  for (const fSlot of featureSlots) {
+    // Find the adjacent song based on track placement
+    let adjacentSong: { songId: string; songTitle: string; artistName: string } | null = null;
+
+    const placement = fSlot.featuredTrack || "before"; // default: feature introduces the next song
+
+    if (placement === "before") {
+      // Feature plays before the song — find next song
+      const maxPos = Math.max(...slots.map((s) => s.position));
+      for (let i = fSlot.position + 1; i <= maxPos; i++) {
+        const slot = slots.find((s) => s.position === i);
+        if (slot?.type === "song" && slot.songId && slot.songTitle && slot.artistName) {
+          adjacentSong = { songId: slot.songId, songTitle: slot.songTitle, artistName: slot.artistName };
+          break;
+        }
+      }
+    } else if (placement === "after") {
+      // Feature plays after the song — find prev song
+      for (let i = fSlot.position - 1; i >= 0; i--) {
+        const slot = slots.find((s) => s.position === i);
+        if (slot?.type === "song" && slot.songId && slot.songTitle && slot.artistName) {
+          adjacentSong = { songId: slot.songId, songTitle: slot.songTitle, artistName: slot.artistName };
+          break;
+        }
+      }
+    }
+
+    if (!adjacentSong) continue;
+
+    // Find an unused feature content item for this DJ and re-generate with correct song
+    const featureContent = await prisma.featureContent.findFirst({
+      where: {
+        stationId,
+        djPersonalityId: djId,
+        isUsed: false,
+        ...(assignedIds.size > 0 ? { id: { notIn: [...assignedIds] } } : {}),
+      },
+      include: { featureType: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (!featureContent || !featureContent.featureType.gptPromptTemplate) continue;
+
+    // Get full song data
+    const song = await prisma.song.findUnique({
+      where: { id: adjacentSong.songId },
+      select: { id: true, title: true, artistName: true, genre: true, album: true },
+    });
+
+    const songData: SongData | undefined = song
+      ? { id: song.id, artistName: song.artistName, title: song.title, genre: song.genre, album: song.album }
+      : undefined;
+
+    // Fill the template with actual song/DJ data (produces an instruction prompt, not dialogue)
+    const filledPrompt = fillTemplate(
+      featureContent.featureType.gptPromptTemplate,
+      djFirstName(djPersona.name),
+      songData,
+    );
+
+    // Use AI to generate actual spoken DJ dialogue from the filled template
+    const systemPrompt = buildSystemPrompt(djPersona);
+    const aiResponse = await aiProvider.chat(
+      [
+        { role: "system", content: systemPrompt },
+        {
+          role: "user",
+          content: `${filledPrompt}\n\nOutput ONLY the spoken text — no stage directions, no quotes, no labels. 2-4 sentences, 20-30 seconds when spoken.`,
+        },
+      ],
+      {
+        maxTokens: 200,
+        temperature: djPersona.gptTemperature || 0.8,
+      },
+    );
+    const newContent = aiResponse.content.trim();
+
+    await prisma.featureContent.update({
+      where: { id: featureContent.id },
+      data: {
+        content: newContent,
+        isUsed: true,
+        relatedSongId: adjacentSong.songId,
+        contextData: JSON.stringify({
+          artistName: adjacentSong.artistName,
+          songTitle: adjacentSong.songTitle,
+        }),
+      },
+    });
+
+    assignedIds.add(featureContent.id);
+
+    // Update the slot to reference this feature content
+    const slotIdx = slots.findIndex((s) => s.position === fSlot.position);
+    if (slotIdx >= 0) {
+      slots[slotIdx].featureContentId = featureContent.id;
+    }
+
+    relinked++;
+  }
+
+  // Update the playlist slots with feature content IDs
+  if (relinked > 0) {
+    await prisma.hourPlaylist.update({
+      where: { id: hourPlaylistId },
+      data: { slots: JSON.stringify(slots) },
+    });
+  }
+
+  return relinked;
+}
+
+/**
+ * Find the last voice_break position in the playlist slots.
+ */
+function findLastVoiceBreakPosition(
+  slots: Array<{ position: number; type: string; minute?: number }>,
+): number | null {
+  const vbSlots = slots
+    .filter((s) => s.type === "voice_break")
+    .sort((a, b) => b.position - a.position);
+  return vbSlots.length > 0 ? vbSlots[0].position : null;
+}
+
+/**
+ * Pick the least-used active generic voice track for a DJ.
+ */
+async function pickGenericTrack(djId: string, stationId: string) {
+  const track = await prisma.genericVoiceTrack.findFirst({
+    where: {
+      djId,
+      stationId,
+      isActive: true,
+      audioFilePath: { not: null },
+    },
+    orderBy: [
+      { useCount: "asc" },
+      { lastUsedAt: "asc" },
+    ],
+  });
+
+  return track;
+}
