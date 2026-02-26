@@ -1,48 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
-import { handleApiError, unauthorized } from "@/lib/api/errors";
-import { requireRole } from "@/lib/api/auth";
+import { railwayFetch } from "@/lib/api/railway";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const stationId = request.nextUrl.searchParams.get("stationId");
-    const where: any = { ...(stationId && { stationId }) };
-
-    const templates = await prisma.clockTemplate.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      take: 200,
-      include: {
-        _count: { select: { assignments: true } },
-      },
-    });
-
-    return NextResponse.json({ templates });
+    const res = await railwayFetch("/api/clocks/templates");
+    const data = await res.json();
+    return NextResponse.json(data);
   } catch (error) {
-    return handleApiError(error, "/api/clock-templates");
+    return NextResponse.json({ error: "Failed to fetch clock templates" }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await requireRole("admin");
-    if (!session) return unauthorized();
-
     const body = await request.json();
-    const { stationId, name, ...rest } = body;
-
-    if (!stationId || !name) {
-      return NextResponse.json({ error: "Missing required fields: stationId, name" }, { status: 400 });
-    }
-
-    const template = await prisma.clockTemplate.create({
-      data: { stationId, name, ...rest },
+    const res = await railwayFetch("/api/clocks/templates", {
+      method: "POST",
+      body: JSON.stringify(body),
     });
-
-    return NextResponse.json({ template }, { status: 201 });
+    const data = await res.json();
+    return NextResponse.json(data, { status: res.status });
   } catch (error) {
-    return handleApiError(error, "/api/clock-templates");
+    return NextResponse.json({ error: "Failed to create clock template" }, { status: 500 });
   }
 }

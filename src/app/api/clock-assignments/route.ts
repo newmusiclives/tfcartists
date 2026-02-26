@@ -1,52 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
-import { handleApiError, unauthorized } from "@/lib/api/errors";
-import { requireRole } from "@/lib/api/auth";
+import { railwayFetch } from "@/lib/api/railway";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const stationId = request.nextUrl.searchParams.get("stationId");
-    const djId = request.nextUrl.searchParams.get("djId");
-    const where: any = {
-      ...(stationId && { stationId }),
-      ...(djId && { djId }),
-    };
-
-    const assignments = await prisma.clockAssignment.findMany({
-      where,
-      orderBy: { timeSlotStart: "asc" },
-      include: {
-        dj: { select: { id: true, name: true, slug: true } },
-        clockTemplate: { select: { id: true, name: true, clockType: true } },
-      },
-    });
-
-    return NextResponse.json({ assignments });
+    const res = await railwayFetch("/api/clocks/assignments");
+    const data = await res.json();
+    return NextResponse.json(data);
   } catch (error) {
-    return handleApiError(error, "/api/clock-assignments");
+    return NextResponse.json({ error: "Failed to fetch clock assignments" }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await requireRole("admin");
-    if (!session) return unauthorized();
-
     const body = await request.json();
-    const { stationId, djId, clockTemplateId, dayType, timeSlotStart, timeSlotEnd } = body;
-
-    if (!stationId || !djId || !clockTemplateId || !timeSlotStart || !timeSlotEnd) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-    }
-
-    const assignment = await prisma.clockAssignment.create({
-      data: { stationId, djId, clockTemplateId, dayType: dayType || "all", timeSlotStart, timeSlotEnd },
+    const res = await railwayFetch("/api/clocks/assignments", {
+      method: "POST",
+      body: JSON.stringify(body),
     });
-
-    return NextResponse.json({ assignment }, { status: 201 });
+    const data = await res.json();
+    return NextResponse.json(data, { status: res.status });
   } catch (error) {
-    return handleApiError(error, "/api/clock-assignments");
+    return NextResponse.json({ error: "Failed to create clock assignment" }, { status: 500 });
   }
 }
