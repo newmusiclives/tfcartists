@@ -377,28 +377,31 @@ export default function RadioClocksPage() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  // Fetch all data
+  // Fetch all data — each request independent so one failure doesn't block others
   const fetchAll = useCallback(async () => {
     try {
-      const [tRes, aRes, dRes] = await Promise.all([
+      const [tRes, aRes] = await Promise.all([
         fetch("/api/clock-templates"),
         fetch("/api/clock-assignments"),
-        fetch(
-          "https://tfc-radio-backend-production.up.railway.app/api/clocks/djs"
-        ),
       ]);
       const tData = await tRes.json();
       const aData = await aRes.json();
-      const dData = await dRes.json();
-
       setTemplates(tData.templates || []);
       setAssignments(aData.assignments || []);
+    } catch (err) {
+      console.error("Failed to fetch templates/assignments:", err);
+    }
+
+    // DJs fetched separately — cross-origin call may fail due to CORS
+    try {
+      const dRes = await fetch("/api/clock-djs");
+      const dData = await dRes.json();
       setDjs(dData.djs || []);
     } catch (err) {
-      console.error("Failed to fetch data:", err);
-    } finally {
-      setLoading(false);
+      console.error("Failed to fetch DJs:", err);
     }
+
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -498,10 +501,7 @@ export default function RadioClocksPage() {
   const deleteAssignment = async (id: string) => {
     if (!confirm("Delete this DJ assignment?")) return;
     try {
-      await fetch(
-        `https://tfc-radio-backend-production.up.railway.app/api/clocks/assignments/${id}`,
-        { method: "DELETE" }
-      );
+      await fetch(`/api/clock-assignments/${id}`, { method: "DELETE" });
       showToast("Assignment deleted");
       await fetchAll();
     } catch {
