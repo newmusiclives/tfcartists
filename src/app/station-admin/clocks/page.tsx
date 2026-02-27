@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { SharedNav } from "@/components/shared-nav";
 import {
   Clock,
@@ -16,6 +16,7 @@ import {
   ArrowUp,
   ArrowDown,
   Copy,
+  Sparkles,
 } from "lucide-react";
 
 // ============================================================================
@@ -67,6 +68,22 @@ interface DJ {
   is_active: boolean;
 }
 
+interface DJShowHour {
+  hour: number;
+  startTime: string;
+  endTime: string;
+  assignment?: DJAssignment;
+  template?: ClockTemplate;
+}
+
+interface DJShow {
+  djId: string;
+  djName: string;
+  shiftStart: number;
+  shiftEnd: number;
+  hours: DJShowHour[];
+}
+
 // ============================================================================
 // Constants
 // ============================================================================
@@ -94,6 +111,83 @@ function formatClockType(t: string) {
 
 function slotColor(category: string) {
   return CATEGORY_COLORS[category] || "bg-gray-300";
+}
+
+function formatTime12(time24: string): string {
+  const [h, m] = time24.split(":").map(Number);
+  const suffix = h >= 12 ? "PM" : "AM";
+  const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${h12}:${String(m).padStart(2, "0")} ${suffix}`;
+}
+
+function buildDJShows(
+  assignments: DJAssignment[],
+  templates: ClockTemplate[]
+): DJShow[] {
+  const byDJ: Record<string, DJAssignment[]> = {};
+  for (const a of assignments) {
+    if (!a.is_active) continue;
+    if (!byDJ[a.dj_id]) byDJ[a.dj_id] = [];
+    byDJ[a.dj_id].push(a);
+  }
+
+  const templateMap = new Map(templates.map((t) => [t.id, t]));
+  const shows: DJShow[] = [];
+
+  for (const [djId, djAssigns] of Object.entries(byDJ)) {
+    let minStart = 24;
+    let maxEnd = 0;
+    for (const a of djAssigns) {
+      if (a.time_slot_start) {
+        const h = parseInt(a.time_slot_start.split(":")[0]);
+        if (h < minStart) minStart = h;
+      }
+      if (a.time_slot_end) {
+        const h = parseInt(a.time_slot_end.split(":")[0]);
+        if (h > maxEnd) maxEnd = h;
+      }
+    }
+
+    if (maxEnd - minStart < 2) continue;
+    const numHours = Math.min(maxEnd - minStart, 3);
+    const hours: DJShowHour[] = [];
+
+    for (let i = 0; i < numHours; i++) {
+      const hourStart = minStart + i;
+      const startTime = `${String(hourStart).padStart(2, "0")}:00`;
+      const endTime = `${String(hourStart + 1).padStart(2, "0")}:00`;
+
+      const matching = djAssigns.find((a) => {
+        if (!a.time_slot_start) return false;
+        const aStart = parseInt(a.time_slot_start.split(":")[0]);
+        const aEnd = a.time_slot_end
+          ? parseInt(a.time_slot_end.split(":")[0])
+          : aStart + 1;
+        return aStart <= hourStart && aEnd > hourStart;
+      });
+
+      hours.push({
+        hour: i + 1,
+        startTime,
+        endTime,
+        assignment: matching,
+        template: matching
+          ? templateMap.get(matching.clock_template_id)
+          : undefined,
+      });
+    }
+
+    shows.push({
+      djId,
+      djName: djAssigns[0].dj_name,
+      shiftStart: minStart,
+      shiftEnd: maxEnd,
+      hours,
+    });
+  }
+
+  shows.sort((a, b) => a.shiftStart - b.shiftStart);
+  return shows;
 }
 
 // ============================================================================
@@ -406,6 +500,10 @@ export default function RadioClocksPage() {
     time_slot_end: "09:00",
   });
   const [toast, setToast] = useState<string | null>(null);
+  const [showHourEditing, setShowHourEditing] = useState<{
+    djId: string;
+    hour: number;
+  } | null>(null);
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -479,6 +577,7 @@ export default function RadioClocksPage() {
       if (data.status === "success") {
         showToast("Pattern saved");
         setEditing(null);
+        setShowHourEditing(null);
         await fetchAll();
       }
     } catch {
@@ -577,6 +676,148 @@ export default function RadioClocksPage() {
     if (Array.isArray(pattern)) return pattern;
     return [];
   };
+
+  // === DJ Show Clocks logic ===
+
+  const assignTemplateToHour = async (
+    show: DJShow,
+    hourIdx: number,
+    templateId: string
+  ) => {
+    if (!templateId) return;
+    setSaving(true);
+    try {
+      // Determine what template each hour should have after the change
+      const hourTemplates = show.hours.map((h, i) =>
+        i === hourIdx ? templateId : h.template?.id || ""
+      );
+
+      // Delete all existing assignments for this DJ
+      const djAssigns = assignments.filter((a) => a.dj_id === show.djId);
+      await Promise.all(
+        djAssigns.map((a) =>
+          fetch(`/api/clock-assignments/${a.id}`, { method: "DELETE" })
+        )
+      );
+
+      // Create new 1-hour assignments for hours that have a template
+      for (let i = 0; i < show.hours.length; i++) {
+        if (!hourTemplates[i]) continue;
+        const startHour = show.shiftStart + i;
+        await fetch("/api/clock-assignments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dj_id: show.djId,
+            clock_template_id: hourTemplates[i],
+            day_of_week: null,
+            time_slot_start: `${String(startHour).padStart(2, "0")}:00`,
+            time_slot_end: `${String(startHour + 1).padStart(2, "0")}:00`,
+          }),
+        });
+      }
+
+      showToast("Hour assignment updated");
+      await fetchAll();
+    } catch {
+      showToast("Failed to update assignment");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const generateShowClocks = async (show: DJShow) => {
+    setSaving(true);
+    try {
+      // Use the first hour's template as source pattern
+      const sourceTemplate = show.hours[0]?.template;
+      const sourceSlots =
+        sourceTemplate && Array.isArray(sourceTemplate.clock_pattern)
+          ? sourceTemplate.clock_pattern
+          : [];
+
+      const hourLabels = ["Hour 1 (Open)", "Hour 2 (Body)", "Hour 3 (Close)"];
+      const templateNames = hourLabels.map(
+        (label) => `${show.djName} - ${label}`
+      );
+
+      // Create 3 new templates, collecting IDs from responses
+      const newTemplateIds: string[] = [];
+      for (const name of templateNames) {
+        const res = await fetch("/api/clock-templates", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            description: `Auto-generated show clock for ${show.djName}`,
+            clock_type: sourceTemplate?.clock_type || "midday",
+            tempo: sourceTemplate?.tempo || "moderate",
+            clock_pattern: sourceSlots.map((s) => ({ ...s })),
+          }),
+        });
+        const data = await res.json();
+        if (data.template?.id) {
+          newTemplateIds.push(data.template.id);
+        }
+      }
+
+      // If we didn't get IDs from responses, refetch templates and find by name
+      if (newTemplateIds.length < 3) {
+        const tRes = await fetch("/api/clock-templates");
+        const tData = await tRes.json();
+        const freshTemplates: ClockTemplate[] = tData.templates || [];
+        newTemplateIds.length = 0;
+        for (const name of templateNames) {
+          const found = freshTemplates.find(
+            (t) => t.name === name && t.is_active
+          );
+          if (found) newTemplateIds.push(found.id);
+        }
+      }
+
+      if (newTemplateIds.length !== 3) {
+        showToast("Failed to create all 3 templates");
+        setSaving(false);
+        return;
+      }
+
+      // Delete all existing assignments for this DJ
+      const djAssigns = assignments.filter((a) => a.dj_id === show.djId);
+      await Promise.all(
+        djAssigns.map((a) =>
+          fetch(`/api/clock-assignments/${a.id}`, { method: "DELETE" })
+        )
+      );
+
+      // Create new 1-hour assignments
+      for (let i = 0; i < 3; i++) {
+        const startHour = show.shiftStart + i;
+        await fetch("/api/clock-assignments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            dj_id: show.djId,
+            clock_template_id: newTemplateIds[i],
+            day_of_week: null,
+            time_slot_start: `${String(startHour).padStart(2, "0")}:00`,
+            time_slot_end: `${String(startHour + 1).padStart(2, "0")}:00`,
+          }),
+        });
+      }
+
+      showToast(`Generated 3 show clocks for ${show.djName}`);
+      await fetchAll();
+    } catch {
+      showToast("Failed to generate show clocks");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const djShows = useMemo(
+    () => buildDJShows(assignments, templates),
+    [assignments, templates]
+  );
 
   const activeTemplates = templates.filter((t) => t.is_active);
 
@@ -682,6 +923,158 @@ export default function RadioClocksPage() {
             </span>
           ))}
         </div>
+
+        {/* ================================================================ */}
+        {/* DJ Show Clocks */}
+        {/* ================================================================ */}
+        {!loading && djShows.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-6">
+              <Users className="w-7 h-7 text-amber-600" />
+              DJ Show Clocks
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Assign different clock templates to each hour of a DJ&apos;s shift,
+              or generate 3 dedicated templates per DJ.
+            </p>
+            <div className="space-y-4">
+              {djShows.map((show) => (
+                <div
+                  key={show.djId}
+                  className="bg-white rounded-xl shadow-sm border overflow-hidden"
+                >
+                  {/* DJ Header */}
+                  <div className="p-4 flex items-center justify-between border-b bg-gray-50">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-amber-100 p-2 rounded-lg">
+                        <Users className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">
+                          {show.djName}
+                        </h3>
+                        <span className="text-sm text-gray-500">
+                          {formatTime12(show.hours[0].startTime)} –{" "}
+                          {formatTime12(show.hours[show.hours.length - 1].endTime)}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => generateShowClocks(show)}
+                      disabled={saving}
+                      className="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 flex items-center gap-2"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      Generate 3 Clocks
+                    </button>
+                  </div>
+
+                  {/* Hour rows */}
+                  <div className="divide-y">
+                    {show.hours.map((hour, idx) => {
+                      const hourSlots = hour.template
+                        ? parseSlots(hour.template.clock_pattern)
+                        : [];
+                      const isEditingThisHour =
+                        showHourEditing?.djId === show.djId &&
+                        showHourEditing?.hour === idx;
+
+                      return (
+                        <div key={idx}>
+                          <div className="px-4 py-3 flex items-center gap-4">
+                            <div className="w-40 shrink-0">
+                              <span className="text-sm font-medium text-gray-700">
+                                Hour {hour.hour}
+                              </span>
+                              <span className="text-xs text-gray-400 ml-1">
+                                ({formatTime12(hour.startTime)}–
+                                {formatTime12(hour.endTime)})
+                              </span>
+                            </div>
+                            <select
+                              value={hour.template?.id || ""}
+                              onChange={(e) =>
+                                assignTemplateToHour(show, idx, e.target.value)
+                              }
+                              disabled={saving}
+                              className="border rounded-lg px-2 py-1.5 text-sm w-56"
+                            >
+                              <option value="">No template</option>
+                              {activeTemplates.map((t) => (
+                                <option key={t.id} value={t.id}>
+                                  {t.name}
+                                </option>
+                              ))}
+                            </select>
+                            {hour.template && (
+                              <button
+                                onClick={() =>
+                                  setShowHourEditing(
+                                    isEditingThisHour
+                                      ? null
+                                      : { djId: show.djId, hour: idx }
+                                  )
+                                }
+                                className={`p-1.5 rounded hover:bg-blue-100 ${
+                                  isEditingThisHour
+                                    ? "bg-blue-100 text-blue-700"
+                                    : "text-blue-600"
+                                }`}
+                                title="Edit slots"
+                              >
+                                <Pencil className="w-4 h-4" />
+                              </button>
+                            )}
+                            {/* Mini timeline bar */}
+                            <div className="flex-1 relative h-6 bg-gray-200 rounded overflow-hidden">
+                              {hourSlots.map((slot, i) => (
+                                <div
+                                  key={i}
+                                  className={`absolute top-0 h-full ${slotColor(
+                                    slot.category
+                                  )} opacity-85 border-r border-white/30`}
+                                  style={{
+                                    left: `${(slot.minute / 60) * 100}%`,
+                                    width: `${Math.max(
+                                      (slot.duration / 60) * 100,
+                                      1.2
+                                    )}%`,
+                                  }}
+                                  title={`${slot.type} (${
+                                    slot.category
+                                  }) @ :${String(slot.minute).padStart(
+                                    2,
+                                    "0"
+                                  )} — ${slot.duration}min`}
+                                />
+                              ))}
+                              {hourSlots.length === 0 && (
+                                <span className="absolute inset-0 flex items-center justify-center text-xs text-gray-400">
+                                  No slots
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Inline slot editor for this hour */}
+                          {isEditingThisHour && hour.template && (
+                            <SlotEditor
+                              template={hour.template}
+                              onSave={(pattern) =>
+                                savePattern(hour.template!.id, pattern)
+                              }
+                              onCancel={() => setShowHourEditing(null)}
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Templates */}
         {loading ? (
