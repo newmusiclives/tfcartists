@@ -13,6 +13,9 @@ import {
   Trash2,
   Save,
   Users,
+  ArrowUp,
+  ArrowDown,
+  Copy,
 } from "lucide-react";
 
 // ============================================================================
@@ -124,6 +127,22 @@ function SlotEditor({
 
   const removeSlot = (idx: number) => {
     setSlots((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const moveSlot = (sortedIdx: number, direction: "up" | "down") => {
+    const sorted = [...slots].sort((a, b) => a.minute - b.minute);
+    const targetIdx = direction === "up" ? sortedIdx - 1 : sortedIdx + 1;
+    if (targetIdx < 0 || targetIdx >= sorted.length) return;
+    // Swap minute values so the visual order changes
+    const currentReal = slots.indexOf(sorted[sortedIdx]);
+    const targetReal = slots.indexOf(sorted[targetIdx]);
+    setSlots((prev) =>
+      prev.map((s, i) => {
+        if (i === currentReal) return { ...s, minute: sorted[targetIdx].minute };
+        if (i === targetReal) return { ...s, minute: sorted[sortedIdx].minute };
+        return s;
+      })
+    );
   };
 
   const addSlot = () => {
@@ -255,6 +274,22 @@ function SlotEditor({
                   className="border rounded px-1.5 py-0.5 text-xs flex-1"
                   placeholder="notes"
                 />
+                <button
+                  onClick={() => moveSlot(sortedIdx, "up")}
+                  disabled={sortedIdx === 0}
+                  className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  title="Move up"
+                >
+                  <ArrowUp className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => moveSlot(sortedIdx, "down")}
+                  disabled={sortedIdx === slots.length - 1}
+                  className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  title="Move down"
+                >
+                  <ArrowDown className="w-4 h-4" />
+                </button>
                 <button
                   onClick={() => removeSlot(realIdx)}
                   className="text-red-400 hover:text-red-600"
@@ -466,6 +501,35 @@ export default function RadioClocksPage() {
       }
     } catch {
       showToast("Failed to delete template");
+    }
+  };
+
+  const duplicateTemplate = async (source: ClockTemplate) => {
+    setSaving(true);
+    try {
+      const sourceSlots = Array.isArray(source.clock_pattern) ? source.clock_pattern : [];
+      const res = await fetch("/api/clock-templates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${source.name} (Copy)`,
+          description: source.description || "",
+          clock_type: source.clock_type,
+          tempo: source.tempo || "moderate",
+          clock_pattern: sourceSlots.map((s) => ({ ...s })),
+        }),
+      });
+      const data = await res.json();
+      if (data.status === "success") {
+        showToast("Template duplicated");
+        await fetchAll();
+      } else {
+        showToast(data.detail || "Failed to duplicate");
+      }
+    } catch {
+      showToast("Failed to duplicate template");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -687,6 +751,16 @@ export default function RadioClocksPage() {
                             title="Edit slots"
                           >
                             <Pencil className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              duplicateTemplate(t);
+                            }}
+                            className="p-1.5 rounded hover:bg-green-100 text-green-600"
+                            title="Duplicate template"
+                          >
+                            <Copy className="w-4 h-4" />
                           </button>
                           <button
                             onClick={(e) => {
