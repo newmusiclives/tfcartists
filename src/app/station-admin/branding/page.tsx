@@ -95,6 +95,7 @@ export default function StationBrandingPage() {
   const [generating, setGenerating] = useState<Record<string, boolean>>({});
   const [editingScript, setEditingScript] = useState<{ category: ScriptCategory; index: number } | null>(null);
   const [editDraft, setEditDraft] = useState<ImagingScript>({ label: "", text: "", musicBed: "" });
+  const [genError, setGenError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/stations")
@@ -178,6 +179,7 @@ export default function StationBrandingPage() {
   const generateScripts = async (category: ScriptCategory) => {
     if (!station) return;
     setGenerating((prev) => ({ ...prev, [category]: true }));
+    setGenError(null);
     try {
       const res = await fetch("/api/station-branding/generate-scripts", {
         method: "POST",
@@ -185,6 +187,11 @@ export default function StationBrandingPage() {
         body: JSON.stringify({ stationId: station.id, category }),
       });
       const data = await res.json();
+      if (!res.ok) {
+        const msg = data?.error?.message || data?.error || `Error ${res.status}`;
+        setGenError(typeof msg === "string" ? msg : JSON.stringify(msg));
+        return;
+      }
       if (data.scripts) {
         setScripts(category, data.scripts);
 
@@ -201,7 +208,7 @@ export default function StationBrandingPage() {
         setTimeout(() => setSaved(false), 2000);
       }
     } catch {
-      // silent
+      setGenError("Network error — could not reach the server.");
     } finally {
       setGenerating((prev) => ({ ...prev, [category]: false }));
     }
@@ -445,6 +452,13 @@ export default function StationBrandingPage() {
                 {SCRIPT_CATEGORIES.reduce((sum, cat) => sum + getScripts(cat.key).length, 0)} scripts total
               </span>
             </div>
+
+            {genError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex items-start justify-between gap-2">
+                <p className="text-sm text-red-700">{genError}</p>
+                <button onClick={() => setGenError(null)} className="text-red-400 hover:text-red-600 shrink-0 text-lg leading-none">&times;</button>
+              </div>
+            )}
 
             <div className="space-y-4">
               {Object.entries(groupedCategories).map(([group, categories]) => {

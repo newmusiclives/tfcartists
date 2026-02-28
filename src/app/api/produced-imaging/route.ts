@@ -17,15 +17,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const musicBeds = await prisma.musicBed.findMany({
+    const producedImaging = await prisma.producedImaging.findMany({
       where: { stationId, isActive: true },
       orderBy: { createdAt: "desc" },
       take: 200,
     });
 
-    return NextResponse.json({ musicBeds });
+    return NextResponse.json({ producedImaging });
   } catch (error) {
-    return handleApiError(error, "/api/music-beds");
+    return handleApiError(error, "/api/produced-imaging");
   }
 }
 
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const stationId = formData.get("stationId") as string;
     const name = formData.get("name") as string;
-    const category = (formData.get("category") as string) || "general";
+    const category = (formData.get("category") as string) || "sweeper";
     const file = formData.get("file") as File;
 
     if (!stationId || !name || !file) {
@@ -55,22 +55,22 @@ export async function POST(request: NextRequest) {
     const fileName = `${safeName}-${Date.now()}${ext}`;
     const buffer = Buffer.from(await file.arrayBuffer());
 
-    // Save file to public/audio/music-beds/ (falls back to data URI on Netlify)
+    // Save file to public/audio/produced-imaging/ (falls back to data URI on Netlify)
     let filePath: string;
     try {
-      const outputDir = path.join(process.cwd(), "public", "audio", "music-beds");
+      const outputDir = path.join(process.cwd(), "public", "audio", "produced-imaging");
       if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
       }
       fs.writeFileSync(path.join(outputDir, fileName), buffer);
-      filePath = `/audio/music-beds/${fileName}`;
+      filePath = `/audio/produced-imaging/${fileName}`;
     } catch {
       // Serverless (Netlify) — read-only filesystem, store as data URI
       const mimeType = ext === ".wav" ? "audio/wav" : "audio/mpeg";
       filePath = `data:${mimeType};base64,${buffer.toString("base64")}`;
     }
 
-    const musicBed = await prisma.musicBed.create({
+    const item = await prisma.producedImaging.create({
       data: {
         stationId,
         name,
@@ -80,8 +80,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ musicBed }, { status: 201 });
+    return NextResponse.json({ producedImaging: item }, { status: 201 });
   } catch (error) {
-    return handleApiError(error, "/api/music-beds");
+    return handleApiError(error, "/api/produced-imaging");
   }
 }

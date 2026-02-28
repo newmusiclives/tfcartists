@@ -43,8 +43,19 @@ interface MusicBedItem {
   isActive: boolean;
 }
 
+interface ProducedImagingItem {
+  id: string;
+  name: string;
+  fileName: string;
+  filePath: string;
+  durationSeconds: number | null;
+  category: string;
+  isActive: boolean;
+}
+
 const USAGE_OPTIONS = ["promo", "id", "sweeper"];
 const BED_CATEGORIES = ["general", "upbeat", "soft", "corporate", "country"];
+const PRODUCED_CATEGORIES = ["promo", "sweeper", "station_id", "toh", "positioning"];
 
 export default function StationImagingPage() {
   const [voices, setVoices] = useState<ImagingVoice[]>([]);
@@ -70,6 +81,14 @@ export default function StationImagingPage() {
   const [playingBedId, setPlayingBedId] = useState<string | null>(null);
   const [audioEl] = useState(() => typeof Audio !== "undefined" ? new Audio() : null);
 
+  // Produced Imaging state
+  const [producedImaging, setProducedImaging] = useState<ProducedImagingItem[]>([]);
+  const [prodUploadName, setProdUploadName] = useState("");
+  const [prodUploadCategory, setProdUploadCategory] = useState("sweeper");
+  const [prodUploadFile, setProdUploadFile] = useState<File | null>(null);
+  const [prodUploading, setProdUploading] = useState(false);
+  const [playingProdId, setPlayingProdId] = useState<string | null>(null);
+
   useEffect(() => {
     fetch("/api/stations")
       .then((r) => r.json())
@@ -78,13 +97,15 @@ export default function StationImagingPage() {
         if (stations.length > 0) {
           const sid = stations[0].id;
           setStationId(sid);
-          // Fetch voices and music beds in parallel
+          // Fetch voices, music beds, and produced imaging in parallel
           Promise.all([
             fetch(`/api/station-imaging?stationId=${sid}`).then((r) => r.json()),
             fetch(`/api/music-beds?stationId=${sid}`).then((r) => r.json()),
-          ]).then(([voiceData, bedData]) => {
+            fetch(`/api/produced-imaging?stationId=${sid}`).then((r) => r.json()),
+          ]).then(([voiceData, bedData, prodData]) => {
             setVoices(voiceData.voices || []);
             setMusicBeds(bedData.musicBeds || []);
+            setProducedImaging(prodData.producedImaging || []);
           });
         }
       })
@@ -174,8 +195,77 @@ export default function StationImagingPage() {
       audioEl.src = bed.filePath;
       audioEl.play();
       setPlayingBedId(bed.id);
+      setPlayingProdId(null);
       audioEl.onended = () => setPlayingBedId(null);
     }
+  };
+
+  // Produced Imaging functions
+  const uploadProducedImaging = async () => {
+    if (!stationId || !prodUploadName || !prodUploadFile) return;
+    setProdUploading(true);
+    const formData = new FormData();
+    formData.append("stationId", stationId);
+    formData.append("name", prodUploadName);
+    formData.append("category", prodUploadCategory);
+    formData.append("file", prodUploadFile);
+    try {
+      const res = await fetch("/api/produced-imaging", { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.producedImaging) {
+        setProducedImaging([data.producedImaging, ...producedImaging]);
+        setProdUploadName("");
+        setProdUploadCategory("sweeper");
+        setProdUploadFile(null);
+      }
+    } catch {}
+    setProdUploading(false);
+  };
+
+  const deleteProducedImaging = async (id: string) => {
+    if (!confirm("Delete this imaging element?")) return;
+    await fetch(`/api/produced-imaging/${id}`, { method: "DELETE" });
+    setProducedImaging(producedImaging.filter((p) => p.id !== id));
+    if (playingProdId === id) {
+      audioEl?.pause();
+      setPlayingProdId(null);
+    }
+  };
+
+  const togglePlayProd = (item: ProducedImagingItem) => {
+    if (!audioEl) return;
+    if (playingProdId === item.id) {
+      audioEl.pause();
+      setPlayingProdId(null);
+    } else {
+      audioEl.src = item.filePath;
+      audioEl.play();
+      setPlayingProdId(item.id);
+      setPlayingBedId(null);
+      audioEl.onended = () => setPlayingProdId(null);
+    }
+  };
+
+  const categoryLabel = (cat: string) => {
+    const labels: Record<string, string> = {
+      promo: "Promo",
+      sweeper: "Sweeper",
+      station_id: "Station ID",
+      toh: "TOH",
+      positioning: "Positioning",
+    };
+    return labels[cat] || cat;
+  };
+
+  const categoryColor = (cat: string) => {
+    const colors: Record<string, string> = {
+      promo: "bg-purple-100 text-purple-700",
+      sweeper: "bg-blue-100 text-blue-700",
+      station_id: "bg-amber-100 text-amber-700",
+      toh: "bg-rose-100 text-rose-700",
+      positioning: "bg-teal-100 text-teal-700",
+    };
+    return colors[cat] || "bg-gray-100 text-gray-600";
   };
 
   return (
@@ -425,6 +515,107 @@ export default function StationImagingPage() {
             })}
           </div>
         )}
+
+        {/* ===== Pre-Produced Imaging Section ===== */}
+        <div className="mt-12">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                <Mic className="w-7 h-7 text-indigo-600" />
+                Pre-Produced Imaging
+              </h2>
+              <p className="text-gray-600 mt-1">Upload ready-to-air promos, sweepers, station IDs, and more</p>
+            </div>
+          </div>
+
+          {/* Upload form */}
+          <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+            <h3 className="font-semibold mb-4">Upload Imaging Element</h3>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+              <div>
+                <label className="text-xs text-gray-500 block mb-1">Name</label>
+                <input
+                  type="text"
+                  value={prodUploadName}
+                  onChange={(e) => setProdUploadName(e.target.value)}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  placeholder="e.g. Morning Station ID"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1">Category</label>
+                <select
+                  value={prodUploadCategory}
+                  onChange={(e) => setProdUploadCategory(e.target.value)}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                >
+                  {PRODUCED_CATEGORIES.map((c) => (
+                    <option key={c} value={c}>{categoryLabel(c)}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-xs text-gray-500 block mb-1">Audio File (MP3/WAV)</label>
+                <input
+                  type="file"
+                  accept=".mp3,.wav,audio/mpeg,audio/wav"
+                  onChange={(e) => setProdUploadFile(e.target.files?.[0] || null)}
+                  className="w-full border rounded-lg px-3 py-1.5 text-sm file:mr-2 file:rounded file:border-0 file:bg-indigo-50 file:text-indigo-700 file:px-2 file:py-1 file:text-xs"
+                />
+              </div>
+              <button
+                onClick={uploadProducedImaging}
+                disabled={prodUploading || !prodUploadName || !prodUploadFile}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2 justify-center"
+              >
+                {prodUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                Upload
+              </button>
+            </div>
+          </div>
+
+          {/* Produced imaging list */}
+          {producedImaging.length === 0 ? (
+            <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
+              <Mic className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500">No pre-produced imaging uploaded yet.</p>
+              <p className="text-sm text-gray-400 mt-1">Upload ready-to-air promos, sweepers, IDs, and more.</p>
+            </div>
+          ) : (
+            <div className="bg-white rounded-xl shadow-sm border divide-y">
+              {producedImaging.map((item) => (
+                <div key={item.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => togglePlayProd(item)}
+                      className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center hover:bg-indigo-200"
+                    >
+                      {playingProdId === item.id ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                    </button>
+                    <div>
+                      <p className="font-medium text-gray-900 text-sm">{item.name}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${categoryColor(item.category)}`}>
+                          {categoryLabel(item.category)}
+                        </span>
+                        <span className="text-xs text-gray-400">{item.fileName}</span>
+                        {item.durationSeconds && (
+                          <span className="text-xs text-gray-400">{Math.round(item.durationSeconds)}s</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => deleteProducedImaging(item.id)}
+                    className="text-sm text-red-500 px-3 py-1.5 rounded-lg hover:bg-red-50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* ===== Music Beds Section ===== */}
         <div className="mt-12">

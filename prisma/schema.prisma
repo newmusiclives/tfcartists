@@ -1110,6 +1110,7 @@ model Station {
   stationDJs         DJ[]    @relation("StationDJs")
   showTransitions    ShowTransition[]
   musicBeds          MusicBed[]
+  producedImaging    ProducedImaging[]
   sponsorAds         SponsorAd[]
   genericVoiceTracks GenericVoiceTrack[]
 
@@ -2391,6 +2392,33 @@ model MusicBed {
   @@index([stationId])
   @@index([category])
   @@index([isActive])
+}
+
+model ProducedImaging {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Station
+  stationId       String
+  station         Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // File info
+  name            String
+  fileName        String
+  filePath        String   // e.g. "/audio/produced-imaging/morning-id.mp3"
+  durationSeconds Float?
+
+  // Classification
+  category        String   @default("sweeper") // "promo", "sweeper", "station_id", "toh", "positioning"
+
+  // Status
+  isActive        Boolean  @default(true)
+
+  metadata        Json?
+
+  @@index([stationId])
+  @@index([category])
 }
 
 // Sponsor ad records for even rotation scheduling
