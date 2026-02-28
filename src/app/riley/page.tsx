@@ -442,7 +442,7 @@ export default function RileyDashboardPage() {
         </section>
 
         {/* Quick Actions */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <QuickActionCard
             title="Artist Pipeline"
             description="Complete journey from discovery to activation"
@@ -473,6 +473,13 @@ export default function RileyDashboardPage() {
             href="/riley/artists"
             icon={<Users className="w-8 h-8 text-orange-600" />}
             managedBy="Marcus Tate"
+          />
+          <QuickActionCard
+            title="Spotify Discovery"
+            description="Search Spotify for indie artists to recruit"
+            href="/riley/discovery"
+            icon={<Music className="w-8 h-8 text-green-600" />}
+            managedBy="Riley AI"
           />
           <QuickActionCard
             title="Pool Share Calculator"
