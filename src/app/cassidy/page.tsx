@@ -44,8 +44,12 @@ export default function CassidyDashboardPage() {
           setRecentSubmissions(submissionsData.submissions || []);
         }
 
-        // Mock progression requests for now (would need separate API route)
-        setProgressionRequests([]);
+        // Fetch progression requests
+        const progressionRes = await fetch("/api/cassidy/progression-requests?limit=5");
+        if (progressionRes.ok) {
+          const progressionData = await progressionRes.json();
+          setProgressionRequests(progressionData.progressionRequests || []);
+        }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
@@ -338,9 +342,17 @@ export default function CassidyDashboardPage() {
           </div>
 
           <div className="space-y-3">
-            {progressionRequests.map((request) => (
-              <ProgressionRequestRow key={request.id} {...request} />
-            ))}
+            {progressionRequests.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p>No progression requests yet</p>
+                <p className="text-sm mt-1">Artists can request tier upgrades after time in their current tier</p>
+              </div>
+            ) : (
+              progressionRequests.map((request) => (
+                <ProgressionRequestRow key={request.id} {...request} />
+              ))
+            )}
           </div>
         </section>
 

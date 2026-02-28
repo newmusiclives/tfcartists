@@ -204,6 +204,20 @@ export default function ListenerDashboardPage() {
           )}
         </div>
 
+        {/* Redeem CTA */}
+        <Link
+          href="/rewards/redeem"
+          className="block bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-6 text-white hover:from-amber-600 hover:to-orange-600 transition-all"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-bold mb-1">Redeem Your XP</h2>
+              <p className="text-amber-100 text-sm">Spend {profile.xpTotal.toLocaleString()} XP on merch, shoutouts & more</p>
+            </div>
+            <Gift className="w-8 h-8 text-amber-200" />
+          </div>
+        </Link>
+
         {/* Recent XP */}
         <div className="bg-white rounded-2xl shadow-sm border p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Recent XP</h2>

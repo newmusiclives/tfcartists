@@ -636,6 +636,7 @@ model Listener {
   playbacks         ListenerPlayback[]
   sponsorReferral   SponsorListenerReferral?
   referralChains    SponsorReferralChain[]
+  redemptions       Redemption[]
 
   metadata          Json?
 }
@@ -2342,6 +2343,55 @@ model Badge {
   condition   String   // machine-readable condition key
 
   @@index([category])
+}
+
+// Reward catalog items that listeners can redeem XP for
+model RewardOption {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  name        String
+  description String
+  category    String   // "merch", "shoutout", "exclusive", "experience"
+  xpCost      Int
+  icon        String?  // emoji or icon name
+
+  // Availability
+  isActive    Boolean  @default(true)
+  totalSupply Int?     // null = unlimited
+  remaining   Int?     // null = unlimited
+  minLevel    Int      @default(1) // minimum listener level required
+
+  // Fulfillment
+  fulfillmentType String @default("manual") // "manual", "automatic", "digital"
+  fulfillmentDetails String? // instructions for manual fulfillment
+
+  redemptions Redemption[]
+
+  @@index([isActive])
+  @@index([category])
+}
+
+// Record of a listener redeeming XP for a reward
+model Redemption {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  listenerId  String
+  listener    Listener @relation(fields: [listenerId], references: [id])
+  rewardId    String
+  reward      RewardOption @relation(fields: [rewardId], references: [id])
+
+  xpSpent     Int
+  status      String   @default("pending") // "pending", "fulfilled", "cancelled"
+  fulfilledAt DateTime?
+  fulfilledBy String?
+  notes       String?
+
+  @@index([listenerId])
+  @@index([status])
 }
 
 // System configuration (API keys, credentials, settings)

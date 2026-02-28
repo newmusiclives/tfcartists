@@ -81,6 +81,11 @@ export function RadioPlayer() {
     }
   }, []);
 
+  // Fetch now-playing on mount so visitors see what's on before pressing play
+  useEffect(() => {
+    fetchNowPlaying();
+  }, [fetchNowPlaying]);
+
   useEffect(() => {
     const handleBeforeUnload = () => {
       // Best-effort session end on page close
@@ -279,7 +284,9 @@ export function RadioPlayer() {
                   ? "Stream unavailable"
                   : showLoading
                     ? "Connecting..."
-                    : trackTitle}
+                    : nowPlaying?.title
+                      ? trackTitle
+                      : currentStation.name}
               </div>
               <div className="text-sm text-amber-300/80 truncate">
                 {showError
@@ -288,7 +295,9 @@ export function RadioPlayer() {
                     ? "Buffering stream..."
                     : showActive
                       ? `${trackArtist}${djName ? ` · DJ ${djName}` : ""}`
-                      : "Click play to listen"}
+                      : nowPlaying?.artist_name
+                        ? `${nowPlaying.artist_name}${djName ? ` · DJ ${djName}` : ""} — Press play`
+                        : "Press play to listen"}
               </div>
             </div>
           </div>
@@ -364,7 +373,9 @@ export function RadioPlayer() {
                   ? "bg-green-500/20 text-green-400 border border-green-500/30"
                   : showLoading
                     ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                    : "bg-gray-500/20 text-gray-400 border border-gray-500/30"
+                    : showError
+                      ? "bg-red-500/20 text-red-400 border border-red-500/30"
+                      : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
               }`}
             >
               <span
@@ -373,7 +384,9 @@ export function RadioPlayer() {
                     ? "bg-green-400 animate-pulse"
                     : showLoading
                       ? "bg-blue-400 animate-pulse"
-                      : "bg-gray-500"
+                      : showError
+                        ? "bg-red-400"
+                        : "bg-amber-400 animate-pulse"
                 }`}
               />
               <span>
@@ -381,7 +394,9 @@ export function RadioPlayer() {
                   ? "ON AIR"
                   : showLoading
                     ? "LOADING"
-                    : "OFFLINE"}
+                    : showError
+                      ? "OFFLINE"
+                      : "LISTEN LIVE"}
               </span>
             </div>
 

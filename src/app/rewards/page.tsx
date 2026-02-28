@@ -80,6 +80,27 @@ export default function RewardsHubPage() {
             </div>
           </Link>
 
+          {/* Redeem Rewards */}
+          <Link
+            href="/rewards/redeem"
+            className="group bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
+          >
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                <Gift className="w-5 h-5 text-amber-600" />
+              </div>
+              <h2 className="text-lg font-bold text-gray-900">Redeem Rewards</h2>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              Spend your hard-earned XP on merch, on-air shoutouts, exclusive content,
+              and unique experiences. New rewards added regularly!
+            </p>
+            <div className="mt-4 text-amber-600 text-sm font-semibold flex items-center space-x-1 group-hover:text-amber-700">
+              <span>Browse Rewards</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
           {/* Leaderboard */}
           <Link
             href="/rewards/leaderboard"

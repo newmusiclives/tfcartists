@@ -344,27 +344,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* System Status */}
+      {/* Platform Promise */}
       <section className="bg-gradient-to-r from-amber-700 to-orange-600 text-white py-20">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-4xl font-bold mb-12 text-center">
-            System Overview
+            The TrueFans Difference
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
-              <div className="text-4xl font-bold mb-2">3</div>
-              <div className="text-amber-100">Active Artists</div>
-              <div className="text-sm text-amber-200 mt-2">Riley's Pipeline</div>
+              <div className="text-4xl font-bold mb-2">92%</div>
+              <div className="text-amber-100">Goes to Artists</div>
+              <div className="text-sm text-amber-200 mt-2">Industry-leading donation rate</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
-              <div className="text-4xl font-bold mb-2">$127.50</div>
-              <div className="text-amber-100">Total Raised</div>
-              <div className="text-sm text-amber-200 mt-2">Via TrueFans RADIO</div>
+              <div className="text-4xl font-bold mb-2">24/7</div>
+              <div className="text-amber-100">Live Radio</div>
+              <div className="text-sm text-amber-200 mt-2">AI DJs + curated programming</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
-              <div className="text-4xl font-bold mb-2">31</div>
-              <div className="text-amber-100">Total Shares</div>
-              <div className="text-sm text-amber-200 mt-2">In Artist Pool</div>
+              <div className="text-4xl font-bold mb-2">100%</div>
+              <div className="text-amber-100">Transparent</div>
+              <div className="text-sm text-amber-200 mt-2">Every dollar tracked & reported</div>
             </div>
           </div>
           <div className="mt-8 text-center">
