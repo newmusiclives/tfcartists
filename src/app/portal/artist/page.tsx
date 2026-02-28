@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { SharedNav } from "@/components/shared-nav";
 import {
   Music,
@@ -190,14 +191,16 @@ export default function ArtistPortalPage() {
               {Object.entries(TIER_INFO)
                 .filter(([key]) => key !== "FREE" && key !== artist?.airplayTier)
                 .map(([key, info]) => (
-                  <div
+                  <Link
                     key={key}
-                    className="bg-white rounded-lg p-3 border text-center"
+                    href="/airplay"
+                    className="bg-white rounded-lg p-3 border text-center hover:border-amber-400 hover:shadow-md transition-all"
                   >
                     <p className="font-semibold text-sm">{info.name}</p>
                     <p className="text-lg font-bold text-amber-600">${info.cost}/mo</p>
                     <p className="text-xs text-gray-500">{info.shares} shares</p>
-                  </div>
+                    <p className="text-xs text-amber-600 font-medium mt-1">Upgrade &rarr;</p>
+                  </Link>
                 ))}
             </div>
           </div>

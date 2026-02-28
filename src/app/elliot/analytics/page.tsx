@@ -12,17 +12,27 @@ interface ElliotStats {
   growth: { newThisWeek: number; newThisMonth: number; churnedThisWeek: number; returningListenerPercent: number };
 }
 
+interface AnalyticsData {
+  dailyGrowth: { date: string; count: number }[];
+  sessionDistribution: { bucket: string; count: number }[];
+  referralFunnel: { source: string; count: number }[];
+  retentionCohorts: { week: string; total: number; active: number; rate: number }[];
+}
+
 export default function ListenerAnalyticsPage() {
   const [stats, setStats] = useState<ElliotStats | null>(null);
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("/api/elliot/stats");
-        if (res.ok) {
-          setStats(await res.json());
-        }
+        const [statsRes, analyticsRes] = await Promise.all([
+          fetch("/api/elliot/stats"),
+          fetch("/api/elliot/analytics"),
+        ]);
+        if (statsRes.ok) setStats(await statsRes.json());
+        if (analyticsRes.ok) setAnalytics(await analyticsRes.json());
       } catch (error) {
         console.error("Error fetching analytics data:", error);
       } finally {
@@ -137,6 +147,139 @@ export default function ListenerAnalyticsPage() {
             positive={stats.growth.returningListenerPercent >= 50}
           />
         </section>
+
+        {/* Listener Growth Trend (30 days) */}
+        {analytics && analytics.dailyGrowth.length > 0 && (
+          <section className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-bold mb-2">Listener Growth Trend</h2>
+            <p className="text-gray-600 text-sm mb-6">New listener signups per day (last 30 days)</p>
+            <div className="flex items-end space-x-1 h-40">
+              {analytics.dailyGrowth.map((d) => {
+                const maxCount = Math.max(...analytics.dailyGrowth.map((x) => x.count), 1);
+                const height = Math.max((d.count / maxCount) * 100, 2);
+                return (
+                  <div key={d.date} className="flex-1 group relative">
+                    <div
+                      className="bg-indigo-500 hover:bg-indigo-400 rounded-t transition-colors w-full"
+                      style={{ height: `${height}%` }}
+                    />
+                    <div className="hidden group-hover:block absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10">
+                      {d.date.slice(5)}: {d.count}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex justify-between text-xs text-gray-400 mt-2">
+              <span>{analytics.dailyGrowth[0]?.date.slice(5)}</span>
+              <span>{analytics.dailyGrowth[analytics.dailyGrowth.length - 1]?.date.slice(5)}</span>
+            </div>
+          </section>
+        )}
+
+        {/* Session Duration + Referral Funnel side by side */}
+        {analytics && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Session Duration Distribution */}
+            <section className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-lg font-bold mb-2">Session Duration</h2>
+              <p className="text-gray-600 text-xs mb-4">Distribution of session lengths (30 days)</p>
+              <div className="space-y-3">
+                {analytics.sessionDistribution.map((b) => {
+                  const maxCount = Math.max(...analytics.sessionDistribution.map((x) => x.count), 1);
+                  const width = Math.max((b.count / maxCount) * 100, 2);
+                  return (
+                    <div key={b.bucket}>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="text-gray-700 font-medium">{b.bucket}</span>
+                        <span className="text-gray-500">{b.count.toLocaleString()}</span>
+                      </div>
+                      <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all"
+                          style={{ width: `${width}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* Referral Source Funnel */}
+            <section className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-lg font-bold mb-2">Referral Sources</h2>
+              <p className="text-gray-600 text-xs mb-4">How listeners discovered the station</p>
+              {analytics.referralFunnel.length === 0 ? (
+                <p className="text-sm text-gray-400">No referral data yet</p>
+              ) : (
+                <div className="space-y-3">
+                  {analytics.referralFunnel.map((s) => {
+                    const maxCount = Math.max(...analytics.referralFunnel.map((x) => x.count), 1);
+                    const width = Math.max((s.count / maxCount) * 100, 4);
+                    const total = analytics.referralFunnel.reduce((sum, x) => sum + x.count, 0);
+                    const pct = total > 0 ? Math.round((s.count / total) * 100) : 0;
+                    return (
+                      <div key={s.source}>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="text-gray-700 font-medium">{s.source}</span>
+                          <span className="text-gray-500">{s.count.toLocaleString()} ({pct}%)</span>
+                        </div>
+                        <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full transition-all"
+                            style={{ width: `${width}%` }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+          </div>
+        )}
+
+        {/* Retention Cohorts */}
+        {analytics && analytics.retentionCohorts.length > 0 && (
+          <section className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-bold mb-2">Weekly Retention Cohorts</h2>
+            <p className="text-gray-600 text-sm mb-6">
+              Percentage of each weekly signup cohort still active this week
+            </p>
+            <div className="grid grid-cols-4 gap-4">
+              {analytics.retentionCohorts.map((c) => (
+                <div key={c.week} className="text-center">
+                  <div className="text-xs text-gray-500 mb-2">{c.week}</div>
+                  <div className="relative mx-auto w-20 h-20">
+                    <svg className="w-20 h-20 -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        className="text-gray-200"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path
+                        className={c.rate >= 50 ? "text-green-500" : c.rate >= 25 ? "text-yellow-500" : "text-red-400"}
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeDasharray={`${c.rate}, 100`}
+                        strokeLinecap="round"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-lg font-bold text-gray-900">{c.rate}%</span>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-2">{c.active}/{c.total} active</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Listener Tier Distribution */}
         <section className="bg-white rounded-xl shadow-lg p-6">

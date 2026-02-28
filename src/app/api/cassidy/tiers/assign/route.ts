@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
 import { messageDelivery } from "@/lib/messaging/delivery-service";
+import { notifyArtistPlaced } from "@/lib/messaging/notifications";
 import type { AssignTierRequest } from "@/types/cassidy";
 
 export const dynamic = "force-dynamic";
@@ -182,6 +183,17 @@ export async function POST(request: NextRequest) {
       trackTitle: submission.trackTitle,
       stage: "placed",
       tier: body.tierAwarded,
+    }).catch(() => {});
+
+    // Notify artist of placement via GHL email/SMS
+    notifyArtistPlaced({
+      email: submission.artistEmail || undefined,
+      phone: submission.artistPhone || undefined,
+      artistName: submission.artistName,
+      trackTitle: submission.trackTitle,
+      tierAwarded: body.tierAwarded,
+      spinsPerWeek: body.rotationSpinsWeekly,
+      rationale: body.decisionRationale,
     }).catch(() => {});
 
     return NextResponse.json({

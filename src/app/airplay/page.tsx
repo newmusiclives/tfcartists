@@ -2,11 +2,57 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Radio, ArrowLeft, Check, TrendingUp, DollarSign } from "lucide-react";
+import { Radio, ArrowLeft, Check, TrendingUp, DollarSign, Loader2, X } from "lucide-react";
 import { AIRPLAY_TIERS, estimateMonthlyEarnings } from "@/lib/radio/airplay-system";
 
 export default function AirplayPage() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [checkoutTier, setCheckoutTier] = useState<string | null>(null);
+  const [checkoutForm, setCheckoutForm] = useState({ name: "", email: "", artistId: "" });
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
+
+  function handleUpgradeClick(tierKey: string) {
+    if (tierKey === "FREE") return;
+    setCheckoutTier(tierKey);
+    setCheckoutError("");
+    setShowCheckout(true);
+  }
+
+  async function handleCheckout() {
+    if (!checkoutForm.name || !checkoutForm.email || !checkoutForm.artistId) {
+      setCheckoutError("Please fill in all fields");
+      return;
+    }
+    setCheckoutLoading(true);
+    setCheckoutError("");
+    try {
+      const res = await fetch("/api/payments/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "airplay",
+          entityId: checkoutForm.artistId,
+          tier: checkoutTier,
+          email: checkoutForm.email,
+          name: checkoutForm.name,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setCheckoutError(data.error || "Failed to create subscription");
+        return;
+      }
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      }
+    } catch {
+      setCheckoutError("Network error. Please try again.");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  }
 
   const tiers = [
     { key: "FREE", ...AIRPLAY_TIERS.FREE },
@@ -127,14 +173,15 @@ export default function AirplayPage() {
                 </div>
 
                 <button
-                  onClick={() => setSelectedTier(tier.key)}
+                  onClick={() => handleUpgradeClick(tier.key)}
                   className={`w-full py-3 rounded-lg font-semibold transition-colors ${
                     tier.key === "FREE"
-                      ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-gray-100 text-gray-700 cursor-default"
                       : isPopular
                       ? "bg-purple-600 text-white hover:bg-purple-700"
                       : "bg-purple-100 text-purple-700 hover:bg-purple-200"
                   }`}
+                  disabled={tier.key === "FREE"}
                 >
                   {tier.key === "FREE" ? "Auto-Included" : "Upgrade Now"}
                 </button>
@@ -229,6 +276,87 @@ export default function AirplayPage() {
           </p>
         </div>
       </main>
+
+      {/* Checkout Modal */}
+      {showCheckout && checkoutTier && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 relative">
+            <button
+              onClick={() => setShowCheckout(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Upgrade to {AIRPLAY_TIERS[checkoutTier as keyof typeof AIRPLAY_TIERS]?.name}
+              </h2>
+              <p className="text-gray-600 mt-1">
+                ${AIRPLAY_TIERS[checkoutTier as keyof typeof AIRPLAY_TIERS]?.price}/month via Manifest Financial
+              </p>
+            </div>
+
+            {checkoutError && (
+              <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
+                {checkoutError}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Artist ID</label>
+                <input
+                  type="text"
+                  value={checkoutForm.artistId}
+                  onChange={(e) => setCheckoutForm((f) => ({ ...f, artistId: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="Your artist ID"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <input
+                  type="text"
+                  value={checkoutForm.name}
+                  onChange={(e) => setCheckoutForm((f) => ({ ...f, name: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="Your name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  value={checkoutForm.email}
+                  onChange={(e) => setCheckoutForm((f) => ({ ...f, email: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                  placeholder="your@email.com"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={handleCheckout}
+              disabled={checkoutLoading}
+              className="w-full mt-6 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+            >
+              {checkoutLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <span>Continue to Payment</span>
+              )}
+            </button>
+
+            <p className="text-xs text-gray-500 text-center mt-4">
+              Secure payment processing by Manifest Financial
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

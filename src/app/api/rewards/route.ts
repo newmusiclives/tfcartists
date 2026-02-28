@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { notifyRewardRedeemed } from "@/lib/messaging/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -149,6 +150,14 @@ export async function POST(request: NextRequest) {
           ]
         : []),
     ]);
+
+    // Notify listener via GHL email
+    notifyRewardRedeemed({
+      email: listener.email || undefined,
+      listenerName: listener.name || "Listener",
+      rewardName: reward.name,
+      xpSpent: reward.xpCost,
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,

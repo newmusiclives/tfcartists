@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
 import { messageDelivery } from "@/lib/messaging/delivery-service";
+import { notifySubmissionReceived } from "@/lib/messaging/notifications";
 import type { CreateSubmissionRequest, SubmissionListItem } from "@/types/cassidy";
 
 export const dynamic = "force-dynamic";
@@ -180,6 +181,14 @@ export async function POST(request: NextRequest) {
       trackTitle: body.trackTitle,
       stage: "pending",
     }).catch(() => {}); // fire-and-forget
+
+    // Notify artist their submission was received
+    notifySubmissionReceived({
+      email: body.artistEmail,
+      phone: body.artistPhone,
+      artistName: body.artistName,
+      trackTitle: body.trackTitle,
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,

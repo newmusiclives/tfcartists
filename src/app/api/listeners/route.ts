@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
+import { notifyListenerWelcome } from "@/lib/messaging/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -75,6 +76,14 @@ export async function POST(request: NextRequest) {
         successful: true,
       },
     });
+
+    // Send welcome email via GHL
+    if (listener.email && listener.name) {
+      notifyListenerWelcome({
+        email: listener.email,
+        name: listener.name,
+      }).catch(() => {});
+    }
 
     return NextResponse.json({ listener, existing: false }, { status: 201 });
   } catch (error) {
