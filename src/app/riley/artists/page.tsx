@@ -17,9 +17,22 @@ const sharesMap: Record<string, number> = {
   FREE: 1, TIER_5: 5, TIER_20: 25, TIER_50: 75, TIER_120: 200,
 };
 
-function mapArtist(a: any) {
-  const tier = tierMap[a.airplayTier] || "FREE";
-  const shares = sharesMap[a.airplayTier] || 1;
+interface RawArtist {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  airplayTier?: string;
+  status?: string;
+  createdAt: string;
+  engagementRate?: number;
+  genre?: string;
+  _count?: { conversations?: number };
+}
+
+function mapArtist(a: RawArtist) {
+  const tier = tierMap[a.airplayTier || "FREE"] || "FREE";
+  const shares = sharesMap[a.airplayTier || "FREE"] || 1;
   const price = AIRPLAY_TIER_PRICING[tier as keyof typeof AIRPLAY_TIER_PRICING] || 0;
   return {
     id: a.id,

@@ -47,7 +47,7 @@ export interface Submission {
   // Submission context (from Riley)
   discoverySource?: string;
   discoveredBy?: string;
-  rileyContext?: any;
+  rileyContext?: Record<string, unknown>;
 
   // Review status
   status: SubmissionStatus;
@@ -64,7 +64,7 @@ export interface Submission {
   decisionRationale?: string;
 
   // Progression pathway
-  upgradePathway?: any;
+  upgradePathway?: Record<string, unknown>;
 
   // Revenue
   premiumFastTrack: boolean;
@@ -74,7 +74,7 @@ export interface Submission {
   reviews?: SubmissionReview[];
   tierHistory?: TierPlacement[];
 
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export interface SubmissionReview {
@@ -130,12 +130,12 @@ export interface Judge {
 
   // Status
   isActive: boolean;
-  availabilitySchedule?: any;
+  availabilitySchedule?: Record<string, unknown>;
 
   // Relationships
   reviews?: SubmissionReview[];
 
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export interface TierPlacement {
@@ -154,14 +154,14 @@ export interface TierPlacement {
   decidedBy: string;
 
   // Judge scores summary
-  judgeScores?: any;
+  judgeScores?: Record<string, number>;
 
   // Progression context
   isProgression: boolean;
   timeInPreviousTierDays?: number;
   improvementNotes?: string;
 
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ProgressionRequest {
@@ -198,7 +198,7 @@ export interface ProgressionRequest {
   newTierIfApproved?: RotationTier;
   timelineToResubmit?: string;
 
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export interface RotationSlot {
@@ -231,14 +231,14 @@ export interface RotationSlot {
   // Performance (Elliott)
   avgEngagementScore?: number;
   skipRate?: number;
-  listenerFeedback?: any;
+  listenerFeedback?: Record<string, unknown>;
 
   // 80/20 transformation
   mainstreamReplaced: boolean;
   replacedAt?: Date | string;
   progressContribution?: number;
 
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 // ============================================================================
@@ -257,7 +257,7 @@ export interface CreateSubmissionRequest {
   genreTags?: string[];
   discoverySource?: string;
   discoveredBy?: string;
-  rileyContext?: any;
+  rileyContext?: Record<string, unknown>;
   submissionType?: string;
   premiumFastTrack?: boolean;
 }

@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
         genreTags: body.genreTags ? JSON.stringify(body.genreTags) : undefined,
         discoverySource: body.discoverySource,
         discoveredBy: body.discoveredBy,
-        rileyContext: body.rileyContext,
+        rileyContext: body.rileyContext as any,
         submissionType: body.submissionType || "initial",
         premiumFastTrack: body.premiumFastTrack || false,
         status: "PENDING",

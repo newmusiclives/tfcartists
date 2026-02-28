@@ -442,7 +442,7 @@ function TierCard({ tier, count, percentage, sessions, color }: {
   );
 }
 
-function TimeSlotRow({ slot, listeners, avgSession, topDJ }: any) {
+function TimeSlotRow({ slot, listeners, avgSession, topDJ }: { slot: string; listeners: number; avgSession: number; topDJ: string }) {
   return (
     <div className="bg-gray-50 rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
@@ -457,7 +457,7 @@ function TimeSlotRow({ slot, listeners, avgSession, topDJ }: any) {
   );
 }
 
-function ArtistRow({ rank, name, plays, newListeners, avgCompletion }: any) {
+function ArtistRow({ rank, name, plays, newListeners, avgCompletion }: { rank: number; name: string; plays: number; newListeners: number; avgCompletion: number }) {
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
       <div className="flex items-center space-x-4">
@@ -483,7 +483,7 @@ function ArtistRow({ rank, name, plays, newListeners, avgCompletion }: any) {
   );
 }
 
-function DeviceCard({ device, count, percentage }: any) {
+function DeviceCard({ device, count, percentage }: { device: string; count: number; percentage: number }) {
   return (
     <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-6 border-2 border-gray-200 text-center">
       <div className="text-sm text-gray-600 mb-2">{device}</div>
@@ -493,7 +493,7 @@ function DeviceCard({ device, count, percentage }: any) {
   );
 }
 
-function StatBox({ label, value, icon }: any) {
+function StatBox({ label, value, icon }: { label: string; value: string | number; icon: React.ReactNode }) {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 text-center">
       <div className="flex justify-center mb-3">{icon}</div>

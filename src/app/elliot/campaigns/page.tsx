@@ -391,7 +391,7 @@ function CampaignCard({ campaign }: { campaign: CampaignData }) {
   );
 }
 
-function ActionCard({ icon, title, description, buttonText }: any) {
+function ActionCard({ icon, title, description, buttonText }: { icon: React.ReactNode; title: string; description: string; buttonText: string }) {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 text-center">
       <div className="flex justify-center mb-4">{icon}</div>

@@ -358,7 +358,7 @@ function MemberCard({ rank, name, avatar, tier, points, sessions, hours, joinDat
   );
 }
 
-function ActivityRow({ user, action, topic, time, engagement }: any) {
+function ActivityRow({ user, action, topic, time, engagement }: { user: string; action: string; topic: string; time: string; engagement: number }) {
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
       <div className="flex items-center space-x-4 flex-1">
@@ -424,7 +424,7 @@ function EventRow({ name, date, time, host, attendees, type }: {
   );
 }
 
-function TopicCard({ topic, posts, members, lastActive }: any) {
+function TopicCard({ topic, posts, members, lastActive }: { topic: string; posts: number; members: number; lastActive: string }) {
   return (
     <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-300 transition-colors">
       <div className="flex items-center space-x-2 mb-3">
@@ -449,7 +449,7 @@ function TopicCard({ topic, posts, members, lastActive }: any) {
   );
 }
 
-function ProgramCard({ icon, title, description, buttonText }: any) {
+function ProgramCard({ icon, title, description, buttonText }: { icon: React.ReactNode; title: string; description: string; buttonText: string }) {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 text-center">
       <div className="flex justify-center mb-4">{icon}</div>

@@ -10,7 +10,7 @@ interface UseApiResult<T> {
 }
 
 interface UseMutationResult<T> {
-  trigger: (body?: any) => Promise<T | null>;
+  trigger: (body?: unknown) => Promise<T | null>;
   data: T | null;
   loading: boolean;
   error: string | null;
@@ -36,8 +36,8 @@ export function useApi<T>(url: string | null): UseApiResult<T> {
       }
       const json = await res.json();
       setData(json);
-    } catch (err: any) {
-      setError(err.message || "An error occurred");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export function useApi<T>(url: string | null): UseApiResult<T> {
   return { data, loading, error, refetch: fetchData };
 }
 
-export function useMutation<T = any>(
+export function useMutation<T = unknown>(
   url: string,
   method: "POST" | "PATCH" | "PUT" | "DELETE" = "POST"
 ): UseMutationResult<T> {
@@ -59,7 +59,7 @@ export function useMutation<T = any>(
   const [error, setError] = useState<string | null>(null);
 
   const trigger = useCallback(
-    async (body?: any): Promise<T | null> => {
+    async (body?: unknown): Promise<T | null> => {
       setLoading(true);
       setError(null);
       try {

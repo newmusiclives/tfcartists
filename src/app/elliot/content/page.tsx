@@ -323,7 +323,7 @@ export default function ViralContentPage() {
   );
 }
 
-function MetricCard({ icon, label, value, subtitle }: any) {
+function MetricCard({ icon, label, value, subtitle }: { icon: React.ReactNode; label: string; value: string | number; subtitle: string }) {
   return (
     <div className="bg-white rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
@@ -424,7 +424,7 @@ function ContentCard({ title, platform, creator, publishedDate, views, likes, sh
   );
 }
 
-function PlatformCard({ platform, posts, avgViews, avgEngagement, color }: any) {
+function PlatformCard({ platform, posts, avgViews, avgEngagement, color }: { platform: string; posts: number; avgViews: string; avgEngagement: string; color: string }) {
   return (
     <div className={`${color} text-white rounded-lg p-6 text-center`}>
       <div className="text-xl font-bold mb-2">{platform}</div>
