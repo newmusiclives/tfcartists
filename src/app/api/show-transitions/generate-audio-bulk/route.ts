@@ -6,6 +6,7 @@ import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
 import * as path from "path";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { getConfig } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
@@ -195,8 +196,8 @@ export async function POST(request: NextRequest) {
           ({ buffer, ext } = await generateWithGemini(gemini, transition.scriptText!, voice, voiceDesc));
         } else {
           if (!openai) {
-            const apiKey = process.env.OPENAI_API_KEY;
-            if (!apiKey) throw new Error("OPENAI_API_KEY not configured");
+            const apiKey = await getConfig("OPENAI_API_KEY");
+            if (!apiKey) throw new Error("OPENAI_API_KEY not configured. Set it in Admin → Settings.");
             openai = new OpenAI({ apiKey });
           }
           ({ buffer, ext } = await generateWithOpenAI(openai, transition.scriptText!, voice));

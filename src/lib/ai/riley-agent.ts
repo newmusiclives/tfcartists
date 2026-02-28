@@ -99,7 +99,7 @@ export class RileyAgent {
         role: "riley",
         content,
         intent,
-        aiProvider: aiProvider.getDefaultProvider(),
+        aiProvider: await aiProvider.getDefaultProvider(),
       },
     });
 
@@ -129,7 +129,7 @@ export class RileyAgent {
           channel,
           messagePreview: content.substring(0, 100),
         },
-        aiProvider: aiProvider.getDefaultProvider(),
+        aiProvider: await aiProvider.getDefaultProvider(),
       },
     });
 

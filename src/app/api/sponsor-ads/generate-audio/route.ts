@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import * as fs from "fs";
 import * as path from "path";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { getConfig } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
@@ -53,10 +54,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = await getConfig("OPENAI_API_KEY");
     if (!apiKey) {
       return NextResponse.json(
-        { error: "OPENAI_API_KEY not configured" },
+        { error: "OPENAI_API_KEY not configured. Set it in Admin → Settings." },
         { status: 500 }
       );
     }

@@ -6,6 +6,7 @@ import { messageDelivery } from "@/lib/messaging/delivery-service";
 import { amplifyPcm, pcmToWav, saveAudioFile } from "@/lib/radio/voice-track-tts";
 import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import OpenAI from "openai";
+import { getConfig } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
@@ -268,7 +269,7 @@ export async function GET(req: NextRequest) {
       });
 
       if (adsNeedingAudio.length > 0) {
-        const apiKey = process.env.OPENAI_API_KEY;
+        const apiKey = await getConfig("OPENAI_API_KEY");
         if (!apiKey) {
           logger.warn("OPENAI_API_KEY not configured — skipping ad audio generation");
         } else {

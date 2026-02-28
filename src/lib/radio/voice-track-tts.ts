@@ -66,7 +66,8 @@ export function saveAudioFile(buffer: Buffer, dir: string, filename: string): st
 }
 
 export async function generateWithOpenAI(text: string, voice: string): Promise<{ buffer: Buffer; ext: string }> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const { getConfig } = await import("@/lib/config");
+  const apiKey = await getConfig("OPENAI_API_KEY");
   if (!apiKey) throw new Error("OPENAI_API_KEY not configured");
 
   const openai = new OpenAI({ apiKey });
@@ -81,7 +82,8 @@ export async function generateWithOpenAI(text: string, voice: string): Promise<{
 
 /** Generate OpenAI TTS as raw PCM (24kHz 16-bit mono) for audio mixing */
 export async function generatePcmWithOpenAI(text: string, voice: string): Promise<Buffer> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const { getConfig } = await import("@/lib/config");
+  const apiKey = await getConfig("OPENAI_API_KEY");
   if (!apiKey) throw new Error("OPENAI_API_KEY not configured");
 
   const openai = new OpenAI({ apiKey });

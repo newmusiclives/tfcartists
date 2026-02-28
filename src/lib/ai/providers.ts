@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import Anthropic from "@anthropic-ai/sdk";
+import { getConfig } from "@/lib/config";
 
 export type AIProvider = "openai" | "claude";
 
@@ -17,31 +18,36 @@ export interface AIResponse {
 class AIProviderService {
   private openai: OpenAI | null = null;
   private anthropic: Anthropic | null = null;
-  private defaultProvider: AIProvider;
+  private openaiKeyUsed: string | null = null;
+  private anthropicKeyUsed: string | null = null;
 
-  constructor() {
-    this.defaultProvider = (process.env.DEFAULT_AI_PROVIDER as AIProvider) || "claude";
+  // Resolve the default provider (checks DB then env)
+  private async resolveProvider(): Promise<AIProvider> {
+    const val = await getConfig("DEFAULT_AI_PROVIDER", "claude");
+    return val === "openai" ? "openai" : "claude";
   }
 
-  // Lazy initialization - only create clients when needed
-  private getOpenAI(): OpenAI {
-    if (!this.openai) {
-      const apiKey = process.env.OPENAI_API_KEY;
-      if (!apiKey) {
-        throw new Error("OPENAI_API_KEY is not configured. Set it in your environment variables.");
-      }
+  // Lazy initialization — recreates client if the stored key has changed
+  private async getOpenAI(): Promise<OpenAI> {
+    const apiKey = await getConfig("OPENAI_API_KEY");
+    if (!apiKey) {
+      throw new Error("OPENAI_API_KEY is not configured. Set it in Admin → Settings.");
+    }
+    if (!this.openai || this.openaiKeyUsed !== apiKey) {
       this.openai = new OpenAI({ apiKey });
+      this.openaiKeyUsed = apiKey;
     }
     return this.openai;
   }
 
-  private getAnthropic(): Anthropic {
-    if (!this.anthropic) {
-      const apiKey = process.env.ANTHROPIC_API_KEY;
-      if (!apiKey) {
-        throw new Error("ANTHROPIC_API_KEY is not configured. Set it in your environment variables.");
-      }
+  private async getAnthropic(): Promise<Anthropic> {
+    const apiKey = await getConfig("ANTHROPIC_API_KEY");
+    if (!apiKey) {
+      throw new Error("ANTHROPIC_API_KEY is not configured. Set it in Admin → Settings.");
+    }
+    if (!this.anthropic || this.anthropicKeyUsed !== apiKey) {
       this.anthropic = new Anthropic({ apiKey });
+      this.anthropicKeyUsed = apiKey;
     }
     return this.anthropic;
   }
@@ -55,7 +61,7 @@ class AIProviderService {
       model?: string;
     }
   ): Promise<AIResponse> {
-    const provider = options?.provider || this.defaultProvider;
+    const provider = options?.provider || await this.resolveProvider();
     const temperature = options?.temperature || 0.7;
     const maxTokens = options?.maxTokens || 500;
 
@@ -72,7 +78,7 @@ class AIProviderService {
     maxTokens: number,
     model?: string
   ): Promise<AIResponse> {
-    const openai = this.getOpenAI(); // Lazy load
+    const openai = await this.getOpenAI();
 
     const completion = await openai.chat.completions.create({
       model: model || "gpt-4o-mini",
@@ -97,7 +103,7 @@ class AIProviderService {
     maxTokens: number,
     model?: string
   ): Promise<AIResponse> {
-    const anthropic = this.getAnthropic(); // Lazy load
+    const anthropic = await this.getAnthropic();
 
     // Extract system message if present
     const systemMessage = messages.find((m) => m.role === "system");
@@ -122,8 +128,8 @@ class AIProviderService {
     };
   }
 
-  getDefaultProvider(): AIProvider {
-    return this.defaultProvider;
+  async getDefaultProvider(): Promise<AIProvider> {
+    return this.resolveProvider();
   }
 }
 
