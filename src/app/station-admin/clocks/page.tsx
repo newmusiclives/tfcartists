@@ -981,8 +981,8 @@ export default function RadioClocksPage() {
 
                       return (
                         <div key={idx}>
-                          <div className="px-4 py-3 flex items-center gap-4">
-                            <div className="w-40 shrink-0">
+                          <div className="px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <div className="sm:w-40 shrink-0">
                               <span className="text-sm font-medium text-gray-700">
                                 Hour {hour.hour}
                               </span>
@@ -997,7 +997,7 @@ export default function RadioClocksPage() {
                                 assignTemplateToHour(show, idx, e.target.value)
                               }
                               disabled={saving}
-                              className="border rounded-lg px-2 py-1.5 text-sm w-56"
+                              className="border rounded-lg px-2 py-1.5 text-sm w-full sm:w-56"
                             >
                               <option value="">No template</option>
                               {activeTemplates.map((t) => (
@@ -1202,7 +1202,7 @@ export default function RadioClocksPage() {
                             })}
                           </div>
                           {/* Slot grid */}
-                          <div className="grid grid-cols-10 gap-1">
+                          <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-1">
                             {slots.map((slot, i) => (
                               <div
                                 key={i}
@@ -1253,8 +1253,8 @@ export default function RadioClocksPage() {
 
           {/* Assignment table */}
           {assignments.length > 0 && (
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden mb-6">
-              <table className="w-full text-sm">
+            <div className="bg-white rounded-xl shadow-sm border overflow-x-auto mb-6">
+              <table className="w-full text-sm min-w-[640px]">
                 <thead className="bg-gray-50 border-b">
                   <tr>
                     <th className="px-4 py-3 text-left font-medium text-gray-600">DJ</th>
@@ -1308,7 +1308,7 @@ export default function RadioClocksPage() {
           {/* Add assignment form */}
           <div className="bg-white rounded-xl shadow-sm border p-5">
             <h3 className="font-semibold text-gray-800 mb-4">Add Assignment</h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 mb-4">
               <div>
                 <label className="text-xs text-gray-500 mb-1 block">DJ</label>
                 <select

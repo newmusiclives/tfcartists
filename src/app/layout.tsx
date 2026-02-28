@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { RadioPlayer } from "@/components/radio-player";
 import { StationProvider } from "@/contexts/StationContext";
+import { ToastProvider } from "@/contexts/ToastContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +18,28 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "TrueFans RADIO Network",
-  description: "AI-powered radio stations championing independent artists",
+  title: {
+    default: "TrueFans RADIO | AI-Powered Independent Radio",
+    template: "%s | TrueFans RADIO",
+  },
+  description:
+    "24/7 AI-powered radio championing independent artists. 92% of every dollar goes directly to artists. Listen live, earn rewards, and discover new music.",
+  keywords: [
+    "independent radio",
+    "indie music",
+    "artist support",
+    "AI radio",
+    "music discovery",
+    "TrueFans",
+    "americana",
+    "country music",
+    "live radio",
+  ],
   manifest: "/manifest.json",
+  metadataBase: new URL("https://truefans-radio.netlify.app"),
+  alternates: {
+    canonical: "/",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -30,16 +50,23 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "TrueFans RADIO Network",
-    description: "AI-powered radio stations championing independent artists",
+    title: "TrueFans RADIO | Where the Music Finds You",
+    description:
+      "24/7 AI-powered radio championing independent artists. 92% of every dollar goes directly to artists. Listen live, earn rewards, and discover new music.",
     url: "https://truefans-radio.netlify.app",
     siteName: "TrueFans RADIO",
     type: "website",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TrueFans RADIO Network",
-    description: "AI-powered radio stations championing independent artists",
+    title: "TrueFans RADIO | Where the Music Finds You",
+    description:
+      "24/7 AI-powered radio championing independent artists. 92% goes to artists. Listen live & earn rewards.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -55,8 +82,10 @@ export default function RootLayout({
           Skip to main content
         </a>
         <StationProvider>
-          <div id="main-content" className="pb-24">{children}</div>
-          <RadioPlayer />
+          <ToastProvider>
+            <div id="main-content" className="pb-24">{children}</div>
+            <RadioPlayer />
+          </ToastProvider>
         </StationProvider>
       </body>
     </html>

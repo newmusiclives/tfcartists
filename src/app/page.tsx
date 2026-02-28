@@ -5,13 +5,30 @@ import { ArrowRight, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target
 import { StationName } from "@/components/station-name";
 
 export const metadata: Metadata = {
-  title: "TrueFans RADIO Network | AI-Powered Independent Radio",
-  description: "AI-powered radio stations championing independent artists. Discover emerging music, support real artists, and join a passionate listener community.",
+  title: "TrueFans RADIO | Where the Music Finds You",
+  description:
+    "24/7 AI-powered radio championing independent artists. 92% of every dollar goes directly to artists. Listen live, earn rewards, and discover new music.",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "RadioStation",
+  name: "TrueFans RADIO",
+  description:
+    "24/7 AI-powered radio championing independent artists. 92% of every dollar goes directly to artists.",
+  url: "https://truefans-radio.netlify.app",
+  broadcastFrequency: "Internet Only",
+  areaServed: "Worldwide",
+  genre: "Americana / Independent",
 };
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Navigation */}
       <nav className="border-b bg-white/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

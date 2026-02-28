@@ -190,7 +190,7 @@ export default function StationAdminHub() {
                   {primary.formatType && ` / ${primary.formatType}`}
                 </p>
               </div>
-              <div className="grid grid-cols-4 gap-6 text-center">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center">
                 <div>
                   <div className="text-2xl font-bold text-gray-900">{primary._count.songs}</div>
                   <div className="text-xs text-gray-500">Songs</div>
