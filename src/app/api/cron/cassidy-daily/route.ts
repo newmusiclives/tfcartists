@@ -7,6 +7,7 @@ import { amplifyPcm, pcmToWav, saveAudioFile } from "@/lib/radio/voice-track-tts
 import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import OpenAI from "openai";
 import { getConfig } from "@/lib/config";
+import { logCronExecution } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,8 @@ export const dynamic = "force-dynamic";
  * 4. Log daily review metrics
  */
 export async function GET(req: NextRequest) {
+  const _cronStart = Date.now();
+  const _cronStartedAt = new Date();
   try {
     const isDev = process.env.NODE_ENV === "development";
 
@@ -343,6 +346,8 @@ export async function GET(req: NextRequest) {
 
     logger.info("Cassidy daily submission review completed", results);
 
+    await logCronExecution({ jobName: "cassidy-daily", status: "success", duration: Date.now() - _cronStart, summary: results as Record<string, unknown>, startedAt: _cronStartedAt });
+
     return NextResponse.json({
       success: true,
       message: "Cassidy daily submission review completed",
@@ -351,6 +356,8 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     logger.error("Cassidy daily submission review failed", { error });
+
+    await logCronExecution({ jobName: "cassidy-daily", status: "error", duration: Date.now() - _cronStart, error: error instanceof Error ? error.message : String(error), startedAt: _cronStartedAt });
 
     return NextResponse.json(
       {

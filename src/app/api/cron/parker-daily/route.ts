@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
+import { logCronExecution } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,8 @@ export const dynamic = "force-dynamic";
  * 5. Log daily station health metrics
  */
 export async function GET(req: NextRequest) {
+  const _cronStart = Date.now();
+  const _cronStartedAt = new Date();
   try {
     const isDev = process.env.NODE_ENV === "development";
 
@@ -120,6 +123,8 @@ export async function GET(req: NextRequest) {
 
     logger.info("Parker daily station management completed", results);
 
+    await logCronExecution({ jobName: "parker-daily", status: "success", duration: Date.now() - _cronStart, summary: results as Record<string, unknown>, startedAt: _cronStartedAt });
+
     return NextResponse.json({
       success: true,
       message: "Parker daily station management completed",
@@ -128,6 +133,8 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     logger.error("Parker daily station management failed", { error });
+
+    await logCronExecution({ jobName: "parker-daily", status: "error", duration: Date.now() - _cronStart, error: error instanceof Error ? error.message : String(error), startedAt: _cronStartedAt });
 
     return NextResponse.json(
       {

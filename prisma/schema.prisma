@@ -2394,6 +2394,22 @@ model Redemption {
   @@index([status])
 }
 
+// Cron job execution log — tracks every run for audit/debugging
+model CronLog {
+  id        String   @id @default(cuid())
+  jobName   String   // "features-daily", "parker-daily", etc.
+  status    String   // "success", "error", "timeout"
+  duration  Int      // milliseconds
+  summary   Json?    // key metrics from the run (counts, etc.)
+  error     String?  // error message if failed
+  startedAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([jobName])
+  @@index([createdAt])
+  @@index([status])
+}
+
 // System configuration (API keys, credentials, settings)
 // Allows admin to configure services through the UI
 model SystemConfig {

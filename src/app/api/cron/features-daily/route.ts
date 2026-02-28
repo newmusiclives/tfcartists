@@ -3,12 +3,15 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { pick, djFirstName, fillTemplate, type SongData } from "@/lib/radio/template-utils";
+import { logCronExecution } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
 const POOL_TARGET = 3; // unused items per DJ per feature type
 
 export async function GET(req: NextRequest) {
+  const _cronStart = Date.now();
+  const _cronStartedAt = new Date();
   try {
     const isDev = process.env.NODE_ENV === "development";
 
@@ -175,6 +178,8 @@ export async function GET(req: NextRequest) {
 
     logger.info("Features-daily cron completed", { generated, skipped, expired, byDj });
 
+    await logCronExecution({ jobName: "features-daily", status: "success", duration: Date.now() - _cronStart, summary: { generated, skipped, expired, byDj } as Record<string, unknown>, startedAt: _cronStartedAt });
+
     return NextResponse.json({
       success: true,
       generated,
@@ -185,6 +190,8 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     logger.error("Features-daily cron failed", { error });
+
+    await logCronExecution({ jobName: "features-daily", status: "error", duration: Date.now() - _cronStart, error: error instanceof Error ? error.message : String(error), startedAt: _cronStartedAt });
 
     return NextResponse.json(
       {

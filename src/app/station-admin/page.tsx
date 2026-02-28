@@ -17,6 +17,7 @@ import {
   Sparkles,
   Paintbrush,
   Megaphone,
+  Timer,
 } from "lucide-react";
 
 interface Station {
@@ -116,6 +117,13 @@ const actionCards = [
     href: "/station-admin/sponsor-ads",
     icon: Megaphone,
     color: "bg-green-500",
+  },
+  {
+    title: "Cron Logs",
+    description: "Monitor automated daily and monthly job executions",
+    href: "/station-admin/cron-logs",
+    icon: Timer,
+    color: "bg-slate-500",
   },
 ];
 

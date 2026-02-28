@@ -7,6 +7,7 @@ import {
   processScoutPayouts,
 } from "@/lib/scout/monthly-payout";
 import { messageDelivery } from "@/lib/messaging/delivery-service";
+import { logCronExecution } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,8 @@ export const dynamic = "force-dynamic";
  * }
  */
 export async function GET(req: NextRequest) {
+  const _cronStart = Date.now();
+  const _cronStartedAt = new Date();
   try {
     const isDev = process.env.NODE_ENV === "development";
 
@@ -252,6 +255,8 @@ export async function GET(req: NextRequest) {
       failedCount: payoutResults.failedCount,
     });
 
+    await logCronExecution({ jobName: "revenue-monthly", status: "success", duration: Date.now() - _cronStart, summary: { totalAdRevenue, artistPoolAmount, totalArtists: artists.length, totalShares } as Record<string, unknown>, startedAt: _cronStartedAt });
+
     return NextResponse.json({
       success: true,
       message: "Revenue distribution and scout payouts completed",
@@ -281,6 +286,8 @@ export async function GET(req: NextRequest) {
 
   } catch (error) {
     logger.error("Monthly revenue distribution failed", { error });
+
+    await logCronExecution({ jobName: "revenue-monthly", status: "error", duration: Date.now() - _cronStart, error: error instanceof Error ? error.message : String(error), startedAt: _cronStartedAt });
 
     return NextResponse.json(
       {

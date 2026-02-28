@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { runVoiceTracksDaily } from "@/lib/cron/voice-tracks-daily-runner";
+import { logCronExecution } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
+  const _cronStart = Date.now();
+  const _cronStartedAt = new Date();
   try {
     const isDev = process.env.NODE_ENV === "development";
 
@@ -25,11 +28,16 @@ export async function GET(req: NextRequest) {
 
     const result = await runVoiceTracksDaily();
 
+    await logCronExecution({ jobName: "voice-tracks-daily", status: result.success ? "success" : "error", duration: Date.now() - _cronStart, summary: result as unknown as Record<string, unknown>, startedAt: _cronStartedAt });
+
     return NextResponse.json(result, {
       status: result.success ? 200 : 500,
     });
   } catch (error) {
     logger.error("Voice-tracks-daily cron failed", { error });
+
+    await logCronExecution({ jobName: "voice-tracks-daily", status: "error", duration: Date.now() - _cronStart, error: error instanceof Error ? error.message : String(error), startedAt: _cronStartedAt });
+
     return NextResponse.json(
       {
         error: "Voice tracks daily cron failed",
