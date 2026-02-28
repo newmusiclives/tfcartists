@@ -189,8 +189,8 @@ export async function POST(request: NextRequest) {
 
         if (provider === "gemini") {
           if (!gemini) {
-            const apiKey = process.env.GOOGLE_API_KEY;
-            if (!apiKey) throw new Error("GOOGLE_API_KEY not configured");
+            const apiKey = await getConfig("GOOGLE_API_KEY");
+            if (!apiKey) throw new Error("GOOGLE_API_KEY not configured. Set it in Admin → Settings.");
             gemini = new GoogleGenAI({ apiKey });
           }
           ({ buffer, ext } = await generateWithGemini(gemini, transition.scriptText!, voice, voiceDesc));

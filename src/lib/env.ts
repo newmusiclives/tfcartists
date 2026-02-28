@@ -29,6 +29,9 @@ const envSchema = z.object({
   MANIFEST_API_KEY: z.string().optional(),
   MANIFEST_WEBHOOK_SECRET: z.string().optional(),
 
+  // Google AI (Gemini TTS for show transitions)
+  GOOGLE_API_KEY: z.string().optional(),
+
   // Social Media Discovery
   TIKTOK_API_KEY: z.string().optional(),
   SPOTIFY_CLIENT_ID: z.string().optional(),
@@ -57,6 +60,9 @@ const envSchema = z.object({
   // Rate Limiting (optional - uses in-memory in development)
   UPSTASH_REDIS_REST_URL: z.string().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+
+  // Radio Backend
+  NOW_PLAYING_URL: z.string().optional(),
 
   // Error Monitoring
   SENTRY_DSN: z.string().optional(),
