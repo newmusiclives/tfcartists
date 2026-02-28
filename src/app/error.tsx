@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertCircle, Home, RefreshCcw } from "lucide-react";
-import { logger } from "@/lib/logger";
+import { captureException } from "@/lib/sentry-client";
 
 export default function Error({
   error,
@@ -13,11 +13,8 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to our logging service
-    logger.error("Application error", {
-      message: error.message,
+    captureException(error, {
       digest: error.digest,
-      stack: error.stack,
     });
   }, [error]);
 

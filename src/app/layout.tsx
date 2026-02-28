@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { RadioPlayer } from "@/components/radio-player";
+import { SentryInit } from "@/components/sentry-init";
 import { StationProvider } from "@/contexts/StationContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 
@@ -78,6 +79,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <SentryInit />
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:bg-amber-700 focus:text-white focus:px-4 focus:py-2 focus:rounded">
           Skip to main content
         </a>

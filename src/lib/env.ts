@@ -66,6 +66,7 @@ const envSchema = z.object({
 
   // Error Monitoring
   SENTRY_DSN: z.string().optional(),
+  NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
 
   // Node Environment
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
