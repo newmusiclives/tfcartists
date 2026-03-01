@@ -27,18 +27,18 @@ export async function requireAuth() {
 
 /**
  * Require a specific role (or admin). Returns session or null.
- * In development (no AUTH_SECRET), bypasses auth for dashboard access.
+ * Bypasses auth when REQUIRE_AUTH is not set (demo mode).
  */
 export async function requireRole(...roles: UserRole[]) {
+  // In demo mode (default), bypass auth so dashboards are accessible
+  if (process.env.REQUIRE_AUTH !== "true") {
+    return { user: { id: "demo-admin", name: "Admin", role: "admin" } } as any;
+  }
   const session = await auth();
-  if (session?.user?.role) {
-    if (session.user.role === "admin") return session;
-    if (roles.includes(session.user.role as UserRole)) return session;
-  }
-  // Bypass auth when no AUTH_SECRET is set (development/demo mode)
-  if (!process.env.AUTH_SECRET && !process.env.NEXTAUTH_SECRET) {
-    return { user: { id: "dev-admin", name: "Admin", role: "admin" } } as any;
-  }
+  if (!session?.user?.role) return null;
+  // Admin always has access
+  if (session.user.role === "admin") return session;
+  if (roles.includes(session.user.role as UserRole)) return session;
   return null;
 }
 
