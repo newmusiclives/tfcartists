@@ -44,8 +44,12 @@ export async function requireRole(...roles: UserRole[]) {
 
 /**
  * Require admin role. Returns session or null.
+ * Bypasses auth when REQUIRE_AUTH is not set (demo mode).
  */
 export async function requireAdmin() {
+  if (process.env.REQUIRE_AUTH !== "true") {
+    return { user: { id: "demo-admin", name: "Admin", role: "admin" } } as any;
+  }
   const session = await auth();
   if (!session?.user?.role || session.user.role !== "admin") return null;
   return session;
