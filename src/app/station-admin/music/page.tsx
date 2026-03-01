@@ -241,16 +241,59 @@ export default function MusicLibraryPage() {
             </div>
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center gap-2 mt-4">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => setPage(p)}
-                    className={`px-3 py-1 rounded text-sm ${p === page ? "bg-gray-900 text-white" : "bg-white border hover:bg-gray-50"}`}
-                  >
-                    {p}
-                  </button>
-                ))}
+              <div className="flex items-center justify-center gap-1 mt-4">
+                <button
+                  onClick={() => setPage(1)}
+                  disabled={page === 1}
+                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  First
+                </button>
+                <button
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
+                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Prev
+                </button>
+                {(() => {
+                  const range: number[] = [];
+                  let start = Math.max(1, page - 2);
+                  let end = Math.min(totalPages, page + 2);
+                  if (page <= 3) end = Math.min(totalPages, 5);
+                  if (page >= totalPages - 2) start = Math.max(1, totalPages - 4);
+                  for (let i = start; i <= end; i++) range.push(i);
+                  return (
+                    <>
+                      {start > 1 && <span className="px-1 text-gray-400 text-sm">...</span>}
+                      {range.map((p) => (
+                        <button
+                          key={p}
+                          onClick={() => setPage(p)}
+                          className={`px-3 py-1 rounded text-sm ${p === page ? "bg-gray-900 text-white" : "bg-white border hover:bg-gray-50"}`}
+                        >
+                          {p}
+                        </button>
+                      ))}
+                      {end < totalPages && <span className="px-1 text-gray-400 text-sm">...</span>}
+                    </>
+                  );
+                })()}
+                <button
+                  onClick={() => setPage(page + 1)}
+                  disabled={page === totalPages}
+                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+                <button
+                  onClick={() => setPage(totalPages)}
+                  disabled={page === totalPages}
+                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Last
+                </button>
+                <span className="ml-3 text-xs text-gray-500">Page {page} of {totalPages}</span>
               </div>
             )}
           </>

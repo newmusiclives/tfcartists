@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
       ...(vocalGender && { vocalGender }),
       ...(search && {
         OR: [
-          { title: { contains: search } },
-          { artistName: { contains: search } },
+          { title: { contains: search, mode: "insensitive" as const } },
+          { artistName: { contains: search, mode: "insensitive" as const } },
         ],
       }),
     };
