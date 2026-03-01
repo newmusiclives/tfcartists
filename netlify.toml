@@ -1,7 +1,7 @@
 # Netlify Configuration for TrueFans RADIO
 
 [build]
-  command = "npm run build && rm -rf .netlify/functions-internal/___netlify-server-handler/public/audio"
+  command = "npm run build"
   publish = ".next"
 
 [build.environment]
@@ -13,6 +13,10 @@
 # Next.js Plugin - handles API routes, SSR, and static pages automatically
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Remove audio files from server function to stay under 250MB limit
+[[plugins]]
+  package = "./netlify/plugins/slim-functions"
 
 # Scheduled Functions (Cron Jobs)
 # Note: Scheduled functions require Netlify Pro plan or higher
