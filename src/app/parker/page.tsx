@@ -40,22 +40,24 @@ export default function ParkerDashboardPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [stationRes, adsRes] = await Promise.all([
-          fetch("/api/stations"),
-          fetch("/api/sponsor-ads"),
-        ]);
-
+        const stationRes = await fetch("/api/stations");
         if (stationRes.status === 401) { setUnauthorized(true); return; }
+
+        let stationId = "";
         if (stationRes.ok) {
           const data = await stationRes.json();
           const station = data.stations?.[0] || data;
           setStationData(station);
+          stationId = station.id || "";
         }
 
-        if (adsRes.ok) {
-          const data = await adsRes.json();
-          const ads: SponsorAd[] = data.ads || data || [];
-          setActiveAds(Array.isArray(ads) ? ads.filter((a) => a.isActive).length : 0);
+        if (stationId) {
+          const adsRes = await fetch(`/api/sponsor-ads?stationId=${stationId}`);
+          if (adsRes.ok) {
+            const data = await adsRes.json();
+            const ads: SponsorAd[] = data.ads || data || [];
+            setActiveAds(Array.isArray(ads) ? ads.filter((a) => a.isActive).length : 0);
+          }
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
