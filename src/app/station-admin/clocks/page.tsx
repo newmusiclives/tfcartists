@@ -101,6 +101,28 @@ const CATEGORY_COLORS: Record<string, string> = {
   Imaging: "bg-pink-500",
 };
 
+const CATEGORY_HEX: Record<string, string> = {
+  TOH: "#dc2626",
+  A: "#ef4444",
+  B: "#3b82f6",
+  C: "#22c55e",
+  D: "#a855f7",
+  E: "#f97316",
+  DJ: "#f59e0b",
+  Sponsor: "#6b7280",
+  Feature: "#14b8a6",
+  Imaging: "#ec4899",
+};
+
+const SLOT_LABELS: Record<string, string> = {
+  toh: "TOH",
+  voice_track: "DJ",
+  sponsor: "Ad",
+  feature: "Feat",
+  sweeper: "Swp",
+  promo: "Pro",
+};
+
 const SLOT_TYPES = ["toh", "voice_track", "song", "sponsor", "feature", "sweeper", "promo"];
 const SLOT_CATEGORIES = ["TOH", "A", "B", "C", "D", "E", "DJ", "Sponsor", "Feature", "Imaging"];
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -267,6 +289,13 @@ function SlotEditor({
 
   return (
     <div className="border-t bg-gray-50 p-5 space-y-5">
+      {/* Clock Face Overview */}
+      {slots.length > 0 && (
+        <div className="flex justify-center mb-4">
+          <ClockFace slots={slots} size={280} />
+        </div>
+      )}
+
       {/* Timeline Bar */}
       <div>
         <h4 className="text-sm font-semibold text-gray-700 mb-2">60-Minute Timeline</h4>
@@ -468,6 +497,217 @@ function SlotEditor({
         >
           Cancel
         </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Clock Face Visualization
+// ============================================================================
+
+function ClockFace({ slots, size = 320 }: { slots: ClockSlot[]; size?: number }) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  const sortedSlots = useMemo(
+    () => [...slots].sort((a, b) => a.minute - b.minute),
+    [slots]
+  );
+
+  const cx = 100;
+  const cy = 100;
+  const outerR = 85;
+  const innerR = 30;
+
+  // Convert minute to angle (0 min = 12 o'clock = -90deg in SVG coords)
+  const minToAngle = (min: number) => (min / 60) * 360 - 90;
+
+  // Convert polar to cartesian
+  const polarToCart = (angleDeg: number, r: number) => {
+    const rad = (angleDeg * Math.PI) / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  };
+
+  // Build annular sector path
+  const arcPath = (startMin: number, endMin: number) => {
+    const visualEnd = Math.max(endMin, startMin + 0.5); // minimum visual width
+    const a1 = minToAngle(startMin);
+    const a2 = minToAngle(visualEnd);
+    const sweep = a2 - a1;
+    const largeArc = sweep > 180 ? 1 : 0;
+
+    const oStart = polarToCart(a1, outerR);
+    const oEnd = polarToCart(a2, outerR);
+    const iStart = polarToCart(a1, innerR);
+    const iEnd = polarToCart(a2, innerR);
+
+    return [
+      `M ${oStart.x} ${oStart.y}`,
+      `A ${outerR} ${outerR} 0 ${largeArc} 1 ${oEnd.x} ${oEnd.y}`,
+      `L ${iEnd.x} ${iEnd.y}`,
+      `A ${innerR} ${innerR} 0 ${largeArc} 0 ${iStart.x} ${iStart.y}`,
+      "Z",
+    ].join(" ");
+  };
+
+  // Slot label
+  const slotLabel = (slot: ClockSlot) => {
+    if (slot.type === "song") return slot.category;
+    return SLOT_LABELS[slot.type] || slot.type.charAt(0).toUpperCase();
+  };
+
+  // Label position (midpoint of arc, midpoint of radii)
+  const labelPos = (slot: ClockSlot) => {
+    const visualDur = Math.max(slot.duration, 0.5);
+    const midMin = slot.minute + visualDur / 2;
+    const midAngle = minToAngle(midMin);
+    const midR = (outerR + innerR) / 2;
+    return polarToCart(midAngle, midR);
+  };
+
+  // Tick marks
+  const ticks = useMemo(() => {
+    const result: { min: number; major: boolean }[] = [];
+    for (let m = 0; m < 60; m += 5) {
+      result.push({ min: m, major: m % 15 === 0 });
+    }
+    return result;
+  }, []);
+
+  const hoveredSlot = hoveredIdx !== null ? sortedSlots[hoveredIdx] : null;
+
+  return (
+    <div className="flex flex-col items-center gap-3" style={{ maxWidth: size }}>
+      <svg viewBox="0 0 200 200" className="w-full" style={{ maxWidth: size }}>
+        {/* Background circle */}
+        <circle cx={cx} cy={cy} r={outerR} fill="#f3f4f6" />
+        <circle cx={cx} cy={cy} r={innerR} fill="white" />
+
+        {/* Slot wedges */}
+        {sortedSlots.map((slot, i) => {
+          const fill = CATEGORY_HEX[slot.category] || "#d1d5db";
+          const dimmed = hoveredIdx !== null && hoveredIdx !== i;
+          return (
+            <path
+              key={i}
+              d={arcPath(slot.minute, slot.minute + slot.duration)}
+              fill={fill}
+              stroke="white"
+              strokeWidth={0.5}
+              opacity={dimmed ? 0.3 : 0.9}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              className="transition-opacity duration-150 cursor-pointer"
+            />
+          );
+        })}
+
+        {/* Labels inside wedges */}
+        {sortedSlots.map((slot, i) => {
+          const visualDur = Math.max(slot.duration, 0.5);
+          if (visualDur < 0.75) return null;
+          const pos = labelPos(slot);
+          const fontSize = visualDur < 2 ? 5 : visualDur < 3 ? 6 : 7;
+          return (
+            <text
+              key={`lbl-${i}`}
+              x={pos.x}
+              y={pos.y}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill="white"
+              fontSize={fontSize}
+              fontWeight="bold"
+              pointerEvents="none"
+              style={{ textShadow: "0 0 2px rgba(0,0,0,0.5)" }}
+            >
+              {slotLabel(slot)}
+            </text>
+          );
+        })}
+
+        {/* Tick marks */}
+        {ticks.map(({ min, major }) => {
+          const angle = minToAngle(min);
+          const tickOuter = polarToCart(angle, outerR + 2);
+          const tickInner = polarToCart(angle, outerR - (major ? 5 : 3));
+          const labelPt = polarToCart(angle, outerR + 8);
+          return (
+            <g key={`tick-${min}`}>
+              <line
+                x1={tickInner.x}
+                y1={tickInner.y}
+                x2={tickOuter.x}
+                y2={tickOuter.y}
+                stroke={major ? "#374151" : "#9ca3af"}
+                strokeWidth={major ? 1 : 0.5}
+              />
+              {major && (
+                <text
+                  x={labelPt.x}
+                  y={labelPt.y}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={6}
+                  fill="#6b7280"
+                  fontWeight="600"
+                >
+                  :{String(min).padStart(2, "0")}
+                </text>
+              )}
+            </g>
+          );
+        })}
+
+        {/* Center text */}
+        <text
+          x={cx}
+          y={cy - 4}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize={12}
+          fontWeight="bold"
+          fill="#374151"
+        >
+          {sortedSlots.length}
+        </text>
+        <text
+          x={cx}
+          y={cy + 7}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize={5}
+          fill="#6b7280"
+        >
+          slots/hr
+        </text>
+      </svg>
+
+      {/* Hover tooltip */}
+      {hoveredSlot && (
+        <div className="text-xs text-center bg-gray-800 text-white rounded px-3 py-1.5 -mt-1">
+          <span className="font-semibold">{hoveredSlot.type}</span>
+          {" "}({hoveredSlot.category}) at :{String(hoveredSlot.minute).padStart(2, "0")}
+          {" "}&mdash; {hoveredSlot.duration}min
+          {hoveredSlot.notes && <span className="opacity-75"> &middot; {hoveredSlot.notes}</span>}
+        </div>
+      )}
+
+      {/* Legend */}
+      <div className="flex flex-wrap justify-center gap-1.5">
+        {Object.entries(CATEGORY_HEX).map(([cat, hex]) => {
+          const hasCategory = sortedSlots.some((s) => s.category === cat);
+          if (!hasCategory) return null;
+          return (
+            <span
+              key={cat}
+              className="text-white text-[10px] px-1.5 py-0.5 rounded font-medium"
+              style={{ backgroundColor: hex }}
+            >
+              {cat}
+            </span>
+          );
+        })}
       </div>
     </div>
   );
@@ -1181,46 +1421,7 @@ export default function RadioClocksPage() {
                         <p className="text-sm text-gray-600 mb-4">{t.description}</p>
                       )}
                       {slots.length > 0 ? (
-                        <>
-                          {/* Mini timeline */}
-                          <div className="relative h-8 bg-gray-200 rounded-lg overflow-hidden mb-3">
-                            {slots.map((slot, i) => {
-                              const left = (slot.minute / 60) * 100;
-                              const width = Math.max((slot.duration / 60) * 100, 1.2);
-                              return (
-                                <div
-                                  key={i}
-                                  className={`absolute top-0 h-full ${slotColor(
-                                    slot.category
-                                  )} opacity-85 border-r border-white/30`}
-                                  style={{ left: `${left}%`, width: `${width}%` }}
-                                  title={`${slot.type} (${slot.category}) @ :${String(
-                                    slot.minute
-                                  ).padStart(2, "0")} — ${slot.duration}min`}
-                                />
-                              );
-                            })}
-                          </div>
-                          {/* Slot grid */}
-                          <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-1">
-                            {slots.map((slot, i) => (
-                              <div
-                                key={i}
-                                className={`${slotColor(
-                                  slot.category
-                                )} text-white rounded px-1.5 py-2 text-center text-xs`}
-                                title={`${slot.type} (${slot.category}) @ :${String(
-                                  slot.minute
-                                ).padStart(2, "0")} (${slot.duration}min) ${slot.notes || ""}`}
-                              >
-                                <div className="font-bold">{slot.category}</div>
-                                <div className="opacity-75">
-                                  :{String(slot.minute).padStart(2, "0")}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </>
+                        <ClockFace slots={slots} />
                       ) : (
                         <p className="text-sm text-gray-400 italic">
                           No clock pattern defined. Click the edit button to add slots.
