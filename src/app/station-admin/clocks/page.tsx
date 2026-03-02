@@ -553,9 +553,10 @@ function ClockFace({
 
   const cx = 110;
   const cy = 110;
-  const outerR = 95;
-  const midR = 65; // ring divider: songs outer, non-songs inner
-  const innerR = 42;
+  const outerR = 88; // main song ring outer edge
+  const innerR = 48; // main song ring inner edge
+  const markerOuter = 100; // non-song tick markers sit outside the ring
+  const markerInner = 89;
 
   // Convert minute to angle (0 min = 12 o'clock = -90deg in SVG coords)
   const minToAngle = (min: number) => (min / 60) * 360 - 90;
@@ -594,12 +595,11 @@ function ClockFace({
     return SLOT_LABELS[slot.type] || slot.type.charAt(0).toUpperCase();
   };
 
-  // Label position (midpoint of arc, in the correct ring)
+  // Label position (midpoint of song wedge)
   const labelPos = (slot: ClockSlot) => {
     const midMin = slot.minute + slot.duration / 2;
     const midAngle = minToAngle(midMin);
-    const isSong = slot.type === "song";
-    const labelR = isSong ? (midR + innerR) / 2 : (outerR + midR) / 2;
+    const labelR = (outerR + innerR) / 2;
     return polarToCart(midAngle, labelR);
   };
 
@@ -617,29 +617,26 @@ function ClockFace({
   return (
     <div className="flex flex-col items-center gap-3" style={{ maxWidth: size }}>
       <svg viewBox="0 0 220 220" className="w-full" style={{ maxWidth: size }}>
-        {/* Background rings */}
+        {/* Background */}
         <circle cx={cx} cy={cy} r={outerR} fill="#f3f4f6" />
-        <circle cx={cx} cy={cy} r={midR} fill="#e5e7eb" />
         <circle cx={cx} cy={cy} r={innerR} fill="white" />
 
-        {/* Slot wedges — non-songs in outer ring (more space), songs in inner ring */}
+        {/* Song wedges — main ring */}
         {sortedSlots.map((slot, i) => {
+          if (slot.type !== "song") return null;
           const fill = CATEGORY_HEX[slot.category] || "#d1d5db";
           const isSelected = externalSelectedIdx === i;
           const isHovered = hoveredIdx === i;
           const somethingActive = hoveredIdx !== null || externalSelectedIdx != null;
           const dimmed = somethingActive && !isSelected && !isHovered;
-          const isSong = slot.type === "song";
-          const rOuter = isSong ? midR : outerR;
-          const rInner = isSong ? innerR : midR;
           return (
             <path
-              key={i}
-              d={arcPath(slot.minute, slot.minute + slot.duration, rOuter, rInner)}
+              key={`song-${i}`}
+              d={arcPath(slot.minute, slot.minute + slot.duration, outerR, innerR)}
               fill={fill}
               stroke={isSelected ? "#fff" : "white"}
-              strokeWidth={isSelected ? 2.5 : 1}
-              opacity={dimmed ? 0.3 : 0.9}
+              strokeWidth={isSelected ? 2.5 : 1.5}
+              opacity={dimmed ? 0.3 : 0.85}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
               onClick={() => onWedgeClick?.(i)}
@@ -648,21 +645,37 @@ function ClockFace({
           );
         })}
 
-        {/* Ring divider */}
-        <circle cx={cx} cy={cy} r={midR} fill="none" stroke="white" strokeWidth={1.5} />
-
-        {/* Labels inside wedges */}
+        {/* Non-song markers — colored ticks outside the ring */}
         {sortedSlots.map((slot, i) => {
-          const isSong = slot.type === "song";
-          // Inner ring songs: label if >= 3 min; Outer ring non-songs: label if >= 0.5 min
-          if (isSong && slot.duration < 3) return null;
-          if (!isSong && slot.duration < 0.5) return null;
+          if (slot.type === "song") return null;
+          const fill = CATEGORY_HEX[slot.category] || "#d1d5db";
+          const isSelected = externalSelectedIdx === i;
+          const isHovered = hoveredIdx === i;
+          const somethingActive = hoveredIdx !== null || externalSelectedIdx != null;
+          const dimmed = somethingActive && !isSelected && !isHovered;
+          return (
+            <path
+              key={`mark-${i}`}
+              d={arcPath(slot.minute, slot.minute + slot.duration, markerOuter, markerInner)}
+              fill={fill}
+              stroke="white"
+              strokeWidth={0.5}
+              opacity={dimmed ? 0.3 : 0.95}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              onClick={() => onWedgeClick?.(i)}
+              className="transition-opacity duration-150 cursor-pointer"
+            />
+          );
+        })}
+
+        {/* Song labels — plenty of room in the wide ring */}
+        {sortedSlots.map((slot, i) => {
+          if (slot.type !== "song") return null;
+          if (slot.duration < 2.5) return null;
           const pos = labelPos(slot);
           const label = slotLabel(slot);
-          // Outer ring labels can be bigger since there's more space
-          const fontSize = isSong
-            ? (slot.duration < 4 ? 8 : 9.5)
-            : (slot.duration < 1 ? 6.5 : 8);
+          const fontSize = slot.duration < 3.5 ? 8.5 : 10.5;
           return (
             <text
               key={`lbl-${i}`}
@@ -684,9 +697,9 @@ function ClockFace({
         {/* Tick marks */}
         {ticks.map(({ min, major }) => {
           const angle = minToAngle(min);
-          const tickOuter = polarToCart(angle, outerR + 2);
-          const tickInner = polarToCart(angle, outerR - (major ? 5 : 3));
-          const labelPt = polarToCart(angle, outerR + 9);
+          const tickOuter = polarToCart(angle, markerOuter + 2);
+          const tickInner = polarToCart(angle, markerOuter - (major ? 4 : 2));
+          const labelPt = polarToCart(angle, markerOuter + 9);
           return (
             <g key={`tick-${min}`}>
               <line
