@@ -292,7 +292,7 @@ function SlotEditor({
       {/* Clock Face Overview */}
       {slots.length > 0 && (
         <div className="flex justify-center mb-4">
-          <ClockFace slots={slots} size={280} />
+          <ClockFace slots={slots} size={380} />
         </div>
       )}
 
@@ -506,7 +506,7 @@ function SlotEditor({
 // Clock Face Visualization
 // ============================================================================
 
-function ClockFace({ slots, size = 320 }: { slots: ClockSlot[]; size?: number }) {
+function ClockFace({ slots, size = 440 }: { slots: ClockSlot[]; size?: number }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const sortedSlots = useMemo(
@@ -607,7 +607,7 @@ function ClockFace({ slots, size = 320 }: { slots: ClockSlot[]; size?: number })
           const visualDur = Math.max(slot.duration, 0.5);
           if (visualDur < 0.75) return null;
           const pos = labelPos(slot);
-          const fontSize = visualDur < 2 ? 5 : visualDur < 3 ? 6 : 7;
+          const fontSize = visualDur < 2 ? 6 : visualDur < 3 ? 7.5 : 9;
           return (
             <text
               key={`lbl-${i}`}
@@ -631,7 +631,7 @@ function ClockFace({ slots, size = 320 }: { slots: ClockSlot[]; size?: number })
           const angle = minToAngle(min);
           const tickOuter = polarToCart(angle, outerR + 2);
           const tickInner = polarToCart(angle, outerR - (major ? 5 : 3));
-          const labelPt = polarToCart(angle, outerR + 8);
+          const labelPt = polarToCart(angle, outerR + 9);
           return (
             <g key={`tick-${min}`}>
               <line
@@ -648,7 +648,7 @@ function ClockFace({ slots, size = 320 }: { slots: ClockSlot[]; size?: number })
                   y={labelPt.y}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fontSize={6}
+                  fontSize={7}
                   fill="#6b7280"
                   fontWeight="600"
                 >
@@ -665,7 +665,7 @@ function ClockFace({ slots, size = 320 }: { slots: ClockSlot[]; size?: number })
           y={cy - 4}
           textAnchor="middle"
           dominantBaseline="central"
-          fontSize={12}
+          fontSize={14}
           fontWeight="bold"
           fill="#374151"
         >
@@ -673,10 +673,10 @@ function ClockFace({ slots, size = 320 }: { slots: ClockSlot[]; size?: number })
         </text>
         <text
           x={cx}
-          y={cy + 7}
+          y={cy + 8}
           textAnchor="middle"
           dominantBaseline="central"
-          fontSize={5}
+          fontSize={6}
           fill="#6b7280"
         >
           slots/hr
@@ -685,7 +685,7 @@ function ClockFace({ slots, size = 320 }: { slots: ClockSlot[]; size?: number })
 
       {/* Hover tooltip */}
       {hoveredSlot && (
-        <div className="text-xs text-center bg-gray-800 text-white rounded px-3 py-1.5 -mt-1">
+        <div className="text-sm text-center bg-gray-800 text-white rounded-lg px-4 py-2 -mt-1">
           <span className="font-semibold">{hoveredSlot.type}</span>
           {" "}({hoveredSlot.category}) at :{String(hoveredSlot.minute).padStart(2, "0")}
           {" "}&mdash; {hoveredSlot.duration}min
@@ -701,7 +701,7 @@ function ClockFace({ slots, size = 320 }: { slots: ClockSlot[]; size?: number })
           return (
             <span
               key={cat}
-              className="text-white text-[10px] px-1.5 py-0.5 rounded font-medium"
+              className="text-white text-xs px-2 py-0.5 rounded font-medium"
               style={{ backgroundColor: hex }}
             >
               {cat}
