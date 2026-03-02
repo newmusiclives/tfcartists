@@ -633,7 +633,7 @@ function ClockFace({
               d={arcPath(slot.minute, slot.minute + slot.duration)}
               fill={fill}
               stroke={isSelected ? "#fff" : "white"}
-              strokeWidth={isSelected ? 2.5 : 0.5}
+              strokeWidth={isSelected ? 2.5 : 1}
               opacity={dimmed ? 0.3 : 0.9}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
@@ -643,12 +643,15 @@ function ClockFace({
           );
         })}
 
-        {/* Labels inside wedges */}
+        {/* Labels inside wedges — only for slots wide enough to read */}
         {sortedSlots.map((slot, i) => {
-          const visualDur = Math.max(slot.duration, 0.5);
-          if (visualDur < 0.75) return null;
+          const dur = slot.duration;
+          if (dur < 1.5) return null; // too narrow for any label
           const pos = labelPos(slot);
-          const fontSize = visualDur < 2 ? 7 : visualDur < 3 ? 9 : 10;
+          const label = slotLabel(slot);
+          // Short label for medium wedges, full label for large ones
+          const displayLabel = dur < 3 ? label.charAt(0) : label;
+          const fontSize = dur < 2.5 ? 7.5 : dur < 4 ? 9 : 10;
           return (
             <text
               key={`lbl-${i}`}
@@ -660,9 +663,9 @@ function ClockFace({
               fontSize={fontSize}
               fontWeight="bold"
               pointerEvents="none"
-              style={{ textShadow: "0 0 2px rgba(0,0,0,0.5)" }}
+              style={{ textShadow: "0 0 3px rgba(0,0,0,0.6)" }}
             >
-              {slotLabel(slot)}
+              {displayLabel}
             </text>
           );
         })}
