@@ -19,6 +19,8 @@ import {
   ArrowDown,
   Copy,
   Sparkles,
+  AlertTriangle,
+  AlertCircle,
 } from "lucide-react";
 
 // ============================================================================
@@ -193,6 +195,84 @@ const BREAK_COLORS: Record<BreakType, string> = {
   toh: "#dc2626", dj: "#f59e0b", sponsor: "#6b7280", feature: "#14b8a6",
   quick: "#ec4899", custom: "#8b5cf6",
 };
+
+// ============================================================================
+// Clock Programming Rules
+// ============================================================================
+
+interface RuleViolation {
+  severity: "error" | "warning";
+  rule: string;
+  message: string;
+  slotIndices?: number[];   // indices into sorted slots for highlighting
+}
+
+const CLOCK_RULES = {
+  maxAListPerHour: 4,
+  minEstablishedPct: 20,    // at least 20% of songs must be A, B, C, or D
+  establishedCategories: new Set(["A", "B", "C", "D"]),
+  replaceableByE: new Set(["B", "C", "D"]),  // E can replace these once E has songs
+};
+
+function validateClockRules(slots: ClockSlot[]): RuleViolation[] {
+  const violations: RuleViolation[] = [];
+  const sorted = [...slots].sort((a, b) => a.minute - b.minute);
+  const songs = sorted.filter((s) => s.type === "song");
+
+  if (songs.length === 0) return violations;
+
+  // Rule 1: Max 4 A-list songs per hour
+  const aSongs = songs.filter((s) => s.category === "A");
+  if (aSongs.length > CLOCK_RULES.maxAListPerHour) {
+    const indices = aSongs.map((s) => sorted.indexOf(s));
+    violations.push({
+      severity: "error",
+      rule: "A-list limit",
+      message: `${aSongs.length} A-list songs (max ${CLOCK_RULES.maxAListPerHour} per hour)`,
+      slotIndices: indices,
+    });
+  }
+
+  // Rule 2: At least 20% of songs must be from established categories (A, B, C, D)
+  const establishedCount = songs.filter((s) => CLOCK_RULES.establishedCategories.has(s.category)).length;
+  const establishedPct = (establishedCount / songs.length) * 100;
+  if (establishedPct < CLOCK_RULES.minEstablishedPct) {
+    violations.push({
+      severity: "error",
+      rule: "Established minimum",
+      message: `Only ${Math.round(establishedPct)}% established (A-D) songs — minimum ${CLOCK_RULES.minEstablishedPct}%`,
+    });
+  }
+
+  // Rule 3: E category can replace B, C, D — but warn if E slots present without E songs existing
+  const eSongs = songs.filter((s) => s.category === "E");
+  if (eSongs.length > 0) {
+    // This is informational — E slots will pull from indie/emerging artists
+    const eCount = eSongs.length;
+    const replaceableCount = songs.filter((s) => CLOCK_RULES.replaceableByE.has(s.category)).length;
+    if (replaceableCount === 0 && eCount > 0) {
+      violations.push({
+        severity: "warning",
+        rule: "E replacement",
+        message: `${eCount} E-category slots — these replace B/C/D when E artists are available`,
+      });
+    }
+  }
+
+  // Rule 4: Avoid back-to-back same song category (proxy for gender diversity)
+  for (let i = 1; i < songs.length; i++) {
+    if (songs[i].category === songs[i - 1].category) {
+      violations.push({
+        severity: "warning",
+        rule: "Variety",
+        message: `Back-to-back ${songs[i].category}-category songs at :${String(songs[i - 1].minute).padStart(2, "0")} and :${String(songs[i].minute).padStart(2, "0")} — avoid consecutive same category for vocal variety`,
+        slotIndices: [sorted.indexOf(songs[i - 1]), sorted.indexOf(songs[i])],
+      });
+    }
+  }
+
+  return violations;
+}
 
 function formatClockType(t: string) {
   return (t || "").replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -522,6 +602,18 @@ function SlotEditor({
     typeCounts[s.type] = (typeCounts[s.type] || 0) + 1;
   }
 
+  // Rule validation
+  const ruleViolations = useMemo(() => validateClockRules(slots), [slots]);
+  const violatedSlotIndices = useMemo(() => {
+    const set = new Set<number>();
+    for (const v of ruleViolations) {
+      if (v.slotIndices) v.slotIndices.forEach((i) => set.add(i));
+    }
+    return set;
+  }, [ruleViolations]);
+  const errors = ruleViolations.filter((v) => v.severity === "error");
+  const warnings = ruleViolations.filter((v) => v.severity === "warning");
+
   return (
     <div className="border-t bg-gray-50 p-5 space-y-5">
       {/* Two-column layout: slot list + clock face */}
@@ -551,12 +643,31 @@ function SlotEditor({
         })()}
       </div>
 
+      {/* Rule Violations */}
+      {ruleViolations.length > 0 && (
+        <div className="space-y-1.5">
+          {errors.map((v, i) => (
+            <div key={`err-${i}`} className="flex items-start gap-2 bg-red-50 border border-red-200 rounded px-3 py-1.5 text-xs text-red-700">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
+              <span><strong>{v.rule}:</strong> {v.message}</span>
+            </div>
+          ))}
+          {warnings.map((v, i) => (
+            <div key={`warn-${i}`} className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded px-3 py-1.5 text-xs text-amber-700">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+              <span><strong>{v.rule}:</strong> {v.message}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Slot List with Break Blocks */}
       <div className="overflow-y-auto space-y-1">
         {editorRows.map((row) => {
           if (row.kind === "song") {
             const { slot, sortedIdx } = row;
             const realIdx = slots.indexOf(slot);
+            const hasViolation = violatedSlotIndices.has(sortedIdx);
             return (
               <div
                 key={`song-${sortedIdx}`}
@@ -565,6 +676,8 @@ function SlotEditor({
                 className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-pointer transition-colors ${
                   selectedIdx === sortedIdx
                     ? "bg-blue-50 border-blue-400 ring-2 ring-blue-300"
+                    : hasViolation
+                    ? "bg-red-50 border-red-300 ring-1 ring-red-200"
                     : "bg-white hover:bg-gray-50"
                 }`}
               >
