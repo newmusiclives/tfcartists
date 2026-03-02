@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { SharedNav } from "@/components/shared-nav";
 import {
   Clock,
@@ -234,6 +234,13 @@ function SlotEditor({
     duration: 4,
     notes: "",
   });
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const handleWedgeClick = (idx: number) => {
+    setSelectedIdx(idx);
+    slotRefs.current[idx]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
 
   const updateSlot = (idx: number, field: keyof ClockSlot, value: string | number) => {
     setSlots((prev) =>
@@ -243,6 +250,7 @@ function SlotEditor({
 
   const removeSlot = (idx: number) => {
     setSlots((prev) => prev.filter((_, i) => i !== idx));
+    setSelectedIdx(null);
   };
 
   const moveSlot = (sortedIdx: number, direction: "up" | "down") => {
@@ -289,41 +297,10 @@ function SlotEditor({
 
   return (
     <div className="border-t bg-gray-50 p-5 space-y-5">
-      {/* Clock Face Overview */}
-      {slots.length > 0 && (
-        <div className="flex justify-center mb-4">
-          <ClockFace slots={slots} size={380} />
-        </div>
-      )}
-
-      {/* Timeline Bar */}
-      <div>
-        <h4 className="text-sm font-semibold text-gray-700 mb-2">60-Minute Timeline</h4>
-        <div className="relative h-10 bg-gray-200 rounded-lg overflow-hidden">
-          {slots.map((slot, i) => {
-            const left = (slot.minute / 60) * 100;
-            const width = Math.max((slot.duration / 60) * 100, 1.2);
-            return (
-              <div
-                key={i}
-                className={`absolute top-0 h-full ${slotColor(slot.category)} opacity-85 border-r border-white/30`}
-                style={{ left: `${left}%`, width: `${width}%` }}
-                title={`${slot.type} (${slot.category}) @ :${String(slot.minute).padStart(2, "0")} — ${slot.duration}min`}
-              />
-            );
-          })}
-          {/* Minute markers */}
-          {[0, 15, 30, 45].map((m) => (
-            <div
-              key={m}
-              className="absolute top-0 h-full border-l border-black/20"
-              style={{ left: `${(m / 60) * 100}%` }}
-            >
-              <span className="text-[9px] text-gray-600 ml-0.5">:{String(m).padStart(2, "0")}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Two-column layout: slot list + clock face */}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left column: summary, slots, add, save */}
+        <div className="flex-1 min-w-0 space-y-4 order-2 lg:order-1">
 
       {/* Summary */}
       <div className="flex flex-wrap gap-2 text-xs">
@@ -338,7 +315,7 @@ function SlotEditor({
       </div>
 
       {/* Slot List */}
-      <div className="max-h-[400px] overflow-y-auto space-y-1">
+      <div className="overflow-y-auto space-y-1">
         {slots
           .slice()
           .sort((a, b) => a.minute - b.minute)
@@ -347,7 +324,13 @@ function SlotEditor({
             return (
               <div
                 key={realIdx}
-                className="flex items-center gap-2 bg-white border rounded px-3 py-1.5 text-sm"
+                ref={(el) => { slotRefs.current[sortedIdx] = el; }}
+                onClick={() => setSelectedIdx(sortedIdx)}
+                className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-pointer transition-colors ${
+                  selectedIdx === sortedIdx
+                    ? "bg-blue-50 border-blue-400 ring-2 ring-blue-300"
+                    : "bg-white hover:bg-gray-50"
+                }`}
               >
                 <span className={`w-3 h-3 rounded-sm ${slotColor(slot.category)}`} />
                 <select
@@ -498,6 +481,50 @@ function SlotEditor({
           Cancel
         </button>
       </div>
+
+        </div>
+
+        {/* Right column: large clock face (sticky) */}
+        {slots.length > 0 && (
+          <div className="lg:w-[540px] shrink-0 lg:sticky lg:top-4 lg:self-start order-1 lg:order-2">
+            <ClockFace
+              slots={slots}
+              size={500}
+              selectedIdx={selectedIdx}
+              onWedgeClick={handleWedgeClick}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Timeline Bar (full width below columns) */}
+      <div>
+        <h4 className="text-sm font-semibold text-gray-700 mb-2">60-Minute Timeline</h4>
+        <div className="relative h-10 bg-gray-200 rounded-lg overflow-hidden">
+          {slots.map((slot, i) => {
+            const left = (slot.minute / 60) * 100;
+            const width = Math.max((slot.duration / 60) * 100, 1.2);
+            return (
+              <div
+                key={i}
+                className={`absolute top-0 h-full ${slotColor(slot.category)} opacity-85 border-r border-white/30`}
+                style={{ left: `${left}%`, width: `${width}%` }}
+                title={`${slot.type} (${slot.category}) @ :${String(slot.minute).padStart(2, "0")} — ${slot.duration}min`}
+              />
+            );
+          })}
+          {/* Minute markers */}
+          {[0, 15, 30, 45].map((m) => (
+            <div
+              key={m}
+              className="absolute top-0 h-full border-l border-black/20"
+              style={{ left: `${(m / 60) * 100}%` }}
+            >
+              <span className="text-[9px] text-gray-600 ml-0.5">:{String(m).padStart(2, "0")}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -506,7 +533,17 @@ function SlotEditor({
 // Clock Face Visualization
 // ============================================================================
 
-function ClockFace({ slots, size = 440 }: { slots: ClockSlot[]; size?: number }) {
+function ClockFace({
+  slots,
+  size = 500,
+  selectedIdx: externalSelectedIdx,
+  onWedgeClick,
+}: {
+  slots: ClockSlot[];
+  size?: number;
+  selectedIdx?: number | null;
+  onWedgeClick?: (idx: number) => void;
+}) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const sortedSlots = useMemo(
@@ -514,10 +551,10 @@ function ClockFace({ slots, size = 440 }: { slots: ClockSlot[]; size?: number })
     [slots]
   );
 
-  const cx = 100;
-  const cy = 100;
-  const outerR = 85;
-  const innerR = 30;
+  const cx = 110;
+  const cy = 110;
+  const outerR = 95;
+  const innerR = 35;
 
   // Convert minute to angle (0 min = 12 o'clock = -90deg in SVG coords)
   const minToAngle = (min: number) => (min / 60) * 360 - 90;
@@ -578,7 +615,7 @@ function ClockFace({ slots, size = 440 }: { slots: ClockSlot[]; size?: number })
 
   return (
     <div className="flex flex-col items-center gap-3" style={{ maxWidth: size }}>
-      <svg viewBox="0 0 200 200" className="w-full" style={{ maxWidth: size }}>
+      <svg viewBox="0 0 220 220" className="w-full" style={{ maxWidth: size }}>
         {/* Background circle */}
         <circle cx={cx} cy={cy} r={outerR} fill="#f3f4f6" />
         <circle cx={cx} cy={cy} r={innerR} fill="white" />
@@ -586,17 +623,21 @@ function ClockFace({ slots, size = 440 }: { slots: ClockSlot[]; size?: number })
         {/* Slot wedges */}
         {sortedSlots.map((slot, i) => {
           const fill = CATEGORY_HEX[slot.category] || "#d1d5db";
-          const dimmed = hoveredIdx !== null && hoveredIdx !== i;
+          const isSelected = externalSelectedIdx === i;
+          const isHovered = hoveredIdx === i;
+          const somethingActive = hoveredIdx !== null || externalSelectedIdx != null;
+          const dimmed = somethingActive && !isSelected && !isHovered;
           return (
             <path
               key={i}
               d={arcPath(slot.minute, slot.minute + slot.duration)}
               fill={fill}
-              stroke="white"
-              strokeWidth={0.5}
+              stroke={isSelected ? "#fff" : "white"}
+              strokeWidth={isSelected ? 2.5 : 0.5}
               opacity={dimmed ? 0.3 : 0.9}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
+              onClick={() => onWedgeClick?.(i)}
               className="transition-opacity duration-150 cursor-pointer"
             />
           );
@@ -607,7 +648,7 @@ function ClockFace({ slots, size = 440 }: { slots: ClockSlot[]; size?: number })
           const visualDur = Math.max(slot.duration, 0.5);
           if (visualDur < 0.75) return null;
           const pos = labelPos(slot);
-          const fontSize = visualDur < 2 ? 6 : visualDur < 3 ? 7.5 : 9;
+          const fontSize = visualDur < 2 ? 7 : visualDur < 3 ? 9 : 10;
           return (
             <text
               key={`lbl-${i}`}
@@ -648,7 +689,7 @@ function ClockFace({ slots, size = 440 }: { slots: ClockSlot[]; size?: number })
                   y={labelPt.y}
                   textAnchor="middle"
                   dominantBaseline="central"
-                  fontSize={7}
+                  fontSize={8}
                   fill="#6b7280"
                   fontWeight="600"
                 >
@@ -662,10 +703,10 @@ function ClockFace({ slots, size = 440 }: { slots: ClockSlot[]; size?: number })
         {/* Center text */}
         <text
           x={cx}
-          y={cy - 4}
+          y={cy - 5}
           textAnchor="middle"
           dominantBaseline="central"
-          fontSize={14}
+          fontSize={16}
           fontWeight="bold"
           fill="#374151"
         >
@@ -673,10 +714,10 @@ function ClockFace({ slots, size = 440 }: { slots: ClockSlot[]; size?: number })
         </text>
         <text
           x={cx}
-          y={cy + 8}
+          y={cy + 9}
           textAnchor="middle"
           dominantBaseline="central"
-          fontSize={6}
+          fontSize={7}
           fill="#6b7280"
         >
           slots/hr
@@ -1421,7 +1462,25 @@ export default function RadioClocksPage() {
                         <p className="text-sm text-gray-600 mb-4">{t.description}</p>
                       )}
                       {slots.length > 0 ? (
-                        <ClockFace slots={slots} />
+                        <div className="flex flex-col lg:flex-row gap-6">
+                          <div className="flex-1 min-w-0 order-2 lg:order-1">
+                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Slot Summary</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {[...slots].sort((a, b) => a.minute - b.minute).map((slot, i) => (
+                                <span
+                                  key={i}
+                                  className="text-white text-xs px-2 py-0.5 rounded font-medium"
+                                  style={{ backgroundColor: CATEGORY_HEX[slot.category] || "#d1d5db" }}
+                                >
+                                  {SLOT_LABELS[slot.type] || slot.type} :{String(slot.minute).padStart(2, "0")}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="lg:w-[540px] shrink-0 order-1 lg:order-2">
+                            <ClockFace slots={slots} size={500} />
+                          </div>
+                        </div>
                       ) : (
                         <p className="text-sm text-gray-400 italic">
                           No clock pattern defined. Click the edit button to add slots.
