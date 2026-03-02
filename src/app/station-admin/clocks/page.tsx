@@ -599,7 +599,7 @@ function ClockFace({
     const midMin = slot.minute + slot.duration / 2;
     const midAngle = minToAngle(midMin);
     const isSong = slot.type === "song";
-    const labelR = isSong ? (outerR + midR) / 2 : (midR + innerR) / 2;
+    const labelR = isSong ? (midR + innerR) / 2 : (outerR + midR) / 2;
     return polarToCart(midAngle, labelR);
   };
 
@@ -618,11 +618,11 @@ function ClockFace({
     <div className="flex flex-col items-center gap-3" style={{ maxWidth: size }}>
       <svg viewBox="0 0 220 220" className="w-full" style={{ maxWidth: size }}>
         {/* Background rings */}
-        <circle cx={cx} cy={cy} r={outerR} fill="#e5e7eb" />
-        <circle cx={cx} cy={cy} r={midR} fill="#f3f4f6" />
+        <circle cx={cx} cy={cy} r={outerR} fill="#f3f4f6" />
+        <circle cx={cx} cy={cy} r={midR} fill="#e5e7eb" />
         <circle cx={cx} cy={cy} r={innerR} fill="white" />
 
-        {/* Slot wedges — songs in outer ring, non-songs in inner ring */}
+        {/* Slot wedges — non-songs in outer ring (more space), songs in inner ring */}
         {sortedSlots.map((slot, i) => {
           const fill = CATEGORY_HEX[slot.category] || "#d1d5db";
           const isSelected = externalSelectedIdx === i;
@@ -630,8 +630,8 @@ function ClockFace({
           const somethingActive = hoveredIdx !== null || externalSelectedIdx != null;
           const dimmed = somethingActive && !isSelected && !isHovered;
           const isSong = slot.type === "song";
-          const rOuter = isSong ? outerR : midR;
-          const rInner = isSong ? midR : innerR;
+          const rOuter = isSong ? midR : outerR;
+          const rInner = isSong ? innerR : midR;
           return (
             <path
               key={i}
@@ -651,12 +651,18 @@ function ClockFace({
         {/* Ring divider */}
         <circle cx={cx} cy={cy} r={midR} fill="none" stroke="white" strokeWidth={1.5} />
 
-        {/* Labels inside wedges — only for slots >= 3 min */}
+        {/* Labels inside wedges */}
         {sortedSlots.map((slot, i) => {
-          if (slot.duration < 3) return null;
+          const isSong = slot.type === "song";
+          // Inner ring songs: label if >= 3 min; Outer ring non-songs: label if >= 0.5 min
+          if (isSong && slot.duration < 3) return null;
+          if (!isSong && slot.duration < 0.5) return null;
           const pos = labelPos(slot);
           const label = slotLabel(slot);
-          const fontSize = slot.duration < 4 ? 9 : 10.5;
+          // Outer ring labels can be bigger since there's more space
+          const fontSize = isSong
+            ? (slot.duration < 4 ? 8 : 9.5)
+            : (slot.duration < 1 ? 6.5 : 8);
           return (
             <text
               key={`lbl-${i}`}
