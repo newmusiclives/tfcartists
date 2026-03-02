@@ -1083,14 +1083,40 @@ function ClockFace({
     [segments]
   );
 
-  // Pre-compute sequential angles for each segment
+  // Pre-compute sequential angles — breaks get a minimum width so numbers fit
   const segmentArcs = useMemo(() => {
+    const MIN_BREAK_DEG = 18; // minimum degrees for a break segment
+    if (totalDuration <= 0) return segments.map(() => ({ startAngle: -90, endAngle: -90 }));
+
+    // First pass: compute raw angles
+    const raw = segments.map((seg) => (seg.duration / totalDuration) * 360);
+
+    // Second pass: enforce minimum for breaks, steal from songs proportionally
+    let deficit = 0;
+    const adjusted = raw.map((deg, i) => {
+      if (segments[i].kind === "break" && deg < MIN_BREAK_DEG) {
+        deficit += MIN_BREAK_DEG - deg;
+        return MIN_BREAK_DEG;
+      }
+      return deg;
+    });
+
+    // Shrink song segments proportionally to cover the deficit
+    if (deficit > 0) {
+      const songTotal = adjusted.reduce((sum, deg, i) => sum + (segments[i].kind === "song" ? deg : 0), 0);
+      if (songTotal > 0) {
+        const scale = (songTotal - deficit) / songTotal;
+        for (let i = 0; i < adjusted.length; i++) {
+          if (segments[i].kind === "song") adjusted[i] *= scale;
+        }
+      }
+    }
+
     const arcs: { startAngle: number; endAngle: number }[] = [];
-    let cursor = -90; // start at 12 o'clock
-    for (const seg of segments) {
-      const sweep = totalDuration > 0 ? (seg.duration / totalDuration) * 360 : 0;
-      arcs.push({ startAngle: cursor, endAngle: cursor + sweep });
-      cursor += sweep;
+    let cursor = -90;
+    for (const deg of adjusted) {
+      arcs.push({ startAngle: cursor, endAngle: cursor + deg });
+      cursor += deg;
     }
     return arcs;
   }, [segments, totalDuration]);
