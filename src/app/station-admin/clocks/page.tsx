@@ -567,7 +567,7 @@ function ClockFace({
 
   // Build annular sector path
   const arcPath = (startMin: number, endMin: number) => {
-    const visualEnd = Math.max(endMin, startMin + 0.5); // minimum visual width
+    const visualEnd = Math.max(endMin, startMin + 1); // minimum visual width
     const a1 = minToAngle(startMin);
     const a2 = minToAngle(visualEnd);
     const sweep = a2 - a1;
@@ -595,8 +595,7 @@ function ClockFace({
 
   // Label position (midpoint of arc, midpoint of radii)
   const labelPos = (slot: ClockSlot) => {
-    const visualDur = Math.max(slot.duration, 0.5);
-    const midMin = slot.minute + visualDur / 2;
+    const midMin = slot.minute + slot.duration / 2;
     const midAngle = minToAngle(midMin);
     const midR = (outerR + innerR) / 2;
     return polarToCart(midAngle, midR);
@@ -632,8 +631,8 @@ function ClockFace({
               key={i}
               d={arcPath(slot.minute, slot.minute + slot.duration)}
               fill={fill}
-              stroke={isSelected ? "#fff" : "white"}
-              strokeWidth={isSelected ? 2.5 : 1}
+              stroke={isSelected ? "#fff" : "#f9fafb"}
+              strokeWidth={isSelected ? 2.5 : 1.5}
               opacity={dimmed ? 0.3 : 0.9}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
@@ -643,15 +642,12 @@ function ClockFace({
           );
         })}
 
-        {/* Labels inside wedges — only for slots wide enough to read */}
+        {/* Labels inside wedges — only for slots >= 3 min */}
         {sortedSlots.map((slot, i) => {
-          const dur = slot.duration;
-          if (dur < 1.5) return null; // too narrow for any label
+          if (slot.duration < 3) return null;
           const pos = labelPos(slot);
           const label = slotLabel(slot);
-          // Short label for medium wedges, full label for large ones
-          const displayLabel = dur < 3 ? label.charAt(0) : label;
-          const fontSize = dur < 2.5 ? 7.5 : dur < 4 ? 9 : 10;
+          const fontSize = slot.duration < 4 ? 9 : 10.5;
           return (
             <text
               key={`lbl-${i}`}
@@ -663,9 +659,9 @@ function ClockFace({
               fontSize={fontSize}
               fontWeight="bold"
               pointerEvents="none"
-              style={{ textShadow: "0 0 3px rgba(0,0,0,0.6)" }}
+              style={{ textShadow: "0 0 3px rgba(0,0,0,0.7)" }}
             >
-              {displayLabel}
+              {label}
             </text>
           );
         })}
