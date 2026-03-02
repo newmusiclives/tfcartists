@@ -85,17 +85,17 @@ async function main() {
       continue;
     }
 
-    // PATCH the template
+    // PUT the template with updated clock_pattern
     const patchRes = await fetch(`${API_URL}/api/clocks/templates/${tpl.id}`, {
-      method: "PATCH",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ clock_pattern: sorted }),
     });
 
     if (patchRes.ok) {
-      console.log(`    PATCHED successfully`);
+      console.log(`    Updated successfully`);
     } else {
-      console.error(`    PATCH failed: ${patchRes.status} ${await patchRes.text()}`);
+      console.error(`    Update failed: ${patchRes.status} ${await patchRes.text()}`);
     }
   }
 
