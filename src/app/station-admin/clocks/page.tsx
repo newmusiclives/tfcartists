@@ -88,6 +88,7 @@ interface DJShow {
 
 interface BreakBlock {
   id: string;
+  num: number;              // 1-based break number
   breakType: BreakType;
   label: string;
   slots: ClockSlot[];
@@ -351,12 +352,14 @@ function detectBreaks(slots: ClockSlot[]): EditorRow[] {
       label = BREAK_TYPE_LABELS[breakType];
     }
 
+    breakCounter++;
     const insert = rowInserts.find((r) => r.breakIdx === bi);
     if (insert) {
       rows[insert.position] = {
         kind: "break",
         block: {
           id: `break-${breakCounter}`,
+          num: breakCounter,
           breakType,
           label,
           slots: group,
@@ -366,7 +369,6 @@ function detectBreaks(slots: ClockSlot[]): EditorRow[] {
         firstSortedIdx: startIdx,
       };
     }
-    breakCounter++;
   }
 
   return rows;
@@ -401,6 +403,10 @@ function SlotEditor({
   const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const editorRows = useMemo(() => detectBreaks(slots), [slots]);
+  const breakBlocks = useMemo(
+    () => editorRows.filter((r): r is Extract<EditorRow, { kind: "break" }> => r.kind === "break").map((r) => r.block),
+    [editorRows]
+  );
 
   const handleWedgeClick = (idx: number) => {
     setSelectedIdx(idx);
@@ -657,6 +663,12 @@ function SlotEditor({
                   style={{ backgroundColor: BREAK_COLORS[block.breakType] }}
                 />
                 <Layers className="w-4 h-4 text-gray-500 shrink-0" />
+                <span
+                  className="inline-flex items-center justify-center w-5 h-5 rounded-full text-white text-[10px] font-bold shrink-0"
+                  style={{ backgroundColor: BREAK_COLORS[block.breakType] }}
+                >
+                  {block.num}
+                </span>
                 <span className="font-medium text-gray-800">{block.label}</span>
                 <span className="text-xs text-gray-500">
                   {block.slots.length} slot{block.slots.length !== 1 ? "s" : ""}, {Math.round(block.totalDuration * 10) / 10}min at :{String(block.startMinute).padStart(2, "0")}
@@ -866,6 +878,7 @@ function SlotEditor({
               size={500}
               selectedIdx={selectedIdx}
               onWedgeClick={handleWedgeClick}
+              breaks={breakBlocks}
             />
           </div>
         )}
@@ -912,11 +925,13 @@ function ClockFace({
   size = 500,
   selectedIdx: externalSelectedIdx,
   onWedgeClick,
+  breaks,
 }: {
   slots: ClockSlot[];
   size?: number;
   selectedIdx?: number | null;
   onWedgeClick?: (idx: number) => void;
+  breaks?: BreakBlock[];
 }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
@@ -1035,6 +1050,41 @@ function ClockFace({
               onClick={() => onWedgeClick?.(i)}
               className="cursor-pointer"
             />
+          );
+        })}
+
+        {/* Break block wedges with numbers */}
+        {breaks?.map((brk) => {
+          const startMin = brk.startMinute;
+          const endMin = startMin + brk.totalDuration;
+          const color = BREAK_COLORS[brk.breakType];
+          const midMin = startMin + brk.totalDuration / 2;
+          const midAngle = minToAngle(midMin);
+          const labelR = (outerR + innerR) / 2;
+          const pos = polarToCart(midAngle, labelR);
+          return (
+            <g key={brk.id}>
+              <path
+                d={arcPath(startMin, endMin)}
+                fill={color}
+                opacity={0.25}
+                stroke={color}
+                strokeWidth={1}
+              />
+              <circle cx={pos.x} cy={pos.y} r={7} fill={color} opacity={0.85} />
+              <text
+                x={pos.x}
+                y={pos.y}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="white"
+                fontSize={8}
+                fontWeight="bold"
+                pointerEvents="none"
+              >
+                {brk.num}
+              </text>
+            </g>
           );
         })}
 
