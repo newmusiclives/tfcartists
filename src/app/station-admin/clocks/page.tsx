@@ -212,7 +212,7 @@ const CLOCK_RULES = {
   minEstablishedPct: 20,    // at least 20% of songs must be A, B, C, or D
   establishedCategories: new Set(["A", "B", "C", "D"]),
   replaceableByE: new Set(["B", "C", "D"]),  // E can replace these once E has songs
-  dFallbackOrder: ["B", "C", "D"],  // when D is empty, fill from B→C→D least-played
+  eFallbackOrder: ["B", "C", "D"],  // when E is empty, fill from least-played B→C→D
 };
 
 function validateClockRules(slots: ClockSlot[]): RuleViolation[] {
@@ -245,19 +245,14 @@ function validateClockRules(slots: ClockSlot[]): RuleViolation[] {
     });
   }
 
-  // Rule 3: E category can replace B, C, D — but warn if E slots present without E songs existing
+  // Rule 3: E-category fallback — when no E songs exist, fill from least-played B → C → D
   const eSongs = songs.filter((s) => s.category === "E");
   if (eSongs.length > 0) {
-    // This is informational — E slots will pull from indie/emerging artists
-    const eCount = eSongs.length;
-    const replaceableCount = songs.filter((s) => CLOCK_RULES.replaceableByE.has(s.category)).length;
-    if (replaceableCount === 0 && eCount > 0) {
-      violations.push({
-        severity: "warning",
-        rule: "E replacement",
-        message: `${eCount} E-category slots — these replace B/C/D when E artists are available`,
-      });
-    }
+    violations.push({
+      severity: "info",
+      rule: "E fallback",
+      message: `${eSongs.length} E-category slot${eSongs.length !== 1 ? "s" : ""} — if no E songs available, scheduler fills from least-played B, then C, then D in rotation`,
+    });
   }
 
   // Rule 4: Avoid back-to-back same song category (proxy for gender diversity)
@@ -272,17 +267,7 @@ function validateClockRules(slots: ClockSlot[]): RuleViolation[] {
     }
   }
 
-  // Rule 5: D-category fallback — when no D songs exist, fill from B, C, D in sequence
-  const dSlots = songs.filter((s) => s.category === "D");
-  if (dSlots.length > 0) {
-    violations.push({
-      severity: "info",
-      rule: "D fallback",
-      message: `${dSlots.length} D-category slot${dSlots.length !== 1 ? "s" : ""} — if no D songs available, scheduler fills from least-played B, then C, then D in rotation`,
-    });
-  }
-
-  // Rule 6: Least-played selection — all categories use least-played-first to reduce repetition
+  // Rule 5: Least-played selection — all categories use least-played-first to reduce repetition
   const categoriesUsed = [...new Set(songs.map((s) => s.category))].sort().join(", ");
   violations.push({
     severity: "info",
