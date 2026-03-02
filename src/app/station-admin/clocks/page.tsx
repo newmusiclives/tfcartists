@@ -935,38 +935,56 @@ function ClockFace({
 }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  const sortedSlots = useMemo(
-    () => [...slots].sort((a, b) => a.minute - b.minute),
-    [slots]
+  // Build sequential segments: songs + break blocks in order, sized by duration
+  type Segment =
+    | { kind: "song"; slot: ClockSlot; sortedIdx: number; duration: number }
+    | { kind: "break"; block: BreakBlock; duration: number };
+
+  const segments = useMemo((): Segment[] => {
+    const rows = detectBreaks(slots);
+    return rows.map((row) => {
+      if (row.kind === "song") {
+        return { kind: "song", slot: row.slot, sortedIdx: row.sortedIdx, duration: row.slot.duration };
+      }
+      return { kind: "break", block: row.block, duration: row.block.totalDuration };
+    });
+  }, [slots]);
+
+  const totalDuration = useMemo(
+    () => segments.reduce((sum, seg) => sum + seg.duration, 0),
+    [segments]
   );
+
+  // Pre-compute sequential angles for each segment
+  const segmentArcs = useMemo(() => {
+    const arcs: { startAngle: number; endAngle: number }[] = [];
+    let cursor = -90; // start at 12 o'clock
+    for (const seg of segments) {
+      const sweep = totalDuration > 0 ? (seg.duration / totalDuration) * 360 : 0;
+      arcs.push({ startAngle: cursor, endAngle: cursor + sweep });
+      cursor += sweep;
+    }
+    return arcs;
+  }, [segments, totalDuration]);
 
   const cx = 110;
   const cy = 110;
   const outerR = 92;
   const innerR = 44;
 
-  // Convert minute to angle (0 min = 12 o'clock = -90deg in SVG coords)
-  const minToAngle = (min: number) => (min / 60) * 360 - 90;
-
-  // Convert polar to cartesian
   const polarToCart = (angleDeg: number, r: number) => {
     const rad = (angleDeg * Math.PI) / 180;
     return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   };
 
-  // Build annular sector path
-  const arcPath = (startMin: number, endMin: number, rOuter = outerR, rInner = innerR) => {
-    const visualEnd = Math.max(endMin, startMin + 0.5);
-    const a1 = minToAngle(startMin);
-    const a2 = minToAngle(visualEnd);
-    const sweep = a2 - a1;
+  const arcPath = (startAngle: number, endAngle: number, rOuter = outerR, rInner = innerR) => {
+    const sweep = endAngle - startAngle;
+    if (sweep <= 0) return "";
     const largeArc = sweep > 180 ? 1 : 0;
-
-    const oStart = polarToCart(a1, rOuter);
-    const oEnd = polarToCart(a2, rOuter);
-    const iStart = polarToCart(a1, rInner);
-    const iEnd = polarToCart(a2, rInner);
-
+    const oStart = polarToCart(startAngle, rOuter);
+    const oEnd = polarToCart(endAngle, rOuter);
+    const iStart = polarToCart(startAngle, rInner);
+    const iEnd = polarToCart(endAngle, rInner);
     return [
       `M ${oStart.x} ${oStart.y}`,
       `A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${oEnd.x} ${oEnd.y}`,
@@ -976,30 +994,7 @@ function ClockFace({
     ].join(" ");
   };
 
-  // Slot label
-  const slotLabel = (slot: ClockSlot) => {
-    if (slot.type === "song") return slot.category;
-    return SLOT_LABELS[slot.type] || slot.type.charAt(0).toUpperCase();
-  };
-
-  // Label position (midpoint of song wedge)
-  const labelPos = (slot: ClockSlot) => {
-    const midMin = slot.minute + slot.duration / 2;
-    const midAngle = minToAngle(midMin);
-    const labelR = (outerR + innerR) / 2;
-    return polarToCart(midAngle, labelR);
-  };
-
-  // Tick marks
-  const ticks = useMemo(() => {
-    const result: { min: number; major: boolean }[] = [];
-    for (let m = 0; m < 60; m += 5) {
-      result.push({ min: m, major: m % 15 === 0 });
-    }
-    return result;
-  }, []);
-
-  const hoveredSlot = hoveredIdx !== null ? sortedSlots[hoveredIdx] : null;
+  const hoveredSeg = hoveredIdx !== null ? segments[hoveredIdx] : null;
 
   return (
     <div className="flex flex-col items-center gap-3" style={{ maxWidth: size }}>
@@ -1008,92 +1003,59 @@ function ClockFace({
         <circle cx={cx} cy={cy} r={outerR} fill="#e5e7eb" />
         <circle cx={cx} cy={cy} r={innerR} fill="white" />
 
-        {/* Song wedges — bold and colorful */}
-        {sortedSlots.map((slot, i) => {
-          if (slot.type !== "song") return null;
-          const fill = CATEGORY_HEX[slot.category] || "#d1d5db";
-          const isSelected = externalSelectedIdx === i;
+        {/* All segments — songs and breaks in sequence */}
+        {segments.map((seg, i) => {
+          const arc = segmentArcs[i];
           const isHovered = hoveredIdx === i;
+          const isSelected = seg.kind === "song" && externalSelectedIdx === seg.sortedIdx;
           const somethingActive = hoveredIdx !== null || externalSelectedIdx != null;
           const dimmed = somethingActive && !isSelected && !isHovered;
-          return (
-            <path
-              key={i}
-              d={arcPath(slot.minute, slot.minute + slot.duration)}
-              fill={fill}
-              stroke={isSelected ? "#3b82f6" : "white"}
-              strokeWidth={isSelected ? 2.5 : 2}
-              opacity={dimmed ? 0.35 : 0.92}
-              onMouseEnter={() => setHoveredIdx(i)}
-              onMouseLeave={() => setHoveredIdx(null)}
-              onClick={() => onWedgeClick?.(i)}
-              className="transition-opacity duration-150 cursor-pointer"
-            />
-          );
-        })}
 
-        {/* Non-song slots — invisible but clickable for interaction */}
-        {sortedSlots.map((slot, i) => {
-          if (slot.type === "song") return null;
-          const isSelected = externalSelectedIdx === i;
-          const isHovered = hoveredIdx === i;
+          if (seg.kind === "song") {
+            const fill = CATEGORY_HEX[seg.slot.category] || "#d1d5db";
+            return (
+              <path
+                key={`seg-${i}`}
+                d={arcPath(arc.startAngle, arc.endAngle)}
+                fill={fill}
+                stroke={isSelected ? "#3b82f6" : "white"}
+                strokeWidth={isSelected ? 2.5 : 1.5}
+                opacity={dimmed ? 0.35 : 0.92}
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
+                onClick={() => onWedgeClick?.(seg.sortedIdx)}
+                className="transition-opacity duration-150 cursor-pointer"
+              />
+            );
+          }
+
+          // Break segment
+          const color = BREAK_COLORS[seg.block.breakType];
           return (
             <path
-              key={`ns-${i}`}
-              d={arcPath(slot.minute, slot.minute + slot.duration)}
-              fill={isHovered ? "#6b7280" : "transparent"}
-              stroke={isSelected ? "#3b82f6" : "none"}
-              strokeWidth={isSelected ? 2 : 0}
-              opacity={isHovered ? 0.4 : 0}
+              key={`seg-${i}`}
+              d={arcPath(arc.startAngle, arc.endAngle)}
+              fill={color}
+              stroke="white"
+              strokeWidth={1.5}
+              opacity={isHovered ? 0.5 : 0.3}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
-              onClick={() => onWedgeClick?.(i)}
               className="cursor-pointer"
             />
           );
         })}
 
-        {/* Break block wedges with numbers */}
-        {breaks?.map((brk) => {
-          const startMin = brk.startMinute;
-          const endMin = startMin + brk.totalDuration;
-          const color = BREAK_COLORS[brk.breakType];
-          const midMin = startMin + brk.totalDuration / 2;
-          const midAngle = minToAngle(midMin);
+        {/* Song labels */}
+        {segments.map((seg, i) => {
+          if (seg.kind !== "song") return null;
+          const arc = segmentArcs[i];
+          const sweep = arc.endAngle - arc.startAngle;
+          if (sweep < 15) return null; // too small for label
+          const midAngle = (arc.startAngle + arc.endAngle) / 2;
           const labelR = (outerR + innerR) / 2;
           const pos = polarToCart(midAngle, labelR);
-          return (
-            <g key={brk.id}>
-              <path
-                d={arcPath(startMin, endMin)}
-                fill={color}
-                opacity={0.25}
-                stroke={color}
-                strokeWidth={1}
-              />
-              <circle cx={pos.x} cy={pos.y} r={7} fill={color} opacity={0.85} />
-              <text
-                x={pos.x}
-                y={pos.y}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill="white"
-                fontSize={8}
-                fontWeight="bold"
-                pointerEvents="none"
-              >
-                {brk.num}
-              </text>
-            </g>
-          );
-        })}
-
-        {/* Song labels only */}
-        {sortedSlots.map((slot, i) => {
-          if (slot.type !== "song" || slot.duration < 2.5) return null;
-          const pos = labelPos(slot);
-          const label = slotLabel(slot);
-          const fontSize = slot.duration < 3.5 ? 9 : 11;
+          const fontSize = sweep < 22 ? 9 : 11;
           return (
             <text
               key={`lbl-${i}`}
@@ -1107,41 +1069,49 @@ function ClockFace({
               pointerEvents="none"
               style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
             >
-              {label}
+              {seg.slot.category}
             </text>
           );
         })}
 
-        {/* Tick marks */}
-        {ticks.map(({ min, major }) => {
-          const angle = minToAngle(min);
-          const tickOuter = polarToCart(angle, outerR + 2);
-          const tickInner = polarToCart(angle, outerR - (major ? 4 : 2));
-          const labelPt = polarToCart(angle, outerR + 10);
+        {/* Break number badges */}
+        {segments.map((seg, i) => {
+          if (seg.kind !== "break") return null;
+          const arc = segmentArcs[i];
+          const midAngle = (arc.startAngle + arc.endAngle) / 2;
+          const labelR = (outerR + innerR) / 2;
+          const pos = polarToCart(midAngle, labelR);
+          const color = BREAK_COLORS[seg.block.breakType];
           return (
-            <g key={`tick-${min}`}>
-              <line
-                x1={tickInner.x}
-                y1={tickInner.y}
-                x2={tickOuter.x}
-                y2={tickOuter.y}
-                stroke={major ? "#374151" : "#9ca3af"}
-                strokeWidth={major ? 1 : 0.5}
-              />
-              {major && (
-                <text
-                  x={labelPt.x}
-                  y={labelPt.y}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize={8}
-                  fill="#6b7280"
-                  fontWeight="600"
-                >
-                  :{String(min).padStart(2, "0")}
-                </text>
-              )}
+            <g key={`brk-${i}`}>
+              <circle cx={pos.x} cy={pos.y} r={7} fill={color} opacity={0.9} />
+              <text
+                x={pos.x}
+                y={pos.y}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="white"
+                fontSize={8}
+                fontWeight="bold"
+                pointerEvents="none"
+              >
+                {seg.block.num}
+              </text>
             </g>
+          );
+        })}
+
+        {/* Divider ticks between segments */}
+        {segmentArcs.map((arc, i) => {
+          if (i === 0) return null;
+          const pt1 = polarToCart(arc.startAngle, innerR);
+          const pt2 = polarToCart(arc.startAngle, outerR);
+          return (
+            <line
+              key={`div-${i}`}
+              x1={pt1.x} y1={pt1.y} x2={pt2.x} y2={pt2.y}
+              stroke="white" strokeWidth={1} opacity={0.6}
+            />
           );
         })}
 
@@ -1155,7 +1125,7 @@ function ClockFace({
           fontWeight="bold"
           fill="#374151"
         >
-          {sortedSlots.length}
+          {slots.length}
         </text>
         <text
           x={cx}
@@ -1170,19 +1140,28 @@ function ClockFace({
       </svg>
 
       {/* Hover tooltip */}
-      {hoveredSlot && (
+      {hoveredSeg && (
         <div className="text-sm text-center bg-gray-800 text-white rounded-lg px-4 py-2 -mt-1">
-          <span className="font-semibold">{hoveredSlot.type}</span>
-          {" "}({hoveredSlot.category}) at :{String(hoveredSlot.minute).padStart(2, "0")}
-          {" "}&mdash; {hoveredSlot.duration}min
-          {hoveredSlot.notes && <span className="opacity-75"> &middot; {hoveredSlot.notes}</span>}
+          {hoveredSeg.kind === "song" ? (
+            <>
+              <span className="font-semibold">{hoveredSeg.slot.type}</span>
+              {" "}({hoveredSeg.slot.category}) at :{String(hoveredSeg.slot.minute).padStart(2, "0")}
+              {" "}&mdash; {hoveredSeg.slot.duration}min
+              {hoveredSeg.slot.notes && <span className="opacity-75"> &middot; {hoveredSeg.slot.notes}</span>}
+            </>
+          ) : (
+            <>
+              <span className="font-semibold">#{hoveredSeg.block.num} {hoveredSeg.block.label}</span>
+              {" "}&mdash; {hoveredSeg.block.slots.length} slots, {Math.round(hoveredSeg.block.totalDuration * 10) / 10}min at :{String(hoveredSeg.block.startMinute).padStart(2, "0")}
+            </>
+          )}
         </div>
       )}
 
       {/* Legend */}
       <div className="flex flex-wrap justify-center gap-1.5">
         {Object.entries(CATEGORY_HEX).map(([cat, hex]) => {
-          const hasCategory = sortedSlots.some((s) => s.category === cat);
+          const hasCategory = slots.some((s) => s.category === cat && s.type === "song");
           if (!hasCategory) return null;
           return (
             <span
@@ -1194,6 +1173,11 @@ function ClockFace({
             </span>
           );
         })}
+        {breaks && breaks.length > 0 && (
+          <span className="text-xs px-2 py-0.5 rounded font-medium bg-gray-200 text-gray-600">
+            {breaks.length} breaks
+          </span>
+        )}
       </div>
     </div>
   );
