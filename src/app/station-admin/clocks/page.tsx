@@ -1268,7 +1268,24 @@ export default function RadioClocksPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {assignments.map((a) => (
+                  {[...assignments].sort((a, b) => {
+                    // DJ schedule order: Hank(6-9) → Loretta(9-12) → Doc(12-3) → Cody(3-6) → others
+                    const DJ_ORDER: Record<string, number> = {
+                      hank_westwood: 0,
+                      loretta_merrick: 1,
+                      doc_holloway: 2,
+                      cody_rampart: 3,
+                      automation: 4,
+                    };
+                    const oa = DJ_ORDER[a.dj_id] ?? 99;
+                    const ob = DJ_ORDER[b.dj_id] ?? 99;
+                    if (oa !== ob) return oa - ob;
+                    // Within same DJ, sort by day then time
+                    const da = a.day_of_week ?? -1;
+                    const db = b.day_of_week ?? -1;
+                    if (da !== db) return da - db;
+                    return (a.time_slot_start || "").localeCompare(b.time_slot_start || "");
+                  }).map((a) => (
                     <tr key={a.id} className={!a.is_active ? "opacity-50" : ""}>
                       <td className="px-4 py-3 font-medium">{a.dj_name}</td>
                       <td className="px-4 py-3">{a.clock_template_name}</td>
