@@ -18,8 +18,12 @@ export async function getSession() {
 
 /**
  * Require any authenticated user. Returns session or null.
+ * Bypasses auth when REQUIRE_AUTH is not set (demo mode).
  */
 export async function requireAuth() {
+  if (process.env.REQUIRE_AUTH !== "true") {
+    return { user: { id: "demo-admin", name: "Admin", role: "admin" } } as any;
+  }
   const session = await auth();
   if (!session?.user) return null;
   return session;

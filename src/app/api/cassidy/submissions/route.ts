@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { auth } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
 import { messageDelivery } from "@/lib/messaging/delivery-service";
 import { notifySubmissionReceived } from "@/lib/messaging/notifications";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
 import type { CreateSubmissionRequest, SubmissionListItem } from "@/types/cassidy";
 
 export const dynamic = "force-dynamic";
@@ -21,17 +22,8 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // Check role authorization
-    const userRole = session?.user?.role;
-    if (userRole !== "cassidy" && userRole !== "riley" && userRole !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const session = await requireRole("cassidy", "riley");
+    if (!session) return unauthorized();
 
     // Parse query parameters
     const searchParams = request.nextUrl.searchParams;
@@ -129,17 +121,8 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // Check role authorization (Riley can submit, Cassidy can manage)
-    const userRole = session.user.role;
-    if (!["riley", "cassidy", "admin"].includes(userRole || "")) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const session = await requireRole("cassidy", "riley");
+    if (!session) return unauthorized();
 
     // Parse request body
     const body: CreateSubmissionRequest = await request.json();

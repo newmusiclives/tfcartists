@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { auth } from "@/lib/auth/config";
 import { logger } from "@/lib/logger";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
 import type { ProgressionRequestListItem } from "@/types/cassidy";
 
 export const dynamic = "force-dynamic";
@@ -18,15 +19,8 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userRole = session.user.role;
-    if (userRole !== "cassidy" && userRole !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const session = await requireRole("cassidy");
+    if (!session) return unauthorized();
 
     const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get("status");
@@ -76,15 +70,8 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userRole = session.user.role;
-    if (!["riley", "cassidy", "admin"].includes(userRole || "")) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const session = await requireRole("cassidy", "riley");
+    if (!session) return unauthorized();
 
     const body = await request.json();
 
@@ -129,14 +116,8 @@ export async function POST(request: NextRequest) {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userRole = session.user.role;
-    if (userRole !== "cassidy" && userRole !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    const session = await requireRole("cassidy");
+    if (!session) return unauthorized();
     }
 
     const body = await request.json();
