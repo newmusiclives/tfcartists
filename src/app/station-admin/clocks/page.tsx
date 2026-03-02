@@ -9,6 +9,8 @@ import {
   Loader2,
   ChevronDown,
   ChevronUp,
+  ChevronRight,
+  Layers,
   Pencil,
   Trash2,
   Save,
@@ -84,6 +86,21 @@ interface DJShow {
   hours: DJShowHour[];
 }
 
+interface BreakBlock {
+  id: string;
+  breakType: BreakType;
+  label: string;
+  slots: ClockSlot[];
+  startMinute: number;
+  totalDuration: number;
+}
+
+type BreakType = "toh" | "sponsor" | "feature" | "quick" | "custom";
+
+type EditorRow =
+  | { kind: "song"; slot: ClockSlot; sortedIdx: number }
+  | { kind: "break"; block: BreakBlock; firstSortedIdx: number };
+
 // ============================================================================
 // Constants
 // ============================================================================
@@ -126,6 +143,49 @@ const SLOT_LABELS: Record<string, string> = {
 const SLOT_TYPES = ["toh", "voice_track", "song", "sponsor", "feature", "sweeper", "promo"];
 const SLOT_CATEGORIES = ["TOH", "A", "B", "C", "D", "E", "DJ", "Sponsor", "Feature", "Imaging"];
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+const BREAK_PRESETS: Record<Exclude<BreakType, "custom">, {
+  label: string;
+  slots: Omit<ClockSlot, "position" | "minute">[];
+}> = {
+  toh: {
+    label: "TOH Break",
+    slots: [
+      { type: "toh", category: "TOH", duration: 2, notes: "Top of hour ID" },
+      { type: "voice_track", category: "DJ", duration: 0.2, notes: "DJ intro" },
+    ],
+  },
+  sponsor: {
+    label: "Sponsor Break",
+    slots: [
+      { type: "sweeper", category: "Imaging", duration: 1, notes: "Station sweeper" },
+      { type: "sponsor", category: "Sponsor", duration: 1, notes: "Sponsor spot 1" },
+      { type: "sponsor", category: "Sponsor", duration: 1, notes: "Sponsor spot 2" },
+      { type: "promo", category: "Imaging", duration: 1, notes: "TFC promo" },
+    ],
+  },
+  feature: {
+    label: "Feature Break",
+    slots: [
+      { type: "sweeper", category: "Imaging", duration: 1, notes: "Station sweeper" },
+      { type: "feature", category: "Feature", duration: 0.5, notes: "Feature segment" },
+      { type: "sponsor", category: "Sponsor", duration: 1, notes: "Sponsor spot" },
+      { type: "promo", category: "Imaging", duration: 1, notes: "TFC promo" },
+    ],
+  },
+  quick: {
+    label: "Quick Break",
+    slots: [
+      { type: "sweeper", category: "Imaging", duration: 1, notes: "Station sweeper" },
+      { type: "promo", category: "Imaging", duration: 1, notes: "TFC promo" },
+    ],
+  },
+};
+
+const BREAK_COLORS: Record<BreakType, string> = {
+  toh: "#dc2626", sponsor: "#6b7280", feature: "#14b8a6",
+  quick: "#ec4899", custom: "#8b5cf6",
+};
 
 function formatClockType(t: string) {
   return (t || "").replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -213,6 +273,63 @@ function buildDJShows(
 }
 
 // ============================================================================
+// Break Detection
+// ============================================================================
+
+function matchBreakType(group: ClockSlot[]): BreakType {
+  const seq = group.map((s) => s.type).join(",");
+  for (const [key, preset] of Object.entries(BREAK_PRESETS)) {
+    const presetSeq = preset.slots.map((s) => s.type).join(",");
+    if (seq === presetSeq) return key as Exclude<BreakType, "custom">;
+  }
+  return "custom";
+}
+
+function detectBreaks(slots: ClockSlot[]): EditorRow[] {
+  const sorted = [...slots].sort((a, b) => a.minute - b.minute);
+  const rows: EditorRow[] = [];
+  let nonSongGroup: ClockSlot[] = [];
+  let groupStartIdx = 0;
+  let breakCounter = 0;
+
+  const finalizeGroup = () => {
+    if (nonSongGroup.length === 0) return;
+    const breakType = matchBreakType(nonSongGroup);
+    const presetLabel = breakType !== "custom"
+      ? BREAK_PRESETS[breakType].label
+      : "Custom Break";
+    rows.push({
+      kind: "break",
+      block: {
+        id: `break-${breakCounter}`,
+        breakType,
+        label: presetLabel,
+        slots: [...nonSongGroup],
+        startMinute: nonSongGroup[0].minute,
+        totalDuration: nonSongGroup.reduce((sum, s) => sum + s.duration, 0),
+      },
+      firstSortedIdx: groupStartIdx,
+    });
+    breakCounter++;
+    nonSongGroup = [];
+  };
+
+  for (let i = 0; i < sorted.length; i++) {
+    const slot = sorted[i];
+    if (slot.type === "song") {
+      finalizeGroup();
+      rows.push({ kind: "song", slot, sortedIdx: i });
+    } else {
+      if (nonSongGroup.length === 0) groupStartIdx = i;
+      nonSongGroup.push(slot);
+    }
+  }
+  finalizeGroup();
+
+  return rows;
+}
+
+// ============================================================================
 // Slot Editor Component
 // ============================================================================
 
@@ -235,7 +352,12 @@ function SlotEditor({
     notes: "",
   });
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const [expandedBreaks, setExpandedBreaks] = useState<Set<string>>(new Set());
+  const [showInsertBreak, setShowInsertBreak] = useState(false);
+  const [insertBreakMinute, setInsertBreakMinute] = useState(0);
   const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const editorRows = useMemo(() => detectBreaks(slots), [slots]);
 
   const handleWedgeClick = (idx: number) => {
     setSelectedIdx(idx);
@@ -282,6 +404,62 @@ function SlotEditor({
     setNewSlot({ type: "song", category: "C", minute: 0, duration: 4, notes: "" });
   };
 
+  const toggleBreak = (id: string) => {
+    setExpandedBreaks((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const removeBreak = (block: BreakBlock) => {
+    const breakSlotKeys = new Set(
+      block.slots.map((s) => `${s.type}:${s.minute}:${s.duration}:${s.notes}`)
+    );
+    setSlots((prev) => {
+      const toRemove = new Set<number>();
+      for (let i = 0; i < prev.length; i++) {
+        const key = `${prev[i].type}:${prev[i].minute}:${prev[i].duration}:${prev[i].notes}`;
+        if (breakSlotKeys.has(key) && !toRemove.has(i)) {
+          breakSlotKeys.delete(key);
+          toRemove.add(i);
+        }
+      }
+      return prev.filter((_, i) => !toRemove.has(i));
+    });
+    setSelectedIdx(null);
+  };
+
+  const insertBreak = (breakType: Exclude<BreakType, "custom">, atMinute: number) => {
+    const preset = BREAK_PRESETS[breakType];
+    let minute = atMinute;
+    const newSlots: ClockSlot[] = preset.slots.map((s, i) => {
+      const slot: ClockSlot = {
+        position: slots.length + i + 1,
+        minute,
+        duration: s.duration,
+        category: s.category,
+        type: s.type,
+        notes: s.notes,
+      };
+      minute += s.duration;
+      return slot;
+    });
+    setSlots((prev) => [...prev, ...newSlots]);
+    setShowInsertBreak(false);
+  };
+
+  const updateBreakSlot = (block: BreakBlock, slotIdx: number, field: keyof ClockSlot, value: string | number) => {
+    const target = block.slots[slotIdx];
+    setSlots((prev) =>
+      prev.map((s) =>
+        s.type === target.type && s.minute === target.minute && s.duration === target.duration && s.notes === target.notes
+          ? { ...s, [field]: value }
+          : s
+      )
+    );
+  };
+
   const handleSave = () => {
     const sorted = [...slots]
       .sort((a, b) => a.minute - b.minute)
@@ -312,18 +490,27 @@ function SlotEditor({
         <span className="bg-white border rounded px-2 py-0.5 font-semibold">
           Total: {slots.length} slots
         </span>
+        {(() => {
+          const breaks = editorRows.filter((r) => r.kind === "break");
+          if (breaks.length === 0) return null;
+          const labels = breaks.map((r) => r.kind === "break" ? r.block.label.replace(" Break", "") : "").join(", ");
+          return (
+            <span className="bg-purple-50 border border-purple-200 text-purple-700 rounded px-2 py-0.5">
+              {breaks.length} break{breaks.length !== 1 ? "s" : ""} ({labels})
+            </span>
+          );
+        })()}
       </div>
 
-      {/* Slot List */}
+      {/* Slot List with Break Blocks */}
       <div className="overflow-y-auto space-y-1">
-        {slots
-          .slice()
-          .sort((a, b) => a.minute - b.minute)
-          .map((slot, sortedIdx) => {
+        {editorRows.map((row) => {
+          if (row.kind === "song") {
+            const { slot, sortedIdx } = row;
             const realIdx = slots.indexOf(slot);
             return (
               <div
-                key={realIdx}
+                key={`song-${sortedIdx}`}
                 ref={(el) => { slotRefs.current[sortedIdx] = el; }}
                 onClick={() => setSelectedIdx(sortedIdx)}
                 className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-pointer transition-colors ${
@@ -404,7 +591,110 @@ function SlotEditor({
                 </button>
               </div>
             );
-          })}
+          }
+
+          // Break block row
+          const { block, firstSortedIdx } = row;
+          const isExpanded = expandedBreaks.has(block.id);
+          return (
+            <div key={block.id}>
+              {/* Break summary row */}
+              <div
+                ref={(el) => { slotRefs.current[firstSortedIdx] = el; }}
+                onClick={() => setSelectedIdx(firstSortedIdx)}
+                className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-pointer transition-colors ${
+                  selectedIdx === firstSortedIdx
+                    ? "bg-blue-50 border-blue-400 ring-2 ring-blue-300"
+                    : "bg-gray-50 hover:bg-gray-100"
+                }`}
+                style={{ borderLeftWidth: 3, borderLeftColor: BREAK_COLORS[block.breakType] }}
+              >
+                <span
+                  className="w-3 h-3 rounded-full shrink-0"
+                  style={{ backgroundColor: BREAK_COLORS[block.breakType] }}
+                />
+                <Layers className="w-4 h-4 text-gray-500 shrink-0" />
+                <span className="font-medium text-gray-800">{block.label}</span>
+                <span className="text-xs text-gray-500">
+                  {block.slots.length} slot{block.slots.length !== 1 ? "s" : ""}, {Math.round(block.totalDuration * 10) / 10}min at :{String(block.startMinute).padStart(2, "0")}
+                </span>
+                <span className="flex-1" />
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleBreak(block.id); }}
+                  className="text-gray-400 hover:text-gray-700 p-0.5"
+                  title={isExpanded ? "Collapse" : "Expand"}
+                >
+                  {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); removeBreak(block); }}
+                  className="text-red-400 hover:text-red-600 p-0.5"
+                  title="Delete entire break"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Expanded break slots */}
+              {isExpanded && (
+                <div className="ml-6 border-l-2 pl-2 space-y-1 my-1" style={{ borderColor: BREAK_COLORS[block.breakType] }}>
+                  {block.slots.map((bSlot, bIdx) => (
+                    <div
+                      key={`${block.id}-${bIdx}`}
+                      className="flex items-center gap-2 border rounded px-3 py-1.5 text-sm bg-white hover:bg-gray-50"
+                    >
+                      <span className={`w-3 h-3 rounded-sm ${slotColor(bSlot.category)}`} />
+                      <select
+                        value={bSlot.type}
+                        onChange={(e) => updateBreakSlot(block, bIdx, "type", e.target.value)}
+                        className="border rounded px-1.5 py-0.5 text-xs w-28"
+                      >
+                        {SLOT_TYPES.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={bSlot.category}
+                        onChange={(e) => updateBreakSlot(block, bIdx, "category", e.target.value)}
+                        className="border rounded px-1.5 py-0.5 text-xs w-20"
+                      >
+                        {SLOT_CATEGORIES.map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                      <label className="text-xs text-gray-500">min:</label>
+                      <input
+                        type="number"
+                        value={bSlot.minute}
+                        onChange={(e) => updateBreakSlot(block, bIdx, "minute", parseInt(e.target.value) || 0)}
+                        className="border rounded px-1.5 py-0.5 text-xs w-14 text-center"
+                        min={0}
+                        max={59}
+                      />
+                      <label className="text-xs text-gray-500">dur:</label>
+                      <input
+                        type="number"
+                        value={bSlot.duration}
+                        onChange={(e) => updateBreakSlot(block, bIdx, "duration", parseFloat(e.target.value) || 0)}
+                        className="border rounded px-1.5 py-0.5 text-xs w-14 text-center"
+                        min={0}
+                        max={10}
+                        step={0.1}
+                      />
+                      <input
+                        type="text"
+                        value={bSlot.notes}
+                        onChange={(e) => updateBreakSlot(block, bIdx, "notes", e.target.value)}
+                        className="border rounded px-1.5 py-0.5 text-xs flex-1"
+                        placeholder="notes"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Add Slot */}
@@ -463,6 +753,47 @@ function SlotEditor({
         >
           Add
         </button>
+      </div>
+
+      {/* Insert Break */}
+      <div>
+        <button
+          onClick={() => setShowInsertBreak(!showInsertBreak)}
+          className="flex items-center gap-2 text-sm font-medium text-purple-600 hover:text-purple-800"
+        >
+          <Layers className="w-4 h-4" />
+          Insert Break Block
+        </button>
+        {showInsertBreak && (
+          <div className="mt-2 bg-white border rounded-lg p-3 space-y-3">
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-gray-500">At minute:</label>
+              <input
+                type="number"
+                value={insertBreakMinute}
+                onChange={(e) => setInsertBreakMinute(parseInt(e.target.value) || 0)}
+                className="border rounded px-2 py-1 text-xs w-16 text-center"
+                min={0}
+                max={59}
+              />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {(Object.entries(BREAK_PRESETS) as [Exclude<BreakType, "custom">, typeof BREAK_PRESETS[keyof typeof BREAK_PRESETS]][]).map(([key, preset]) => {
+                const totalDur = preset.slots.reduce((s, sl) => s + sl.duration, 0);
+                return (
+                  <button
+                    key={key}
+                    onClick={() => insertBreak(key, insertBreakMinute)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium text-white hover:opacity-90 transition-opacity"
+                    style={{ backgroundColor: BREAK_COLORS[key] }}
+                  >
+                    {preset.label} ({totalDur}min)
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Actions */}
