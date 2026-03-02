@@ -95,7 +95,7 @@ interface BreakBlock {
   totalDuration: number;
 }
 
-type BreakType = "toh" | "sponsor" | "feature" | "quick" | "custom";
+type BreakType = "toh" | "dj" | "sponsor" | "feature" | "quick" | "custom";
 
 type EditorRow =
   | { kind: "song"; slot: ClockSlot; sortedIdx: number }
@@ -155,6 +155,12 @@ const BREAK_PRESETS: Record<Exclude<BreakType, "custom">, {
       { type: "voice_track", category: "DJ", duration: 0.2, notes: "DJ intro" },
     ],
   },
+  dj: {
+    label: "DJ Break",
+    slots: [
+      { type: "voice_track", category: "DJ", duration: 0.5, notes: "DJ voice track" },
+    ],
+  },
   sponsor: {
     label: "Sponsor Break",
     slots: [
@@ -183,7 +189,7 @@ const BREAK_PRESETS: Record<Exclude<BreakType, "custom">, {
 };
 
 const BREAK_COLORS: Record<BreakType, string> = {
-  toh: "#dc2626", sponsor: "#6b7280", feature: "#14b8a6",
+  toh: "#dc2626", dj: "#f59e0b", sponsor: "#6b7280", feature: "#14b8a6",
   quick: "#ec4899", custom: "#8b5cf6",
 };
 
@@ -277,13 +283,19 @@ function buildDJShows(
 // ============================================================================
 
 function matchBreakType(group: ClockSlot[]): BreakType {
-  const seq = group.map((s) => s.type).join(",");
-  for (const [key, preset] of Object.entries(BREAK_PRESETS)) {
-    const presetSeq = preset.slots.map((s) => s.type).join(",");
-    if (seq === presetSeq) return key as Exclude<BreakType, "custom">;
-  }
+  const types = new Set(group.map((s) => s.type));
+  if (types.has("toh")) return "toh";
+  if (types.has("feature")) return "feature";
+  if (types.has("sponsor")) return "sponsor";
+  if (types.has("voice_track")) return "dj";
+  if (types.has("sweeper") || types.has("promo")) return "quick";
   return "custom";
 }
+
+const BREAK_TYPE_LABELS: Record<BreakType, string> = {
+  toh: "TOH Break", dj: "DJ Break", sponsor: "Sponsor Break",
+  feature: "Feature Break", quick: "Quick Break", custom: "Custom Break",
+};
 
 function detectBreaks(slots: ClockSlot[]): EditorRow[] {
   const sorted = [...slots].sort((a, b) => a.minute - b.minute);
@@ -292,39 +304,70 @@ function detectBreaks(slots: ClockSlot[]): EditorRow[] {
   let groupStartIdx = 0;
   let breakCounter = 0;
 
+  // Collect all break blocks first, then assign positional labels
+  const pendingBreaks: { group: ClockSlot[]; startIdx: number }[] = [];
+
   const finalizeGroup = () => {
     if (nonSongGroup.length === 0) return;
-    const breakType = matchBreakType(nonSongGroup);
-    const presetLabel = breakType !== "custom"
-      ? BREAK_PRESETS[breakType].label
-      : "Custom Break";
-    rows.push({
-      kind: "break",
-      block: {
-        id: `break-${breakCounter}`,
-        breakType,
-        label: presetLabel,
-        slots: [...nonSongGroup],
-        startMinute: nonSongGroup[0].minute,
-        totalDuration: nonSongGroup.reduce((sum, s) => sum + s.duration, 0),
-      },
-      firstSortedIdx: groupStartIdx,
-    });
-    breakCounter++;
+    pendingBreaks.push({ group: [...nonSongGroup], startIdx: groupStartIdx });
     nonSongGroup = [];
   };
+
+  // Build rows with placeholder breaks
+  const rowInserts: { position: number; breakIdx: number }[] = [];
 
   for (let i = 0; i < sorted.length; i++) {
     const slot = sorted[i];
     if (slot.type === "song") {
-      finalizeGroup();
+      if (nonSongGroup.length > 0) {
+        rowInserts.push({ position: rows.length, breakIdx: pendingBreaks.length });
+        finalizeGroup();
+        rows.push(null as unknown as EditorRow); // placeholder
+      }
       rows.push({ kind: "song", slot, sortedIdx: i });
     } else {
       if (nonSongGroup.length === 0) groupStartIdx = i;
       nonSongGroup.push(slot);
     }
   }
-  finalizeGroup();
+  if (nonSongGroup.length > 0) {
+    rowInserts.push({ position: rows.length, breakIdx: pendingBreaks.length });
+    finalizeGroup();
+    rows.push(null as unknown as EditorRow); // placeholder
+  }
+
+  // Now assign labels with positional context
+  for (let bi = 0; bi < pendingBreaks.length; bi++) {
+    const { group, startIdx } = pendingBreaks[bi];
+    const breakType = matchBreakType(group);
+    const startMinute = group[0].minute;
+
+    let label: string;
+    if (bi === 0 && startMinute <= 2) {
+      label = "Show Opening";
+    } else if (bi === pendingBreaks.length - 1 && startMinute >= 48) {
+      label = "Show Closing";
+    } else {
+      label = BREAK_TYPE_LABELS[breakType];
+    }
+
+    const insert = rowInserts.find((r) => r.breakIdx === bi);
+    if (insert) {
+      rows[insert.position] = {
+        kind: "break",
+        block: {
+          id: `break-${breakCounter}`,
+          breakType,
+          label,
+          slots: group,
+          startMinute,
+          totalDuration: group.reduce((sum, s) => sum + s.duration, 0),
+        },
+        firstSortedIdx: startIdx,
+      };
+    }
+    breakCounter++;
+  }
 
   return rows;
 }
