@@ -212,6 +212,7 @@ const CLOCK_RULES = {
   minEstablishedPct: 20,    // at least 20% of songs must be A, B, C, or D
   establishedCategories: new Set(["A", "B", "C", "D"]),
   replaceableByE: new Set(["B", "C", "D"]),  // E can replace these once E has songs
+  dFallbackOrder: ["B", "C", "D"],  // when D is empty, fill from B→C→D least-played
 };
 
 function validateClockRules(slots: ClockSlot[]): RuleViolation[] {
@@ -271,7 +272,17 @@ function validateClockRules(slots: ClockSlot[]): RuleViolation[] {
     }
   }
 
-  // Rule 5: Least-played selection — all categories use least-played-first to reduce repetition
+  // Rule 5: D-category fallback — when no D songs exist, fill from B, C, D in sequence
+  const dSlots = songs.filter((s) => s.category === "D");
+  if (dSlots.length > 0) {
+    violations.push({
+      severity: "info",
+      rule: "D fallback",
+      message: `${dSlots.length} D-category slot${dSlots.length !== 1 ? "s" : ""} — if no D songs available, scheduler fills from least-played B, then C, then D in rotation`,
+    });
+  }
+
+  // Rule 6: Least-played selection — all categories use least-played-first to reduce repetition
   const categoriesUsed = [...new Set(songs.map((s) => s.category))].sort().join(", ");
   violations.push({
     severity: "info",
