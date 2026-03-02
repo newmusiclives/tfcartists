@@ -201,7 +201,7 @@ const BREAK_COLORS: Record<BreakType, string> = {
 // ============================================================================
 
 interface RuleViolation {
-  severity: "error" | "warning";
+  severity: "error" | "warning" | "info";
   rule: string;
   message: string;
   slotIndices?: number[];   // indices into sorted slots for highlighting
@@ -270,6 +270,14 @@ function validateClockRules(slots: ClockSlot[]): RuleViolation[] {
       });
     }
   }
+
+  // Rule 5: Least-played selection — all categories use least-played-first to reduce repetition
+  const categoriesUsed = [...new Set(songs.map((s) => s.category))].sort().join(", ");
+  violations.push({
+    severity: "info",
+    rule: "Deep selection",
+    message: `All categories (${categoriesUsed}) use least-played-first selection — songs with fewest recent plays are scheduled first to maximize rotation depth and reduce repetition`,
+  });
 
   return violations;
 }
@@ -613,6 +621,7 @@ function SlotEditor({
   }, [ruleViolations]);
   const errors = ruleViolations.filter((v) => v.severity === "error");
   const warnings = ruleViolations.filter((v) => v.severity === "warning");
+  const infos = ruleViolations.filter((v) => v.severity === "info");
 
   return (
     <div className="border-t bg-gray-50 p-5 space-y-5">
@@ -655,6 +664,12 @@ function SlotEditor({
           {warnings.map((v, i) => (
             <div key={`warn-${i}`} className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded px-3 py-1.5 text-xs text-amber-700">
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+              <span><strong>{v.rule}:</strong> {v.message}</span>
+            </div>
+          ))}
+          {infos.map((v, i) => (
+            <div key={`info-${i}`} className="flex items-start gap-2 bg-blue-50 border border-blue-200 rounded px-3 py-1.5 text-xs text-blue-700">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-blue-400" />
               <span><strong>{v.rule}:</strong> {v.message}</span>
             </div>
           ))}
