@@ -118,7 +118,6 @@ export async function PATCH(request: NextRequest) {
   try {
     const session = await requireRole("cassidy");
     if (!session) return unauthorized();
-    }
 
     const body = await request.json();
 
