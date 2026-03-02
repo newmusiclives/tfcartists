@@ -619,12 +619,10 @@ function ClockFace({
         <circle cx={cx} cy={cy} r={outerR} fill="#e5e7eb" />
         <circle cx={cx} cy={cy} r={innerR} fill="white" />
 
-        {/* All slots as wedges — songs are bold, non-songs are muted */}
+        {/* Song wedges — bold and colorful */}
         {sortedSlots.map((slot, i) => {
-          const isSong = slot.type === "song";
-          const fill = isSong
-            ? (CATEGORY_HEX[slot.category] || "#d1d5db")
-            : "#9ca3af";
+          if (slot.type !== "song") return null;
+          const fill = CATEGORY_HEX[slot.category] || "#d1d5db";
           const isSelected = externalSelectedIdx === i;
           const isHovered = hoveredIdx === i;
           const somethingActive = hoveredIdx !== null || externalSelectedIdx != null;
@@ -635,12 +633,33 @@ function ClockFace({
               d={arcPath(slot.minute, slot.minute + slot.duration)}
               fill={fill}
               stroke={isSelected ? "#3b82f6" : "white"}
-              strokeWidth={isSelected ? 2 : 1.5}
-              opacity={dimmed ? 0.3 : isSong ? 0.9 : 0.5}
+              strokeWidth={isSelected ? 2.5 : 2}
+              opacity={dimmed ? 0.35 : 0.92}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
               onClick={() => onWedgeClick?.(i)}
               className="transition-opacity duration-150 cursor-pointer"
+            />
+          );
+        })}
+
+        {/* Non-song slots — invisible but clickable for interaction */}
+        {sortedSlots.map((slot, i) => {
+          if (slot.type === "song") return null;
+          const isSelected = externalSelectedIdx === i;
+          const isHovered = hoveredIdx === i;
+          return (
+            <path
+              key={`ns-${i}`}
+              d={arcPath(slot.minute, slot.minute + slot.duration)}
+              fill={isHovered ? "#6b7280" : "transparent"}
+              stroke={isSelected ? "#3b82f6" : "none"}
+              strokeWidth={isSelected ? 2 : 0}
+              opacity={isHovered ? 0.4 : 0}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              onClick={() => onWedgeClick?.(i)}
+              className="cursor-pointer"
             />
           );
         })}
