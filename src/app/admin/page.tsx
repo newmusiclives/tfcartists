@@ -62,96 +62,141 @@ interface Artist {
   };
 }
 
-// Aggregated mock data matching individual team dashboards
-const systemFinancials = {
-  sponsorRevenue: 22250,
-  artistSubscriptions: 3900,
-  get totalRevenue() { return this.sponsorRevenue + this.artistSubscriptions; },
-  artistPoolPayout: 17800,  // 80% of sponsor revenue
-  stationRetained: 8350,    // 20% sponsor + 100% artist subs
-  liveShowDonations: 45000,
-  annualProjection: (22250 + 3900) * 12,
-};
+interface TeamSummary {
+  name: string;
+  role: string;
+  color: string;
+  href: string;
+  icon: any;
+  stats: { label: string; value: string }[];
+}
 
-const teamSummaries = {
-  riley: {
-    name: "Riley's Team",
-    role: "Artist Acquisition",
-    color: "purple",
-    href: "/riley",
-    icon: Users,
-    stats: [
-      { label: "Total Artists", value: "340" },
-      { label: "Monthly Revenue", value: "$3,900" },
-      { label: "Pending Submissions", value: "12" },
-      { label: "Pool Shares", value: "6,430" },
-    ],
-  },
-  cassidy: {
-    name: "Cassidy's Team",
-    role: "Submission Review",
-    color: "teal",
-    href: "/cassidy",
-    icon: Award,
-    stats: [
-      { label: "In Rotation", value: "200" },
-      { label: "Placement Rate", value: "95%" },
-      { label: "Avg Review Time", value: "5 days" },
-      { label: "80/20 Progress", value: "45%" },
-    ],
-  },
-  harper: {
-    name: "Harper's Team",
-    role: "Sponsor Acquisition",
-    color: "green",
-    href: "/harper",
-    icon: Building2,
-    stats: [
-      { label: "Active Sponsors", value: "125" },
-      { label: "Monthly Revenue", value: "$22,250" },
-      { label: "Scheduled Calls", value: "22" },
-      { label: "In Negotiation", value: "15" },
-    ],
-  },
-  elliot: {
-    name: "Elliot's Team",
-    role: "Listener Growth",
-    color: "blue",
-    href: "/elliot",
-    icon: Target,
-    stats: [
-      { label: "Daily Active", value: "1,250" },
-      { label: "Avg Session", value: "28 min" },
-      { label: "Returning", value: "52%" },
-      { label: "Viral Views", value: "485k" },
-    ],
-  },
-  parker: {
-    name: "Parker's Team",
-    role: "Station Management",
-    color: "rose",
-    href: "/parker",
-    icon: Radio,
-    stats: [
-      { label: "Songs", value: "---" },
-      { label: "Active DJs", value: "---" },
-      { label: "Clock Templates", value: "---" },
-      { label: "Active Ads", value: "---" },
-    ],
-  },
-};
+interface Financials {
+  sponsorRevenue: number;
+  artistSubscriptions: number;
+  totalRevenue: number;
+  artistPoolPayout: number;
+  stationRetained: number;
+  liveShowDonations: number;
+  annualProjection: number;
+}
+
+function fmt(n: number): string {
+  return n.toLocaleString();
+}
+
+function buildTeamSummaries(
+  rileyData: any,
+  cassidyData: any,
+  harperData: any,
+  elliotData: any,
+  mgmtData: any
+): Record<string, TeamSummary> {
+  const kpis = mgmtData?.kpis || {};
+  return {
+    riley: {
+      name: "Riley's Team",
+      role: "Artist Acquisition",
+      color: "purple",
+      href: "/riley",
+      icon: Users,
+      stats: [
+        { label: "Total Artists", value: rileyData?.totalArtists?.toLocaleString() ?? "\u2014" },
+        { label: "Monthly Revenue", value: rileyData?.monthlyRevenue != null ? formatCurrency(rileyData.monthlyRevenue) : "\u2014" },
+        { label: "Pending Submissions", value: rileyData?.pendingSubmissions?.toString() ?? "\u2014" },
+        { label: "Pool Shares", value: rileyData?.totalShares?.toLocaleString() ?? "\u2014" },
+      ],
+    },
+    cassidy: {
+      name: "Cassidy's Team",
+      role: "Submission Review",
+      color: "teal",
+      href: "/cassidy",
+      icon: Award,
+      stats: [
+        { label: "In Rotation", value: cassidyData?.totalArtistsInRotation?.toString() ?? "\u2014" },
+        { label: "Placement Rate", value: cassidyData?.placementRate != null ? `${cassidyData.placementRate}%` : "\u2014" },
+        { label: "Avg Review Time", value: cassidyData?.avgReviewTime != null ? `${cassidyData.avgReviewTime} days` : "\u2014" },
+        { label: "80/20 Progress", value: cassidyData?.rotationTransformation?.indie != null ? `${cassidyData.rotationTransformation.indie}%` : "\u2014" },
+      ],
+    },
+    harper: {
+      name: "Harper's Team",
+      role: "Sponsor Acquisition",
+      color: "green",
+      href: "/harper",
+      icon: Building2,
+      stats: [
+        { label: "Active Sponsors", value: harperData?.activeSponsorships?.toString() ?? "\u2014" },
+        { label: "Monthly Revenue", value: harperData?.totalMonthlyRevenue != null ? formatCurrency(harperData.totalMonthlyRevenue) : "\u2014" },
+        { label: "Calls This Month", value: harperData?.callsThisMonth?.toString() ?? "\u2014" },
+        { label: "In Negotiation", value: harperData?.byStatus?.NEGOTIATING?.toString() ?? "\u2014" },
+      ],
+    },
+    elliot: {
+      name: "Elliot's Team",
+      role: "Listener Growth",
+      color: "blue",
+      href: "/elliot",
+      icon: Target,
+      stats: [
+        { label: "Total Listeners", value: elliotData?.totalListeners?.toLocaleString() ?? "\u2014" },
+        { label: "Avg Session", value: elliotData?.behavior?.avgSessionLength != null ? `${Math.round(elliotData.behavior.avgSessionLength)} min` : "\u2014" },
+        { label: "Returning", value: elliotData?.growth?.returningListenerPercent != null ? `${elliotData.growth.returningListenerPercent}%` : "\u2014" },
+        { label: "Total Views", value: elliotData?.content?.totalViews?.toLocaleString() ?? "\u2014" },
+      ],
+    },
+    parker: {
+      name: "Parker's Team",
+      role: "Station Management",
+      color: "rose",
+      href: "/parker",
+      icon: Radio,
+      stats: [
+        { label: "Songs", value: kpis.songCount?.toLocaleString() ?? "\u2014" },
+        { label: "Active DJs", value: kpis.djCount?.toString() ?? "\u2014" },
+        { label: "Clock Templates", value: kpis.clockCount?.toString() ?? "\u2014" },
+        { label: "Total Revenue", value: kpis.totalRevenue != null ? formatCurrency(kpis.totalRevenue) : "\u2014" },
+      ],
+    },
+  };
+}
+
+function buildFinancials(harperData: any, rileyData: any, mgmtData: any): Financials {
+  const sponsorRevenue = harperData?.totalMonthlyRevenue ?? mgmtData?.kpis?.sponsorRevenue ?? 0;
+  const artistSubscriptions = rileyData?.monthlyRevenue ?? mgmtData?.kpis?.artistSubscriptionRevenue ?? 0;
+  const totalRevenue = sponsorRevenue + artistSubscriptions;
+  const artistPoolPayout = Math.round(sponsorRevenue * 0.8);
+  const stationRetained = totalRevenue - artistPoolPayout;
+  return {
+    sponsorRevenue,
+    artistSubscriptions,
+    totalRevenue,
+    artistPoolPayout,
+    stationRetained,
+    liveShowDonations: 0,
+    annualProjection: totalRevenue * 12,
+  };
+}
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [artists, setArtists] = useState<Artist[]>([]);
   const [loading, setLoading] = useState(true);
+  const [teamSummaries, setTeamSummaries] = useState<Record<string, TeamSummary> | null>(null);
+  const [systemFinancials, setSystemFinancials] = useState<Financials | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [statsRes, artistsRes] = await Promise.all([
+        const [statsRes, artistsRes, rileyRes, cassidyRes, harperRes, elliotRes, mgmtRes] = await Promise.all([
           fetch("/api/stats"),
           fetch("/api/artists?limit=10"),
+          fetch("/api/riley/stats").catch(() => null),
+          fetch("/api/cassidy/stats").catch(() => null),
+          fetch("/api/harper/stats").catch(() => null),
+          fetch("/api/elliot/stats").catch(() => null),
+          fetch("/api/management/stats").catch(() => null),
         ]);
 
         if (statsRes.ok) {
@@ -163,6 +208,15 @@ export default function AdminDashboard() {
           const artistsData = await artistsRes.json();
           if (Array.isArray(artistsData.artists)) setArtists(artistsData.artists);
         }
+
+        const rileyData = rileyRes?.ok ? await rileyRes.json().catch(() => null) : null;
+        const cassidyData = cassidyRes?.ok ? await cassidyRes.json().catch(() => null) : null;
+        const harperData = harperRes?.ok ? await harperRes.json().catch(() => null) : null;
+        const elliotData = elliotRes?.ok ? await elliotRes.json().catch(() => null) : null;
+        const mgmtData = mgmtRes?.ok ? await mgmtRes.json().catch(() => null) : null;
+
+        setTeamSummaries(buildTeamSummaries(rileyData, cassidyData, harperData, elliotData, mgmtData));
+        setSystemFinancials(buildFinancials(harperData, rileyData, mgmtData));
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
@@ -231,9 +285,9 @@ export default function AdminDashboard() {
               <span className="text-purple-100 text-sm font-medium">Total Monthly Revenue</span>
               <TrendingUp className="w-5 h-5 text-purple-200" />
             </div>
-            <div className="text-3xl font-bold">${systemFinancials.totalRevenue.toLocaleString()}</div>
+            <div className="text-3xl font-bold">${systemFinancials ? fmt(systemFinancials.totalRevenue) : "\u2014"}</div>
             <div className="text-sm text-purple-200 mt-1">
-              Annual: ${systemFinancials.annualProjection.toLocaleString()}
+              Annual: ${systemFinancials ? fmt(systemFinancials.annualProjection) : "\u2014"}
             </div>
           </div>
 
@@ -242,7 +296,7 @@ export default function AdminDashboard() {
               <span className="text-green-100 text-sm font-medium">Artist Pool Payout</span>
               <Users className="w-5 h-5 text-green-200" />
             </div>
-            <div className="text-3xl font-bold">${systemFinancials.artistPoolPayout.toLocaleString()}</div>
+            <div className="text-3xl font-bold">${systemFinancials ? fmt(systemFinancials.artistPoolPayout) : "\u2014"}</div>
             <div className="text-sm text-green-200 mt-1">
               80% of sponsor revenue distributed monthly
             </div>
@@ -253,7 +307,7 @@ export default function AdminDashboard() {
               <span className="text-blue-100 text-sm font-medium">Station Retained</span>
               <DollarSign className="w-5 h-5 text-blue-200" />
             </div>
-            <div className="text-3xl font-bold">${systemFinancials.stationRetained.toLocaleString()}</div>
+            <div className="text-3xl font-bold">${systemFinancials ? fmt(systemFinancials.stationRetained) : "\u2014"}</div>
             <div className="text-sm text-blue-200 mt-1">
               20% sponsors + artist subscriptions
             </div>
@@ -264,7 +318,7 @@ export default function AdminDashboard() {
               <span className="text-orange-100 text-sm font-medium">Live Show Donations</span>
               <Calendar className="w-5 h-5 text-orange-200" />
             </div>
-            <div className="text-3xl font-bold">${systemFinancials.liveShowDonations.toLocaleString()}</div>
+            <div className="text-3xl font-bold">${systemFinancials ? fmt(systemFinancials.liveShowDonations) : "\u2014"}</div>
             <div className="text-sm text-orange-200 mt-1">
               Direct to artists via TrueFans CONNECT
             </div>
@@ -275,7 +329,7 @@ export default function AdminDashboard() {
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-4">Team Dashboards</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {Object.entries(teamSummaries).map(([key, team]) => {
+            {teamSummaries && Object.entries(teamSummaries).map(([key, team]) => {
               const colorMap: Record<string, { border: string; iconBg: string; iconText: string; badge: string; hover: string }> = {
                 purple: { border: "border-purple-200", iconBg: "bg-purple-100", iconText: "text-purple-600", badge: "bg-purple-600", hover: "hover:border-purple-400" },
                 teal: { border: "border-teal-200", iconBg: "bg-teal-100", iconText: "text-teal-600", badge: "bg-teal-600", hover: "hover:border-teal-400" },
@@ -337,16 +391,16 @@ export default function AdminDashboard() {
                 <span className="text-sm font-semibold text-blue-700">Sponsor Revenue</span>
               </div>
               <div className="text-2xl font-bold text-blue-900 mb-2">
-                ${systemFinancials.sponsorRevenue.toLocaleString()}/mo
+                ${systemFinancials ? fmt(systemFinancials.sponsorRevenue) : "\u2014"}/mo
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-blue-600">80% to Artist Pool</span>
-                  <span className="font-semibold text-blue-900">${systemFinancials.artistPoolPayout.toLocaleString()}</span>
+                  <span className="font-semibold text-blue-900">${systemFinancials ? fmt(systemFinancials.artistPoolPayout) : "\u2014"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-blue-600">20% to Station</span>
-                  <span className="font-semibold text-blue-900">${(systemFinancials.sponsorRevenue * 0.2).toLocaleString()}</span>
+                  <span className="font-semibold text-blue-900">${systemFinancials ? fmt(Math.round(systemFinancials.sponsorRevenue * 0.2)) : "\u2014"}</span>
                 </div>
               </div>
             </div>
@@ -358,16 +412,16 @@ export default function AdminDashboard() {
                 <span className="text-sm font-semibold text-purple-700">Artist Subscriptions</span>
               </div>
               <div className="text-2xl font-bold text-purple-900 mb-2">
-                ${systemFinancials.artistSubscriptions.toLocaleString()}/mo
+                ${systemFinancials ? fmt(systemFinancials.artistSubscriptions) : "\u2014"}/mo
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-purple-600">100% to Station</span>
-                  <span className="font-semibold text-purple-900">${systemFinancials.artistSubscriptions.toLocaleString()}</span>
+                  <span className="font-semibold text-purple-900">${systemFinancials ? fmt(systemFinancials.artistSubscriptions) : "\u2014"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-purple-600">Airplay tier fees</span>
-                  <span className="font-semibold text-purple-900">340 artists</span>
+                  <span className="font-semibold text-purple-900">{stats?.artists.total || 0} artists</span>
                 </div>
               </div>
             </div>
@@ -379,16 +433,16 @@ export default function AdminDashboard() {
                 <span className="text-sm font-semibold text-green-700">Net Station Revenue</span>
               </div>
               <div className="text-2xl font-bold text-green-900 mb-2">
-                ${systemFinancials.stationRetained.toLocaleString()}/mo
+                ${systemFinancials ? fmt(systemFinancials.stationRetained) : "\u2014"}/mo
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-green-600">Annual Projection</span>
-                  <span className="font-semibold text-green-900">${(systemFinancials.stationRetained * 12).toLocaleString()}</span>
+                  <span className="font-semibold text-green-900">${systemFinancials ? fmt(systemFinancials.stationRetained * 12) : "\u2014"}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-green-600">Est. Profit (after $5k expenses)</span>
-                  <span className="font-semibold text-green-900">${(systemFinancials.stationRetained - 5000).toLocaleString()}</span>
+                  <span className="font-semibold text-green-900">${systemFinancials ? fmt(systemFinancials.stationRetained - 5000) : "\u2014"}</span>
                 </div>
               </div>
             </div>

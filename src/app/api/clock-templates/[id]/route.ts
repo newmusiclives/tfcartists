@@ -1,20 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { railwayFetch } from "@/lib/api/railway";
-import { auth } from "@/lib/auth/config";
+import { requireAdmin } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
 
-async function requireAdmin() {
-  const session = await auth();
-  if (!session?.user) return false;
-  return ["admin", "parker"].includes(session.user.role || "");
-}
-
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    if (!(await requireAdmin())) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const session = await requireAdmin();
+    if (!session) return unauthorized();
     const { id } = await params;
     const res = await railwayFetch("/api/clocks/templates");
     if (!res.ok) {
@@ -32,9 +26,8 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    if (!(await requireAdmin())) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const session = await requireAdmin();
+    if (!session) return unauthorized();
     const { id } = await params;
     const body = await request.json();
     const res = await railwayFetch(`/api/clocks/templates/${id}`, {
@@ -50,9 +43,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    if (!(await requireAdmin())) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const session = await requireAdmin();
+    if (!session) return unauthorized();
     const { id } = await params;
     const body = await request.json();
     const res = await railwayFetch(`/api/clocks/templates/${id}`, {
@@ -68,9 +60,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
 export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    if (!(await requireAdmin())) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const session = await requireAdmin();
+    if (!session) return unauthorized();
     const { id } = await params;
     const res = await railwayFetch(`/api/clocks/templates/${id}`, {
       method: "DELETE",

@@ -41,5 +41,8 @@ prisma/*.db-journal
 # Local Netlify folder
 .netlify
 
+# Prebuild slim (large assets moved during Netlify build)
+.tmp-large-assets/
+
 # Deno
 deno.lock
