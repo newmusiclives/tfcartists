@@ -554,7 +554,8 @@ function ClockFace({
   const cx = 110;
   const cy = 110;
   const outerR = 95;
-  const innerR = 35;
+  const midR = 65; // ring divider: songs outer, non-songs inner
+  const innerR = 42;
 
   // Convert minute to angle (0 min = 12 o'clock = -90deg in SVG coords)
   const minToAngle = (min: number) => (min / 60) * 360 - 90;
@@ -565,24 +566,24 @@ function ClockFace({
     return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   };
 
-  // Build annular sector path
-  const arcPath = (startMin: number, endMin: number) => {
+  // Build annular sector path with configurable radii
+  const arcPath = (startMin: number, endMin: number, rOuter = outerR, rInner = innerR) => {
     const visualEnd = Math.max(endMin, startMin + 1); // minimum visual width
     const a1 = minToAngle(startMin);
     const a2 = minToAngle(visualEnd);
     const sweep = a2 - a1;
     const largeArc = sweep > 180 ? 1 : 0;
 
-    const oStart = polarToCart(a1, outerR);
-    const oEnd = polarToCart(a2, outerR);
-    const iStart = polarToCart(a1, innerR);
-    const iEnd = polarToCart(a2, innerR);
+    const oStart = polarToCart(a1, rOuter);
+    const oEnd = polarToCart(a2, rOuter);
+    const iStart = polarToCart(a1, rInner);
+    const iEnd = polarToCart(a2, rInner);
 
     return [
       `M ${oStart.x} ${oStart.y}`,
-      `A ${outerR} ${outerR} 0 ${largeArc} 1 ${oEnd.x} ${oEnd.y}`,
+      `A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${oEnd.x} ${oEnd.y}`,
       `L ${iEnd.x} ${iEnd.y}`,
-      `A ${innerR} ${innerR} 0 ${largeArc} 0 ${iStart.x} ${iStart.y}`,
+      `A ${rInner} ${rInner} 0 ${largeArc} 0 ${iStart.x} ${iStart.y}`,
       "Z",
     ].join(" ");
   };
@@ -593,12 +594,13 @@ function ClockFace({
     return SLOT_LABELS[slot.type] || slot.type.charAt(0).toUpperCase();
   };
 
-  // Label position (midpoint of arc, midpoint of radii)
+  // Label position (midpoint of arc, in the correct ring)
   const labelPos = (slot: ClockSlot) => {
     const midMin = slot.minute + slot.duration / 2;
     const midAngle = minToAngle(midMin);
-    const midR = (outerR + innerR) / 2;
-    return polarToCart(midAngle, midR);
+    const isSong = slot.type === "song";
+    const labelR = isSong ? (outerR + midR) / 2 : (midR + innerR) / 2;
+    return polarToCart(midAngle, labelR);
   };
 
   // Tick marks
@@ -615,24 +617,28 @@ function ClockFace({
   return (
     <div className="flex flex-col items-center gap-3" style={{ maxWidth: size }}>
       <svg viewBox="0 0 220 220" className="w-full" style={{ maxWidth: size }}>
-        {/* Background circle */}
-        <circle cx={cx} cy={cy} r={outerR} fill="#f3f4f6" />
+        {/* Background rings */}
+        <circle cx={cx} cy={cy} r={outerR} fill="#e5e7eb" />
+        <circle cx={cx} cy={cy} r={midR} fill="#f3f4f6" />
         <circle cx={cx} cy={cy} r={innerR} fill="white" />
 
-        {/* Slot wedges */}
+        {/* Slot wedges — songs in outer ring, non-songs in inner ring */}
         {sortedSlots.map((slot, i) => {
           const fill = CATEGORY_HEX[slot.category] || "#d1d5db";
           const isSelected = externalSelectedIdx === i;
           const isHovered = hoveredIdx === i;
           const somethingActive = hoveredIdx !== null || externalSelectedIdx != null;
           const dimmed = somethingActive && !isSelected && !isHovered;
+          const isSong = slot.type === "song";
+          const rOuter = isSong ? outerR : midR;
+          const rInner = isSong ? midR : innerR;
           return (
             <path
               key={i}
-              d={arcPath(slot.minute, slot.minute + slot.duration)}
+              d={arcPath(slot.minute, slot.minute + slot.duration, rOuter, rInner)}
               fill={fill}
-              stroke={isSelected ? "#fff" : "#f9fafb"}
-              strokeWidth={isSelected ? 2.5 : 1.5}
+              stroke={isSelected ? "#fff" : "white"}
+              strokeWidth={isSelected ? 2.5 : 1}
               opacity={dimmed ? 0.3 : 0.9}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
@@ -641,6 +647,9 @@ function ClockFace({
             />
           );
         })}
+
+        {/* Ring divider */}
+        <circle cx={cx} cy={cy} r={midR} fill="none" stroke="white" strokeWidth={1.5} />
 
         {/* Labels inside wedges — only for slots >= 3 min */}
         {sortedSlots.map((slot, i) => {
