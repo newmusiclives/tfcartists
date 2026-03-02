@@ -308,35 +308,41 @@ function buildDJShows(
   const shows: DJShow[] = [];
 
   for (const [djId, djAssigns] of Object.entries(byDJ)) {
-    let minStart = 24;
-    let maxEnd = 0;
+    // Collect all assigned start-hours
+    const assignedHours = new Set<number>();
     for (const a of djAssigns) {
       if (a.time_slot_start) {
-        const h = parseInt(a.time_slot_start.split(":")[0]);
-        if (h < minStart) minStart = h;
-      }
-      if (a.time_slot_end) {
-        const h = parseInt(a.time_slot_end.split(":")[0]);
-        if (h > maxEnd) maxEnd = h;
+        assignedHours.add(parseInt(a.time_slot_start.split(":")[0]));
       }
     }
 
-    if (maxEnd - minStart < 2) continue;
-    const numHours = Math.min(maxEnd - minStart, 3);
-    const hours: DJShowHour[] = [];
+    if (assignedHours.size === 0) continue;
 
-    for (let i = 0; i < numHours; i++) {
-      const hourStart = minStart + i;
+    // Detect overnight: has hours >= 18 AND hours < 6
+    const hasEvening = [...assignedHours].some((h) => h >= 18);
+    const hasMorning = [...assignedHours].some((h) => h < 6);
+    const isOvernight = hasEvening && hasMorning;
+
+    // Sort hours: overnight puts evening first (18+), then morning (0-5)
+    const sortedHours = [...assignedHours].sort((a, b) => {
+      if (isOvernight) {
+        const aKey = a >= 18 ? a : a + 24;
+        const bKey = b >= 18 ? b : b + 24;
+        return aKey - bKey;
+      }
+      return a - b;
+    });
+
+    const hours: DJShowHour[] = [];
+    for (let i = 0; i < sortedHours.length; i++) {
+      const hourStart = sortedHours[i];
+      const endHour = (hourStart + 1) % 24;
       const startTime = `${String(hourStart).padStart(2, "0")}:00`;
-      const endTime = `${String(hourStart + 1).padStart(2, "0")}:00`;
+      const endTime = `${String(endHour).padStart(2, "0")}:00`;
 
       const matching = djAssigns.find((a) => {
         if (!a.time_slot_start) return false;
-        const aStart = parseInt(a.time_slot_start.split(":")[0]);
-        const aEnd = a.time_slot_end
-          ? parseInt(a.time_slot_end.split(":")[0])
-          : aStart + 1;
-        return aStart <= hourStart && aEnd > hourStart;
+        return parseInt(a.time_slot_start.split(":")[0]) === hourStart;
       });
 
       hours.push({
@@ -350,16 +356,26 @@ function buildDJShows(
       });
     }
 
+    // shiftStart: first hour in sorted order
+    const shiftStart = sortedHours[0];
+    // shiftEnd: hour after the last sorted hour (mod 24)
+    const shiftEnd = (sortedHours[sortedHours.length - 1] + 1) % 24;
+
     shows.push({
       djId,
       djName: djAssigns[0].dj_name,
-      shiftStart: minStart,
-      shiftEnd: maxEnd,
+      shiftStart,
+      shiftEnd,
       hours,
     });
   }
 
-  shows.sort((a, b) => a.shiftStart - b.shiftStart);
+  // Sort shows: use effective sort key (overnight shifts sort by 18+)
+  shows.sort((a, b) => {
+    const aKey = a.shiftStart;
+    const bKey = b.shiftStart;
+    return aKey - bKey;
+  });
   return shows;
 }
 
@@ -1596,8 +1612,25 @@ export default function RadioClocksPage() {
           ? sourceTemplate.clock_pattern
           : [];
 
-      const hourLabels = ["Hour 1 (Open)", "Hour 2 (Body)", "Hour 3 (Close)"];
-      const templateNames = hourLabels.map(
+      const totalHours = show.hours.length;
+      // Divide hours into 3 blocks (e.g. 3→1,1,1  12→4,4,4  6→2,2,2)
+      const blockSize = Math.ceil(totalHours / 3);
+      const blocks: DJShowHour[][] = [];
+      for (let i = 0; i < totalHours; i += blockSize) {
+        blocks.push(show.hours.slice(i, i + blockSize));
+      }
+
+      // Generate block labels based on shift length
+      const blockLabels =
+        totalHours <= 3
+          ? ["Hour 1 (Open)", "Hour 2 (Body)", "Hour 3 (Close)"]
+          : blocks.map((blk, i) => {
+              const start = formatTime12(blk[0].startTime);
+              const end = formatTime12(blk[blk.length - 1].endTime);
+              return `Block ${i + 1} (${start}–${end})`;
+            });
+
+      const templateNames = blockLabels.map(
         (label) => `${show.djName} - ${label}`
       );
 
@@ -1622,7 +1655,7 @@ export default function RadioClocksPage() {
       }
 
       // If we didn't get IDs from responses, refetch templates and find by name
-      if (newTemplateIds.length < 3) {
+      if (newTemplateIds.length < blocks.length) {
         const tRes = await fetch("/api/clock-templates");
         const tData = await tRes.json();
         const freshTemplates: ClockTemplate[] = tData.templates || [];
@@ -1635,8 +1668,8 @@ export default function RadioClocksPage() {
         }
       }
 
-      if (newTemplateIds.length !== 3) {
-        showToast("Failed to create all 3 templates");
+      if (newTemplateIds.length !== blocks.length) {
+        showToast(`Failed to create all ${blocks.length} templates`);
         setSaving(false);
         return;
       }
@@ -1649,23 +1682,24 @@ export default function RadioClocksPage() {
         )
       );
 
-      // Create new 1-hour assignments
-      for (let i = 0; i < 3; i++) {
-        const startHour = show.shiftStart + i;
-        await fetch("/api/clock-assignments", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            dj_id: show.djId,
-            clock_template_id: newTemplateIds[i],
-            day_of_week: null,
-            time_slot_start: `${String(startHour).padStart(2, "0")}:00`,
-            time_slot_end: `${String(startHour + 1).padStart(2, "0")}:00`,
-          }),
-        });
+      // Create new 1-hour assignments, one per hour in each block
+      for (let b = 0; b < blocks.length; b++) {
+        for (const hr of blocks[b]) {
+          await fetch("/api/clock-assignments", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              dj_id: show.djId,
+              clock_template_id: newTemplateIds[b],
+              day_of_week: null,
+              time_slot_start: hr.startTime,
+              time_slot_end: hr.endTime,
+            }),
+          });
+        }
       }
 
-      showToast(`Generated 3 show clocks for ${show.djName}`);
+      showToast(`Generated ${blocks.length} show clocks for ${show.djName}`);
       await fetchAll();
     } catch {
       showToast("Failed to generate show clocks");
@@ -1826,6 +1860,8 @@ export default function RadioClocksPage() {
                     >
                       <Sparkles className="w-4 h-4" />
                       Generate 3 Clocks
+                      {show.hours.length > 3 &&
+                        ` (${Math.ceil(show.hours.length / 3)}h each)`}
                     </button>
                   </div>
 
