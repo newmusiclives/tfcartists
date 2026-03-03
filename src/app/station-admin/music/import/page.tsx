@@ -272,8 +272,24 @@ export default function MusicImportPage() {
     } finally { setImporting(false); }
   };
 
+  // Page-level drag prevention — catches ALL drag events before the browser can
+  const pageDragOver = (e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); };
+  const pageDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // If files mode and audio files, add them
+    if (mode === "files" && e.dataTransfer.files.length > 0) {
+      addFiles(e.dataTransfer.files);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen bg-gray-50"
+      onDragEnter={pageDragOver}
+      onDragOver={pageDragOver}
+      onDrop={pageDrop}
+    >
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link href="/station-admin/music" className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-4">
@@ -388,8 +404,14 @@ export default function MusicImportPage() {
                   <p className="text-lg font-medium text-gray-700 mb-1">
                     {isDragging ? "Drop files here" : "Drag & drop audio files here"}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 mb-3">
                     or click to browse. Supports MP3, WAV, M4A, FLAC, OGG
+                  </p>
+                  <p className="text-sm font-medium">
+                    Files will be added to category:{" "}
+                    <span className={`inline-block px-2 py-0.5 rounded font-black ${CATEGORIES.find(c => c.value === defaultCategory)?.color || ""}`}>
+                      {defaultCategory} — {CATEGORIES.find(c => c.value === defaultCategory)?.label.split(" — ")[1]}
+                    </span>
                   </p>
                   <p className="text-xs text-gray-400 mt-2">
                     Files named "Artist - Title.mp3" will auto-fill metadata
