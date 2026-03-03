@@ -248,6 +248,7 @@ export default function MusicLibraryPage() {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b">
                   <tr>
+                    <th className="w-10 px-2 py-3"></th>
                     <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Title</th>
                     <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Artist</th>
                     <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Duration</th>
@@ -265,23 +266,23 @@ export default function MusicLibraryPage() {
                       onClick={() => setEditing(song)}
                       className="hover:bg-gray-50 cursor-pointer transition-colors"
                     >
+                      <td className="pl-2 pr-0 py-3 w-10" onClick={(e) => e.stopPropagation()}>
+                        {song.rotationCategory === "E" && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); toggleFeatured(song, e); }}
+                            title={song.isFeatured ? "Remove from featured" : "Add to featured"}
+                            className="p-1.5 rounded-lg hover:bg-amber-50 transition-all"
+                          >
+                            <Star className={`w-5 h-5 ${
+                              song.isFeatured
+                                ? "text-amber-500 fill-amber-500"
+                                : "text-gray-300 hover:text-amber-400"
+                            }`} />
+                          </button>
+                        )}
+                      </td>
                       <td className="px-4 py-3 text-sm font-medium text-gray-900">
-                        <span className="flex items-center gap-1.5">
-                          {song.rotationCategory === "E" && (
-                            <button
-                              onClick={(e) => toggleFeatured(song, e)}
-                              title={song.isFeatured ? "Remove from featured" : "Add to featured"}
-                              className="flex-shrink-0 hover:scale-125 transition-transform"
-                            >
-                              <Star className={`w-4 h-4 ${
-                                song.isFeatured
-                                  ? "text-amber-500 fill-amber-500"
-                                  : "text-gray-300 hover:text-amber-400"
-                              }`} />
-                            </button>
-                          )}
-                          {song.title}
-                        </span>
+                        {song.title}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-600">{song.artistName}</td>
                       <td className="px-4 py-3 text-sm text-gray-500 text-center">{formatDuration(song.duration)}</td>
