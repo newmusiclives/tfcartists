@@ -2,17 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
 import { notifyListenerWelcome } from "@/lib/messaging/notifications";
+import { withRateLimit, getRateLimitIdentifier } from "@/lib/rate-limit/limiter";
+import { createListenerSchema } from "@/lib/validation/schemas";
+import { requireAuth, getOrgScope } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
+    // GET requires authentication (listing listener data)
+    const session = await requireAuth();
+    if (!session) return unauthorized();
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const limit = Math.min(parseInt(searchParams.get("limit") || "50"), 100);
-    const offset = parseInt(searchParams.get("offset") || "0");
+    const offset = Math.max(0, parseInt(searchParams.get("offset") || "0"));
 
-    const where: Record<string, unknown> = {};
+    const orgScope = getOrgScope(session);
+    const where: Record<string, unknown> = { ...orgScope };
     if (status) where.status = status;
 
     const [listeners, total] = await Promise.all([
@@ -33,15 +42,20 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { name, email, discoverySource, referralCode } = body;
+    // Rate limit public registration endpoint
+    const rateLimitResponse = await withRateLimit(request, "api");
+    if (rateLimitResponse) return rateLimitResponse;
 
-    if (!email) {
+    // Validate input
+    const body = await request.json();
+    const parsed = createListenerSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Email is required" },
+        { error: "Validation failed", details: parsed.error.flatten().fieldErrors },
         { status: 400 }
       );
     }
+    const { name, email, discoverySource, referralCode } = parsed.data;
 
     // Deduplicate by email
     const existing = await prisma.listener.findUnique({

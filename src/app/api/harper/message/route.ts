@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
+import { prisma } from "@/lib/db";
+import { orgWhere } from "@/lib/db-scoped";
 import { logger } from "@/lib/logger";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
-import { auth } from "@/lib/auth/config";
 
 export const dynamic = "force-dynamic";
 
@@ -13,13 +16,8 @@ export const dynamic = "force-dynamic";
  * Rate limited: 10 requests per minute (AI tier)
  */
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!["harper", "admin"].includes(session.user.role || "")) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const session = await requireRole("harper");
+  if (!session) return unauthorized();
 
   // Check rate limit
   const rateLimitResponse = await withRateLimit(request, "ai");
@@ -36,6 +34,15 @@ export async function POST(request: NextRequest) {
         { error: "sponsorId and content are required" },
         { status: 400 }
       );
+    }
+
+    // Verify sponsor belongs to user's org
+    const sponsor = await prisma.sponsor.findFirst({
+      where: { id: sponsorId, ...orgWhere(session) },
+      select: { id: true },
+    });
+    if (!sponsor) {
+      return NextResponse.json({ error: "Sponsor not found" }, { status: 404 });
     }
 
     const harperAgent = new HarperAgent();

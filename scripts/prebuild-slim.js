@@ -28,6 +28,12 @@ function moveDir(name) {
   }
 
   fs.mkdirSync(STASH_DIR, { recursive: true });
+
+  // If dest already exists (from a previous build), remove it first
+  if (fs.existsSync(dest)) {
+    fs.rmSync(dest, { recursive: true, force: true });
+  }
+
   fs.renameSync(src, dest);
   console.log(`[prebuild-slim] moved public/${name} -> .tmp-large-assets/${name}`);
 }

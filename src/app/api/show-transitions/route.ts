@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireAuth } from "@/lib/api/auth";
+import { verifyStationAccess } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,11 @@ export async function GET(request: NextRequest) {
     const stationId = request.nextUrl.searchParams.get("stationId");
     if (!stationId) {
       return NextResponse.json({ error: "stationId required" }, { status: 400 });
+    }
+
+    if (stationId && session) {
+      const station = await verifyStationAccess(session, stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
     }
 
     const type = request.nextUrl.searchParams.get("type");
@@ -44,6 +50,11 @@ export async function POST(request: NextRequest) {
         { error: "stationId, transitionType, and name are required" },
         { status: 400 }
       );
+    }
+
+    if (stationId && session) {
+      const station = await verifyStationAccess(session, stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
     }
 
     const transition = await prisma.showTransition.create({

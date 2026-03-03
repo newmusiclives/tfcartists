@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
+import { verifyStationAccess } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -93,6 +94,11 @@ export async function POST(request: NextRequest) {
         { error: "stationId, sponsorName, and adTitle are required" },
         { status: 400 }
       );
+    }
+
+    if (stationId) {
+      const station = await verifyStationAccess(session, stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
     }
 
     const ad = await prisma.sponsorAd.create({

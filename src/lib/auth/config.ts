@@ -123,6 +123,37 @@ export const authConfig: NextAuthConfig = {
             }
           }
 
+          // Operator login: check OrganizationUser table
+          try {
+            const { PrismaClient } = await import("@prisma/client");
+            const bcrypt = await import("bcryptjs");
+            const prismaAuth = new PrismaClient();
+
+            const orgUser = await prismaAuth.organizationUser.findFirst({
+              where: { email: username, isActive: true },
+              include: { organization: { select: { id: true, name: true } } },
+            });
+
+            if (orgUser && orgUser.passwordHash) {
+              const isValid = await bcrypt.compare(password, orgUser.passwordHash);
+
+              if (isValid) {
+                await prismaAuth.$disconnect();
+                return {
+                  id: orgUser.id,
+                  name: orgUser.name,
+                  email: orgUser.email,
+                  role: orgUser.role === "owner" ? "admin" : orgUser.role,
+                  organizationId: orgUser.organizationId,
+                };
+              }
+            }
+
+            await prismaAuth.$disconnect();
+          } catch {
+            // DB not available — skip operator auth
+          }
+
           // Invalid credentials
           return null;
         } catch (error) {
@@ -138,18 +169,20 @@ export const authConfig: NextAuthConfig = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      // Add user role to JWT token
+      // Add user role and organization to JWT token
       if (user) {
         token.role = user.role;
         token.id = user.id;
+        token.organizationId = user.organizationId;
       }
       return token;
     },
     async session({ session, token }) {
-      // Add user role to session
+      // Add user role and organization to session
       if (session.user) {
         session.user.role = token.role as string;
         session.user.id = token.id as string;
+        session.user.organizationId = token.organizationId as string | undefined;
       }
       return session;
     },
@@ -172,6 +205,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
 declare module "next-auth" {
   interface User {
     role?: string;
+    organizationId?: string;
   }
 
   interface Session {
@@ -181,6 +215,7 @@ declare module "next-auth" {
       email?: string | null;
       image?: string | null;
       role?: string;
+      organizationId?: string;
     };
   }
 }
@@ -188,5 +223,6 @@ declare module "next-auth" {
 declare module "@auth/core/jwt" {
   interface JWT {
     role?: string;
+    organizationId?: string;
   }
 }

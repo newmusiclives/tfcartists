@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
+import { orgWhere } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,8 @@ export async function GET(request: NextRequest) {
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
+    const scope = orgWhere(session);
+
     const [
       totalArtists,
       freeCount,
@@ -29,12 +32,12 @@ export async function GET(request: NextRequest) {
       rejectedThisMonth,
       revenuePool,
     ] = await Promise.all([
-      prisma.artist.count({ where: { deletedAt: null } }),
-      prisma.artist.count({ where: { airplayTier: "FREE", deletedAt: null } }),
-      prisma.artist.count({ where: { airplayTier: "TIER_5", deletedAt: null } }),
-      prisma.artist.count({ where: { airplayTier: "TIER_20", deletedAt: null } }),
-      prisma.artist.count({ where: { airplayTier: "TIER_50", deletedAt: null } }),
-      prisma.artist.count({ where: { airplayTier: "TIER_120", deletedAt: null } }),
+      prisma.artist.count({ where: { deletedAt: null, ...scope } }),
+      prisma.artist.count({ where: { airplayTier: "FREE", deletedAt: null, ...scope } }),
+      prisma.artist.count({ where: { airplayTier: "TIER_5", deletedAt: null, ...scope } }),
+      prisma.artist.count({ where: { airplayTier: "TIER_20", deletedAt: null, ...scope } }),
+      prisma.artist.count({ where: { airplayTier: "TIER_50", deletedAt: null, ...scope } }),
+      prisma.artist.count({ where: { airplayTier: "TIER_120", deletedAt: null, ...scope } }),
       prisma.submission.count({ where: { status: "PENDING" } }),
       prisma.submission.count({
         where: {

@@ -141,6 +141,23 @@ export async function generateVoiceTrackScripts(
         }
       );
 
+      // Validate tense accuracy — regenerate once if wrong
+      let scriptText = response.content.trim();
+      const tenseIssue = validateVoiceTrackTense(vb.trackType, scriptText, prevSong, nextSong);
+      if (tenseIssue) {
+        logger.warn("Voice track tense violation detected, regenerating", {
+          position: vb.position, trackType: vb.trackType, issue: tenseIssue,
+        });
+        const retry = await aiProvider.chat(
+          [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt + `\n\nIMPORTANT CORRECTION: Your previous attempt had a tense error: "${tenseIssue}". Fix this in your new response.` },
+          ],
+          { maxTokens: 200, temperature: Math.max(0.3, (dj.gptTemperature || 0.8) - 0.2) }
+        );
+        scriptText = retry.content.trim();
+      }
+
       // Upsert voice track record
       const existingVt = await prisma.voiceTrack.findFirst({
         where: {
@@ -161,7 +178,7 @@ export async function generateVoiceTrackScripts(
         nextSongId: nextSong?.songId || null,
         nextSongTitle: nextSong?.songTitle || null,
         nextArtistName: nextSong?.artistName || null,
-        scriptText: response.content.trim(),
+        scriptText,
         status: "script_ready",
         airDate: playlist.airDate,
         hourOfDay: playlist.hourOfDay,
@@ -250,6 +267,16 @@ You speak naturally and in character. Keep it conversational and warm.${
   }`;
 }
 
+/**
+ * When RAILWAY_SAFE_MODE is true, voice tracks will NOT reference specific
+ * song titles — they'll be personality-driven (mood, time of day, DJ character)
+ * instead. This prevents mismatches when Railway picks different songs than
+ * the HourPlaylist.
+ *
+ * Set to false once Railway is wired to consume /api/playout/hour.
+ */
+const RAILWAY_SAFE_MODE = process.env.VOICE_TRACK_SAFE_MODE !== "false";
+
 function buildUserPrompt(
   trackType: string,
   djFirstName: string,
@@ -265,9 +292,25 @@ function buildUserPrompt(
   const rules = `Rules:
 - 2-4 sentences max (10-20 seconds when spoken)
 - Natural, conversational, in-character
-- Reference specific song titles and artist names when available
 - Match ${timeOfDay} energy
 - Output ONLY the spoken text — no stage directions, no quotes, no labels`;
+
+  // SAFE MODE: Generate personality-driven voice tracks without song references.
+  // This prevents DJ from naming wrong songs when Railway picks its own playlist.
+  if (RAILWAY_SAFE_MODE) {
+    const moods: Record<string, string> = {
+      morning: "Talk about the morning — coffee, sunrise, getting the day started. Keep it warm and optimistic.",
+      midday: "Talk about the midday groove — keeping the energy up, the music flowing. Mention the kind of music you love playing.",
+      afternoon: "Talk about the afternoon — winding through the day, deep cuts, discoveries. Share something personal about why you love this music.",
+      evening: "Talk about the evening — settling in, reflecting, the feel of the music. Create atmosphere.",
+    };
+    return `Write a short, in-character DJ voice break for ${djFirstName} during the ${timeOfDay}.
+${moods[timeOfDay] || moods.afternoon}
+
+DO NOT mention any specific song titles or artist names. Instead, talk about the music, the mood, your feelings, or the listeners.
+
+${rules}`;
+  }
 
   if (trackType === "intro" && nextSong) {
     return `You are writing a FORWARD INTRO. The song has NOT played yet. You are teasing it BEFORE it starts.
@@ -321,4 +364,71 @@ CRITICAL TENSE RULES — VIOLATION MEANS FAILURE:
   // Fallback for missing song context or "generic" trackType
   return `Write a short, generic DJ voice track for ${djFirstName} during the ${timeOfDay}.
 ${rules}`;
+}
+
+/**
+ * Validates that a voice track script uses the correct tense for its track type.
+ * Returns a description of the issue, or null if valid.
+ */
+function validateVoiceTrackTense(
+  trackType: string,
+  script: string,
+  prevSong: { songTitle: string; artistName: string } | null,
+  nextSong: { songTitle: string; artistName: string } | null,
+): string | null {
+  const lower = script.toLowerCase();
+  const PAST_PHRASES = ["that was", "you just heard", "we just heard", "hope you enjoyed", "what a track"];
+  const FUTURE_PHRASES = ["here's", "here is", "coming up", "next up", "let's hear", "now let's", "up next"];
+
+  if (trackType === "intro" && nextSong) {
+    // Intro should NOT have past tense about the next song
+    for (const phrase of PAST_PHRASES) {
+      if (lower.includes(phrase) && nextSong && lower.includes(nextSong.songTitle.toLowerCase())) {
+        return `Used past tense "${phrase}" for upcoming song "${nextSong.songTitle}"`;
+      }
+    }
+    // Check if any past-tense phrase appears at all (intro should be forward-looking)
+    for (const phrase of PAST_PHRASES) {
+      if (lower.includes(phrase)) {
+        return `Intro contains past-tense phrase "${phrase}" — should only use future tense`;
+      }
+    }
+  }
+
+  if (trackType === "back_announce" && prevSong) {
+    // Back-announce should NOT have future tense
+    for (const phrase of FUTURE_PHRASES) {
+      if (lower.includes(phrase)) {
+        return `Back-announce contains future-tense phrase "${phrase}" — song already played`;
+      }
+    }
+  }
+
+  if (trackType === "back_announce_intro" && prevSong && nextSong) {
+    // Check that the previous song isn't introduced with future tense
+    const prevTitle = prevSong.songTitle.toLowerCase();
+    const nextTitle = nextSong.songTitle.toLowerCase();
+    for (const phrase of FUTURE_PHRASES) {
+      const idx = lower.indexOf(phrase);
+      if (idx !== -1) {
+        // If a future phrase is near the prev song title, that's wrong
+        const nearbyText = lower.substring(Math.max(0, idx - 5), idx + phrase.length + 60);
+        if (nearbyText.includes(prevTitle)) {
+          return `Used future tense "${phrase}" for already-played song "${prevSong.songTitle}"`;
+        }
+      }
+    }
+    for (const phrase of PAST_PHRASES) {
+      const idx = lower.indexOf(phrase);
+      if (idx !== -1) {
+        // If a past phrase is near the next song title, that's wrong
+        const nearbyText = lower.substring(Math.max(0, idx - 5), idx + phrase.length + 60);
+        if (nearbyText.includes(nextTitle)) {
+          return `Used past tense "${phrase}" for upcoming song "${nextSong.songTitle}"`;
+        }
+      }
+    }
+  }
+
+  return null; // No issues detected
 }

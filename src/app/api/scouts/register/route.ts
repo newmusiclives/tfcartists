@@ -4,6 +4,7 @@ import { generateReferralCode } from "@/lib/scout/referral-codes";
 import { logger } from "@/lib/logger";
 import { auth } from "@/lib/auth/config";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { orgWhere, orgIdForCreate } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -41,8 +42,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if listener exists
-    const listener = await prisma.listener.findUnique({
-      where: { id: listenerId },
+    const listener = await prisma.listener.findFirst({
+      where: { id: listenerId, ...orgWhere(session) },
     });
 
     if (!listener) {
@@ -53,8 +54,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if listener is already a scout
-    const existingScout = await prisma.scout.findUnique({
-      where: { listenerId },
+    const existingScout = await prisma.scout.findFirst({
+      where: { listenerId, ...orgWhere(session) },
     });
 
     if (existingScout) {
@@ -71,6 +72,7 @@ export async function POST(req: NextRequest) {
     const referralCode = await generateReferralCode();
 
     // Create scout record
+    const orgId = orgIdForCreate(session);
     const scout = await prisma.scout.create({
       data: {
         listenerId,
@@ -78,6 +80,7 @@ export async function POST(req: NextRequest) {
         status: "ACTIVE", // Activate immediately
         activatedAt: new Date(),
         payoutEmail: email || listener.email,
+        ...(orgId ? { organizationId: orgId } : {}),
       },
       include: {
         listener: {

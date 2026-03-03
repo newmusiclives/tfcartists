@@ -29,14 +29,46 @@ export async function withAuth(
 }
 
 /**
- * Parse pagination parameters from request search params.
+ * Default allowed sort fields for pagination.
+ * Prevents order-by injection by whitelisting valid column names.
  */
-export function withPagination(searchParams: URLSearchParams) {
+const DEFAULT_SORT_FIELDS = new Set([
+  "createdAt",
+  "updatedAt",
+  "name",
+  "email",
+  "status",
+  "pipelineStage",
+  "airplayTier",
+  "businessName",
+  "contactName",
+  "genre",
+  "monthlyBudget",
+  "tier",
+  "xpLevel",
+  "rotationCategory",
+  "title",
+  "artist",
+]);
+
+/**
+ * Parse pagination parameters from request search params.
+ * @param allowedSortFields - Optional custom whitelist of sortable fields
+ */
+export function withPagination(
+  searchParams: URLSearchParams,
+  allowedSortFields?: Set<string>
+) {
   const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
   const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "20", 10)));
   const skip = (page - 1) * limit;
-  const sortBy = searchParams.get("sortBy") || "createdAt";
-  const sortOrder = (searchParams.get("sortOrder") || "desc") as "asc" | "desc";
+
+  const requestedSort = searchParams.get("sortBy") || "createdAt";
+  const allowed = allowedSortFields || DEFAULT_SORT_FIELDS;
+  const sortBy = allowed.has(requestedSort) ? requestedSort : "createdAt";
+
+  const rawOrder = searchParams.get("sortOrder");
+  const sortOrder = rawOrder === "asc" ? "asc" : "desc";
   const search = searchParams.get("search") || "";
 
   return { page, limit, skip, sortBy, sortOrder, search };

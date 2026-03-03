@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { csrfHeaders } from "@/lib/csrf-client";
 
 interface UseApiResult<T> {
   data: T | null;
@@ -66,7 +67,7 @@ export function useMutation<T = unknown>(
         const res = await fetch(url, {
           method,
           credentials: "include",
-          headers: { "Content-Type": "application/json" },
+          headers: csrfHeaders(),
           body: body !== undefined ? JSON.stringify(body) : undefined,
         });
         if (!res.ok) {

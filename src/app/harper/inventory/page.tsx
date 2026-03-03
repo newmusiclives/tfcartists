@@ -31,7 +31,7 @@ export default function AdInventoryPage() {
     utilization: utilizationRate.toFixed(1),
   };
 
-  const tierBreakdown = [
+  const tierBreakdown: Array<{ tier: string; sponsors: number; spotsPerSponsor: number; totalSpots: number; price: number; color: "teal" | "blue" | "green" | "purple" }> = [
     {
       tier: "Local Hero",
       sponsors: 45,
@@ -263,14 +263,22 @@ function TierAllocationCard({
   price,
   color,
   totalSpots: maxSpots,
-}: any) {
+}: {
+  tier: string;
+  sponsors: number;
+  spotsPerSponsor: number;
+  totalSpots: number;
+  price: number;
+  color: "teal" | "blue" | "green" | "purple";
+}) {
   const percentage = (totalSpots / maxSpots) * 100;
-  const colorClasses = {
+  const colorMap: Record<string, string> = {
     teal: "bg-teal-100 text-teal-700",
     blue: "bg-blue-100 text-blue-700",
     green: "bg-green-100 text-green-700",
     purple: "bg-purple-100 text-purple-700",
-  }[color];
+  };
+  const colorClasses = colorMap[color];
 
   return (
     <div className="border-2 border-gray-200 rounded-lg p-4">

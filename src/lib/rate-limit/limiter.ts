@@ -219,7 +219,7 @@ export async function checkRateLimit(
 /**
  * Get identifier from request for rate limiting
  *
- * Priority: User ID > IP address > Anonymous
+ * Priority: User ID > IP address > IP from connection > path-scoped fallback
  */
 export function getRateLimitIdentifier(
   request: Request,
@@ -229,7 +229,7 @@ export function getRateLimitIdentifier(
     return `user:${userId}`;
   }
 
-  // Try to get IP from various headers
+  // Try to get IP from various headers (Netlify, Cloudflare, etc.)
   const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) {
     return `ip:${forwardedFor.split(",")[0].trim()}`;
@@ -240,8 +240,15 @@ export function getRateLimitIdentifier(
     return `ip:${realIp}`;
   }
 
-  // Fallback to anonymous (not ideal for production)
-  return "anonymous";
+  // Netlify-specific header
+  const nfIp = request.headers.get("x-nf-client-connection-ip");
+  if (nfIp) {
+    return `ip:${nfIp}`;
+  }
+
+  // Fallback: scope by path so different endpoints don't share a bucket
+  const url = new URL(request.url);
+  return `anon:${url.pathname}`;
 }
 
 /**

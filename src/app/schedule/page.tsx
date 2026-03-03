@@ -1,14 +1,131 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Radio, Clock, Calendar } from "lucide-react";
+import { Radio, Clock, Calendar, Loader2 } from "lucide-react";
 import { StationName } from "@/components/station-name";
+import { prisma } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "Schedule | TrueFans RADIO",
-  description: "View the full 24/7 programming schedule for North Country Radio. Weekday and weekend DJ lineups, special programming, and show times.",
+  title: "Schedule",
+  description: "View the full 24/7 programming schedule. Weekday and weekend DJ lineups, show times, and featured programming.",
 };
 
-export default function SchedulePage() {
+// Revalidate every 5 minutes so DJ changes appear without a redeploy
+export const revalidate = 300;
+
+interface DJSlot {
+  name: string;
+  showName: string | null;
+  bio: string | null;
+  shiftStart: string;
+  shiftEnd: string;
+  dayType: string; // "weekday" | "saturday" | "sunday"
+}
+
+// Color palette for time slots — cycles through these
+const WEEKDAY_COLORS = [
+  "bg-gradient-to-r from-amber-600 to-orange-600",
+  "bg-gradient-to-r from-orange-500 to-red-500",
+  "bg-gradient-to-r from-purple-600 to-indigo-600",
+  "bg-gradient-to-r from-rose-600 to-pink-600",
+  "bg-gradient-to-r from-indigo-700 to-slate-700",
+  "bg-gradient-to-r from-gray-600 to-slate-600",
+];
+
+function formatTime(hour: number): string {
+  if (hour === 0 || hour === 24) return "12:00am";
+  if (hour === 12) return "12:00pm";
+  if (hour < 12) return `${hour}:00am`;
+  return `${hour - 12}:00pm`;
+}
+
+async function getScheduleData(): Promise<{
+  weekday: DJSlot[];
+  saturday: DJSlot[];
+  sunday: DJSlot[];
+}> {
+  try {
+    // Fetch active DJs from the first active station
+    const station = await prisma.station.findFirst({
+      where: { isActive: true, deletedAt: null },
+      select: { id: true },
+    });
+
+    if (!station) return { weekday: [], saturday: [], sunday: [] };
+
+    // Fetch clock assignments grouped by DJ to build schedule
+    const assignments = await prisma.clockAssignment.findMany({
+      where: { stationId: station.id, isActive: true },
+      select: {
+        dayType: true,
+        timeSlotStart: true,
+        timeSlotEnd: true,
+        dj: {
+          select: { name: true, showFormat: true, tagline: true, vibe: true, isWeekend: true },
+        },
+      },
+      orderBy: { timeSlotStart: "asc" },
+    });
+
+    // Group assignments by DJ + dayType to merge into shifts
+    const shiftMap = new Map<string, { dj: typeof assignments[0]["dj"]; dayType: string; start: string; end: string }>();
+
+    for (const a of assignments) {
+      const key = `${a.dj.name}-${a.dayType}`;
+      const existing = shiftMap.get(key);
+      if (!existing) {
+        shiftMap.set(key, { dj: a.dj, dayType: a.dayType, start: a.timeSlotStart, end: a.timeSlotEnd });
+      } else {
+        // Extend shift range
+        if (a.timeSlotStart < existing.start) existing.start = a.timeSlotStart;
+        if (a.timeSlotEnd > existing.end) existing.end = a.timeSlotEnd;
+      }
+    }
+
+    const weekday: DJSlot[] = [];
+    const saturday: DJSlot[] = [];
+    const sunday: DJSlot[] = [];
+
+    for (const shift of shiftMap.values()) {
+      const startHour = parseInt(shift.start.split(":")[0]);
+      const endHour = parseInt(shift.end.split(":")[0]);
+
+      const slot: DJSlot = {
+        name: shift.dj.name,
+        showName: shift.dj.showFormat || shift.dj.tagline,
+        bio: shift.dj.vibe,
+        shiftStart: String(startHour),
+        shiftEnd: String(endHour),
+        dayType: shift.dayType,
+      };
+
+      switch (shift.dayType) {
+        case "saturday":
+          saturday.push(slot);
+          break;
+        case "sunday":
+          sunday.push(slot);
+          break;
+        default:
+          weekday.push(slot);
+      }
+    }
+
+    // Sort by shift start time
+    const sortByStart = (a: DJSlot, b: DJSlot) => parseInt(a.shiftStart) - parseInt(b.shiftStart);
+    weekday.sort(sortByStart);
+    saturday.sort(sortByStart);
+    sunday.sort(sortByStart);
+
+    return { weekday, saturday, sunday };
+  } catch {
+    return { weekday: [], saturday: [], sunday: [] };
+  }
+}
+
+export default async function SchedulePage() {
+  const { weekday, saturday, sunday } = await getScheduleData();
+  const hasData = weekday.length > 0 || saturday.length > 0 || sunday.length > 0;
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
       {/* Navigation */}
@@ -20,30 +137,9 @@ export default function SchedulePage() {
               <StationName className="font-bold text-xl text-gray-900" />
             </div>
             <div className="flex items-center space-x-4">
-              <Link
-                href="/"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                href="/station"
-                className="text-amber-700 hover:text-amber-800 font-medium transition-colors"
-              >
-                Station
-              </Link>
-              <Link
-                href="/djs"
-                className="text-amber-700 hover:text-amber-800 font-medium transition-colors"
-              >
-                DJs
-              </Link>
-              <Link
-                href="/network"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Network
-              </Link>
+              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">Home</Link>
+              <Link href="/station" className="text-amber-700 hover:text-amber-800 font-medium transition-colors">Station</Link>
+              <Link href="/network" className="text-gray-600 hover:text-gray-900 transition-colors">Network</Link>
             </div>
           </div>
         </div>
@@ -55,7 +151,7 @@ export default function SchedulePage() {
           <Calendar className="w-4 h-4" />
           <span>24/7 Programming Schedule</span>
         </div>
-        <h1 className="text-6xl font-serif font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-4">
           Programming Schedule
         </h1>
         <p className="text-xl text-gray-700 max-w-3xl mx-auto">
@@ -65,252 +161,109 @@ export default function SchedulePage() {
         </p>
       </section>
 
-      {/* Weekday Schedule */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-4xl font-serif font-bold text-center mb-8 text-gray-900">
-          Weekday Schedule
-          <span className="block text-lg font-normal text-gray-600 mt-2">
-            Monday – Friday
-          </span>
-        </h2>
-
-        <div className="space-y-4">
-          <TimeSlot
-            time="6:00am – 10:00am"
-            show="Sunrise & Steel"
-            dj="Hank Westwood"
-            mood="Morning ritual, working-class pride"
-            color="bg-gradient-to-r from-amber-600 to-orange-600"
-          />
-          <TimeSlot
-            time="10:00am – 2:00pm"
-            show="Desert Folk Dispatch"
-            dj="Loretta Merrick"
-            mood="M6 to Mississippi — British heart, American soul"
-            color="bg-gradient-to-r from-orange-500 to-red-500"
-          />
-          <TimeSlot
-            time="2:00pm – 6:00pm"
-            show="The Deep Cuts Show"
-            dj="Marcus 'Doc' Holloway"
-            mood="Vinyl deep dives, album-side gems"
-            color="bg-gradient-to-r from-purple-600 to-indigo-600"
-          />
-          <TimeSlot
-            time="6:00pm – 10:00pm"
-            show="Borderlands"
-            dj="Carmen Vasquez"
-            mood="Cross-cultural, bilingual storytelling"
-            color="bg-gradient-to-r from-rose-600 to-pink-600"
-          />
-          <TimeSlot
-            time="10:00pm – 2:00am"
-            show="Midnight Rodeo"
-            dj="Cody Rampart"
-            mood="Honky-tonk nights, outlaw country"
-            color="bg-gradient-to-r from-indigo-700 to-slate-700"
-          />
-          <TimeSlot
-            time="2:00am – 6:00am"
-            show="Overnight Automation"
-            dj="RoboDJ"
-            mood="Minimal talk, pure flow"
-            color="bg-gradient-to-r from-gray-600 to-slate-600"
-          />
-        </div>
-      </section>
-
-      {/* Weekend Schedule */}
-      <section className="bg-white py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-serif font-bold text-center mb-8 text-gray-900">
-            Weekend Schedule
-            <span className="block text-lg font-normal text-gray-600 mt-2">
-              Saturday & Sunday
-            </span>
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Saturday */}
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                <Calendar className="w-6 h-6 mr-2 text-amber-700" />
-                Saturday
-              </h3>
-              <div className="space-y-3">
-                <WeekendSlot
-                  time="6:00am – 10:00am"
-                  show="Rust Belt Revival"
-                  dj="Jo McAllister"
-                  focus="Working-class anthems, Heartland rock"
-                />
-                <WeekendSlot
-                  time="10:00am – 2:00pm"
-                  show="The Long Road Home"
-                  dj="Paul Saunders"
-                  focus="Sunday morning reflection"
-                />
-                <WeekendSlot
-                  time="2:00pm – 6:00pm"
-                  show="Afterglow Americana"
-                  dj="Ezra Stone"
-                  focus="Twilight vibes, introspective"
-                />
-                <WeekendSlot
-                  time="6:00pm – 10:00pm"
-                  show="The Melody Trail"
-                  dj="Levi Bridges"
-                  focus="Weekend kickoff, hiking vibes"
-                />
+      {!hasData ? (
+        <section className="max-w-4xl mx-auto px-4 py-16 text-center">
+          <p className="text-gray-500 text-lg">Schedule data is being set up. Check back soon!</p>
+        </section>
+      ) : (
+        <>
+          {/* Weekday Schedule */}
+          {weekday.length > 0 && (
+            <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+              <h2 className="text-4xl font-serif font-bold text-center mb-8 text-gray-900">
+                Weekday Schedule
+                <span className="block text-lg font-normal text-gray-600 mt-2">Monday - Friday</span>
+              </h2>
+              <div className="space-y-4">
+                {weekday.map((slot, i) => (
+                  <TimeSlot
+                    key={`weekday-${i}`}
+                    time={`${formatTime(parseInt(slot.shiftStart))} - ${formatTime(parseInt(slot.shiftEnd))}`}
+                    show={slot.showName || `${slot.name}'s Show`}
+                    dj={slot.name}
+                    mood={slot.bio || ""}
+                    color={WEEKDAY_COLORS[i % WEEKDAY_COLORS.length]}
+                  />
+                ))}
               </div>
-            </div>
+            </section>
+          )}
 
-            {/* Sunday */}
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                <Calendar className="w-6 h-6 mr-2 text-amber-700" />
-                Sunday
-              </h3>
-              <div className="space-y-3">
-                <WeekendSlot
-                  time="6:00am – 10:00am"
-                  show="Raw Tracks & Room Tones"
-                  dj="Sam Turnbull"
-                  focus="Studio sessions, live recordings"
-                />
-                <WeekendSlot
-                  time="10:00am – 2:00pm"
-                  show="Mountain Daybreak"
-                  dj="Ruby Finch"
-                  focus="Appalachian roots, Sunday comfort"
-                />
-                <WeekendSlot
-                  time="2:00pm – 6:00pm"
-                  show="Backroads & Barrooms"
-                  dj="Mark Faulkner"
-                  focus="Texas country, jukebox wisdom"
-                />
-                <WeekendSlot
-                  time="6:00pm – 10:00pm"
-                  show="Evening Hymns"
-                  dj="Iris Langley"
-                  focus="Singer-songwriter, literary folk"
-                />
+          {/* Weekend Schedule */}
+          {(saturday.length > 0 || sunday.length > 0) && (
+            <section className="bg-white py-16">
+              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-4xl font-serif font-bold text-center mb-8 text-gray-900">
+                  Weekend Schedule
+                  <span className="block text-lg font-normal text-gray-600 mt-2">Saturday & Sunday</span>
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {saturday.length > 0 && (
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                        <Calendar className="w-6 h-6 mr-2 text-amber-700" />
+                        Saturday
+                      </h3>
+                      <div className="space-y-3">
+                        {saturday.map((slot, i) => (
+                          <WeekendSlot
+                            key={`sat-${i}`}
+                            time={`${formatTime(parseInt(slot.shiftStart))} - ${formatTime(parseInt(slot.shiftEnd))}`}
+                            show={slot.showName || `${slot.name}'s Show`}
+                            dj={slot.name}
+                            focus={slot.bio || ""}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {sunday.length > 0 && (
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                        <Calendar className="w-6 h-6 mr-2 text-amber-700" />
+                        Sunday
+                      </h3>
+                      <div className="space-y-3">
+                        {sunday.map((slot, i) => (
+                          <WeekendSlot
+                            key={`sun-${i}`}
+                            time={`${formatTime(parseInt(slot.shiftStart))} - ${formatTime(parseInt(slot.shiftEnd))}`}
+                            show={slot.showName || `${slot.name}'s Show`}
+                            dj={slot.name}
+                            focus={slot.bio || ""}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Special Programming */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-4xl font-serif font-bold text-center mb-8 text-gray-900">
-          Special Programming
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SpecialBlock
-            title="First Friday"
-            description="New Artist Showcase — Debut tracks from emerging artists"
-          />
-          <SpecialBlock
-            title="Second Sunday"
-            description="Songwriter Session — Acoustic, storytelling-focused programming"
-          />
-          <SpecialBlock
-            title="Third Thursday"
-            description="Deep Cuts Vinyl Night — Doc Holloway's extended album deep dives"
-          />
-          <SpecialBlock
-            title="Last Saturday"
-            description="Listener Request Hour — Community picks the playlist"
-          />
-        </div>
-      </section>
-
-      {/* Programming Principles */}
-      <section className="bg-gradient-to-br from-amber-700 to-orange-700 text-white py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-serif font-bold text-center mb-8">
-            How We Program
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <Clock className="w-12 h-12 mx-auto mb-4" />
-              <h3 className="text-xl font-bold mb-3">Time of Day Matters</h3>
-              <p className="text-amber-100">
-                Morning: upbeat, energizing. Evening: warm, storytelling. Late night: intimate, slower.
-              </p>
-            </div>
-            <div>
-              <Radio className="w-12 h-12 mx-auto mb-4" />
-              <h3 className="text-xl font-bold mb-3">Create Flow</h3>
-              <p className="text-amber-100">
-                Songs transition naturally by tempo, mood, and key. Build arcs within each hour.
-              </p>
-            </div>
-            <div>
-              <Calendar className="w-12 h-12 mx-auto mb-4" />
-              <h3 className="text-xl font-bold mb-3">Mix Old & New</h3>
-              <p className="text-amber-100">
-                Classic Americana (70s–90s) alongside modern indie country. Honor the past, celebrate the present.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Listening Tips */}
-      <section className="max-w-4xl mx-auto px-4 py-16">
-        <h2 className="text-4xl font-serif font-bold text-center mb-8 text-gray-900">
-          Listening Tips
-        </h2>
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <ul className="space-y-4 text-gray-700 text-lg">
-            <li className="flex items-start">
-              <span className="text-amber-700 font-bold mr-3">☀️</span>
-              <span><strong>Morning listeners:</strong> Start your day with Hank (6-10am) — Coffee, optimism, working-class anthems.</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-amber-700 font-bold mr-3">🌄</span>
-              <span><strong>Midday explorers:</strong> Tune into Loretta (10am-2pm) — British outsider's love letter to americana, smart but unpretentious.</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-amber-700 font-bold mr-3">🎸</span>
-              <span><strong>Afternoon deep-divers:</strong> Join Doc (2-6pm) — Vinyl gems, album cuts, music history.</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-amber-700 font-bold mr-3">🌆</span>
-              <span><strong>Evening storytellers:</strong> Listen to Carmen (6-10pm) — Cross-cultural, bilingual, border ballads.</span>
-            </li>
-            <li className="flex items-start">
-              <span className="text-amber-700 font-bold mr-3">🌙</span>
-              <span><strong>Night owls:</strong> Keep Cody company (10pm-2am) — Honky-tonk, outlaw country, late-night vibes.</span>
-            </li>
-          </ul>
-        </div>
-      </section>
+            </section>
+          )}
+        </>
+      )}
 
       {/* CTA */}
       <section className="bg-gradient-to-br from-amber-50 to-orange-100 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-serif font-bold mb-6 text-gray-900">
-            Make NCR Part of Your Day
+            Make It Part of Your Day
           </h2>
           <p className="text-xl text-gray-700 mb-8">
             Set your alarm. Bookmark your favorite show. Build a listening habit.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Link
-              href="/djs"
+              href="/station"
               className="inline-flex items-center space-x-2 bg-amber-700 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-amber-800 transition-colors shadow-lg"
             >
-              <span>Meet the DJs</span>
+              <span>Back to Station</span>
             </Link>
             <Link
-              href="/station"
+              href="/listen"
               className="inline-flex items-center space-x-2 border-2 border-amber-700 text-amber-800 px-8 py-4 rounded-lg text-lg font-bold hover:bg-amber-50 transition-colors"
             >
-              <span>Back to Station</span>
+              <span>Listen Now</span>
             </Link>
           </div>
         </div>
@@ -322,9 +275,8 @@ export default function SchedulePage() {
           <div className="mb-4">
             <StationName className="text-2xl font-serif font-bold text-white" />
           </div>
-          <p className="text-lg italic text-amber-400 mb-6">"Where the music finds you."</p>
           <p className="text-sm">
-            Part of the <Link href="/network" className="text-amber-400 hover:text-amber-300">TrueFans RADIO™ Network</Link>
+            Part of the <Link href="/network" className="text-amber-400 hover:text-amber-300">TrueFans RADIO Network</Link>
           </p>
         </div>
       </footer>
@@ -332,18 +284,8 @@ export default function SchedulePage() {
   );
 }
 
-function TimeSlot({
-  time,
-  show,
-  dj,
-  mood,
-  color
-}: {
-  time: string;
-  show: string;
-  dj: string;
-  mood: string;
-  color: string;
+function TimeSlot({ time, show, dj, mood, color }: {
+  time: string; show: string; dj: string; mood: string; color: string;
 }) {
   return (
     <div className={`${color} text-white rounded-xl p-6 shadow-lg`}>
@@ -355,31 +297,15 @@ function TimeSlot({
           </div>
           <h3 className="text-2xl font-serif font-bold mb-1">{show}</h3>
           <p className="text-sm opacity-90 mb-2">with {dj}</p>
-          <p className="text-sm italic opacity-80">{mood}</p>
-        </div>
-        <div className="mt-4 md:mt-0">
-          <Link
-            href="/djs"
-            className="inline-block bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors"
-          >
-            View DJ Profile →
-          </Link>
+          {mood && <p className="text-sm italic opacity-80">{mood}</p>}
         </div>
       </div>
     </div>
   );
 }
 
-function WeekendSlot({
-  time,
-  show,
-  dj,
-  focus
-}: {
-  time: string;
-  show: string;
-  dj: string;
-  focus: string;
+function WeekendSlot({ time, show, dj, focus }: {
+  time: string; show: string; dj: string; focus: string;
 }) {
   return (
     <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-5 shadow-md">
@@ -389,24 +315,9 @@ function WeekendSlot({
           <p className="text-sm font-semibold text-gray-600 mb-1">{time}</p>
           <h4 className="text-xl font-bold text-gray-900 mb-1">{show}</h4>
           <p className="text-sm text-gray-700 mb-2">with {dj}</p>
-          <p className="text-sm text-gray-600">{focus}</p>
+          {focus && <p className="text-sm text-gray-600">{focus}</p>}
         </div>
       </div>
-    </div>
-  );
-}
-
-function SpecialBlock({
-  title,
-  description
-}: {
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl p-6 shadow-md">
-      <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-700">{description}</p>
     </div>
   );
 }

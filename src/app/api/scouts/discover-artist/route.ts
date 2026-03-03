@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { auth } from "@/lib/auth/config";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { orgWhere, orgIdForCreate } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 

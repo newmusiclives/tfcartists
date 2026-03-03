@@ -165,11 +165,12 @@ export async function GET(request: NextRequest) {
     let indieCount = 0;
     let mainstreamCount = 0;
 
-    rotationSlots.forEach((slot) => {
+    rotationSlots.forEach((slot: any) => {
+      const count = typeof slot._count === "number" ? slot._count : slot._count?._all ?? 0;
       if (slot.indieVsMainstream === "indie") {
-        indieCount = slot._count;
+        indieCount = count;
       } else if (slot.indieVsMainstream === "mainstream") {
-        mainstreamCount = slot._count;
+        mainstreamCount = count;
       }
     });
 

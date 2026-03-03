@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
+import { orgWhere } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -73,56 +74,56 @@ export async function GET(request: NextRequest) {
       revenuePlatinum,
     ] = await Promise.all([
       // Total sponsors (excluding soft-deleted)
-      prisma.sponsor.count({ where: { deletedAt: null } }),
+      prisma.sponsor.count({ where: { deletedAt: null, ...orgWhere(session) } }),
 
       // --- byStatus (SponsorStatus enum) ---
       prisma.sponsor.count({
-        where: { status: "DISCOVERED", deletedAt: null },
+        where: { status: "DISCOVERED", deletedAt: null, ...orgWhere(session) },
       }),
       prisma.sponsor.count({
-        where: { status: "CONTACTED", deletedAt: null },
+        where: { status: "CONTACTED", deletedAt: null, ...orgWhere(session) },
       }),
       prisma.sponsor.count({
-        where: { status: "INTERESTED", deletedAt: null },
+        where: { status: "INTERESTED", deletedAt: null, ...orgWhere(session) },
       }),
       prisma.sponsor.count({
-        where: { status: "NEGOTIATING", deletedAt: null },
+        where: { status: "NEGOTIATING", deletedAt: null, ...orgWhere(session) },
       }),
-      prisma.sponsor.count({ where: { status: "CLOSED", deletedAt: null } }),
-      prisma.sponsor.count({ where: { status: "ACTIVE", deletedAt: null } }),
-      prisma.sponsor.count({ where: { status: "CHURNED", deletedAt: null } }),
+      prisma.sponsor.count({ where: { status: "CLOSED", deletedAt: null, ...orgWhere(session) } }),
+      prisma.sponsor.count({ where: { status: "ACTIVE", deletedAt: null, ...orgWhere(session) } }),
+      prisma.sponsor.count({ where: { status: "CHURNED", deletedAt: null, ...orgWhere(session) } }),
       prisma.sponsor.count({
-        where: { status: "UNRESPONSIVE", deletedAt: null },
+        where: { status: "UNRESPONSIVE", deletedAt: null, ...orgWhere(session) },
       }),
 
       // --- byStage (pipelineStage string) ---
       prisma.sponsor.count({
-        where: { pipelineStage: "discovery", deletedAt: null },
+        where: { pipelineStage: "discovery", deletedAt: null, ...orgWhere(session) },
       }),
       prisma.sponsor.count({
-        where: { pipelineStage: "contacted", deletedAt: null },
+        where: { pipelineStage: "contacted", deletedAt: null, ...orgWhere(session) },
       }),
       prisma.sponsor.count({
-        where: { pipelineStage: "interested", deletedAt: null },
+        where: { pipelineStage: "interested", deletedAt: null, ...orgWhere(session) },
       }),
       prisma.sponsor.count({
-        where: { pipelineStage: "negotiating", deletedAt: null },
+        where: { pipelineStage: "negotiating", deletedAt: null, ...orgWhere(session) },
       }),
       prisma.sponsor.count({
-        where: { pipelineStage: "closed", deletedAt: null },
+        where: { pipelineStage: "closed", deletedAt: null, ...orgWhere(session) },
       }),
       prisma.sponsor.count({
-        where: { pipelineStage: "active", deletedAt: null },
+        where: { pipelineStage: "active", deletedAt: null, ...orgWhere(session) },
       }),
       prisma.sponsor.count({
-        where: { pipelineStage: "churned", deletedAt: null },
+        where: { pipelineStage: "churned", deletedAt: null, ...orgWhere(session) },
       }),
 
       // --- Sponsorship-based metrics (from Sponsorship table) ---
-      prisma.sponsorship.count({ where: { status: "active" } }),
+      prisma.sponsorship.count({ where: { status: "active", sponsor: { ...orgWhere(session) } } }),
 
       prisma.sponsorship.aggregate({
-        where: { status: "active" },
+        where: { status: "active", sponsor: { ...orgWhere(session) } },
         _sum: { monthlyAmount: true },
       }),
 
@@ -130,6 +131,7 @@ export async function GET(request: NextRequest) {
       prisma.sponsorCall.count({
         where: {
           createdAt: { gte: startOfMonth, lte: endOfMonth },
+          sponsor: { ...orgWhere(session) },
         },
       }),
 
@@ -137,6 +139,7 @@ export async function GET(request: NextRequest) {
       prisma.sponsorship.count({
         where: {
           createdAt: { gte: startOfMonth, lte: endOfMonth },
+          sponsor: { ...orgWhere(session) },
         },
       }),
 
@@ -148,6 +151,7 @@ export async function GET(request: NextRequest) {
         where: {
           role: "harper",
           createdAt: { gte: thirtyDaysAgo },
+          conversation: { sponsor: { ...orgWhere(session) } },
         },
       }),
 
@@ -157,6 +161,7 @@ export async function GET(request: NextRequest) {
           sponsorshipTier: "LOCAL_HERO",
           status: "ACTIVE",
           deletedAt: null,
+          ...orgWhere(session),
         },
         _sum: { monthlyAmount: true },
         _count: true,
@@ -166,6 +171,7 @@ export async function GET(request: NextRequest) {
           sponsorshipTier: "BRONZE",
           status: "ACTIVE",
           deletedAt: null,
+          ...orgWhere(session),
         },
         _sum: { monthlyAmount: true },
         _count: true,
@@ -175,6 +181,7 @@ export async function GET(request: NextRequest) {
           sponsorshipTier: "SILVER",
           status: "ACTIVE",
           deletedAt: null,
+          ...orgWhere(session),
         },
         _sum: { monthlyAmount: true },
         _count: true,
@@ -184,6 +191,7 @@ export async function GET(request: NextRequest) {
           sponsorshipTier: "GOLD",
           status: "ACTIVE",
           deletedAt: null,
+          ...orgWhere(session),
         },
         _sum: { monthlyAmount: true },
         _count: true,
@@ -193,6 +201,7 @@ export async function GET(request: NextRequest) {
           sponsorshipTier: "PLATINUM",
           status: "ACTIVE",
           deletedAt: null,
+          ...orgWhere(session),
         },
         _sum: { monthlyAmount: true },
         _count: true,

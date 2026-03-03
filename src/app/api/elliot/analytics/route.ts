@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
+import { orgWhere } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +79,7 @@ export async function GET() {
     // --- Referral source breakdown ---
     const referralSources = await prisma.listener.groupBy({
       by: ["discoverySource"],
+      where: { ...orgWhere(session) },
       _count: { id: true },
       orderBy: { _count: { id: "desc" } },
     });
@@ -107,12 +109,14 @@ export async function GET() {
 
       const cohortTotal = await prisma.listener.count({
         where: {
+          ...orgWhere(session),
           createdAt: { gte: cohortStart, lt: cohortEnd },
         },
       });
 
       const cohortActive = await prisma.listener.count({
         where: {
+          ...orgWhere(session),
           createdAt: { gte: cohortStart, lt: cohortEnd },
           lastListenedAt: { gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) },
         },

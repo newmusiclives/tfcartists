@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth/config";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { validateCsrf, ensureCsrfCookie } from "@/lib/csrf";
 
 /**
  * Security Headers Configuration
@@ -38,12 +39,14 @@ function addSecurityHeaders(response: NextResponse, pathname: string) {
     // Embed routes: allow iframe embedding from any origin, allow media
     const embedCsp = isDev
       ? "default-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' data: https:; frame-ancestors *;"
-      : "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' data: https:; frame-ancestors *;";
+      : "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' data: https:; frame-ancestors *;";
     response.headers.set("Content-Security-Policy", embedCsp);
   } else {
+    // Note: style-src keeps 'unsafe-inline' because Next.js injects inline styles.
+    // script-src removes 'unsafe-inline' in production for XSS protection.
     const csp = isDev
       ? "default-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' ws: wss: https:; media-src 'self' data: https:;"
-      : "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' data: https:;";
+      : "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' data: https:;";
     response.headers.set("Content-Security-Policy", csp);
   }
 
@@ -111,6 +114,37 @@ function addCorsHeaders(response: NextResponse, request: NextRequest) {
   return response;
 }
 
+/**
+ * Simple in-memory rate limiter for middleware (Edge-compatible).
+ * Provides a baseline safety net for all API write requests.
+ * Per-route Upstash rate limiting provides more granular control.
+ */
+const writeRateMap = new Map<string, { count: number; resetAt: number }>();
+const WRITE_RATE_LIMIT = 120; // Max writes per minute per IP
+const WRITE_RATE_WINDOW = 60_000; // 1 minute
+
+function checkWriteRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = writeRateMap.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    writeRateMap.set(ip, { count: 1, resetAt: now + WRITE_RATE_WINDOW });
+    return true;
+  }
+
+  entry.count++;
+  return entry.count <= WRITE_RATE_LIMIT;
+}
+
+function getClientIp(req: NextRequest): string {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    req.headers.get("x-nf-client-connection-ip") ||
+    "unknown"
+  );
+}
+
 export default auth((req) => {
   const { pathname } = req.nextUrl;
 
@@ -120,12 +154,34 @@ export default auth((req) => {
     return addCorsHeaders(response, req);
   }
 
+  // CSRF validation for state-changing API requests
+  const csrfError = validateCsrf(req);
+  if (csrfError) return csrfError;
+
+  // Global rate limit for API writes (baseline safety net)
+  if (
+    pathname.startsWith("/api") &&
+    ["POST", "PUT", "PATCH", "DELETE"].includes(req.method)
+  ) {
+    const ip = getClientIp(req);
+    if (!checkWriteRateLimit(ip)) {
+      return NextResponse.json(
+        { error: "Too many requests. Please slow down." },
+        { status: 429, headers: { "Retry-After": "60" } }
+      );
+    }
+  }
+
   // All pages are public — auth is optional for role-based UI
   const response = NextResponse.next();
   addSecurityHeaders(response, pathname);
   if (pathname.startsWith("/api")) {
     addCorsHeaders(response, req);
   }
+
+  // Ensure CSRF cookie is always set
+  ensureCsrfCookie(req, response);
+
   return response;
 });
 

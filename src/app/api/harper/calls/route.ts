@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
+import { prisma } from "@/lib/db";
+import { orgWhere } from "@/lib/db-scoped";
 import { logger } from "@/lib/logger";
 import { requireRole } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
@@ -30,6 +32,15 @@ export async function POST(request: NextRequest) {
         { error: "sponsorId, duration, and outcome are required" },
         { status: 400 }
       );
+    }
+
+    // Verify sponsor belongs to user's org
+    const sponsor = await prisma.sponsor.findFirst({
+      where: { id: sponsorId, ...orgWhere(session) },
+      select: { id: true },
+    });
+    if (!sponsor) {
+      return NextResponse.json({ error: "Sponsor not found" }, { status: 404 });
     }
 
     const harperAgent = new HarperAgent();
@@ -77,10 +88,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "sponsorId is required" }, { status: 400 });
     }
 
-    const { prisma } = await import("@/lib/db");
-
     const calls = await prisma.sponsorCall.findMany({
-      where: { sponsorId },
+      where: { sponsorId, sponsor: { ...orgWhere(session) } },
       orderBy: { createdAt: "desc" },
       take: 50,
     });

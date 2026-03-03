@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { buildHourPlaylist } from "@/lib/radio/playlist-builder";
 import { requireAuth } from "@/lib/api/auth";
+import { verifyStationAccess } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,11 @@ export async function GET(request: NextRequest) {
     const djId = sp.get("djId");
     const date = sp.get("date");
     const hour = sp.get("hour");
+
+    if (stationId && session) {
+      const station = await verifyStationAccess(session, stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
+    }
 
     const where: Record<string, unknown> = {};
     if (stationId) where.stationId = stationId;
@@ -58,6 +64,11 @@ export async function POST(request: NextRequest) {
         { error: "stationId, djId, clockTemplateId, airDate, and hourOfDay are required" },
         { status: 400 }
       );
+    }
+
+    if (stationId && session) {
+      const station = await verifyStationAccess(session, stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
     }
 
     const result = await buildHourPlaylist({

@@ -3,26 +3,47 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award, Music, Settings, Building2 } from "lucide-react";
 import { StationName } from "@/components/station-name";
+import { prisma } from "@/lib/db";
+
+const NETWORK_NAME = process.env.NEXT_PUBLIC_NETWORK_NAME || "TrueFans RADIO";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://truefans-radio.netlify.app";
 
 export const metadata: Metadata = {
-  title: "TrueFans RADIO | Where the Music Finds You",
+  title: `${NETWORK_NAME} | Where the Music Finds You`,
   description:
     "24/7 AI-powered radio championing independent artists. 92% of every dollar goes directly to artists. Listen live, earn rewards, and discover new music.",
 };
 
+export const revalidate = 300; // Revalidate every 5 minutes
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "RadioStation",
-  name: "TrueFans RADIO",
+  name: NETWORK_NAME,
   description:
     "24/7 AI-powered radio championing independent artists. 92% of every dollar goes directly to artists.",
-  url: "https://truefans-radio.netlify.app",
+  url: SITE_URL,
   broadcastFrequency: "Internet Only",
   areaServed: "Worldwide",
   genre: "Americana / Independent",
 };
 
-export default function HomePage() {
+async function getMetrics() {
+  try {
+    const [artistCount, sponsorCount, listenerCount, songCount] = await Promise.all([
+      prisma.artist.count({ where: { deletedAt: null } }),
+      prisma.sponsor.count({ where: { deletedAt: null } }),
+      prisma.listener.count(),
+      prisma.song.count({ where: { isActive: true } }),
+    ]);
+    return { artistCount, sponsorCount, listenerCount, songCount };
+  } catch {
+    return { artistCount: 0, sponsorCount: 0, listenerCount: 0, songCount: 0 };
+  }
+}
+
+export default async function HomePage() {
+  const metrics = await getMetrics();
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       <script
@@ -120,7 +141,7 @@ export default function HomePage() {
 
           <div className="inline-flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
             <Radio className="w-4 h-4" />
-            <span>TrueFans RADIO Network — Station #1</span>
+            <span>{NETWORK_NAME} Network</span>
           </div>
 
           <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
@@ -224,7 +245,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
-                <span>300 artists, $4,350/month</span>
+                <span>{metrics.artistCount.toLocaleString()} artists in pipeline</span>
               </li>
             </ul>
           </div>
@@ -257,7 +278,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-teal-600">✓</span>
-                <span>200 artists, 80/20 rotation</span>
+                <span>{metrics.songCount.toLocaleString()} songs in rotation</span>
               </li>
             </ul>
           </div>
@@ -289,7 +310,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-blue-600">✓</span>
-                <span>6,000 listeners, growing daily</span>
+                <span>{metrics.listenerCount.toLocaleString()} listeners and growing</span>
               </li>
             </ul>
           </div>
@@ -321,7 +342,7 @@ export default function HomePage() {
               </li>
               <li className="flex items-center space-x-2">
                 <span className="text-green-600">✓</span>
-                <span>72 sponsors, $18,150/month</span>
+                <span>{metrics.sponsorCount.toLocaleString()} sponsors on board</span>
               </li>
             </ul>
           </div>
@@ -450,7 +471,7 @@ export default function HomePage() {
                 Cookie Policy
               </Link>
             </div>
-            <p className="text-center">&copy; 2025 TrueFans RADIO Network. Parker + Riley + Cassidy + Elliot + Harper AI Teams.</p>
+            <p className="text-center">&copy; {new Date().getFullYear()} {NETWORK_NAME} Network. Powered by AI.</p>
           </div>
         </div>
       </footer>

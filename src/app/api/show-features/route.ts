@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireAuth } from "@/lib/api/auth";
+import { verifyStationAccess } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +46,11 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { action } = body;
+
+    if (body.stationId && session) {
+      const station = await verifyStationAccess(session, body.stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
+    }
 
     if (action === "seed-types") {
       // Bulk upsert feature types

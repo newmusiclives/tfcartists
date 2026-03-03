@@ -3,6 +3,7 @@ import { riley } from "@/lib/ai/riley-agent";
 import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { withValidation, handleArtistMessageSchema } from "@/lib/validation/schemas";
+import { orgWhere } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 

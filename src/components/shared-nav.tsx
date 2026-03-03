@@ -78,6 +78,39 @@ export function SharedNav() {
     setMobileSection((prev) => (prev === id ? null : id));
   }, []);
 
+  // Close dropdowns on Escape key
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpenMenu(null);
+        if (mobileOpen) {
+          setMobileOpen(false);
+          setMobileSection(null);
+        }
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [mobileOpen]);
+
+  // Keyboard handler for dropdown trigger buttons
+  const handleDropdownKeyDown = useCallback(
+    (e: React.KeyboardEvent, menuId: MenuId) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleMenu(menuId);
+      } else if (e.key === "ArrowDown" && openMenu === menuId) {
+        e.preventDefault();
+        // Focus first link in the dropdown
+        const dropdown = (e.currentTarget as HTMLElement).parentElement?.querySelector<HTMLElement>(
+          '[role="menu"] a, [role="menu"] button'
+        );
+        dropdown?.focus();
+      }
+    },
+    [openMenu, toggleMenu]
+  );
+
   const linkClass = (path: string, color = "purple") =>
     `block px-4 py-2 text-sm text-gray-700 hover:bg-${color}-50 transition-colors`;
 
@@ -100,6 +133,9 @@ export function SharedNav() {
               <div className="relative">
                 <button
                   onClick={() => toggleMenu("teams")}
+                  onKeyDown={(e) => handleDropdownKeyDown(e, "teams")}
+                  aria-expanded={openMenu === "teams"}
+                  aria-haspopup="true"
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
                     isActive("/riley") || isActive("/harper") || isActive("/cassidy") || isActive("/elliot") || isActive("/parker")
                       ? "bg-purple-100 text-purple-700"
@@ -111,7 +147,7 @@ export function SharedNav() {
                   <ChevronDown className={`w-3 h-3 transition-transform ${openMenu === "teams" ? "rotate-180" : ""}`} />
                 </button>
                 {openMenu === "teams" && (
-                  <div className="absolute right-0 mt-1 w-[880px] bg-white rounded-xl shadow-xl border py-4 px-3 z-50">
+                  <div role="menu" className="absolute right-0 mt-1 w-[880px] bg-white rounded-xl shadow-xl border py-4 px-3 z-50">
                     <div className="grid grid-cols-5 gap-2">
                       {/* Parker */}
                       <div>
@@ -458,7 +494,12 @@ export function SharedNav() {
           />
 
           {/* Slide-out drawer */}
-          <div className="fixed inset-y-0 right-0 w-80 max-w-[85vw] bg-white z-[70] md:hidden shadow-2xl overflow-y-auto">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+            className="fixed inset-y-0 right-0 w-80 max-w-[85vw] bg-white z-[70] md:hidden shadow-2xl overflow-y-auto"
+          >
             {/* Drawer header */}
             <div className="flex items-center justify-between px-4 h-16 border-b">
               <span className="font-bold text-amber-700 text-lg">Menu</span>

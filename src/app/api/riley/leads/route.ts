@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
+import { orgWhere } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
     const source = searchParams.get("source");
     const search = searchParams.get("search");
 
-    const where: any = { deletedAt: null };
+    const where: any = { deletedAt: null, ...orgWhere(session) };
 
     // Filter by status (mapped to ArtistStatus)
     if (status && status !== "all") {
@@ -140,6 +141,7 @@ export async function POST(request: NextRequest) {
         status: "DISCOVERED",
         pipelineStage: "discovery",
         metadata: body.notes ? { notes: body.notes } : undefined,
+        organizationId: session.user.organizationId || null,
       },
     });
 
@@ -203,7 +205,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const artist = await prisma.artist.update({
-      where: { id: body.id },
+      where: { id: body.id, ...orgWhere(session) },
       data: updateData,
     });
 
@@ -234,7 +236,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     await prisma.artist.update({
-      where: { id },
+      where: { id, ...orgWhere(session) },
       data: { deletedAt: new Date() },
     });
 

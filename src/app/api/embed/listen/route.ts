@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { embedListenSchema, embedListenPatchSchema } from "@/lib/validation/schemas";
 
 export const dynamic = "force-dynamic";
 
@@ -15,8 +17,20 @@ function getTimeSlot(): string {
 // POST: Start an embed listening session
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit embed session creation
+    const rateLimitResponse = await withRateLimit(request, "api");
+    if (rateLimitResponse) return rateLimitResponse;
+
+    // Validate input
     const body = await request.json();
-    const { ref, device } = body;
+    const parsed = embedListenSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Validation failed", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+    const { ref, device } = parsed.data;
 
     // Create listening session
     const session = await prisma.listeningSession.create({
@@ -66,12 +80,18 @@ export async function POST(request: NextRequest) {
 // PATCH: End an embed listening session
 export async function PATCH(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { sessionId } = body;
+    const rateLimitResponse = await withRateLimit(request, "api");
+    if (rateLimitResponse) return rateLimitResponse;
 
-    if (!sessionId) {
-      return NextResponse.json({ error: "sessionId required" }, { status: 400 });
+    const body = await request.json();
+    const parsed = embedListenPatchSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Validation failed", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
     }
+    const { sessionId } = parsed.data;
 
     await prisma.listeningSession.update({
       where: { id: sessionId },

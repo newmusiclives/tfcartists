@@ -3,13 +3,17 @@
 import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { LogIn, Radio, AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { LogIn, Radio, AlertCircle, Building2, Users } from "lucide-react";
+
+type LoginMode = "team" | "operator";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/admin";
 
+  const [mode, setMode] = useState<LoginMode>("team");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,6 +25,8 @@ function LoginForm() {
     setIsLoading(true);
 
     try {
+      // Both team and operator login go through the same NextAuth credentials provider.
+      // Team uses username (admin, riley, etc.), operator uses email.
       const result = await signIn("credentials", {
         username,
         password,
@@ -28,12 +34,14 @@ function LoginForm() {
       });
 
       if (result?.error) {
-        setError(`Login failed: ${result.error} (status: ${result.status})`);
+        setError("Invalid credentials. Please check your username/email and password.");
       } else if (result?.ok) {
-        router.push(callbackUrl);
+        // Operators go to their dashboard, team goes to admin
+        const redirect = mode === "operator" ? "/operator/dashboard" : callbackUrl;
+        router.push(redirect);
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred during login");
     } finally {
       setIsLoading(false);
@@ -54,37 +62,60 @@ function LoginForm() {
 
         {/* Login Form */}
         <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Error Message */}
+          {/* Mode Toggle */}
+          <div className="flex rounded-lg bg-gray-100 p-1 mb-6">
+            <button
+              type="button"
+              onClick={() => { setMode("team"); setUsername(""); setError(""); }}
+              className={`flex-1 flex items-center justify-center space-x-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                mode === "team"
+                  ? "bg-white text-purple-700 shadow-sm"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              <span>Team</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { setMode("operator"); setUsername(""); setError(""); }}
+              className={`flex-1 flex items-center justify-center space-x-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                mode === "operator"
+                  ? "bg-white text-amber-700 shadow-sm"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <Building2 className="w-4 h-4" />
+              <span>Operator</span>
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start space-x-3">
                 <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-red-800">{error}</p>
-                </div>
+                <p className="text-sm text-red-800">{error}</p>
               </div>
             )}
 
-            {/* Username Field */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-                Username
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1.5">
+                {mode === "team" ? "Username" : "Email"}
               </label>
               <input
                 id="username"
-                type="text"
+                type={mode === "operator" ? "email" : "text"}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                placeholder="Enter your username"
+                placeholder={mode === "team" ? "e.g. admin, riley, harper" : "you@example.com"}
                 required
                 disabled={isLoading}
               />
             </div>
 
-            {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
                 Password
               </label>
               <input
@@ -99,11 +130,14 @@ function LoginForm() {
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              className={`w-full text-white py-3 rounded-lg font-medium focus:ring-4 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 ${
+                mode === "team"
+                  ? "bg-purple-600 hover:bg-purple-700 focus:ring-purple-300"
+                  : "bg-amber-700 hover:bg-amber-800 focus:ring-amber-300"
+              }`}
             >
               {isLoading ? (
                 <>
@@ -119,17 +153,25 @@ function LoginForm() {
             </button>
           </form>
 
-          {/* Help text */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
+          {mode === "operator" && (
+            <div className="mt-4 text-center">
+              <Link href="/operator/signup" className="text-sm text-amber-700 hover:text-amber-800 font-medium">
+                Don't have an account? Sign up
+              </Link>
+            </div>
+          )}
+
+          <div className="mt-6 pt-5 border-t border-gray-200">
             <p className="text-xs text-gray-500 text-center">
-              Contact your administrator if you need login credentials.
+              {mode === "team"
+                ? "Contact your administrator for team credentials."
+                : "Operator accounts manage station programming and settings."}
             </p>
           </div>
         </div>
 
-        {/* Footer */}
         <p className="text-center text-purple-200 text-sm mt-6">
-          © 2025 TrueFans RADIO. All rights reserved.
+          &copy; {new Date().getFullYear()} TrueFans RADIO Network
         </p>
       </div>
     </div>

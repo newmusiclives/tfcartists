@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireAuth } from "@/lib/api/auth";
+import { verifyStationAccess } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,11 @@ export async function GET(request: NextRequest) {
     if (!session) return unauthorized();
 
     const stationId = request.nextUrl.searchParams.get("stationId");
+
+    if (stationId && session) {
+      const station = await verifyStationAccess(session, stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
+    }
 
     // Get all DJ shows with DJ info
     const where: any = {};
@@ -55,6 +61,11 @@ export async function PUT(request: NextRequest) {
 
     if (!stationId || !Array.isArray(schedule)) {
       return NextResponse.json({ error: "Missing required: stationId and schedule array" }, { status: 400 });
+    }
+
+    if (stationId && session) {
+      const station = await verifyStationAccess(session, stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
     }
 
     // Bulk update: delete existing assignments for this station and recreate

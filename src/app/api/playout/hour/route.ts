@@ -127,8 +127,16 @@ export async function GET(request: NextRequest) {
 
     if (adSlots.length > 0) {
       // Get all active ads with audio
+      // Include ads that have EITHER a file path or a stored data URI
       const activeAds = await prisma.sponsorAd.findMany({
-        where: { stationId, isActive: true, audioFilePath: { not: null } },
+        where: {
+          stationId,
+          isActive: true,
+          OR: [
+            { audioFilePath: { not: null } },
+            { audioDataUri: { not: null } },
+          ],
+        },
       });
 
       if (activeAds.length > 0) {
@@ -173,14 +181,14 @@ export async function GET(request: NextRequest) {
               id: ad1.id,
               sponsorName: ad1.sponsorName,
               adTitle: ad1.adTitle,
-              audioFilePath: ad1.audioFilePath,
+              audioFilePath: ad1.audioFilePath || ad1.audioDataUri,
               durationSeconds: ad1.durationSeconds,
             },
             {
               id: ad2.id,
               sponsorName: ad2.sponsorName,
               adTitle: ad2.adTitle,
-              audioFilePath: ad2.audioFilePath,
+              audioFilePath: ad2.audioFilePath || ad2.audioDataUri,
               durationSeconds: ad2.durationSeconds,
             },
           ]);

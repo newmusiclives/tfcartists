@@ -18,9 +18,11 @@ export function initSentry() {
     dsn,
     environment: process.env.NODE_ENV || "production",
     enabled: process.env.NODE_ENV === "production",
-    tracesSampleRate: 0.1,
+    // Higher sampling during initial launch to catch issues early.
+    // Reduce to 0.1 once stable with significant traffic.
+    tracesSampleRate: 1.0,
     replaysSessionSampleRate: 0,
-    replaysOnErrorSampleRate: 0.5,
+    replaysOnErrorSampleRate: 1.0,
     beforeSend(event) {
       // Strip PII from error reports
       if (event.request?.cookies) {

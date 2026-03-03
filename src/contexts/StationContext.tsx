@@ -14,6 +14,11 @@ export interface StationInfo {
   formatType: string | null;
   streamUrl: string | null;
   isActive: boolean;
+  logoUrl?: string | null;
+  description?: string | null;
+  ownerName?: string | null;
+  ownerEmail?: string | null;
+  organizationId?: string | null;
   _count?: {
     songs: number;
     clockTemplates: number;
@@ -22,17 +27,22 @@ export interface StationInfo {
   };
 }
 
+/**
+ * Default fallback station. Used only when the API is unreachable.
+ * In production, station data comes from the database via /api/stations.
+ * Operators override all fields through the Station admin UI.
+ */
 const DEFAULT_STATION: StationInfo = {
   id: "default-ncr",
-  name: "North Country Radio",
-  callSign: "NCR",
-  tagline: "Where the music finds you.",
-  genre: "Americana, Country, Singer-Songwriter",
-  primaryColor: "#78350f",
-  secondaryColor: "#c2410c",
-  stationCode: "ncr",
-  formatType: "americana",
-  streamUrl: "https://tfc-radio.netlify.app/stream/americana-hq.mp3",
+  name: process.env.NEXT_PUBLIC_STATION_NAME || "North Country Radio",
+  callSign: process.env.NEXT_PUBLIC_STATION_CALL_SIGN || "NCR",
+  tagline: process.env.NEXT_PUBLIC_STATION_TAGLINE || "Where the music finds you.",
+  genre: process.env.NEXT_PUBLIC_STATION_GENRE || "Americana, Country, Singer-Songwriter",
+  primaryColor: process.env.NEXT_PUBLIC_PRIMARY_COLOR || "#78350f",
+  secondaryColor: process.env.NEXT_PUBLIC_SECONDARY_COLOR || "#c2410c",
+  stationCode: process.env.NEXT_PUBLIC_STATION_CODE || "ncr",
+  formatType: process.env.NEXT_PUBLIC_FORMAT_TYPE || "americana",
+  streamUrl: process.env.NEXT_PUBLIC_STREAM_URL || "https://tfc-radio.netlify.app/stream/americana-hq.mp3",
   isActive: true,
 };
 

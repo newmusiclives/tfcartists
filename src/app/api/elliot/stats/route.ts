@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
+import { orgWhere } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -55,31 +56,32 @@ export async function GET(request: NextRequest) {
       scoutCount,
     ] = await Promise.all([
       // --- Listener counts by status ---
-      prisma.listener.count(),
-      prisma.listener.count({ where: { status: "NEW" } }),
-      prisma.listener.count({ where: { status: "ACTIVE" } }),
-      prisma.listener.count({ where: { status: "POWER_USER" } }),
-      prisma.listener.count({ where: { status: "AT_RISK" } }),
-      prisma.listener.count({ where: { status: "CHURNED" } }),
-      prisma.listener.count({ where: { status: "REACTIVATED" } }),
+      prisma.listener.count({ where: { ...orgWhere(session) } }),
+      prisma.listener.count({ where: { status: "NEW", ...orgWhere(session) } }),
+      prisma.listener.count({ where: { status: "ACTIVE", ...orgWhere(session) } }),
+      prisma.listener.count({ where: { status: "POWER_USER", ...orgWhere(session) } }),
+      prisma.listener.count({ where: { status: "AT_RISK", ...orgWhere(session) } }),
+      prisma.listener.count({ where: { status: "CHURNED", ...orgWhere(session) } }),
+      prisma.listener.count({ where: { status: "REACTIVATED", ...orgWhere(session) } }),
 
       // --- Listener counts by tier ---
-      prisma.listener.count({ where: { tier: "CASUAL" } }),
-      prisma.listener.count({ where: { tier: "REGULAR" } }),
-      prisma.listener.count({ where: { tier: "SUPER_FAN" } }),
-      prisma.listener.count({ where: { tier: "EVANGELIST" } }),
+      prisma.listener.count({ where: { tier: "CASUAL", ...orgWhere(session) } }),
+      prisma.listener.count({ where: { tier: "REGULAR", ...orgWhere(session) } }),
+      prisma.listener.count({ where: { tier: "SUPER_FAN", ...orgWhere(session) } }),
+      prisma.listener.count({ where: { tier: "EVANGELIST", ...orgWhere(session) } }),
 
       // --- Behavior aggregates ---
       prisma.listener.aggregate({
+        where: { ...orgWhere(session) },
         _sum: { totalSessions: true, totalListeningHours: true },
         _avg: { averageSessionLength: true, listeningStreak: true },
       }),
 
       // --- Growth metrics ---
-      prisma.listener.count({ where: { createdAt: { gte: startOfWeek } } }),
-      prisma.listener.count({ where: { createdAt: { gte: startOfMonth } } }),
+      prisma.listener.count({ where: { ...orgWhere(session), createdAt: { gte: startOfWeek } } }),
+      prisma.listener.count({ where: { ...orgWhere(session), createdAt: { gte: startOfMonth } } }),
       prisma.listener.count({
-        where: { status: "CHURNED", updatedAt: { gte: startOfWeek } },
+        where: { status: "CHURNED", ...orgWhere(session), updatedAt: { gte: startOfWeek } },
       }),
 
       // --- Content metrics ---
@@ -105,7 +107,7 @@ export async function GET(request: NextRequest) {
       }),
 
       // --- Community metrics ---
-      prisma.listener.count({ where: { communityMember: true } }),
+      prisma.listener.count({ where: { communityMember: true, ...orgWhere(session) } }),
       prisma.scout.count(),
     ]);
 

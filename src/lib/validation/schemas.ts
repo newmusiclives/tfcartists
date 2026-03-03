@@ -125,6 +125,34 @@ export const idParamSchema = z.object({
 });
 
 // ============================================================================
+// PUBLIC ENDPOINT SCHEMAS
+// ============================================================================
+
+export const createListenerSchema = z.object({
+  name: z.string().max(200).optional(),
+  email: z.string().email("Invalid email format").max(320),
+  discoverySource: z.string().max(100).optional(),
+  referralCode: z.string().max(50).optional(),
+});
+
+export const embedListenSchema = z.object({
+  ref: z.string().max(50).optional(),
+  device: z.enum(["embed", "web", "mobile", "desktop"]).default("embed"),
+});
+
+export const embedListenPatchSchema = z.object({
+  sessionId: z.string().cuid("Invalid session ID format"),
+});
+
+export const sponsorInquirySchema = z.object({
+  businessName: z.string().min(1, "Business name is required").max(200),
+  contactName: z.string().min(1, "Contact name is required").max(200),
+  email: z.string().email("Invalid email format"),
+  phone: z.string().max(20).optional(),
+  message: z.string().max(2000).optional(),
+});
+
+// ============================================================================
 // VALIDATION HELPER FUNCTIONS
 // ============================================================================
 

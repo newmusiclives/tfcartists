@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
 import { requireRole } from "@/lib/api/auth";
+import { verifyStationAccess } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +56,11 @@ export async function POST(request: NextRequest) {
 
     if (!stationId || !title || !artistName) {
       return NextResponse.json({ error: "Missing required fields: stationId, title, artistName" }, { status: 400 });
+    }
+
+    if (stationId) {
+      const station = await verifyStationAccess(session, stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
     }
 
     const song = await prisma.song.create({

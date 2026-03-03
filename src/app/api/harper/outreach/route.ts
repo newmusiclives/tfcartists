@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
 import { prisma } from "@/lib/db";
+import { orgWhere } from "@/lib/db-scoped";
 import { logger } from "@/lib/logger";
+import { requireRole } from "@/lib/api/auth";
+import { unauthorized } from "@/lib/api/errors";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { messageDelivery } from "@/lib/messaging/delivery-service";
 
@@ -21,6 +24,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const session = await requireRole("harper");
+    if (!session) return unauthorized();
+
     const body = await request.json();
     const { sponsorId, channel = "email", template = "initial_contact" } = body;
 
@@ -28,9 +34,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "sponsorId is required" }, { status: 400 });
     }
 
-    // Get sponsor details
-    const sponsor = await prisma.sponsor.findUnique({
-      where: { id: sponsorId },
+    // Get sponsor details (scoped to org)
+    const sponsor = await prisma.sponsor.findFirst({
+      where: { id: sponsorId, ...orgWhere(session) },
     });
 
     if (!sponsor) {

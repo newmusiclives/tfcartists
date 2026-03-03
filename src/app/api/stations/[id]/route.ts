@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
-import { requireAdmin, pickFields } from "@/lib/api/auth";
+import { requireAdmin, pickFields, getOrgScope } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const { id } = await params;
     const station = await prisma.station.findUnique({
-      where: { id },
+      where: { id, deletedAt: null },
       include: {
         songs: { where: { isActive: true }, take: 10, orderBy: { createdAt: "desc" } },
         clockTemplates: { where: { isActive: true } },
@@ -41,20 +41,54 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     const { id } = await params;
     const body = await request.json();
-    const station = await prisma.station.update({ where: { id }, data: pickFields(body, ALLOWED_FIELDS) });
+
+    // Optimistic locking: check version matches before updating
+    if (body.version !== undefined) {
+      const current = await prisma.station.findUnique({
+        where: { id, deletedAt: null },
+        select: { version: true },
+      });
+      if (!current) {
+        return NextResponse.json({ error: "Station not found" }, { status: 404 });
+      }
+      if (current.version !== body.version) {
+        return NextResponse.json(
+          { error: "Conflict: station was modified by another user. Please refresh and try again.", currentVersion: current.version },
+          { status: 409 }
+        );
+      }
+    }
+
+    const data = pickFields(body, ALLOWED_FIELDS);
+    const station = await prisma.station.update({
+      where: { id, deletedAt: null },
+      data: {
+        ...data,
+        version: { increment: 1 },
+      },
+    });
     return NextResponse.json({ station });
   } catch (error) {
     return handleApiError(error, "/api/stations/[id]");
   }
 }
 
+/**
+ * DELETE /api/stations/[id]
+ * Soft-deletes the station (sets deletedAt instead of destroying data).
+ */
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await requireAdmin();
     if (!session) return unauthorized();
 
     const { id } = await params;
-    await prisma.station.delete({ where: { id } });
+
+    // Soft delete: set deletedAt timestamp instead of destroying
+    await prisma.station.update({
+      where: { id, deletedAt: null },
+      data: { deletedAt: new Date(), isActive: false },
+    });
     return NextResponse.json({ success: true });
   } catch (error) {
     return handleApiError(error, "/api/stations/[id]");

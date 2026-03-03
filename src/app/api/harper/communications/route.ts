@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { requireRole } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
+import { orgWhere } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -22,9 +23,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "sponsorId is required" }, { status: 400 });
     }
 
-    // Get conversations for this sponsor (limited)
+    // Get conversations for this sponsor (limited, scoped to org)
     const conversations = await prisma.sponsorConversation.findMany({
-      where: { sponsorId },
+      where: { sponsorId, sponsor: { ...orgWhere(session) } },
       include: {
         messages: {
           orderBy: { createdAt: "asc" },
@@ -35,9 +36,9 @@ export async function GET(request: NextRequest) {
       take: 20,
     });
 
-    // Get sponsor details
-    const sponsor = await prisma.sponsor.findUnique({
-      where: { id: sponsorId },
+    // Get sponsor details (scoped to org)
+    const sponsor = await prisma.sponsor.findFirst({
+      where: { id: sponsorId, ...orgWhere(session) },
       select: {
         businessName: true,
         contactName: true,

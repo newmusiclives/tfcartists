@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireAuth } from "@/lib/api/auth";
+import { verifyStationAccess } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +59,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "stationId required" }, { status: 400 });
     }
 
+    if (stationId && session) {
+      const stationAccess = await verifyStationAccess(session, stationId);
+      if (!stationAccess) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
+    }
+
     const station = await prisma.station.findUnique({
       where: { id: stationId },
       select: { id: true, name: true, ...PRODUCTION_FIELDS },
@@ -83,6 +89,11 @@ export async function PATCH(request: NextRequest) {
 
     if (!stationId) {
       return NextResponse.json({ error: "stationId required" }, { status: 400 });
+    }
+
+    if (stationId && session) {
+      const stationAccess = await verifyStationAccess(session, stationId);
+      if (!stationAccess) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
     }
 
     // Whitelist only production fields

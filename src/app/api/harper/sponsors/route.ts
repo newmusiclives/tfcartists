@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, validationError, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
-import { requireRole } from "@/lib/api/auth";
+import { requireRole, getOrgScope } from "@/lib/api/auth";
 import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 export const dynamic = "force-dynamic";
@@ -28,9 +28,11 @@ export async function GET(request: NextRequest) {
     const pipelineStage = searchParams.get("pipelineStage");
     const tier = searchParams.get("tier");
 
-    // Build where clause
+    // Build where clause — scoped to user's organization
+    const orgScope = getOrgScope(session);
     const where: any = {
       deletedAt: null,
+      ...orgScope,
     };
 
     if (search) {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, notFound, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
+import { orgWhere } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -20,8 +21,8 @@ export async function GET(
 
     const { id } = await params;
 
-    const sponsor = await prisma.sponsor.findUnique({
-      where: { id },
+    const sponsor = await prisma.sponsor.findFirst({
+      where: { id, ...orgWhere(session) },
       include: {
         conversations: {
           orderBy: { createdAt: "desc" },
@@ -67,9 +68,9 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
-    // Check the sponsor exists
-    const existing = await prisma.sponsor.findUnique({
-      where: { id },
+    // Check the sponsor exists (scoped to org)
+    const existing = await prisma.sponsor.findFirst({
+      where: { id, ...orgWhere(session) },
       select: { id: true, deletedAt: true, version: true },
     });
 

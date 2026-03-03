@@ -4,7 +4,6 @@ import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
-
 export const dynamic = "force-dynamic";
 
 /**
@@ -71,7 +70,7 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get("status") || "active";
 
     const campaigns = await prisma.growthCampaign.findMany({
-      where: status !== "all" ? { status } : undefined,
+      where: status !== "all" ? { status } : {},
       include: {
         responses: {
           select: {

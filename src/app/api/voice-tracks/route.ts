@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireAuth } from "@/lib/api/auth";
+import { verifyStationAccess } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,11 @@ export async function GET(request: NextRequest) {
     const djId = sp.get("djId");
     const date = sp.get("date");
     const hour = sp.get("hour");
+
+    if (stationId) {
+      const station = await verifyStationAccess(session, stationId);
+      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
+    }
 
     const where: Record<string, unknown> = {};
     if (hourPlaylistId) where.hourPlaylistId = hourPlaylistId;

@@ -81,7 +81,7 @@ class Logger {
       return;
     }
 
-    // In production, log errors and warnings + report to Sentry
+    // In production, log errors, warnings, and info + report errors to Sentry
     if (level === "error") {
       const logData = { timestamp, level, message, ...context };
       console.error(JSON.stringify(logData));
@@ -89,6 +89,10 @@ class Logger {
     } else if (level === "warn") {
       const logData = { timestamp, level, message, ...context };
       console.warn(JSON.stringify(logData));
+      reportToSentry(message, "warning", context);
+    } else if (level === "info") {
+      const logData = { timestamp, level, message, ...context };
+      console.log(JSON.stringify(logData));
     }
   }
 
@@ -131,6 +135,39 @@ class Logger {
 
 // Export singleton instance
 export const logger = new Logger();
+
+/**
+ * Structured API request logger for use in route handlers.
+ * Logs method, path, status, duration, and optional user context.
+ */
+export function logApiRequest(req: {
+  method: string;
+  url: string;
+  userId?: string;
+  role?: string;
+  status: number;
+  duration: number;
+  error?: string;
+}) {
+  const url = new URL(req.url);
+  const logData = {
+    method: req.method,
+    path: url.pathname,
+    status: req.status,
+    duration: `${req.duration}ms`,
+    ...(req.userId && { userId: req.userId }),
+    ...(req.role && { role: req.role }),
+    ...(req.error && { error: req.error }),
+  };
+
+  if (req.status >= 500) {
+    logger.error(`API ${req.method} ${url.pathname} ${req.status}`, logData);
+  } else if (req.status >= 400) {
+    logger.warn(`API ${req.method} ${url.pathname} ${req.status}`, logData);
+  } else {
+    logger.api(req.method, url.pathname, req.status, req.duration);
+  }
+}
 
 // Helper for measuring operation duration
 export function measureDuration<T>(fn: () => T): { result: T; duration: number } {

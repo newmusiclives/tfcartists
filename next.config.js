@@ -3,7 +3,20 @@ const nextConfig = {
   transpilePackages: ["next-auth"],
   poweredByHeader: false,
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "truefans-radio.netlify.app",
+      },
+      {
+        protocol: "https",
+        hostname: "**.netlify.app",
+      },
+      {
+        protocol: "https",
+        hostname: "i.scdn.co", // Spotify album art
+      },
+    ],
   },
   experimental: {
     serverActions: {

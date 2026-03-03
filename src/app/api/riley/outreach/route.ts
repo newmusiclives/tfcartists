@@ -5,6 +5,7 @@ import { RILEY_INTENTS } from "@/lib/ai/riley-personality";
 import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { withValidation, triggerOutreachSchema } from "@/lib/validation/schemas";
+import { orgWhere } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 

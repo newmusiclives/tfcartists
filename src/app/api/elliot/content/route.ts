@@ -3,7 +3,6 @@ import { elliot } from "@/lib/ai/elliot-agent";
 import { logger } from "@/lib/logger";
 import { requireRole } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
-
 export const dynamic = "force-dynamic";
 
 /**

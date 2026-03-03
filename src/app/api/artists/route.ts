@@ -3,16 +3,20 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
-import { requireRole } from "@/lib/api/auth";
+import { requireRole, requireAuth, getOrgScope } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
 /**
  * GET /api/artists
- * Get all artists with optional filters, pagination, search, tier filter
+ * Get all artists with optional filters, pagination, search, tier filter.
+ * Results are scoped to the user's organization.
  */
 export async function GET(request: NextRequest) {
   try {
+    const session = await requireAuth();
+    const orgScope = session ? getOrgScope(session) : {};
+
     const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get("status");
     const stage = searchParams.get("stage");
@@ -21,6 +25,7 @@ export async function GET(request: NextRequest) {
 
     const where: any = {
       deletedAt: null,
+      ...orgScope,
       ...(status && { status: status as any }),
       ...(stage && { pipelineStage: stage }),
       ...(tier && { airplayTier: tier as any }),
@@ -99,6 +104,7 @@ export async function POST(request: NextRequest) {
         sourceHandle,
         status: "DISCOVERED",
         pipelineStage: "discovery",
+        organizationId: session.user.organizationId || null,
       },
     });
 

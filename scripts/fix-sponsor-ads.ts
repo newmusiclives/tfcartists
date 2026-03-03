@@ -122,6 +122,7 @@ async function main() {
 
   let regenerated = 0;
   let failed = 0;
+  const persistedAudioMap = new Map<string, string>(); // adId → base64 data URI
 
   for (const adId of ALL_AD_IDS) {
     // First get the ad details to show which one we're processing
@@ -147,10 +148,66 @@ async function main() {
       const path = data.audio_path || data.generated_audio_path || "ok";
       console.log(`  REGENERATED: ${adLabel} → ${path}`);
       regenerated++;
+
+      // Step 3: Fetch the audio file and store as data URI in Netlify DB
+      // This ensures audio survives Railway redeploys
+      if (path && path !== "ok" && !path.startsWith("data:")) {
+        try {
+          const audioUrl = path.startsWith("http") ? path : `${RAILWAY_API}${path}`;
+          const audioRes = await fetch(audioUrl, { headers });
+          if (audioRes.ok) {
+            const audioBuffer = await audioRes.arrayBuffer();
+            const base64 = Buffer.from(audioBuffer).toString("base64");
+            const dataUri = `data:audio/mp3;base64,${base64}`;
+            persistedAudioMap.set(adId, dataUri);
+            console.log(`  PERSISTED: ${adLabel} (${Math.round(base64.length / 1024)}KB as data URI)`);
+          }
+        } catch (e) {
+          console.log(`  WARN: Could not persist audio for ${adLabel}`);
+        }
+      }
     } else {
       const errText = await res.text().catch(() => "");
       console.error(`  FAILED: ${adLabel} — ${res.status} ${errText.substring(0, 120)}`);
       failed++;
+    }
+  }
+
+  // ── Step 3: Update Netlify DB with persisted audio ────────────────
+  if (persistedAudioMap.size > 0) {
+    console.log(`\nStep 3: Persisting ${persistedAudioMap.size} audio data URIs to Netlify DB...\n`);
+    try {
+      const { PrismaClient } = await import("@prisma/client");
+      const prisma = new PrismaClient();
+
+      for (const [adId, dataUri] of persistedAudioMap) {
+        try {
+          // Find ad by matching the Railway ID pattern to Netlify ad
+          const ads = await prisma.sponsorAd.findMany({
+            where: { isActive: true },
+            select: { id: true, adTitle: true, sponsorName: true },
+          });
+
+          // Update all active ads with the audio data URI
+          // Match by position in the array since IDs differ between Railway and Netlify
+          if (ads.length > 0) {
+            const idx = ALL_AD_IDS.indexOf(adId);
+            if (idx >= 0 && idx < ads.length) {
+              await prisma.sponsorAd.update({
+                where: { id: ads[idx].id },
+                data: { audioDataUri: dataUri },
+              });
+              console.log(`  STORED: ${ads[idx].sponsorName} - ${ads[idx].adTitle}`);
+            }
+          }
+        } catch (e) {
+          console.log(`  WARN: DB update failed for ${adId}`);
+        }
+      }
+
+      await prisma.$disconnect();
+    } catch (e) {
+      console.log("  WARN: Could not connect to Netlify DB for persistence");
     }
   }
 
@@ -159,6 +216,7 @@ async function main() {
   console.log(`Scripts updated: ${Object.keys(TFC_AD_UPDATES).length}`);
   console.log(`Audio regenerated: ${regenerated}`);
   console.log(`Audio failed: ${failed}`);
+  console.log(`Audio persisted to DB: ${persistedAudioMap.size}`);
 }
 
 main().catch((e) => {

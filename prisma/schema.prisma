@@ -9,11 +9,105 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================================================
+// ORGANIZATION (Multi-Operator Network)
+// ============================================================================
+// An Organization represents an operator who owns one or more stations.
+// Network-level entities (Artist, Sponsor, Listener) gain organizationId
+// to isolate operator data while optionally sharing via the network marketplace.
+model Organization {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  // Identity
+  name        String    // "Acme Broadcasting"
+  slug        String    @unique // URL-safe slug for routing
+  domain      String?   // Custom domain (e.g., "acmeradio.com")
+
+  // Branding
+  logoUrl     String?
+  primaryColor String?
+  secondaryColor String?
+
+  // Contact
+  ownerName   String
+  ownerEmail  String
+  phone       String?
+
+  // Subscription / billing
+  plan        String    @default("starter") // "starter", "pro", "enterprise", "network"
+  billingEmail String?
+  stripeCustomerId String?
+
+  // Limits
+  maxStations Int       @default(1)
+
+  // Settings
+  settings    Json?     // Flexible operator-level settings
+
+  // Relations
+  stations    Station[]
+  users       OrganizationUser[]
+  artists     Artist[]
+  sponsors    Sponsor[]
+  listeners   Listener[]
+
+  @@index([slug])
+  @@index([ownerEmail])
+}
+
+// Organization users with role-based access
+model OrganizationUser {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // Auth
+  email          String
+  name           String
+  passwordHash   String?  // null for SSO/OAuth users
+  role           String   @default("member") // "owner", "admin", "member", "viewer"
+
+  // Status
+  isActive       Boolean  @default(true)
+  lastLoginAt    DateTime?
+
+  @@unique([organizationId, email])
+  @@index([email])
+}
+
+// Password reset and email verification tokens
+model AuthToken {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  email     String
+  token     String   @unique
+  type      String   // "password_reset" | "email_verification"
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  @@index([token])
+  @@index([email, type])
+}
+
+// ============================================================================
+// ARTIST
+// ============================================================================
 // Artist data and status
 model Artist {
   id                String   @id @default(cuid())
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+
+  // Organization (operator isolation)
+  organizationId    String?
+  organization      Organization? @relation(fields: [organizationId], references: [id])
 
   // Basic Info
   name              String
@@ -255,6 +349,9 @@ model RileyCampaign {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Organization (operator isolation)
+  organizationId String?
+
   name        String
   description String?
   type        String   // "initial", "invitation", "upgrade", "reengagement"
@@ -275,6 +372,9 @@ model RileyCommunication {
   id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // Organization (operator isolation)
+  organizationId String?
 
   artistId    String   // bare string, no FK — matches RileyActivity pattern
   type        String   // "email", "sms", "phone", "social"
@@ -376,6 +476,10 @@ model Sponsor {
   id                String   @id @default(cuid())
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+
+  // Organization (operator isolation)
+  organizationId    String?
+  organization      Organization? @relation(fields: [organizationId], references: [id])
 
   // Basic Info
   businessName      String
@@ -586,6 +690,10 @@ model Listener {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  // Organization (operator isolation)
+  organizationId    String?
+  organization      Organization? @relation(fields: [organizationId], references: [id])
+
   // Identity (optional)
   email             String?  @unique
   name              String?
@@ -690,6 +798,9 @@ model ViralContent {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Organization (operator isolation)
+  organizationId String?
+
   // Content details
   type        String   // "tiktok", "reel", "short", "story", "post"
   title       String
@@ -724,6 +835,9 @@ model GrowthCampaign {
   id          String   @id @default(cuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // Organization (operator isolation)
+  organizationId String?
 
   // Campaign details
   name        String
@@ -1012,9 +1126,15 @@ model ProgrammingBlock {
 
 // Station configuration
 model Station {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime? // Soft delete — null means active
+  version     Int       @default(1) // Optimistic locking for concurrent edits
+
+  // Organization (operator ownership)
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
 
   // Station identity
   name        String   // "North Country Radio"
@@ -1128,6 +1248,9 @@ model Submission {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  // Organization (operator isolation)
+  organizationId    String?
+
   // Artist info
   artistId          String
   artistName        String
@@ -1198,6 +1321,7 @@ enum RotationTier {
 model SubmissionReview {
   id                String   @id @default(cuid())
   createdAt         DateTime @default(now())
+  organizationId    String?  // Organization (operator isolation)
 
   submissionId      String
   submission        Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
@@ -1445,6 +1569,9 @@ model Scout {
   id                String   @id @default(cuid())
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+
+  // Organization (operator isolation)
+  organizationId    String?
 
   // Link to Listener
   listenerId        String   @unique
@@ -2508,7 +2635,8 @@ model SponsorAd {
   musicBed        MusicBed? @relation(fields: [musicBedId], references: [id], onDelete: SetNull)
 
   // Audio
-  audioFilePath   String?
+  audioFilePath   String?  // Path on Railway (ephemeral /tmp/)
+  audioDataUri    String?  // Base64 data URI (persistent, survives redeploys)
   durationSeconds Float?
 
   // Tier & scheduling

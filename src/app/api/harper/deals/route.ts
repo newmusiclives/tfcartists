@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { handleApiError, validationError, notFound, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
 import { requireRole } from "@/lib/api/auth";
+import { orgWhere } from "@/lib/db-scoped";
 import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +32,7 @@ export async function GET(request: NextRequest) {
       return validationError("Invalid status value", [{ field: "status", message: `Status must be one of: ${validStatuses.join(", ")}` }]);
     }
 
-    const where: any = {};
+    const where: any = { sponsor: { ...orgWhere(session) } };
 
     if (status) {
       where.status = status;
@@ -123,9 +124,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check the sponsor exists
-    const sponsor = await prisma.sponsor.findUnique({
-      where: { id: sponsorId },
+    // Check the sponsor exists (scoped to org)
+    const sponsor = await prisma.sponsor.findFirst({
+      where: { id: sponsorId, ...orgWhere(session) },
       select: { id: true, businessName: true, contactName: true, email: true, phone: true, deletedAt: true },
     });
 

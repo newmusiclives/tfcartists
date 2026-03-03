@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HarperAgent } from "@/lib/ai/harper-agent";
+import { prisma } from "@/lib/db";
+import { orgWhere } from "@/lib/db-scoped";
 import { logger } from "@/lib/logger";
 import { requireRole } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
@@ -32,6 +34,15 @@ export async function POST(request: NextRequest) {
         { error: `Invalid tier. Must be one of: ${validTiers.join(", ")}` },
         { status: 400 }
       );
+    }
+
+    // Verify sponsor belongs to user's org
+    const sponsor = await prisma.sponsor.findFirst({
+      where: { id: sponsorId, ...orgWhere(session) },
+      select: { id: true },
+    });
+    if (!sponsor) {
+      return NextResponse.json({ error: "Sponsor not found" }, { status: 404 });
     }
 
     const harperAgent = new HarperAgent();
