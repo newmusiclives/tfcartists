@@ -324,44 +324,47 @@ export default function MusicImportPage() {
 
             {mode === "files" ? (
               <>
-                {/* Default category selector */}
-                <div className="bg-white rounded-xl p-4 shadow-sm border mb-4">
-                  <div className="flex items-center gap-4 flex-wrap">
+                {/* Step 1: Select category */}
+                <div className="bg-white rounded-xl p-6 shadow-sm border mb-4">
+                  <h3 className="text-base font-bold text-gray-900 mb-1">Step 1: Select Rotation Category</h3>
+                  <p className="text-sm text-gray-500 mb-4">Choose which category these songs should be added to</p>
+                  <div className="grid grid-cols-5 gap-2 mb-4">
+                    {CATEGORIES.map((cat) => (
+                      <button
+                        key={cat.value}
+                        onClick={() => { setDefaultCategory(cat.value); if (files.length > 0) applyDefaultCategory(); }}
+                        className={`p-3 rounded-lg border-2 text-center transition-all ${
+                          defaultCategory === cat.value
+                            ? cat.color + " border-current ring-2 ring-offset-1 ring-gray-300 shadow-sm"
+                            : "bg-gray-50 text-gray-400 border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        <span className="text-2xl font-black block">{cat.value}</span>
+                        <span className="text-xs block mt-1">{cat.label.split(" — ")[1]}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-4">
                     <div>
-                      <label className="text-sm font-medium text-gray-700 block mb-1">Default Category</label>
-                      <div className="flex gap-1">
-                        {CATEGORIES.map((cat) => (
-                          <button
-                            key={cat.value}
-                            onClick={() => setDefaultCategory(cat.value)}
-                            className={`px-3 py-1.5 rounded text-xs font-bold border transition-colors ${
-                              defaultCategory === cat.value ? cat.color + " ring-2 ring-offset-1 ring-gray-400" : "bg-gray-50 text-gray-500 border-gray-200"
-                            }`}
-                          >
-                            {cat.value}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-700 block mb-1">Default Vocal</label>
+                      <label className="text-xs font-medium text-gray-500 block mb-1">Vocal Type</label>
                       <select
                         value={defaultGender}
                         onChange={(e) => setDefaultGender(e.target.value)}
-                        className="border rounded-lg px-3 py-1.5 text-sm"
+                        className="border rounded-lg px-3 py-2 text-sm"
                       >
                         {GENDERS.map((g) => <option key={g.value} value={g.value}>{g.label}</option>)}
                       </select>
                     </div>
                     {files.length > 0 && (
-                      <button onClick={applyDefaultCategory} className="text-xs text-green-700 hover:text-green-800 underline mt-4">
-                        Apply to all files
+                      <button onClick={applyDefaultCategory} className="text-sm text-green-700 hover:text-green-800 font-medium underline">
+                        Apply category to all files
                       </button>
                     )}
                   </div>
                 </div>
 
-                {/* Drop zone */}
+                {/* Step 2: Drop files */}
+                <h3 className="text-base font-bold text-gray-900 mb-2 mt-6">Step 2: Add Your Music Files</h3>
                 <div
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
@@ -428,13 +431,16 @@ export default function MusicImportPage() {
                           </div>
 
                           {/* Per-file category */}
-                          <div className="flex gap-0.5 flex-shrink-0">
+                          <div className="flex gap-1 flex-shrink-0">
                             {CATEGORIES.map((cat) => (
                               <button
                                 key={cat.value}
                                 onClick={() => updateFile(i, { category: cat.value })}
-                                className={`w-7 h-7 rounded text-xs font-bold transition-colors ${
-                                  entry.category === cat.value ? cat.color : "bg-gray-100 text-gray-400"
+                                title={cat.label}
+                                className={`w-9 h-9 rounded-lg text-sm font-black transition-all ${
+                                  entry.category === cat.value
+                                    ? cat.color + " ring-2 ring-offset-1 ring-gray-300 shadow-sm scale-110"
+                                    : "bg-gray-100 text-gray-400 hover:bg-gray-200"
                                 }`}
                               >
                                 {cat.value}
