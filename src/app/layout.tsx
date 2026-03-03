@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { RadioPlayer } from "@/components/radio-player";
+import { RadioPlayerWrapper } from "@/components/radio-player-wrapper";
 import { SentryInit } from "@/components/sentry-init";
 import { WebVitalsInit } from "@/components/web-vitals-init";
 import { CsrfProvider } from "@/components/csrf-provider";
@@ -95,8 +95,7 @@ export default function RootLayout({
         </a>
         <StationProvider>
           <ToastProvider>
-            <div id="main-content" className="pb-24">{children}</div>
-            <RadioPlayer />
+            <RadioPlayerWrapper>{children}</RadioPlayerWrapper>
           </ToastProvider>
         </StationProvider>
       </body>

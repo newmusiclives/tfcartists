@@ -189,7 +189,7 @@ export default function PlayerPage() {
   const showError = status === "error";
 
   return (
-    <div className="fixed inset-0 z-[60] overflow-y-auto bg-gradient-to-b from-amber-950 via-amber-900 to-orange-950 text-white select-none">
+    <div className="fixed inset-0 z-[60] bg-gradient-to-b from-amber-950 via-amber-900 to-orange-950 text-white select-none overflow-hidden">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <audio
         ref={audioRef}
@@ -198,7 +198,7 @@ export default function PlayerPage() {
         onEnded={onEnded}
       />
 
-      <div className="min-h-[100dvh] flex flex-col px-6 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+      <div className="h-[100dvh] flex flex-col px-6 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
         {/* Station Branding */}
         <div className="flex items-center justify-center gap-2.5 pt-6 pb-2 flex-shrink-0">
           <Image src="/logos/ncr-logo.png" alt="NCR" width={32} height={32} className="h-8 w-auto object-contain" />
