@@ -29,7 +29,10 @@ interface SongData {
   cueNotes: string | null;
 }
 
-const CATEGORIES = ["All", "A", "B", "C", "D", "E", "Featured"];
+const CATEGORIES = ["All", "A", "B", "C", "D", "E"];
+const CATEGORY_LABELS: Record<string, string> = {
+  A: "Hits", B: "Fast", C: "Medium", D: "Slow", E: "Independent",
+};
 const CATEGORY_BADGES: Record<string, string> = {
   A: "bg-red-100 text-red-700",
   B: "bg-blue-100 text-blue-700",
@@ -52,20 +55,18 @@ export default function MusicLibraryPage() {
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("All");
   const [gender, setGender] = useState("All");
+  const [featuredOnly, setFeaturedOnly] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [stationId, setStationId] = useState<string | null>(null);
   const [editing, setEditing] = useState<SongData | null>(null);
 
-  const fetchSongs = (sid: string, p: number, cat: string, gen: string, q: string) => {
+  const fetchSongs = (sid: string, p: number, cat: string, gen: string, q: string, featured?: boolean) => {
     const params = new URLSearchParams({ stationId: sid, page: String(p), limit: "25" });
-    if (cat === "Featured") {
-      params.set("isFeatured", "true");
-    } else if (cat !== "All") {
-      params.set("category", cat);
-    }
+    if (cat !== "All") params.set("category", cat);
     if (gen !== "All") params.set("vocalGender", gen);
+    if (featured) params.set("isFeatured", "true");
     if (q) params.set("search", q);
 
     fetch(`/api/station-songs?${params}`)
@@ -96,15 +97,20 @@ export default function MusicLibraryPage() {
   useEffect(() => {
     if (stationId) {
       setLoading(true);
-      fetchSongs(stationId, page, category, gender, search);
+      fetchSongs(stationId, page, category, gender, search, category === "E" ? featuredOnly : false);
     }
-  }, [page, category, gender]);
+  }, [page, category, gender, featuredOnly]);
+
+  // Reset featured filter when switching away from E
+  useEffect(() => {
+    if (category !== "E") setFeaturedOnly(false);
+  }, [category]);
 
   const doSearch = () => {
     if (stationId) {
       setPage(1);
       setLoading(true);
-      fetchSongs(stationId, 1, category, gender, search);
+      fetchSongs(stationId, 1, category, gender, search, category === "E" ? featuredOnly : false);
     }
   };
 
@@ -118,35 +124,20 @@ export default function MusicLibraryPage() {
     setEditing(null);
   };
 
-  const featureArtist = async (artistName: string) => {
-    if (!stationId) return;
-    const res = await fetch("/api/station-songs/feature-artist", {
-      method: "POST",
+  const toggleFeatured = async (song: SongData, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation(); // Don't open edit modal
+    const newVal = !song.isFeatured;
+    await fetch(`/api/station-songs/${song.id}`, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ stationId, artistName }),
+      body: JSON.stringify({
+        isFeatured: newVal,
+        featuredAt: newVal ? new Date().toISOString() : null,
+      }),
     });
-    if (res.ok) {
-      const data = await res.json();
-      const featuredIds = new Set(data.songIds as string[]);
-      setSongs(songs.map((s) =>
-        featuredIds.has(s.id) ? { ...s, isFeatured: true } : s
-      ));
-      setEditing(null);
-    }
-  };
-
-  const unfeatureArtist = async (artistName: string) => {
-    if (!stationId) return;
-    const res = await fetch("/api/station-songs/feature-artist", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ stationId, artistName }),
-    });
-    if (res.ok) {
-      setSongs(songs.map((s) =>
-        s.artistName === artistName ? { ...s, isFeatured: false } : s
-      ));
-      setEditing(null);
+    setSongs(songs.map((s) => (s.id === song.id ? { ...s, isFeatured: newVal } : s)));
+    if (editing?.id === song.id) {
+      setEditing({ ...editing, isFeatured: newVal });
     }
   };
 
@@ -185,10 +176,26 @@ export default function MusicLibraryPage() {
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
-                  {c === "All" ? "All" : c === "Featured" ? "Featured" : `Cat ${c}`}
+                  {c === "All" ? "All" : `${c} ${CATEGORY_LABELS[c]}`}
                 </button>
               ))}
             </div>
+
+            {/* Featured sub-filter — only shows when Cat E is selected */}
+            {category === "E" && (
+              <button
+                onClick={() => { setFeaturedOnly(!featuredOnly); setPage(1); }}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                  featuredOnly
+                    ? "bg-amber-500 text-white"
+                    : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"
+                }`}
+              >
+                <Star className={`w-3.5 h-3.5 ${featuredOnly ? "fill-white" : ""}`} />
+                Featured Only
+              </button>
+            )}
+
             <select
               value={gender}
               onChange={(e) => { setGender(e.target.value); setPage(1); }}
@@ -255,7 +262,19 @@ export default function MusicLibraryPage() {
                     >
                       <td className="px-4 py-3 text-sm font-medium text-gray-900">
                         <span className="flex items-center gap-1.5">
-                          {song.isFeatured && <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 flex-shrink-0" />}
+                          {song.rotationCategory === "E" && (
+                            <button
+                              onClick={(e) => toggleFeatured(song, e)}
+                              title={song.isFeatured ? "Remove from featured" : "Add to featured"}
+                              className="flex-shrink-0 hover:scale-125 transition-transform"
+                            >
+                              <Star className={`w-4 h-4 ${
+                                song.isFeatured
+                                  ? "text-amber-500 fill-amber-500"
+                                  : "text-gray-300 hover:text-amber-400"
+                              }`} />
+                            </button>
+                          )}
                           {song.title}
                         </span>
                       </td>
@@ -366,7 +385,7 @@ export default function MusicLibraryPage() {
                     className="w-full border rounded-lg px-3 py-2 text-sm"
                   >
                     {["A", "B", "C", "D", "E"].map((c) => (
-                      <option key={c} value={c}>Category {c}</option>
+                      <option key={c} value={c}>Category {c} — {CATEGORY_LABELS[c]}</option>
                     ))}
                   </select>
                 </div>
@@ -379,31 +398,25 @@ export default function MusicLibraryPage() {
                   />
                 </div>
 
-                {/* Featured Artist (Category E only) */}
+                {/* Featured toggle (Category E only) */}
                 {editing.rotationCategory === "E" && (
                   <div className="border-t pt-3 mt-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-700">Featured Artist</h4>
+                        <h4 className="text-sm font-semibold text-gray-700">Featured Track</h4>
                         <p className="text-xs text-gray-500">Featured tracks get 1-in-4 E rotation slots</p>
                       </div>
-                      {editing.isFeatured ? (
-                        <button
-                          onClick={() => unfeatureArtist(editing.artistName)}
-                          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-amber-100 text-amber-700 hover:bg-amber-200 flex items-center gap-1.5"
-                        >
-                          <Star className="w-3.5 h-3.5 fill-amber-500" />
-                          Unfeature
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => featureArtist(editing.artistName)}
-                          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-amber-100 hover:text-amber-700 flex items-center gap-1.5"
-                        >
-                          <Star className="w-3.5 h-3.5" />
-                          Feature Artist
-                        </button>
-                      )}
+                      <button
+                        onClick={() => toggleFeatured(editing)}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 ${
+                          editing.isFeatured
+                            ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
+                            : "bg-gray-100 text-gray-700 hover:bg-amber-100 hover:text-amber-700"
+                        }`}
+                      >
+                        <Star className={`w-3.5 h-3.5 ${editing.isFeatured ? "fill-amber-500 text-amber-500" : ""}`} />
+                        {editing.isFeatured ? "Unfeature" : "Feature"}
+                      </button>
                     </div>
                   </div>
                 )}
