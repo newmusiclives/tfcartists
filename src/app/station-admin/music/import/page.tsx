@@ -21,11 +21,11 @@ interface FileEntry {
 }
 
 const CATEGORIES = [
-  { value: "A", label: "A — Power Rotation", color: "bg-red-100 text-red-700 border-red-200" },
-  { value: "B", label: "B — Heavy Rotation", color: "bg-blue-100 text-blue-700 border-blue-200" },
-  { value: "C", label: "C — Medium Rotation", color: "bg-green-100 text-green-700 border-green-200" },
-  { value: "D", label: "D — Light Rotation", color: "bg-purple-100 text-purple-700 border-purple-200" },
-  { value: "E", label: "E — Indie/Discovery", color: "bg-orange-100 text-orange-700 border-orange-200" },
+  { value: "A", label: "A — Hits", color: "bg-red-100 text-red-700 border-red-200" },
+  { value: "B", label: "B — Fast", color: "bg-blue-100 text-blue-700 border-blue-200" },
+  { value: "C", label: "C — Medium", color: "bg-green-100 text-green-700 border-green-200" },
+  { value: "D", label: "D — Slow", color: "bg-purple-100 text-purple-700 border-purple-200" },
+  { value: "E", label: "E — Independent", color: "bg-orange-100 text-orange-700 border-orange-200" },
 ];
 
 const GENDERS = [

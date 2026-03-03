@@ -2145,7 +2145,7 @@ model Song {
   cueNotes          String?
 
   // Rotation
-  rotationCategory String  @default("C") // A/B/C/D/E — Hits/Fast/Medium/Slow/Indie
+  rotationCategory String  @default("C") // A/B/C/D/E — Hits/Fast/Medium/Slow/Independent
   vocalGender     String   @default("unknown") // male/female/mixed/instrumental/unknown
   tempoCategory   String   @default("medium") // very_slow/slow/medium/fast/very_fast
 
