@@ -32,7 +32,9 @@ interface DashboardData {
 }
 
 export default function OperatorDashboard() {
-  const { data: session, status } = useSession();
+  const sessionResult = useSession();
+  const session = sessionResult?.data ?? null;
+  const status = sessionResult?.status ?? "loading";
   const router = useRouter();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
