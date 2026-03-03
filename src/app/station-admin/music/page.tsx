@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { SharedNav } from "@/components/shared-nav";
-import { Music, Upload, Search, Loader2, X, Star } from "lucide-react";
+import { Music, Upload, Search, Loader2, X, Star, Pencil } from "lucide-react";
 
 function getCsrfToken(): string {
   const match = document.cookie.match(/(?:^|;\s*)csrf-token=([^;]*)/);
@@ -129,10 +129,16 @@ export default function MusicLibraryPage() {
     setEditing(null);
   };
 
+  const MAX_FEATURED = 5;
+
+  const featuredCount = songs.filter((s) => s.isFeatured).length;
+
   const toggleFeatured = async (song: SongData, e?: React.MouseEvent) => {
-    if (e) e.stopPropagation(); // Don't open edit modal
+    if (e) { e.stopPropagation(); e.preventDefault(); }
     const newVal = !song.isFeatured;
-    await fetch(`/api/station-songs/${song.id}`, {
+    // Enforce max 5 featured
+    if (newVal && featuredCount >= MAX_FEATURED) return;
+    const res = await fetch(`/api/station-songs/${song.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json", "X-CSRF-Token": getCsrfToken() },
       body: JSON.stringify({
@@ -140,6 +146,7 @@ export default function MusicLibraryPage() {
         featuredAt: newVal ? new Date().toISOString() : null,
       }),
     });
+    if (!res.ok) return;
     setSongs(songs.map((s) => (s.id === song.id ? { ...s, isFeatured: newVal } : s)));
     if (editing?.id === song.id) {
       setEditing({ ...editing, isFeatured: newVal });
@@ -188,17 +195,22 @@ export default function MusicLibraryPage() {
 
             {/* Featured sub-filter — only shows when Cat E is selected */}
             {category === "E" && (
-              <button
-                onClick={() => { setFeaturedOnly(!featuredOnly); setPage(1); }}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                  featuredOnly
-                    ? "bg-amber-500 text-white"
-                    : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"
-                }`}
-              >
-                <Star className={`w-3.5 h-3.5 ${featuredOnly ? "fill-white" : ""}`} />
-                Featured Only
-              </button>
+              <>
+                <button
+                  onClick={() => { setFeaturedOnly(!featuredOnly); setPage(1); }}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                    featuredOnly
+                      ? "bg-amber-500 text-white"
+                      : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"
+                  }`}
+                >
+                  <Star className={`w-3.5 h-3.5 ${featuredOnly ? "fill-white" : ""}`} />
+                  Featured Only
+                </button>
+                <span className="text-xs text-gray-500">
+                  {featuredCount}/{MAX_FEATURED} featured
+                </span>
+              </>
             )}
 
             <select
@@ -257,21 +269,28 @@ export default function MusicLibraryPage() {
                     <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">BPM</th>
                     <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Cue</th>
                     <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Plays</th>
+                    <th className="w-10 px-2 py-3"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
                   {songs.map((song) => (
                     <tr
                       key={song.id}
-                      onClick={() => setEditing(song)}
-                      className="hover:bg-gray-50 cursor-pointer transition-colors"
+                      className="hover:bg-gray-50 transition-colors"
                     >
-                      <td className="pl-2 pr-0 py-3 w-10" onClick={(e) => e.stopPropagation()}>
+                      <td className="pl-2 pr-0 py-3 w-10">
                         {song.rotationCategory === "E" && (
                           <button
-                            onClick={(e) => { e.stopPropagation(); toggleFeatured(song, e); }}
-                            title={song.isFeatured ? "Remove from featured" : "Add to featured"}
-                            className="p-1.5 rounded-lg hover:bg-amber-50 transition-all"
+                            onClick={(e) => toggleFeatured(song, e)}
+                            disabled={!song.isFeatured && featuredCount >= MAX_FEATURED}
+                            title={
+                              song.isFeatured
+                                ? "Remove from featured"
+                                : featuredCount >= MAX_FEATURED
+                                  ? `Max ${MAX_FEATURED} featured tracks`
+                                  : "Add to featured"
+                            }
+                            className="p-1.5 rounded-lg hover:bg-amber-50 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                           >
                             <Star className={`w-5 h-5 ${
                               song.isFeatured
@@ -301,6 +320,15 @@ export default function MusicLibraryPage() {
                         )}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-500 text-center">{song.playCount}</td>
+                      <td className="px-2 py-3 w-10">
+                        <button
+                          onClick={() => setEditing(song)}
+                          title="Edit song"
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
