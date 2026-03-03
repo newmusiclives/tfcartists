@@ -5,6 +5,11 @@ import Link from "next/link";
 import { SharedNav } from "@/components/shared-nav";
 import { Music, Upload, Search, Loader2, X, Star } from "lucide-react";
 
+function getCsrfToken(): string {
+  const match = document.cookie.match(/(?:^|;\s*)csrf-token=([^;]*)/);
+  return match ? match[1] : "";
+}
+
 interface SongData {
   id: string;
   title: string;
@@ -117,7 +122,7 @@ export default function MusicLibraryPage() {
   const updateSong = async (id: string, data: Partial<SongData>) => {
     await fetch(`/api/station-songs/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-CSRF-Token": getCsrfToken() },
       body: JSON.stringify(data),
     });
     setSongs(songs.map((s) => (s.id === id ? { ...s, ...data } : s)));
@@ -129,7 +134,7 @@ export default function MusicLibraryPage() {
     const newVal = !song.isFeatured;
     await fetch(`/api/station-songs/${song.id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-CSRF-Token": getCsrfToken() },
       body: JSON.stringify({
         isFeatured: newVal,
         featuredAt: newVal ? new Date().toISOString() : null,
