@@ -62,6 +62,7 @@ interface SongCandidate {
   tempoCategory: string;
   playCount: number;
   lastPlayedAt: Date | null;
+  isFeatured: boolean;
 }
 
 export interface BuildPlaylistOptions {
@@ -109,6 +110,7 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
       tempoCategory: true,
       playCount: true,
       lastPlayedAt: true,
+      isFeatured: true,
     },
   });
 
@@ -153,6 +155,7 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
   let femaleCount = 0;
   let songCount = 0;
   let songsAssigned = 0;
+  let eFeaturedCounter = 0; // Tracks E-slot count for 1-in-4 featured rotation
 
   for (const slot of clockSlots) {
     const resolved: ResolvedSlot = { ...slot };
@@ -171,6 +174,13 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
         }
       }
 
+      // Every 4th E-slot prefers featured artist tracks
+      let preferFeatured = false;
+      if (effectiveCategory === "E") {
+        if (eFeaturedCounter % 4 === 0) preferFeatured = true;
+        eFeaturedCounter++;
+      }
+
       const song = selectSong({
         candidates: allSongs,
         category: effectiveCategory,
@@ -183,6 +193,7 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
         femaleCount,
         songCount,
         templateTempo: template.tempo,
+        preferFeatured,
       });
 
       if (song) {
@@ -249,13 +260,26 @@ interface SelectSongOptions {
   femaleCount: number;
   songCount: number;
   templateTempo: string | null;
+  preferFeatured?: boolean;
 }
 
 function selectSong(opts: SelectSongOptions): SongCandidate | null {
   const {
     candidates, category, usedSongIds, recentArtists, recentPlayMap,
     hourOfDay, airDate, genderBalanceTarget, femaleCount, songCount, templateTempo,
+    preferFeatured,
   } = opts;
+
+  // If preferFeatured, try featured songs first, then fall back to normal selection
+  if (preferFeatured) {
+    const featuredResult = selectSong({
+      ...opts,
+      preferFeatured: false,
+      candidates: candidates.filter((s) => s.isFeatured),
+    });
+    if (featuredResult) return featuredResult;
+    // No eligible featured songs — fall through to normal selection
+  }
 
   // Try requested category first, then fallbacks
   const categoriesToTry = [category, ...(FALLBACK_CATEGORIES[category] || [])];

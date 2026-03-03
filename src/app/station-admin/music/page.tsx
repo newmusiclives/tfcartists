@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { SharedNav } from "@/components/shared-nav";
-import { Music, Upload, Search, Loader2, X } from "lucide-react";
+import { Music, Upload, Search, Loader2, X, Star } from "lucide-react";
 
 interface SongData {
   id: string;
@@ -17,6 +17,7 @@ interface SongData {
   bpm: number | null;
   playCount: number;
   isActive: boolean;
+  isFeatured: boolean;
   introEnd: number | null;
   outroStart: number | null;
   crossfadeStart: number | null;
@@ -28,7 +29,7 @@ interface SongData {
   cueNotes: string | null;
 }
 
-const CATEGORIES = ["All", "A", "B", "C", "D", "E"];
+const CATEGORIES = ["All", "A", "B", "C", "D", "E", "Featured"];
 const CATEGORY_BADGES: Record<string, string> = {
   A: "bg-red-100 text-red-700",
   B: "bg-blue-100 text-blue-700",
@@ -59,7 +60,11 @@ export default function MusicLibraryPage() {
 
   const fetchSongs = (sid: string, p: number, cat: string, gen: string, q: string) => {
     const params = new URLSearchParams({ stationId: sid, page: String(p), limit: "25" });
-    if (cat !== "All") params.set("category", cat);
+    if (cat === "Featured") {
+      params.set("isFeatured", "true");
+    } else if (cat !== "All") {
+      params.set("category", cat);
+    }
     if (gen !== "All") params.set("vocalGender", gen);
     if (q) params.set("search", q);
 
@@ -113,6 +118,38 @@ export default function MusicLibraryPage() {
     setEditing(null);
   };
 
+  const featureArtist = async (artistName: string) => {
+    if (!stationId) return;
+    const res = await fetch("/api/station-songs/feature-artist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ stationId, artistName }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const featuredIds = new Set(data.songIds as string[]);
+      setSongs(songs.map((s) =>
+        featuredIds.has(s.id) ? { ...s, isFeatured: true } : s
+      ));
+      setEditing(null);
+    }
+  };
+
+  const unfeatureArtist = async (artistName: string) => {
+    if (!stationId) return;
+    const res = await fetch("/api/station-songs/feature-artist", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ stationId, artistName }),
+    });
+    if (res.ok) {
+      setSongs(songs.map((s) =>
+        s.artistName === artistName ? { ...s, isFeatured: false } : s
+      ));
+      setEditing(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <SharedNav />
@@ -148,7 +185,7 @@ export default function MusicLibraryPage() {
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
-                  {c === "All" ? "All" : `Cat ${c}`}
+                  {c === "All" ? "All" : c === "Featured" ? "Featured" : `Cat ${c}`}
                 </button>
               ))}
             </div>
@@ -216,7 +253,12 @@ export default function MusicLibraryPage() {
                       onClick={() => setEditing(song)}
                       className="hover:bg-gray-50 cursor-pointer transition-colors"
                     >
-                      <td className="px-4 py-3 text-sm font-medium text-gray-900">{song.title}</td>
+                      <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                        <span className="flex items-center gap-1.5">
+                          {song.isFeatured && <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 flex-shrink-0" />}
+                          {song.title}
+                        </span>
+                      </td>
                       <td className="px-4 py-3 text-sm text-gray-600">{song.artistName}</td>
                       <td className="px-4 py-3 text-sm text-gray-500 text-center">{formatDuration(song.duration)}</td>
                       <td className="px-4 py-3 text-center">
@@ -336,6 +378,35 @@ export default function MusicLibraryPage() {
                     onChange={(e) => setEditing({ ...editing, isActive: e.target.checked })}
                   />
                 </div>
+
+                {/* Featured Artist (Category E only) */}
+                {editing.rotationCategory === "E" && (
+                  <div className="border-t pt-3 mt-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="text-sm font-semibold text-gray-700">Featured Artist</h4>
+                        <p className="text-xs text-gray-500">Featured tracks get 1-in-4 E rotation slots</p>
+                      </div>
+                      {editing.isFeatured ? (
+                        <button
+                          onClick={() => unfeatureArtist(editing.artistName)}
+                          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-amber-100 text-amber-700 hover:bg-amber-200 flex items-center gap-1.5"
+                        >
+                          <Star className="w-3.5 h-3.5 fill-amber-500" />
+                          Unfeature
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => featureArtist(editing.artistName)}
+                          className="px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-amber-100 hover:text-amber-700 flex items-center gap-1.5"
+                        >
+                          <Star className="w-3.5 h-3.5" />
+                          Feature Artist
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* Cue Points */}
                 <div className="border-t pt-3 mt-3">

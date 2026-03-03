@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 const ALLOWED_FIELDS = [
   "title", "artistName", "albumName", "genre", "bpm", "durationSeconds",
   "energy", "mood", "vocalGender", "rotationCategory", "isActive",
+  "isFeatured", "featuredAt",
 ];
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

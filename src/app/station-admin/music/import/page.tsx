@@ -64,11 +64,21 @@ export default function MusicImportPage() {
   const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0 });
   const [result, setResult] = useState<{ imported: number; skipped: number; errors: string[] } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
 
   // CSV/JSON state (legacy mode)
   const [rawInput, setRawInput] = useState("");
   const [preview, setPreview] = useState<any[]>([]);
   const [importing, setImporting] = useState(false);
+
+  // Keep refs to latest state so native listeners always have fresh values
+  const modeRef = useRef(mode);
+  const defaultCategoryRef = useRef(defaultCategory);
+  const defaultGenderRef = useRef(defaultGender);
+  useEffect(() => { modeRef.current = mode; }, [mode]);
+  useEffect(() => { defaultCategoryRef.current = defaultCategory; }, [defaultCategory]);
+  useEffect(() => { defaultGenderRef.current = defaultGender; }, [defaultGender]);
 
   useEffect(() => {
     fetch("/api/stations")
@@ -79,33 +89,92 @@ export default function MusicImportPage() {
       .catch(() => {});
   }, []);
 
-  // Prevent browser from opening dropped files (must be at window level)
+  const addFilesFromNative = useCallback((fileList: FileList) => {
+    const audioFiles = Array.from(fileList).filter((f) =>
+      /\.(mp3|wav|m4a|flac|ogg)$/i.test(f.name)
+    );
+    if (audioFiles.length === 0) return;
+
+    const entries: FileEntry[] = audioFiles.map((file) => {
+      const { artist, title } = parseFilename(file.name);
+      return {
+        file,
+        title,
+        artistName: artist,
+        album: "",
+        category: defaultCategoryRef.current,
+        vocalGender: defaultGenderRef.current,
+        duration: null,
+        status: "pending",
+      };
+    });
+
+    setFiles((prev) => [...prev, ...entries]);
+  }, []);
+
+  // ── Native DOM drag-and-drop ──
+  // Bypasses React's synthetic event system entirely to guarantee
+  // preventDefault() is called on the actual native event.
   useEffect(() => {
-    const preventDefaults = (e: DragEvent) => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    let dragCounter = 0; // Track nested dragenter/dragleave
+
+    const onDragEnter = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      dragCounter++;
+      if (dragCounter === 1) setIsDragging(true);
     };
-    window.addEventListener("dragover", preventDefaults);
-    window.addEventListener("drop", preventDefaults);
+
+    const onDragOver = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = "copy";
+    };
+
+    const onDragLeave = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dragCounter--;
+      if (dragCounter <= 0) {
+        dragCounter = 0;
+        setIsDragging(false);
+      }
+    };
+
+    const onDrop = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dragCounter = 0;
+      setIsDragging(false);
+      if (modeRef.current === "files" && e.dataTransfer?.files?.length) {
+        addFilesFromNative(e.dataTransfer.files);
+      }
+    };
+
+    root.addEventListener("dragenter", onDragEnter);
+    root.addEventListener("dragover", onDragOver);
+    root.addEventListener("dragleave", onDragLeave);
+    root.addEventListener("drop", onDrop);
+
+    // Also prevent at window level as a safety net (capture phase fires first)
+    const preventNav = (e: Event) => { e.preventDefault(); };
+    window.addEventListener("dragover", preventNav, true);
+    window.addEventListener("drop", preventNav, true);
+
     return () => {
-      window.removeEventListener("dragover", preventDefaults);
-      window.removeEventListener("drop", preventDefaults);
+      root.removeEventListener("dragenter", onDragEnter);
+      root.removeEventListener("dragover", onDragOver);
+      root.removeEventListener("dragleave", onDragLeave);
+      root.removeEventListener("drop", onDrop);
+      window.removeEventListener("dragover", preventNav, true);
+      window.removeEventListener("drop", preventNav, true);
     };
-  }, []);
+  }, [addFilesFromNative]);
 
-  // ── Drag & Drop ──
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
-
+  // ── React-based helpers (file list management) ──
   const addFiles = useCallback((fileList: FileList | File[]) => {
     const audioFiles = Array.from(fileList).filter((f) =>
       /\.(mp3|wav|m4a|flac|ogg)$/i.test(f.name)
@@ -127,15 +196,6 @@ export default function MusicImportPage() {
 
     setFiles((prev) => [...prev, ...entries]);
   }, [defaultCategory, defaultGender]);
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    if (e.dataTransfer.files.length > 0) {
-      addFiles(e.dataTransfer.files);
-    }
-  }, [addFiles]);
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -272,24 +332,8 @@ export default function MusicImportPage() {
     } finally { setImporting(false); }
   };
 
-  // Page-level drag prevention — catches ALL drag events before the browser can
-  const pageDragOver = (e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); };
-  const pageDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // If files mode and audio files, add them
-    if (mode === "files" && e.dataTransfer.files.length > 0) {
-      addFiles(e.dataTransfer.files);
-    }
-  };
-
   return (
-    <div
-      className="min-h-screen bg-gray-50"
-      onDragEnter={pageDragOver}
-      onDragOver={pageDragOver}
-      onDrop={pageDrop}
-    >
+    <div ref={rootRef} className="min-h-screen bg-gray-50">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link href="/station-admin/music" className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-4">
@@ -340,6 +384,22 @@ export default function MusicImportPage() {
 
             {mode === "files" ? (
               <>
+                {/* Full-page drop overlay — appears when dragging over the page */}
+                {isDragging && (
+                  <div className="fixed inset-0 z-[100] bg-green-500/10 border-4 border-dashed border-green-500 flex items-center justify-center pointer-events-none">
+                    <div className="bg-white rounded-2xl p-8 shadow-2xl text-center">
+                      <FolderUp className="w-16 h-16 text-green-500 mx-auto mb-3" />
+                      <p className="text-xl font-bold text-gray-900">Drop audio files to import</p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Adding to category:{" "}
+                        <span className={`inline-block px-2 py-0.5 rounded font-black ${CATEGORIES.find(c => c.value === defaultCategory)?.color || ""}`}>
+                          {defaultCategory}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Step 1: Select category */}
                 <div className="bg-white rounded-xl p-6 shadow-sm border mb-4">
                   <h3 className="text-base font-bold text-gray-900 mb-1">Step 1: Select Rotation Category</h3>
@@ -379,18 +439,12 @@ export default function MusicImportPage() {
                   </div>
                 </div>
 
-                {/* Step 2: Drop files */}
+                {/* Step 2: Drop files or click to browse */}
                 <h3 className="text-base font-bold text-gray-900 mb-2 mt-6">Step 2: Add Your Music Files</h3>
                 <div
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
+                  ref={dropZoneRef}
                   onClick={() => fileInputRef.current?.click()}
-                  className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-colors mb-6 ${
-                    isDragging
-                      ? "border-green-500 bg-green-50"
-                      : "border-gray-300 bg-white hover:border-green-400 hover:bg-green-50/30"
-                  }`}
+                  className="border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-colors mb-6 border-gray-300 bg-white hover:border-green-400 hover:bg-green-50/30"
                 >
                   <input
                     ref={fileInputRef}
@@ -400,12 +454,12 @@ export default function MusicImportPage() {
                     onChange={handleFileSelect}
                     className="hidden"
                   />
-                  <FolderUp className={`w-12 h-12 mx-auto mb-4 ${isDragging ? "text-green-500" : "text-gray-400"}`} />
+                  <FolderUp className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                   <p className="text-lg font-medium text-gray-700 mb-1">
-                    {isDragging ? "Drop files here" : "Drag & drop audio files here"}
+                    Drag & drop audio files anywhere on the page
                   </p>
                   <p className="text-sm text-gray-500 mb-3">
-                    or click to browse. Supports MP3, WAV, M4A, FLAC, OGG
+                    or click here to browse. Supports MP3, WAV, M4A, FLAC, OGG
                   </p>
                   <p className="text-sm font-medium">
                     Files will be added to category:{" "}
@@ -414,7 +468,7 @@ export default function MusicImportPage() {
                     </span>
                   </p>
                   <p className="text-xs text-gray-400 mt-2">
-                    Files named "Artist - Title.mp3" will auto-fill metadata
+                    Files named &quot;Artist - Title.mp3&quot; will auto-fill metadata
                   </p>
                 </div>
 

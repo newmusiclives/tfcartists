@@ -2154,11 +2154,16 @@ model Song {
   playCount       Int      @default(0)
   lastPlayedAt    DateTime?
 
+  // Featured artist promotion (Category E)
+  isFeatured      Boolean  @default(false)
+  featuredAt      DateTime?
+
   metadata        Json?
 
   @@index([stationId])
   @@index([rotationCategory])
   @@index([isActive])
+  @@index([isFeatured])
 }
 
 // Clock template for scheduling music rotation

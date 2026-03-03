@@ -13,12 +13,14 @@ export async function GET(request: NextRequest) {
     const stationId = searchParams.get("stationId");
     const category = searchParams.get("category");
     const vocalGender = searchParams.get("vocalGender");
+    const isFeatured = searchParams.get("isFeatured");
     const { page, limit, skip, search } = withPagination(searchParams);
 
     const where: any = {
       ...(stationId && { stationId }),
       ...(category && { rotationCategory: category }),
       ...(vocalGender && { vocalGender }),
+      ...(isFeatured === "true" && { isFeatured: true }),
       ...(search && {
         OR: [
           { title: { contains: search, mode: "insensitive" as const } },
