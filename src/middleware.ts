@@ -46,7 +46,7 @@ function addSecurityHeaders(response: NextResponse, pathname: string) {
     // script-src removes 'unsafe-inline' in production for XSS protection.
     const csp = isDev
       ? "default-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' ws: wss: https:; media-src 'self' data: https:;"
-      : "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' data: https:;";
+      : "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' data: https:;";
     response.headers.set("Content-Security-Policy", csp);
   }
 
