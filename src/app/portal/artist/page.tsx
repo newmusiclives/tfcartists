@@ -8,7 +8,6 @@ import {
   DollarSign,
   TrendingUp,
   Upload,
-  BarChart3,
   Clock,
   Star,
   Loader2,
@@ -30,14 +29,6 @@ interface ArtistProfile {
   createdAt: string;
 }
 
-interface EarningsData {
-  period: string;
-  tier: string;
-  shares: number;
-  earnings: number;
-  paid: boolean;
-}
-
 const TIER_INFO: Record<string, { name: string; shares: number; cost: number; color: string }> = {
   FREE: { name: "Free", shares: 1, cost: 0, color: "gray" },
   TIER_5: { name: "Starter", shares: 5, cost: 5, color: "blue" },
@@ -49,40 +40,51 @@ const TIER_INFO: Record<string, { name: string; shares: number; cost: number; co
 export default function ArtistPortalPage() {
   const [artistId, setArtistId] = useState("");
   const [artist, setArtist] = useState<ArtistProfile | null>(null);
-  const [earnings, setEarnings] = useState<EarningsData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<"lookup" | "dashboard">("lookup");
 
   const lookupArtist = async () => {
     if (!artistId.trim()) return;
     setLoading(true);
+    setError(null);
     try {
-      const res = await fetch(`/api/riley/artists/${artistId}`);
-      if (res.ok) {
-        const data = await res.json();
-        setArtist(data.artist || data);
-        setView("dashboard");
-
-        // Fetch earnings
-        const earningsRes = await fetch(`/api/admin/financials`);
-        if (earningsRes.ok) {
-          const fData = await earningsRes.json();
-          setEarnings(
-            (fData.recentEarnings || []).filter(
-              (e: any) => e.tier === (data.artist || data).airplayTier
-            )
-          );
+      let res: Response;
+      if (artistId.includes("@")) {
+        res = await fetch(`/api/artists?search=${encodeURIComponent(artistId)}&limit=1`);
+        if (res.ok) {
+          const data = await res.json();
+          const artists = data.artists || [];
+          if (artists.length > 0) {
+            setArtist(artists[0]);
+            setView("dashboard");
+          } else {
+            setError("No artist found with that email.");
+          }
+          return;
+        }
+      } else {
+        res = await fetch(`/api/artists/${artistId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setArtist(data.artist || data);
+          setView("dashboard");
+          return;
         }
       }
+      if (res.status === 404) {
+        setError("Artist not found. Check your ID or email and try again.");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     } catch {
-      // handle error
+      setError("Network error. Please check your connection.");
     } finally {
       setLoading(false);
     }
   };
 
   const tier = artist ? TIER_INFO[artist.airplayTier] || TIER_INFO.FREE : TIER_INFO.FREE;
-  const totalEarnings = earnings.reduce((sum, e) => sum + e.earnings, 0);
 
   if (view === "lookup") {
     return (
@@ -112,8 +114,11 @@ export default function ArtistPortalPage() {
               Go
             </button>
           </div>
+          {error && (
+            <p className="text-sm text-red-600 mt-3">{error}</p>
+          )}
           <p className="text-xs text-gray-400 mt-3">
-            Your Artist ID was provided when you joined TrueFans Radio.
+            Enter your Artist ID (from your welcome email) or the email you signed up with.
           </p>
         </div>
       </div>
@@ -157,12 +162,7 @@ export default function ArtistPortalPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-xl p-4 shadow-sm border">
-            <DollarSign className="w-5 h-5 text-green-500 mb-2" />
-            <p className="text-sm text-gray-500">Total Earnings</p>
-            <p className="text-xl font-bold">${totalEarnings.toFixed(2)}</p>
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-white rounded-xl p-4 shadow-sm border">
             <TrendingUp className="w-5 h-5 text-blue-500 mb-2" />
             <p className="text-sm text-gray-500">Shares</p>
@@ -206,45 +206,19 @@ export default function ArtistPortalPage() {
           </div>
         )}
 
-        {/* Earnings History */}
+        {/* Earnings Info */}
         <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
           <div className="px-6 py-4 border-b flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-gray-400" />
-            <h2 className="font-semibold">Earnings History</h2>
+            <DollarSign className="w-5 h-5 text-gray-400" />
+            <h2 className="font-semibold">Earnings</h2>
           </div>
-          {earnings.length > 0 ? (
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Period</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Tier</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Shares</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Earnings</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {earnings.map((e, i) => (
-                  <tr key={i}>
-                    <td className="px-4 py-3">{e.period}</td>
-                    <td className="px-4 py-3">{e.tier}</td>
-                    <td className="px-4 py-3">{e.shares}</td>
-                    <td className="px-4 py-3 font-medium">${e.earnings.toFixed(2)}</td>
-                    <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${e.paid ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>
-                        {e.paid ? "Paid" : "Pending"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="px-6 py-12 text-center text-gray-400">
-              <Clock className="w-8 h-8 mx-auto mb-2" />
-              <p>No earnings data yet. Earnings are calculated monthly.</p>
-            </div>
-          )}
+          <div className="px-6 py-8 text-center text-gray-500">
+            <Clock className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+            <p className="font-medium text-gray-700">Earnings are distributed monthly via Manifest Financial.</p>
+            <p className="text-sm mt-1">
+              Check your registered email for payout notifications and statements.
+            </p>
+          </div>
         </div>
 
         {/* Submit Track CTA */}

@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { SharedNav } from "@/components/shared-nav";
 import {
-  Upload, FileText, ArrowLeft, Loader2, CheckCircle2, AlertCircle,
+  Upload, FileText, ArrowLeft, Loader2, CheckCircle2, AlertCircle, AlertTriangle,
   Music, X, GripVertical, FolderUp,
 } from "lucide-react";
 
@@ -343,7 +343,20 @@ export default function MusicImportPage() {
           <Upload className="w-8 h-8 text-green-600" />
           Import Songs
         </h1>
-        <p className="text-gray-600 mb-6">Add songs to your music library via file upload or CSV/JSON import</p>
+        <p className="text-gray-600 mb-4">Add songs to your music library via file upload or CSV/JSON import</p>
+
+        {/* Railway Sync Warning */}
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="text-sm font-semibold text-amber-800">Two-Step Import Process</h3>
+            <p className="text-xs text-amber-700 mt-1">
+              This page saves song <strong>metadata</strong> (title, artist, category) to the database.
+              The actual <strong>audio files</strong> must be uploaded separately to the Railway streaming backend.
+              Songs won&apos;t play on-air until both steps are complete.
+            </p>
+          </div>
+        </div>
 
         {result ? (
           <div className="bg-white rounded-xl p-8 shadow-sm border text-center">

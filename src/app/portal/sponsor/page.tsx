@@ -31,30 +31,37 @@ interface SponsorProfile {
 }
 
 const TIER_INFO: Record<string, { name: string; cost: number; adSpots: number; color: string }> = {
-  bronze: { name: "Bronze", cost: 100, adSpots: 30, color: "amber" },
-  silver: { name: "Silver", cost: 300, adSpots: 90, color: "gray" },
-  gold: { name: "Gold", cost: 500, adSpots: 180, color: "yellow" },
-  platinum: { name: "Platinum", cost: 1000, adSpots: 360, color: "purple" },
+  LOCAL_HERO: { name: "Local Hero", cost: 50, adSpots: 30, color: "teal" },
+  BRONZE: { name: "Bronze", cost: 100, adSpots: 60, color: "amber" },
+  SILVER: { name: "Silver", cost: 300, adSpots: 90, color: "gray" },
+  GOLD: { name: "Gold", cost: 500, adSpots: 180, color: "yellow" },
+  PLATINUM: { name: "Platinum", cost: 1000, adSpots: 360, color: "purple" },
 };
 
 export default function SponsorPortalPage() {
   const [sponsorId, setSponsorId] = useState("");
   const [sponsor, setSponsor] = useState<SponsorProfile | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<"lookup" | "dashboard">("lookup");
 
   const lookupSponsor = async () => {
     if (!sponsorId.trim()) return;
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch(`/api/sponsors/${sponsorId}`);
       if (res.ok) {
         const data = await res.json();
         setSponsor(data.sponsor || data);
         setView("dashboard");
+      } else if (res.status === 404) {
+        setError("Sponsor not found. Check your ID and try again.");
+      } else {
+        setError("Something went wrong. Please try again.");
       }
     } catch {
-      // handle error
+      setError("Network error. Please check your connection.");
     } finally {
       setLoading(false);
     }
@@ -92,8 +99,11 @@ export default function SponsorPortalPage() {
               Go
             </button>
           </div>
+          {error && (
+            <p className="text-sm text-red-600 mt-3">{error}</p>
+          )}
           <p className="text-xs text-gray-400 mt-3">
-            Your Sponsor ID was provided when your sponsorship was activated.
+            Your Sponsor ID was provided when your sponsorship was activated. Check your welcome email or contact the Harper team.
           </p>
         </div>
       </div>

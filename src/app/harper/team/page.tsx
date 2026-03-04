@@ -39,7 +39,7 @@ export default function HarperTeamPage() {
   const teamMembers: TeamMember[] = [
     {
       id: "harper",
-      name: "Harper AI",
+      name: "Harper Ainsley",
       role: "Sponsor Sales Director",
       title: "Team Lead & Strategy",
       avatar: "HA",
@@ -55,7 +55,7 @@ export default function HarperTeamPage() {
         "Team workflow automation",
       ],
       tools: ["AI Analytics", "Revenue Forecasting", "Upsell Detection", "Team Dashboard"],
-      dashboardLink: "/harper/opportunities",
+      dashboardLink: "/harper/pipeline",
       stats: [
         { label: "Upsell Opportunities", value: 18 },
         { label: "AI Recommendations", value: 32 },
@@ -436,9 +436,9 @@ export default function HarperTeamPage() {
           <h3 className="text-xl font-bold text-gray-900 mb-4">Team Dashboards</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <QuickLink
-              href="/harper/opportunities"
-              title="Harper AI"
-              description="Upsell opportunities"
+              href="/harper/pipeline"
+              title="Harper Ainsley"
+              description="Pipeline overview"
               icon={<Sparkles className="w-6 h-6" />}
               color="green"
             />

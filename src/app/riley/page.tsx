@@ -479,7 +479,7 @@ export default function RileyDashboardPage() {
             description="Search Spotify for indie artists to recruit"
             href="/riley/discovery"
             icon={<Music className="w-8 h-8 text-green-600" />}
-            managedBy="Riley AI"
+            managedBy="Riley Carpenter"
           />
           <QuickActionCard
             title="Pool Share Calculator"

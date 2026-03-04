@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Users, Search, Filter, TrendingUp, Music, DollarSign, User, Mail, Phone, Calendar } from "lucide-react";
+import { ArrowLeft, Users, Search, Filter, TrendingUp, Music, DollarSign, BarChart3, User, Mail, Phone, Calendar } from "lucide-react";
 import { ARTIST_CAPACITY, AIRPLAY_TIER_SHARES, AIRPLAY_TIER_PRICING, AIRPLAY_TIER_PLAYS_PER_MONTH } from "@/lib/calculations/station-capacity";
 
 const tierMap: Record<string, string> = {
@@ -364,33 +364,7 @@ function ArtistRow({ artist, onSelect }: { artist: ReturnType<typeof mapArtist>;
 function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapArtist>; onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<"overview" | "tracks" | "plays" | "revenue" | "tiers">("overview");
 
-  // Mock historical data
-  const trackHistory = [
-    { date: "Jan 15, 2024", track: "Wildfire", status: "Approved", plays: 48 },
-    { date: "Jan 8, 2024", track: "Mountain Road", status: "Approved", plays: 52 },
-    { date: "Dec 20, 2023", track: "Silent Night Blues", status: "Approved", plays: 45 },
-    { date: "Dec 5, 2023", track: "Highway Dreams", status: "Rejected", plays: 0 },
-  ];
-
-  const playHistory = [
-    { month: "Jan 2024", plays: 16, allocated: 16, listeners: 1240 },
-    { month: "Dec 2023", plays: 18, allocated: 16, listeners: 1380 },
-    { month: "Nov 2023", plays: 14, allocated: 16, listeners: 1120 },
-    { month: "Oct 2023", plays: 16, allocated: 16, listeners: 1290 },
-  ];
-
-  const revenueHistory = [
-    { month: "Jan 2024", poolEarnings: 24.25, subscription: 20, net: 4.25 },
-    { month: "Dec 2023", poolEarnings: 22.80, subscription: 20, net: 2.80 },
-    { month: "Nov 2023", poolEarnings: 21.50, subscription: 20, net: 1.50 },
-    { month: "Oct 2023", poolEarnings: 23.10, subscription: 20, net: 3.10 },
-  ];
-
-  const tierHistory = [
-    { date: "Jan 1, 2024", tier: "SILVER", action: "Current Tier", price: 20 },
-    { date: "Nov 15, 2023", tier: "BRONZE", action: "Upgraded from BRONZE", price: 5 },
-    { date: "Oct 1, 2023", tier: "FREE", action: "Joined Platform", price: 0 },
-  ];
+  // Historical data will be fetched from APIs when available
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -536,121 +510,48 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
 
           {/* Track History Tab */}
           {activeTab === "tracks" && (
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Track Submission History</h3>
-              <div className="space-y-3">
-                {trackHistory.map((track, idx) => (
-                  <div key={idx} className="bg-gray-50 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-semibold text-gray-900">{track.track}</div>
-                        <div className="text-sm text-gray-500">{track.date}</div>
-                      </div>
-                      <div className="text-right">
-                        <span className={`px-3 py-1 rounded text-xs font-semibold ${
-                          track.status === "Approved" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                        }`}>
-                          {track.status}
-                        </span>
-                        <div className="text-sm text-gray-600 mt-1">{track.plays} total plays</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="text-center py-8">
+              <Music className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+              <h3 className="font-semibold text-gray-900 mb-2">Track Submission History</h3>
+              <p className="text-sm text-gray-500">Track history will be available once streaming data is connected.</p>
             </div>
           )}
 
           {/* Play History Tab */}
           {activeTab === "plays" && (
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Monthly Play History</h3>
-              <div className="space-y-3">
-                {playHistory.map((month, idx) => (
-                  <div key={idx} className="bg-gray-50 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="font-semibold text-gray-900">{month.month}</div>
-                      <div className="text-sm text-gray-600">{month.listeners.toLocaleString()} unique listeners</div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-sm text-gray-600">Actual Plays</div>
-                        <div className="text-2xl font-bold text-green-600">{month.plays}</div>
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-600">Allocated Plays</div>
-                        <div className="text-2xl font-bold text-gray-600">{month.allocated}</div>
-                      </div>
-                    </div>
-                    <div className="mt-3 bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-green-600 h-2 rounded-full"
-                        style={{ width: `${Math.min((month.plays / month.allocated) * 100, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="text-center py-8">
+              <BarChart3 className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+              <h3 className="font-semibold text-gray-900 mb-2">Monthly Play History</h3>
+              <p className="text-sm text-gray-500">Play history will be available once the Railway streaming backend reports play data.</p>
             </div>
           )}
 
           {/* Revenue History Tab */}
           {activeTab === "revenue" && (
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Monthly Revenue History</h3>
-              <div className="space-y-3">
-                {revenueHistory.map((month, idx) => (
-                  <div key={idx} className="bg-gray-50 rounded-lg p-4">
-                    <div className="font-semibold text-gray-900 mb-3">{month.month}</div>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <div className="text-sm text-gray-600">Pool Earnings</div>
-                        <div className="text-lg font-bold text-green-600">+${month.poolEarnings.toFixed(2)}</div>
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-600">Subscription</div>
-                        <div className="text-lg font-bold text-red-600">-${month.subscription.toFixed(2)}</div>
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-600">Net Earnings</div>
-                        <div className={`text-lg font-bold ${month.net > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {month.net > 0 ? '+' : ''}${month.net.toFixed(2)}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                <div className="bg-purple-50 rounded-lg p-4 mt-4">
-                  <div className="font-semibold text-gray-900 mb-2">Total Lifetime Earnings</div>
-                  <div className="text-3xl font-bold text-purple-600">
-                    ${revenueHistory.reduce((sum, m) => sum + m.net, 0).toFixed(2)}
-                  </div>
-                  <div className="text-sm text-gray-600 mt-1">Net profit over {revenueHistory.length} months</div>
-                </div>
-              </div>
+            <div className="text-center py-8">
+              <DollarSign className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+              <h3 className="font-semibold text-gray-900 mb-2">Monthly Revenue History</h3>
+              <p className="text-sm text-gray-500">Revenue tracking will be available once Manifest Financial payments are connected.</p>
             </div>
           )}
 
           {/* Tier History Tab */}
           {activeTab === "tiers" && (
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Tier Upgrade History</h3>
-              <div className="space-y-3">
-                {tierHistory.map((tier, idx) => (
-                  <div key={idx} className="bg-gray-50 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-semibold text-gray-900">{tier.action}</div>
-                        <div className="text-sm text-gray-500">{tier.date}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-purple-600">{tier.tier}</div>
-                        <div className="text-sm text-gray-600">${tier.price}/month</div>
-                      </div>
-                    </div>
+              <h3 className="font-semibold text-gray-900 mb-4">Current Tier</h3>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-semibold text-gray-900">Current Tier</div>
+                    <div className="text-sm text-gray-500">Since joining</div>
                   </div>
-                ))}
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-purple-600">{artist.tier}</div>
+                    <div className="text-sm text-gray-600">${AIRPLAY_TIER_PRICING[artist.tier as keyof typeof AIRPLAY_TIER_PRICING]}/month</div>
+                  </div>
+                </div>
               </div>
+              <p className="text-sm text-gray-500 mt-3">Full tier progression history will be available in a future update.</p>
             </div>
           )}
         </div>

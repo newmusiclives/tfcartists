@@ -260,7 +260,7 @@ export default async function SchedulePage() {
               <span>Back to Station</span>
             </Link>
             <Link
-              href="/listen"
+              href="/listen/register"
               className="inline-flex items-center space-x-2 border-2 border-amber-700 text-amber-800 px-8 py-4 rounded-lg text-lg font-bold hover:bg-amber-50 transition-colors"
             >
               <span>Listen Now</span>

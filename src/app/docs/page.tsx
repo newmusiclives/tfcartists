@@ -221,20 +221,19 @@ function LocalhostGuide() {
         <div className="bg-white border rounded-lg p-6">
           <h4 className="text-xl font-bold mb-3">DJ Schedule</h4>
           <p className="text-gray-600 mb-3"><strong>URL:</strong> <a href="/schedule" className="text-purple-600 hover:underline">/schedule</a></p>
-          <p className="text-sm text-gray-600">Weekly programming with AI DJ personalities: Nova (morning), Sage (afternoon), Orion (night).</p>
+          <p className="text-sm text-gray-600">Weekly programming with AI DJ personalities: Hank Westwood (morning), Loretta Merrick (midday), Doc Holloway (afternoon), Cody Rampart (drive time).</p>
         </div>
       </div>
 
       <div className="bg-green-50 border-l-4 border-green-500 p-6 mt-8">
         <h4 className="font-bold text-green-900 mb-2">Quick 5-Minute Tour</h4>
         <ol className="list-decimal ml-6 space-y-2 text-green-800">
-          <li>Login as Riley: <code className="bg-green-100 px-2 py-1 rounded">riley / riley2024</code></li>
+          <li>Log in with your team credentials</li>
           <li>Check the pipeline at <a href="/riley/pipeline" className="text-green-700 underline">/riley/pipeline</a></li>
           <li>View pool calculator at <a href="/riley/pool-calculator" className="text-green-700 underline">/riley/pool-calculator</a></li>
-          <li>Switch to Harper: <code className="bg-green-100 px-2 py-1 rounded">harper / harper2024</code></li>
           <li>Browse sponsors at <a href="/harper/sponsors" className="text-green-700 underline">/harper/sponsors</a></li>
           <li>Check capacity at <a href="/capacity" className="text-green-700 underline">/capacity</a></li>
-          <li><strong>Mind blown!</strong> 🤯</li>
+          <li>View the DJ schedule at <a href="/schedule" className="text-green-700 underline">/schedule</a></li>
         </ol>
       </div>
     </div>
@@ -251,7 +250,7 @@ function CompleteDemo() {
       </p>
 
       <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
-        <p className="font-semibold text-blue-900">Status: Production-Ready Foundation | 70% Complete</p>
+        <p className="font-semibold text-blue-900">Status: Production-Ready Foundation</p>
       </div>
 
       <h3 className="text-2xl font-bold mt-8 mb-4">What's Built ✅</h3>
@@ -458,27 +457,19 @@ function Roadmap() {
       <h2 className="text-3xl font-bold mb-6">Implementation Roadmap</h2>
 
       <p className="text-xl text-gray-600 mb-8">
-        Your path from 70% complete to 100% production-ready in 18 weeks.
+        Remaining work to reach full production readiness.
       </p>
 
       <div className="bg-purple-50 border-l-4 border-purple-500 p-6 mb-8">
         <h4 className="font-bold text-purple-900 mb-2">Current Status</h4>
-        <div className="relative pt-1">
-          <div className="flex mb-2 items-center justify-between">
-            <div>
-              <span className="text-xs font-semibold inline-block text-purple-600">70% Complete</span>
-            </div>
-          </div>
-          <div className="overflow-hidden h-4 text-xs flex rounded bg-purple-200">
-            <div style={{width: "70%"}} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-600"></div>
-          </div>
-        </div>
-        <ul className="mt-4 space-y-1 text-sm text-purple-800">
-          <li>✅ Database schema (30 models)</li>
-          <li>✅ Riley team pages & APIs</li>
-          <li>✅ Harper team pages (UI only)</li>
-          <li>⚠️ Missing: External API integrations</li>
-          <li>⚠️ Missing: Harper backend APIs</li>
+        <ul className="mt-2 space-y-1 text-sm text-purple-800">
+          <li>✅ Database schema (30+ models)</li>
+          <li>✅ Riley &amp; Harper team pages &amp; APIs</li>
+          <li>✅ 24/7 radio streaming (Railway backend)</li>
+          <li>✅ AI DJ personalities &amp; voice tracks</li>
+          <li>✅ Clock templates &amp; schedule system</li>
+          <li>⚠️ Remaining: External API integrations</li>
+          <li>⚠️ Remaining: Payment processing</li>
         </ul>
       </div>
 
@@ -492,8 +483,8 @@ function Roadmap() {
           </div>
           <p className="text-gray-600 mb-3"><strong>Time:</strong> 8-10 hours</p>
           <ul className="space-y-2 text-sm text-gray-700">
-            <li>□ Create PostgreSQL database on Supabase (free tier)</li>
-            <li>□ Deploy to Netlify/Vercel</li>
+            <li>□ Configure PostgreSQL database (Neon free tier)</li>
+            <li>□ Deploy to Netlify</li>
             <li>□ Generate NEXTAUTH_SECRET: <code className="bg-gray-100 px-2 py-1 rounded">openssl rand -base64 32</code></li>
             <li>□ Run database migration</li>
           </ul>
@@ -525,7 +516,7 @@ function Roadmap() {
             <p className="font-semibold text-blue-900 mb-2">External Services Needed:</p>
             <ul className="space-y-2 text-sm text-blue-800">
               <li>• Twilio ($1/mo phone number) - SMS</li>
-              <li>• SendGrid (free tier: 100 emails/day)</li>
+              <li>• GoHighLevel - Email notifications</li>
             </ul>
           </div>
           <div className="mt-3 text-sm font-semibold text-green-600">Success: Riley can send SMS + Email ✅</div>
@@ -605,7 +596,7 @@ function Roadmap() {
           <h4 className="text-lg font-bold mb-4">Development Phase (Months 1-3)</h4>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Supabase PostgreSQL</span>
+              <span className="text-gray-600">Neon PostgreSQL</span>
               <span className="font-semibold">$0</span>
             </div>
             <div className="flex justify-between">
@@ -617,7 +608,7 @@ function Roadmap() {
               <span className="font-semibold">~$20</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">SendGrid Email</span>
+              <span className="text-gray-600">GoHighLevel Email</span>
               <span className="font-semibold">$0</span>
             </div>
             <div className="flex justify-between">

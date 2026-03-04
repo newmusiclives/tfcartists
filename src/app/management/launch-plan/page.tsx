@@ -96,7 +96,7 @@ const LAUNCH_PHASES: Phase[] = [
       { id: "f3", label: "Set up DJ schedule (6am-6pm live, 6pm-6am automation)", team: "ops", href: "/schedule", detail: "Weekday + Weekend shift assignments across all DJ slots" },
       { id: "f4", label: "Curate initial music library (200+ tracks)", team: "cassidy", href: "/cassidy", detail: "Upload songs, categorize by genre, assign to rotation clocks" },
       { id: "f5", label: "Configure airplay tiers and revenue sharing", team: "management", href: "/admin", detail: "FREE, $5, $20, $50, $120 tiers — 80% artist pool, 20% station" },
-      { id: "f6", label: "Set up payment processing (Stripe/Manifest)", team: "ops", detail: "Connect payment gateway for artist tiers and sponsor billing" },
+      { id: "f6", label: "Set up payment processing (Manifest Financial)", team: "ops", detail: "Connect payment gateway for artist tiers and sponsor billing" },
       { id: "f7", label: "Configure analytics and tracking systems", team: "ops", href: "/admin/stream-status", detail: "Stream monitoring, listener tracking, engagement metrics" },
       { id: "f8", label: "Activate Riley team — build artist prospect pipeline", team: "riley", href: "/riley", detail: "Load 100+ artist prospects for discovery and outreach" },
       { id: "f9", label: "Activate Harper team — build sponsor prospect list", team: "harper", href: "/harper", detail: "Load 200+ local business prospects for sponsorship outreach" },

@@ -97,7 +97,7 @@ export default function CommunityPage() {
   ];
 
   const upcomingEvents = [
-    { name: "Virtual Listening Party", date: "Coming soon", time: "TBD", host: "Elliot AI", attendees: 0, type: "Virtual" as const },
+    { name: "Virtual Listening Party", date: "Coming soon", time: "TBD", host: "Elliot Brooks", attendees: 0, type: "Virtual" as const },
   ];
 
   const discussionTopics = [

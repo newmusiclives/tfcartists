@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { SharedNav } from "@/components/shared-nav";
 import { CalendarDays, Save, Loader2 } from "lucide-react";
+import { useToast } from "@/contexts/ToastContext";
 
 interface DJOption {
   id: string;
@@ -67,6 +68,7 @@ export default function ScheduleEditorPage() {
   const [stationId, setStationId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetch("/api/stations")
@@ -125,13 +127,18 @@ export default function ScheduleEditorPage() {
     setSaving(true);
     try {
       const validSlots = schedule.filter((s) => s.djId && s.clockTemplateId);
-      await fetch("/api/station-schedule", {
+      const res = await fetch("/api/station-schedule", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stationId, schedule: validSlots }),
       });
+      if (res.ok) {
+        toast("Schedule saved successfully", "success");
+      } else {
+        toast("Failed to save schedule", "error");
+      }
     } catch {
-      // handle error
+      toast("Network error saving schedule", "error");
     } finally {
       setSaving(false);
     }

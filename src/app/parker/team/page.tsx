@@ -41,7 +41,7 @@ export default function ParkerTeamPage() {
       title: "Team Lead & Station Oversight",
       avatar: "PH",
       color: "rose",
-      photoUrl: "/team/parker-hayes.png",
+      photoUrl: "",
       icon: <Radio className="w-6 h-6" />,
       responsibilities: [
         "Strategic oversight and cross-team coordination",
@@ -66,7 +66,7 @@ export default function ParkerTeamPage() {
       title: "Programming & Format Strategy",
       avatar: "SC",
       color: "indigo",
-      photoUrl: "/team/sage-calloway.png",
+      photoUrl: "",
       icon: <CalendarDays className="w-6 h-6" />,
       responsibilities: [
         "Show scheduling and daypart strategy",
@@ -91,7 +91,7 @@ export default function ParkerTeamPage() {
       title: "Music Rotation & Library Management",
       avatar: "WN",
       color: "violet",
-      photoUrl: "/team/wren-nakamura.png",
+      photoUrl: "",
       icon: <ListMusic className="w-6 h-6" />,
       responsibilities: [
         "Music rotation management and scheduling",
@@ -116,7 +116,7 @@ export default function ParkerTeamPage() {
       title: "Commercial Scheduling & Ad Ops",
       avatar: "NT",
       color: "orange",
-      photoUrl: "/team/nolan-torres.png",
+      photoUrl: "",
       icon: <Megaphone className="w-6 h-6" />,
       responsibilities: [
         "Commercial scheduling and spot placement",
@@ -141,7 +141,7 @@ export default function ParkerTeamPage() {
       title: "Community Engagement & Feedback",
       avatar: "IB",
       color: "teal",
-      photoUrl: "/team/ivy-brennan.png",
+      photoUrl: "",
       icon: <MessageCircle className="w-6 h-6" />,
       responsibilities: [
         "Listener feedback management and response",

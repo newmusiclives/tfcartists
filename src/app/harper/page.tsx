@@ -1,48 +1,110 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, DollarSign, Building2, TrendingUp, Phone, Mail, Calendar, Target, UserCircle, Send, Radio, CreditCard, GitBranch } from "lucide-react";
+import { ArrowLeft, DollarSign, Building2, TrendingUp, Phone, Calendar, Target, UserCircle, Send, Radio, CreditCard, GitBranch, Loader2 } from "lucide-react";
 import { SPONSOR_AD_SPOTS, SPONSOR_PRICING } from "@/lib/calculations/station-capacity";
 
-export default function HarperDashboardPage() {
-  // Mock data - in production this would come from the database
-  // OPTIMAL 77% CAPACITY MODEL WITH LOCAL HERO ENTRY TIER
-  const stats = {
-    totalSponsors: 125,
-    byTier: {
-      LOCAL_HERO: 45,  // $50/mo (ENTRY LEVEL)
-      TIER_1: 28,      // $100/mo
-      TIER_2: 35,      // $200/mo
-      TIER_3: 17,      // $400/mo
-    },
-    monthlyRevenue: 18850, // Base packages (45×$50 + 28×$100 + 35×$200 + 17×$400)
-    premiumRevenue: 3400, // Premium add-ons (News, Sponsored Hours, Takeovers)
-    totalRevenue: 22250, // Total Harper revenue (base + premium)
-    artistPoolPayout: 17800, // 80% of total Harper revenue
-    stationRevenue: 4450, // 20% of total Harper revenue
-    activeCalls: 10,
-    scheduledCallbacks: 22,
-    dealsInNegotiation: 15,
+interface HarperStats {
+  totalSponsors: number;
+  byStatus: Record<string, number>;
+  totalMonthlyRevenue: number;
+  activeSponsorships: number;
+  callsThisMonth: number;
+  dealsClosedThisMonth: number;
+  byStage: Record<string, number>;
+  revenueByTier: Record<string, { count: number; revenue: number }>;
+  activity: { recentActions: number; callsThisMonth: number; messagesSent: number };
+}
+
+interface Deal {
+  id: string;
+  tier: string;
+  monthlyAmount: number;
+  status: string;
+  startDate: string;
+  sponsor: {
+    id: string;
+    businessName: string;
+    contactName: string;
+    businessType: string;
+    city: string;
+    state: string;
+    status: string;
+    pipelineStage: string;
   };
+}
 
-  const recentDeals = [
-    { id: 1, business: "Mountain View Coffee", type: "Coffee Shop", tier: "TIER_2", status: "active", startDate: "Jan 2024" },
-    { id: 2, business: "Craftworks Brewery", type: "Brewery", tier: "TIER_3", status: "active", startDate: "Jan 2024" },
-    { id: 3, business: "Red Rock Music Store", type: "Music Store", tier: "TIER_2", status: "negotiating", startDate: "Pending" },
-    { id: 4, business: "Desert Distilling Co.", type: "Distillery", tier: "TIER_3", status: "active", startDate: "Dec 2023" },
-    { id: 5, business: "The Vinyl Cafe", type: "Cafe", tier: "TIER_1", status: "active", startDate: "Jan 2024" },
-  ];
+const TIER_NAMES: Record<string, string> = {
+  localHero: "Local Hero",
+  LOCAL_HERO: "Local Hero",
+  bronze: "Bronze",
+  BRONZE: "Bronze",
+  silver: "Silver",
+  SILVER: "Silver",
+  gold: "Gold",
+  GOLD: "Gold",
+  platinum: "Platinum",
+  PLATINUM: "Platinum",
+};
 
-  const callSchedule = [
-    { id: 1, business: "Sunrise Bakery", contact: "Sarah Miller", time: "2:00 PM Today", type: "discovery" },
-    { id: 2, business: "North Woods Outfitters", contact: "Mike Chen", time: "4:30 PM Today", type: "pitch" },
-    { id: 3, business: "The Book Nook", contact: "Lisa Garcia", time: "10:00 AM Tomorrow", type: "close" },
-  ];
+export default function HarperDashboardPage() {
+  const [stats, setStats] = useState<HarperStats | null>(null);
+  const [deals, setDeals] = useState<Deal[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [unauthorized, setUnauthorized] = useState(false);
 
-  const premiumOpportunities = [
-    { business: "Mountain View Coffee", currentTier: "TIER_2", addon: "Sponsored Hour", monthlyAdd: 300 },
-    { business: "Craftworks Brewery", currentTier: "TIER_3", addon: "Week Takeover", monthlyAdd: 800 },
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [statsRes, dealsRes] = await Promise.all([
+          fetch("/api/harper/stats"),
+          fetch("/api/harper/deals?limit=5"),
+        ]);
+
+        if (statsRes.status === 401) { setUnauthorized(true); return; }
+
+        if (statsRes.ok) {
+          setStats(await statsRes.json());
+        }
+        if (dealsRes.ok) {
+          const data = await dealsRes.json();
+          setDeals(data.deals || []);
+        }
+      } catch (error) {
+        console.error("Error fetching Harper data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+      </main>
+    );
+  }
+
+  if (unauthorized) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
+          <p className="text-gray-600 mb-4">Sign in as Harper to access this dashboard.</p>
+          <Link href="/login?callbackUrl=/harper" className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Sign In</Link>
+        </div>
+      </main>
+    );
+  }
+
+  const totalSponsors = stats?.totalSponsors ?? 0;
+  const totalRevenue = stats?.totalMonthlyRevenue ?? 0;
+  const activeDeals = stats?.activeSponsorships ?? 0;
+  const callsThisMonth = stats?.callsThisMonth ?? 0;
+  const revenueByTier = stats?.revenueByTier ?? {};
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
@@ -82,193 +144,98 @@ export default function HarperDashboardPage() {
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
             icon={<Building2 className="w-6 h-6 text-green-600" />}
-            label="Active Sponsors"
-            value={stats.totalSponsors}
-            subtitle="77% optimal capacity"
+            label="Total Sponsors"
+            value={totalSponsors}
+            subtitle={`${activeDeals} active deals`}
             color="green"
           />
           <MetricCard
             icon={<DollarSign className="w-6 h-6 text-blue-600" />}
             label="Monthly Revenue"
-            value={`$${stats.totalRevenue.toLocaleString()}`}
-            subtitle="Base + Premium"
+            value={`$${totalRevenue.toLocaleString()}`}
+            subtitle="From active sponsorships"
             color="blue"
           />
           <MetricCard
             icon={<Phone className="w-6 h-6 text-orange-600" />}
-            label="Scheduled Calls"
-            value={stats.scheduledCallbacks}
-            subtitle={`${stats.activeCalls} active now`}
+            label="Calls This Month"
+            value={callsThisMonth}
+            subtitle={`${stats?.dealsClosedThisMonth ?? 0} deals closed`}
             color="orange"
           />
           <MetricCard
             icon={<Target className="w-6 h-6 text-purple-600" />}
-            label="In Negotiation"
-            value={stats.dealsInNegotiation}
-            subtitle="Closing soon"
+            label="In Pipeline"
+            value={(stats?.byStage?.negotiating ?? 0) + (stats?.byStage?.interested ?? 0)}
+            subtitle="Negotiating + interested"
             color="purple"
           />
         </section>
 
-        {/* Team Members */}
+        {/* Revenue by Tier */}
         <section className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
-            <Building2 className="w-6 h-6 text-green-600" />
-            <span>Team Members</span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {[
-              { name: "Harper AI", role: "Sponsor Sales Director", avatar: "HA", color: "bg-green-100 text-green-600", status: "Identifying upsell opportunities", kpi: `${stats.dealsInNegotiation} in negotiation` },
-              { name: "Blake Morrison", role: "Outreach & Business Dev", avatar: "BM", color: "bg-blue-100 text-blue-600", status: "Prospecting new sponsors", kpi: `${stats.scheduledCallbacks} scheduled calls` },
-              { name: "Cameron Wells", role: "Account Management", avatar: "CW", color: "bg-indigo-100 text-indigo-600", status: "Managing sponsor accounts", kpi: `${stats.totalSponsors} sponsors` },
-              { name: "Dakota Chen", role: "Ad Operations & QC", avatar: "DC", color: "bg-purple-100 text-purple-600", status: "Scheduling ad spots", kpi: "720 spots/month" },
-              { name: "Riley Nguyen", role: "Billing & Revenue", avatar: "RN", color: "bg-emerald-100 text-emerald-600", status: "Processing invoices", kpi: `$${stats.totalRevenue.toLocaleString()}` },
-            ].map((member, idx) => (
-              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 hover:border-green-300 transition-colors">
-                <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>
-                <div className="font-semibold text-gray-900 text-sm">{member.name}</div>
-                <div className="text-xs text-gray-600 mb-2">{member.role}</div>
-                <div className="text-xs text-green-600 mb-2 truncate">{member.status}</div>
-                <div className="mt-2 pt-2 border-t border-gray-200">
-                  <div className="text-xs font-semibold text-gray-700">{member.kpi}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Revenue Breakdown */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-6">Revenue Distribution</h2>
-
+          <h2 className="text-2xl font-bold mb-6">Revenue by Tier</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="text-sm text-gray-600 mb-2">Base Packages</div>
-              <div className="text-3xl font-bold text-green-600 mb-1">
-                ${stats.monthlyRevenue.toLocaleString()}
-              </div>
-              <div className="text-xs text-gray-500">
-                {stats.byTier.LOCAL_HERO} Local Hero + {stats.byTier.TIER_1} Tier 1 + {stats.byTier.TIER_2} Tier 2 + {stats.byTier.TIER_3} Tier 3
-              </div>
+              <div className="text-sm text-gray-600 mb-2">Active Sponsors</div>
+              <div className="text-3xl font-bold text-green-600 mb-1">{totalSponsors}</div>
+              <div className="text-xs text-gray-500">Across all tiers</div>
             </div>
-
             <div className="text-center">
-              <div className="text-sm text-gray-600 mb-2">Premium Add-ons</div>
+              <div className="text-sm text-gray-600 mb-2">Monthly Revenue</div>
               <div className="text-3xl font-bold text-blue-600 mb-1">
-                ${stats.premiumRevenue.toLocaleString()}
+                ${totalRevenue.toLocaleString()}
               </div>
-              <div className="text-xs text-gray-500">
-                News, Sponsored Hours, Takeovers
-              </div>
+              <div className="text-xs text-gray-500">From sponsorships</div>
             </div>
-
             <div className="text-center">
-              <div className="text-sm text-gray-600 mb-2">Total Monthly</div>
+              <div className="text-sm text-gray-600 mb-2">Artist Pool (80%)</div>
               <div className="text-3xl font-bold text-purple-600 mb-1">
-                ${stats.totalRevenue.toLocaleString()}
+                ${Math.round(totalRevenue * 0.8).toLocaleString()}
               </div>
-              <div className="text-xs text-gray-500">
-                Annual: ${(stats.totalRevenue * 12).toLocaleString()}
-              </div>
+              <div className="text-xs text-gray-500">Distributed to artists</div>
             </div>
           </div>
 
-          <div className="mt-6 pt-6 border-t">
-            <h3 className="font-semibold mb-4">Revenue Allocation</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-purple-50 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700">Artist Pool (80%)</span>
-                  <span className="text-lg font-bold text-purple-600">
-                    ${stats.artistPoolPayout.toLocaleString()}
-                  </span>
-                </div>
-                <div className="text-xs text-gray-600">
-                  Distributed monthly to artists based on shares
-                </div>
-              </div>
-
-              <div className="bg-green-50 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700">Station Revenue (20%)</span>
-                  <span className="text-lg font-bold text-green-600">
-                    ${stats.stationRevenue.toLocaleString()}
-                  </span>
-                </div>
-                <div className="text-xs text-gray-600">
-                  Station operations and growth
-                </div>
+          {Object.keys(revenueByTier).length > 0 && (
+            <div className="mt-6 pt-6 border-t">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                {Object.entries(revenueByTier).map(([tier, data]) => (
+                  <div key={tier} className="bg-gray-50 rounded-lg p-3 text-center">
+                    <div className="text-xs font-bold text-gray-500 mb-1">
+                      {TIER_NAMES[tier] || tier}
+                    </div>
+                    <div className="text-lg font-bold text-gray-900">{data.count}</div>
+                    <div className="text-xs text-gray-500">${data.revenue.toLocaleString()}/mo</div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
+          )}
         </section>
 
-        {/* Sponsor Distribution by Tier */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Sponsor Distribution by Tier</h2>
-          <p className="text-gray-600 text-sm mb-6">
-            Current sponsors: {stats.totalSponsors} at 77% optimal capacity with Local Hero entry tier
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <SponsorTierCard
-              tier="Local Hero"
-              count={stats.byTier.LOCAL_HERO}
-              target={45}
-              price={SPONSOR_PRICING.LOCAL_HERO}
-              spots={SPONSOR_AD_SPOTS.LOCAL_HERO}
-              spotsPerDay={1}
-              color="teal"
-            />
-            <SponsorTierCard
-              tier="Tier 1"
-              count={stats.byTier.TIER_1}
-              target={28}
-              price={SPONSOR_PRICING.TIER_1}
-              spots={SPONSOR_AD_SPOTS.TIER_1}
-              spotsPerDay={2}
-              color="blue"
-            />
-            <SponsorTierCard
-              tier="Tier 2"
-              count={stats.byTier.TIER_2}
-              target={35}
-              price={SPONSOR_PRICING.TIER_2}
-              spots={SPONSOR_AD_SPOTS.TIER_2}
-              spotsPerDay={5}
-              color="green"
-            />
-            <SponsorTierCard
-              tier="Tier 3"
-              count={stats.byTier.TIER_3}
-              target={17}
-              price={SPONSOR_PRICING.TIER_3}
-              spots={SPONSOR_AD_SPOTS.TIER_3}
-              spotsPerDay={10}
-              color="purple"
-            />
-          </div>
-
-          <div className="mt-6 pt-6 border-t">
-            <div className="text-center">
-              <div className="text-sm text-gray-600">Available Ad Inventory</div>
-              <div className="text-2xl font-bold text-gray-900 mt-1">
-                {17280 - (stats.byTier.TIER_1 * SPONSOR_AD_SPOTS.TIER_1 + stats.byTier.TIER_2 * SPONSOR_AD_SPOTS.TIER_2 + stats.byTier.TIER_3 * SPONSOR_AD_SPOTS.TIER_3)} spots
-              </div>
-              <div className="text-xs text-gray-500 mt-1">
-                of 17,280 monthly spots remaining
-              </div>
+        {/* Pipeline Overview */}
+        {stats?.byStage && (
+          <section className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-bold mb-4">Pipeline Overview</h2>
+            <div className="grid grid-cols-3 md:grid-cols-7 gap-3">
+              {Object.entries(stats.byStage).map(([stage, count]) => (
+                <div key={stage} className="text-center">
+                  <div className="text-2xl font-bold text-gray-900">{count}</div>
+                  <div className="text-xs text-gray-500 capitalize">{stage}</div>
+                </div>
+              ))}
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        {/* Active & Recent Deals */}
+        {/* Recent Deals */}
         <section className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-bold">Active & Recent Deals</h2>
+              <h2 className="text-2xl font-bold">Recent Deals</h2>
               <p className="text-gray-600 text-sm mt-1">
-                Closed deals and ongoing negotiations
+                Latest sponsorship activity
               </p>
             </div>
             <Link
@@ -279,49 +246,40 @@ export default function HarperDashboardPage() {
             </Link>
           </div>
 
-          <div className="space-y-3">
-            {recentDeals.map((deal) => (
-              <DealRow key={deal.id} {...deal} />
-            ))}
-          </div>
+          {deals.length > 0 ? (
+            <div className="space-y-3">
+              {deals.map((deal) => (
+                <DealRow key={deal.id} deal={deal} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              <Building2 className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+              <p>No deals yet. Start reaching out to potential sponsors.</p>
+            </div>
+          )}
         </section>
 
-        {/* Upcoming Calls */}
-        <section className="bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Upcoming Calls</h2>
-          <p className="text-gray-600 text-sm mb-6">
-            Scheduled discovery calls, pitches, and closings
-          </p>
-
-          <div className="space-y-3">
-            {callSchedule.map((call) => (
-              <CallRow key={call.id} {...call} />
-            ))}
-          </div>
-
-          <div className="mt-6 text-center">
-            <Link
-              href="/harper/calls"
-              className="text-blue-600 hover:text-blue-700 font-semibold"
-            >
-              View Full Call Schedule →
-            </Link>
-          </div>
-        </section>
-
-        {/* Premium Upsell Opportunities */}
-        <section className="bg-gradient-to-br from-yellow-50 to-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Premium Upsell Opportunities</h2>
-          <p className="text-gray-600 text-sm mb-6">
-            Existing sponsors who might benefit from premium add-ons
-          </p>
-
-          <div className="space-y-4">
-            {premiumOpportunities.map((opp, idx) => (
-              <UpsellOpportunityCard key={idx} {...opp} />
-            ))}
-          </div>
-        </section>
+        {/* Recent Activity */}
+        {stats?.activity && (
+          <section className="bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-bold mb-4">Recent Activity</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white rounded-lg p-4 border">
+                <div className="text-2xl font-bold text-gray-900">{stats.activity.recentActions}</div>
+                <div className="text-sm text-gray-600">Actions this month</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 border">
+                <div className="text-2xl font-bold text-gray-900">{stats.activity.callsThisMonth}</div>
+                <div className="text-sm text-gray-600">Calls completed</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 border">
+                <div className="text-2xl font-bold text-gray-900">{stats.activity.messagesSent}</div>
+                <div className="text-sm text-gray-600">Messages sent</div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Quick Actions */}
         <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -330,60 +288,37 @@ export default function HarperDashboardPage() {
             description="Complete sponsor journey from discovery to activation"
             href="/harper/pipeline"
             icon={<GitBranch className="w-8 h-8 text-green-600" />}
-            badge={8}
-            managedBy="Harper AI"
           />
           <QuickActionCard
             title="Sponsor Outreach"
             description="Lead discovery and business development"
             href="/harper/outreach"
             icon={<Send className="w-8 h-8 text-blue-600" />}
-            badge={12}
-            managedBy="Blake Morrison"
-          />
-          <QuickActionCard
-            title="Automated Workflows"
-            description="Sponsor acquisition automation"
-            href="/harper/workflows"
-            icon={<TrendingUp className="w-8 h-8 text-purple-600" />}
-            managedBy="Harper AI"
           />
           <QuickActionCard
             title="Manage Sponsors"
             description="View and manage all sponsor relationships"
             href="/harper/sponsors"
             icon={<Building2 className="w-8 h-8 text-green-600" />}
-            badge={stats.totalSponsors}
-            managedBy="Cameron Wells"
+            badge={totalSponsors}
           />
           <QuickActionCard
             title="Ad Operations"
             description="Schedule and manage ad spots"
             href="/harper/operations"
             icon={<Radio className="w-8 h-8 text-orange-600" />}
-            managedBy="Dakota Chen"
           />
           <QuickActionCard
             title="Billing & Revenue"
             description="Invoicing and revenue distribution"
             href="/harper/billing"
             icon={<CreditCard className="w-8 h-8 text-blue-600" />}
-            managedBy="Riley Nguyen"
-          />
-          <QuickActionCard
-            title="Call Schedule"
-            description="View and manage upcoming sales calls"
-            href="/harper/calls"
-            icon={<Phone className="w-8 h-8 text-blue-600" />}
-            badge={stats.scheduledCallbacks}
-            managedBy="Blake Morrison"
           />
           <QuickActionCard
             title="Ad Inventory"
             description="Manage ad spots and scheduling"
             href="/harper/inventory"
             icon={<Calendar className="w-8 h-8 text-purple-600" />}
-            managedBy="Dakota Chen"
           />
         </section>
       </div>
@@ -416,191 +351,35 @@ function MetricCard({
   );
 }
 
-function SponsorTierCard({
-  tier,
-  count,
-  target,
-  price,
-  spots,
-  spotsPerDay,
-  color,
-}: {
-  tier: string;
-  count: number;
-  target: number;
-  price: number;
-  spots: number;
-  spotsPerDay: number;
-  color: string;
-}) {
-  const percentage = (count / target) * 100;
-  const colorClasses = {
-    teal: "text-teal-600 bg-teal-100",
-    blue: "text-blue-600 bg-blue-100",
-    green: "text-green-600 bg-green-100",
-    purple: "text-purple-600 bg-purple-100",
-  }[color];
-
-  return (
-    <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200">
-      <div className="flex items-center justify-between mb-2">
-        <div className={`text-xs font-bold px-2 py-1 rounded ${colorClasses}`}>
-          {tier}
-        </div>
-        <div className="text-xs text-gray-500">${price}/mo</div>
-      </div>
-      <div className="text-3xl font-bold mb-1">{count}</div>
-      <div className="text-xs text-gray-500 mb-3">of {target} target</div>
-
-      <div className="space-y-1 text-xs text-gray-600">
-        <div>• {spotsPerDay} spots/day</div>
-        <div>• {spots} spots/month</div>
-      </div>
-
-      <div className="mt-3 bg-gray-200 rounded-full h-2 overflow-hidden">
-        <div
-          className="bg-green-600 h-full rounded-full transition-all"
-          style={{ width: `${Math.min(percentage, 100)}%` }}
-        />
-      </div>
-      <div className="text-xs text-gray-500 mt-1 text-center">
-        {percentage >= 100 ? "Target met!" : `${percentage.toFixed(0)}% of target`}
-      </div>
-    </div>
-  );
-}
-
-function DealRow({
-  business,
-  type,
-  tier,
-  status,
-  startDate,
-}: {
-  business: string;
-  type: string;
-  tier: string;
-  status: string;
-  startDate: string;
-}) {
-  const statusConfig = {
-    active: {
-      bg: "bg-green-50",
-      text: "text-green-700",
-      label: "Active",
-    },
-    negotiating: {
-      bg: "bg-yellow-50",
-      text: "text-yellow-700",
-      label: "Negotiating",
-    },
-    pending: {
-      bg: "bg-blue-50",
-      text: "text-blue-700",
-      label: "Pending",
-    },
-  }[status] || {
-    bg: "bg-gray-50",
-    text: "text-gray-700",
-    label: status,
+function DealRow({ deal }: { deal: Deal }) {
+  const statusConfig: Record<string, { bg: string; text: string; label: string }> = {
+    active: { bg: "bg-green-50", text: "text-green-700", label: "Active" },
+    pending: { bg: "bg-yellow-50", text: "text-yellow-700", label: "Pending" },
+    cancelled: { bg: "bg-red-50", text: "text-red-700", label: "Cancelled" },
+    expired: { bg: "bg-gray-50", text: "text-gray-700", label: "Expired" },
   };
 
-  const tierPrice = {
-    TIER_1: "$100",
-    TIER_2: "$200",
-    TIER_3: "$400",
-  }[tier];
+  const config = statusConfig[deal.status] || { bg: "bg-gray-50", text: "text-gray-700", label: deal.status };
+  const tierName = TIER_NAMES[deal.tier] || deal.tier;
 
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
       <div className="flex items-center space-x-4 flex-1">
         <Building2 className="w-10 h-10 text-gray-400" />
         <div>
-          <div className="font-semibold text-gray-900">{business}</div>
-          <div className="text-sm text-gray-600">{type}</div>
+          <div className="font-semibold text-gray-900">{deal.sponsor.businessName}</div>
+          <div className="text-sm text-gray-600">{deal.sponsor.businessType?.replace(/_/g, " ")}</div>
         </div>
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-xs text-gray-500">{tier.replace('_', ' ')} - {tierPrice}/mo</div>
-          <div className="text-xs text-gray-400">{startDate}</div>
-        </div>
-        <div className={`px-3 py-1 rounded-full ${statusConfig.bg} ${statusConfig.text}`}>
-          <span className="text-xs font-medium">{statusConfig.label}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function CallRow({
-  business,
-  contact,
-  time,
-  type,
-}: {
-  business: string;
-  contact: string;
-  time: string;
-  type: string;
-}) {
-  const typeConfig = {
-    discovery: { color: "blue", label: "Discovery" },
-    pitch: { color: "purple", label: "Pitch" },
-    close: { color: "green", label: "Closing" },
-  }[type] || { color: "gray", label: type };
-
-  return (
-    <div className="flex items-center justify-between p-4 bg-white rounded-lg border-2 border-gray-200">
-      <div className="flex items-center space-x-4 flex-1">
-        <Phone className="w-8 h-8 text-blue-600" />
-        <div>
-          <div className="font-semibold text-gray-900">{business}</div>
-          <div className="text-sm text-gray-600">{contact}</div>
-        </div>
-      </div>
-      <div className="flex items-center space-x-4">
-        <div className="text-right">
-          <div className="text-sm font-medium text-gray-900">{time}</div>
-          <div className={`text-xs text-${typeConfig.color}-600 font-medium`}>{typeConfig.label} Call</div>
-        </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm">
-          Join Call
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function UpsellOpportunityCard({
-  business,
-  currentTier,
-  addon,
-  monthlyAdd,
-}: {
-  business: string;
-  currentTier: string;
-  addon: string;
-  monthlyAdd: number;
-}) {
-  return (
-    <div className="bg-white rounded-lg p-4 border-2 border-yellow-200">
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <div className="font-semibold text-gray-900">{business}</div>
-          <div className="text-sm text-gray-600 mt-1">
-            Currently on {currentTier.replace('_', ' ')} package
+          <div className="text-xs text-gray-500">{tierName} - ${deal.monthlyAmount}/mo</div>
+          <div className="text-xs text-gray-400">
+            {deal.startDate ? new Date(deal.startDate).toLocaleDateString() : "—"}
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <div className="text-center">
-            <div className="text-xs text-gray-500">Upsell</div>
-            <div className="font-bold text-yellow-600">{addon}</div>
-            <div className="text-xs text-yellow-600">+${monthlyAdd}/mo</div>
-          </div>
-          <button className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors text-sm font-medium">
-            Pitch Add-on
-          </button>
+        <div className={`px-3 py-1 rounded-full ${config.bg} ${config.text}`}>
+          <span className="text-xs font-medium">{config.label}</span>
         </div>
       </div>
     </div>
@@ -613,14 +392,12 @@ function QuickActionCard({
   href,
   icon,
   badge,
-  managedBy,
 }: {
   title: string;
   description: string;
   href: string;
   icon: React.ReactNode;
   badge?: number;
-  managedBy?: string;
 }) {
   return (
     <Link href={href} className="block">
@@ -634,9 +411,6 @@ function QuickActionCard({
           )}
         </div>
         <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
-        {managedBy && (
-          <p className="text-xs text-green-600 font-medium mb-1">Managed by {managedBy}</p>
-        )}
         <p className="text-sm text-gray-600">{description}</p>
       </div>
     </Link>

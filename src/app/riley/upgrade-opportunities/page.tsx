@@ -148,7 +148,7 @@ export default function UpgradeOpportunitiesPage() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Tier Upgrade Opportunities</h1>
               <p className="text-gray-600">
-                Artists showing high engagement who might upgrade - Managed by Riley AI
+                Artists showing high engagement who might upgrade - Managed by Riley Carpenter
               </p>
             </div>
           </div>

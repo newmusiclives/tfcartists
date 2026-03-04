@@ -12,34 +12,34 @@ import {
 
 const DJ_SCHEDULE = {
   weekday: [
-    { time: "6:00 AM - 10:00 AM", dj: "Hank Westwood", daypart: "Morning Drive", status: "live" },
-    { time: "10:00 AM - 2:00 PM", dj: "Loretta Merrick", daypart: "Midday", status: "live" },
-    { time: "2:00 PM - 6:00 PM", dj: "Marcus 'Doc' Holloway", daypart: "Afternoon", status: "live" },
-    { time: "6:00 PM - 10:00 PM", dj: "Cody Rampart", daypart: "Evening", status: "live" },
-    { time: "10:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
+    { time: "6:00 AM - 9:00 AM", dj: "Hank Westwood", daypart: "Morning Drive", status: "live" },
+    { time: "9:00 AM - 12:00 PM", dj: "Loretta Merrick", daypart: "Midday", status: "live" },
+    { time: "12:00 PM - 3:00 PM", dj: "Marcus 'Doc' Holloway", daypart: "Afternoon", status: "live" },
+    { time: "3:00 PM - 6:00 PM", dj: "Cody Rampart", daypart: "Drive Time", status: "live" },
+    { time: "6:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
   ],
   saturday: [
-    { time: "6:00 AM - 10:00 AM", dj: "Jo McAllister", daypart: "Morning Drive", status: "live" },
-    { time: "10:00 AM - 2:00 PM", dj: "Paul Saunders", daypart: "Midday", status: "live" },
-    { time: "2:00 PM - 6:00 PM", dj: "Ezra Stone", daypart: "Afternoon", status: "live" },
-    { time: "6:00 PM - 10:00 PM", dj: "Levi Bridges", daypart: "Evening", status: "live" },
-    { time: "10:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
+    { time: "6:00 AM - 9:00 AM", dj: "Jo McAllister", daypart: "Morning Drive", status: "live" },
+    { time: "9:00 AM - 12:00 PM", dj: "Paul Saunders", daypart: "Midday", status: "live" },
+    { time: "12:00 PM - 3:00 PM", dj: "Ezra Stone", daypart: "Afternoon", status: "live" },
+    { time: "3:00 PM - 6:00 PM", dj: "Levi Bridges", daypart: "Drive Time", status: "live" },
+    { time: "6:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
   ],
   sunday: [
-    { time: "6:00 AM - 10:00 AM", dj: "Sam Turnbull", daypart: "Morning Drive", status: "live" },
-    { time: "10:00 AM - 2:00 PM", dj: "Ruby Finch", daypart: "Midday", status: "live" },
-    { time: "2:00 PM - 6:00 PM", dj: "Mark Faulkner", daypart: "Afternoon", status: "live" },
-    { time: "6:00 PM - 10:00 PM", dj: "Iris Langley", daypart: "Evening", status: "live" },
-    { time: "10:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
+    { time: "6:00 AM - 9:00 AM", dj: "Sam Turnbull", daypart: "Morning Drive", status: "live" },
+    { time: "9:00 AM - 12:00 PM", dj: "Ruby Finch", daypart: "Midday", status: "live" },
+    { time: "12:00 PM - 3:00 PM", dj: "Mark Faulkner", daypart: "Afternoon", status: "live" },
+    { time: "3:00 PM - 6:00 PM", dj: "Iris Langley", daypart: "Drive Time", status: "live" },
+    { time: "6:00 PM - 6:00 AM", dj: "Automation", daypart: "Overnight", status: "auto" },
   ],
 };
 
 const DAYPART_ANALYSIS = [
-  { name: "Morning Drive", time: "6am - 10am", listeners: "High", retention: "78%", format: "99%", color: "rose" },
-  { name: "Midday", time: "10am - 3pm", listeners: "Medium", retention: "65%", format: "97%", color: "indigo" },
-  { name: "Afternoon Drive", time: "3pm - 7pm", listeners: "High", retention: "74%", format: "98%", color: "violet" },
-  { name: "Evening", time: "7pm - 12am", listeners: "Low-Med", retention: "58%", format: "100%", color: "orange" },
-  { name: "Overnight", time: "12am - 6am", listeners: "Low", retention: "45%", format: "100%", color: "gray" },
+  { name: "Morning Drive", time: "6am - 9am", listeners: "High", retention: "78%", format: "99%", color: "rose" },
+  { name: "Midday", time: "9am - 12pm", listeners: "Medium", retention: "65%", format: "97%", color: "indigo" },
+  { name: "Afternoon", time: "12pm - 3pm", listeners: "High", retention: "74%", format: "98%", color: "violet" },
+  { name: "Drive Time", time: "3pm - 6pm", listeners: "High", retention: "72%", format: "98%", color: "orange" },
+  { name: "Overnight", time: "6pm - 6am", listeners: "Low", retention: "45%", format: "100%", color: "gray" },
 ];
 
 export default function ProgrammingPage() {

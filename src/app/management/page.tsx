@@ -29,11 +29,11 @@ import {
 import { SharedNav } from "@/components/shared-nav";
 import { useStation } from "@/contexts/StationContext";
 
-// --- Management Team ---
+// --- Management Roles ---
 const MANAGEMENT_TEAM = [
   {
     name: "Morgan Reed",
-    role: "Station Manager (GM)",
+    role: "General Manager (GM)",
     avatar: "MR",
     color: "bg-amber-100 text-amber-700",
     focus: "Overall station success",

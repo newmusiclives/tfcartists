@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { SharedNav } from "@/components/shared-nav";
-import { Users, Plus, Loader2 } from "lucide-react";
+import { Users, Plus, Loader2, X } from "lucide-react";
 
 interface DJData {
   id: string;
@@ -33,6 +34,12 @@ export default function DJEditorPage() {
   const [djs, setDjs] = useState<DJData[]>([]);
   const [loading, setLoading] = useState(true);
   const [stationId, setStationId] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newBio, setNewBio] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     fetch("/api/stations")
@@ -54,6 +61,42 @@ export default function DJEditorPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const createDJ = async () => {
+    if (!newName.trim()) return;
+    setCreating(true);
+    setCreateError(null);
+    try {
+      const res = await fetch("/api/station-djs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newName.trim(),
+          bio: newBio.trim() || `${newName.trim()} is a DJ on North Country Radio.`,
+          stationId,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const djId = data.dj?.id;
+        setShowModal(false);
+        setNewName("");
+        setNewBio("");
+        if (djId) {
+          router.push(`/station-admin/dj-editor/${djId}`);
+        } else {
+          window.location.reload();
+        }
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setCreateError(data.error || `Error: ${res.status}`);
+      }
+    } catch {
+      setCreateError("Network error. Please try again.");
+    } finally {
+      setCreating(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <SharedNav />
@@ -66,13 +109,13 @@ export default function DJEditorPage() {
             </h1>
             <p className="text-gray-600 mt-1">Create and configure AI DJ personalities</p>
           </div>
-          <Link
-            href="/station-admin/wizard"
+          <button
+            onClick={() => setShowModal(true)}
             className="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Add New DJ
-          </Link>
+          </button>
         </div>
 
         {loading ? (
@@ -83,7 +126,7 @@ export default function DJEditorPage() {
           <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
             <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
             <p className="text-gray-500">No DJs configured yet.</p>
-            <p className="text-sm text-gray-400 mt-1">Run the seed script or create DJs via the wizard.</p>
+            <p className="text-sm text-gray-400 mt-1">Click &ldquo;Add New DJ&rdquo; to create your first DJ personality.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -137,6 +180,55 @@ export default function DJEditorPage() {
           </div>
         )}
       </div>
+
+      {/* Create DJ Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-gray-900">Create New DJ</h2>
+              <button onClick={() => { setShowModal(false); setCreateError(null); }} className="text-gray-400 hover:text-gray-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1">DJ Name *</label>
+                <input
+                  type="text"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && createDJ()}
+                  placeholder="e.g., Hank Westwood"
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-purple-400 focus:border-purple-400"
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1">Bio</label>
+                <textarea
+                  value={newBio}
+                  onChange={(e) => setNewBio(e.target.value)}
+                  placeholder="Short bio for this DJ personality..."
+                  rows={3}
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-purple-400 focus:border-purple-400"
+                />
+              </div>
+              {createError && (
+                <p className="text-sm text-red-600">{createError}</p>
+              )}
+              <button
+                onClick={createDJ}
+                disabled={creating || !newName.trim()}
+                className="w-full bg-purple-600 text-white py-2.5 rounded-lg font-medium hover:bg-purple-700 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                {creating ? "Creating..." : "Create DJ"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

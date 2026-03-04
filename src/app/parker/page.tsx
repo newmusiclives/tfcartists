@@ -175,7 +175,7 @@ export default function ParkerDashboardPage() {
               { name: "Sage Calloway", role: "Program Director", avatar: "SC", color: "bg-indigo-100 text-indigo-600", status: "Show scheduling & format", kpi: "Programming" },
               { name: "Wren Nakamura", role: "Music Director", avatar: "WN", color: "bg-violet-100 text-violet-600", status: "Music rotation mgmt", kpi: `${songCount} songs` },
               { name: "Nolan Torres", role: "Traffic Manager", avatar: "NT", color: "bg-orange-100 text-orange-600", status: "Ad inventory & spots", kpi: `${activeAds} ads` },
-              { name: "Ivy Brennan", role: "Listener Services", avatar: "IB", color: "bg-teal-100 text-teal-600", status: "Community engagement", kpi: "Listener care" },
+              { name: "Ivy Brennan", role: "Listener Services Director", avatar: "IB", color: "bg-teal-100 text-teal-600", status: "Community engagement", kpi: "Listener care" },
             ].map((member, idx) => (
               <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 hover:border-rose-300 transition-colors">
                 <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>

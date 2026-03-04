@@ -461,7 +461,7 @@ export default function ShowFeaturesPage() {
                 Generate Feature Content
               </h2>
               <p className="text-sm text-gray-500 mb-4">
-                Create AI-generated content for any feature type
+                Preview feature content using templates and DJ personality data
               </p>
 
               <div className="space-y-4">
@@ -582,7 +582,7 @@ export default function ShowFeaturesPage() {
                   ) : (
                     <Wand2 className="w-4 h-4" />
                   )}
-                  {generating ? "Generating..." : "Generate Feature"}
+                  {generating ? "Generating..." : "Generate from Template"}
                 </button>
 
                 {genResult && (
@@ -600,19 +600,19 @@ export default function ShowFeaturesPage() {
 
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
               <h3 className="text-sm font-semibold text-blue-800 mb-2">
-                Generation Info
+                Template Preview
               </h3>
               <ul className="text-xs text-blue-700 space-y-1 list-disc pl-4">
                 <li>
-                  Features are generated using GPT-4 with your DJ&apos;s personality
+                  Content is generated from templates using your DJ&apos;s personality data
                 </li>
                 <li>
-                  Add OPENAI_API_KEY to .env for real AI content generation
+                  Templates use placeholders like {"{artist}"}, {"{song_title}"}, {"{genre}"} filled with your input
                 </li>
                 <li>
-                  Generated content is cached in database for instant playback
+                  Generated content is saved to the database for the streaming backend to use
                 </li>
-                <li>Voice synthesis requires ELEVENLABS_API_KEY</li>
+                <li>The Railway backend handles TTS voice synthesis during broadcasts</li>
               </ul>
             </div>
           </div>
@@ -814,11 +814,12 @@ export default function ShowFeaturesPage() {
             </div>
             <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
               <BarChart3 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500">
+              <p className="text-gray-500 font-medium">
                 No feature plays recorded yet
               </p>
-              <p className="text-sm text-gray-400 mt-1">
-                Features will appear here once they start playing on-air
+              <p className="text-sm text-gray-400 mt-1 max-w-md mx-auto">
+                Feature analytics are tracked by the Railway streaming backend during live broadcasts.
+                Data will appear here once the station is streaming and features are played on-air.
               </p>
             </div>
           </div>
