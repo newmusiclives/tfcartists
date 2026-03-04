@@ -30,6 +30,7 @@ import {
   Menu,
   X,
   ChevronRight,
+  Calculator,
 } from "lucide-react";
 import { StationSwitcher } from "@/components/station-switcher";
 
@@ -181,15 +182,15 @@ export function SharedNav() {
 
                       {/* Cassidy */}
                       <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-amber-600 uppercase tracking-wider flex items-center space-x-1">
+                        <div className="px-3 py-1.5 text-xs font-bold text-teal-600 uppercase tracking-wider flex items-center space-x-1">
                           <Award className="w-3 h-3" />
                           <span>Cassidy Team</span>
                         </div>
-                        <Link href="/cassidy" className={activeLinkClass("/cassidy", "amber")}>Dashboard</Link>
-                        <Link href="/cassidy/submissions" className={activeLinkClass("/cassidy/submissions", "amber")}>Review Queue</Link>
-                        <Link href="/cassidy/tier-management" className={activeLinkClass("/cassidy/tier-management", "amber")}>Tier Mgmt</Link>
-                        <Link href="/cassidy/rotation" className={activeLinkClass("/cassidy/rotation", "amber")}>Rotation Planner</Link>
-                        <Link href="/cassidy/team" className={activeLinkClass("/cassidy/team", "amber")}>Team Members</Link>
+                        <Link href="/cassidy" className={activeLinkClass("/cassidy", "teal")}>Dashboard</Link>
+                        <Link href="/cassidy/submissions" className={activeLinkClass("/cassidy/submissions", "teal")}>Review Queue</Link>
+                        <Link href="/cassidy/tier-management" className={activeLinkClass("/cassidy/tier-management", "teal")}>Tier Mgmt</Link>
+                        <Link href="/cassidy/rotation" className={activeLinkClass("/cassidy/rotation", "teal")}>Rotation Planner</Link>
+                        <Link href="/cassidy/team" className={activeLinkClass("/cassidy/team", "teal")}>Team Members</Link>
                       </div>
 
                       {/* Elliot */}
@@ -360,6 +361,19 @@ export function SharedNav() {
                   </span>
                 </Link>
                 <Link
+                  href="/admin/station-costs"
+                  className={`p-2 rounded-lg transition-colors group relative ${
+                    isActive("/admin/station-costs") ? "bg-indigo-100 text-indigo-700" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  }`}
+                  title="Station Costs"
+                  aria-current={isActive("/admin/station-costs") ? "page" : undefined}
+                >
+                  <Calculator className="w-4 h-4" />
+                  <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                    Station Costs
+                  </span>
+                </Link>
+                <Link
                   href="/management"
                   className={`p-2 rounded-lg transition-colors group relative ${
                     isActive("/management") ? "bg-amber-100 text-amber-700" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
@@ -428,11 +442,11 @@ export function SharedNav() {
                       </div>
                       {/* Cassidy */}
                       <div className="mt-2">
-                        <div className="px-3 py-1.5 text-xs font-bold text-amber-600 uppercase tracking-wider">Cassidy Team</div>
-                        <Link href="/cassidy" className={activeLinkClass("/cassidy", "amber")}>Dashboard</Link>
-                        <Link href="/cassidy/submissions" className={activeLinkClass("/cassidy/submissions", "amber")}>Review Queue</Link>
-                        <Link href="/cassidy/rotation" className={activeLinkClass("/cassidy/rotation", "amber")}>Rotation</Link>
-                        <Link href="/cassidy/team" className={activeLinkClass("/cassidy/team", "amber")}>Team Members</Link>
+                        <div className="px-3 py-1.5 text-xs font-bold text-teal-600 uppercase tracking-wider">Cassidy Team</div>
+                        <Link href="/cassidy" className={activeLinkClass("/cassidy", "teal")}>Dashboard</Link>
+                        <Link href="/cassidy/submissions" className={activeLinkClass("/cassidy/submissions", "teal")}>Review Queue</Link>
+                        <Link href="/cassidy/rotation" className={activeLinkClass("/cassidy/rotation", "teal")}>Rotation</Link>
+                        <Link href="/cassidy/team" className={activeLinkClass("/cassidy/team", "teal")}>Team Members</Link>
                       </div>
                       {/* Elliot */}
                       <div className="mt-2">
@@ -518,6 +532,10 @@ export function SharedNav() {
                 <Home className="w-5 h-5" />
                 <span className="font-medium">Admin Home</span>
               </Link>
+              <Link href="/admin/station-costs" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/admin/station-costs") ? "bg-indigo-50 text-indigo-700" : "text-gray-700"}`} aria-current={isActive("/admin/station-costs") ? "page" : undefined}>
+                <Calculator className="w-5 h-5" />
+                <span className="font-medium">Station Costs</span>
+              </Link>
 
               {/* Management */}
               <Link href="/management" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/management") ? "bg-amber-50 text-amber-700" : "text-gray-700"}`} aria-current={isActive("/management") ? "page" : undefined}>
@@ -591,11 +609,11 @@ export function SharedNav() {
                   </button>
                   {mobileSection === "cassidy" && (
                     <div className="pl-4 pb-2 space-y-0.5">
-                      <Link href="/cassidy" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Dashboard</Link>
-                      <Link href="/cassidy/submissions" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Review Queue</Link>
-                      <Link href="/cassidy/tier-management" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Tier Management</Link>
-                      <Link href="/cassidy/rotation" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Rotation Planner</Link>
-                      <Link href="/cassidy/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-amber-700">Team Members</Link>
+                      <Link href="/cassidy" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Dashboard</Link>
+                      <Link href="/cassidy/submissions" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Review Queue</Link>
+                      <Link href="/cassidy/tier-management" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Tier Management</Link>
+                      <Link href="/cassidy/rotation" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Rotation Planner</Link>
+                      <Link href="/cassidy/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Team Members</Link>
                     </div>
                   )}
 
