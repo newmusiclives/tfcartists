@@ -74,7 +74,7 @@ const SCRIPT_CATEGORIES: CategoryConfig[] = [
   { key: "promo_doc_holloway", label: "Doc Holloway Promos", group: "Promos", defaultCount: 3 },
   { key: "promo_cody_rampart", label: "Cody Rampart Promos", group: "Promos", defaultCount: 3 },
   // Overnight
-  { key: "overnight", label: "Overnight Automation", group: "Overnight Imaging", defaultCount: 5 },
+  { key: "overnight", label: "Moonshine", group: "Overnight Imaging", defaultCount: 5 },
 ];
 
 const GROUP_COLORS: Record<string, { bg: string; border: string; tag: string; accent: string }> = {

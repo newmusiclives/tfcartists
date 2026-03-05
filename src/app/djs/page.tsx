@@ -295,7 +295,7 @@ export default function DJsPage() {
             <div className="bg-gray-100 rounded-xl p-6 text-center">
               <div className="flex items-center justify-center space-x-2 mb-2">
                 <Radio className="w-5 h-5 text-gray-500" />
-                <span className="font-bold text-gray-700">Overnight Automation</span>
+                <span className="font-bold text-gray-700">Moonshine</span>
               </div>
               <p className="text-gray-600">
                 6:00pm – 6:00am daily · Pure music, no DJ — curated playlists run through the night

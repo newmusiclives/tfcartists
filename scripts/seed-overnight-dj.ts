@@ -1,5 +1,5 @@
 /**
- * Seed "Overnight Automation" DJ + 3 format clocks + 12 hourly assignments.
+ * Seed "Moonshine" DJ + 3 format clocks + 12 hourly assignments.
  *
  * Creates:
  *   A. "Overnight" DJ personality (id: overnight)
@@ -163,19 +163,19 @@ async function main() {
   }
 
   const overnightDJ = existingDJs.find(
-    (d) => d.id.startsWith("overnight") || d.display_name === "Overnight Automation"
+    (d) => d.id.startsWith("overnight") || d.display_name === "Moonshine"
   );
 
   let djId: string;
   if (overnightDJ) {
     djId = overnightDJ.id;
-    console.log(`  SKIP (exists): Overnight Automation (${djId})\n`);
+    console.log(`  SKIP (exists): Moonshine (${djId})\n`);
   } else {
-    console.log("  Creating Overnight Automation DJ...");
+    console.log("  Creating Moonshine DJ...");
     // Backend expects: { id, name, style, slot? } and namespaces as {id}_{station_code}
     const djBody = {
       id: "overnight",
-      name: "Overnight Automation",
+      name: "Moonshine",
       style: "Automated overnight programming — no live DJ, mellow late-night automation",
       slot: "6pm-6am daily",
     };
@@ -192,7 +192,7 @@ async function main() {
     if (createDjRes.ok) {
       const result = await createDjRes.json();
       djId = result.dj_id || result.id || "overnight_americana";
-      console.log(`  CREATED: Overnight Automation (${djId})\n`);
+      console.log(`  CREATED: Moonshine (${djId})\n`);
     } else {
       const errText = await createDjRes.text().catch(() => "");
       console.error(`  FAILED to create DJ: ${createDjRes.status} ${errText}`);

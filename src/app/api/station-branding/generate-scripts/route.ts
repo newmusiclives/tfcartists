@@ -90,8 +90,8 @@ Sell the station as a destination for music lovers.`;
       break;
 
     case "overnight":
-      instructions = `Write ${count} overnight automation imaging scripts (5-15 seconds spoken).
-These play between 6pm and 6am when no live DJ is on air.
+      instructions = `Write ${count} Moonshine overnight imaging scripts (5-15 seconds spoken).
+These play between 6pm and 6am during the Moonshine automated shift.
 - Warm, late-night radio feel
 - No references to specific DJs
 - Evoke the mood of late-night/early-morning listening
