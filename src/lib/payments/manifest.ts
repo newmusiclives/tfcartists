@@ -1,5 +1,6 @@
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
+import { notifySubscriptionActivated, notifyEarningsAvailable } from "@/lib/messaging/notifications";
 
 /**
  * Manifest Financial Integration
@@ -361,6 +362,22 @@ class ManifestFinancial {
     switch (eventType) {
       case "subscription.created":
         logger.info("Subscription created", { subscriptionId: data.id });
+
+        // Send activation notification
+        if (data.metadata?.type === "airplay" && data.metadata?.artistId) {
+          const artist = await prisma.artist.findUnique({ where: { id: data.metadata.artistId } });
+          if (artist?.email) {
+            const tierShares: Record<string, number> = { TIER_5: 5, TIER_20: 25, TIER_50: 75, TIER_120: 200 };
+            const tierPrices: Record<string, number> = { TIER_5: 5, TIER_20: 20, TIER_50: 50, TIER_120: 120 };
+            notifySubscriptionActivated({
+              email: artist.email,
+              name: artist.name,
+              tier: data.metadata.tier || "TIER_5",
+              amount: tierPrices[data.metadata.tier] || 5,
+              shares: tierShares[data.metadata.tier] || 5,
+            });
+          }
+        }
         break;
 
       case "subscription.updated":
@@ -403,7 +420,7 @@ class ManifestFinancial {
       case "payout.paid":
         logger.info("Payout completed", { payoutId: data.id });
 
-        // Update earnings record
+        // Update earnings record and notify artist
         if (data.metadata?.artistId && data.metadata?.period) {
           await prisma.radioEarnings.updateMany({
             where: {
@@ -415,6 +432,18 @@ class ManifestFinancial {
               paidAt: new Date(),
             },
           });
+
+          const artist = await prisma.artist.findUnique({ where: { id: data.metadata.artistId } });
+          if (artist?.email) {
+            notifyEarningsAvailable({
+              email: artist.email,
+              artistName: artist.name,
+              period: data.metadata.period,
+              earnings: (data.amount || 0) / 100,
+              tier: artist.airplayTier || "FREE",
+              shares: artist.airplayShares || 1,
+            });
+          }
         }
         break;
 

@@ -383,6 +383,7 @@ export default function SponsorPipeline() {
                 <input
                   type="text"
                   placeholder="Search sponsors..."
+                  aria-label="Search sponsors..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -402,6 +403,7 @@ export default function SponsorPipeline() {
               <select
                 value={selectedPriority}
                 onChange={(e) => setSelectedPriority(e.target.value as Priority | 'all')}
+                aria-label="Filter by priority"
                 className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="all">All Priorities</option>

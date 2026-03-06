@@ -55,19 +55,14 @@ async function clearAll() {
   console.log("Clearing all tables...");
   // Delete in dependency order (children first)
   await prisma.$transaction([
-    prisma.sponsorReferralChain.deleteMany(),
     prisma.sponsorCommission.deleteMany(),
-    prisma.sponsorArtistDevelopment.deleteMany(),
-    prisma.sponsorBulkPurchase.deleteMany(),
     prisma.sponsorListenerReferral.deleteMany(),
     prisma.sponsorGrowthPartner.deleteMany(),
     prisma.listenerPlayback.deleteMany(),
-    prisma.airplayPrepurchase.deleteMany(),
     prisma.scoutCommission.deleteMany(),
     prisma.listenerReferral.deleteMany(),
     prisma.artistDiscovery.deleteMany(),
     prisma.scout.deleteMany(),
-    prisma.campaignResponse.deleteMany(),
     prisma.listenerEngagement.deleteMany(),
     prisma.listeningSession.deleteMany(),
     prisma.growthCampaign.deleteMany(),
@@ -76,13 +71,11 @@ async function clearAll() {
     prisma.listener.deleteMany(),
     prisma.cassidyActivity.deleteMany(),
     prisma.rotationSlot.deleteMany(),
-    prisma.panelMeeting.deleteMany(),
     prisma.progressionRequest.deleteMany(),
     prisma.tierPlacement.deleteMany(),
     prisma.submissionReview.deleteMany(),
     prisma.submission.deleteMany(),
     prisma.judge.deleteMany(),
-    prisma.programmingBlock.deleteMany(),
     prisma.trackPlayback.deleteMany(),
     prisma.sponsorAd.deleteMany(),
     prisma.musicBed.deleteMany(),
@@ -723,19 +716,8 @@ async function seedCampaigns(listeners: any[]) {
       },
     });
 
-    // 5 responses per campaign
-    const responses: any[] = [];
-    for (let r = 0; r < 5; r++) {
-      responses.push({
-        campaignId: campaign.id,
-        listenerId: pick(listeners).id,
-        action: pick(["clicked", "listened", "shared", "joined", "ignored"]),
-        converted: Math.random() > 0.5,
-      });
-    }
-    await prisma.campaignResponse.createMany({ data: responses });
   }
-  console.log("  Created 5 campaigns with 25 responses");
+  console.log("  Created 5 campaigns");
 }
 
 // ============ DJs (12) + DJ SHOWS + STATION ============

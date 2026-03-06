@@ -152,12 +152,14 @@ export default function RileyDiscoveryPage() {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && search()}
                 placeholder="Search by artist name..."
+                aria-label="Search by artist name..."
                 className="w-full pl-10 pr-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
               />
             </div>
             <select
               value={genre}
               onChange={(e) => setGenre(e.target.value)}
+              aria-label="Filter by genre"
               className="border rounded-lg px-3 py-2.5 text-sm bg-white min-w-[180px]"
             >
               <option value="">All Genres</option>

@@ -266,6 +266,7 @@ export default function OutreachPage() {
                 <input
                   type="text"
                   placeholder="Search by name, genre, or location..."
+                  aria-label="Search by name, genre, or location..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -274,6 +275,7 @@ export default function OutreachPage() {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as ContactStatus | "all")}
+                aria-label="Filter by status"
                 className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="all">All Statuses</option>
@@ -288,6 +290,7 @@ export default function OutreachPage() {
               <select
                 value={filterSource}
                 onChange={(e) => setFilterSource(e.target.value as DiscoverySource | "all")}
+                aria-label="Filter by source"
                 className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="all">All Sources</option>

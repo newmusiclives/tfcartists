@@ -216,6 +216,7 @@ export default function MusicLibraryPage() {
             <select
               value={gender}
               onChange={(e) => { setGender(e.target.value); setPage(1); }}
+              aria-label="Filter by vocal gender"
               className="border rounded-lg px-3 py-1.5 text-sm"
             >
               {GENDERS.map((g) => (
@@ -232,6 +233,7 @@ export default function MusicLibraryPage() {
                   onKeyDown={(e) => e.key === "Enter" && doSearch()}
                   className="w-full border rounded-lg pl-9 pr-3 py-1.5 text-sm"
                   placeholder="Search title or artist..."
+                  aria-label="Search title or artist..."
                 />
               </div>
               <button onClick={doSearch} className="bg-gray-900 text-white px-3 py-1.5 rounded-lg text-sm">

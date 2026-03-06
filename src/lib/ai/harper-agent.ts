@@ -8,6 +8,7 @@ import {
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { messageDelivery, MessageChannel } from "@/lib/messaging/delivery-service";
+import { manifest } from "@/lib/payments/manifest";
 
 export interface HarperConversationContext {
   sponsorId: string;
@@ -409,12 +410,32 @@ export class HarperAgent {
 
     logger.info("Sponsorship deal closed", { sponsorId, tier, monthlyAmount });
 
-    // TODO: Generate Manifest Financial payment link when Manifest Financial is integrated
-    // const paymentLink = await manifest.createSubscription({ ... });
+    // Generate Manifest Financial payment link
+    let paymentLink: string | undefined;
+    if (manifest.isConfigured()) {
+      try {
+        const sponsor = await prisma.sponsor.findUnique({ where: { id: sponsorId } });
+        if (sponsor) {
+          const result = await manifest.createSponsorshipSubscription({
+            sponsorId,
+            tier: tier.toLowerCase() as "bronze" | "silver" | "gold" | "platinum",
+            email: sponsor.email || "",
+            businessName: sponsor.businessName,
+          });
+          paymentLink = result.checkoutUrl;
+          logger.info("Manifest payment link generated", { sponsorId, checkoutUrl: paymentLink });
+        }
+      } catch (err) {
+        logger.warn("Failed to generate Manifest payment link", {
+          sponsorId,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    }
 
     return {
       sponsorship,
-      paymentLink: undefined, // Will be populated when Manifest Financial is integrated
+      paymentLink,
     };
   }
 

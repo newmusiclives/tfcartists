@@ -863,11 +863,10 @@ class MessageDeliveryService {
   }
 
   /**
-   * Send Instagram DM
-   * Note: Instagram Graph API requires business account and specific permissions
+   * Send Instagram DM via Graph API
+   * Requires: Instagram Business Account + Facebook App with instagram_manage_messages permission
    */
   private async sendInstagram(to: string, content: string): Promise<DeliveryResult> {
-    // Check if Instagram is configured
     if (!env.INSTAGRAM_ACCESS_TOKEN) {
       logger.warn("Instagram not configured, skipping DM delivery", { to });
       return {
@@ -877,19 +876,77 @@ class MessageDeliveryService {
       };
     }
 
-    // TODO: Implement Instagram Graph API integration
-    // This requires:
-    // 1. Instagram Business Account
-    // 2. Facebook App with instagram_manage_messages permission
-    // 3. Page Access Token with proper scopes
+    try {
+      // First, find the Instagram user ID by username
+      // The 'to' field should be an Instagram username (without @)
+      const username = to.replace(/^@/, "");
 
-    logger.warn("Instagram delivery not yet implemented", { to });
+      // Use the Instagram Graph API to look up the user's IGSID (Instagram-scoped ID)
+      // Note: You can only message users who have messaged your business first (24-hour window)
+      // or users who have opted in via ig.me links or CTAs
+      const searchRes = await fetch(
+        `https://graph.facebook.com/v19.0/me/conversations?platform=instagram&user_id=${encodeURIComponent(username)}&access_token=${env.INSTAGRAM_ACCESS_TOKEN}`
+      );
 
-    return {
-      success: false,
-      error: "Instagram delivery not yet implemented",
-      channel: "instagram",
-    };
+      if (!searchRes.ok) {
+        const errorBody = await searchRes.text();
+        throw new Error(`Instagram conversation lookup failed (${searchRes.status}): ${errorBody}`);
+      }
+
+      const conversations = await searchRes.json();
+      const conversationId = conversations.data?.[0]?.id;
+
+      if (!conversationId) {
+        // No existing conversation — user hasn't messaged us first
+        logger.warn("No Instagram conversation found — user must message the business first", { username });
+        return {
+          success: false,
+          error: "No existing conversation with this user. Instagram requires users to message the business first.",
+          channel: "instagram",
+        };
+      }
+
+      // Send message to existing conversation
+      const sendRes = await fetch(
+        `https://graph.facebook.com/v19.0/me/messages`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            recipient: { comment_id: conversationId },
+            message: { text: content },
+            access_token: env.INSTAGRAM_ACCESS_TOKEN,
+          }),
+        }
+      );
+
+      if (!sendRes.ok) {
+        const errorBody = await sendRes.text();
+        throw new Error(`Instagram DM send failed (${sendRes.status}): ${errorBody}`);
+      }
+
+      const sendData = await sendRes.json();
+
+      logger.info("Instagram DM sent successfully", {
+        messageId: sendData.message_id,
+        to: this.maskSensitiveData(username),
+      });
+
+      return {
+        success: true,
+        messageId: sendData.message_id,
+        channel: "instagram",
+      };
+    } catch (error) {
+      logger.error("Instagram DM delivery failed", {
+        to: this.maskSensitiveData(to),
+        error: error instanceof Error ? error.message : String(error),
+      });
+
+      throw error;
+    }
   }
 
   /**

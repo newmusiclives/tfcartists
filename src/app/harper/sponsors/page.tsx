@@ -509,6 +509,7 @@ export default function SponsorManagement() {
                 <input
                   type="text"
                   placeholder="Search sponsors..."
+                  aria-label="Search sponsors..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -519,6 +520,7 @@ export default function SponsorManagement() {
               <select
                 value={selectedTier}
                 onChange={(e) => setSelectedTier(e.target.value as SponsorTier | 'all')}
+                aria-label="Filter by tier"
                 className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="all">All Tiers</option>
@@ -529,6 +531,7 @@ export default function SponsorManagement() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value as SponsorStatus | 'all')}
+                aria-label="Filter by status"
                 className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="all">All Status</option>

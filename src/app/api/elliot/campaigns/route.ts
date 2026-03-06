@@ -71,31 +71,21 @@ export async function GET(req: NextRequest) {
 
     const campaigns = await prisma.growthCampaign.findMany({
       where: status !== "all" ? { status } : {},
-      include: {
-        responses: {
-          select: {
-            action: true,
-            converted: true,
-          },
-        },
-      },
       orderBy: { createdAt: "desc" },
       take: 50,
     });
 
-    // Calculate performance metrics
+    // Calculate performance metrics from goalReached/goalTarget
     const campaignsWithMetrics = campaigns.map((campaign) => ({
       ...campaign,
       metrics: {
-        totalResponses: campaign.responses.length,
-        conversions: campaign.responses.filter((r) => r.converted).length,
+        totalResponses: campaign.goalReached,
+        conversions: campaign.goalReached,
         conversionRate:
-          campaign.responses.length > 0
-            ? (campaign.responses.filter((r) => r.converted).length /
-                campaign.responses.length) *
-              100
+          campaign.goalTarget > 0
+            ? (campaign.goalReached / campaign.goalTarget) * 100
             : 0,
-        progress: (campaign.goalReached / campaign.goalTarget) * 100,
+        progress: campaign.goalTarget > 0 ? (campaign.goalReached / campaign.goalTarget) * 100 : 0,
       },
     }));
 

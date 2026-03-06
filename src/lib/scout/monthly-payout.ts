@@ -11,6 +11,7 @@ import {
   getCurrentPeriod,
 } from "./commission-calculator";
 import { logger } from "@/lib/logger";
+import { messageDelivery } from "@/lib/messaging/delivery-service";
 
 export type CommissionSummary = {
   period: string;
@@ -253,8 +254,8 @@ export async function processScoutPayouts(
         `Payout successful for scout ${scoutId}: $${amount.toFixed(2)}`
       );
 
-      // TODO: Send payout notification email
-      // await notifyScoutEarnings(scoutId, period, amount);
+      // Send payout notification email
+      await notifyScoutEarnings(scoutId, period, amount);
     } catch (error) {
       logger.error(`Payout failed for scout ${scoutId}:`, error as any);
 
@@ -385,15 +386,55 @@ export async function getScoutLifetimeEarnings(scoutId: string) {
 }
 
 /**
- * Notify scout of their monthly earnings (placeholder for email integration)
+ * Notify scout of their monthly earnings via GHL email
  */
 export async function notifyScoutEarnings(
   scoutId: string,
   period: string,
   amount: number
 ): Promise<void> {
-  // TODO: Implement email notification
-  logger.info(
-    `Would send earnings notification to scout ${scoutId} for period ${period}: $${amount.toFixed(2)}`
-  );
+  try {
+    const scout = await prisma.scout.findUnique({
+      where: { id: scoutId },
+      include: {
+        listener: {
+          select: { email: true, name: true },
+        },
+      },
+    });
+
+    const email = scout?.listener?.email;
+    if (!email) {
+      logger.info(`No email for scout ${scoutId}, skipping payout notification`);
+      return;
+    }
+
+    const name = scout.listener?.name || "Scout";
+    const body = [
+      `Hi ${name},`,
+      "",
+      `Your scout commissions for ${period} have been processed!`,
+      "",
+      `Amount Earned: $${amount.toFixed(2)}`,
+      "",
+      "Thank you for helping us discover great artists. Keep referring — you earn commissions for every artist who upgrades!",
+      "",
+      "— The TrueFans RADIO Team",
+    ].join("\n");
+
+    await messageDelivery.send({
+      to: email,
+      content: body,
+      channel: "email",
+      subject: `Your TrueFans scout earnings for ${period}: $${amount.toFixed(2)}`,
+      artistName: name,
+    });
+
+    logger.info(`Payout notification sent to scout ${scoutId} (${email})`);
+  } catch (error) {
+    logger.warn("Failed to send scout payout notification", {
+      scoutId,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
 }

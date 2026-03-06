@@ -93,6 +93,7 @@ export default function ArtistsListPage() {
               <input
                 type="text"
                 placeholder="Search artists..."
+                aria-label="Search artists..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -103,6 +104,7 @@ export default function ArtistsListPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
+                aria-label="Filter by status"
                 className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none bg-white"
               >
                 <option value="">All Statuses</option>

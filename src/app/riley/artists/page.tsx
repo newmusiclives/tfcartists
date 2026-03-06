@@ -178,6 +178,7 @@ export default function RileyArtistsPage() {
               <input
                 type="text"
                 placeholder="Search artists by name or email..."
+                aria-label="Search artists by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -188,6 +189,7 @@ export default function RileyArtistsPage() {
               <select
                 value={tierFilter}
                 onChange={(e) => setTierFilter(e.target.value as TierFilter)}
+                aria-label="Filter by tier"
                 className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="ALL">All Tiers</option>
