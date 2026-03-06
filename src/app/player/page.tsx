@@ -188,6 +188,16 @@ export default function PlayerPage() {
   const showLoading = status === "loading";
   const showError = status === "error";
 
+  // Set body background dark to prevent white flash on mobile
+  useEffect(() => {
+    document.documentElement.style.background = '#451a03';
+    document.body.style.background = '#451a03';
+    return () => {
+      document.documentElement.style.background = '';
+      document.body.style.background = '';
+    };
+  }, []);
+
   return (
     <div className="fixed inset-0 z-[60] bg-gradient-to-b from-amber-950 via-amber-900 to-orange-950 text-white select-none overflow-hidden">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
@@ -199,46 +209,53 @@ export default function PlayerPage() {
       />
 
       <div className="h-[100dvh] flex flex-col px-6 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
-        {/* Station Branding */}
-        <div className="flex items-center justify-center gap-2.5 pt-6 pb-2 flex-shrink-0">
-          <Image src="/logos/ncr-logo.png" alt="NCR" width={32} height={32} className="h-8 w-auto object-contain" />
-          <h1 className="text-base font-bold tracking-wide text-amber-100">
-            {currentStation.name}
-          </h1>
+        {/* Station Branding — centered, single line */}
+        <div className="flex flex-col items-center pt-6 pb-1 flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <Image src="/logos/ncr-logo.png" alt="NCR" width={24} height={24} className="h-6 w-6 object-contain" />
+            <h1 className="text-sm font-bold tracking-wide text-amber-100 whitespace-nowrap">
+              North Country Radio
+            </h1>
+          </div>
+          {/* Status badge */}
           <div
-            className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+            className={`mt-2 flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
               showActive
-                ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                : showLoading
-                  ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                  : "bg-gray-500/20 text-gray-400 border border-gray-500/30"
+                ? "bg-green-500/20 text-green-400"
+                : showError
+                  ? "bg-red-500/20 text-red-400"
+                  : showLoading
+                    ? "bg-amber-500/20 text-amber-400"
+                    : "bg-white/10 text-amber-300/60"
             }`}
           >
             <span
-              className={`w-1.5 h-1.5 rounded-full ${
+              className={`w-2 h-2 rounded-full ${
                 showActive
                   ? "bg-green-400 animate-pulse"
-                  : showLoading
-                    ? "bg-blue-400 animate-pulse"
-                    : "bg-gray-500"
+                  : showError
+                    ? "bg-red-400"
+                    : showLoading
+                      ? "bg-amber-400 animate-pulse"
+                      : "bg-amber-300/40"
               }`}
             />
-            {showActive ? "ON AIR" : showLoading ? "LOADING" : "OFFLINE"}
+            {showActive ? "LIVE" : showError ? "OFFLINE" : showLoading ? "CONNECTING" : "LISTEN LIVE"}
           </div>
         </div>
 
         {/* Listener count */}
         {showActive && listenerCount !== undefined && listenerCount > 0 && (
-          <div className="flex items-center justify-center gap-1.5 text-xs text-amber-300/60 flex-shrink-0">
+          <div className="flex items-center justify-center gap-1.5 text-[11px] text-amber-300/50 mt-1 flex-shrink-0">
             <Headphones className="w-3 h-3" />
             <span>{listenerCount} listening</span>
           </div>
         )}
 
         {/* Main Content — fills available space, centers children */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-4 py-4 min-h-0">
-          {/* Album Artwork — scales with available space, max 256px */}
-          <div className="relative w-full max-w-[16rem] aspect-square flex-shrink rounded-2xl overflow-hidden shadow-2xl shadow-black/50 bg-amber-800/50">
+        <div className="flex-1 flex flex-col items-center justify-center gap-3 py-3 min-h-0">
+          {/* Album Artwork — smaller on mobile */}
+          <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 bg-amber-800/30">
             {artworkUrl && (showActive || showLoading) ? (
               <Image
                 src={artworkUrl}
@@ -248,22 +265,22 @@ export default function PlayerPage() {
                 unoptimized
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center p-6">
-                <Image src="/logos/ncr-logo.png" alt="North Country Radio" width={192} height={192} className="w-full h-full object-contain opacity-50" />
+              <div className="w-full h-full flex items-center justify-center p-8">
+                <Image src="/logos/ncr-logo.png" alt="North Country Radio" width={120} height={120} className="w-full h-full object-contain opacity-40" />
               </div>
             )}
           </div>
 
           {/* Track Info */}
-          <div className="text-center w-full max-w-sm flex-shrink-0">
-            <p className="text-lg font-bold text-white truncate">
+          <div className="text-center w-full max-w-xs flex-shrink-0">
+            <p className="text-base font-bold text-white truncate">
               {showError
                 ? "Stream Unavailable"
                 : showLoading
                   ? "Connecting..."
                   : trackTitle}
             </p>
-            <p className="text-sm text-amber-300/80 mt-0.5 truncate">
+            <p className="text-sm text-amber-300/70 mt-0.5 truncate">
               {showError
                 ? "Tap play to retry"
                 : showLoading
@@ -274,18 +291,18 @@ export default function PlayerPage() {
 
           {/* DJ name */}
           {showActive && djName && (
-            <p className="text-xs text-amber-300/70 flex-shrink-0">DJ {djName}</p>
+            <p className="text-[11px] text-amber-300/60 flex-shrink-0">with {djName}</p>
           )}
 
           {/* Equalizer */}
-          <div className="flex items-end justify-center gap-1 h-6 flex-shrink-0">
+          <div className="flex items-end justify-center gap-1 h-5 flex-shrink-0">
             {[1, 2, 3, 4, 5, 6, 7].map((bar) => (
               <div
                 key={bar}
                 className={`w-1 rounded-full ${
                   showActive
                     ? "bg-green-400 animate-equalizer"
-                    : "bg-amber-700/50 h-1"
+                    : "bg-amber-700/40 h-1"
                 }`}
                 style={
                   showActive
@@ -301,12 +318,12 @@ export default function PlayerPage() {
         </div>
 
         {/* Controls — pinned to bottom */}
-        <div className="flex flex-col items-center gap-4 pb-4 flex-shrink-0">
+        <div className="flex flex-col items-center gap-3 pb-4 flex-shrink-0">
           {/* Action Buttons Row */}
           <div className="flex items-center gap-6">
             <button
               onClick={() => setLiked(!liked)}
-              className={`transition-colors ${liked ? "text-red-400" : "text-amber-400/50 hover:text-amber-400"}`}
+              className={`transition-colors ${liked ? "text-red-400" : "text-amber-400/40 hover:text-amber-400"}`}
               aria-label={liked ? "Unlike" : "Like"}
             >
               <Heart className={`w-5 h-5 ${liked ? "fill-current" : ""}`} />
@@ -327,7 +344,7 @@ export default function PlayerPage() {
 
             <button
               onClick={handleShare}
-              className="text-amber-400/50 hover:text-amber-400 transition-colors"
+              className="text-amber-400/40 hover:text-amber-400 transition-colors"
               aria-label="Share"
             >
               <Share2 className="w-5 h-5" />
@@ -359,22 +376,22 @@ export default function PlayerPage() {
           </div>
 
           {/* Sleep Timer */}
-          <div className="flex items-center gap-3 text-xs">
+          <div className="flex items-center gap-2 text-[11px]">
             {sleepTimer ? (
               <button
                 onClick={cancelSleepTimer}
                 className="text-amber-400 hover:text-amber-300 px-3 py-1 rounded-full border border-amber-400/30"
               >
-                Sleep timer: {sleepTimer}min (cancel)
+                Sleep: {sleepTimer}min (cancel)
               </button>
             ) : (
-              <div className="flex items-center gap-2 text-amber-400/40">
+              <div className="flex items-center gap-1.5 text-amber-400/35">
                 <span>Sleep:</span>
                 {[15, 30, 60].map((m) => (
                   <button
                     key={m}
                     onClick={() => startSleepTimer(m)}
-                    className="hover:text-amber-400 px-2 py-0.5 rounded-full border border-amber-400/20 hover:border-amber-400/40 transition-colors"
+                    className="hover:text-amber-400 px-2 py-0.5 rounded-full border border-amber-400/15 hover:border-amber-400/40 transition-colors"
                   >
                     {m}m
                   </button>
@@ -386,7 +403,7 @@ export default function PlayerPage() {
           {/* Open Full Site Link */}
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-xs text-amber-400/60 hover:text-amber-400 transition-colors"
+            className="flex items-center gap-1.5 text-[11px] text-amber-400/40 hover:text-amber-400 transition-colors"
           >
             <ExternalLink className="w-3 h-3" />
             Open Full Site
