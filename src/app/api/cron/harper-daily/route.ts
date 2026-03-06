@@ -27,21 +27,17 @@ export async function GET(req: NextRequest) {
   const _cronStart = Date.now();
   const _cronStartedAt = new Date();
   try {
-    const isDev = process.env.NODE_ENV === "development";
+    // Verify cron secret
+    const authHeader = req.headers.get("authorization");
+    const cronSecret = env.CRON_SECRET;
+    if (!cronSecret) {
+      logger.error("CRON_SECRET not configured");
+      return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+    }
 
-    // Verify cron secret (skip in development for manual triggers)
-    if (!isDev) {
-      const authHeader = req.headers.get("authorization");
-      const cronSecret = env.CRON_SECRET;
-      if (!cronSecret) {
-        logger.error("CRON_SECRET not configured");
-        return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
-      }
-
-      if (authHeader !== `Bearer ${cronSecret}`) {
-        logger.warn("Unauthorized cron attempt", { path: "/api/cron/harper-daily" });
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
+    if (authHeader !== `Bearer ${cronSecret}`) {
+      logger.warn("Unauthorized cron attempt", { path: "/api/cron/harper-daily" });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     logger.info("Starting Harper daily automation");

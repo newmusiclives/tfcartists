@@ -21,6 +21,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await requireRole("riley", "cassidy");
+    if (!session) return unauthorized();
+
     const { id } = await params;
 
     const artist = await prisma.artist.findUnique({

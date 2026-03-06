@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
         artistName: name,
       });
     } catch {
-      console.error(`[signup] Failed to send verification email to ${email}`);
+      console.error("[signup] Failed to send verification email");
     }
 
     return NextResponse.json(

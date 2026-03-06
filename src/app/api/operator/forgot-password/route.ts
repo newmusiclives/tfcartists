@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
           artistName: user.name,
         });
       } catch {
-        console.error(`[password-reset] Failed to send email to ${email}`);
+        console.error("[password-reset] Failed to send reset email");
       }
     }
 

@@ -2,6 +2,11 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 
+if (process.env.NODE_ENV === 'production') {
+  console.error('ERROR: This script cannot be run in production. Aborting.');
+  process.exit(1);
+}
+
 const GHL_BASE_URL = "https://services.leadconnectorhq.com";
 const API_KEY = process.env.GHL_API_KEY!;
 const LOCATION_ID = process.env.GHL_LOCATION_ID!;
@@ -76,14 +81,12 @@ async function cleanDatabase() {
   total += await deleteMany("Cassidy activities", () => prisma.cassidyActivity.deleteMany({}));
   total += await deleteMany("Tier placements", () => prisma.tierPlacement.deleteMany({}));
   total += await deleteMany("Progression requests", () => prisma.progressionRequest.deleteMany({}));
-  total += await deleteMany("Panel meetings", () => prisma.panelMeeting.deleteMany({}));
   total += await deleteMany("Rotation slots", () => prisma.rotationSlot.deleteMany({}));
   total += await deleteMany("Submission reviews", () => prisma.submissionReview.deleteMany({}));
   total += await deleteMany("Submissions", () => prisma.submission.deleteMany({}));
   total += await deleteMany("Scout commissions", () => prisma.scoutCommission.deleteMany({}));
   total += await deleteMany("Artist discoveries", () => prisma.artistDiscovery.deleteMany({}));
   total += await deleteMany("Listener referrals", () => prisma.listenerReferral.deleteMany({}));
-  total += await deleteMany("Airplay prepurchases", () => prisma.airplayPrepurchase.deleteMany({}));
   total += await deleteMany("Scouts", () => prisma.scout.deleteMany({}));
 
   // === HARPER TEAM ===
@@ -93,9 +96,6 @@ async function cleanDatabase() {
   total += await deleteMany("Sponsor conversations", () => prisma.sponsorConversation.deleteMany({}));
   total += await deleteMany("Sponsor calls", () => prisma.sponsorCall.deleteMany({}));
   total += await deleteMany("Sponsor commissions", () => prisma.sponsorCommission.deleteMany({}));
-  total += await deleteMany("Sponsor referral chains", () => prisma.sponsorReferralChain.deleteMany({}));
-  total += await deleteMany("Sponsor bulk purchases", () => prisma.sponsorBulkPurchase.deleteMany({}));
-  total += await deleteMany("Sponsor artist development", () => prisma.sponsorArtistDevelopment.deleteMany({}));
   total += await deleteMany("Sponsor listener referrals", () => prisma.sponsorListenerReferral.deleteMany({}));
   total += await deleteMany("Sponsor growth partners", () => prisma.sponsorGrowthPartner.deleteMany({}));
   total += await deleteMany("Sponsorships", () => prisma.sponsorship.deleteMany({}));
@@ -104,7 +104,6 @@ async function cleanDatabase() {
   // === ELLIOT TEAM ===
   console.log("\n=== Cleaning Elliot Team ===");
   total += await deleteMany("Elliot activities", () => prisma.elliotActivity.deleteMany({}));
-  total += await deleteMany("Campaign responses", () => prisma.campaignResponse.deleteMany({}));
   total += await deleteMany("Growth campaigns", () => prisma.growthCampaign.deleteMany({}));
   total += await deleteMany("Listener engagements", () => prisma.listenerEngagement.deleteMany({}));
   total += await deleteMany("Viral content", () => prisma.viralContent.deleteMany({}));
@@ -115,7 +114,6 @@ async function cleanDatabase() {
   // === ADMIN / SHARED ===
   console.log("\n=== Cleaning Admin / Shared ===");
   total += await deleteMany("Radio revenue pools", () => prisma.radioRevenuePool.deleteMany({}));
-  total += await deleteMany("Embed events", () => prisma.embedEvent.deleteMany({}));
   total += await deleteMany("XP transactions", () => prisma.xPTransaction.deleteMany({}));
   total += await deleteMany("Badges", () => prisma.badge.deleteMany({}));
   total += await deleteMany("Track playback", () => prisma.trackPlayback.deleteMany({}));

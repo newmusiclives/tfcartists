@@ -24,18 +24,14 @@ const DAILY_JOBS = [
  * Auth: Bearer {CRON_SECRET}
  */
 export async function GET(req: NextRequest) {
-  const isDev = process.env.NODE_ENV === "development";
-
-  if (!isDev) {
-    const authHeader = req.headers.get("authorization");
-    const cronSecret = env.CRON_SECRET;
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  // Verify cron secret
+  const cronSecret = env.CRON_SECRET;
+  const authHeader = req.headers.get("authorization");
+  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const baseUrl = process.env.URL || process.env.NEXTAUTH_URL || "https://truefans-radio.netlify.app";
-  const cronSecret = env.CRON_SECRET || "development-secret";
   const results: Record<string, { status: number; duration: number; ok: boolean; error?: string }> = {};
 
   for (const job of DAILY_JOBS) {

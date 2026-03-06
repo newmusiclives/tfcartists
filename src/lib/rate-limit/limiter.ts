@@ -89,7 +89,11 @@ function createRateLimiter(
   }
 
   // Production without Upstash configured
-  logger.warn("Rate limiting not configured. Set up Upstash Redis for production.");
+  logger.warn(
+    "⚠ PRODUCTION WARNING: Rate limiting falling back to in-memory store. " +
+    "This is NOT safe for distributed deployments — requests are not shared across instances. " +
+    "Configure UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN for production."
+  );
   return null;
 }
 

@@ -67,11 +67,19 @@ export const metadata: Metadata = {
     siteName: NETWORK_NAME,
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/logos/ncr-og.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${NETWORK_NAME} | ${STATION_TAGLINE}`,
     description: SITE_DESCRIPTION,
+    images: ["/logos/ncr-og.png"],
   },
   robots: {
     index: true,

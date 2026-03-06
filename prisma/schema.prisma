@@ -39,7 +39,7 @@ model Organization {
   // Subscription / billing
   plan        String    @default("starter") // "starter", "pro", "enterprise", "network"
   billingEmail String?
-  stripeCustomerId String?
+  manifestCustomerId String?
 
   // Limits
   maxStations Int       @default(1)
@@ -149,7 +149,6 @@ model Artist {
   referrals         Referral[]
   artistDiscoveries ArtistDiscovery[]
   scoutCommissions  ScoutCommission[]
-  artistDevelopment SponsorArtistDevelopment[]
 
   // TrueFans RADIO Airplay
   airplayTier       AirplayTier @default(FREE)
@@ -738,12 +737,10 @@ model Listener {
   // Relationships
   sessions          ListeningSession[]
   engagements       ListenerEngagement[]
-  campaignResponses CampaignResponse[]
   scout             Scout?
   referredBy        ListenerReferral[]
   playbacks         ListenerPlayback[]
   sponsorReferral   SponsorListenerReferral?
-  referralChains    SponsorReferralChain[]
   redemptions       Redemption[]
 
   metadata          Json?
@@ -859,27 +856,6 @@ model GrowthCampaign {
   // Timing
   startDate   DateTime
   endDate     DateTime?
-
-  // Results
-  responses   CampaignResponse[]
-
-  metadata    Json?
-}
-
-// Campaign responses/interactions
-model CampaignResponse {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-
-  campaignId  String
-  campaign    GrowthCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-
-  listenerId  String?
-  listener    Listener? @relation(fields: [listenerId], references: [id], onDelete: SetNull)
-
-  // Response
-  action      String   // "clicked", "listened", "shared", "joined", "ignored"
-  converted   Boolean  @default(false) // Did they complete the goal?
 
   metadata    Json?
 }
@@ -1036,7 +1012,6 @@ model DJShow {
 
   // Relationships
   trackPlays  TrackPlayback[]
-  programmingBlocks ProgrammingBlock[]
 
   metadata    Json?
 
@@ -1083,45 +1058,6 @@ model TrackPlayback {
   @@index([djId])
   @@index([showId])
   @@index([timeSlot])
-}
-
-// Special programming blocks
-model ProgrammingBlock {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Block details
-  name        String   // "New Artist Showcase", "Songwriter Session"
-  description String?
-  type        String   // "weekly_feature", "monthly_special", "seasonal", "event"
-
-  // Schedule
-  djShowId    String?
-  djShow      DJShow?  @relation(fields: [djShowId], references: [id], onDelete: SetNull)
-
-  dayOfWeek   Int?     // null if recurring across multiple days
-  timeSlot    String?  // "morning", "midday", "evening", "late_night"
-  duration    Int?     // minutes
-
-  // Recurrence
-  frequency   String   // "weekly", "monthly", "seasonal", "one_time"
-  nextOccurrence DateTime?
-
-  // Content focus
-  theme       String?  // "Texas Songwriter Night", "Deep Cuts Vinyl Night"
-  curatedBy   String?  // DJ or team member who curates
-
-  // Status
-  isActive    Boolean  @default(true)
-  startDate   DateTime
-  endDate     DateTime?
-
-  metadata    Json?
-
-  @@index([djShowId])
-  @@index([isActive])
-  @@index([nextOccurrence])
 }
 
 // Station configuration
@@ -1463,41 +1399,6 @@ model ProgressionRequest {
   @@index([currentTier])
 }
 
-// Panel review meetings
-model PanelMeeting {
-  id                String   @id @default(cuid())
-  createdAt         DateTime @default(now())
-
-  meetingDate       DateTime
-  meetingType       String   // "tuesday_session", "thursday_session", "monthly_strategy"
-
-  // Attendees (JSON arrays of IDs)
-  judgesPresent     String?  // JSON array of judge IDs
-  rileyRepPresent   String?
-  harperRepPresent  String?
-  elliottRepPresent String?
-
-  // Submissions reviewed
-  submissionsReviewed String? // JSON array of submission IDs
-  tiersAssigned     Json?     // {submission_id: tier}
-
-  // Meeting notes
-  discussionSummary String?
-  strategicDecisions Json?
-  actionItems       Json?
-
-  // Metrics
-  submissionsJudgedCount Int?
-  avgJudgingTimeMinutes Int?
-  consensusReachedCount Int?
-  splitDecisionsCount Int?
-
-  metadata          Json?
-
-  @@index([meetingDate])
-  @@index([meetingType])
-}
-
 // Rotation slots for programming
 model RotationSlot {
   id                String   @id @default(cuid())
@@ -1603,7 +1504,6 @@ model Scout {
   discoveries       ArtistDiscovery[]
   referrals         ListenerReferral[]
   commissions       ScoutCommission[]
-  prepurchases      AirplayPrepurchase[]
 
   metadata          Json?
 
@@ -1758,53 +1658,6 @@ enum CommissionStatus {
   CANCELLED         // Commission cancelled
 }
 
-// Airplay prepurchase by scouts
-model AirplayPrepurchase {
-  id                String   @id @default(cuid())
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  // Scout who purchased
-  scoutId           String
-  scout             Scout    @relation(fields: [scoutId], references: [id], onDelete: Cascade)
-
-  // Purchase details
-  amountPaid        Float    // $80
-  creditValue       Float    // $100 worth of airplay
-
-  // Target artist
-  targetArtistId    String?
-  targetArtistEmail String?
-  targetArtistName  String?
-
-  // Redemption
-  status            PrepurchaseStatus @default(PENDING)
-  redeemedAt        DateTime?
-  redeemedBy        String?  // Artist ID who redeemed
-
-  // Commission tracking
-  hasConverted      Boolean  @default(false) // Artist became paying customer
-  conversionDate    DateTime?
-
-  // Payment
-  paymentIntentId   String?  // Manifest payment ID
-  transactionId     String?
-
-  metadata          Json?
-
-  @@index([scoutId])
-  @@index([targetArtistId])
-  @@index([status])
-}
-
-enum PrepurchaseStatus {
-  PENDING           // Purchased, not yet sent
-  SENT              // Sent to artist
-  REDEEMED          // Artist activated airplay
-  CONVERTED         // Artist upgraded to paid
-  EXPIRED           // Never redeemed (after 90 days)
-}
-
 // Listener playback tracking (for influence bonus)
 model ListenerPlayback {
   id                String   @id @default(cuid())
@@ -1870,10 +1723,7 @@ model SponsorGrowthPartner {
 
   // Relationships
   listenerReferrals SponsorListenerReferral[]
-  artistDevelopment SponsorArtistDevelopment[]
   commissions       SponsorCommission[]
-  bulkPurchases     SponsorBulkPurchase[]
-  referralChains    SponsorReferralChain[]
 
   metadata          Json?
 
@@ -1929,52 +1779,6 @@ model SponsorListenerReferral {
   @@index([lastVerifiedMonth])
 }
 
-// Artist development via bulk purchases
-model SponsorArtistDevelopment {
-  id                String   @id @default(cuid())
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  // Growth partner backing the artist
-  growthPartnerId   String
-  growthPartner     SponsorGrowthPartner @relation(fields: [growthPartnerId], references: [id], onDelete: Cascade)
-
-  // Artist being backed
-  artistId          String
-  artist            Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
-
-  // From bulk purchase
-  bulkPurchaseId    String?
-  bulkPurchase      SponsorBulkPurchase? @relation(fields: [bulkPurchaseId], references: [id], onDelete: SetNull)
-
-  // Credit allocation
-  creditAllocated   Float    // Amount of airplay credit allocated to this artist
-  creditUsed        Float    @default(0)
-  creditRemaining   Float    // creditAllocated - creditUsed
-
-  // Conversion tracking
-  hasConverted      Boolean  @default(false) // Artist upgraded to paid tier
-  convertedAt       DateTime?
-  conversionTier    String?  // "TIER_5", "TIER_20", etc.
-
-  // Commission tracking
-  commissionRate    Float    @default(0.20) // 20% lifetime
-  totalCommissions  Float    @default(0)
-
-  // Donation tracking
-  totalDonations    Float    @default(0)
-  donationCommissions Float  @default(0)
-
-  metadata          Json?
-
-  @@unique([growthPartnerId, artistId])
-  @@index([growthPartnerId])
-  @@index([artistId])
-  @@index([hasConverted])
-}
-
-// Add relationship to Artist model
-// (This will be added as: artistDevelopment SponsorArtistDevelopment[])
 
 // Sponsor commission records
 model SponsorCommission {
@@ -2036,69 +1840,6 @@ enum SponsorCommissionStatus {
   PAID              // Successfully paid
   FAILED            // Payment failed
   CANCELLED         // Commission cancelled
-}
-
-// Network referral chains for network effect commissions
-model SponsorReferralChain {
-  id                String   @id @default(cuid())
-  createdAt         DateTime @default(now())
-
-  // Origin sponsor
-  growthPartnerId   String
-  growthPartner     SponsorGrowthPartner @relation(fields: [growthPartnerId], references: [id], onDelete: Cascade)
-
-  // Chain levels (max 2 deep)
-  level1ListenerId  String   // Direct referral from sponsor
-  level1Listener    Listener @relation(fields: [level1ListenerId], references: [id], onDelete: Cascade)
-
-  level2ListenerId  String?  // Referral from level1
-
-  // Event tracking
-  eventType         String?  // "artist_purchase", "artist_upgrade", etc.
-  eventValue        Float?   // Value of the event (e.g., $20 for TIER_20 purchase)
-  commissionEarned  Float    @default(0) // 5% of eventValue
-
-  metadata          Json?
-
-  @@index([growthPartnerId])
-  @@index([level1ListenerId])
-}
-
-// Bulk airplay purchases by sponsors
-model SponsorBulkPurchase {
-  id                String   @id @default(cuid())
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  // Growth partner purchasing
-  growthPartnerId   String
-  growthPartner     SponsorGrowthPartner @relation(fields: [growthPartnerId], references: [id], onDelete: Cascade)
-
-  // Purchase details
-  amountPaid        Float    // $1,000
-  creditValue       Float    // $1,667 worth of airplay
-  discountPercent   Float    @default(40) // 40% discount
-
-  // Distribution
-  creditsAllocated  Float    @default(0)
-  creditsRemaining  Float    // creditValue - creditsAllocated
-
-  // Expiry
-  expiresAt         DateTime // 12 months from purchase
-  isExpired         Boolean  @default(false)
-
-  // Payment
-  paymentIntentId   String?  // Manifest payment ID
-  transactionId     String?
-
-  // Relationships
-  artistAllocations SponsorArtistDevelopment[]
-
-  metadata          Json?
-
-  @@index([growthPartnerId])
-  @@index([expiresAt])
-  @@index([isExpired])
 }
 
 // =============================================================================
@@ -2432,23 +2173,6 @@ model FeatureSchedule {
 // =============================================================================
 
 // Embed event tracking (widget plays from external sites)
-model EmbedEvent {
-  id                String   @id @default(cuid())
-  createdAt         DateTime @default(now())
-  sessionId         String?
-  referralCode      String?
-  referrerType      String?  // "scout", "artist", "sponsor", "listener"
-  referrerId        String?
-  listenerIp        String?  // hashed for privacy
-  device            String   @default("embed")
-  convertedToListener Boolean @default(false)
-  listenerId        String?
-
-  @@index([referralCode])
-  @@index([referrerId])
-  @@index([createdAt])
-}
-
 // XP transaction log for gamification
 model XPTransaction {
   id          String   @id @default(cuid())

@@ -31,23 +31,20 @@ export async function GET(req: NextRequest) {
   const _cronStart = Date.now();
   const _cronStartedAt = new Date();
   try {
-    const isDev = process.env.NODE_ENV === "development";
     const url = new URL(req.url);
     const dryRun = url.searchParams.get("dry_run") === "true";
 
-    // Verify cron secret (skip in development for manual dashboard triggers)
-    if (!isDev) {
-      const authHeader = req.headers.get("authorization");
-      const cronSecret = env.CRON_SECRET;
-      if (!cronSecret) {
-        logger.error("CRON_SECRET not configured");
-        return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
-      }
+    // Verify cron secret
+    const authHeader = req.headers.get("authorization");
+    const cronSecret = env.CRON_SECRET;
+    if (!cronSecret) {
+      logger.error("CRON_SECRET not configured");
+      return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+    }
 
-      if (authHeader !== `Bearer ${cronSecret}`) {
-        logger.warn("Unauthorized cron attempt", { path: "/api/cron/riley-daily" });
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
+    if (authHeader !== `Bearer ${cronSecret}`) {
+      logger.warn("Unauthorized cron attempt", { path: "/api/cron/riley-daily" });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Skip Sundays — Riley works Mon-Sat only

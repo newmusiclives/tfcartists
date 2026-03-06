@@ -18,12 +18,10 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   const start = Date.now();
   try {
-    const isDev = process.env.NODE_ENV === "development";
-    if (!isDev) {
-      const authHeader = req.headers.get("authorization");
-      if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
+    // Verify cron secret
+    const authHeader = req.headers.get("authorization");
+    if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { searchParams } = new URL(req.url);
