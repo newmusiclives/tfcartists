@@ -33,13 +33,16 @@ export default function PlayerPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(75);
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
-  const [status, setStatus] = useState<"idle" | "loading" | "playing" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "playing" | "error" | "reconnecting">("idle");
   const [liked, setLiked] = useState(false);
   const [sleepTimer, setSleepTimer] = useState<number | null>(null);
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const sleepRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectAttemptRef = useRef(0);
+  const userStoppedRef = useRef(false);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -88,6 +91,7 @@ export default function PlayerPage() {
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
       if (sleepRef.current) clearTimeout(sleepRef.current);
+      if (reconnectRef.current) clearTimeout(reconnectRef.current);
     };
   }, []);
 
@@ -99,19 +103,50 @@ export default function PlayerPage() {
     }
   }, []);
 
+  const clearReconnect = useCallback(() => {
+    if (reconnectRef.current) {
+      clearTimeout(reconnectRef.current);
+      reconnectRef.current = null;
+    }
+  }, []);
+
+  const reconnectStream = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio || userStoppedRef.current) return;
+
+    const attempt = reconnectAttemptRef.current;
+    // Exponential backoff: 2s, 4s, 8s, 16s, max 30s
+    const delay = Math.min(2000 * Math.pow(2, attempt), 30000);
+    reconnectAttemptRef.current = attempt + 1;
+
+    setStatus("reconnecting");
+    reconnectRef.current = setTimeout(() => {
+      if (userStoppedRef.current) return;
+      audio.src = `${STREAM_URL}?_t=${Date.now()}`;
+      audio.play().catch(() => {
+        // Will trigger onError → reconnect again
+      });
+    }, delay);
+  }, []);
+
   const handlePlay = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    userStoppedRef.current = false;
+    reconnectAttemptRef.current = 0;
+    clearReconnect();
     setStatus("loading");
     fetchNowPlaying();
     audio.src = `${STREAM_URL}?_t=${Date.now()}`;
     audio.play().catch(() => {
-      setStatus("error");
+      reconnectStream();
     });
-  }, [fetchNowPlaying]);
+  }, [fetchNowPlaying, clearReconnect, reconnectStream]);
 
   const handlePause = useCallback(() => {
     const audio = audioRef.current;
+    userStoppedRef.current = true;
+    clearReconnect();
     if (audio) {
       audio.pause();
       audio.src = "";
@@ -119,7 +154,7 @@ export default function PlayerPage() {
     setIsPlaying(false);
     setStatus("idle");
     stopPolling();
-  }, [stopPolling]);
+  }, [stopPolling, clearReconnect]);
 
   const togglePlayPause = useCallback(() => {
     if (isPlaying || status === "loading") {
@@ -132,17 +167,38 @@ export default function PlayerPage() {
   const onPlaying = useCallback(() => {
     setIsPlaying(true);
     setStatus("playing");
+    reconnectAttemptRef.current = 0;
+    clearReconnect();
     startPolling();
-  }, [startPolling]);
+  }, [startPolling, clearReconnect]);
 
   const onError = useCallback(() => {
-    setStatus("error");
+    if (userStoppedRef.current) return;
     setIsPlaying(false);
-  }, []);
+    reconnectStream();
+  }, [reconnectStream]);
 
   const onEnded = useCallback(() => {
+    if (userStoppedRef.current) return;
     setIsPlaying(false);
-    setStatus("idle");
+    reconnectStream();
+  }, [reconnectStream]);
+
+  const onStalled = useCallback(() => {
+    // Stream stalled (no data for a while) — common on mobile networks
+    if (userStoppedRef.current) return;
+    const audio = audioRef.current;
+    if (audio && !audio.paused) {
+      // Give it a few seconds, then force reconnect
+      reconnectRef.current = setTimeout(() => {
+        if (userStoppedRef.current || !audioRef.current) return;
+        if (audioRef.current.paused) return;
+        // Still stalled — reconnect
+        reconnectAttemptRef.current = 0;
+        audioRef.current.src = `${STREAM_URL}?_t=${Date.now()}`;
+        audioRef.current.play().catch(() => {});
+      }, 8000);
+    }
   }, []);
 
   const handleShare = useCallback(async () => {
@@ -185,7 +241,7 @@ export default function PlayerPage() {
   const artworkUrl = nowPlaying?.artwork_url;
 
   const showActive = status === "playing";
-  const showLoading = status === "loading";
+  const showLoading = status === "loading" || status === "reconnecting";
   const showError = status === "error";
 
   // Set body background dark to prevent white flash on mobile
@@ -206,6 +262,8 @@ export default function PlayerPage() {
         onPlaying={onPlaying}
         onError={onError}
         onEnded={onEnded}
+        onStalled={onStalled}
+        preload="none"
       />
 
       <div className="h-[100dvh] flex flex-col px-6 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
@@ -240,7 +298,7 @@ export default function PlayerPage() {
                       : "bg-amber-300/40"
               }`}
             />
-            {showActive ? "LIVE" : showError ? "OFFLINE" : showLoading ? "CONNECTING" : "LISTEN LIVE"}
+            {showActive ? "LIVE" : showError ? "OFFLINE" : status === "reconnecting" ? "RECONNECTING" : showLoading ? "CONNECTING" : "LISTEN LIVE"}
           </div>
         </div>
 

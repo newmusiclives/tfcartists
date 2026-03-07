@@ -31,6 +31,9 @@ export function RadioPlayer() {
   const sessionStartRef = useRef<number | null>(null);
   const lastTrackRef = useRef<string | null>(null);
   const connectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectAttemptRef = useRef(0);
+  const userStoppedRef = useRef(false);
 
   // Sync volume to audio element
   useEffect(() => {
@@ -105,6 +108,7 @@ export function RadioPlayer() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       if (pollRef.current) clearInterval(pollRef.current);
       if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
+      if (reconnectRef.current) clearTimeout(reconnectRef.current);
     };
   }, []);
 
@@ -154,9 +158,31 @@ export function RadioPlayer() {
     sessionStartRef.current = null;
   }, []);
 
+  const clearReconnect = useCallback(() => {
+    if (reconnectRef.current) { clearTimeout(reconnectRef.current); reconnectRef.current = null; }
+  }, []);
+
+  const reconnectStream = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio || userStoppedRef.current) return;
+    const delay = Math.min(2000 * Math.pow(2, reconnectAttemptRef.current), 30000);
+    reconnectAttemptRef.current += 1;
+    setStatus("loading");
+    reconnectRef.current = setTimeout(() => {
+      if (userStoppedRef.current) return;
+      const streamUrl = currentStation.streamUrl || DEFAULT_STREAM_URL;
+      audio.src = `${streamUrl}?_t=${Date.now()}`;
+      audio.play().catch(() => {});
+    }, delay);
+  }, [currentStation.streamUrl]);
+
   const handlePlay = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
+
+    userStoppedRef.current = false;
+    reconnectAttemptRef.current = 0;
+    clearReconnect();
 
     // Clear any previous connection timeout
     if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
@@ -167,7 +193,7 @@ export function RadioPlayer() {
     const streamUrl = currentStation.streamUrl || DEFAULT_STREAM_URL;
     audio.src = `${streamUrl}?_t=${Date.now()}`;
     audio.play().catch(() => {
-      setStatus("error");
+      reconnectStream();
     });
 
     // Auto-timeout if stream doesn't connect within 15 seconds
@@ -176,12 +202,14 @@ export function RadioPlayer() {
         audio.pause();
         audio.src = "";
         setIsPlaying(false);
-        setStatus("error");
+        reconnectStream();
       }
     }, 15_000);
   }, [fetchNowPlaying, startSession, currentStation.streamUrl]);
 
   const handlePause = useCallback(() => {
+    userStoppedRef.current = true;
+    clearReconnect();
     if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
     const audio = audioRef.current;
     if (audio) {
@@ -192,7 +220,7 @@ export function RadioPlayer() {
     setStatus("idle");
     stopPolling();
     endSession();
-  }, [stopPolling, endSession]);
+  }, [stopPolling, endSession, clearReconnect]);
 
   const togglePlayPause = useCallback(() => {
     if (isPlaying || status === "loading") {
@@ -204,20 +232,38 @@ export function RadioPlayer() {
 
   const onPlaying = useCallback(() => {
     if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
+    reconnectAttemptRef.current = 0;
+    clearReconnect();
     setIsPlaying(true);
     setStatus("playing");
     startPolling();
-  }, [startPolling]);
+  }, [startPolling, clearReconnect]);
 
   const onError = useCallback(() => {
-    setStatus("error");
+    if (userStoppedRef.current) return;
     setIsPlaying(false);
-  }, []);
+    reconnectStream();
+  }, [reconnectStream]);
 
   const onEnded = useCallback(() => {
+    if (userStoppedRef.current) return;
     setIsPlaying(false);
-    setStatus("idle");
-  }, []);
+    reconnectStream();
+  }, [reconnectStream]);
+
+  const onStalled = useCallback(() => {
+    if (userStoppedRef.current) return;
+    const audio = audioRef.current;
+    if (audio && !audio.paused) {
+      reconnectRef.current = setTimeout(() => {
+        if (userStoppedRef.current || !audioRef.current || audioRef.current.paused) return;
+        reconnectAttemptRef.current = 0;
+        const streamUrl = currentStation.streamUrl || DEFAULT_STREAM_URL;
+        audioRef.current.src = `${streamUrl}?_t=${Date.now()}`;
+        audioRef.current.play().catch(() => {});
+      }, 8000);
+    }
+  }, [currentStation.streamUrl]);
 
   const trackTitle = nowPlaying?.title || currentStation.name;
   const trackArtist = nowPlaying?.artist_name || currentStation.genre;
@@ -246,6 +292,8 @@ export function RadioPlayer() {
         onPlaying={onPlaying}
         onError={onError}
         onEnded={onEnded}
+        onStalled={onStalled}
+        preload="none"
       />
 
       {/* Top accent line */}

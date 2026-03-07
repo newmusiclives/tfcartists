@@ -35,6 +35,9 @@ export default function EmbedPlayerPage() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const sessionIdRef = useRef<string | null>(null);
+  const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectAttemptRef = useRef(0);
+  const userStoppedRef = useRef(false);
 
   const fetchNowPlaying = useCallback(async () => {
     try {
@@ -64,21 +67,43 @@ export default function EmbedPlayerPage() {
   useEffect(() => {
     // Pre-fetch now playing on mount for artwork even before play
     fetchNowPlaying();
-    return () => { if (pollRef.current) clearInterval(pollRef.current); };
+    return () => { if (pollRef.current) clearInterval(pollRef.current); if (reconnectRef.current) clearTimeout(reconnectRef.current); };
   }, [fetchNowPlaying]);
+
+  const clearReconnect = useCallback(() => {
+    if (reconnectRef.current) { clearTimeout(reconnectRef.current); reconnectRef.current = null; }
+  }, []);
+
+  const reconnectStream = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio || userStoppedRef.current) return;
+    const delay = Math.min(2000 * Math.pow(2, reconnectAttemptRef.current), 30000);
+    reconnectAttemptRef.current += 1;
+    setStatus("loading");
+    reconnectRef.current = setTimeout(() => {
+      if (userStoppedRef.current) return;
+      audio.src = `${STREAM_URL}?_t=${Date.now()}`;
+      audio.play().catch(() => {});
+    }, delay);
+  }, []);
 
   const handlePlay = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    userStoppedRef.current = false;
+    reconnectAttemptRef.current = 0;
+    clearReconnect();
     setStatus("loading");
     fetchNowPlaying();
     startSession();
     audio.src = `${STREAM_URL}?_t=${Date.now()}`;
-    audio.play().catch(() => setStatus("error"));
-  }, [fetchNowPlaying, startSession]);
+    audio.play().catch(() => reconnectStream());
+  }, [fetchNowPlaying, startSession, clearReconnect, reconnectStream]);
 
   const handlePause = useCallback(() => {
     const audio = audioRef.current;
+    userStoppedRef.current = true;
+    clearReconnect();
     if (audio) { audio.pause(); audio.src = ""; }
     setIsPlaying(false);
     setStatus("idle");
@@ -91,7 +116,7 @@ export default function EmbedPlayerPage() {
       }).catch(() => {});
       sessionIdRef.current = null;
     }
-  }, []);
+  }, [clearReconnect]);
 
   const togglePlay = useCallback(() => {
     if (isPlaying || status === "loading") handlePause();
@@ -101,10 +126,12 @@ export default function EmbedPlayerPage() {
   const onPlaying = useCallback(() => {
     setIsPlaying(true);
     setStatus("playing");
+    reconnectAttemptRef.current = 0;
+    clearReconnect();
     fetchNowPlaying();
     if (pollRef.current) clearInterval(pollRef.current);
     pollRef.current = setInterval(fetchNowPlaying, POLL_INTERVAL);
-  }, [fetchNowPlaying]);
+  }, [fetchNowPlaying, clearReconnect]);
 
   const trackTitle = nowPlaying?.title || "North Country Radio";
   const trackArtist = nowPlaying?.artist_name || "Americana & Country";
@@ -123,8 +150,18 @@ export default function EmbedPlayerPage() {
       <audio
         ref={audioRef}
         onPlaying={onPlaying}
-        onError={() => { setStatus("error"); setIsPlaying(false); }}
-        onEnded={() => { setIsPlaying(false); setStatus("idle"); }}
+        onError={() => { if (!userStoppedRef.current) { setIsPlaying(false); reconnectStream(); } }}
+        onEnded={() => { if (!userStoppedRef.current) { setIsPlaying(false); reconnectStream(); } }}
+        onStalled={() => {
+          if (userStoppedRef.current || !audioRef.current || audioRef.current.paused) return;
+          reconnectRef.current = setTimeout(() => {
+            if (userStoppedRef.current || !audioRef.current || audioRef.current.paused) return;
+            reconnectAttemptRef.current = 0;
+            audioRef.current.src = `${STREAM_URL}?_t=${Date.now()}`;
+            audioRef.current.play().catch(() => {});
+          }, 8000);
+        }}
+        preload="none"
       />
     </>
   );
