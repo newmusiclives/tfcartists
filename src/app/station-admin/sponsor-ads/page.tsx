@@ -180,6 +180,10 @@ export default function SponsorAdsPage() {
       weight: ad.weight.toString(),
     });
     setShowCreate(true);
+    // Scroll to the edit form at the top
+    setTimeout(() => {
+      document.getElementById("ad-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   };
 
   const togglePlayAd = (ad: SponsorAd) => {
@@ -287,7 +291,7 @@ export default function SponsorAdsPage() {
 
         {/* Create / Edit form */}
         {showCreate && (
-          <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+          <div id="ad-form" className="bg-white rounded-xl p-6 shadow-sm border mb-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold">
                 {editingId ? "Edit Ad" : "New Sponsor Ad"}
