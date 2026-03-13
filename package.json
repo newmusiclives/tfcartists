@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/prebuild-slim.js && prisma generate && next build",
+    "build": "node scripts/prebuild-slim.js && prisma generate && next build && node scripts/postbuild-restore.js",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
