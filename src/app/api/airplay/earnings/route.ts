@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getArtistEarnings, getCurrentPeriod } from "@/lib/radio/airplay-system";
 import { logger } from "@/lib/logger";
-import { unauthorized } from "@/lib/api/errors";
-import { requireAuth } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -12,9 +10,6 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const searchParams = request.nextUrl.searchParams;
     const artistId = searchParams.get("artistId");
     const period = searchParams.get("period") || getCurrentPeriod();

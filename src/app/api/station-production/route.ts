@@ -51,17 +51,9 @@ type ProductionField = keyof typeof PRODUCTION_FIELDS;
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const stationId = request.nextUrl.searchParams.get("stationId");
     if (!stationId) {
       return NextResponse.json({ error: "stationId required" }, { status: 400 });
-    }
-
-    if (stationId && session) {
-      const stationAccess = await verifyStationAccess(session, stationId);
-      if (!stationAccess) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
     }
 
     const station = await prisma.station.findUnique({

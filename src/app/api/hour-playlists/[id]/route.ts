@@ -10,9 +10,6 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const { id } = await params;
 
     const playlist = await prisma.hourPlaylist.findUnique({

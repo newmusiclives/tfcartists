@@ -8,17 +8,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const stationId = request.nextUrl.searchParams.get("stationId");
     if (!stationId) {
       return NextResponse.json({ error: "stationId required" }, { status: 400 });
-    }
-
-    if (stationId && session) {
-      const station = await verifyStationAccess(session, stationId);
-      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
     }
 
     const type = request.nextUrl.searchParams.get("type");

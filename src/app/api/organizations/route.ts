@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
-import { requireAdmin, requireAuth } from "@/lib/api/auth";
+import { requireAdmin } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -11,11 +11,6 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
-    // Super admins can see all organizations
-    const isAdmin = session.user.role === "admin";
 
     const organizations = await prisma.organization.findMany({
       where: {

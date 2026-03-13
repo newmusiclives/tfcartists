@@ -14,8 +14,13 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    const orgScope = session ? getOrgScope(session) : {};
+    let orgScope = {};
+    try {
+      const session = await requireAuth();
+      if (session) orgScope = getOrgScope(session);
+    } catch {
+      // No auth — return unscoped results
+    }
 
     const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get("status");

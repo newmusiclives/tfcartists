@@ -90,9 +90,6 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const limit = Number(request.nextUrl.searchParams.get("limit")) || 20;
 
     const plays = await prisma.trackPlayback.findMany({

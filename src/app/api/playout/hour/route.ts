@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { handleApiError, unauthorized } from "@/lib/api/errors";
-import { requireAuth } from "@/lib/api/auth";
+import { handleApiError } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
 
@@ -42,9 +41,6 @@ const DEFAULT_DURATION: Record<string, number> = {
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const sp = request.nextUrl.searchParams;
     const stationId = sp.get("stationId");
     const date = sp.get("date");

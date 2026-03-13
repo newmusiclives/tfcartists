@@ -10,9 +10,6 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const status = request.nextUrl.searchParams.get("status");
 
     const validStatuses = ["ACTIVE", "INACTIVE", "SUSPENDED"];

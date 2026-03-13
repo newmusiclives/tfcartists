@@ -9,19 +9,11 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
-
     const sp = request.nextUrl.searchParams;
     const stationId = sp.get("stationId");
     const djId = sp.get("djId");
     const date = sp.get("date");
     const hour = sp.get("hour");
-
-    if (stationId && session) {
-      const station = await verifyStationAccess(session, stationId);
-      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
-    }
 
     const where: Record<string, unknown> = {};
     if (stationId) where.stationId = stationId;
