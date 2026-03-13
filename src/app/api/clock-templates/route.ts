@@ -8,8 +8,6 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
     const res = await railwayFetch("/api/clocks/templates");
     if (!res.ok) {
       const errBody = await res.text().catch(() => "");
