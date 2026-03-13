@@ -407,14 +407,31 @@ export default function SponsorAdsPage() {
                 />
               </div>
             </div>
-            <button
-              onClick={editingId ? saveEdit : createAd}
-              disabled={creating || !form.sponsorName || !form.adTitle}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
-            >
-              {creating && <Loader2 className="w-4 h-4 animate-spin" />}
-              {editingId ? "Save Changes" : "Create Ad"}
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={editingId ? saveEdit : createAd}
+                disabled={creating || !form.sponsorName || !form.adTitle}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+              >
+                {creating && <Loader2 className="w-4 h-4 animate-spin" />}
+                {editingId ? "Save Changes" : "Create Ad"}
+              </button>
+              {editingId && (() => {
+                const editAd = ads.find((a) => a.id === editingId);
+                return editAd?.audioFilePath ? (
+                  <button
+                    onClick={() => togglePlayAd(editAd)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  >
+                    {playingId === editingId ? (
+                      <><Pause className="w-4 h-4" /> Stop</>
+                    ) : (
+                      <><Play className="w-4 h-4" /> Play Audio</>
+                    )}
+                  </button>
+                ) : null;
+              })()}
+            </div>
           </div>
         )}
 
