@@ -3,6 +3,7 @@ import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { getTodaysShiftHours } from "@/lib/cron/voice-tracks-hour-runner";
 import { logCronExecution } from "@/lib/cron/log";
+import { stationToday } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +40,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      date: new Date().toISOString().split("T")[0],
+      date: stationToday().toISOString().split("T")[0],
       totalHours: hours.length,
       pendingHours: pending.length,
       lockedHours: locked.length,

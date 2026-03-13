@@ -1,7 +1,7 @@
 import { schedule } from "@netlify/functions";
 import { runVoiceTracksDaily } from "../../src/lib/cron/voice-tracks-daily-runner";
 
-const handler = schedule("0 5 * * *", async () => {
+const handler = schedule("0 12 * * *", async () => {
   try {
     console.log("Voice Tracks Daily Cron starting (direct runner)");
 

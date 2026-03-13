@@ -3,6 +3,7 @@ import { logger } from "@/lib/logger";
 import { buildHourPlaylist } from "@/lib/radio/playlist-builder";
 import { generateVoiceTrackScripts } from "@/lib/radio/voice-track-generator";
 import { generateVoiceTrackAudio, generateFeatureAudio } from "@/lib/radio/voice-track-tts";
+import { stationToday, stationDayType } from "@/lib/timezone";
 
 export interface HourResult {
   success: boolean;
@@ -39,8 +40,7 @@ export async function runVoiceTracksHour(params: {
 }): Promise<HourResult> {
   const start = Date.now();
   const { stationId, djId, clockTemplateId, hourOfDay, excludeSongIds } = params;
-  const airDate = params.airDate || new Date();
-  airDate.setHours(0, 0, 0, 0);
+  const airDate = params.airDate || stationToday();
 
   const dj = await prisma.dJ.findUnique({
     where: { id: djId },
@@ -132,10 +132,8 @@ export async function getTodaysShiftHours(): Promise<Array<{
   });
   if (!station) return [];
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const dayOfWeek = today.getDay();
-  const dayType = dayOfWeek === 0 ? "sunday" : dayOfWeek === 6 ? "saturday" : "weekday";
+  const today = stationToday();
+  const dayType = stationDayType();
 
   const assignments = await prisma.clockAssignment.findMany({
     where: {

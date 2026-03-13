@@ -5,6 +5,7 @@ import { generateVoiceTrackScripts, buildSystemPrompt } from "@/lib/radio/voice-
 import { generateVoiceTrackAudio, generateFeatureAudio } from "@/lib/radio/voice-track-tts";
 import { aiProvider } from "@/lib/ai/providers";
 import { fillTemplate, djFirstName, type SongData } from "@/lib/radio/template-utils";
+import { stationToday, stationDayType } from "@/lib/timezone";
 
 interface ShiftHour {
   djId: string;
@@ -59,11 +60,9 @@ export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
     };
   }
 
-  // 2. Determine today's day type
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const dayOfWeek = today.getDay(); // 0=Sun, 6=Sat
-  const dayType = dayOfWeek === 0 ? "sunday" : dayOfWeek === 6 ? "saturday" : "weekday";
+  // 2. Determine today's day type (in Mountain Time)
+  const today = stationToday();
+  const dayType = stationDayType();
 
   // 3. Get all active clock assignments for today
   const assignments = await prisma.clockAssignment.findMany({

@@ -1393,19 +1393,30 @@ export default function RadioClocksPage() {
         fetch("/api/clock-templates"),
         fetch("/api/clock-assignments"),
       ]);
-      const tData = await tRes.json();
-      const aData = await aRes.json();
-      setTemplates(tData.templates || []);
-      setAssignments(aData.assignments || []);
+      if (!tRes.ok || !aRes.ok) {
+        const errMsg = !tRes.ok
+          ? `Templates: ${tRes.status} ${tRes.statusText}`
+          : `Assignments: ${aRes.status} ${aRes.statusText}`;
+        console.error("Clock API error:", errMsg);
+        showToast(`Failed to load clocks (${errMsg})`);
+      } else {
+        const tData = await tRes.json();
+        const aData = await aRes.json();
+        setTemplates(tData.templates || []);
+        setAssignments(aData.assignments || []);
+      }
     } catch (err) {
       console.error("Failed to fetch templates/assignments:", err);
+      showToast("Network error loading clocks");
     }
 
     // DJs fetched separately — cross-origin call may fail due to CORS
     try {
       const dRes = await fetch("/api/clock-djs");
-      const dData = await dRes.json();
-      setDjs(dData.djs || []);
+      if (dRes.ok) {
+        const dData = await dRes.json();
+        setDjs(dData.djs || []);
+      }
     } catch (err) {
       console.error("Failed to fetch DJs:", err);
     }
