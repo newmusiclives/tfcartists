@@ -56,16 +56,23 @@ export async function POST(
       );
     }
 
-    // Allow per-request voice override, otherwise pick from station imaging settings
+    // Voice priority: request body > ad metadata > station imaging default
     const body = await request.json().catch(() => ({}));
     let openaiVoice = (body as { voice?: string }).voice || "";
     if (!openaiVoice) {
-      openaiVoice = "onyx";
-      const imagingVoice = await prisma.stationImagingVoice.findFirst({
-        where: { stationId: ad.stationId, isActive: true },
-      });
-      if (imagingVoice) {
-        openaiVoice = voiceMap[imagingVoice.voiceType] || "onyx";
+      // Check ad-level voice preference stored in metadata
+      const adMeta = (ad.metadata as Record<string, unknown>) || {};
+      const adVoiceType = adMeta.voiceType as string | undefined;
+      if (adVoiceType && voiceMap[adVoiceType]) {
+        openaiVoice = voiceMap[adVoiceType];
+      } else {
+        openaiVoice = "onyx";
+        const imagingVoice = await prisma.stationImagingVoice.findFirst({
+          where: { stationId: ad.stationId, isActive: true },
+        });
+        if (imagingVoice) {
+          openaiVoice = voiceMap[imagingVoice.voiceType] || "onyx";
+        }
       }
     }
 
