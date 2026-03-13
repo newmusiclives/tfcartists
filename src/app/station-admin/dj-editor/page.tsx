@@ -138,7 +138,7 @@ export default function DJEditorPage() {
               >
                 <div className="flex items-start gap-4">
                   {dj.photoUrl ? (
-                    <Image
+                    <img
                       src={dj.photoUrl}
                       alt={dj.name}
                       width={72}

@@ -64,7 +64,7 @@ function DJPhoto({ dj, size = 80 }: { dj: DJData; size?: number }) {
 
   if (dj.photoUrl && !imgError) {
     return (
-      <Image
+      <img
         src={dj.photoUrl}
         alt={dj.name}
         width={size}

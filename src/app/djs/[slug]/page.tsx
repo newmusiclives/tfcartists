@@ -120,7 +120,7 @@ export default function DJProfilePage() {
           <div className="px-8 pb-8 -mt-16 relative">
             <div className="flex items-end gap-6">
               {dj.photoUrl ? (
-                <Image
+                <img
                   src={dj.photoUrl}
                   alt={dj.name}
                   width={128}

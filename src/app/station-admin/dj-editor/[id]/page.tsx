@@ -227,7 +227,7 @@ export default function DJEditorDetailPage() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             {dj.photoUrl ? (
-              <Image src={dj.photoUrl} alt={dj.name} width={80} height={80} className="w-20 h-20 rounded-full object-cover ring-2 ring-purple-200 shadow-md" />
+              <img src={dj.photoUrl} alt={dj.name} width={80} height={80} className="w-20 h-20 rounded-full object-cover ring-2 ring-purple-200 shadow-md" />
             ) : (
               <div
                 className="w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-xl"
@@ -464,7 +464,7 @@ export default function DJEditorDetailPage() {
             <h2 className="font-semibold mb-4">Visual Identity</h2>
             <div className="flex items-start gap-6 mb-4">
               {dj.photoUrl ? (
-                <Image src={dj.photoUrl} alt={dj.name} width={160} height={160} className="w-40 h-40 rounded-2xl object-cover border shadow-lg" />
+                <img src={dj.photoUrl} alt={dj.name} width={160} height={160} className="w-40 h-40 rounded-2xl object-cover border shadow-lg" />
               ) : (
                 <div
                   className="w-40 h-40 rounded-2xl flex items-center justify-center text-white font-bold text-4xl"
