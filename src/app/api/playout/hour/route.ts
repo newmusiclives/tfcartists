@@ -53,6 +53,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Normalize to local midnight — must match playlist-builder.ts line 216
+    // which uses setHours(0,0,0,0) on the server's local timezone
     const airDate = new Date(date);
     airDate.setHours(0, 0, 0, 0);
     const hourOfDay = parseInt(hour, 10);

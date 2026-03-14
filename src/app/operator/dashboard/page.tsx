@@ -52,8 +52,14 @@ export default function OperatorDashboard() {
         fetch("/api/harper/sponsors?limit=1").then((r) => r.json()).catch(() => ({ pagination: { total: 0 } })),
         fetch("/api/listeners?limit=1").then((r) => r.json()).catch(() => ({ total: 0 })),
       ]).then(([stationsData, artistsData, sponsorsData, listenersData]) => {
+        const stations = stationsData.stations || [];
+        // Auto-redirect new operators with no stations to the setup wizard
+        if (stations.length === 0) {
+          router.push("/station-admin/wizard");
+          return;
+        }
         setData({
-          stations: stationsData.stations || [],
+          stations,
           artistCount: artistsData.pagination?.total || 0,
           sponsorCount: sponsorsData.pagination?.total || 0,
           listenerCount: listenersData.total || 0,
@@ -157,6 +163,7 @@ export default function OperatorDashboard() {
             <QuickAction href="/station-admin/schedule-editor" label="Edit Schedule" icon={Clock} />
             <QuickAction href="/station-admin/sponsor-ads" label="Manage Ads" icon={Megaphone} />
             <QuickAction href="/station-admin/branding" label="Station Branding" icon={Settings} />
+            <QuickAction href="/operator/analytics" label="View Analytics" icon={BarChart3} />
           </div>
         </div>
       </div>

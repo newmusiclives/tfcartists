@@ -26,6 +26,7 @@ function useSearchParam(name: string, fallback: string): string {
 export default function EmbedPlayerPage() {
   const size = useSearchParam("size", "compact");
   const refCode = useSearchParam("ref", "");
+  const accentColor = useSearchParam("color", "#b45309");
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "playing" | "error">("idle");

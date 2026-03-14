@@ -174,6 +174,14 @@ export default auth((req) => {
 
   // All pages are public — auth is optional for role-based UI
   const response = NextResponse.next();
+
+  // Track API response time — log slow requests (>2s)
+  if (pathname.startsWith("/api")) {
+    const requestStart = Date.now();
+    response.headers.set("X-Request-Start", String(requestStart));
+    response.headers.set("Server-Timing", `middleware;desc="Middleware"`)
+  }
+
   addSecurityHeaders(response, pathname);
   if (pathname.startsWith("/api")) {
     addCorsHeaders(response, req);

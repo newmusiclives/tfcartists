@@ -193,9 +193,9 @@ class ManifestFinancial {
   }): Promise<{ subscriptionId: string; checkoutUrl: string }> {
     const tierPricing = {
       bronze: { amount: 10000, name: "Bronze - $100/month" },
-      silver: { amount: 30000, name: "Silver - $300/month" },
-      gold: { amount: 50000, name: "Gold - $500/month" },
-      platinum: { amount: 100000, name: "Platinum - $1,000/month" },
+      silver: { amount: 25000, name: "Silver - $250/month" },
+      gold: { amount: 40000, name: "Gold - $400/month" },
+      platinum: { amount: 50000, name: "Platinum - $500/month" },
     };
 
     const pricing = tierPricing[params.tier];
@@ -243,6 +243,71 @@ class ManifestFinancial {
       subscriptionId: subscription.id,
       checkoutUrl,
     };
+  }
+
+  /**
+   * Create a station subscription for an operator
+   */
+  async createStationSubscription(params: {
+    organizationId: string;
+    plan: "starter" | "pro" | "enterprise" | "network";
+    email: string;
+    organizationName: string;
+  }): Promise<{ subscriptionId: string; checkoutUrl: string }> {
+    const planPricing = {
+      starter: { amount: 4900, name: "Starter - $49/month", maxStations: 1 },
+      pro: { amount: 19900, name: "Pro - $199/month", maxStations: 3 },
+      enterprise: { amount: 49900, name: "Enterprise - $499/month", maxStations: 10 },
+      network: { amount: 99900, name: "Network - $999/month", maxStations: 50 },
+    };
+
+    const pricing = planPricing[params.plan];
+
+    logger.info("Creating station subscription", {
+      organizationId: params.organizationId,
+      plan: params.plan,
+    });
+
+    const customer = await this.createCustomer({
+      email: params.email,
+      name: params.organizationName,
+      metadata: {
+        organizationId: params.organizationId,
+        type: "station_operator",
+      },
+    });
+
+    const subscription = await this.request<ManifestSubscription>("/subscriptions", {
+      method: "POST",
+      body: JSON.stringify({
+        customerId: customer.id,
+        planId: `station_${params.plan}`,
+        amount: pricing.amount,
+        currency: "usd",
+        interval: "month",
+        metadata: {
+          organizationId: params.organizationId,
+          plan: params.plan,
+          maxStations: pricing.maxStations,
+          type: "station_subscription",
+        },
+      }),
+    });
+
+    const checkoutUrl = `${this.baseUrl}/checkout/${subscription.id}`;
+
+    // Update organization with Manifest customer ID and plan
+    const { prisma } = await import("@/lib/db");
+    await prisma.organization.update({
+      where: { id: params.organizationId },
+      data: {
+        manifestCustomerId: customer.id,
+        plan: params.plan,
+        maxStations: pricing.maxStations,
+      },
+    });
+
+    return { subscriptionId: subscription.id, checkoutUrl };
   }
 
   /**
@@ -444,6 +509,20 @@ class ManifestFinancial {
               shares: artist.airplayShares || 1,
             });
           }
+        }
+        break;
+
+      case "subscription.activated":
+        // Station subscription activated — operator plan is live
+        if (data.metadata?.type === "station_subscription" && data.metadata?.organizationId) {
+          await prisma.organization.update({
+            where: { id: data.metadata.organizationId },
+            data: {
+              plan: data.metadata.plan || "starter",
+              maxStations: data.metadata.maxStations || 1,
+            },
+          });
+          logger.info("Station subscription activated", { orgId: data.metadata.organizationId });
         }
         break;
 

@@ -53,6 +53,8 @@ model Organization {
   artists     Artist[]
   sponsors    Sponsor[]
   listeners   Listener[]
+  newsletterSubscribers NewsletterSubscriber[]
+  newsletterEditions    NewsletterEdition[]
 
   @@index([slug])
   @@index([ownerEmail])
@@ -1079,6 +1081,10 @@ model Station {
   description String?
   stationCode String?  @unique // URL-safe slug ("ncr", "southern-soul")
 
+  // Station mode
+  stationMode String  @default("full") // "full" (standard), "artist" (artist-owned), "community" (local business)
+  artistOwnerId String? // If stationMode="artist", links to the owning Artist
+
   // Format
   formatType  String?  // "americana", "country", "rock", "jazz", "blues", "folk"
   musicEra    String?  // "classic", "modern", "mixed"
@@ -1099,6 +1105,10 @@ model Station {
   // Programming hours
   primeHoursStart    String @default("06:00")
   primeHoursEnd      String @default("18:00")
+
+  // Location (for community radio weather/traffic)
+  stationLatitude    Float?
+  stationLongitude   Float?
 
   // Stream config
   streamUrl          String?
@@ -1170,6 +1180,10 @@ model Station {
   producedImaging    ProducedImaging[]
   sponsorAds         SponsorAd[]
   genericVoiceTracks GenericVoiceTrack[]
+  communityEvents    CommunityEvent[]
+  townAnnouncements  TownAnnouncement[]
+  podcastEpisodes    PodcastEpisode[]
+  songRequests       SongRequest[]
 
   metadata    Json?
 }
@@ -2506,4 +2520,233 @@ model GenericVoiceTrack {
   @@index([djId])
   @@index([stationId])
   @@index([useCount])
+}
+
+// =============================================================================
+// PUSH SUBSCRIPTIONS
+// =============================================================================
+
+model PushSubscription {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  endpoint       String   @unique
+  p256dh         String
+  auth           String
+  listenerId     String?
+  organizationId String?
+  isActive       Boolean  @default(true)
+
+  @@index([listenerId])
+}
+
+// =============================================================================
+// FAN REQUESTS
+// =============================================================================
+
+model SongRequest {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+
+  stationId     String
+  station       Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // What was requested
+  songTitle     String
+  artistName    String
+  songId        String?  // Link to Song if it exists in library
+
+  // Who requested
+  listenerId    String?
+  listenerName  String?
+  message       String?  // Optional dedication message
+
+  // Status
+  status        String   @default("pending") // pending, queued, played, rejected
+  playedAt      DateTime?
+  rejectedReason String?
+
+  @@index([stationId])
+  @@index([status])
+}
+
+// =============================================================================
+// SPONSOR REFERRAL BONUSES
+// =============================================================================
+
+model SponsorReferralBonus {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+
+  // Who referred
+  referrerId    String   // listenerId or scoutId
+  referrerType  String   // "listener", "scout"
+
+  // Which sponsor
+  sponsorId     String
+  sponsorTier   String   // bronze, silver, gold, platinum
+
+  // Payout details
+  bonusAmount   Float    // 50% of first month's fee
+  status        String   @default("pending") // pending, paid, cancelled
+  paidAt        DateTime?
+
+  @@index([referrerId])
+  @@index([status])
+}
+
+// =============================================================================
+// PODCAST / REPLAY
+// =============================================================================
+
+model PodcastEpisode {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  stationId     String
+  station       Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // Content
+  title         String
+  description   String?  @db.Text
+  audioFilePath String?
+  duration      Int?     // seconds
+  fileSize      Int?     // bytes
+
+  // Publishing
+  publishedAt   DateTime?
+  episodeType   String   @default("HOURLY_REPLAY") // HOURLY_REPLAY, WEEKLY_BEST_OF, CUSTOM
+  seasonNumber  Int?
+  episodeNumber Int?
+
+  // Metadata
+  djName        String?
+  hourOfDay     Int?
+  airDate       String?  // YYYY-MM-DD
+
+  isPublished   Boolean  @default(false)
+
+  @@index([stationId])
+  @@index([publishedAt])
+  @@index([episodeType])
+}
+
+// =============================================================================
+// COMMUNITY RADIO (Local Business Package)
+// =============================================================================
+
+model CommunityEvent {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  stationId     String
+  station       Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // Event details
+  title         String
+  description   String?
+  location      String?
+  startDate     DateTime
+  endDate       DateTime?
+  isAllDay      Boolean  @default(false)
+
+  // Categorization
+  category      String   @default("general") // general, music, sports, community, business, holiday
+  sponsorId     String?  // Optional sponsor for sponsored events
+
+  // On-air settings
+  announceOnAir Boolean  @default(true)
+  announcementScript String? // Pre-written or AI-generated script for DJ to read
+  announcedCount Int     @default(0)
+
+  // Status
+  isActive      Boolean  @default(true)
+
+  @@index([stationId])
+  @@index([startDate])
+}
+
+model TownAnnouncement {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+
+  stationId     String
+  station       Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  // Content
+  title         String
+  content       String
+  priority      String   @default("normal") // low, normal, high, urgent
+  category      String   @default("general") // general, weather, traffic, safety, business
+
+  // Scheduling
+  startsAt      DateTime @default(now())
+  expiresAt     DateTime?
+  readOnAir     Boolean  @default(true)
+  readCount     Int      @default(0)
+
+  isActive      Boolean  @default(true)
+
+  @@index([stationId])
+  @@index([priority])
+}
+
+// =============================================================================
+// NEWSLETTER
+// =============================================================================
+
+model NewsletterSubscriber {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  email         String
+  name          String?
+
+  // Organization scoping
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  // Preferences
+  weeklyDigest      Boolean @default(true)
+  artistSpotlight   Boolean @default(true)
+  newMusicAlerts    Boolean @default(true)
+  stationUpdates    Boolean @default(true)
+
+  // Status
+  isActive      Boolean  @default(true)
+  confirmedAt   DateTime?
+  unsubscribedAt DateTime?
+  unsubscribeToken String @unique @default(cuid())
+
+  // Linked listener (if registered)
+  listenerId    String?
+
+  @@unique([email, organizationId])
+  @@index([organizationId])
+  @@index([isActive])
+}
+
+model NewsletterEdition {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  // Content
+  type          String   // "weekly_digest" | "artist_spotlight" | "new_music" | "custom"
+  subject       String
+  htmlContent   String   @db.Text
+  textContent   String   @db.Text
+
+  // Delivery stats
+  sentAt        DateTime?
+  recipientCount Int     @default(0)
+  openCount     Int      @default(0)
+  clickCount    Int      @default(0)
+
+  @@index([organizationId])
+  @@index([type])
 }

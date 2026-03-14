@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import Anthropic from "@anthropic-ai/sdk";
 import { getConfig } from "@/lib/config";
+import { logger, measureDurationAsync } from "@/lib/logger";
 
 export type AIProvider = "openai" | "claude";
 
@@ -64,11 +65,30 @@ class AIProviderService {
     const provider = options?.provider || await this.resolveProvider();
     const temperature = options?.temperature || 0.7;
     const maxTokens = options?.maxTokens || 500;
+    const model = options?.model || (provider === "openai" ? "gpt-4o-mini" : "claude-3-5-sonnet-20241022");
 
-    if (provider === "openai") {
-      return this.chatOpenAI(messages, temperature, maxTokens, options?.model);
-    } else {
-      return this.chatClaude(messages, temperature, maxTokens, options?.model);
+    try {
+      const { result, duration } = await measureDurationAsync(async () => {
+        if (provider === "openai") {
+          return this.chatOpenAI(messages, temperature, maxTokens, options?.model);
+        } else {
+          return this.chatClaude(messages, temperature, maxTokens, options?.model);
+        }
+      });
+
+      logger.ai(provider, model, "chat", {
+        durationMs: duration,
+        tokensUsed: result.tokensUsed,
+      });
+
+      return result;
+    } catch (error) {
+      logger.aiFailure(provider, model, "chat", error, {
+        messageCount: messages.length,
+        maxTokens,
+        temperature,
+      });
+      throw error;
     }
   }
 

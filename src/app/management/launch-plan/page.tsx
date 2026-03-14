@@ -202,7 +202,7 @@ const LAUNCH_PHASES: Phase[] = [
       { id: "s6", label: "Monthly revenue distribution runs automatically", team: "management", href: "/admin", detail: "Cron job calculates shares, processes payouts, sends notifications" },
       { id: "s7", label: "85%+ sponsor renewal rate achieved", team: "harper", detail: "Deliver compelling ROI reports, community impact stories, renewal incentives" },
       { id: "s8", label: "Community thriving — 500+ Discord, active UGC", team: "elliot", detail: "Monthly listening parties, artist takeovers, trivia nights, contests" },
-      { id: "s9", label: "Target: $8,350/mo net revenue — model proven", team: "management", href: "/management", detail: "If targets hit, the model is validated and ready for Station #2" },
+      { id: "s9", label: "Target: $9,950/mo gross revenue — model proven", team: "management", href: "/management", detail: "If targets hit, the model is validated and ready for Station #2" },
       { id: "s10", label: "Plan Station #2 expansion in the TrueFans Network", team: "management", href: "/network", detail: "Choose next genre (Southern Soul, Indie Rock, etc.), recruit operator" },
     ],
   },

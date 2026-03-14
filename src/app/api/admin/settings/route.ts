@@ -28,6 +28,13 @@ const CONFIG_DEFINITIONS: Record<string, { category: string; label: string; encr
   ANTHROPIC_API_KEY: { category: "ai", label: "Anthropic API Key", encrypted: true },
   DEFAULT_AI_PROVIDER: { category: "ai", label: "Default AI Provider (openai or claude)", encrypted: false },
 
+  // Cloudflare R2 Object Storage
+  R2_ACCOUNT_ID: { category: "storage", label: "R2 Account ID", encrypted: false },
+  R2_ACCESS_KEY_ID: { category: "storage", label: "R2 Access Key ID", encrypted: true },
+  R2_SECRET_ACCESS_KEY: { category: "storage", label: "R2 Secret Access Key", encrypted: true },
+  R2_BUCKET_NAME: { category: "storage", label: "R2 Bucket Name", encrypted: false },
+  R2_PUBLIC_URL: { category: "storage", label: "R2 Public URL (custom domain)", encrypted: false },
+
   // Authentication
   NEXTAUTH_SECRET: { category: "auth", label: "NextAuth Secret (32+ chars)", encrypted: true },
   NEXTAUTH_URL: { category: "auth", label: "Production URL", encrypted: false },

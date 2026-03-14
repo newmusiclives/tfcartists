@@ -6,6 +6,7 @@ import { Copy, Check, Code, ExternalLink } from "lucide-react";
 const BASE_URL = typeof window !== "undefined" ? window.location.origin : (process.env.NEXT_PUBLIC_SITE_URL || "https://truefans-radio.netlify.app");
 
 type Size = "compact" | "card" | "full";
+type Platform = "html" | "wordpress" | "shopify";
 
 const SIZE_CONFIG: Record<Size, { width: number; height: number; label: string; description: string }> = {
   compact: { width: 320, height: 80, label: "Compact", description: "Horizontal bar with artwork - sidebars & footers" },
@@ -13,9 +14,20 @@ const SIZE_CONFIG: Record<Size, { width: number; height: number; label: string; 
   full: { width: 320, height: 440, label: "Full", description: "Full player matching the live station look - landing pages" },
 };
 
+const COLOR_PRESETS = [
+  { name: "Amber", value: "#b45309" },
+  { name: "Blue", value: "#1d4ed8" },
+  { name: "Green", value: "#047857" },
+  { name: "Purple", value: "#7c3aed" },
+  { name: "Red", value: "#dc2626" },
+  { name: "Pink", value: "#db2777" },
+];
+
 export default function EmbedCodeGeneratorPage() {
   const [size, setSize] = useState<Size>("card");
   const [refCode, setRefCode] = useState("");
+  const [accentColor, setAccentColor] = useState("#b45309");
+  const [platform, setPlatform] = useState<Platform>("html");
   const [copied, setCopied] = useState(false);
 
   // Auto-load ref code from localStorage if available
@@ -25,8 +37,18 @@ export default function EmbedCodeGeneratorPage() {
   }, []);
 
   const config = SIZE_CONFIG[size];
-  const embedUrl = `${BASE_URL}/embed/player?size=${size}${refCode ? `&ref=${refCode}` : ""}`;
-  const snippet = `<iframe src="${embedUrl}" width="${config.width}" height="${config.height}" frameborder="0" allow="autoplay" style="border-radius:${size === "full" ? 20 : size === "card" ? 16 : 14}px;border:none;overflow:hidden;"></iframe>`;
+  const colorParam = accentColor !== "#b45309" ? `&color=${encodeURIComponent(accentColor)}` : "";
+  const embedUrl = `${BASE_URL}/embed/player?size=${size}${refCode ? `&ref=${refCode}` : ""}${colorParam}`;
+  const borderRadius = size === "full" ? 20 : size === "card" ? 16 : 14;
+  const iframeHtml = `<iframe src="${embedUrl}" width="${config.width}" height="${config.height}" frameborder="0" allow="autoplay" style="border-radius:${borderRadius}px;border:none;overflow:hidden;" title="TrueFans RADIO Player"></iframe>`;
+  const attribution = `<p style="font-size:11px;text-align:center;margin:4px 0;"><a href="${BASE_URL}" target="_blank" rel="noopener" style="color:#999;text-decoration:none;">Powered by TrueFans RADIO</a></p>`;
+
+  const snippets: Record<Platform, string> = {
+    html: `${iframeHtml}\n${attribution}`,
+    wordpress: `<!-- TrueFans RADIO Player Widget -->\n<div style="max-width:${config.width}px;margin:0 auto;">\n${iframeHtml}\n${attribution}\n</div>\n<!-- /TrueFans RADIO -->`,
+    shopify: `<!-- Paste in a Custom Liquid block -->\n<div style="max-width:${config.width}px;margin:20px auto;">\n${iframeHtml}\n${attribution}\n</div>`,
+  };
+  const snippet = snippets[platform];
 
   const handleCopy = () => {
     navigator.clipboard.writeText(snippet);
@@ -81,6 +103,45 @@ export default function EmbedCodeGeneratorPage() {
                   >
                     <div className="font-semibold text-sm text-gray-900">{val.label} ({val.width} x {val.height})</div>
                     <div className="text-xs text-gray-500">{val.description}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Accent Color */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Accent Color</label>
+              <div className="flex items-center gap-2 flex-wrap">
+                {COLOR_PRESETS.map((c) => (
+                  <button
+                    key={c.value}
+                    onClick={() => setAccentColor(c.value)}
+                    className={`w-8 h-8 rounded-full border-2 transition-all ${accentColor === c.value ? "border-gray-900 scale-110" : "border-gray-200"}`}
+                    style={{ backgroundColor: c.value }}
+                    title={c.name}
+                  />
+                ))}
+                <input
+                  type="color"
+                  value={accentColor}
+                  onChange={(e) => setAccentColor(e.target.value)}
+                  className="w-8 h-8 rounded-full cursor-pointer border border-gray-200"
+                  title="Custom color"
+                />
+              </div>
+            </div>
+
+            {/* Platform */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Platform</label>
+              <div className="flex gap-2">
+                {([["html", "HTML"], ["wordpress", "WordPress"], ["shopify", "Shopify"]] as const).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => setPlatform(key)}
+                    className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${platform === key ? "border-amber-500 bg-amber-50 text-amber-700 font-medium" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
+                  >
+                    {label}
                   </button>
                 ))}
               </div>

@@ -4,24 +4,20 @@ import { z } from "zod";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 
-// Define the credentials schema
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
 });
 
-/**
- * NextAuth.js v5 Configuration
- *
- * IMPORTANT: In production, replace this with a proper database-backed authentication
- * This is a simple credentials provider for development/demo purposes
- *
- * For production, consider:
- * - Database adapter (Prisma adapter with User/Account/Session models)
- * - OAuth providers (Google, GitHub, etc.)
- * - Magic link authentication
- * - Two-factor authentication
- */
+// Team user lookup table — avoids repetitive if/else chains
+const TEAM_USERS: Record<string, { envKey: keyof typeof env; id: string; name: string; email: string; role: string }> = {
+  admin:   { envKey: "ADMIN_PASSWORD",   id: "admin-1",   name: "TrueFans Admin",         email: "admin@truefansradio.com",   role: "admin"   },
+  riley:   { envKey: "RILEY_PASSWORD",   id: "riley-1",   name: "Riley (Artist Team)",     email: "riley@truefansradio.com",   role: "riley"   },
+  harper:  { envKey: "HARPER_PASSWORD",  id: "harper-1",  name: "Harper (Sponsor Team)",   email: "harper@truefansradio.com",  role: "harper"  },
+  elliot:  { envKey: "ELLIOT_PASSWORD",  id: "elliot-1",  name: "Elliot (Listener Team)",  email: "elliot@truefansradio.com",  role: "elliot"  },
+  cassidy: { envKey: "CASSIDY_PASSWORD", id: "cassidy-1", name: "Cassidy (Review Panel)",  email: "cassidy@truefansradio.com", role: "cassidy" },
+};
+
 export const authConfig: NextAuthConfig = {
   providers: [
     Credentials({
@@ -32,113 +28,38 @@ export const authConfig: NextAuthConfig = {
       },
       async authorize(credentials) {
         try {
-          // Validate credentials
           const parsed = loginSchema.safeParse(credentials);
-          if (!parsed.success) {
-            return null;
-          }
+          if (!parsed.success) return null;
 
           const { username, password } = parsed.data;
 
-          // SECURITY: All passwords MUST be set via environment variables
-          // No default passwords allowed in production
-
-          // Admin user access
-          if (username === "admin") {
-            if (!env.ADMIN_PASSWORD) {
-              logger.error("ADMIN_PASSWORD environment variable not set");
+          // Team user authentication
+          const teamUser = TEAM_USERS[username.toLowerCase()];
+          if (teamUser) {
+            const expected = env[teamUser.envKey];
+            if (!expected) {
+              logger.error(`${teamUser.envKey} environment variable not set`);
               return null;
             }
-            if (password === env.ADMIN_PASSWORD) {
-              return {
-                id: "admin-1",
-                name: "TrueFans Admin",
-                email: "admin@truefansradio.com",
-                role: "admin",
-              };
+            if (password === expected) {
+              return { id: teamUser.id, name: teamUser.name, email: teamUser.email, role: teamUser.role };
             }
+            return null;
           }
 
-          // Riley team access
-          if (username === "riley") {
-            if (!env.RILEY_PASSWORD) {
-              logger.error("RILEY_PASSWORD environment variable not set");
-              return null;
-            }
-            if (password === env.RILEY_PASSWORD) {
-              return {
-                id: "riley-1",
-                name: "Riley (Artist Team)",
-                email: "riley@truefansradio.com",
-                role: "riley",
-              };
-            }
-          }
-
-          // Harper team access
-          if (username === "harper") {
-            if (!env.HARPER_PASSWORD) {
-              logger.error("HARPER_PASSWORD environment variable not set");
-              return null;
-            }
-            if (password === env.HARPER_PASSWORD) {
-              return {
-                id: "harper-1",
-                name: "Harper (Sponsor Team)",
-                email: "harper@truefansradio.com",
-                role: "harper",
-              };
-            }
-          }
-
-          // Elliot team access
-          if (username === "elliot") {
-            if (!env.ELLIOT_PASSWORD) {
-              logger.error("ELLIOT_PASSWORD environment variable not set");
-              return null;
-            }
-            if (password === env.ELLIOT_PASSWORD) {
-              return {
-                id: "elliot-1",
-                name: "Elliot (Listener Team)",
-                email: "elliot@truefansradio.com",
-                role: "elliot",
-              };
-            }
-          }
-
-          // Cassidy team access
-          if (username === "cassidy") {
-            if (!env.CASSIDY_PASSWORD) {
-              logger.error("CASSIDY_PASSWORD environment variable not set");
-              return null;
-            }
-            if (password === env.CASSIDY_PASSWORD) {
-              return {
-                id: "cassidy-1",
-                name: "Cassidy (Review Panel)",
-                email: "cassidy@truefansradio.com",
-                role: "cassidy",
-              };
-            }
-          }
-
-          // Operator login: check OrganizationUser table
+          // Operator login: check OrganizationUser table using shared prisma instance
           try {
-            const { PrismaClient } = await import("@prisma/client");
+            const { prisma } = await import("@/lib/db");
             const bcrypt = await import("bcryptjs");
-            const prismaAuth = new PrismaClient();
 
-            const orgUser = await prismaAuth.organizationUser.findFirst({
+            const orgUser = await prisma.organizationUser.findFirst({
               where: { email: username, isActive: true },
               include: { organization: { select: { id: true, name: true } } },
             });
 
-            if (orgUser && orgUser.passwordHash) {
+            if (orgUser?.passwordHash) {
               const isValid = await bcrypt.compare(password, orgUser.passwordHash);
-
               if (isValid) {
-                await prismaAuth.$disconnect();
                 return {
                   id: orgUser.id,
                   name: orgUser.name,
@@ -148,13 +69,10 @@ export const authConfig: NextAuthConfig = {
                 };
               }
             }
-
-            await prismaAuth.$disconnect();
-          } catch {
-            // DB not available — skip operator auth
+          } catch (dbError) {
+            logger.error("Operator auth DB error", { error: dbError });
           }
 
-          // Invalid credentials
           return null;
         } catch (error) {
           logger.error("Auth error", { error });
@@ -165,11 +83,10 @@ export const authConfig: NextAuthConfig = {
   ],
   pages: {
     signIn: "/login",
-    error: "/login", // Redirect errors to login page instead of using default error page
+    error: "/login",
   },
   callbacks: {
     async jwt({ token, user }) {
-      // Add user role and organization to JWT token
       if (user) {
         token.role = user.role;
         token.id = user.id;
@@ -178,7 +95,6 @@ export const authConfig: NextAuthConfig = {
       return token;
     },
     async session({ session, token }) {
-      // Add user role and organization to session
       if (session.user) {
         session.user.role = token.role as string;
         session.user.id = token.id as string;
@@ -187,7 +103,6 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
     async authorized() {
-      // All pages are public — auth is optional for role-based UI
       return true;
     },
   },
@@ -195,8 +110,21 @@ export const authConfig: NextAuthConfig = {
     strategy: "jwt",
     maxAge: 14 * 24 * 60 * 60, // 14 days
   },
+  cookies: {
+    sessionToken: {
+      name: process.env.NODE_ENV === "production"
+        ? "__Secure-authjs.session-token"
+        : "authjs.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
   trustHost: true,
-  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

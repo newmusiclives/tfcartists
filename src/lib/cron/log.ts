@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 /**
  * Log a cron job execution to the database.
@@ -23,6 +24,16 @@ export async function logCronExecution(opts: {
         startedAt: opts.startedAt,
       },
     });
+    // Send alert for failed cron jobs
+    if (opts.status === "error" || opts.status === "timeout") {
+      await notifyCronFailure({
+        jobName: opts.jobName,
+        status: opts.status,
+        duration: opts.duration,
+        error: opts.error,
+        startedAt: opts.startedAt,
+      });
+    }
   } catch {
     // Don't let logging failures break the cron job
     console.error(`[cron-log] Failed to log ${opts.jobName} execution`);
@@ -73,4 +84,60 @@ export function withCronLog(
       throw err;
     }
   };
+}
+
+/**
+ * Cron failure notification helper.
+ * Logs structured failure data via the logger (which reports to Sentry)
+ * and optionally sends a webhook notification if CRON_ALERT_WEBHOOK_URL is set.
+ */
+export async function notifyCronFailure(opts: {
+  jobName: string;
+  status: "error" | "timeout";
+  duration: number;
+  error?: string;
+  startedAt: Date;
+}) {
+  // Always log structured data for monitoring
+  logger.error(`Cron job failed: ${opts.jobName}`, {
+    type: "cron_failure",
+    jobName: opts.jobName,
+    status: opts.status,
+    durationMs: opts.duration,
+    error: opts.error,
+    startedAt: opts.startedAt.toISOString(),
+  });
+
+  // Send webhook notification if configured (Slack, Discord, PagerDuty, etc.)
+  const webhookUrl = process.env.CRON_ALERT_WEBHOOK_URL;
+  if (!webhookUrl) return;
+
+  try {
+    await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: `[CRON ALERT] *${opts.jobName}* failed (${opts.status})`,
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: [
+                `*Cron Job Failed:* \`${opts.jobName}\``,
+                `*Status:* ${opts.status}`,
+                `*Duration:* ${opts.duration}ms`,
+                `*Started:* ${opts.startedAt.toISOString()}`,
+                opts.error ? `*Error:* \`\`\`${opts.error.slice(0, 500)}\`\`\`` : "",
+              ]
+                .filter(Boolean)
+                .join("\n"),
+            },
+          },
+        ],
+      }),
+    }).catch(() => {}); // Fire and forget
+  } catch {
+    // Don't let notification failures break anything
+  }
 }

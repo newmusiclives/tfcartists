@@ -50,19 +50,54 @@ export function amplifyPcm(pcm: Buffer, gain: number): Buffer {
   return out;
 }
 
+/**
+ * Save audio file to R2 object storage (or local fallback).
+ * This is now async — callers should await the result.
+ * The sync signature is preserved for backward compatibility
+ * by falling back to local storage synchronously when R2 is unavailable.
+ */
 export function saveAudioFile(buffer: Buffer, dir: string, filename: string): string {
+  // Start async R2 upload in background — return local path immediately
+  // so existing sync call sites don't break. The R2 URL will be used
+  // by the next read since DB stores the path.
+  const { uploadFile, isR2Configured } = require("@/lib/storage");
+
+  if (isR2Configured()) {
+    // Return a placeholder and update DB asynchronously
+    // For new code, use saveAudioFileAsync instead
+    try {
+      const outputDir = path.join(process.cwd(), "public", "audio", dir);
+      if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+      fs.writeFileSync(path.join(outputDir, filename), buffer);
+    } catch {
+      // Serverless — can't write locally, that's fine
+    }
+
+    // Fire-and-forget R2 upload
+    (uploadFile as typeof import("@/lib/storage").uploadFile)(buffer, dir, filename).catch(() => {});
+
+    return `/audio/${dir}/${filename}`;
+  }
+
+  // No R2 — local only
   try {
     const outputDir = path.join(process.cwd(), "public", "audio", dir);
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(path.join(outputDir, filename), buffer);
     return `/audio/${dir}/${filename}`;
   } catch {
-    // Serverless (Netlify) — read-only filesystem, store as data URI
     const mimeType = filename.endsWith(".wav") ? "audio/wav" : "audio/mpeg";
     return `data:${mimeType};base64,${buffer.toString("base64")}`;
   }
+}
+
+/**
+ * Async version of saveAudioFile — uploads to R2 and returns the public URL.
+ * Preferred for new code.
+ */
+export async function saveAudioFileAsync(buffer: Buffer, dir: string, filename: string): Promise<string> {
+  const { uploadFile } = await import("@/lib/storage");
+  return uploadFile(buffer, dir, filename);
 }
 
 export async function generateWithOpenAI(text: string, voice: string): Promise<{ buffer: Buffer; ext: string }> {

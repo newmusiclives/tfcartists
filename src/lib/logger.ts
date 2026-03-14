@@ -13,6 +13,9 @@ const SENTRY_DSN = process.env.SENTRY_DSN;
 
 type LogLevel = "debug" | "info" | "warn" | "error";
 
+/** Threshold in ms above which API requests are considered slow */
+export const SLOW_REQUEST_THRESHOLD_MS = 2000;
+
 interface LogContext {
   [key: string]: any;
 }
@@ -122,12 +125,39 @@ class Logger {
     });
   }
 
+  // Log slow API requests (>2s) with structured data for monitoring
+  slowRequest(method: string, path: string, durationMs: number, context?: LogContext) {
+    this.warn(`Slow API request: ${method} ${path} took ${durationMs}ms`, {
+      type: "slow_request",
+      method,
+      path,
+      durationMs,
+      threshold: SLOW_REQUEST_THRESHOLD_MS,
+      ...context,
+    });
+  }
+
   // Convenience method for AI provider logging
   ai(provider: string, model: string, operation: string, context?: LogContext) {
     this.debug(`AI ${provider} ${model} - ${operation}`, {
       provider,
       model,
       operation,
+      ...context,
+    });
+  }
+
+  // Structured AI failure logging for monitoring/alerting
+  aiFailure(provider: string, model: string, operation: string, error: unknown, context?: LogContext) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    this.error(`AI API failure: ${provider} ${model} - ${operation}`, {
+      type: "ai_api_failure",
+      provider,
+      model,
+      operation,
+      errorMessage,
+      errorStack,
       ...context,
     });
   }
@@ -167,6 +197,14 @@ export function logApiRequest(req: {
   } else {
     logger.api(req.method, url.pathname, req.status, req.duration);
   }
+
+  // Also flag slow requests regardless of status code
+  if (req.duration > SLOW_REQUEST_THRESHOLD_MS) {
+    logger.slowRequest(req.method, url.pathname, req.duration, {
+      status: req.status,
+      ...(req.userId && { userId: req.userId }),
+    });
+  }
 }
 
 // Helper for measuring operation duration
@@ -185,4 +223,47 @@ export async function measureDurationAsync<T>(
   const result = await fn();
   const duration = Date.now() - start;
   return { result, duration };
+}
+
+/**
+ * Wrap a Next.js API route handler with automatic response time tracking.
+ * Logs all requests and flags slow ones (>2s) for monitoring.
+ *
+ * @example
+ * ```ts
+ * export const GET = withApiTiming("/api/stations", async (req) => {
+ *   const data = await prisma.station.findMany();
+ *   return NextResponse.json({ data });
+ * });
+ * ```
+ */
+export function withApiTiming(
+  routePath: string,
+  handler: (req: Request) => Promise<Response>
+): (req: Request) => Promise<Response> {
+  return async (req: Request) => {
+    const start = Date.now();
+    try {
+      const response = await handler(req);
+      const duration = Date.now() - start;
+
+      if (duration > SLOW_REQUEST_THRESHOLD_MS) {
+        logger.slowRequest(req.method, routePath, duration, {
+          status: response.status,
+        });
+      }
+
+      return response;
+    } catch (error) {
+      const duration = Date.now() - start;
+      logger.error(`API ${req.method} ${routePath} unhandled error`, {
+        type: "api_unhandled_error",
+        method: req.method,
+        path: routePath,
+        durationMs: duration,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      throw error;
+    }
+  };
 }

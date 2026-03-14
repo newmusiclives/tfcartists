@@ -154,12 +154,19 @@ export async function calculateRevenuePool(period: string) {
 /**
  * Distribute revenue pool to artists
  */
+// Safeguards for sustainable payouts
+const ARTIST_POOL_SPLIT = 0.8; // 80% of ad revenue to artists
+const MIN_PER_SHARE_VALUE = 0.50; // Floor: $0.50 minimum per share
+const MAX_PER_SHARE_VALUE = 10.00; // Cap: $10 maximum per share (prevents runaway payouts)
+const SPONSOR_CHURN_RESERVE = 0.10; // 10% of pool held in reserve for sponsor churn months
+
 export async function distributeRevenuePool(
   period: string,
   totalAdRevenue: number
 ): Promise<number> {
-  // Calculate artist pool (80% of ad revenue)
-  const artistPoolAmount = totalAdRevenue * 0.8;
+  // Calculate artist pool (80% of ad revenue, minus 10% churn reserve)
+  const grossPool = totalAdRevenue * ARTIST_POOL_SPLIT;
+  const artistPoolAmount = grossPool * (1 - SPONSOR_CHURN_RESERVE); // 72% effective rate
 
   // Get or create revenue pool record
   let pool = await prisma.radioRevenuePool.findUnique({
@@ -183,7 +190,7 @@ export async function distributeRevenuePool(
         totalAdRevenue,
         artistPoolAmount,
         totalShares: poolStats.totalShares,
-        perShareValue: poolStats.totalShares > 0 ? artistPoolAmount / poolStats.totalShares : 0,
+        perShareValue: poolStats.totalShares > 0 ? Math.min(MAX_PER_SHARE_VALUE, Math.max(MIN_PER_SHARE_VALUE, artistPoolAmount / poolStats.totalShares)) : 0,
         freeArtists: poolStats.freeArtists,
         tier5Artists: poolStats.tier5Artists,
         tier20Artists: poolStats.tier20Artists,
@@ -198,7 +205,7 @@ export async function distributeRevenuePool(
         totalAdRevenue,
         artistPoolAmount,
         totalShares: poolStats.totalShares,
-        perShareValue: poolStats.totalShares > 0 ? artistPoolAmount / poolStats.totalShares : 0,
+        perShareValue: poolStats.totalShares > 0 ? Math.min(MAX_PER_SHARE_VALUE, Math.max(MIN_PER_SHARE_VALUE, artistPoolAmount / poolStats.totalShares)) : 0,
         freeArtists: poolStats.freeArtists,
         tier5Artists: poolStats.tier5Artists,
         tier20Artists: poolStats.tier20Artists,
@@ -382,9 +389,10 @@ export function estimateMonthlyEarnings(
   const totalArtists = options?.totalArtists || 100;
   const averageSharesPerArtist = options?.averageSharesPerArtist || 10;
 
-  const artistPool = monthlyAdRevenue * 0.8; // 80% to artists
+  const artistPool = monthlyAdRevenue * ARTIST_POOL_SPLIT * (1 - SPONSOR_CHURN_RESERVE);
   const totalShares = totalArtists * averageSharesPerArtist;
-  const perShareValue = artistPool / totalShares;
+  const rawPerShare = totalShares > 0 ? artistPool / totalShares : 0;
+  const perShareValue = Math.min(MAX_PER_SHARE_VALUE, Math.max(MIN_PER_SHARE_VALUE, rawPerShare));
 
   const tierShares = AIRPLAY_TIERS[tier].shares;
 

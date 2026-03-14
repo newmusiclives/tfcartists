@@ -21,6 +21,74 @@ export interface StationTemplate {
   }>;
 }
 
+/**
+ * Artist Station Template — simplified station for an individual artist.
+ * No complex DJ personalities; plays their catalog + similar artists.
+ */
+export const ARTIST_STATION_TEMPLATE: StationTemplate = {
+  id: "artist-station",
+  name: "Artist Station",
+  genre: "Artist Catalog",
+  formatType: "mixed",
+  tagline: "Your music, your station",
+  description: "A personal radio station showcasing your music alongside similar artists you love.",
+  primaryColor: "#7c3aed",
+  secondaryColor: "#a78bfa",
+  musicEra: "modern",
+  djPresets: [
+    {
+      name: "Auto DJ",
+      tagline: "Your personal curator",
+      bio: "An AI-powered music curator that introduces your songs and similar artists with warmth and authenticity.",
+      traits: "supportive, knowledgeable, fan-focused",
+      voiceDescription: "Warm, friendly, and conversational",
+      colorPrimary: "#7c3aed",
+      vibe: "Personal radio",
+      age: "Ageless",
+      isWeekend: false,
+    },
+  ],
+};
+
+/**
+ * Community Radio Template — for local businesses and towns.
+ */
+export const COMMUNITY_STATION_TEMPLATE: StationTemplate = {
+  id: "community-radio",
+  name: "Community Radio",
+  genre: "Community, Local",
+  formatType: "mixed",
+  tagline: "Your town's soundtrack",
+  description: "Local community radio featuring local artists, town announcements, event calendar, and sponsor messages.",
+  primaryColor: "#047857",
+  secondaryColor: "#34d399",
+  musicEra: "mixed",
+  djPresets: [
+    {
+      name: "Mayor",
+      tagline: "Your community voice",
+      bio: "A friendly, welcoming host who keeps the community connected with local news, events, and great music.",
+      traits: "welcoming, community-minded, informative",
+      voiceDescription: "Warm, neighborly voice with genuine enthusiasm for local happenings",
+      colorPrimary: "#047857",
+      vibe: "Town square",
+      age: "Mid 40s",
+      isWeekend: false,
+    },
+    {
+      name: "Sunset",
+      tagline: "Evening vibes",
+      bio: "Laid-back evening host who winds down the day with mellow tunes and community shout-outs.",
+      traits: "relaxed, grateful, reflective",
+      voiceDescription: "Calm, soothing voice perfect for evening listening",
+      colorPrimary: "#b45309",
+      vibe: "Porch at dusk",
+      age: "Late 30s",
+      isWeekend: false,
+    },
+  ],
+};
+
 export const STATION_TEMPLATES: StationTemplate[] = [
   {
     id: "americana",
@@ -99,4 +167,6 @@ export const STATION_TEMPLATES: StationTemplate[] = [
       { name: "Patsy", tagline: "Honky-tonk queen", bio: "Named after Patsy Cline, she brings class and sass to classic country.", traits: "sassy, knowledgeable, fun", voiceDescription: "Strong Southern accent with playful edge", colorPrimary: "#be123c", vibe: "Honky-tonk Saturday", age: "Mid 40s", isWeekend: false },
     ],
   },
+  ARTIST_STATION_TEMPLATE,
+  COMMUNITY_STATION_TEMPLATE,
 ];

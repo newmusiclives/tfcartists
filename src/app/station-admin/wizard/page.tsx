@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SharedNav } from "@/components/shared-nav";
 import {
@@ -241,6 +241,56 @@ export default function StationWizard() {
   const [createdDjIds, setCreatedDjIds] = useState<string[]>([]);
   const [createdDjOptions, setCreatedDjOptions] = useState<CreatedDJ[]>([]);
   const [djsSaved, setDjsSaved] = useState(false);
+
+  // Resume in-progress setup — check for a station with setupComplete=false
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/stations");
+        const data = await res.json();
+        const stations = data.stations || [];
+        const inProgress = stations.find((s: any) => !s.setupComplete && s.setupStep > 0);
+        if (inProgress) {
+          setStationId(inProgress.id);
+          setIdentity({
+            name: inProgress.name || "",
+            callSign: inProgress.callSign || "",
+            tagline: inProgress.tagline || "",
+            description: inProgress.description || "",
+            genre: inProgress.genre || "Americana",
+            formatType: inProgress.formatType || "americana",
+            musicEra: inProgress.musicEra || "mixed",
+            primaryColor: inProgress.primaryColor || "#b45309",
+            secondaryColor: inProgress.secondaryColor || "#f59e0b",
+            logoUrl: inProgress.logoUrl || "",
+          });
+          setStep(Math.min(inProgress.setupStep, 4));
+          // If past DJs step, load created DJs
+          if (inProgress.setupStep >= 3) {
+            setDjsSaved(true);
+            const djRes = await fetch(`/api/station-djs?stationId=${inProgress.id}`);
+            const djData = await djRes.json();
+            if (djData.djs?.length) {
+              setCreatedDjOptions(djData.djs.map((d: any) => ({
+                id: d.id, name: d.name, colorPrimary: d.colorPrimary, isWeekend: d.isWeekend,
+              })));
+              setCreatedDjIds(djData.djs.map((d: any) => d.id));
+            }
+            // Load clock templates
+            const tplRes = await fetch(`/api/clock-templates?stationId=${inProgress.id}`);
+            const tplData = await tplRes.json();
+            if (tplData.templates?.length) {
+              setClockTemplates(tplData.templates.map((t: any) => ({
+                id: t.id, name: t.name, clockType: t.clockType,
+              })));
+            }
+          }
+        }
+      } catch {
+        // Ignore — fresh start
+      }
+    })();
+  }, []);
 
   // Step 3: Schedule
   const [schedule, setSchedule] = useState<ScheduleSlot[]>(emptySchedule());

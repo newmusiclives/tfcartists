@@ -57,7 +57,7 @@ export default function OperatePage() {
             Run Your Own AI-Powered Radio Station
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-6">
-            Build a real business. Earn up to $100K/year. Launch in minutes.
+            Build a real business. Earn up to $50K/year. Launch in minutes.
           </p>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
             No broadcast license needed. No expensive equipment. Our AI agents handle artist outreach,
@@ -153,9 +153,9 @@ export default function OperatePage() {
           {/* Top stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
             {[
-              { value: "$8,350/mo", label: "Gross Revenue at Capacity" },
-              { value: "~$100K/yr", label: "Annual Earning Potential" },
-              { value: "$3,350/mo", label: "Net Profit After Expenses" },
+              { value: "$9,950/mo", label: "Gross Revenue at Capacity" },
+              { value: "~$50K/yr", label: "Annual Earning Potential" },
+              { value: "$4,150/mo", label: "Net Profit After Expenses" },
             ].map((stat) => (
               <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
                 <div className="text-3xl font-bold mb-1">{stat.value}</div>
@@ -196,10 +196,10 @@ export default function OperatePage() {
               <p className="text-amber-200 text-sm mb-4">20% commission (80% funds artist pool)</p>
               <div className="space-y-2">
                 {[
-                  { tier: "Bronze", price: "$50/mo" },
-                  { tier: "Silver", price: "$100/mo" },
-                  { tier: "Gold", price: "$200/mo" },
-                  { tier: "Platinum", price: "$400/mo" },
+                  { tier: "Bronze", price: "$100/mo" },
+                  { tier: "Silver", price: "$250/mo" },
+                  { tier: "Gold", price: "$400/mo" },
+                  { tier: "Platinum", price: "$500/mo" },
                 ].map((row) => (
                   <div key={row.tier} className="flex items-center justify-between text-sm py-1.5 border-b border-white/10 last:border-0">
                     <span className="font-medium">{row.tier}</span>
@@ -208,13 +208,13 @@ export default function OperatePage() {
                 ))}
               </div>
               <div className="mt-4 pt-3 border-t border-white/20 text-sm font-semibold text-amber-100">
-                At 125 sponsors: ~$4,450/month your commission
+                At 125 sponsors: ~$6,050/month your commission
               </div>
             </div>
           </div>
 
           <p className="text-center text-amber-300 text-sm mt-6">
-            Estimated ~$5K/month in operating expenses (streaming, AI services, platform fees).
+            Estimated ~$5,800/month in operating expenses (AI services ~$400, promoter commissions ~$4,800, hosting ~$300, messaging ~$100, storage ~$50, platform fees ~$150).
           </p>
         </div>
       </section>

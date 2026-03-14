@@ -5,6 +5,8 @@ import { RadioPlayerWrapper } from "@/components/radio-player-wrapper";
 import { SentryInit } from "@/components/sentry-init";
 import { WebVitalsInit } from "@/components/web-vitals-init";
 import { CsrfProvider } from "@/components/csrf-provider";
+import { SessionProvider } from "@/components/session-provider";
+import { ServiceWorkerRegister } from "@/components/sw-register";
 import { StationProvider } from "@/contexts/StationContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 
@@ -98,14 +100,17 @@ export default function RootLayout({
         <SentryInit />
         <WebVitalsInit />
         <CsrfProvider />
+        <ServiceWorkerRegister />
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:bg-amber-700 focus:text-white focus:px-4 focus:py-2 focus:rounded">
           Skip to main content
         </a>
-        <StationProvider>
-          <ToastProvider>
-            <RadioPlayerWrapper>{children}</RadioPlayerWrapper>
-          </ToastProvider>
-        </StationProvider>
+        <SessionProvider>
+          <StationProvider>
+            <ToastProvider>
+              <RadioPlayerWrapper>{children}</RadioPlayerWrapper>
+            </ToastProvider>
+          </StationProvider>
+        </SessionProvider>
       </body>
     </html>
   );

@@ -1,20 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
-import { requireAdmin, requireAuth, getOrgScope } from "@/lib/api/auth";
+import { requireAdmin, optionalAuth, getOrgScope } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
     // Public GET for station switcher, but scoped by org for authenticated users
-    let orgScope = {};
-    try {
-      const session = await requireAuth();
-      if (session) orgScope = getOrgScope(session);
-    } catch {
-      // No auth — return unscoped results
-    }
+    const session = await optionalAuth();
+    const orgScope = session ? getOrgScope(session) : {};
 
     const stations = await prisma.station.findMany({
       where: {

@@ -247,8 +247,8 @@ export default function ManagementTeamPage() {
               <div className="space-y-3">
                 <div className="bg-amber-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 mb-1">Revenue Target</div>
-                  <div className="text-2xl font-bold text-amber-600">$50,000/month</div>
-                  <div className="text-xs text-gray-500">Currently at $26,150 (52%)</div>
+                  <div className="text-2xl font-bold text-amber-600">$10,000/month</div>
+                  <div className="text-xs text-gray-500">Operator gross revenue at capacity: ~$9,950/mo</div>
                 </div>
                 <div className="bg-blue-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 mb-1">Audience Target</div>

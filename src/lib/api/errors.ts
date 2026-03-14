@@ -328,6 +328,11 @@ export function handleApiError(error: unknown, path?: string): NextResponse {
     }
   }
 
+  // Auth error thrown by requireAuth()
+  if (error instanceof Error && (error as any).code === "UNAUTHORIZED") {
+    return unauthorized(error.message);
+  }
+
   // Standard Error
   if (error instanceof Error) {
     return internalServerError(error.message, error);

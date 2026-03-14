@@ -132,7 +132,7 @@ export async function GET(request: NextRequest) {
       artists: station?.maxArtistCapacity || 340,
       sponsors: station?.maxSponsorCapacity || 125,
       listeners: station?.targetDAU || 5000,
-      revenue: 50000,
+      revenue: 10000, // Monthly operator revenue target at capacity ($9,950 rounded)
     };
 
     // Calculate playbook progress

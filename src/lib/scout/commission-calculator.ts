@@ -3,7 +3,7 @@
  *
  * Calculates commissions for scouts based on artist tier payments:
  * - 20% commission for first 3 months
- * - 10% ongoing residual after month 3
+ * - 12% ongoing residual after month 3
  * - $10 bonus per tier upgrade
  * - $2 per tier upgrade influenced by referred listener network
  * - 25% lifetime for prepurchase conversions
@@ -123,7 +123,7 @@ export async function calculateScoutCommission(
 /**
  * Determine commission rate based on discovery type and months since conversion
  * - First 3 months: 20%
- * - After month 3: 10%
+ * - After month 3: 12%
  * - Prepurchase conversion: 25% lifetime
  */
 export function getCommissionRate(
@@ -140,8 +140,8 @@ export function getCommissionRate(
     return 0.2;
   }
 
-  // After month 3: 10%
-  return 0.1;
+  // After month 3: 12% ongoing residual
+  return 0.12;
 }
 
 /**

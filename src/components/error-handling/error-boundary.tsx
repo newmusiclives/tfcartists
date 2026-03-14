@@ -2,10 +2,15 @@
 
 import { Component, ReactNode } from "react";
 import { logger } from "@/lib/logger";
+import { captureException } from "@/lib/sentry-client";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
+  /** A human-readable label for the section (shown in fallback UI) */
+  section?: string;
+  /** Compact mode renders inline instead of full-page */
+  compact?: boolean;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
@@ -38,10 +43,19 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log error to monitoring service
+    const section = this.props.section || "unknown";
+    // Log error to monitoring service with structured data
     logger.error("Error boundary caught an error", {
+      type: "error_boundary",
+      section,
       error: error.message,
       stack: error.stack,
+      componentStack: errorInfo.componentStack,
+    });
+
+    // Report to Sentry on the client side
+    captureException(error, {
+      section,
       componentStack: errorInfo.componentStack,
     });
 
@@ -49,11 +63,26 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     this.props.onError?.(error, errorInfo);
   }
 
+  private handleRetry = () => {
+    this.setState({ hasError: false, error: null });
+  };
+
   render() {
     if (this.state.hasError) {
       // Custom fallback UI or default
       if (this.props.fallback) {
         return this.props.fallback;
+      }
+
+      // Compact mode for dashboard sections
+      if (this.props.compact) {
+        return (
+          <SectionErrorFallback
+            section={this.props.section}
+            error={this.state.error ?? undefined}
+            onRetry={this.handleRetry}
+          />
+        );
       }
 
       return (
@@ -130,5 +159,87 @@ export function ErrorFallback({ error, reset }: { error?: Error; reset?: () => v
         )}
       </div>
     </div>
+  );
+}
+
+/**
+ * Compact error fallback for dashboard sections.
+ * Renders inline (not full-page) with a retry button that resets the boundary.
+ */
+export function SectionErrorFallback({
+  section,
+  error,
+  onRetry,
+}: {
+  section?: string;
+  error?: Error;
+  onRetry?: () => void;
+}) {
+  return (
+    <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+      <div className="flex items-center justify-center w-10 h-10 mx-auto bg-red-100 rounded-full mb-3">
+        <svg
+          className="w-5 h-5 text-red-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
+        </svg>
+      </div>
+      <h3 className="text-sm font-semibold text-red-800 mb-1">
+        {section ? `Failed to load ${section}` : "Something went wrong"}
+      </h3>
+      <p className="text-xs text-red-600 mb-3">
+        This section encountered an error. Other parts of the page are unaffected.
+      </p>
+      {process.env.NODE_ENV === "development" && error && (
+        <p className="text-xs font-mono text-red-500 mb-3 break-all">
+          {error.message}
+        </p>
+      )}
+      {onRetry && (
+        <button
+          onClick={onRetry}
+          className="text-sm bg-red-600 text-white px-4 py-1.5 rounded hover:bg-red-700 transition-colors"
+        >
+          Retry
+        </button>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Convenience wrapper for wrapping dashboard sections with error isolation.
+ * Uses compact mode by default so failures don't take over the whole page.
+ *
+ * @example
+ * ```tsx
+ * <DashboardErrorBoundary section="Schedule">
+ *   <SchedulePanel />
+ * </DashboardErrorBoundary>
+ *
+ * <DashboardErrorBoundary section="Analytics">
+ *   <AnalyticsWidget />
+ * </DashboardErrorBoundary>
+ * ```
+ */
+export function DashboardErrorBoundary({
+  section,
+  children,
+}: {
+  section: string;
+  children: ReactNode;
+}) {
+  return (
+    <ErrorBoundary section={section} compact>
+      {children}
+    </ErrorBoundary>
   );
 }
