@@ -8,6 +8,7 @@
  */
 
 import { auth } from "@/lib/auth/config";
+import type { Session } from "next-auth";
 
 export type UserRole = "admin" | "riley" | "harper" | "elliot" | "cassidy";
 
@@ -18,9 +19,10 @@ function isDemoMode(): boolean {
   );
 }
 
-const DEMO_SESSION = {
+const DEMO_SESSION: Session = {
   user: { id: "demo-admin", name: "Admin (Demo)", role: "admin" },
-} as any;
+  expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+};
 
 /**
  * Get the current session, or null if not authenticated.
@@ -31,8 +33,7 @@ export async function getSession() {
 
 /**
  * Optional auth — returns session if authenticated, null otherwise.
- * Use for GET endpoints that work for both authenticated and anonymous users
- * (e.g., returning org-scoped results when logged in, all results otherwise).
+ * Use for GET endpoints that work for both authenticated and anonymous users.
  */
 export async function optionalAuth() {
   if (isDemoMode()) return DEMO_SESSION;
@@ -97,7 +98,7 @@ export async function requireAdmin() {
  *   const orgScope = getOrgScope(session);
  *   prisma.station.findMany({ where: { ...orgScope, deletedAt: null } });
  */
-export function getOrgScope(session: any): { organizationId?: string } {
+export function getOrgScope(session: Session | null): { organizationId?: string } {
   // Super-admin sees everything
   if (session?.user?.role === "admin" && !session?.user?.organizationId) {
     return {};

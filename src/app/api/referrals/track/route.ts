@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
 import { logger } from "@/lib/logger";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
 // POST: Track a referral event when a new listener registers with a ref code
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit referral tracking
+    const rateLimitResponse = await withRateLimit(request, "api");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const body = await request.json();
     const { listenerId, referralCode } = body;
 

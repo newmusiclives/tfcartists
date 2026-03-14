@@ -8,6 +8,7 @@ import {
   Radio, Music, Users, Mic, Clock, Settings, Building2,
   BarChart3, Megaphone, ArrowRight, Loader2,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface StationData {
   id: string;
@@ -53,7 +54,6 @@ export default function OperatorDashboard() {
         fetch("/api/listeners?limit=1").then((r) => r.json()).catch(() => ({ total: 0 })),
       ]).then(([stationsData, artistsData, sponsorsData, listenersData]) => {
         const stations = stationsData.stations || [];
-        // Auto-redirect new operators with no stations to the setup wizard
         if (stations.length === 0) {
           router.push("/station-admin/wizard");
           return;
@@ -172,7 +172,7 @@ export default function OperatorDashboard() {
 }
 
 function StatCard({ icon: Icon, label, value, href }: {
-  icon: any; label: string; value: number; href: string;
+  icon: LucideIcon; label: string; value: number; href: string;
 }) {
   return (
     <Link href={href} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
@@ -186,7 +186,7 @@ function StatCard({ icon: Icon, label, value, href }: {
 }
 
 function MetricCard({ icon: Icon, label, value, color, href }: {
-  icon: any; label: string; value: number; color: string; href: string;
+  icon: LucideIcon; label: string; value: number; color: string; href: string;
 }) {
   const colors: Record<string, string> = {
     purple: "bg-purple-50 text-purple-700",
@@ -205,7 +205,7 @@ function MetricCard({ icon: Icon, label, value, color, href }: {
 }
 
 function QuickAction({ href, label, icon: Icon }: {
-  href: string; label: string; icon: any;
+  href: string; label: string; icon: LucideIcon;
 }) {
   return (
     <Link

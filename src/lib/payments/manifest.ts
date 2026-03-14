@@ -13,7 +13,7 @@ export interface ManifestCustomer {
   id: string;
   email: string;
   name?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string>;
 }
 
 export interface ManifestSubscription {
@@ -24,7 +24,7 @@ export interface ManifestSubscription {
   currentPeriodStart: Date;
   currentPeriodEnd: Date;
   amount: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string>;
 }
 
 export interface ManifestPaymentIntent {
@@ -33,7 +33,7 @@ export interface ManifestPaymentIntent {
   currency: string;
   status: "succeeded" | "processing" | "failed";
   customerId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string>;
 }
 
 export interface ManifestPayout {
@@ -41,7 +41,20 @@ export interface ManifestPayout {
   amount: number;
   destination: string; // Bank account or external account ID
   status: "pending" | "in_transit" | "paid" | "failed";
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string>;
+}
+
+/** Data payload delivered by Manifest webhook events */
+export interface WebhookEventData {
+  id: string;
+  amount?: number;
+  metadata?: {
+    artistId?: string;
+    sponsorId?: string;
+    tier?: string;
+    type?: string;
+    period?: string;
+  };
 }
 
 class ManifestFinancial {
@@ -104,7 +117,7 @@ class ManifestFinancial {
   async createCustomer(params: {
     email: string;
     name?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, string>;
   }): Promise<ManifestCustomer> {
     logger.info("Creating Manifest customer", { email: params.email });
 
@@ -246,71 +259,6 @@ class ManifestFinancial {
   }
 
   /**
-   * Create a station subscription for an operator
-   */
-  async createStationSubscription(params: {
-    organizationId: string;
-    plan: "starter" | "pro" | "enterprise" | "network";
-    email: string;
-    organizationName: string;
-  }): Promise<{ subscriptionId: string; checkoutUrl: string }> {
-    const planPricing = {
-      starter: { amount: 4900, name: "Starter - $49/month", maxStations: 1 },
-      pro: { amount: 19900, name: "Pro - $199/month", maxStations: 3 },
-      enterprise: { amount: 49900, name: "Enterprise - $499/month", maxStations: 10 },
-      network: { amount: 99900, name: "Network - $999/month", maxStations: 50 },
-    };
-
-    const pricing = planPricing[params.plan];
-
-    logger.info("Creating station subscription", {
-      organizationId: params.organizationId,
-      plan: params.plan,
-    });
-
-    const customer = await this.createCustomer({
-      email: params.email,
-      name: params.organizationName,
-      metadata: {
-        organizationId: params.organizationId,
-        type: "station_operator",
-      },
-    });
-
-    const subscription = await this.request<ManifestSubscription>("/subscriptions", {
-      method: "POST",
-      body: JSON.stringify({
-        customerId: customer.id,
-        planId: `station_${params.plan}`,
-        amount: pricing.amount,
-        currency: "usd",
-        interval: "month",
-        metadata: {
-          organizationId: params.organizationId,
-          plan: params.plan,
-          maxStations: pricing.maxStations,
-          type: "station_subscription",
-        },
-      }),
-    });
-
-    const checkoutUrl = `${this.baseUrl}/checkout/${subscription.id}`;
-
-    // Update organization with Manifest customer ID and plan
-    const { prisma } = await import("@/lib/db");
-    await prisma.organization.update({
-      where: { id: params.organizationId },
-      data: {
-        manifestCustomerId: customer.id,
-        plan: params.plan,
-        maxStations: pricing.maxStations,
-      },
-    });
-
-    return { subscriptionId: subscription.id, checkoutUrl };
-  }
-
-  /**
    * Cancel a subscription
    */
   async cancelSubscription(subscriptionId: string): Promise<void> {
@@ -375,7 +323,7 @@ class ManifestFinancial {
     signature: string
   ): Promise<{
     event: string;
-    data: any;
+    data: WebhookEventData;
   }> {
     // Verify webhook signature
     const webhookSecret = env.MANIFEST_WEBHOOK_SECRET;
@@ -421,7 +369,7 @@ class ManifestFinancial {
   /**
    * Process different webhook event types
    */
-  async processWebhookEvent(eventType: string, data: any): Promise<void> {
+  async processWebhookEvent(eventType: string, data: WebhookEventData): Promise<void> {
     const { prisma } = await import("@/lib/db");
 
     switch (eventType) {
@@ -509,20 +457,6 @@ class ManifestFinancial {
               shares: artist.airplayShares || 1,
             });
           }
-        }
-        break;
-
-      case "subscription.activated":
-        // Station subscription activated — operator plan is live
-        if (data.metadata?.type === "station_subscription" && data.metadata?.organizationId) {
-          await prisma.organization.update({
-            where: { id: data.metadata.organizationId },
-            data: {
-              plan: data.metadata.plan || "starter",
-              maxStations: data.metadata.maxStations || 1,
-            },
-          });
-          logger.info("Station subscription activated", { orgId: data.metadata.organizationId });
         }
         break;
 

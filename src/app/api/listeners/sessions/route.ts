@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
 import { awardXP, checkBadges, XP_ACTIONS } from "@/lib/gamification/xp-engine";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,10 @@ function getTimeSlot(): string {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit session creation
+    const rateLimitResponse = await withRateLimit(request, "api");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const body = await request.json();
     const { listenerId } = body;
 
@@ -49,6 +54,10 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
+    // Rate limit session updates
+    const rateLimitResponse = await withRateLimit(request, "api");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const body = await request.json();
     const { sessionId, duration } = body;
 

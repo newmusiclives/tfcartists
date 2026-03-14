@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
 // POST endpoint for sendBeacon session-end (sendBeacon only supports POST)
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit session-end calls
+    const rateLimitResponse = await withRateLimit(request, "api");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const body = await request.json();
     const { sessionId, duration } = body;
 

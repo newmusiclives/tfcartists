@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
+import { withRateLimit } from "@/lib/rate-limit/limiter";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit public sponsor inquiries
+    const rateLimitResponse = await withRateLimit(request, "auth");
+    if (rateLimitResponse) return rateLimitResponse;
+
     const body = await request.json();
     const {
       businessName,
