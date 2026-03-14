@@ -34,6 +34,59 @@ const EMPTY_CATEGORY_REMAP: Record<string, string[]> = {
   E: ["B", "C", "D"],
 };
 
+// =============================================================================
+// CATEGORY E SCALING
+// =============================================================================
+//
+// As the number of Category E artists grows, E tracks gradually replace
+// D, C, and B slots. A slots are NEVER replaced — they're power rotation.
+//
+// Scale thresholds (by number of active E-category songs):
+//   0-9 songs:     No replacement. E only fills E-designated clock slots.
+//   10-49 songs:   D slots begin converting to E (0% at 10, 100% at 49)
+//   50-99 songs:   C slots begin converting to E (0% at 50, 100% at 99)
+//   100-199 songs: B slots begin converting to E (0% at 100, 100% at 199)
+//
+// PROTECTION RULE: 20% of B, C, and D slots are ALWAYS reserved for the
+// main music library — they will never be replaced by E tracks, regardless
+// of how many E artists exist. This ensures variety and discovery.
+//
+const LIBRARY_PROTECTION_RATE = 0.2; // 20% of B/C/D always from library
+
+interface EScaleConfig {
+  /** Category to potentially replace */
+  category: string;
+  /** E song count where replacement starts */
+  startAt: number;
+  /** E song count where replacement reaches maximum */
+  fullAt: number;
+}
+
+const E_SCALE_TIERS: EScaleConfig[] = [
+  { category: "D", startAt: 10, fullAt: 49 },
+  { category: "C", startAt: 50, fullAt: 99 },
+  { category: "B", startAt: 100, fullAt: 199 },
+];
+
+/**
+ * Calculate the probability that a given B/C/D slot should be replaced
+ * by a Category E track, based on the current E inventory size.
+ * Returns 0 (never replace) to 0.8 (max replacement, respecting 20% protection).
+ */
+function eReplacementProbability(slotCategory: string, eSongCount: number): number {
+  if (slotCategory === "A") return 0; // A is never replaced
+
+  const tier = E_SCALE_TIERS.find(t => t.category === slotCategory);
+  if (!tier) return 0;
+
+  if (eSongCount < tier.startAt) return 0;
+  if (eSongCount >= tier.fullAt) return 1 - LIBRARY_PROTECTION_RATE; // max 80%
+
+  // Linear ramp between startAt and fullAt
+  const progress = (eSongCount - tier.startAt) / (tier.fullAt - tier.startAt);
+  return progress * (1 - LIBRARY_PROTECTION_RATE); // 0% to 80%
+}
+
 interface ClockSlot {
   position: number;
   minute: number;
@@ -157,6 +210,9 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
   let songsAssigned = 0;
   let eFeaturedCounter = 0; // Tracks E-slot count for 1-in-4 featured rotation
 
+  // Category E scaling: count E songs to determine replacement behavior
+  const eSongCount = categoryInventory.get("E") || 0;
+
   for (const slot of clockSlots) {
     const resolved: ResolvedSlot = { ...slot };
 
@@ -171,6 +227,19 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
           const counter = remapCounters.get(slot.category) || 0;
           effectiveCategory = remapOptions[counter % remapOptions.length];
           remapCounters.set(slot.category, counter + 1);
+        }
+      }
+
+      // Category E scaling: B/C/D slots may be replaced by E based on
+      // how many E songs exist. 20% of each category is always protected.
+      if (
+        eSongCount > 0 &&
+        ["B", "C", "D"].includes(effectiveCategory) &&
+        effectiveCategory === slot.category // only replace original slots, not already-remapped ones
+      ) {
+        const replaceProbability = eReplacementProbability(effectiveCategory, eSongCount);
+        if (replaceProbability > 0 && Math.random() < replaceProbability) {
+          effectiveCategory = "E";
         }
       }
 
