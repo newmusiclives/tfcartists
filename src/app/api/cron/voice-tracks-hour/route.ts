@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { runVoiceTracksHour } from "@/lib/cron/voice-tracks-hour-runner";
 import { logCronExecution } from "@/lib/cron/log";
+import { stationToday } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
 
@@ -42,11 +44,37 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Invalid hour (0-23)" }, { status: 400 });
     }
 
+    // Gather songs from already-locked playlists for this DJ today
+    // to prevent cross-hour repeats when processing hours individually
+    const today = stationToday();
+    const lockedPlaylists = await prisma.hourPlaylist.findMany({
+      where: {
+        stationId,
+        djId,
+        airDate: today,
+        hourOfDay: { not: hourOfDay },
+        status: { in: ["locked", "aired"] },
+      },
+      select: { slots: true },
+    });
+
+    const excludeSongIds = new Set<string>();
+    for (const lp of lockedPlaylists) {
+      if (!lp.slots) continue;
+      const lpSlots: Array<{ songId?: string }> = JSON.parse(
+        typeof lp.slots === "string" ? lp.slots : JSON.stringify(lp.slots)
+      );
+      for (const slot of lpSlots) {
+        if (slot.songId) excludeSongIds.add(slot.songId);
+      }
+    }
+
     const result = await runVoiceTracksHour({
       stationId,
       djId,
       clockTemplateId,
       hourOfDay,
+      excludeSongIds,
     });
 
     await logCronExecution({

@@ -309,11 +309,11 @@ export default function NetworkPage() {
               );
             })}
 
-            {/* Future Stations */}
+            {/* Future Stations — available for operators to claim */}
             {futureStations.map((station) => (
               <div
                 key={station.callsign}
-                className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 p-8 opacity-75"
+                className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 p-8 hover:border-amber-300 hover:shadow-md transition-all"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
@@ -329,9 +329,13 @@ export default function NetworkPage() {
                   </div>
                 </div>
                 <p className="text-gray-500 text-sm mb-4">{station.genre}</p>
-                <span className="inline-block bg-gray-200 text-gray-500 text-xs font-semibold px-3 py-1 rounded-full">
-                  Coming Soon
-                </span>
+                <Link
+                  href="/station-admin/wizard"
+                  className="inline-flex items-center space-x-1 bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-amber-200 transition-colors"
+                >
+                  <Radio className="w-3 h-3" />
+                  <span>Operate This Station</span>
+                </Link>
               </div>
             ))}
           </div>
@@ -457,7 +461,7 @@ export default function NetworkPage() {
             <strong>Cassidy</strong>, and <strong>Elliot</strong>
           </p>
           <p className="text-xs mt-4">
-            &copy; 2025 TrueFans RADIO. All rights reserved.
+            &copy; {new Date().getFullYear()} TrueFans RADIO. All rights reserved.
           </p>
         </div>
       </footer>

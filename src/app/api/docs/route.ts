@@ -14,7 +14,7 @@ export async function GET() {
       contact: { email: "admin@truefansradio.com" },
     },
     servers: [
-      { url: process.env.NEXTAUTH_URL || "http://localhost:3000", description: "Current environment" },
+      { url: process.env.NEXTAUTH_URL || "https://truefans-radio.netlify.app", description: "Current environment" },
     ],
     tags: [
       { name: "Auth", description: "Authentication (NextAuth)" },

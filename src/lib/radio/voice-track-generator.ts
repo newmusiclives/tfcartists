@@ -273,9 +273,11 @@ You speak naturally and in character. Keep it conversational and warm.${
  * instead. This prevents mismatches when Railway picks different songs than
  * the HourPlaylist.
  *
- * Set to false once Railway is wired to consume /api/playout/hour.
+ * Default: false — Railway consumes /api/playout/hour and plays the locked
+ * playlist, so voice tracks should reference actual song titles.
+ * Set VOICE_TRACK_SAFE_MODE=true to revert to generic mode if needed.
  */
-const RAILWAY_SAFE_MODE = process.env.VOICE_TRACK_SAFE_MODE !== "false";
+const RAILWAY_SAFE_MODE = process.env.VOICE_TRACK_SAFE_MODE === "true";
 
 function buildUserPrompt(
   trackType: string,

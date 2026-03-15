@@ -168,10 +168,16 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
   });
 
   // 3. Get recently played songs for cooldown filtering
+  //    TWO sources: TrackPlayback records (from actual airplay) AND
+  //    already-locked playlists for today (prevents repeats even when
+  //    Railway hasn't written playback records back to the database).
   const cooldownHours = Math.max(...Object.values(REPEAT_COOLDOWN));
   const cooldownSince = new Date(airDate);
   cooldownSince.setHours(hourOfDay - cooldownHours, 0, 0, 0);
 
+  const recentPlayMap = new Map<string, Date>();
+
+  // Source A: TrackPlayback records (actual airplay history)
   const recentPlays = await prisma.trackPlayback.findMany({
     where: {
       djId,
@@ -179,13 +185,41 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
     },
     select: { trackId: true, playedAt: true },
   });
-
-  const recentPlayMap = new Map<string, Date>();
   for (const play of recentPlays) {
     if (play.trackId) {
       const existing = recentPlayMap.get(play.trackId);
       if (!existing || play.playedAt > existing) {
         recentPlayMap.set(play.trackId, play.playedAt);
+      }
+    }
+  }
+
+  // Source B: Already-locked playlists for today — prevents repeats across
+  //          adjacent hours even when TrackPlayback records don't exist yet.
+  //          This is the PRIMARY repeat prevention for freshly-built playlists.
+  const lockedPlaylists = await prisma.hourPlaylist.findMany({
+    where: {
+      stationId,
+      airDate: new Date(new Date(airDate).setHours(0, 0, 0, 0)),
+      status: { in: ["locked", "aired", "draft"] },
+      hourOfDay: { not: hourOfDay }, // exclude current hour (we're rebuilding it)
+    },
+    select: { slots: true, hourOfDay: true },
+  });
+  for (const lp of lockedPlaylists) {
+    if (!lp.slots) continue;
+    const lpSlots: Array<{ songId?: string }> = JSON.parse(
+      typeof lp.slots === "string" ? lp.slots : JSON.stringify(lp.slots)
+    );
+    // Treat locked-playlist songs as "played" at the start of that hour
+    const playedAt = new Date(airDate);
+    playedAt.setHours(lp.hourOfDay, 0, 0, 0);
+    for (const slot of lpSlots) {
+      if (slot.songId) {
+        const existing = recentPlayMap.get(slot.songId);
+        if (!existing || playedAt > existing) {
+          recentPlayMap.set(slot.songId, playedAt);
+        }
       }
     }
   }

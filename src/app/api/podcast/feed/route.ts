@@ -130,7 +130,8 @@ ${itemsXml}
       },
     });
   } catch (error) {
-    console.error("[Podcast Feed]", error);
+    const { logger } = await import("@/lib/logger");
+    logger.error("Podcast feed generation failed", { error: error instanceof Error ? error.message : String(error) });
     return new Response("<error>Internal server error</error>", {
       status: 500,
       headers: { "Content-Type": "application/xml" },

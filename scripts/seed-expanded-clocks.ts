@@ -40,11 +40,15 @@ interface ClockSlot {
  *
  * songCategories must be exactly 13 entries matching those positions.
  */
-function buildPattern(songCategories: SlotCategory[], tohNotes: string): ClockSlot[] {
+function buildPattern(songCategories: SlotCategory[], tohNotes: string, isFirstHour: boolean = true, isLastHour: boolean = true): ClockSlot[] {
   // Song positions mapped to their minute marks in the hour
   // Positions: 2(0), 3(4), 5(9), 6(13), 8(18), 10(23), 12(28), 13(32), 16(38), 17(42), 20(48), 21(52), 23(57)
   const pattern: ClockSlot[] = [
-    { position: 1,  minute: 0,  duration: 2,    category: "TOH",     type: "station_id",  notes: tohNotes },
+    // Full show opening (station_id/TOH) only in the first hour of a DJ's shift.
+    // Hours 2 & 3 get a short sweeper instead.
+    isFirstHour
+      ? { position: 1,  minute: 0,  duration: 2,    category: "TOH",     type: "station_id",  notes: tohNotes }
+      : { position: 1,  minute: 0,  duration: 0.5,  category: "Imaging", type: "sweeper",     notes: "Hour sweeper — quick station ID (not full show open)" },
     { position: 2,  minute: 0,  duration: 4,    category: songCategories[0],  type: "song",        notes: "Opener" },
     { position: 3,  minute: 4,  duration: 4,    category: songCategories[1],  type: "song",        notes: "Second song" },
     { position: 4,  minute: 8,  duration: 0.25, category: "DJ",      type: "voice_break", notes: "DJ break 1" },
@@ -74,7 +78,7 @@ function buildPattern(songCategories: SlotCategory[], tohNotes: string): ClockSl
     { position: 25, minute: 56, duration: 1,    category: "Sponsor", type: "ad",          notes: "Sponsor break 3" },
     { position: 26, minute: 57, duration: 1,    category: "Promo",   type: "promo",       notes: "Station promo 3" },
     { position: 27, minute: 58, duration: 4,    category: songCategories[11], type: "song",        notes: "Penultimate" },
-    { position: 28, minute: 59, duration: 1,    category: songCategories[12], type: "song",        notes: "Closer" },
+    { position: 28, minute: 59, duration: 1,    category: songCategories[12], type: "song",        notes: isLastHour ? "Show closer" : "Hour closer" },
   ];
   return pattern;
 }
@@ -93,6 +97,10 @@ interface ClockDef {
   /** 13 song categories matching the 13 song slots in buildPattern */
   songCategories: SlotCategory[];
   tohNotes: string;
+  /** True for the first hour of a DJ's shift — gets full show opening. Default true. */
+  isFirstHour?: boolean;
+  /** True for the last hour of a DJ's shift — gets show closing. Default true. */
+  isLastHour?: boolean;
 }
 
 const clockDefs: ClockDef[] = [
@@ -120,6 +128,7 @@ const clockDefs: ClockDef[] = [
     // Actually per plan: 4A 2B 2C 2D 1E = 11 songs. 13 slots means plan mix is approximate.
     // Adjust to 13: 5A, 2B, 2C, 2D, 2E = 13
     tohNotes: "Morning TOH — imaging voice over music bed",
+    isLastHour: false,
   },
 
   // Hour 2 (7am) — "Morning Drive Peak"
@@ -128,6 +137,8 @@ const clockDefs: ClockDef[] = [
     name: "Morning Drive Peak",
     description: "7am peak commute — maximum energy, all hits and fast tracks",
     clockType: "morning_drive_peak",
+    isFirstHour: false,
+    isLastHour: false,
     tempo: "upbeat",
     energyLevel: "high",
     hitsPerHour: 5,
@@ -145,6 +156,7 @@ const clockDefs: ClockDef[] = [
     name: "Morning Wind-Down",
     description: "8am wind-down — balanced mix, variety before handoff to Loretta",
     clockType: "morning_winddown",
+    isFirstHour: false,
     tempo: "moderate",
     energyLevel: "medium",
     hitsPerHour: 3,
@@ -175,6 +187,7 @@ const clockDefs: ClockDef[] = [
     songCategories: ["A",   "B",   "A",    "B",    "C",    "E",   "A",   "B",   "A",    "E",    "C",   "A",   "B"],
     // Tally: A=5, B=4, C=2, D=0, E=2 — close to 4A 3B 2C 0D 2E (13 slots = +1A +1B)
     tohNotes: "Midday TOH — imaging voice over music bed",
+    isLastHour: false,
   },
 
   // Hour 2 (10am) — "Midday Cruise"
@@ -183,6 +196,8 @@ const clockDefs: ClockDef[] = [
     name: "Midday Cruise",
     description: "10am settled mid-morning — balanced, easy listening",
     clockType: "midday_cruise",
+    isFirstHour: false,
+    isLastHour: false,
     tempo: "moderate",
     energyLevel: "medium",
     hitsPerHour: 3,
@@ -200,6 +215,7 @@ const clockDefs: ClockDef[] = [
     name: "Pre-Lunch Mellow",
     description: "11am winding toward lunch — laid-back, deeper cuts",
     clockType: "midday_mellow",
+    isFirstHour: false,
     tempo: "moderate",
     energyLevel: "low",
     hitsPerHour: 2,
@@ -221,6 +237,7 @@ const clockDefs: ClockDef[] = [
     name: "Lunch Hour Energy",
     description: "12pm lunch break — energy boost with fast and familiar tracks",
     clockType: "afternoon_lunch",
+    isLastHour: false,
     tempo: "upbeat",
     energyLevel: "high",
     hitsPerHour: 4,
@@ -238,6 +255,8 @@ const clockDefs: ClockDef[] = [
     name: "Afternoon Groove",
     description: "1pm post-lunch groove — smooth, medium tempo",
     clockType: "afternoon_groove",
+    isFirstHour: false,
+    isLastHour: false,
     tempo: "moderate",
     energyLevel: "medium",
     hitsPerHour: 3,
@@ -255,6 +274,7 @@ const clockDefs: ClockDef[] = [
     name: "Deep Afternoon",
     description: "2pm deep dive — slower tracks, storytelling, indie gems",
     clockType: "afternoon_deep",
+    isFirstHour: false,
     tempo: "laid_back",
     energyLevel: "low",
     hitsPerHour: 2,
@@ -276,6 +296,7 @@ const clockDefs: ClockDef[] = [
     name: "Drive Time Launch",
     description: "3pm commute begins — big energy, familiar hits",
     clockType: "evening_launch",
+    isLastHour: false,
     tempo: "upbeat",
     energyLevel: "high",
     hitsPerHour: 5,
@@ -293,6 +314,8 @@ const clockDefs: ClockDef[] = [
     name: "Rush Hour",
     description: "4pm peak drive time — highest energy of the day, all bangers",
     clockType: "evening_rush",
+    isFirstHour: false,
+    isLastHour: false,
     tempo: "upbeat",
     energyLevel: "high",
     hitsPerHour: 4,
@@ -310,6 +333,7 @@ const clockDefs: ClockDef[] = [
     name: "Evening Unwind",
     description: "5pm winding down — reflective, deeper tracks before automation",
     clockType: "evening_unwind",
+    isFirstHour: false,
     tempo: "moderate",
     energyLevel: "medium",
     hitsPerHour: 2,
@@ -384,7 +408,7 @@ async function main() {
   // 4. Create 12 new clock templates
   const templateMap = new Map<string, string>(); // clockType → template id
   for (const def of clockDefs) {
-    const pattern = buildPattern(def.songCategories, def.tohNotes);
+    const pattern = buildPattern(def.songCategories, def.tohNotes, def.isFirstHour !== false, def.isLastHour !== false);
     const template = await prisma.clockTemplate.create({
       data: {
         stationId: station.id,

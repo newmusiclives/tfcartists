@@ -18,6 +18,8 @@ import {
   Paintbrush,
   Megaphone,
   Timer,
+  RefreshCw,
+  Activity,
 } from "lucide-react";
 
 interface Station {
@@ -130,6 +132,13 @@ const actionCards = [
 export default function StationAdminHub() {
   const [stations, setStations] = useState<Station[]>([]);
   const [loading, setLoading] = useState(true);
+  const [regenerating, setRegenerating] = useState(false);
+  const [regenResult, setRegenResult] = useState<string | null>(null);
+  const [streamHealth, setStreamHealth] = useState<{
+    healthy: boolean;
+    latencyMs: number;
+    nowPlaying?: string;
+  } | null>(null);
 
   useEffect(() => {
     fetch("/api/stations")
@@ -137,7 +146,51 @@ export default function StationAdminHub() {
       .then((data) => setStations(data.stations || []))
       .catch(() => {})
       .finally(() => setLoading(false));
+
+    // Check stream health
+    fetch("/api/now-playing")
+      .then((r) => r.json())
+      .then((data) => {
+        setStreamHealth({
+          healthy: data.status === "on-air" || !!data.title,
+          latencyMs: 0,
+          nowPlaying: data.title ? `${data.title} — ${data.artist || ""}` : undefined,
+        });
+      })
+      .catch(() => setStreamHealth({ healthy: false, latencyMs: 0 }));
   }, []);
+
+  async function handleRegenerate() {
+    if (regenerating) return;
+    setRegenerating(true);
+    setRegenResult(null);
+    try {
+      const res = await fetch("/api/hour-playlists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ regenerateToday: true }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setRegenResult(`Built ${data.playlistsBuilt || data.songsAssigned || 0} playlists`);
+      } else {
+        // Fallback: trigger via cron endpoint
+        const cronRes = await fetch("/api/cron/voice-tracks-daily", {
+          headers: { Authorization: `Bearer ${prompt("Enter CRON_SECRET:")}` },
+        });
+        if (cronRes.ok) {
+          const data = await cronRes.json();
+          setRegenResult(`${data.hoursProcessed || 0} hours processed`);
+        } else {
+          setRegenResult("Failed — check CRON_SECRET");
+        }
+      }
+    } catch {
+      setRegenResult("Failed to regenerate");
+    } finally {
+      setRegenerating(false);
+    }
+  }
 
   const primary = stations[0];
 
@@ -226,6 +279,59 @@ export default function StationAdminHub() {
             </p>
           </div>
         )}
+
+        {/* Stream Health + Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          {/* Stream Health */}
+          <div className="bg-white rounded-xl p-5 shadow-sm border">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Activity className={`w-5 h-5 ${streamHealth?.healthy ? "text-green-500" : "text-red-500"}`} />
+                <div>
+                  <h3 className="font-semibold text-gray-900 text-sm">Stream Status</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {streamHealth === null
+                      ? "Checking..."
+                      : streamHealth.healthy
+                      ? streamHealth.nowPlaying || "On Air"
+                      : "Off Air — no playlist for this hour"}
+                  </p>
+                </div>
+              </div>
+              {streamHealth !== null && (
+                <span
+                  className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                    streamHealth.healthy
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {streamHealth.healthy ? "LIVE" : "DOWN"}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Regenerate Playlists */}
+          <div className="bg-white rounded-xl p-5 shadow-sm border">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-gray-900 text-sm">Today&apos;s Playlists</h3>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {regenResult || "Rebuild all DJ playlists for today"}
+                </p>
+              </div>
+              <button
+                onClick={handleRegenerate}
+                disabled={regenerating}
+                className="bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+              >
+                <RefreshCw className={`w-4 h-4 ${regenerating ? "animate-spin" : ""}`} />
+                {regenerating ? "Building..." : "Regenerate"}
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Action Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

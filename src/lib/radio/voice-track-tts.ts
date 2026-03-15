@@ -5,7 +5,7 @@
 
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
+import { mixVoiceWithMusicBed, trimSilence } from "@/lib/radio/audio-mixer";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
@@ -244,6 +244,9 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
           voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
         }
 
+        // Trim leading/trailing silence from TTS output for tighter stream flow
+        voicePcm = trimSilence(voicePcm);
+
         // Boost voice, then mix with bed underneath
         const boostedPcm = amplifyPcm(voicePcm, 2.0);
         const mixedPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
@@ -270,21 +273,23 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
           },
         });
       } else {
-        // No music bed — generate as before
-        let buffer: Buffer;
-        let ext: string;
+        // No music bed — generate as PCM, trim silence, save as WAV
+        let voicePcm: Buffer;
 
         if (provider === "gemini") {
-          ({ buffer, ext } = await generateWithGemini(vt.scriptText, voice, voiceDirection));
+          const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
+          voicePcm = buffer.subarray(44); // skip WAV header
         } else {
-          ({ buffer, ext } = await generateWithOpenAI(vt.scriptText, voice));
+          voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
         }
 
-        const filename = `vt-${vt.id}.${ext}`;
-        const audioFilePath = saveAudioFile(buffer, "voice-tracks", filename);
+        // Trim leading/trailing silence for tighter stream flow
+        voicePcm = trimSilence(voicePcm);
 
-        const wordCount = vt.scriptText.split(/\s+/).length;
-        const audioDuration = Math.round((wordCount / 150) * 60 * 10) / 10;
+        const wavBuffer = pcmToWav(voicePcm);
+        const filename = `vt-${vt.id}.wav`;
+        const audioFilePath = saveAudioFile(wavBuffer, "voice-tracks", filename);
+        const audioDuration = Math.round((voicePcm.length / 48000) * 10) / 10;
 
         await prisma.voiceTrack.update({
           where: { id: vt.id },
@@ -390,6 +395,9 @@ export async function generateFeatureAudio(
           voicePcm = await generatePcmWithOpenAI(fc.content, voice);
         }
 
+        // Trim silence for tighter stream flow
+        voicePcm = trimSilence(voicePcm);
+
         const boostedPcm = amplifyPcm(voicePcm, 2.0);
         const mixedPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
@@ -408,18 +416,21 @@ export async function generateFeatureAudio(
           data: { audioFilePath, audioDuration },
         });
       } else {
-        let buffer: Buffer;
-        let ext: string;
+        // No music bed — generate as PCM, trim silence, save as WAV
+        let voicePcm: Buffer;
         if (provider === "gemini") {
-          ({ buffer, ext } = await generateWithGemini(fc.content, voice, featureVoiceDirection));
+          const { buffer } = await generateWithGemini(fc.content, voice, featureVoiceDirection);
+          voicePcm = buffer.subarray(44);
         } else {
-          ({ buffer, ext } = await generateWithOpenAI(fc.content, voice));
+          voicePcm = await generatePcmWithOpenAI(fc.content, voice);
         }
 
-        const filename = `fc-${fc.id}.${ext}`;
-        const audioFilePath = saveAudioFile(buffer, "features", filename);
-        const wordCount = fc.content.split(/\s+/).length;
-        const audioDuration = Math.round((wordCount / 150) * 60 * 10) / 10;
+        voicePcm = trimSilence(voicePcm);
+
+        const wavBuffer = pcmToWav(voicePcm);
+        const filename = `fc-${fc.id}.wav`;
+        const audioFilePath = saveAudioFile(wavBuffer, "features", filename);
+        const audioDuration = Math.round((voicePcm.length / 48000) * 10) / 10;
 
         await prisma.featureContent.update({
           where: { id: fc.id },

@@ -213,6 +213,44 @@ function applyFades(pcm: Buffer, sampleRate: number, fadeInMs: number, fadeOutMs
 }
 
 /**
+ * Trim leading and trailing silence from 16-bit PCM audio.
+ * Silence is defined as samples below the given threshold (in 16-bit range).
+ * Preserves a small pad on each end to avoid clipping attack transients.
+ */
+export function trimSilence(
+  pcm: Buffer,
+  options: { threshold?: number; padSamples?: number } = {}
+): Buffer {
+  const { threshold = 300, padSamples = 480 } = options; // 300 ≈ -40dBFS, 480 = 20ms at 24kHz
+  const numSamples = pcm.length / 2;
+  if (numSamples === 0) return pcm;
+
+  // Find first non-silent sample
+  let start = 0;
+  for (let i = 0; i < numSamples; i++) {
+    if (Math.abs(pcm.readInt16LE(i * 2)) > threshold) {
+      start = i;
+      break;
+    }
+  }
+
+  // Find last non-silent sample
+  let end = numSamples - 1;
+  for (let i = numSamples - 1; i >= start; i--) {
+    if (Math.abs(pcm.readInt16LE(i * 2)) > threshold) {
+      end = i;
+      break;
+    }
+  }
+
+  // Add small pad to avoid clipping transients, clamped to buffer bounds
+  start = Math.max(0, start - padSamples);
+  end = Math.min(numSamples - 1, end + padSamples);
+
+  return pcm.subarray(start * 2, (end + 1) * 2);
+}
+
+/**
  * High-level: mix voice PCM with a music bed file.
  *
  * Reads the music bed WAV, resamples to 24kHz mono, loops to match voice duration,

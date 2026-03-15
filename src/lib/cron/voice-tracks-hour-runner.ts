@@ -62,32 +62,54 @@ export async function runVoiceTracksHour(params: {
   };
 
   try {
-    // 1. Build playlist
-    const playlist = await buildHourPlaylist({
-      stationId,
-      djId,
-      clockTemplateId,
-      airDate,
-      hourOfDay,
-      excludeSongIds,
+    // Check if a locked playlist already exists — don't overwrite it
+    const normalizedDate = new Date(airDate);
+    normalizedDate.setHours(0, 0, 0, 0);
+    const existingLocked = await prisma.hourPlaylist.findFirst({
+      where: {
+        stationId,
+        djId,
+        airDate: normalizedDate,
+        hourOfDay,
+        status: { in: ["locked", "aired"] },
+      },
     });
-    result.playlistBuilt = true;
 
-    // 2. Lock the playlist
-    await prisma.hourPlaylist.update({
-      where: { id: playlist.hourPlaylistId },
-      data: { status: "locked" },
-    });
+    let playlistId: string;
+
+    if (existingLocked) {
+      // Already locked — skip rebuild, just ensure voice tracks + audio exist
+      playlistId = existingLocked.id;
+      result.playlistBuilt = true;
+    } else {
+      // 1. Build playlist
+      const playlist = await buildHourPlaylist({
+        stationId,
+        djId,
+        clockTemplateId,
+        airDate,
+        hourOfDay,
+        excludeSongIds,
+      });
+      playlistId = playlist.hourPlaylistId;
+      result.playlistBuilt = true;
+
+      // 2. Lock the playlist
+      await prisma.hourPlaylist.update({
+        where: { id: playlistId },
+        data: { status: "locked" },
+      });
+    }
 
     // 3. Generate voice track scripts
-    const scripts = await generateVoiceTrackScripts(playlist.hourPlaylistId);
+    const scripts = await generateVoiceTrackScripts(playlistId);
     result.scriptsGenerated = scripts.generated;
     if (scripts.errors.length > 0) {
       result.errors.push(...scripts.errors);
     }
 
     // 4. Generate voice track audio
-    const audio = await generateVoiceTrackAudio(playlist.hourPlaylistId);
+    const audio = await generateVoiceTrackAudio(playlistId);
     result.audioGenerated = audio.generated;
     if (audio.errors.length > 0) {
       result.errors.push(...audio.errors);
@@ -95,7 +117,7 @@ export async function runVoiceTracksHour(params: {
 
     // 5. Generate feature audio (features were linked during daily cron)
     const featureAudio = await generateFeatureAudio(
-      playlist.hourPlaylistId,
+      playlistId,
       stationId,
       djId,
     );

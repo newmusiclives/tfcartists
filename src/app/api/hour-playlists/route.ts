@@ -4,6 +4,7 @@ import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { buildHourPlaylist } from "@/lib/radio/playlist-builder";
 import { requireAuth } from "@/lib/api/auth";
 import { verifyStationAccess } from "@/lib/db-scoped";
+import { stationToday, stationDayType } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +50,62 @@ export async function POST(request: NextRequest) {
     if (!session) return unauthorized();
 
     const body = await request.json();
+
+    // Bulk regeneration mode: build all playlists for today
+    if (body.regenerateToday) {
+      const station = await prisma.station.findFirst({ where: { isActive: true } });
+      if (!station) return NextResponse.json({ error: "No active station" }, { status: 404 });
+
+      const today = stationToday();
+      const dayType = stationDayType();
+
+      const assignments = await prisma.clockAssignment.findMany({
+        where: {
+          stationId: station.id,
+          isActive: true,
+          dayType: { in: [dayType, "all"] },
+        },
+        include: { dj: { select: { id: true, name: true, isActive: true } } },
+        orderBy: { timeSlotStart: "asc" },
+      });
+
+      const djUsedSongs = new Map<string, Set<string>>();
+      let playlistsBuilt = 0;
+
+      for (const assignment of assignments) {
+        if (!assignment.dj?.isActive) continue;
+        const startHour = parseInt(assignment.timeSlotStart.split(":")[0], 10);
+        const endHour = parseInt(assignment.timeSlotEnd.split(":")[0], 10);
+
+        if (!djUsedSongs.has(assignment.djId)) djUsedSongs.set(assignment.djId, new Set());
+        const excludeSongIds = djUsedSongs.get(assignment.djId)!;
+
+        for (let hour = startHour; hour < endHour; hour++) {
+          // Skip already locked
+          const existing = await prisma.hourPlaylist.findFirst({
+            where: { stationId: station.id, djId: assignment.djId, airDate: today, hourOfDay: hour, status: { in: ["locked", "aired"] } },
+          });
+          if (existing) { playlistsBuilt++; continue; }
+
+          const playlist = await buildHourPlaylist({
+            stationId: station.id,
+            djId: assignment.djId,
+            clockTemplateId: assignment.clockTemplateId,
+            airDate: today,
+            hourOfDay: hour,
+            excludeSongIds,
+          });
+          for (const slot of playlist.slots) { if (slot.songId) excludeSongIds.add(slot.songId); }
+
+          await prisma.hourPlaylist.update({ where: { id: playlist.hourPlaylistId }, data: { status: "locked" } });
+          playlistsBuilt++;
+        }
+      }
+
+      return NextResponse.json({ success: true, playlistsBuilt, date: today.toISOString().split("T")[0] });
+    }
+
+    // Single-hour mode
     const { stationId, djId, clockTemplateId, airDate, hourOfDay } = body;
 
     if (!stationId || !djId || !clockTemplateId || !airDate || hourOfDay === undefined) {

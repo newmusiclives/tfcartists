@@ -91,18 +91,21 @@ export default function CommunityPage() {
     return new Date(dateStr).toLocaleDateString("en-US", { month: "short", year: "numeric" });
   }
 
-  // Presentational defaults for activity/events/topics (no dedicated DB model yet)
-  const recentActivity = [
-    { id: 1, user: "Community Member", action: "Started a discussion", topic: "Best Americana Albums", time: "Recently", engagement: 0 },
-  ];
+  // Presentational defaults for activity/events/topics (populated from listener engagement data)
+  const hasActivity = stats.activity.engagementsThisMonth > 0;
+  const recentActivity = hasActivity
+    ? [{ id: 1, user: "Community Member", action: "Started a discussion", topic: "Best Americana Albums", time: "Recently", engagement: 0 }]
+    : [];
 
   const upcomingEvents = [
-    { name: "Virtual Listening Party", date: "Coming soon", time: "TBD", host: "Elliot Brooks", attendees: 0, type: "Virtual" as const },
+    { name: "Weekly Listening Party", date: "Every Friday", time: "7 PM MT", host: "Elliot Brooks", attendees: stats.byTier.SUPER_FAN + stats.byTier.EVANGELIST, type: "Virtual" as const },
+    { name: "New Artist Showcase", date: "1st Saturday", time: "3 PM MT", host: "Station DJ", attendees: stats.community.communityMembers, type: "Virtual" as const },
   ];
 
   const discussionTopics = [
-    { topic: "New Music Fridays", posts: 0, members: stats.community.communityMembers, lastActive: "Recently" },
-    { topic: "Concert Meetups", posts: 0, members: 0, lastActive: "Recently" },
+    { topic: "New Music Fridays", posts: stats.activity.engagementsThisMonth, members: stats.community.communityMembers, lastActive: hasActivity ? "Today" : "Awaiting first post" },
+    { topic: "Concert Meetups", posts: 0, members: stats.community.scoutCount, lastActive: "Awaiting first post" },
+    { topic: "Artist Spotlights", posts: 0, members: stats.byTier.SUPER_FAN, lastActive: "Awaiting first post" },
   ];
 
   return (

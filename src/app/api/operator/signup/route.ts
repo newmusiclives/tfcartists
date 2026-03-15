@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
+import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
@@ -101,18 +102,23 @@ export async function POST(request: NextRequest) {
     });
 
     // Send verification email
-    const verifyUrl = `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/operator/verify-email?token=${result.verifyToken}`;
-    try {
-      const { messageDelivery } = await import("@/lib/messaging/delivery-service");
-      await messageDelivery.send({
-        to: email,
-        channel: "email",
-        subject: "Verify your email — TrueFans RADIO",
-        content: `Welcome to TrueFans RADIO!\n\nHi ${name},\n\nPlease verify your email by visiting this link:\n\n${verifyUrl}\n\nThis link expires in 24 hours.\n\n— TrueFans RADIO`,
-        artistName: name,
-      });
-    } catch {
-      console.error("[signup] Failed to send verification email");
+    const baseUrl = process.env.NEXTAUTH_URL;
+    if (!baseUrl) {
+      logger.error("NEXTAUTH_URL not set — cannot send verification email");
+    } else {
+      const verifyUrl = `${baseUrl}/api/operator/verify-email?token=${result.verifyToken}`;
+      try {
+        const { messageDelivery } = await import("@/lib/messaging/delivery-service");
+        await messageDelivery.send({
+          to: email,
+          channel: "email",
+          subject: "Verify your email — TrueFans RADIO",
+          content: `Welcome to TrueFans RADIO!\n\nHi ${name},\n\nPlease verify your email by visiting this link:\n\n${verifyUrl}\n\nThis link expires in 24 hours.\n\n— TrueFans RADIO`,
+          artistName: name,
+        });
+      } catch (err) {
+        logger.error("Failed to send verification email", { error: err instanceof Error ? err.message : String(err) });
+      }
     }
 
     return NextResponse.json(

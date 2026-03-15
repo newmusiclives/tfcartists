@@ -89,6 +89,13 @@ export const metadata: Metadata = {
   },
 };
 
+// GoHighLevel Chat Widget ID — set in GHL > Sites > Chat Widget > Install
+const GHL_WIDGET_ID = process.env.NEXT_PUBLIC_GHL_WIDGET_ID || "";
+
+// Analytics — GoHighLevel tracking or Google Analytics
+const GHL_TRACKING_ID = process.env.NEXT_PUBLIC_GHL_TRACKING_ID || "";
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -96,6 +103,30 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* GoHighLevel Tracking Script */}
+        {GHL_TRACKING_ID && (
+          <script
+            async
+            src={`https://link.msgsndr.com/js/tracking.js?v=${GHL_TRACKING_ID}`}
+          />
+        )}
+
+        {/* Google Analytics (fallback if no GHL tracking) */}
+        {GA_MEASUREMENT_ID && !GHL_TRACKING_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
+              }}
+            />
+          </>
+        )}
+      </head>
       <body className={inter.className}>
         <SentryInit />
         <WebVitalsInit />
@@ -111,6 +142,16 @@ export default function RootLayout({
             </ToastProvider>
           </StationProvider>
         </SessionProvider>
+
+        {/* GoHighLevel Live Chat Widget */}
+        {GHL_WIDGET_ID && (
+          <script
+            src="https://widgets.leadconnectorhq.com/loader.js"
+            data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
+            data-widget-id={GHL_WIDGET_ID}
+            async
+          />
+        )}
       </body>
     </html>
   );

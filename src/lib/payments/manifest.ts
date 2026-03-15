@@ -259,6 +259,66 @@ class ManifestFinancial {
   }
 
   /**
+   * Create a station operator subscription
+   */
+  async createStationSubscription(params: {
+    organizationId: string;
+    plan: string;
+    email: string;
+    organizationName: string;
+  }): Promise<{ subscriptionId: string; checkoutUrl: string }> {
+    const planPricing: Record<string, { amount: number; name: string }> = {
+      pro: { amount: 29900, name: "Pro - $299/month" },
+      enterprise: { amount: 99900, name: "Enterprise - $999/month" },
+      network: { amount: 249900, name: "Network - $2,499/month" },
+    };
+
+    const pricing = planPricing[params.plan] || planPricing.pro;
+
+    logger.info("Creating station subscription", {
+      organizationId: params.organizationId,
+      plan: params.plan,
+    });
+
+    const customer = await this.createCustomer({
+      email: params.email,
+      name: params.organizationName,
+      metadata: {
+        organizationId: params.organizationId,
+        type: "operator",
+      },
+    });
+
+    const subscription = await this.request<ManifestSubscription>("/subscriptions", {
+      method: "POST",
+      body: JSON.stringify({
+        customerId: customer.id,
+        planId: `station_${params.plan}`,
+        amount: pricing.amount,
+        currency: "usd",
+        interval: "month",
+        metadata: {
+          organizationId: params.organizationId,
+          plan: params.plan,
+          type: "station",
+        },
+      }),
+    });
+
+    const checkoutUrl = `${this.baseUrl}/checkout/${subscription.id}`;
+
+    logger.info("Station subscription created", {
+      subscriptionId: subscription.id,
+      organizationId: params.organizationId,
+    });
+
+    return {
+      subscriptionId: subscription.id,
+      checkoutUrl,
+    };
+  }
+
+  /**
    * Cancel a subscription
    */
   async cancelSubscription(subscriptionId: string): Promise<void> {
@@ -382,12 +442,13 @@ class ManifestFinancial {
           if (artist?.email) {
             const tierShares: Record<string, number> = { TIER_5: 5, TIER_20: 25, TIER_50: 75, TIER_120: 200 };
             const tierPrices: Record<string, number> = { TIER_5: 5, TIER_20: 20, TIER_50: 50, TIER_120: 120 };
+            const tier = data.metadata.tier || "TIER_5";
             notifySubscriptionActivated({
               email: artist.email,
               name: artist.name,
-              tier: data.metadata.tier || "TIER_5",
-              amount: tierPrices[data.metadata.tier] || 5,
-              shares: tierShares[data.metadata.tier] || 5,
+              tier,
+              amount: tierPrices[tier] || 5,
+              shares: tierShares[tier] || 5,
             });
           }
         }
@@ -398,12 +459,14 @@ class ManifestFinancial {
 
         // Update subscription status in database
         if (data.metadata?.artistId) {
-          await prisma.artist.update({
-            where: { id: data.metadata.artistId },
-            data: {
-              airplayTier: data.metadata.tier,
-            },
-          });
+          const validTiers = ["FREE", "TIER_5", "TIER_20", "TIER_50", "TIER_120"] as const;
+          const tier = data.metadata.tier as typeof validTiers[number] | undefined;
+          if (tier && validTiers.includes(tier)) {
+            await prisma.artist.update({
+              where: { id: data.metadata.artistId },
+              data: { airplayTier: tier },
+            });
+          }
         }
         break;
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
+import { logger } from "@/lib/logger";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { randomBytes } from "crypto";
 import { z } from "zod";
@@ -46,18 +47,23 @@ export async function POST(request: NextRequest) {
       });
 
       // Send reset email via GHL
-      const resetUrl = `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/operator/reset-password?token=${token}`;
-      try {
-        const { messageDelivery } = await import("@/lib/messaging/delivery-service");
-        await messageDelivery.send({
-          to: email,
-          channel: "email",
-          subject: "Reset your password — TrueFans RADIO",
-          content: `Hi ${user.name},\n\nYou requested a password reset. Visit this link to set a new password:\n\n${resetUrl}\n\nThis link expires in 1 hour. If you didn't request this, ignore this email.\n\n— TrueFans RADIO`,
-          artistName: user.name,
-        });
-      } catch {
-        console.error("[password-reset] Failed to send reset email");
+      const baseUrl = process.env.NEXTAUTH_URL;
+      if (!baseUrl) {
+        logger.error("NEXTAUTH_URL not set — cannot send reset email");
+      } else {
+        const resetUrl = `${baseUrl}/operator/reset-password?token=${token}`;
+        try {
+          const { messageDelivery } = await import("@/lib/messaging/delivery-service");
+          await messageDelivery.send({
+            to: email,
+            channel: "email",
+            subject: "Reset your password — TrueFans RADIO",
+            content: `Hi ${user.name},\n\nYou requested a password reset. Visit this link to set a new password:\n\n${resetUrl}\n\nThis link expires in 1 hour. If you didn't request this, ignore this email.\n\n— TrueFans RADIO`,
+            artistName: user.name,
+          });
+        } catch (err) {
+          logger.error("Failed to send reset email", { error: err instanceof Error ? err.message : String(err) });
+        }
       }
     }
 

@@ -18,6 +18,8 @@
     "voice-tracks": "tsx scripts/run-voice-tracks.ts --direct",
     "voice-tracks:api": "tsx scripts/run-voice-tracks.ts",
     "fix-ads": "tsx scripts/fix-sponsor-ads.ts",
+    "generate-playlists": "tsx scripts/generate-today-playlists.ts",
+    "fix-clocks": "tsx scripts/fix-clock-show-openings.ts",
     "db:seed": "tsx scripts/seed-all-teams.ts",
     "db:seed:demo": "tsx scripts/seed-demo-data.ts",
     "setup": "npm install && npx prisma db push && npm run db:seed",

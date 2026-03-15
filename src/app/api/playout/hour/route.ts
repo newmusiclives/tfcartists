@@ -1,22 +1,70 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
+import { stationDayType } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
 
-// DJ shift boundaries for show transitions (weekday schedule)
-const DJ_SHIFT_STARTS: Record<number, boolean> = { 6: true, 9: true, 12: true, 15: true };
+/**
+ * Look up which DJ is assigned to a given hour from ClockAssignment.
+ * Returns the DJ's id and slug, or null if no assignment exists.
+ */
+async function getDjForHour(stationId: string, hourOfDay: number): Promise<{
+  djId: string;
+  djSlug: string;
+} | null> {
+  const dayType = stationDayType();
+  const hourStr = hourOfDay.toString().padStart(2, "0") + ":00";
 
-// Handoff hours and their group IDs
-const HANDOFF_HOURS: Record<number, string> = {
-  9: "hank-to-loretta",
-  12: "loretta-to-doc",
-  15: "doc-to-cody",
-};
+  const assignment = await prisma.clockAssignment.findFirst({
+    where: {
+      stationId,
+      isActive: true,
+      dayType: { in: [dayType, "all"] },
+      timeSlotStart: { lte: hourStr },
+      timeSlotEnd: { gt: hourStr },
+    },
+    include: { dj: { select: { id: true, slug: true } } },
+    orderBy: { priority: "desc" },
+  });
+
+  if (!assignment?.dj) return null;
+  return { djId: assignment.dj.id, djSlug: assignment.dj.slug };
+}
+
+/**
+ * Determine if a DJ shift change happens at this hour by comparing
+ * the current hour's DJ to the previous hour's DJ from ClockAssignment.
+ * Returns the previous DJ's slug for handoff group ID construction, or null.
+ */
+async function getShiftTransitionInfo(stationId: string, hourOfDay: number): Promise<{
+  isShiftStart: boolean;
+  isShiftEnd: boolean;
+  prevDjSlug: string | null;
+  nextDjSlug: string | null;
+  currentDjSlug: string | null;
+}> {
+  const [prevDj, currentDj, nextDj] = await Promise.all([
+    hourOfDay > 0 ? getDjForHour(stationId, hourOfDay - 1) : null,
+    getDjForHour(stationId, hourOfDay),
+    getDjForHour(stationId, hourOfDay + 1),
+  ]);
+
+  const isShiftStart = !prevDj || prevDj.djId !== currentDj?.djId;
+  const isShiftEnd = !nextDj || nextDj.djId !== currentDj?.djId;
+
+  return {
+    isShiftStart,
+    isShiftEnd,
+    prevDjSlug: prevDj?.djSlug ?? null,
+    nextDjSlug: nextDj?.djSlug ?? null,
+    currentDjSlug: currentDj?.djSlug ?? null,
+  };
+}
 
 // Seconds of breathing room after a song before the next element starts.
-// Prevents the song's natural tail/decay from being clipped into ads or imaging.
-const SONG_TAIL_PAD_SEC = 1.5;
+// Kept tight — crossfade/ducking handles smooth transitions on the Railway side.
+const SONG_TAIL_PAD_SEC = 0.3;
 
 // Default durations (seconds) when actual duration is unknown
 // Kept tight to minimize dead air — real radio has no silence between elements
@@ -59,15 +107,21 @@ export async function GET(request: NextRequest) {
     airDate.setHours(0, 0, 0, 0);
     const hourOfDay = parseInt(hour, 10);
 
-    // Find the hour playlist
+    // Look up which DJ is assigned to this hour from ClockAssignment
+    const scheduledDj = await getDjForHour(stationId, hourOfDay);
+
+    // Find the hour playlist — filter by the scheduled DJ to prevent
+    // serving the wrong DJ's playlist (e.g., Cody's playlist during Doc's hour)
     const playlist = await prisma.hourPlaylist.findFirst({
       where: {
         stationId,
         airDate,
         hourOfDay,
         status: { in: ["locked", "aired"] },
+        ...(scheduledDj ? { djId: scheduledDj.djId } : {}),
       },
       include: { voiceTracks: true },
+      orderBy: { createdAt: "desc" }, // Always use the most recent playlist
     });
 
     if (!playlist) {
@@ -79,6 +133,9 @@ export async function GET(request: NextRequest) {
 
     const slots = JSON.parse(playlist.slots);
 
+    // --- Warnings for debugging (declared early so feature/ad code can push to it) ---
+    const warnings: string[] = [];
+
     // Build voice track lookup by position
     const vtByPosition = new Map(
       playlist.voiceTracks
@@ -86,17 +143,86 @@ export async function GET(request: NextRequest) {
         .map((vt) => [vt.position, vt])
     );
 
-    // Look up feature content for feature slots
-    const featureSlots = slots.filter((s: { type: string; featureContentId?: string }) =>
-      s.type === "feature" && s.featureContentId
+    // Look up feature content for feature slots — both linked and unlinked
+    const allFeatureSlots = slots.filter((s: { type: string }) => s.type === "feature");
+    const linkedFeatureSlots = allFeatureSlots.filter(
+      (s: { featureContentId?: string }) => s.featureContentId
     );
-    const featureIds = featureSlots.map((s: { featureContentId: string }) => s.featureContentId);
+    const unlinkedFeatureSlots = allFeatureSlots.filter(
+      (s: { featureContentId?: string }) => !s.featureContentId
+    );
+
+    const featureIds = linkedFeatureSlots.map((s: { featureContentId: string }) => s.featureContentId);
     const features = featureIds.length > 0
       ? await prisma.featureContent.findMany({
           where: { id: { in: featureIds } },
         })
       : [];
     const featureMap = new Map(features.map((f) => [f.id, f]));
+
+    // Fill unlinked feature slots from the available pool
+    // This ensures 2 features per hour even if relinkFeatures didn't run or failed
+    if (unlinkedFeatureSlots.length > 0) {
+      const usedFeatureIds = new Set<string>(featureIds);
+      const availableFeatures = await prisma.featureContent.findMany({
+        where: {
+          stationId,
+          djPersonalityId: playlist.djId,
+          isUsed: false,
+          id: { notIn: [...usedFeatureIds] },
+          content: { not: "" },
+        },
+        orderBy: { createdAt: "desc" },
+        take: unlinkedFeatureSlots.length,
+      });
+
+      // Also try used features with audio as a fallback
+      const fallbackFeatures = availableFeatures.length < unlinkedFeatureSlots.length
+        ? await prisma.featureContent.findMany({
+            where: {
+              stationId,
+              djPersonalityId: playlist.djId,
+              audioFilePath: { not: null },
+              id: { notIn: [...usedFeatureIds, ...availableFeatures.map((f) => f.id)] },
+            },
+            orderBy: { createdAt: "desc" },
+            take: unlinkedFeatureSlots.length - availableFeatures.length,
+          })
+        : [];
+
+      const allAvailable = [...availableFeatures, ...fallbackFeatures];
+
+      for (let i = 0; i < unlinkedFeatureSlots.length && i < allAvailable.length; i++) {
+        const fc = allAvailable[i];
+        const slot = unlinkedFeatureSlots[i];
+        slot.featureContentId = fc.id;
+        featureMap.set(fc.id, fc);
+        usedFeatureIds.add(fc.id);
+
+        // Mark as used so it doesn't get picked again
+        await prisma.featureContent.update({
+          where: { id: fc.id },
+          data: { isUsed: true },
+        });
+      }
+
+      // Update playlist slots with newly linked feature IDs
+      if (allAvailable.length > 0) {
+        await prisma.hourPlaylist.update({
+          where: { id: playlist.id },
+          data: { slots: JSON.stringify(slots) },
+        });
+      }
+
+      // Warn if we still couldn't fill all feature slots
+      const unfilled = unlinkedFeatureSlots.length - allAvailable.length;
+      if (unfilled > 0) {
+        warnings.push(
+          `${unfilled} feature slot(s) have no content. ` +
+          `Check that FeatureSchedules are active and features-daily cron is running.`
+        );
+      }
+    }
 
     // Look up songs for file URLs
     const songIds = slots
@@ -124,23 +250,23 @@ export async function GET(request: NextRequest) {
     const resolvedAds = new Map<number, [ResolvedAd, ResolvedAd]>();
 
     if (adSlots.length > 0) {
-      // Get all active ads with audio
-      // Include ads that have EITHER a file path or a stored data URI
+      // Get ALL active ads (not just ones with audio — include scriptText-only ads too)
       const activeAds = await prisma.sponsorAd.findMany({
         where: {
           stationId,
           isActive: true,
-          OR: [
-            { audioFilePath: { not: null } },
-            { audioDataUri: { not: null } },
-          ],
         },
       });
 
-      if (activeAds.length > 0) {
+      // Separate ads with audio from those without
+      const adsWithAudio = activeAds.filter(
+        (a) => a.audioFilePath || a.audioDataUri
+      );
+
+      if (adsWithAudio.length > 0) {
         // Sort by weighted rotation score (lowest plays-per-weight first)
         // then by oldest lastPlayedAt — least-played ads surface first
-        activeAds.sort((a, b) => {
+        adsWithAudio.sort((a, b) => {
           const scoreA = a.playCount / (a.weight || 1);
           const scoreB = b.playCount / (b.weight || 1);
           if (scoreA !== scoreB) return scoreA - scoreB;
@@ -152,19 +278,13 @@ export async function GET(request: NextRequest) {
           return 0;
         });
 
-        // Pick ads for each slot, advancing through the sorted list
-        // and tracking which ads we've used so we don't repeat in the same hour
-        const usedIds = new Set<string>();
+        // Pick ads for each slot using round-robin through the sorted list.
+        // When we exhaust unique ads, wrap around instead of always picking [0].
+        let adCursor = 0;
         const pickNextAd = () => {
-          // First pass: pick the first unused ad from the sorted list
-          for (const ad of activeAds) {
-            if (!usedIds.has(ad.id)) {
-              usedIds.add(ad.id);
-              return ad;
-            }
-          }
-          // All used this hour — allow repeats, pick lowest rotation
-          return activeAds[0];
+          const ad = adsWithAudio[adCursor % adsWithAudio.length];
+          adCursor++;
+          return ad;
         };
 
         const adsToUpdate: string[] = [];
@@ -192,29 +312,44 @@ export async function GET(request: NextRequest) {
           ]);
         }
 
-        // Update play counts so rotation actually progresses across hours
-        const uniqueAdIds = [...new Set(adsToUpdate)];
-        await prisma.sponsorAd.updateMany({
-          where: { id: { in: uniqueAdIds } },
-          data: {
-            playCount: { increment: 1 },
-            lastPlayedAt: new Date(),
-          },
-        });
+        // Only update play counts ONCE per playlist lock — not on every GET.
+        // Check if this playlist's ads have already been counted by looking at
+        // the playlist status. "locked" = first fetch, "aired" = already counted.
+        if (playlist.status === "locked") {
+          const uniqueAdIds = [...new Set(adsToUpdate)];
+          await prisma.$transaction([
+            prisma.sponsorAd.updateMany({
+              where: { id: { in: uniqueAdIds } },
+              data: {
+                playCount: { increment: 1 },
+                lastPlayedAt: new Date(),
+              },
+            }),
+            prisma.hourPlaylist.update({
+              where: { id: playlist.id },
+              data: { status: "aired" },
+            }),
+          ]);
+        }
+      } else if (activeAds.length > 0) {
+        // Ads exist but have no audio — warn so operator knows to generate audio
+        warnings.push(
+          `${activeAds.length} sponsor ad(s) exist but none have audio files. ` +
+          `Go to Station Admin → Sponsor Ads to generate audio.`
+        );
       }
     }
 
-    // --- Warnings for debugging ---
-    const warnings: string[] = [];
-
-    // --- Resolve show transitions for this hour ---
+    // --- Resolve show transitions for this hour (derived from ClockAssignment, not hardcoded) ---
     type TransitionEntry = { id: string; type: string; name: string; audioFilePath: string | null; durationSeconds: number; handoffPart: number | null };
 
     let showIntro: TransitionEntry | null = null;
     let showOutro: TransitionEntry | null = null;
     const handoffParts: TransitionEntry[] = [];
 
-    if (DJ_SHIFT_STARTS[hourOfDay]) {
+    const shiftInfo = await getShiftTransitionInfo(stationId, hourOfDay);
+
+    if (shiftInfo.isShiftStart) {
       // This is the first hour of a DJ shift — look for show_intro
       const intro = await prisma.showTransition.findFirst({
         where: {
@@ -240,19 +375,18 @@ export async function GET(request: NextRequest) {
       }
 
       // Check for handoff crosstalk at this hour
-      const handoffGroupId = HANDOFF_HOURS[hourOfDay];
-      if (handoffGroupId) {
+      if (shiftInfo.prevDjSlug) {
         const parts = await prisma.showTransition.findMany({
           where: {
             stationId,
             transitionType: "handoff",
-            handoffGroupId,
+            hourOfDay,
             isActive: true,
           },
           orderBy: { handoffPart: "asc" },
         });
         if (parts.length === 0) {
-          warnings.push(`Handoff hour ${hourOfDay} (group "${handoffGroupId}") has no matching transitions`);
+          warnings.push(`Handoff hour ${hourOfDay} has no matching transitions`);
         }
         for (const p of parts) {
           if (!p.audioFilePath) {
@@ -270,9 +404,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Check if this is the last hour of a shift (hour before a shift start)
-    const nextHour = hourOfDay + 1;
-    if (DJ_SHIFT_STARTS[nextHour]) {
+    // Check if this is the last hour of a shift (next hour has a different DJ)
+    if (shiftInfo.isShiftEnd) {
       const outro = await prisma.showTransition.findFirst({
         where: {
           stationId,
@@ -334,7 +467,41 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // --- Load station production settings for crossfade/transition hints ---
+    const station = await prisma.station.findUnique({
+      where: { id: stationId },
+      select: {
+        crossfadeEnabled: true,
+        crossfadeDuration: true,
+        crossfadeStartNext: true,
+        crossfadeFadeIn: true,
+        crossfadeFadeOut: true,
+        crossfadeCurve: true,
+        duckingEnabled: true,
+        duckingAmount: true,
+        duckingAttack: true,
+        duckingRelease: true,
+      },
+    });
+
+    // Load per-song cue points (outroStart, crossfadeStart) for tighter transitions
+    const songCuePoints = songIds.length > 0
+      ? await prisma.song.findMany({
+          where: { id: { in: songIds } },
+          select: { id: true, outroStart: true, crossfadeStart: true, introEnd: true },
+        })
+      : [];
+    const cuePointMap = new Map(songCuePoints.map((s) => [s.id, s]));
+
     // --- Assemble the full program log ---
+    interface TransitionHint {
+      fadeIn?: number;   // seconds — fade in this element over N seconds
+      fadeOut?: number;  // seconds — fade out this element over N seconds
+      overlapNext?: number; // seconds — start next element N seconds before this one ends
+      duck?: boolean;    // auto-duck music under this voice element
+      curve?: string;    // equal_power | linear | logarithmic
+    }
+
     interface ProgramSlot {
       position: number;
       sequenceOrder?: number;
@@ -342,7 +509,8 @@ export async function GET(request: NextRequest) {
       minute: number;
       type: string;
       category: string;
-      song?: { id: string; title: string; artistName: string; fileUrl: string | null; duration: number | null };
+      transitionHint?: TransitionHint;
+      song?: { id: string; title: string; artistName: string; fileUrl: string | null; duration: number | null; outroStart?: number | null; crossfadeStart?: number | null; introEnd?: number | null };
       voiceTrack?: {
         id: string;
         trackType: string;
@@ -396,11 +564,17 @@ export async function GET(request: NextRequest) {
         category: slot.category as string,
       };
 
-      // Attach song data
+      // Attach song data with per-song cue points
       if (slot.type === "song" && slot.songId) {
         const song = songMap.get(slot.songId as string);
         if (song) {
-          entry.song = song;
+          const cues = cuePointMap.get(slot.songId as string);
+          entry.song = {
+            ...song,
+            outroStart: cues?.outroStart ?? null,
+            crossfadeStart: cues?.crossfadeStart ?? null,
+            introEnd: cues?.introEnd ?? null,
+          };
           if (!song.fileUrl) {
             warnings.push(`Song "${song.title}" by ${song.artistName} (pos ${slot.position}) has no fileUrl`);
           }
@@ -520,11 +694,55 @@ export async function GET(request: NextRequest) {
     // --- Sort by position and assign sequenceOrder + cumulativeStartSec ---
     programLog.sort((a, b) => a.position - b.position);
 
+    // Crossfade settings from station config
+    const xfEnabled = station?.crossfadeEnabled ?? true;
+    const xfDuration = station?.crossfadeDuration ?? 3.0;
+    const xfFadeIn = station?.crossfadeFadeIn ?? 0.8;
+    const xfFadeOut = station?.crossfadeFadeOut ?? 1.5;
+    const xfCurve = station?.crossfadeCurve ?? "equal_power";
+    const duckEnabled = station?.duckingEnabled ?? true;
+
     let cumulativeSec = 0;
     for (let i = 0; i < programLog.length; i++) {
       const entry = programLog[i];
+      const prev = i > 0 ? programLog[i - 1] : null;
+      const next = i < programLog.length - 1 ? programLog[i + 1] : null;
       entry.sequenceOrder = i;
       entry.cumulativeStartSec = cumulativeSec;
+
+      // --- Compute transition hints for Railway ---
+      const hint: TransitionHint = {};
+
+      if (entry.type === "song") {
+        // Song → voice_break/feature: fade out the song tail
+        if (next && (next.type === "voice_break" || next.type === "feature")) {
+          hint.fadeOut = xfEnabled ? xfFadeOut : 0.5;
+          // Use per-song crossfadeStart if available, otherwise use station default
+          const cues = entry.song?.crossfadeStart;
+          hint.overlapNext = cues ?? (xfEnabled ? station?.crossfadeStartNext ?? 1.0 : 0);
+          hint.curve = xfCurve;
+        }
+        // Song → song: crossfade
+        if (next?.type === "song" && xfEnabled) {
+          hint.fadeOut = xfFadeOut;
+          hint.overlapNext = station?.crossfadeStartNext ?? 1.5;
+          hint.curve = xfCurve;
+        }
+        // Voice/feature → song: fade in the song
+        if (prev && (prev.type === "voice_break" || prev.type === "feature")) {
+          hint.fadeIn = xfEnabled ? xfFadeIn : 0.3;
+        }
+      }
+
+      if (entry.type === "voice_break" || entry.type === "feature") {
+        // Auto-duck music under voice elements
+        if (duckEnabled) hint.duck = true;
+      }
+
+      // Only attach hint if it has properties
+      if (Object.keys(hint).length > 0) {
+        entry.transitionHint = hint;
+      }
 
       // Calculate this entry's duration for cumulative timing
       // Use actual measured duration whenever available to eliminate dead air
@@ -541,21 +759,39 @@ export async function GET(request: NextRequest) {
         durationSec = entry.imaging.audioDuration;
       }
 
-      cumulativeSec += durationSec;
+      // Subtract overlap from cumulative time (elements play sooner when crossfading)
+      const overlapSec = entry.transitionHint?.overlapNext ?? 0;
 
-      // Add tail padding after songs so the natural decay isn't clipped
-      if (entry.type === "song") {
+      cumulativeSec += durationSec - overlapSec;
+
+      // Add minimal tail padding after songs (crossfade handles the rest)
+      if (entry.type === "song" && !entry.transitionHint?.overlapNext) {
         cumulativeSec += SONG_TAIL_PAD_SEC;
       }
     }
+
+    // Production settings for Railway to apply DSP
+    const productionSettings = station ? {
+      crossfadeEnabled: station.crossfadeEnabled,
+      crossfadeDuration: station.crossfadeDuration,
+      crossfadeFadeIn: station.crossfadeFadeIn,
+      crossfadeFadeOut: station.crossfadeFadeOut,
+      crossfadeCurve: station.crossfadeCurve,
+      duckingEnabled: station.duckingEnabled,
+      duckingAmount: station.duckingAmount,
+      duckingAttack: station.duckingAttack,
+      duckingRelease: station.duckingRelease,
+    } : null;
 
     return NextResponse.json({
       playlistId: playlist.id,
       stationId: playlist.stationId,
       djId: playlist.djId,
+      scheduledDjSlug: scheduledDj?.djSlug ?? null,
       airDate: playlist.airDate,
       hourOfDay: playlist.hourOfDay,
       status: playlist.status,
+      productionSettings,
       programLog,
       warnings,
     });
