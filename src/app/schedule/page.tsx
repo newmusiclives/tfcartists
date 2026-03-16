@@ -12,6 +12,12 @@ export const metadata: Metadata = {
 // Revalidate every 5 minutes so DJ changes appear without a redeploy
 export const revalidate = 300;
 
+interface HourDetail {
+  hour: number;
+  clockTemplateName: string | null;
+  clockType: string | null;
+}
+
 interface DJSlot {
   name: string;
   showName: string | null;
@@ -19,6 +25,7 @@ interface DJSlot {
   shiftStart: string;
   shiftEnd: string;
   dayType: string; // "weekday" | "saturday" | "sunday"
+  hours: HourDetail[];
 }
 
 // Color palette for time slots — cycles through these
@@ -52,7 +59,7 @@ async function getScheduleData(): Promise<{
 
     if (!station) return { weekday: [], saturday: [], sunday: [] };
 
-    // Fetch clock assignments grouped by DJ to build schedule
+    // Fetch clock assignments with clock template details
     const assignments = await prisma.clockAssignment.findMany({
       where: { stationId: station.id, isActive: true },
       select: {
@@ -62,22 +69,51 @@ async function getScheduleData(): Promise<{
         dj: {
           select: { name: true, showFormat: true, tagline: true, vibe: true, isWeekend: true },
         },
+        clockTemplate: {
+          select: { name: true, clockType: true },
+        },
       },
       orderBy: { timeSlotStart: "asc" },
     });
 
-    // Group assignments by DJ + dayType to merge into shifts
-    const shiftMap = new Map<string, { dj: typeof assignments[0]["dj"]; dayType: string; start: string; end: string }>();
+    // Group assignments by DJ + dayType, collecting per-hour clock info
+    const shiftMap = new Map<string, {
+      dj: typeof assignments[0]["dj"];
+      dayType: string;
+      start: string;
+      end: string;
+      hours: HourDetail[];
+    }>();
 
     for (const a of assignments) {
       const key = `${a.dj.name}-${a.dayType}`;
+      const startHour = parseInt(a.timeSlotStart.split(":")[0], 10);
+      const endHour = parseInt(a.timeSlotEnd.split(":")[0], 10);
+
+      // Build per-hour details for this assignment
+      const totalHours = endHour > startHour ? endHour - startHour : (24 - startHour) + endHour;
+      const hourDetails: HourDetail[] = [];
+      for (let i = 0; i < totalHours; i++) {
+        hourDetails.push({
+          hour: (startHour + i) % 24,
+          clockTemplateName: a.clockTemplate?.name || null,
+          clockType: a.clockTemplate?.clockType || null,
+        });
+      }
+
       const existing = shiftMap.get(key);
       if (!existing) {
-        shiftMap.set(key, { dj: a.dj, dayType: a.dayType, start: a.timeSlotStart, end: a.timeSlotEnd });
+        shiftMap.set(key, {
+          dj: a.dj,
+          dayType: a.dayType,
+          start: a.timeSlotStart,
+          end: a.timeSlotEnd,
+          hours: hourDetails,
+        });
       } else {
-        // Extend shift range
         if (a.timeSlotStart < existing.start) existing.start = a.timeSlotStart;
         if (a.timeSlotEnd > existing.end) existing.end = a.timeSlotEnd;
+        existing.hours.push(...hourDetails);
       }
     }
 
@@ -89,6 +125,9 @@ async function getScheduleData(): Promise<{
       const startHour = parseInt(shift.start.split(":")[0]);
       const endHour = parseInt(shift.end.split(":")[0]);
 
+      // Sort hours
+      shift.hours.sort((a, b) => a.hour - b.hour);
+
       const slot: DJSlot = {
         name: shift.dj.name,
         showName: shift.dj.showFormat || shift.dj.tagline,
@@ -96,6 +135,7 @@ async function getScheduleData(): Promise<{
         shiftStart: String(startHour),
         shiftEnd: String(endHour),
         dayType: shift.dayType,
+        hours: shift.hours,
       };
 
       switch (shift.dayType) {
@@ -183,6 +223,7 @@ export default async function SchedulePage() {
                     dj={slot.name}
                     mood={slot.bio || ""}
                     color={WEEKDAY_COLORS[i % WEEKDAY_COLORS.length]}
+                    hours={slot.hours}
                   />
                 ))}
               </div>
@@ -284,12 +325,12 @@ export default async function SchedulePage() {
   );
 }
 
-function TimeSlot({ time, show, dj, mood, color }: {
-  time: string; show: string; dj: string; mood: string; color: string;
+function TimeSlot({ time, show, dj, mood, color, hours }: {
+  time: string; show: string; dj: string; mood: string; color: string; hours: HourDetail[];
 }) {
   return (
     <div className={`${color} text-white rounded-xl p-6 shadow-lg`}>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
             <Clock className="w-5 h-5" />
@@ -299,6 +340,21 @@ function TimeSlot({ time, show, dj, mood, color }: {
           <p className="text-sm opacity-90 mb-2">with {dj}</p>
           {mood && <p className="text-sm italic opacity-80">{mood}</p>}
         </div>
+        {hours.length > 0 && (
+          <div className="flex flex-wrap gap-2 md:max-w-xs">
+            {hours.map((h) => (
+              <div
+                key={h.hour}
+                className="bg-white/15 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs"
+              >
+                <div className="font-bold">{formatTime(h.hour)}</div>
+                {h.clockTemplateName && (
+                  <div className="opacity-80 truncate max-w-[120px]">{h.clockTemplateName}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
