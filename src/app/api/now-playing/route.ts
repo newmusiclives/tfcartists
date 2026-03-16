@@ -2,57 +2,19 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { stationHour, stationToday, stationNow } from "@/lib/timezone";
 
-const RAILWAY_BASE = process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app";
-const NOW_PLAYING_URL = process.env.NOW_PLAYING_URL || `${RAILWAY_BASE}/api/now_playing`;
-
 export const dynamic = "force-dynamic";
-
-// Cache the last Railway response so we can detect staleness
-let lastRailwayTitle = "";
-let lastRailwayChangedAt = 0;
 
 /**
  * GET /api/now-playing
  *
- * Returns what's currently playing. Uses Railway if the data is fresh,
- * otherwise falls back to the locked playlist in the database.
+ * Returns what's currently playing based on today's locked playlist.
+ * Uses the current Mountain Time minute to determine which song
+ * should be on air right now.
+ *
+ * This is the only reliable source — Railway's now_playing endpoint
+ * often gets stuck on stale data when track_played reports fail.
  */
 export async function GET() {
-  // 1. Try Railway upstream
-  if (NOW_PLAYING_URL) {
-    try {
-      const res = await fetch(NOW_PLAYING_URL, {
-        cache: "no-store",
-        signal: AbortSignal.timeout(3000),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const title = data.title || "";
-
-        // Track when the title last changed
-        if (title !== lastRailwayTitle) {
-          lastRailwayTitle = title;
-          lastRailwayChangedAt = Date.now();
-        }
-
-        // If Railway data changed in the last 10 minutes, trust it
-        const ageMs = Date.now() - lastRailwayChangedAt;
-        if (ageMs < 10 * 60 * 1000 && title) {
-          // Ensure field names match what the player expects
-          return NextResponse.json({
-            ...data,
-            artist_name: data.artist_name || data.artistName || data.artist,
-            dj_name: data.dj_name || data.djName,
-          });
-        }
-        // Stale — fall through to playlist fallback
-      }
-    } catch {
-      // Railway unreachable — fall through to DB fallback
-    }
-  }
-
-  // 2. Fallback: derive now-playing from today's locked playlist
   try {
     const station = await prisma.station.findFirst({
       where: { isActive: true },
@@ -85,25 +47,29 @@ export async function GET() {
       });
     }
 
-    // Find the DJ name
+    // Find the DJ
     const dj = await prisma.dJ.findUnique({
       where: { id: playlist.djId },
       select: { name: true, slug: true },
     });
 
-    // Parse slots and find the song playing at the current minute
+    // Parse slots and find the song at the current minute
     const slots = JSON.parse(playlist.slots);
     const songSlots = slots
       .filter((s: { type: string; songTitle?: string }) => s.type === "song" && s.songTitle)
       .sort((a: { minute: number }, b: { minute: number }) => a.minute - b.minute);
 
-    // Walk through songs by cumulative duration to find what's actually playing
-    let currentSong = songSlots[0] || null;
-    let elapsed = 0;
+    // Find the most recent song that should have started by now
+    let currentSong: { songTitle: string; artistName: string; minute: number } | null = null;
     for (const song of songSlots) {
       if (song.minute <= minuteOfHour) {
         currentSong = song;
       }
+    }
+
+    // If no song found for current minute, use the first song
+    if (!currentSong && songSlots.length > 0) {
+      currentSong = songSlots[0];
     }
 
     return NextResponse.json({
