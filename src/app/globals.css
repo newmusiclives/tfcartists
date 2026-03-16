@@ -44,6 +44,18 @@
   }
 }
 
+/* Safe area bottom padding for mobile nav */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Add bottom padding to main content on mobile when nav is visible */
+@media (max-width: 639px) {
+  main {
+    padding-bottom: 3.5rem;
+  }
+}
+
 /* Radio player equalizer animation */
 @keyframes equalizer {
   0%, 100% { height: 4px; }

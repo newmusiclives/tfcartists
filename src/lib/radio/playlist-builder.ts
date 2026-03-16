@@ -319,6 +319,29 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
   normalizedDate.setHours(0, 0, 0, 0);
 
   // 7. Save to DB
+  // Check if a playlist already exists — if so, delete stale voice tracks
+  // that reference songs from the previous build. Without this cleanup,
+  // voice tracks back-announce the wrong songs (e.g. "that was Time Magraw"
+  // when the current playlist has Florida Georgia Line at that position).
+  const existingPlaylist = await prisma.hourPlaylist.findUnique({
+    where: {
+      stationId_djId_airDate_hourOfDay: {
+        stationId,
+        djId,
+        airDate: normalizedDate,
+        hourOfDay,
+      },
+    },
+    select: { id: true, status: true },
+  });
+
+  if (existingPlaylist && existingPlaylist.status === "draft") {
+    // Delete stale voice tracks so they'll be regenerated with correct song refs
+    await prisma.voiceTrack.deleteMany({
+      where: { hourPlaylistId: existingPlaylist.id },
+    });
+  }
+
   const hourPlaylist = await prisma.hourPlaylist.upsert({
     where: {
       stationId_djId_airDate_hourOfDay: {

@@ -97,14 +97,27 @@ export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
   }
 
   // 4. Expand assignments into individual hours
+  // Handles midnight-crossing shifts (e.g. 21:00-00:00) where endHour <= startHour
   const shiftHours: ShiftHour[] = [];
+  const seenHours = new Set<string>(); // "djId:hour" to prevent duplicates
+
   for (const assignment of assignments) {
     if (!assignment.dj?.isActive || !assignment.clockTemplate?.clockPattern) continue;
 
     const startHour = parseInt(assignment.timeSlotStart.split(":")[0], 10);
     const endHour = parseInt(assignment.timeSlotEnd.split(":")[0], 10);
 
-    for (let hour = startHour; hour < endHour; hour++) {
+    // Calculate total hours, handling midnight crossing
+    const totalHours = endHour > startHour
+      ? endHour - startHour                 // Normal: 06:00-09:00 = 3 hours
+      : (24 - startHour) + endHour;         // Midnight: 21:00-02:00 = 5 hours
+
+    for (let i = 0; i < totalHours; i++) {
+      const hour = (startHour + i) % 24;
+      const key = `${assignment.djId}:${hour}`;
+      if (seenHours.has(key)) continue; // Skip duplicate DJ+hour combos
+      seenHours.add(key);
+
       shiftHours.push({
         djId: assignment.djId,
         djName: assignment.dj.name,

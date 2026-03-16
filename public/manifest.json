@@ -1,7 +1,7 @@
 {
   "name": "North Country Radio",
   "short_name": "NCR Radio",
-  "description": "Americana & Country — TrueFans RADIO Network",
+  "description": "Americana & Country — TrueFans RADIO Network. 24/7 AI-powered independent radio.",
   "start_url": "/player",
   "scope": "/",
   "display": "standalone",
@@ -9,6 +9,7 @@
   "theme_color": "#78350f",
   "orientation": "portrait",
   "categories": ["music", "entertainment"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -38,6 +39,20 @@
       "name": "Schedule",
       "short_name": "Schedule",
       "url": "/schedule"
+    },
+    {
+      "name": "Submit Music",
+      "short_name": "Submit",
+      "url": "/onboard"
     }
-  ]
+  ],
+  "share_target": {
+    "action": "/onboard",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
 }

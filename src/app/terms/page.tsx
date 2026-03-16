@@ -30,7 +30,7 @@ export default function TermsOfServicePage() {
           Terms of Service
         </h1>
         <p className="mt-2 text-gray-500 text-sm">
-          Last Updated: February 2026
+          Last Updated: March 2026
         </p>
 
         <div className="mt-10 space-y-10 text-gray-700 leading-relaxed">

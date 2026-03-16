@@ -7,6 +7,8 @@ import { WebVitalsInit } from "@/components/web-vitals-init";
 import { CsrfProvider } from "@/components/csrf-provider";
 import { SessionProvider } from "@/components/session-provider";
 import { ServiceWorkerRegister } from "@/components/sw-register";
+import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
+import { MobileNav } from "@/components/mobile-nav";
 import { StationProvider } from "@/contexts/StationContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 
@@ -139,6 +141,8 @@ export default function RootLayout({
           <StationProvider>
             <ToastProvider>
               <RadioPlayerWrapper>{children}</RadioPlayerWrapper>
+              <MobileNav />
+              <PWAInstallPrompt />
             </ToastProvider>
           </StationProvider>
         </SessionProvider>

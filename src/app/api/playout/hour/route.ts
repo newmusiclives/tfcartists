@@ -6,30 +6,65 @@ import { stationDayType } from "@/lib/timezone";
 export const dynamic = "force-dynamic";
 
 /**
+ * Check if a given hour (0-23) falls within a time slot range.
+ * Handles midnight-crossing shifts (e.g. 21:00-00:00) where the
+ * end time is less than the start time.
+ */
+function hourInSlot(hourOfDay: number, timeSlotStart: string, timeSlotEnd: string): boolean {
+  const start = parseInt(timeSlotStart.split(":")[0], 10);
+  const end = parseInt(timeSlotEnd.split(":")[0], 10);
+
+  if (end > start) {
+    // Normal shift: 06:00-09:00 → hours 6, 7, 8
+    return hourOfDay >= start && hourOfDay < end;
+  }
+  if (end <= start && end !== start) {
+    // Midnight-crossing shift: 21:00-02:00 → hours 21, 22, 23, 0, 1
+    return hourOfDay >= start || hourOfDay < end;
+  }
+  // end === start means full 24h or degenerate — treat as no match
+  return false;
+}
+
+/**
  * Look up which DJ is assigned to a given hour from ClockAssignment.
- * Returns the DJ's id and slug, or null if no assignment exists.
+ * Returns the DJ's id, slug, and time slot, or null if no assignment exists.
+ *
+ * Fetches all active assignments and filters programmatically to correctly
+ * handle midnight-crossing shifts where string comparison would fail.
  */
 async function getDjForHour(stationId: string, hourOfDay: number): Promise<{
   djId: string;
   djSlug: string;
+  timeSlotStart: string;
+  timeSlotEnd: string;
 } | null> {
   const dayType = stationDayType();
-  const hourStr = hourOfDay.toString().padStart(2, "0") + ":00";
 
-  const assignment = await prisma.clockAssignment.findFirst({
+  const assignments = await prisma.clockAssignment.findMany({
     where: {
       stationId,
       isActive: true,
       dayType: { in: [dayType, "all"] },
-      timeSlotStart: { lte: hourStr },
-      timeSlotEnd: { gt: hourStr },
     },
     include: { dj: { select: { id: true, slug: true } } },
     orderBy: { priority: "desc" },
   });
 
-  if (!assignment?.dj) return null;
-  return { djId: assignment.dj.id, djSlug: assignment.dj.slug };
+  // Find the highest-priority assignment whose time slot covers this hour
+  for (const assignment of assignments) {
+    if (!assignment.dj) continue;
+    if (hourInSlot(hourOfDay, assignment.timeSlotStart, assignment.timeSlotEnd)) {
+      return {
+        djId: assignment.dj.id,
+        djSlug: assignment.dj.slug,
+        timeSlotStart: assignment.timeSlotStart,
+        timeSlotEnd: assignment.timeSlotEnd,
+      };
+    }
+  }
+
+  return null;
 }
 
 /**
@@ -45,9 +80,9 @@ async function getShiftTransitionInfo(stationId: string, hourOfDay: number): Pro
   currentDjSlug: string | null;
 }> {
   const [prevDj, currentDj, nextDj] = await Promise.all([
-    hourOfDay > 0 ? getDjForHour(stationId, hourOfDay - 1) : null,
+    getDjForHour(stationId, (hourOfDay + 23) % 24),  // wrap: hour 0 → check hour 23
     getDjForHour(stationId, hourOfDay),
-    getDjForHour(stationId, hourOfDay + 1),
+    getDjForHour(stationId, (hourOfDay + 1) % 24),   // wrap: hour 23 → check hour 0
   ]);
 
   const isShiftStart = !prevDj || prevDj.djId !== currentDj?.djId;
@@ -581,10 +616,41 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // Attach voice track
+      // Attach voice track — cross-validate song references against actual playlist
       if (slot.type === "voice_break") {
         const vt = vtByPosition.get(slot.position as number);
         if (vt) {
+          // Cross-validate: check that the VT's stored song references match
+          // the actual songs in the current playlist slots
+          if (vt.prevSongId) {
+            const actualPrevSlot = slots
+              .filter((s: { type: string; position: number; songId?: string }) =>
+                s.type === "song" && s.songId && s.position < (slot.position as number))
+              .sort((a: { position: number }, b: { position: number }) => b.position - a.position)[0];
+            if (actualPrevSlot && actualPrevSlot.songId !== vt.prevSongId) {
+              const actualSong = songMap.get(actualPrevSlot.songId as string);
+              warnings.push(
+                `Voice track at pos ${slot.position} references prev song "${vt.prevSongTitle}" ` +
+                `but actual prev song is "${actualSong?.title || "unknown"}" by ${actualSong?.artistName || "unknown"} — ` +
+                `stale voice track from a previous playlist build`
+              );
+            }
+          }
+          if (vt.nextSongId) {
+            const actualNextSlot = slots
+              .filter((s: { type: string; position: number; songId?: string }) =>
+                s.type === "song" && s.songId && s.position > (slot.position as number))
+              .sort((a: { position: number }, b: { position: number }) => a.position - b.position)[0];
+            if (actualNextSlot && actualNextSlot.songId !== vt.nextSongId) {
+              const actualSong = songMap.get(actualNextSlot.songId as string);
+              warnings.push(
+                `Voice track at pos ${slot.position} references next song "${vt.nextSongTitle}" ` +
+                `but actual next song is "${actualSong?.title || "unknown"}" by ${actualSong?.artistName || "unknown"} — ` +
+                `stale voice track from a previous playlist build`
+              );
+            }
+          }
+
           entry.voiceTrack = {
             id: vt.id,
             trackType: vt.trackType,
@@ -788,6 +854,9 @@ export async function GET(request: NextRequest) {
       stationId: playlist.stationId,
       djId: playlist.djId,
       scheduledDjSlug: scheduledDj?.djSlug ?? null,
+      scheduledDjShift: scheduledDj
+        ? { start: scheduledDj.timeSlotStart, end: scheduledDj.timeSlotEnd }
+        : null,
       airDate: playlist.airDate,
       hourOfDay: playlist.hourOfDay,
       status: playlist.status,
