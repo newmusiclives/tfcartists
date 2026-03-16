@@ -108,8 +108,8 @@ function hour2Pattern() {
   ];
 }
 
-// Hour 3: Show closer
-function hour3Pattern() {
+// Hour 3 WITH handoff: Show closer + transition to next DJ (Hank→Loretta, Loretta→Doc, Doc→Cody)
+function hour3WithHandoffPattern() {
   return [
     // :00 — Top of hour
     { position: 1,  minute: 0,  duration: 2, category: "TOH",     type: "station_id",  notes: "Top of hour — station ID" },
@@ -142,20 +142,62 @@ function hour3Pattern() {
     { position: 20, minute: 44, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 3" },
     { position: 21, minute: 44, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 1-2" },
     { position: 22, minute: 45, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 3-4" },
-    // :46 — Music block 4 + show closer
+    // :46 — Final music + transition
     { position: 23, minute: 46, duration: 4, category: "C",       type: "song",        notes: "Medium rotation" },
-    { position: 24, minute: 50, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
-    { position: 25, minute: 54, duration: 1, category: "DJ",      type: "voice_break", notes: "Generic pre-recorded — SHOW CLOSER" },
-    { position: 26, minute: 55, duration: 4, category: "D",       type: "song",        notes: "Final song before handoff" },
+    { position: 24, minute: 50, duration: 2, category: "DJ",      type: "voice_break", notes: "SHOW TRANSITION — DJ hands off to next DJ" },
+    { position: 25, minute: 52, duration: 4, category: "B",       type: "song",        notes: "Final song" },
+    { position: 26, minute: 56, duration: 2, category: "DJ",      type: "voice_break", notes: "SHOW CLOSER — DJ signs off" },
   ];
 }
 
-// DJ configs
+// Hour 3 WITHOUT handoff: Show closer only (Cody — last DJ of the day, no following DJ)
+function hour3NoHandoffPattern() {
+  return [
+    // :00 — Top of hour
+    { position: 1,  minute: 0,  duration: 2, category: "TOH",     type: "station_id",  notes: "Top of hour — station ID" },
+    // :00 — Music block 1
+    { position: 2,  minute: 0,  duration: 4, category: "A",       type: "song",        notes: "Power hit opener" },
+    { position: 3,  minute: 4,  duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
+    { position: 4,  minute: 8,  duration: 1, category: "DJ",      type: "voice_break", notes: "Back-announce + intro next song" },
+    { position: 5,  minute: 9,  duration: 4, category: "C",       type: "song",        notes: "Medium rotation" },
+    // :13 — Feature 1
+    { position: 6,  minute: 13, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 1" },
+    // :16 — AD BREAK 1 (2 min)
+    { position: 7,  minute: 16, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 1" },
+    { position: 8,  minute: 16, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 1-2" },
+    { position: 9,  minute: 17, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 3-4" },
+    // :18 — Music block 2
+    { position: 10, minute: 18, duration: 4, category: "A",       type: "song",        notes: "Power hit" },
+    { position: 11, minute: 22, duration: 4, category: "D",       type: "song",        notes: "Light rotation / discovery" },
+    { position: 12, minute: 26, duration: 1, category: "DJ",      type: "voice_break", notes: "Back-announce + intro next song" },
+    { position: 13, minute: 27, duration: 4, category: "E",       type: "song",        notes: "Artist spotlight / new music" },
+    // :31 — Feature 2
+    { position: 14, minute: 31, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 2" },
+    // :34 — AD BREAK 2 (2 min)
+    { position: 15, minute: 34, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 2" },
+    { position: 16, minute: 34, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 1-2" },
+    { position: 17, minute: 35, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 3-4" },
+    // :36 — Music block 3
+    { position: 18, minute: 36, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
+    { position: 19, minute: 40, duration: 4, category: "A",       type: "song",        notes: "Power hit" },
+    // :44 — AD BREAK 3 (2 min)
+    { position: 20, minute: 44, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 3" },
+    { position: 21, minute: 44, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 1-2" },
+    { position: 22, minute: 45, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 3-4" },
+    // :46 — Final music + show closer (no handoff)
+    { position: 23, minute: 46, duration: 4, category: "C",       type: "song",        notes: "Medium rotation" },
+    { position: 24, minute: 50, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
+    { position: 25, minute: 54, duration: 4, category: "A",       type: "song",        notes: "Final power hit of the day" },
+    { position: 26, minute: 58, duration: 2, category: "DJ",      type: "voice_break", notes: "SHOW CLOSER — DJ signs off for the day" },
+  ];
+}
+
+// DJ configs — hasFollowingDj determines if Hour 3 has a show transition
 const DJ_CLOCKS = [
-  { slug: "hank-westwood",    name: "Hank",    clockPrefix: "Morning Drive",    clockType: "morning_drive", tempo: "upbeat",   hours: [6, 7, 8] },
-  { slug: "loretta-merrick",  name: "Loretta", clockPrefix: "Midday Show",      clockType: "midday",        tempo: "moderate", hours: [9, 10, 11] },
-  { slug: "doc-holloway",     name: "Doc",     clockPrefix: "Afternoon Groove", clockType: "midday",        tempo: "moderate", hours: [12, 13, 14] },
-  { slug: "cody-rampart",     name: "Cody",    clockPrefix: "Drive Home",       clockType: "evening",       tempo: "laid_back", hours: [15, 16, 17] },
+  { slug: "hank-westwood",    name: "Hank",    clockPrefix: "Morning Drive",    clockType: "morning_drive", tempo: "upbeat",    hours: [6, 7, 8],   hasFollowingDj: true },
+  { slug: "loretta-merrick",  name: "Loretta", clockPrefix: "Midday Show",      clockType: "midday",        tempo: "moderate",  hours: [9, 10, 11], hasFollowingDj: true },
+  { slug: "doc-holloway",     name: "Doc",     clockPrefix: "Afternoon Groove", clockType: "midday",        tempo: "moderate",  hours: [12, 13, 14], hasFollowingDj: true },
+  { slug: "cody-rampart",     name: "Cody",    clockPrefix: "Drive Home",       clockType: "evening",       tempo: "laid_back", hours: [15, 16, 17], hasFollowingDj: false },
 ];
 
 const DAY_TYPES = ["weekday", "saturday", "sunday"];
@@ -190,8 +232,13 @@ async function main() {
 
     console.log(`\n${djRecord.name}:`);
 
-    const patterns = [hour1Pattern(), hour2Pattern(), hour3Pattern()];
-    const hourLabels = ["Hour 1 (Opener)", "Hour 2", "Hour 3 (Closer)"];
+    const hour3 = dj.hasFollowingDj ? hour3WithHandoffPattern() : hour3NoHandoffPattern();
+    const patterns = [hour1Pattern(), hour2Pattern(), hour3];
+    const hourLabels = [
+      "Hour 1 (Opener)",
+      "Hour 2",
+      dj.hasFollowingDj ? "Hour 3 (Closer + Handoff)" : "Hour 3 (Closer)",
+    ];
 
     // Count elements per pattern for logging
     for (let i = 0; i < 3; i++) {
@@ -206,7 +253,7 @@ async function main() {
         data: {
           stationId: station.id,
           name: templateName,
-          description: `${djRecord.name}'s ${hourLabels[i].toLowerCase()} clock. ${i === 0 ? "Includes show intro." : i === 2 ? "Includes show closer." : "Mid-show programming."} ${songs} songs, ${ads * 2} ad spots (${ads} breaks), ${features} features, ${vts} voice tracks.`,
+          description: `${djRecord.name}'s ${hourLabels[i].toLowerCase()} clock. ${i === 0 ? "Includes show intro." : i === 2 ? (dj.hasFollowingDj ? "Includes show transition to next DJ + show closer." : "Includes show closer (last DJ of the day).") : "Mid-show programming."} ${songs} songs, ${ads * 2} ad spots (${ads} breaks), ${features} features, ${vts} voice tracks.`,
           clockType: dj.clockType,
           tempo: dj.tempo,
           hitsPerHour: songs,
