@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { railwayFetch } from "@/lib/api/railway";
+import { prisma } from "@/lib/db";
 import { requireAuth } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
 
@@ -10,11 +10,9 @@ export async function DELETE(_request: NextRequest, { params }: { params: Promis
     const session = await requireAuth();
     if (!session) return unauthorized();
     const { id } = await params;
-    const res = await railwayFetch(`/api/clocks/assignments/${id}`, {
-      method: "DELETE",
-    });
-    const data = await res.json().catch(() => ({}));
-    return NextResponse.json(data, { status: res.status });
+
+    await prisma.clockAssignment.delete({ where: { id } });
+    return NextResponse.json({ message: "Deleted" });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete assignment" }, { status: 500 });
   }

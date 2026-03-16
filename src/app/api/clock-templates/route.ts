@@ -1,20 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
-import { railwayFetch } from "@/lib/api/railway";
-import { requireAuth } from "@/lib/api/auth";
+import { prisma } from "@/lib/db";
+import { optionalAuth, requireAuth } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
-import { verifyStationAccess } from "@/lib/db-scoped";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const res = await railwayFetch("/api/clocks/templates");
-    if (!res.ok) {
-      const errBody = await res.text().catch(() => "");
-      return NextResponse.json({ error: errBody || "Railway API error" }, { status: res.status });
+    const station = await prisma.station.findFirst({
+      where: { isActive: true },
+      select: { id: true },
+    });
+    if (!station) {
+      return NextResponse.json([]);
     }
-    const data = await res.json();
-    return NextResponse.json(data);
+
+    const templates = await prisma.clockTemplate.findMany({
+      where: { stationId: station.id },
+      orderBy: { name: "asc" },
+    });
+
+    // Count how many assignments use each template
+    const assignmentCounts = await prisma.clockAssignment.groupBy({
+      by: ["clockTemplateId"],
+      where: { stationId: station.id, isActive: true },
+      _count: true,
+    });
+    const countMap = new Map(assignmentCounts.map((a) => [a.clockTemplateId, a._count]));
+
+    const result = templates.map((t) => ({
+      id: t.id,
+      name: t.name,
+      description: t.description,
+      clock_pattern: t.clockPattern ? JSON.parse(typeof t.clockPattern === "string" ? t.clockPattern : JSON.stringify(t.clockPattern)) : [],
+      is_active: t.isActive,
+      usage_count: countMap.get(t.id) || 0,
+      clock_type: t.clockType || "general",
+      tempo: t.tempo,
+      programming_notes: t.description || null,
+      created_at: t.createdAt?.toISOString() || null,
+      hits_per_hour: t.hitsPerHour || 0,
+      gender_balance_target: t.genderBalanceTarget || 0.5,
+    }));
+
+    return NextResponse.json(result);
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch clock templates" }, { status: 500 });
   }
@@ -26,17 +55,33 @@ export async function POST(request: NextRequest) {
     if (!session) return unauthorized();
     const body = await request.json();
 
-    if (body.stationId) {
-      const station = await verifyStationAccess(session, body.stationId);
-      if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
+    const station = await prisma.station.findFirst({
+      where: { isActive: true },
+      select: { id: true },
+    });
+    if (!station) {
+      return NextResponse.json({ error: "No active station" }, { status: 404 });
     }
 
-    const res = await railwayFetch("/api/clocks/templates", {
-      method: "POST",
-      body: JSON.stringify(body),
+    const template = await prisma.clockTemplate.create({
+      data: {
+        stationId: body.stationId || station.id,
+        name: body.name,
+        description: body.description || body.programming_notes || null,
+        clockPattern: JSON.stringify(body.clock_pattern || []),
+        isActive: body.is_active ?? true,
+        clockType: body.clock_type || "general",
+        tempo: body.tempo || null,
+        hitsPerHour: body.hits_per_hour || 0,
+        genderBalanceTarget: body.gender_balance_target || 0.5,
+      },
     });
-    const data = await res.json().catch(() => ({}));
-    return NextResponse.json(data, { status: res.status });
+
+    return NextResponse.json({
+      id: template.id,
+      name: template.name,
+      message: "Template created",
+    }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: "Failed to create clock template" }, { status: 500 });
   }

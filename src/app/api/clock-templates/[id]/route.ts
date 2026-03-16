@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { railwayFetch } from "@/lib/api/railway";
+import { prisma } from "@/lib/db";
 import { requireAuth } from "@/lib/api/auth";
 import { unauthorized } from "@/lib/api/errors";
 
@@ -7,18 +7,24 @@ export const dynamic = "force-dynamic";
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await requireAuth();
-    if (!session) return unauthorized();
     const { id } = await params;
-    const res = await railwayFetch("/api/clocks/templates");
-    if (!res.ok) {
-      const errBody = await res.text().catch(() => "");
-      return NextResponse.json({ error: errBody || "Railway API error" }, { status: res.status });
-    }
-    const data = await res.json();
-    const template = (data.templates || []).find((t: any) => t.id === id);
+    const template = await prisma.clockTemplate.findUnique({ where: { id } });
     if (!template) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    return NextResponse.json({ template });
+
+    return NextResponse.json({
+      template: {
+        id: template.id,
+        name: template.name,
+        description: template.description,
+        clock_pattern: template.clockPattern ? JSON.parse(typeof template.clockPattern === "string" ? template.clockPattern : JSON.stringify(template.clockPattern)) : [],
+        is_active: template.isActive,
+        clock_type: template.clockType || "general",
+        tempo: template.tempo,
+        programming_notes: template.description,
+        hits_per_hour: template.hitsPerHour || 0,
+        gender_balance_target: template.genderBalanceTarget || 0.5,
+      },
+    });
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch clock template" }, { status: 500 });
   }
@@ -30,12 +36,22 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     if (!session) return unauthorized();
     const { id } = await params;
     const body = await request.json();
-    const res = await railwayFetch(`/api/clocks/templates/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(body),
+
+    const template = await prisma.clockTemplate.update({
+      where: { id },
+      data: {
+        name: body.name,
+        description: body.description || body.programming_notes,
+        clockPattern: body.clock_pattern ? JSON.stringify(body.clock_pattern) : undefined,
+        isActive: body.is_active,
+        clockType: body.clock_type,
+        tempo: body.tempo,
+        hitsPerHour: body.hits_per_hour,
+        genderBalanceTarget: body.gender_balance_target,
+      },
     });
-    const data = await res.json().catch(() => ({}));
-    return NextResponse.json(data, { status: res.status });
+
+    return NextResponse.json({ id: template.id, message: "Updated" });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update clock template" }, { status: 500 });
   }
@@ -47,12 +63,17 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     if (!session) return unauthorized();
     const { id } = await params;
     const body = await request.json();
-    const res = await railwayFetch(`/api/clocks/templates/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(body),
-    });
-    const data = await res.json().catch(() => ({}));
-    return NextResponse.json(data, { status: res.status });
+
+    const data: Record<string, unknown> = {};
+    if (body.name !== undefined) data.name = body.name;
+    if (body.description !== undefined) data.description = body.description;
+    if (body.clock_pattern !== undefined) data.clockPattern = JSON.stringify(body.clock_pattern);
+    if (body.is_active !== undefined) data.isActive = body.is_active;
+    if (body.clock_type !== undefined) data.clockType = body.clock_type;
+    if (body.tempo !== undefined) data.tempo = body.tempo;
+
+    const template = await prisma.clockTemplate.update({ where: { id }, data });
+    return NextResponse.json({ id: template.id, message: "Updated" });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update clock template" }, { status: 500 });
   }
@@ -63,11 +84,9 @@ export async function DELETE(_request: NextRequest, { params }: { params: Promis
     const session = await requireAuth();
     if (!session) return unauthorized();
     const { id } = await params;
-    const res = await railwayFetch(`/api/clocks/templates/${id}`, {
-      method: "DELETE",
-    });
-    const data = await res.json().catch(() => ({}));
-    return NextResponse.json(data, { status: res.status });
+
+    await prisma.clockTemplate.delete({ where: { id } });
+    return NextResponse.json({ message: "Deleted" });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete clock template" }, { status: 500 });
   }
