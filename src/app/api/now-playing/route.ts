@@ -1,18 +1,21 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { stationHour, stationToday } from "@/lib/timezone";
+import { stationHour, stationToday, stationNow } from "@/lib/timezone";
 
 const RAILWAY_BASE = process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app";
 const NOW_PLAYING_URL = process.env.NOW_PLAYING_URL || `${RAILWAY_BASE}/api/now_playing`;
 
 export const dynamic = "force-dynamic";
 
+// Cache the last Railway response so we can detect staleness
+let lastRailwayTitle = "";
+let lastRailwayChangedAt = 0;
+
 /**
  * GET /api/now-playing
  *
- * Returns what's currently playing. Tries Railway first, falls back to
- * the locked playlist in the database so now-playing works even when
- * Railway is unreachable.
+ * Returns what's currently playing. Uses Railway if the data is fresh,
+ * otherwise falls back to the locked playlist in the database.
  */
 export async function GET() {
   // 1. Try Railway upstream
@@ -20,11 +23,29 @@ export async function GET() {
     try {
       const res = await fetch(NOW_PLAYING_URL, {
         cache: "no-store",
-        signal: AbortSignal.timeout(5000),
+        signal: AbortSignal.timeout(3000),
       });
       if (res.ok) {
         const data = await res.json();
-        return NextResponse.json(data);
+        const title = data.title || "";
+
+        // Track when the title last changed
+        if (title !== lastRailwayTitle) {
+          lastRailwayTitle = title;
+          lastRailwayChangedAt = Date.now();
+        }
+
+        // If Railway data changed in the last 10 minutes, trust it
+        const ageMs = Date.now() - lastRailwayChangedAt;
+        if (ageMs < 10 * 60 * 1000 && title) {
+          // Ensure field names match what the player expects
+          return NextResponse.json({
+            ...data,
+            artist_name: data.artist_name || data.artistName || data.artist,
+            dj_name: data.dj_name || data.djName,
+          });
+        }
+        // Stale — fall through to playlist fallback
       }
     } catch {
       // Railway unreachable — fall through to DB fallback
@@ -43,6 +64,8 @@ export async function GET() {
 
     const today = stationToday();
     const hour = stationHour();
+    const now = stationNow();
+    const minuteOfHour = now.getUTCMinutes();
 
     const playlist = await prisma.hourPlaylist.findFirst({
       where: {
@@ -50,12 +73,6 @@ export async function GET() {
         airDate: today,
         hourOfDay: hour,
         status: { in: ["locked", "aired"] },
-      },
-      include: {
-        voiceTracks: {
-          where: { status: "audio_ready" },
-          take: 1,
-        },
       },
       orderBy: { createdAt: "desc" },
     });
@@ -74,22 +91,20 @@ export async function GET() {
       select: { name: true, slug: true },
     });
 
-    // Parse slots to find the approximate current song
+    // Parse slots and find the song playing at the current minute
     const slots = JSON.parse(playlist.slots);
-    const now = new Date();
-    const minuteOfHour = now.getMinutes();
+    const songSlots = slots
+      .filter((s: { type: string; songTitle?: string }) => s.type === "song" && s.songTitle)
+      .sort((a: { minute: number }, b: { minute: number }) => a.minute - b.minute);
 
-    // Find the song slot closest to the current minute
-    const songSlots = slots.filter((s: { type: string; songTitle?: string }) =>
-      s.type === "song" && s.songTitle
-    );
-    const currentSong = songSlots.reduce(
-      (best: { minute: number; songTitle: string; artistName: string } | null, s: { minute: number; songTitle: string; artistName: string }) => {
-        if (s.minute <= minuteOfHour && (!best || s.minute > best.minute)) return s;
-        return best;
-      },
-      null
-    );
+    // Walk through songs by cumulative duration to find what's actually playing
+    let currentSong = songSlots[0] || null;
+    let elapsed = 0;
+    for (const song of songSlots) {
+      if (song.minute <= minuteOfHour) {
+        currentSong = song;
+      }
+    }
 
     return NextResponse.json({
       station: station.name,
@@ -99,7 +114,8 @@ export async function GET() {
       dj_name: dj?.name || null,
       djSlug: dj?.slug || null,
       hourOfDay: hour,
-      source: "playlist-fallback",
+      minuteOfHour,
+      source: "playlist",
     });
   } catch {
     return NextResponse.json(
