@@ -39,8 +39,8 @@ function hour1Pattern() {
     { position: 7,  minute: 15, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 1" },
     // :18 — AD BREAK 1 (2 min: sweeper + 4 spots + promo)
     { position: 8,  minute: 18, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 1" },
-    { position: 9,  minute: 18, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 1-2" },
-    { position: 10, minute: 19, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 3-4" },
+    { position: 9,  minute: 18, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 1 — spots 1-2" },
+    { position: 10, minute: 19, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 1 — spots 3-4" },
     // :20 — Music block 2
     { position: 11, minute: 20, duration: 4, category: "C",       type: "song",        notes: "Medium rotation" },
     { position: 12, minute: 24, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
@@ -50,15 +50,15 @@ function hour1Pattern() {
     { position: 15, minute: 33, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 2" },
     // :36 — AD BREAK 2 (2 min)
     { position: 16, minute: 36, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 2" },
-    { position: 17, minute: 36, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 1-2" },
-    { position: 18, minute: 37, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 3-4" },
+    { position: 17, minute: 36, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 2 — spots 1-2" },
+    { position: 18, minute: 37, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 2 — spots 3-4" },
     // :38 — Music block 3
     { position: 19, minute: 38, duration: 4, category: "A",       type: "song",        notes: "Power hit" },
     { position: 20, minute: 42, duration: 4, category: "E",       type: "song",        notes: "Artist spotlight / new music" },
     // :46 — AD BREAK 3 (2 min)
     { position: 21, minute: 46, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 3" },
-    { position: 22, minute: 46, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 1-2" },
-    { position: 23, minute: 47, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 3-4" },
+    { position: 22, minute: 46, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 3 — spots 1-2" },
+    { position: 23, minute: 47, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 3 — spots 3-4" },
     // :48 — Music block 4 + generic VT
     { position: 24, minute: 48, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
     { position: 25, minute: 52, duration: 1, category: "DJ",      type: "voice_break", notes: "Generic pre-recorded voice track" },
@@ -80,8 +80,8 @@ function hour2Pattern() {
     { position: 6,  minute: 13, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 1" },
     // :16 — AD BREAK 1 (2 min)
     { position: 7,  minute: 16, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 1" },
-    { position: 8,  minute: 16, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 1-2" },
-    { position: 9,  minute: 17, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 3-4" },
+    { position: 8,  minute: 16, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 1 — spots 1-2" },
+    { position: 9,  minute: 17, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 1 — spots 3-4" },
     // :18 — Music block 2
     { position: 10, minute: 18, duration: 4, category: "A",       type: "song",        notes: "Power hit" },
     { position: 11, minute: 22, duration: 4, category: "D",       type: "song",        notes: "Light rotation / discovery" },
@@ -91,15 +91,15 @@ function hour2Pattern() {
     { position: 14, minute: 31, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 2" },
     // :34 — AD BREAK 2 (2 min)
     { position: 15, minute: 34, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 2" },
-    { position: 16, minute: 34, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 1-2" },
-    { position: 17, minute: 35, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 3-4" },
+    { position: 16, minute: 34, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 2 — spots 1-2" },
+    { position: 17, minute: 35, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 2 — spots 3-4" },
     // :36 — Music block 3
     { position: 18, minute: 36, duration: 4, category: "E",       type: "song",        notes: "Artist spotlight / new music" },
     { position: 19, minute: 40, duration: 4, category: "A",       type: "song",        notes: "Power hit" },
     // :44 — AD BREAK 3 (2 min)
     { position: 20, minute: 44, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 3" },
-    { position: 21, minute: 44, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 1-2" },
-    { position: 22, minute: 45, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 3-4" },
+    { position: 21, minute: 44, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 3 — spots 1-2" },
+    { position: 22, minute: 45, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 3 — spots 3-4" },
     // :46 — Music block 4 + generic VT
     { position: 23, minute: 46, duration: 4, category: "C",       type: "song",        notes: "Medium rotation" },
     { position: 24, minute: 50, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
@@ -122,8 +122,8 @@ function hour3WithHandoffPattern() {
     { position: 6,  minute: 13, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 1" },
     // :16 — AD BREAK 1 (2 min)
     { position: 7,  minute: 16, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 1" },
-    { position: 8,  minute: 16, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 1-2" },
-    { position: 9,  minute: 17, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 3-4" },
+    { position: 8,  minute: 16, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 1 — spots 1-2" },
+    { position: 9,  minute: 17, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 1 — spots 3-4" },
     // :18 — Music block 2
     { position: 10, minute: 18, duration: 4, category: "A",       type: "song",        notes: "Power hit" },
     { position: 11, minute: 22, duration: 4, category: "D",       type: "song",        notes: "Light rotation / discovery" },
@@ -133,15 +133,15 @@ function hour3WithHandoffPattern() {
     { position: 14, minute: 31, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 2" },
     // :34 — AD BREAK 2 (2 min)
     { position: 15, minute: 34, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 2" },
-    { position: 16, minute: 34, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 1-2" },
-    { position: 17, minute: 35, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 3-4" },
+    { position: 16, minute: 34, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 2 — spots 1-2" },
+    { position: 17, minute: 35, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 2 — spots 3-4" },
     // :36 — Music block 3
     { position: 18, minute: 36, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
     { position: 19, minute: 40, duration: 4, category: "A",       type: "song",        notes: "Power hit" },
     // :44 — AD BREAK 3 (2 min)
     { position: 20, minute: 44, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 3" },
-    { position: 21, minute: 44, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 1-2" },
-    { position: 22, minute: 45, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 3-4" },
+    { position: 21, minute: 44, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 3 — spots 1-2" },
+    { position: 22, minute: 45, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 3 — spots 3-4" },
     // :46 — Final music + transition
     { position: 23, minute: 46, duration: 4, category: "C",       type: "song",        notes: "Medium rotation" },
     { position: 24, minute: 50, duration: 2, category: "DJ",      type: "voice_break", notes: "SHOW TRANSITION — DJ hands off to next DJ" },
@@ -164,8 +164,8 @@ function hour3NoHandoffPattern() {
     { position: 6,  minute: 13, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 1" },
     // :16 — AD BREAK 1 (2 min)
     { position: 7,  minute: 16, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 1" },
-    { position: 8,  minute: 16, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 1-2" },
-    { position: 9,  minute: 17, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 1 — spots 3-4" },
+    { position: 8,  minute: 16, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 1 — spots 1-2" },
+    { position: 9,  minute: 17, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 1 — spots 3-4" },
     // :18 — Music block 2
     { position: 10, minute: 18, duration: 4, category: "A",       type: "song",        notes: "Power hit" },
     { position: 11, minute: 22, duration: 4, category: "D",       type: "song",        notes: "Light rotation / discovery" },
@@ -175,15 +175,15 @@ function hour3NoHandoffPattern() {
     { position: 14, minute: 31, duration: 3, category: "Feature", type: "feature",     notes: "Station feature segment 2" },
     // :34 — AD BREAK 2 (2 min)
     { position: 15, minute: 34, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 2" },
-    { position: 16, minute: 34, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 1-2" },
-    { position: 17, minute: 35, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 2 — spots 3-4" },
+    { position: 16, minute: 34, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 2 — spots 1-2" },
+    { position: 17, minute: 35, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 2 — spots 3-4" },
     // :36 — Music block 3
     { position: 18, minute: 36, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
     { position: 19, minute: 40, duration: 4, category: "A",       type: "song",        notes: "Power hit" },
     // :44 — AD BREAK 3 (2 min)
     { position: 20, minute: 44, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into ad break 3" },
-    { position: 21, minute: 44, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 1-2" },
-    { position: 22, minute: 45, duration: 1, category: "Sponsor", type: "ad",          notes: "Ad break 3 — spots 3-4" },
+    { position: 21, minute: 44, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 3 — spots 1-2" },
+    { position: 22, minute: 45, duration: 1, category: "Sponsor", type: "sponsor",          notes: "Ad break 3 — spots 3-4" },
     // :46 — Final music + show closer (no handoff)
     { position: 23, minute: 46, duration: 4, category: "C",       type: "song",        notes: "Medium rotation" },
     { position: 24, minute: 50, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },

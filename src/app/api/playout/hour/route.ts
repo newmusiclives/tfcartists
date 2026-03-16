@@ -273,7 +273,7 @@ export async function GET(request: NextRequest) {
 
     // --- Resolve ads for ad slots ---
     const adSlots = slots.filter((s: { type: string }) =>
-      s.type === "ad" || s.type === "commercial"
+      s.type === "ad" || s.type === "commercial" || s.type === "sponsor"
     );
     type ResolvedAd = {
       id: string;

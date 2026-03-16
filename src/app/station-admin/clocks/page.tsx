@@ -444,10 +444,14 @@ function detectBreaks(slots: ClockSlot[]): EditorRow[] {
     const startMinute = group[0].minute;
 
     let label: string;
-    if (bi === 0 && startMinute <= 2) {
+    // Only label as Show Opening/Closing if the actual slot notes say so
+    const groupNotes = group.map(s => (s.notes || "").toUpperCase()).join(" ");
+    if (groupNotes.includes("SHOW INTRO") || groupNotes.includes("SHOW OPEN")) {
       label = "Show Opening";
-    } else if (bi === pendingBreaks.length - 1 && startMinute >= 48) {
+    } else if (groupNotes.includes("SHOW CLOSER") || groupNotes.includes("SHOW CLOSE") || groupNotes.includes("SIGNS OFF")) {
       label = "Show Closing";
+    } else if (groupNotes.includes("SHOW TRANSITION") || groupNotes.includes("HANDS OFF")) {
+      label = "Show Transition";
     } else {
       label = BREAK_TYPE_LABELS[breakType];
     }
