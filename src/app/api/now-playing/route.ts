@@ -96,10 +96,10 @@ export async function GET() {
     return NextResponse.json({
       station: station.name,
       status: "on-air",
-      djName: dj?.name || null,
-      djSlug: dj?.slug || null,
       title: currentSong?.songTitle || "Music",
-      artist: currentSong?.artistName || station.name,
+      artist_name: currentSong?.artistName || station.name,
+      dj_name: dj?.name || null,
+      djSlug: dj?.slug || null,
       hourOfDay: hour,
       source: "playlist-fallback",
     });
