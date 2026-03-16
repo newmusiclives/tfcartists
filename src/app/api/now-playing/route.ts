@@ -2,10 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { stationHour, stationToday } from "@/lib/timezone";
 
-const NOW_PLAYING_URL =
-  process.env.NOW_PLAYING_URL || process.env.RAILWAY_BACKEND_URL
-    ? `${process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app"}/api/now_playing`
-    : null;
+const RAILWAY_BASE = process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app";
+const NOW_PLAYING_URL = process.env.NOW_PLAYING_URL || `${RAILWAY_BASE}/api/now_playing`;
 
 export const dynamic = "force-dynamic";
 
