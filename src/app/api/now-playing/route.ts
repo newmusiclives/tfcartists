@@ -2,17 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { stationHour, stationToday, stationNow } from "@/lib/timezone";
 
+const RAILWAY_BASE = process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app";
+
 export const dynamic = "force-dynamic";
 
 /**
  * GET /api/now-playing
  *
  * Returns what's currently playing based on today's locked playlist.
- * Uses the current Mountain Time minute to determine which song
- * should be on air right now.
- *
- * This is the only reliable source — Railway's now_playing endpoint
- * often gets stuck on stale data when track_played reports fail.
+ * Also fetches artwork and listener count from Railway as supplementary data.
  */
 export async function GET() {
   try {
@@ -53,23 +51,37 @@ export async function GET() {
       select: { name: true, slug: true },
     });
 
-    // Parse slots and find the song at the current minute
+    // Find the current song from the playlist
     const slots = JSON.parse(playlist.slots);
     const songSlots = slots
       .filter((s: { type: string; songTitle?: string }) => s.type === "song" && s.songTitle)
       .sort((a: { minute: number }, b: { minute: number }) => a.minute - b.minute);
 
-    // Find the most recent song that should have started by now
-    let currentSong: { songTitle: string; artistName: string; minute: number } | null = null;
+    let currentSong: { songTitle: string; artistName: string; songId?: string } | null = null;
     for (const song of songSlots) {
       if (song.minute <= minuteOfHour) {
         currentSong = song;
       }
     }
-
-    // If no song found for current minute, use the first song
     if (!currentSong && songSlots.length > 0) {
       currentSong = songSlots[0];
+    }
+
+    // Try to get artwork from Railway (non-blocking, best-effort)
+    let artworkUrl: string | null = null;
+    let listenerCount = 0;
+    try {
+      const railwayRes = await fetch(`${RAILWAY_BASE}/api/now_playing`, {
+        cache: "no-store",
+        signal: AbortSignal.timeout(2000),
+      });
+      if (railwayRes.ok) {
+        const railwayData = await railwayRes.json();
+        artworkUrl = railwayData.artwork_url || null;
+        listenerCount = railwayData.listener_count || 0;
+      }
+    } catch {
+      // Railway unreachable — no artwork, that's fine
     }
 
     return NextResponse.json({
@@ -77,7 +89,10 @@ export async function GET() {
       status: "on-air",
       title: currentSong?.songTitle || "Music",
       artist_name: currentSong?.artistName || station.name,
+      artwork_url: artworkUrl,
+      listener_count: listenerCount,
       dj_name: dj?.name || null,
+      dj_id: dj?.slug || null,
       djSlug: dj?.slug || null,
       hourOfDay: hour,
       minuteOfHour,
