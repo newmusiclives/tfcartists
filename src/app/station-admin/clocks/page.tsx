@@ -505,12 +505,97 @@ function SlotEditor({
   const [showInsertBreak, setShowInsertBreak] = useState(false);
   const [insertBreakMinute, setInsertBreakMinute] = useState(0);
   const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
 
   const editorRows = useMemo(() => detectBreaks(slots), [slots]);
   const breakBlocks = useMemo(
     () => editorRows.filter((r): r is Extract<EditorRow, { kind: "break" }> => r.kind === "break").map((r) => r.block),
     [editorRows]
   );
+
+  // Drag-and-drop: reorder slots by swapping minute values
+  const handleDragStart = (sortedIdx: number) => {
+    setDragIdx(sortedIdx);
+  };
+
+  const handleDragOver = (e: React.DragEvent, sortedIdx: number) => {
+    e.preventDefault();
+    if (dragIdx !== null && dragIdx !== sortedIdx) {
+      setDragOverIdx(sortedIdx);
+    }
+  };
+
+  const handleDrop = (sortedIdx: number) => {
+    if (dragIdx === null || dragIdx === sortedIdx) {
+      setDragIdx(null);
+      setDragOverIdx(null);
+      return;
+    }
+
+    const sorted = [...slots].sort((a, b) => a.minute - b.minute);
+    const dragSlot = sorted[dragIdx];
+    const dropSlot = sorted[sortedIdx];
+
+    if (!dragSlot || !dropSlot) {
+      setDragIdx(null);
+      setDragOverIdx(null);
+      return;
+    }
+
+    // For break blocks: find all consecutive non-song slots from the drag source
+    const isDragBreak = dragSlot.type !== "song";
+    const isDropBreak = dropSlot.type !== "song";
+
+    if (!isDragBreak && !isDropBreak) {
+      // Song ↔ Song: simple swap of minute values
+      const dragReal = slots.indexOf(dragSlot);
+      const dropReal = slots.indexOf(dropSlot);
+      setSlots(prev => prev.map((s, i) => {
+        if (i === dragReal) return { ...s, minute: dropSlot.minute };
+        if (i === dropReal) return { ...s, minute: dragSlot.minute };
+        return s;
+      }));
+    } else {
+      // Break or mixed: collect the contiguous group and shift minutes
+      // Find the group of slots to move (consecutive non-song or single song)
+      const getGroup = (startIdx: number): number[] => {
+        const indices = [startIdx];
+        const startSlot = sorted[startIdx];
+        if (startSlot.type === "song") return indices;
+        // Expand forward through consecutive non-song slots
+        for (let i = startIdx + 1; i < sorted.length; i++) {
+          if (sorted[i].type !== "song" && sorted[i].minute - sorted[i - 1].minute <= 1) {
+            indices.push(i);
+          } else break;
+        }
+        return indices;
+      };
+
+      const dragGroup = getGroup(dragIdx);
+      const dropMinute = dropSlot.minute;
+      const dragMinuteStart = sorted[dragGroup[0]].minute;
+      const offset = dropMinute - dragMinuteStart;
+
+      // Shift all slots in the drag group by the offset
+      const dragRealIndices = dragGroup.map(si => slots.indexOf(sorted[si]));
+      setSlots(prev => prev.map((s, i) => {
+        const groupPos = dragRealIndices.indexOf(i);
+        if (groupPos >= 0) {
+          return { ...s, minute: Math.max(0, Math.min(59, s.minute + offset)) };
+        }
+        return s;
+      }));
+    }
+
+    setDragIdx(null);
+    setDragOverIdx(null);
+  };
+
+  const handleDragEnd = () => {
+    setDragIdx(null);
+    setDragOverIdx(null);
+  };
 
   const handleWedgeClick = (idx: number) => {
     setSelectedIdx(idx);
@@ -704,8 +789,17 @@ function SlotEditor({
                 key={`song-${sortedIdx}`}
                 ref={(el) => { slotRefs.current[sortedIdx] = el; }}
                 onClick={() => setSelectedIdx(sortedIdx)}
-                className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-pointer transition-colors ${
-                  selectedIdx === sortedIdx
+                draggable
+                onDragStart={() => handleDragStart(sortedIdx)}
+                onDragOver={(e) => handleDragOver(e, sortedIdx)}
+                onDrop={() => handleDrop(sortedIdx)}
+                onDragEnd={handleDragEnd}
+                className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-grab active:cursor-grabbing transition-all ${
+                  dragOverIdx === sortedIdx
+                    ? "border-blue-500 border-2 bg-blue-50 scale-[1.02] shadow-md"
+                    : dragIdx === sortedIdx
+                    ? "opacity-40 border-dashed"
+                    : selectedIdx === sortedIdx
                     ? "bg-blue-50 border-blue-400 ring-2 ring-blue-300"
                     : hasViolation
                     ? "bg-red-50 border-red-300 ring-1 ring-red-200"
@@ -795,8 +889,17 @@ function SlotEditor({
               <div
                 ref={(el) => { slotRefs.current[firstSortedIdx] = el; }}
                 onClick={() => setSelectedIdx(firstSortedIdx)}
-                className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-pointer transition-colors ${
-                  selectedIdx === firstSortedIdx
+                draggable
+                onDragStart={() => handleDragStart(firstSortedIdx)}
+                onDragOver={(e) => handleDragOver(e, firstSortedIdx)}
+                onDrop={() => handleDrop(firstSortedIdx)}
+                onDragEnd={handleDragEnd}
+                className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-grab active:cursor-grabbing transition-all ${
+                  dragOverIdx === firstSortedIdx
+                    ? "border-blue-500 border-2 bg-blue-50 scale-[1.02] shadow-md"
+                    : dragIdx === firstSortedIdx
+                    ? "opacity-40 border-dashed"
+                    : selectedIdx === firstSortedIdx
                     ? "bg-blue-50 border-blue-400 ring-2 ring-blue-300"
                     : "bg-gray-50 hover:bg-gray-100"
                 }`}
