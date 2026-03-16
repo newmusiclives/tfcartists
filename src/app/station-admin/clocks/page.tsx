@@ -1402,8 +1402,8 @@ export default function RadioClocksPage() {
       } else {
         const tData = await tRes.json();
         const aData = await aRes.json();
-        setTemplates(tData.templates || []);
-        setAssignments(aData.assignments || []);
+        setTemplates(Array.isArray(tData) ? tData : tData.templates || []);
+        setAssignments(Array.isArray(aData) ? aData : aData.assignments || []);
       }
     } catch (err) {
       console.error("Failed to fetch templates/assignments:", err);
@@ -1415,7 +1415,7 @@ export default function RadioClocksPage() {
       const dRes = await fetch("/api/clock-djs");
       if (dRes.ok) {
         const dData = await dRes.json();
-        setDjs(dData.djs || []);
+        setDjs(Array.isArray(dData) ? dData : dData.djs || []);
       }
     } catch (err) {
       console.error("Failed to fetch DJs:", err);
