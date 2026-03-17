@@ -31,11 +31,9 @@ interface GenerateVoiceTracksResult {
  * the correct trackType for each based on the immediately adjacent slots.
  *
  * trackType logic:
- *   - If the slot immediately BEFORE the VB is a song → always forward-intro
- *     (the listener just heard the song; the DJ should introduce what's NEXT)
- *   - If there's a non-song slot (feature, ad, sweeper) between the previous
- *     song and the VB → intro (the flow was broken; don't back-announce)
- *   - Fallback: intro if a next song exists, otherwise generic personality moment
+ *   - If there's a next song → forward intro (DJ introduces what's coming up)
+ *   - Otherwise → generic personality moment
+ *   - No back-announces — they often reference the wrong song due to queue timing
  */
 function discoverVoiceBreaks(slots: ResolvedSlot[]): {
   position: number;
@@ -53,15 +51,12 @@ function discoverVoiceBreaks(slots: ResolvedSlot[]): {
 
     let trackType: string;
 
-    if (prevIsSong && nextSong) {
-      // Song right before AND song ahead → back-announce + intro
-      trackType = "back_announce_intro";
-    } else if (nextSong) {
-      // No immediate song before (feature/ad/sweeper gap) → just intro the next song
+    if (nextSong) {
+      // Always forward-intro the next song — no back-announces
       trackType = "intro";
     } else if (prevIsSong) {
-      // Song right before, nothing ahead → back-announce only
-      trackType = "back_announce";
+      // Nothing ahead → generic personality moment (no back-announce)
+      trackType = "generic";
     } else {
       // No adjacent songs at all → generic personality moment
       trackType = "generic";
