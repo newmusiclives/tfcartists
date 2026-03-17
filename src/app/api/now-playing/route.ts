@@ -1,18 +1,33 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { stationHour, stationToday, stationNow } from "@/lib/timezone";
+import { stationHour, stationToday } from "@/lib/timezone";
 
-const RAILWAY_BASE = process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app";
+const RAILWAY_URL = `${process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app"}/api/now_playing`;
 
 export const dynamic = "force-dynamic";
 
 /**
  * GET /api/now-playing
  *
- * Returns what's currently playing based on today's locked playlist.
- * Also fetches artwork and listener count from Railway as supplementary data.
+ * Proxies Railway's now_playing endpoint (source of truth).
+ * Falls back to the locked playlist if Railway is unreachable.
  */
 export async function GET() {
+  // 1. Try Railway upstream — it knows what's actually playing
+  try {
+    const res = await fetch(RAILWAY_URL, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(5000),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return NextResponse.json(data);
+    }
+  } catch {
+    // Railway unreachable — fall through to DB fallback
+  }
+
+  // 2. Fallback: derive now-playing from today's locked playlist
   try {
     const station = await prisma.station.findFirst({
       where: { isActive: true },
@@ -24,8 +39,6 @@ export async function GET() {
 
     const today = stationToday();
     const hour = stationHour();
-    const now = stationNow();
-    const minuteOfHour = now.getUTCMinutes();
 
     const playlist = await prisma.hourPlaylist.findFirst({
       where: {
@@ -45,58 +58,36 @@ export async function GET() {
       });
     }
 
-    // Find the DJ
     const dj = await prisma.dJ.findUnique({
       where: { id: playlist.djId },
       select: { name: true, slug: true },
     });
 
-    // Find the current song from the playlist
     const slots = JSON.parse(playlist.slots);
-    const songSlots = slots
-      .filter((s: { type: string; songTitle?: string }) => s.type === "song" && s.songTitle)
-      .sort((a: { minute: number }, b: { minute: number }) => a.minute - b.minute);
-
-    let currentSong: { songTitle: string; artistName: string; songId?: string } | null = null;
-    for (const song of songSlots) {
-      if (song.minute <= minuteOfHour) {
-        currentSong = song;
-      }
-    }
-    if (!currentSong && songSlots.length > 0) {
-      currentSong = songSlots[0];
-    }
-
-    // Try to get artwork from Railway (non-blocking, best-effort)
-    let artworkUrl: string | null = null;
-    let listenerCount = 0;
-    try {
-      const railwayRes = await fetch(`${RAILWAY_BASE}/api/now_playing`, {
-        cache: "no-store",
-        signal: AbortSignal.timeout(2000),
-      });
-      if (railwayRes.ok) {
-        const railwayData = await railwayRes.json();
-        artworkUrl = railwayData.artwork_url || null;
-        listenerCount = railwayData.listener_count || 0;
-      }
-    } catch {
-      // Railway unreachable — no artwork, that's fine
-    }
+    const minuteOfHour = new Date().getMinutes();
+    const songSlots = slots.filter(
+      (s: { type: string; songTitle?: string }) => s.type === "song" && s.songTitle
+    );
+    const currentSong = songSlots.reduce(
+      (best: { minute: number; songTitle: string; artistName: string } | null, s: { minute: number; songTitle: string; artistName: string }) => {
+        if (s.minute <= minuteOfHour && (!best || s.minute > best.minute)) return s;
+        return best;
+      },
+      null
+    );
 
     return NextResponse.json({
       station: station.name,
       status: "on-air",
       title: currentSong?.songTitle || "Music",
       artist_name: currentSong?.artistName || station.name,
-      artwork_url: artworkUrl,
-      listener_count: listenerCount,
+      artwork_url: null,
+      listener_count: 0,
       dj_name: dj?.name || null,
       dj_id: dj?.slug || null,
       djSlug: dj?.slug || null,
       hourOfDay: hour,
-      minuteOfHour,
-      source: "playlist",
+      source: "playlist-fallback",
     });
   } catch {
     return NextResponse.json(
