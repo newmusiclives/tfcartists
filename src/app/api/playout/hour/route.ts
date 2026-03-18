@@ -473,6 +473,17 @@ export async function GET(request: NextRequest) {
     // Imaging voice metadata — shared between standalone imaging slots and ad break bookends
     let imagingVoiceMeta: { scripts?: Record<string, Array<{ label: string; audioFilePath?: string; audioDuration?: number }>> } | null = null;
 
+    // Time-of-day period for filtering imaging scripts
+    const timePeriod =
+      hourOfDay < 6 ? "overnight" :
+      hourOfDay < 10 ? "morning" :
+      hourOfDay < 14 ? "midday" :
+      hourOfDay < 18 ? "afternoon" : "evening";
+
+    // Labels that DON'T match the current time period should be excluded
+    const wrongTimePeriods = ["morning", "midday", "afternoon", "evening", "overnight", "late night"]
+      .filter((p) => p !== timePeriod && !(timePeriod === "overnight" && p === "late night"));
+
     if (imagingSlots.length > 0 || adSlots.length > 0) {
       // Find imaging voice with audio metadata
       const imagingVoice = await prisma.stationImagingVoice.findFirst({
@@ -484,7 +495,13 @@ export async function GET(request: NextRequest) {
         if (imagingVoiceMeta?.scripts) {
           for (const slot of imagingSlots) {
             const slotType = slot.type as string;
-            const scripts = imagingVoiceMeta.scripts[slotType] || imagingVoiceMeta.scripts["sweeper"] || [];
+            const allScripts = imagingVoiceMeta.scripts[slotType] || imagingVoiceMeta.scripts["sweeper"] || [];
+            // Filter out scripts whose labels reference the wrong time of day
+            const timeFiltered = allScripts.filter((s) => {
+              const label = s.label.toLowerCase();
+              return !wrongTimePeriods.some((wp) => label.includes(wp));
+            });
+            const scripts = timeFiltered.length > 0 ? timeFiltered : allScripts;
             if (scripts.length > 0) {
               // Pick a random imaging script for variety
               const pick = scripts[Math.floor(Math.random() * scripts.length)];
@@ -685,10 +702,16 @@ export async function GET(request: NextRequest) {
         const pos = slot.position as number;
         const min = slot.minute as number;
 
-        // Pick a random imaging script by type
+        // Pick a random imaging script by type, filtered by time of day
         const pickImaging = (scriptType: string) => {
           if (!imagingVoiceMeta?.scripts) return undefined;
-          const scripts = imagingVoiceMeta.scripts[scriptType] || [];
+          const allScripts = imagingVoiceMeta.scripts[scriptType] || [];
+          if (allScripts.length === 0) return undefined;
+          const timeFiltered = allScripts.filter((s) => {
+            const label = s.label.toLowerCase();
+            return !wrongTimePeriods.some((wp) => label.includes(wp));
+          });
+          const scripts = timeFiltered.length > 0 ? timeFiltered : allScripts;
           if (scripts.length === 0) return undefined;
           const pick = scripts[Math.floor(Math.random() * scripts.length)];
           return pick.audioFilePath ? { type: scriptType, audioFilePath: pick.audioFilePath, audioDuration: pick.audioDuration } : undefined;
