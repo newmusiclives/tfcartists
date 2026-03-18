@@ -46,3 +46,7 @@ prisma/*.db-journal
 
 # Deno
 deno.lock
+
+# Generated audio files (served from R2 in production)
+public/audio/
+.tmp-audio/

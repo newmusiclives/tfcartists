@@ -136,10 +136,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Normalize to local midnight — must match playlist-builder.ts line 216
-    // which uses setHours(0,0,0,0) on the server's local timezone
-    const airDate = new Date(date);
-    airDate.setHours(0, 0, 0, 0);
+    // Normalize to UTC midnight — must match stationToday() which stores
+    // dates as UTC midnight with the Mountain Time calendar date
+    const airDate = new Date(date + "T00:00:00.000Z");
     const hourOfDay = parseInt(hour, 10);
 
     // Look up which DJ is assigned to this hour from ClockAssignment
