@@ -428,12 +428,12 @@ export default async function MarketingPage() {
               </div>
               <div className="text-amber-600 font-semibold text-sm mb-2">For Operators</div>
               <div className="flex items-baseline">
-                <span className="text-3xl font-bold text-gray-900">$250</span>
+                <span className="text-3xl font-bold text-gray-900">$150</span>
                 <span className="text-sm text-gray-500 ml-1">/mo</span>
               </div>
-              <div className="text-sm text-gray-500 mb-6">everything you need</div>
+              <div className="text-sm text-gray-500 mb-6">launch your station</div>
               <ul className="space-y-2 mb-6">
-                {["6 AI DJs, 24/7 live radio", "340 artists, 125 sponsors", "5 AI teams do all the work", "Earn up to $75K/yr"].map((item) => (
+                {["Full AI-powered station", "2 AI DJs, 12hr/day live", "5 AI teams included", "No broadcast license needed"].map((item) => (
                   <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
                     <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0" />
                     <span>{item}</span>
@@ -441,9 +441,9 @@ export default async function MarketingPage() {
                 ))}
               </ul>
               <Link href="/operate" className="block text-center bg-amber-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-amber-700 transition-colors text-sm">
-                Launch Your Station
+                Learn More
               </Link>
-              <p className="text-xs text-center text-gray-400 mt-2">Plans from $150/mo · <Link href="/operate" className="text-amber-600 hover:underline">See all plans</Link></p>
+              <p className="text-xs text-center text-gray-400 mt-2"><Link href="/operate" className="text-amber-600 hover:underline">See all plans</Link></p>
             </div>
           </div>
         </div>
