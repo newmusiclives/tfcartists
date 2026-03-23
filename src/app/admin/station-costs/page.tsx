@@ -47,17 +47,17 @@ const IMAGING_SCRIPT_TOKENS = 1500;
 // --- Revenue tiers ---
 const ARTIST_TIERS = [
   { name: "Free", price: 0 },
-  { name: "Tier 5", price: 5 },
-  { name: "Tier 20", price: 20 },
-  { name: "Tier 50", price: 50 },
-  { name: "Tier 120", price: 120 },
+  { name: "Bronze", price: 5 },
+  { name: "Silver", price: 15 },
+  { name: "Gold", price: 40 },
+  { name: "Platinum", price: 100 },
 ];
 
 const SPONSOR_TIERS = [
-  { name: "Bronze", price: 100 },
-  { name: "Silver", price: 250 },
-  { name: "Gold", price: 500 },
-  { name: "Platinum", price: 1000 },
+  { name: "Local Hero", price: 30 },
+  { name: "Tier 1", price: 80 },
+  { name: "Tier 2", price: 150 },
+  { name: "Tier 3", price: 300 },
 ];
 
 function fmt(n: number): string {
@@ -256,8 +256,13 @@ export default function StationCostsPage() {
   const savings = fullCosts - costs.total;
   const hasOptimizations = optStdTTS || optReduceTracks || optGeminiTTS || optSkipFeatures;
 
-  // --- Pricing margins ---
-  const pricePoints = [149, 199, 299];
+  // --- Operator plan pricing ---
+  const operatorPlans = [
+    { name: "Launch", price: 150, fee: 15, setup: 500 },
+    { name: "Growth", price: 250, fee: 10, setup: 500, recommended: true },
+    { name: "Scale", price: 400, fee: 7, setup: 1000 },
+    { name: "Network", price: 800, fee: 5, setup: 0 },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -413,12 +418,12 @@ export default function StationCostsPage() {
             <h3 className="text-sm font-semibold text-gray-700 mb-3">Mixed Revenue Scenarios</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {[
-                { desc: "2 Gold artists + 1 Bronze sponsor", rev: 2 * 50 + 100 },
-                { desc: "1 Tier 120 artist + 1 Bronze sponsor", rev: 120 + 100 },
-                { desc: "4 Tier 20 artists + 1 Silver sponsor", rev: 4 * 20 + 250 },
-                { desc: "1 Gold sponsor only", rev: 500 },
-                { desc: "10 Tier 5 artists + 1 Bronze sponsor", rev: 10 * 5 + 100 },
-                { desc: "2 Tier 50 artists + 2 Bronze sponsors", rev: 2 * 50 + 2 * 100 },
+                { desc: "2 Gold artists + 1 Local Hero sponsor", rev: 2 * 40 + 30 },
+                { desc: "1 Platinum artist + 1 Tier 1 sponsor", rev: 100 + 80 },
+                { desc: "4 Silver artists + 1 Tier 2 sponsor", rev: 4 * 15 + 150 },
+                { desc: "1 Tier 3 sponsor only", rev: 300 },
+                { desc: "10 Bronze artists + 1 Tier 1 sponsor", rev: 10 * 5 + 80 },
+                { desc: "2 Gold artists + 2 Local Hero sponsors", rev: 2 * 40 + 2 * 30 },
               ].map((scenario) => {
                 const surplus = scenario.rev - costs.total;
                 const positive = surplus >= 0;
@@ -508,31 +513,45 @@ export default function StationCostsPage() {
             Operator Pricing & Margins
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {pricePoints.map((price) => {
-              const margin = price - costs.total;
-              const marginPct = (margin / price) * 100;
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {operatorPlans.map((plan) => {
+              const margin = plan.price - costs.total;
               const positive = margin >= 0;
+              // Example: at full capacity operator earns ~$8,350/mo
+              const exampleRevenue = 8350;
+              const platformFee = exampleRevenue * (plan.fee / 100);
+              const totalTfRevenue = plan.price + platformFee;
               return (
                 <div
-                  key={price}
+                  key={plan.name}
                   className={`p-5 rounded-xl border-2 text-center ${
-                    price === 199
+                    plan.recommended
                       ? "border-indigo-400 bg-indigo-50"
                       : "border-gray-200 bg-gray-50"
                   }`}
                 >
-                  {price === 199 && (
+                  {plan.recommended && (
                     <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">Recommended</span>
                   )}
-                  <p className="text-3xl font-bold text-gray-900 mt-1">${price}</p>
-                  <p className="text-xs text-gray-500 mb-3">per station / month</p>
-                  <div className={`text-lg font-bold ${positive ? "text-green-600" : "text-red-600"}`}>
-                    {positive ? "+" : ""}${fmt(margin)}
+                  <p className="text-xl font-bold text-gray-900 mt-1">{plan.name}</p>
+                  <p className="text-3xl font-bold text-gray-900">${plan.price}</p>
+                  <p className="text-xs text-gray-500 mb-2">per station / month</p>
+                  <p className="text-xs text-gray-500">+ {plan.fee}% platform fee</p>
+                  {plan.setup > 0 && (
+                    <p className="text-xs text-gray-400">${plan.setup} one-time setup</p>
+                  )}
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <p className="text-xs text-gray-500">TrueFans revenue at capacity</p>
+                    <div className="text-lg font-bold text-green-600">
+                      ${fmt(totalTfRevenue)}/mo
+                    </div>
+                    <p className="text-xs text-gray-400">
+                      ${plan.price} sub + ${fmt(platformFee)} fee
+                    </p>
                   </div>
-                  <p className="text-xs text-gray-500">
-                    margin ({marginPct.toFixed(0)}%)
-                  </p>
+                  <div className={`mt-2 text-sm font-semibold ${positive ? "text-green-600" : "text-red-600"}`}>
+                    SaaS margin: {positive ? "+" : ""}${fmt(margin)}
+                  </div>
                 </div>
               );
             })}
