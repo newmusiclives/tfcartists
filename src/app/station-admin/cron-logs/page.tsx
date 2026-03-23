@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SharedNav } from "@/components/shared-nav";
-import { Clock, CheckCircle, XCircle, AlertTriangle, Loader2, RefreshCw } from "lucide-react";
+import { Clock, CheckCircle, XCircle, AlertTriangle, Loader2, RefreshCw, PauseCircle, PlayCircle } from "lucide-react";
 
 interface CronLog {
   id: string;
@@ -15,6 +15,11 @@ interface CronLog {
   createdAt: string;
 }
 
+interface SuspendJob {
+  name: string;
+  suspended: boolean;
+}
+
 const JOB_LABELS: Record<string, string> = {
   "features-daily": "Features",
   "parker-daily": "Parker",
@@ -23,6 +28,9 @@ const JOB_LABELS: Record<string, string> = {
   "harper-daily": "Harper",
   "elliot-daily": "Elliot",
   "voice-tracks-daily": "Voice Tracks",
+  "voice-tracks-hour": "Voice Tracks (Hourly)",
+  "newsletter-weekly": "Newsletter",
+  "promoter-payouts": "Promoter Payouts",
   "revenue-monthly": "Revenue",
 };
 
@@ -72,6 +80,34 @@ export default function CronLogsPage() {
   const [filter, setFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [suspendJobs, setSuspendJobs] = useState<SuspendJob[]>([]);
+  const [togglingJob, setTogglingJob] = useState<string | null>(null);
+
+  const fetchSuspendStatus = () => {
+    fetch("/api/admin/cron-suspend")
+      .then((r) => r.json())
+      .then((data) => setSuspendJobs(data.jobs || []))
+      .catch(() => {});
+  };
+
+  const toggleSuspend = async (jobName: string, currentlySuspended: boolean) => {
+    setTogglingJob(jobName);
+    try {
+      const res = await fetch("/api/admin/cron-suspend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobName, suspended: !currentlySuspended }),
+      });
+      if (res.ok) {
+        setSuspendJobs((prev) =>
+          prev.map((j) => j.name === jobName ? { ...j, suspended: !currentlySuspended } : j)
+        );
+      }
+    } catch {
+      // ignore
+    }
+    setTogglingJob(null);
+  };
 
   const fetchLogs = () => {
     setLoading(true);
@@ -91,6 +127,7 @@ export default function CronLogsPage() {
 
   useEffect(() => {
     fetchLogs();
+    fetchSuspendStatus();
   }, [filter, statusFilter]);
 
   const jobNames = Object.keys(JOB_LABELS);
@@ -138,6 +175,40 @@ export default function CronLogsPage() {
             <div className="text-xs text-gray-500">Avg Duration</div>
           </div>
         </div>
+
+        {/* Suspend Controls */}
+        {suspendJobs.length > 0 && (
+          <div className="bg-white rounded-xl border p-4 mb-6">
+            <h2 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+              <PauseCircle className="w-4 h-4" />
+              Job Controls
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {suspendJobs.map((job) => (
+                <button
+                  key={job.name}
+                  onClick={() => toggleSuspend(job.name, job.suspended)}
+                  disabled={togglingJob === job.name}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                    job.suspended
+                      ? "bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
+                      : "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                  } ${togglingJob === job.name ? "opacity-50" : ""}`}
+                >
+                  {job.suspended ? (
+                    <PauseCircle className="w-3.5 h-3.5" />
+                  ) : (
+                    <PlayCircle className="w-3.5 h-3.5" />
+                  )}
+                  {JOB_LABELS[job.name] || job.name}
+                  <span className="text-[10px] opacity-70">
+                    {job.suspended ? "PAUSED" : "ACTIVE"}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="flex gap-3 mb-4">
