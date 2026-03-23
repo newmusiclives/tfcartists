@@ -6,10 +6,18 @@ const RAILWAY_URL = `${process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-bac
 
 export const dynamic = "force-dynamic";
 
+// Default durations (seconds) for non-song elements — matches playout/hour
+const DEFAULT_DURATION: Record<string, number> = {
+  imaging: 5, sweeper: 5, promo: 10, station_id: 4,
+  feature: 45, voice_break: 10, song: 210,
+  ad: 20, commercial: 20, transition: 8,
+};
+
 /**
  * Derive the currently-playing song from the locked playlist for this hour.
- * Uses cumulative song durations for accurate position tracking instead
- * of just the slot's minute marker.
+ * Walks through ALL slots (songs, voice breaks, imaging, ads) with their
+ * actual durations to compute cumulative time, then finds which song
+ * is playing at the current elapsed seconds.
  */
 function deriveCurrentSong(
   slots: Array<{ type: string; songTitle?: string; artistName?: string; songId?: string; minute: number; duration?: number }>,
@@ -17,24 +25,32 @@ function deriveCurrentSong(
   secondOfMinute: number
 ) {
   const elapsedSeconds = minuteOfHour * 60 + secondOfMinute;
-  const songSlots = slots.filter(
-    (s) => s.type === "song" && s.songTitle
-  );
 
-  // Walk through songs by their minute markers + cumulative duration
-  // to find which song should be playing right now.
-  // Each slot has a `minute` field indicating when it starts in the hour.
-  let currentSong: typeof songSlots[0] | null = null;
+  // Walk through all slots in order, accumulating time
+  let cumulativeSec = 0;
+  let currentSong: typeof slots[0] | null = null;
 
-  for (const slot of songSlots) {
-    const slotStartSec = slot.minute * 60;
-    if (slotStartSec <= elapsedSeconds) {
-      currentSong = slot;
-    } else {
-      break; // Past our current time — the previous song is the one playing
+  for (const slot of slots) {
+    const slotDuration = slot.duration || DEFAULT_DURATION[slot.type] || 10;
+
+    if (cumulativeSec + slotDuration > elapsedSeconds) {
+      // We're currently in this slot
+      if (slot.type === "song" && slot.songTitle) {
+        return slot;
+      }
+      // We're in a non-song element — return the most recent song
+      return currentSong;
     }
+
+    // Track the most recent song we've passed
+    if (slot.type === "song" && slot.songTitle) {
+      currentSong = slot;
+    }
+
+    cumulativeSec += slotDuration;
   }
 
+  // Past the end of all slots — return last song
   return currentSong;
 }
 
