@@ -7,7 +7,9 @@ import { logCronExecution, isCronSuspended } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
-const POOL_TARGET = 3; // unused items per DJ per feature type
+const POOL_TARGET = 2; // unused items per DJ per feature type
+const MAX_TOTAL_FEATURES = 500; // hard cap — delete oldest used features beyond this
+const MAX_GENERATE_PER_RUN = 20; // prevent runaway generation
 
 export async function GET(req: NextRequest) {
   const _cronStart = Date.now();
@@ -89,6 +91,26 @@ export async function GET(req: NextRequest) {
       logger.info("Expired stale feature content", { expired });
     }
 
+    // Guardrail: hard cap on total features — delete oldest used ones beyond limit
+    const totalFeatures = await prisma.featureContent.count({ where: { stationId: station.id } });
+    let cleaned = 0;
+    if (totalFeatures > MAX_TOTAL_FEATURES) {
+      const excess = totalFeatures - MAX_TOTAL_FEATURES;
+      const oldestUsed = await prisma.featureContent.findMany({
+        where: { stationId: station.id, isUsed: true, audioFilePath: null },
+        orderBy: { createdAt: "asc" },
+        take: excess,
+        select: { id: true },
+      });
+      if (oldestUsed.length > 0) {
+        const { count } = await prisma.featureContent.deleteMany({
+          where: { id: { in: oldestUsed.map((f) => f.id) } },
+        });
+        cleaned = count;
+        logger.info("Cleaned excess features", { cleaned, totalBefore: totalFeatures });
+      }
+    }
+
     let generated = 0;
     let skipped = 0;
     const byDj: Record<string, number> = {};
@@ -116,6 +138,12 @@ export async function GET(req: NextRequest) {
         continue;
       }
 
+      // Guardrail: stop generating if we've hit the per-run cap
+      if (generated >= MAX_GENERATE_PER_RUN) {
+        skipped++;
+        continue;
+      }
+
       const firstName = djFirstName(combo.djName);
       const isTrackLinked = combo.trackPlacement === "before" || combo.trackPlacement === "after";
 
@@ -138,8 +166,9 @@ export async function GET(req: NextRequest) {
         ? allSongs.filter((s) => !usedSongIds.includes(s.id))
         : [];
 
-      // Generate needed items
-      for (let i = 0; i < needed; i++) {
+      // Generate needed items (capped by per-run limit)
+      const toGenerate = Math.min(needed, MAX_GENERATE_PER_RUN - generated);
+      for (let i = 0; i < toGenerate; i++) {
         let song: SongData | undefined;
         if (isTrackLinked && availableSongs.length > 0) {
           // Pick a random song from available pool
@@ -176,15 +205,16 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    logger.info("Features-daily cron completed", { generated, skipped, expired, byDj });
+    logger.info("Features-daily cron completed", { generated, skipped, expired, cleaned, byDj });
 
-    await logCronExecution({ jobName: "features-daily", status: "success", duration: Date.now() - _cronStart, summary: { generated, skipped, expired, byDj } as Record<string, unknown>, startedAt: _cronStartedAt });
+    await logCronExecution({ jobName: "features-daily", status: "success", duration: Date.now() - _cronStart, summary: { generated, skipped, expired, cleaned, byDj } as Record<string, unknown>, startedAt: _cronStartedAt });
 
     return NextResponse.json({
       success: true,
       generated,
       skipped,
       expired,
+      cleaned,
       byDj,
       timestamp: new Date().toISOString(),
     });
