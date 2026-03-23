@@ -12,7 +12,23 @@ const signupSchema = z.object({
   name: z.string().min(1).max(200),
   email: z.string().email(),
   password: z.string().min(8, "Password must be at least 8 characters"),
+  plan: z.enum(["launch", "growth", "scale", "network"]).optional(),
 });
+
+/** Map frontend plan names to database plan values */
+const PLAN_MAP: Record<string, string> = {
+  launch: "starter",
+  growth: "pro",
+  scale: "enterprise",
+  network: "network",
+};
+
+const MAX_STATIONS_MAP: Record<string, number> = {
+  launch: 1,
+  growth: 1,
+  scale: 3,
+  network: 10,
+};
 
 async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);
@@ -33,7 +49,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { organizationName, name, email, password } = parsed.data;
+    const { organizationName, name, email, password, plan } = parsed.data;
 
     // Check if email already exists
     const existingUser = await prisma.organizationUser.findFirst({
@@ -71,8 +87,8 @@ export async function POST(request: NextRequest) {
           slug,
           ownerName: name,
           ownerEmail: email,
-          plan: "starter",
-          maxStations: 1,
+          plan: plan ? PLAN_MAP[plan] : "starter",
+          maxStations: plan ? MAX_STATIONS_MAP[plan] : 1,
         },
       });
 

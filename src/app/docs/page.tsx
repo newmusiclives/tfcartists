@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SharedNav } from "@/components/shared-nav";
-import { FileText, Rocket, Map, BookOpen } from "lucide-react";
+import { FileText, Rocket, Map, BookOpen, Code2 } from "lucide-react";
 
 export default function DocsPage() {
-  const [activeTab, setActiveTab] = useState<"demo" | "roadmap" | "localhost">("localhost");
+  const [activeTab, setActiveTab] = useState<"demo" | "roadmap" | "localhost" | "api">("localhost");
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -55,6 +55,17 @@ export default function DocsPage() {
                 <Map className="w-5 h-5" />
                 <span>Implementation Roadmap</span>
               </button>
+              <button
+                onClick={() => setActiveTab("api")}
+                className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
+                  activeTab === "api"
+                    ? "bg-purple-100 text-purple-700"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                <Code2 className="w-5 h-5" />
+                <span>API Reference</span>
+              </button>
             </div>
           </div>
 
@@ -63,6 +74,7 @@ export default function DocsPage() {
             {activeTab === "localhost" && <LocalhostGuide />}
             {activeTab === "demo" && <CompleteDemo />}
             {activeTab === "roadmap" && <Roadmap />}
+            {activeTab === "api" && <ApiReference />}
           </div>
         </div>
       </div>
@@ -692,6 +704,149 @@ function Roadmap() {
         <h4 className="font-bold text-yellow-900 mb-2">Pick One Task and Start NOW! 🚀</h4>
         <p className="text-yellow-800">
           You have everything you need. The foundation is rock-solid. Now it's execution time.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+interface ApiDocsData {
+  name: string;
+  version: string;
+  baseUrl: string;
+  authentication: string;
+  endpoints: Record<string, Record<string, string>>;
+  webhookEvents: string[];
+  rateLimits: Record<string, string>;
+}
+
+function ApiReference() {
+  const [docs, setDocs] = useState<ApiDocsData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/docs")
+      .then((r) => r.json())
+      .then((data) => {
+        setDocs(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600" />
+      </div>
+    );
+  }
+
+  if (!docs) {
+    return <p className="text-red-600">Failed to load API documentation.</p>;
+  }
+
+  function methodBadge(method: string) {
+    const colors: Record<string, string> = {
+      GET: "bg-green-100 text-green-800 border-green-300",
+      POST: "bg-blue-100 text-blue-800 border-blue-300",
+      PATCH: "bg-yellow-100 text-yellow-800 border-yellow-300",
+      PUT: "bg-orange-100 text-orange-800 border-orange-300",
+      DELETE: "bg-red-100 text-red-800 border-red-300",
+    };
+    return (
+      <span
+        className={`inline-block px-2 py-0.5 rounded text-xs font-bold border ${colors[method] || "bg-gray-100 text-gray-800 border-gray-300"}`}
+      >
+        {method}
+      </span>
+    );
+  }
+
+  return (
+    <div className="prose prose-lg max-w-none">
+      <h2 className="text-3xl font-bold mb-2">{docs.name}</h2>
+      <p className="text-gray-500 mb-6">Version {docs.version} &middot; Base URL: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{docs.baseUrl}</code></p>
+
+      {/* Authentication */}
+      <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
+        <h3 className="text-xl font-bold text-blue-900 mb-2">Authentication</h3>
+        <p className="text-blue-800 mb-3">
+          Include your API key as a Bearer token in the <code className="bg-blue-100 px-1 rounded">Authorization</code> header:
+        </p>
+        <div className="bg-white rounded-lg p-4 border border-blue-200 font-mono text-sm">
+          Authorization: Bearer YOUR_API_KEY
+        </div>
+        <p className="text-blue-700 text-sm mt-3">
+          API keys are managed in your operator dashboard at{" "}
+          <a href="/operator/dashboard" className="text-blue-600 underline font-semibold">/operator/dashboard</a>
+        </p>
+      </div>
+
+      {/* Endpoints */}
+      <h3 className="text-2xl font-bold mb-4">Endpoints</h3>
+      <div className="space-y-6 mb-8">
+        {Object.entries(docs.endpoints).map(([category, routes]) => (
+          <div key={category} className="bg-white border rounded-lg overflow-hidden">
+            <div className="bg-gray-50 px-6 py-3 border-b">
+              <h4 className="text-lg font-bold text-gray-900 m-0">{category}</h4>
+            </div>
+            <div className="divide-y">
+              {Object.entries(routes).map(([key, description]) => {
+                const parts = key.split(" ");
+                const method = parts[0];
+                const path = parts.slice(1).join(" ");
+                return (
+                  <div key={key} className="px-6 py-3 flex items-start gap-3">
+                    <div className="pt-0.5">{methodBadge(method)}</div>
+                    <div>
+                      <code className="text-sm font-semibold text-gray-900">{path}</code>
+                      <p className="text-sm text-gray-600 m-0 mt-0.5">{description}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Rate Limits */}
+      <h3 className="text-2xl font-bold mb-4">Rate Limits</h3>
+      <div className="bg-white border rounded-lg p-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {Object.entries(docs.rateLimits).map(([category, limit]) => (
+            <div key={category} className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="text-sm text-gray-500 capitalize mb-1">{category}</div>
+              <div className="text-lg font-bold text-gray-900">{limit}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Webhook Events */}
+      <h3 className="text-2xl font-bold mb-4">Webhook Events</h3>
+      <div className="bg-white border rounded-lg p-6 mb-8">
+        <p className="text-gray-600 mb-4">
+          Register a webhook URL in your organization settings to receive real-time notifications for these events:
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {docs.webhookEvents.map((event) => (
+            <div key={event} className="flex items-center gap-2 bg-gray-50 rounded-lg px-4 py-2">
+              <span className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0" />
+              <code className="text-sm font-semibold">{event}</code>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer note */}
+      <div className="bg-purple-50 border-l-4 border-purple-500 p-6">
+        <h4 className="font-bold text-purple-900 mb-2">Need an API Key?</h4>
+        <p className="text-purple-800">
+          API keys are managed in your operator dashboard. Visit{" "}
+          <a href="/operator/dashboard" className="text-purple-600 underline font-semibold">/operator/dashboard</a>{" "}
+          to create and manage your keys.
         </p>
       </div>
     </div>
