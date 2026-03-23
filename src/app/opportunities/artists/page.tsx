@@ -124,6 +124,100 @@ export default function ArtistOpportunityPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
+        {/* Artist Subscription Pricing */}
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Artist Airplay Pricing</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              92 cents of every dollar goes back to artists through our 80/20 sponsor revenue split.
+              At capacity, the artist pool is <strong>$17,800/month</strong> shared among all artists.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+            {/* Free */}
+            <div className="rounded-lg p-5 border-2 border-gray-200 bg-gray-50 flex flex-col">
+              <h3 className="font-bold text-lg text-gray-900 mb-1">Free</h3>
+              <div className="text-3xl font-bold text-gray-700 mb-1">$0</div>
+              <div className="text-sm text-gray-500 mb-3">forever</div>
+              <p className="text-sm text-gray-600 mb-3 flex-1">Get discovered — 1 play/month, station promotion</p>
+              <ul className="text-xs text-gray-500 space-y-1">
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 1 play per month</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Artist Pool share</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Station promotion</li>
+              </ul>
+            </div>
+
+            {/* Bronze */}
+            <div className="rounded-lg p-5 border-2 border-orange-200 bg-orange-50 flex flex-col">
+              <h3 className="font-bold text-lg text-orange-900 mb-1">Bronze</h3>
+              <div className="text-3xl font-bold text-orange-600 mb-1">$5<span className="text-base font-normal">/mo</span></div>
+              <div className="text-sm text-orange-500 mb-3">Less than a coffee</div>
+              <p className="text-sm text-gray-600 mb-3 flex-1">Buy a coffee, get on the radio — 5 plays/month</p>
+              <ul className="text-xs text-gray-500 space-y-1">
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 5 plays per month</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Priority rotation</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Artist spotlight</li>
+              </ul>
+            </div>
+
+            {/* Silver */}
+            <div className="rounded-lg p-5 border-2 border-blue-200 bg-blue-50 flex flex-col">
+              <h3 className="font-bold text-lg text-blue-900 mb-1">Silver</h3>
+              <div className="text-3xl font-bold text-blue-600 mb-1">$15<span className="text-base font-normal">/mo</span></div>
+              <div className="text-sm text-blue-500 mb-3">Less than a Spotify playlist push</div>
+              <p className="text-sm text-gray-600 mb-3 flex-1">20 plays/month with heavy rotation and social features</p>
+              <ul className="text-xs text-gray-500 space-y-1">
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 20 plays per month</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Heavy rotation</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Social media features</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Artist interview segment</li>
+              </ul>
+            </div>
+
+            {/* Gold - Most Popular */}
+            <div className="rounded-lg p-5 border-4 border-yellow-400 bg-yellow-50 flex flex-col relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                MOST POPULAR
+              </div>
+              <h3 className="font-bold text-lg text-yellow-900 mb-1">Gold</h3>
+              <div className="text-3xl font-bold text-yellow-600 mb-1">$39<span className="text-base font-normal">/mo</span></div>
+              <div className="text-sm text-yellow-600 font-semibold mb-3">Less than Netflix</div>
+              <p className="text-sm text-gray-600 mb-3 flex-1">65 plays/month, heavy rotation, dedicated show segment</p>
+              <ul className="text-xs text-gray-500 space-y-1">
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 65 plays per month</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Heavy rotation</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Dedicated show segment</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Playlist inclusion</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Concert announcements</li>
+              </ul>
+            </div>
+
+            {/* Platinum */}
+            <div className="rounded-lg p-5 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-purple-100 flex flex-col">
+              <h3 className="font-bold text-lg text-purple-900 mb-1">Platinum</h3>
+              <div className="text-3xl font-bold text-purple-600 mb-1">$99<span className="text-base font-normal">/mo</span></div>
+              <div className="text-sm text-purple-500 mb-3">Power rotation</div>
+              <p className="text-sm text-gray-600 mb-3 flex-1">250 plays/month, VIP events — earn more from the pool than you pay</p>
+              <ul className="text-xs text-gray-500 space-y-1">
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 250 plays per month</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Power rotation</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Artist takeover hour</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> VIP event promotion</li>
+                <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Direct fan messaging</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200 text-center">
+            <p className="text-sm text-green-800">
+              <strong>The math:</strong> At capacity, the artist revenue pool is $17,800/month.
+              Platinum artists with 250 shares can earn <strong>more</strong> from the revenue pool than their $99 subscription costs.
+              92 cents of every sponsor dollar goes directly to artists.
+            </p>
+          </div>
+        </div>
+
         {/* Value Proposition */}
         <div className="bg-gradient-to-r from-orange-500 to-purple-600 rounded-xl shadow-lg p-8 text-white">
           <h2 className="text-3xl font-bold mb-4">🎵 Why Become a TrueFans Artist Promoter?</h2>

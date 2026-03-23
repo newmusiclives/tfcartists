@@ -57,11 +57,12 @@ export default function OperatePage() {
             Run Your Own AI-Powered Radio Station
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-6">
-            Build a real business. Earn up to $50K/year. Launch in minutes.
+            Pay $249/mo + 10% platform fee, earn $8,350/mo = 30x ROI
           </p>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            No broadcast license needed. No expensive equipment. Our AI agents handle artist outreach,
-            sponsor sales, listener growth, and music curation while you focus on building your brand and community.
+            No broadcast license needed. No expensive equipment. 5 AI teams handle artist outreach,
+            sponsor sales, listener growth, music curation, and station programming — launch in days, not months.
+            Potential $50K+/year net profit while AI does all the work.
           </p>
           <button
             onClick={scrollToCTA}
@@ -87,13 +88,13 @@ export default function OperatePage() {
               },
               {
                 icon: Sparkles,
-                title: "AI Does the Heavy Lifting",
-                desc: "Four AI agents handle artist outreach, sponsor sales, listener growth, and music curation. You manage the strategy, they do the work.",
+                title: "5 AI Teams Do All the Work",
+                desc: "Five AI agents handle artist outreach, sponsor sales, listener growth, music curation, and station programming. You manage the strategy, they do the work.",
               },
               {
                 icon: Zap,
-                title: "Launch in Minutes",
-                desc: "Choose from 5 genre templates with pre-built DJ personalities, schedules, and station branding. Your station can be live in about 5 minutes.",
+                title: "Launch in Days, Not Months",
+                desc: "No broadcast license. No equipment. Choose from 5 genre templates with pre-built DJ personalities, schedules, and station branding. Go live fast.",
               },
               {
                 icon: TrendingUp,
@@ -154,8 +155,8 @@ export default function OperatePage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
             {[
               { value: "$9,950/mo", label: "Gross Revenue at Capacity" },
-              { value: "~$50K/yr", label: "Annual Earning Potential" },
-              { value: "$4,150/mo", label: "Net Profit After Expenses" },
+              { value: "$50K+/yr", label: "Annual Net Profit Potential" },
+              { value: "$8,350/mo", label: "Net Profit (Growth Plan)" },
             ].map((stat) => (
               <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
                 <div className="text-3xl font-bold mb-1">{stat.value}</div>
@@ -174,9 +175,9 @@ export default function OperatePage() {
                 {[
                   { tier: "Free", price: "$0/mo", artists: "Unlimited" },
                   { tier: "Bronze", price: "$5/mo", artists: "80 artists" },
-                  { tier: "Silver", price: "$20/mo", artists: "40 artists" },
-                  { tier: "Gold", price: "$50/mo", artists: "30 artists" },
-                  { tier: "Platinum", price: "$120/mo", artists: "10 artists" },
+                  { tier: "Silver", price: "$15/mo", artists: "40 artists" },
+                  { tier: "Gold", price: "$39/mo", artists: "30 artists" },
+                  { tier: "Platinum", price: "$99/mo", artists: "10 artists" },
                 ].map((row) => (
                   <div key={row.tier} className="flex items-center justify-between text-sm py-1.5 border-b border-white/10 last:border-0">
                     <span className="font-medium">{row.tier}</span>
@@ -214,8 +215,45 @@ export default function OperatePage() {
           </div>
 
           <p className="text-center text-amber-300 text-sm mt-6">
-            Estimated ~$5,800/month in operating expenses (AI services ~$400, promoter commissions ~$4,800, hosting ~$300, messaging ~$100, storage ~$50, platform fees ~$150).
+            Operating expenses vary by plan. Growth plan example: $249/mo base + 10% platform fee on revenue + AI services, hosting, and messaging.
           </p>
+
+          {/* Pricing Tiers */}
+          <div className="mt-12">
+            <h3 className="text-xl font-bold text-center mb-6">Operator Plans</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { plan: "Launch", price: "$149/mo", fee: "15% of revenue", setup: "$499", highlight: false },
+                { plan: "Growth", price: "$249/mo", fee: "10% of revenue", setup: "$499", highlight: true },
+                { plan: "Scale", price: "$399/mo", fee: "7% of revenue", setup: "$999", highlight: false },
+                { plan: "Network", price: "$799/mo", fee: "5% of revenue", setup: "Free", highlight: false },
+              ].map((tier) => (
+                <div
+                  key={tier.plan}
+                  className={`rounded-xl p-5 text-center ${
+                    tier.highlight
+                      ? "bg-white text-gray-900 ring-2 ring-amber-400 shadow-lg"
+                      : "bg-white/10 backdrop-blur-sm"
+                  }`}
+                >
+                  {tier.highlight && (
+                    <div className="text-xs font-bold text-amber-600 uppercase tracking-wide mb-2">Most Popular</div>
+                  )}
+                  <h4 className={`text-lg font-bold mb-1 ${tier.highlight ? "text-gray-900" : ""}`}>{tier.plan}</h4>
+                  <div className={`text-2xl font-bold mb-2 ${tier.highlight ? "text-amber-600" : ""}`}>{tier.price}</div>
+                  <div className={`text-sm mb-1 ${tier.highlight ? "text-gray-600" : "text-amber-200"}`}>
+                    Platform fee: {tier.fee}
+                  </div>
+                  <div className={`text-sm ${tier.highlight ? "text-gray-500" : "text-amber-300"}`}>
+                    Setup: {tier.setup} (one-time)
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-amber-200 text-xs mt-4">
+              All plans include 5 AI teams, full station tools, and unlimited listeners. Platform fee applies to gross station revenue.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -255,7 +293,7 @@ export default function OperatePage() {
             Your AI Team
           </h2>
           <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
-            Four specialized AI agents work around the clock to grow your station. Each one handles a critical part of the business.
+            Five specialized AI agents work around the clock to grow your station. Each one handles a critical part of the business.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[
@@ -290,6 +328,14 @@ export default function OperatePage() {
                 role: "Music Curation",
                 capacity: "8,640 tracks/mo",
                 desc: "Reviews submissions, assigns rotation tiers, manages playlists, and ensures quality programming.",
+              },
+              {
+                name: "Morgan",
+                color: "amber",
+                icon: Radio,
+                role: "Station Programming",
+                capacity: "24/7 automation",
+                desc: "Manages DJ schedules, generates voice tracks, handles station imaging, and keeps your stream running around the clock.",
               },
             ].map((agent) => (
               <div
@@ -356,7 +402,7 @@ export default function OperatePage() {
             Ready to Build Your Station?
           </h2>
           <p className="text-lg text-gray-600 mb-10">
-            Launch in about 5 minutes. No credit card required.
+            No broadcast license. No equipment. AI does the work. Launch in days, not months.
           </p>
           <div
             ref={ctaRef}

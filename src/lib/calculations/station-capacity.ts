@@ -41,26 +41,26 @@ export const STATION_CONSTRAINTS = {
 // AIRPLAY TIERS - Team Riley
 export const AIRPLAY_TIER_SHARES = {
   FREE: 1,
-  BRONZE: 5,    // $5/month
-  SILVER: 25,   // $20/month
-  GOLD: 75,     // $50/month
-  PLATINUM: 200, // $120/month
+  BRONZE: 5,     // $5/month — same
+  SILVER: 30,    // Was 25 — more value at new lower price
+  GOLD: 100,     // Was 75 — significantly more plays
+  PLATINUM: 250, // Was 200 — best value per dollar
 } as const;
 
 export const AIRPLAY_TIER_PRICING = {
   FREE: 0,
-  BRONZE: 5,
-  SILVER: 20,
-  GOLD: 50,
-  PLATINUM: 120,
+  BRONZE: 5,     // "Buy a coffee, get on the radio" — irresistible entry
+  SILVER: 15,    // Was $20 — sweet spot for serious indie artists
+  GOLD: 39,      // Was $50 — "less than Netflix" for heavy rotation
+  PLATINUM: 99,  // Was $120 — premium but accessible for committed artists
 } as const;
 
 export const AIRPLAY_TIER_PLAYS_PER_MONTH = {
   FREE: 1,
-  BRONZE: 4,
-  SILVER: 16,
-  GOLD: 48,
-  PLATINUM: 192,
+  BRONZE: 5,
+  SILVER: 20,
+  GOLD: 65,
+  PLATINUM: 250,
 } as const;
 
 // MASTER OVERVIEW ARTIST CAPACITY
@@ -82,13 +82,61 @@ export const SPONSOR_AD_SPOTS = {
 } as const;
 
 export const SPONSOR_PRICING = {
-  LOCAL_HERO: 50,  // per month (ENTRY LEVEL)
-  TIER_1: 100,     // per month
-  TIER_2: 200,     // per month
-  TIER_3: 400,     // per month
-  NEWS_WEATHER: 400, // per month
-  SPONSORED_HOUR: 300, // per month (not per hour!)
-  WEEK_TAKEOVER: 800, // per month (not per week!)
+  LOCAL_HERO: 29,   // Was $50 — "less than a dollar a day" entry point
+  TIER_1: 79,       // Was $100 — accessible for small businesses
+  TIER_2: 149,      // Was $200 — clear value step-up
+  TIER_3: 299,      // Was $400 — premium but fair for heavy rotation
+  NEWS_WEATHER: 299, // Was $400 — branded content sponsorship
+  SPONSORED_HOUR: 199, // Was $300 — hourly takeover
+  WEEK_TAKEOVER: 599, // Was $800 — weekly takeover premium
+} as const;
+
+// OPERATOR PLANS - TrueFans Platform Pricing
+export const OPERATOR_PLANS = {
+  STARTER: {
+    name: "Launch",
+    monthlyPrice: 149,
+    platformFeePercent: 15,
+    setupFee: 499,
+    maxStations: 1,
+    maxDJs: 2,
+    maxArtists: 150,
+    maxLiveHours: 12,
+    features: ["1 station", "2 AI DJs", "150 artists", "12hr/day live", "Basic analytics"],
+  },
+  PRO: {
+    name: "Growth",
+    monthlyPrice: 249,
+    platformFeePercent: 10,
+    setupFee: 499,
+    maxStations: 1,
+    maxDJs: 6,
+    maxArtists: 340,
+    maxLiveHours: 24,
+    features: ["1 station", "6 AI DJs", "340 artists", "24/7 live", "Full analytics", "Priority support"],
+  },
+  ENTERPRISE: {
+    name: "Scale",
+    monthlyPrice: 399,
+    platformFeePercent: 7,
+    setupFee: 999,
+    maxStations: 3,
+    maxDJs: 12,
+    maxArtists: 500,
+    maxLiveHours: 24,
+    features: ["3 stations", "12 AI DJs", "500 artists", "24/7 live", "White-label option", "Dedicated support"],
+  },
+  NETWORK: {
+    name: "Network",
+    monthlyPrice: 799,
+    platformFeePercent: 5,
+    setupFee: 0,
+    maxStations: 10,
+    maxDJs: 50,
+    maxArtists: 1000,
+    maxLiveHours: 24,
+    features: ["10 stations", "Unlimited DJs", "1000 artists", "24/7 live", "Full white-label", "API access", "Network analytics"],
+  },
 } as const;
 
 /**
@@ -416,5 +464,29 @@ export function calculateStationRevenue(
       rileyTeamRevenue: artistRevenue,
       harperTeamRevenue: totalHarperRevenue,
     },
+  };
+}
+
+/**
+ * Calculate TrueFans platform revenue from an operator
+ * Includes SaaS subscription + platform fee on operator revenue
+ */
+export function calculatePlatformRevenue(
+  plan: keyof typeof OPERATOR_PLANS,
+  operatorMonthlyRevenue: number
+) {
+  const planConfig = OPERATOR_PLANS[plan];
+  const subscription = planConfig.monthlyPrice;
+  const platformFee = operatorMonthlyRevenue * (planConfig.platformFeePercent / 100);
+  const totalPlatformRevenue = subscription + platformFee;
+
+  return {
+    plan: planConfig.name,
+    subscription,
+    platformFeePercent: planConfig.platformFeePercent,
+    platformFee: Math.round(platformFee * 100) / 100,
+    totalPlatformRevenue: Math.round(totalPlatformRevenue * 100) / 100,
+    operatorNetRevenue: Math.round((operatorMonthlyRevenue - platformFee) * 100) / 100,
+    setupFee: planConfig.setupFee,
   };
 }

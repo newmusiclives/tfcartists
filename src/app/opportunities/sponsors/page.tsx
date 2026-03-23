@@ -22,28 +22,38 @@ export default function SponsorOpportunityPage() {
   const referralModel = capacity === "60" ? {
     totalSponsors: 72,
     tiers: {
-      bronze: { price: 100, count: 24, referralBonus: 50 },
-      silver: { price: 250, count: 27, referralBonus: 125 },
-      gold: { price: 400, count: 15, referralBonus: 200 },
-      platinum: { price: 500, count: 6, referralBonus: 250 },
+      localHero: { name: "Local Hero", price: 29, count: 24, referralBonus: 14.50, valueProp: "Less than $1/day — support local music, get 1 ad/day" },
+      tier1: { name: "Tier 1", price: 79, count: 27, referralBonus: 39.50, valueProp: "2 ads/day, reach engaged music fans" },
+      tier2: { name: "Tier 2", price: 149, count: 15, referralBonus: 74.50, valueProp: "5 ads/day, prominent rotation" },
+      tier3: { name: "Tier 3", price: 299, count: 6, referralBonus: 149.50, valueProp: "10 ads/day, premium placement" },
     },
+    premiums: [
+      { name: "News & Weather Sponsor", price: 299 },
+      { name: "Sponsored Hour", price: 199 },
+      { name: "Week Takeover", price: 599 },
+    ],
     examples: [
-      { name: "Local Business Owner", referrals: 2, tiers: "1 Silver, 1 Bronze", earnings: "$175", description: "Referred coffee shop and gym" },
-      { name: "Marketing Agency", referrals: 5, tiers: "2 Gold, 3 Silver", earnings: "$775", description: "Referred multiple clients" },
-      { name: "Chamber of Commerce Member", referrals: 3, tiers: "1 Platinum, 2 Bronze", earnings: "$350", description: "Networking connections" },
+      { name: "Local Business Owner", referrals: 2, tiers: "1 Tier 1, 1 Local Hero", earnings: "$54", description: "Referred coffee shop and gym" },
+      { name: "Marketing Agency", referrals: 5, tiers: "2 Tier 2, 3 Tier 1", earnings: "$267.50", description: "Referred multiple clients" },
+      { name: "Chamber of Commerce Member", referrals: 3, tiers: "1 Tier 3, 2 Local Hero", earnings: "$178.50", description: "Networking connections" },
     ]
   } : {
     totalSponsors: 120,
     tiers: {
-      bronze: { price: 100, count: 40, referralBonus: 50 },
-      silver: { price: 250, count: 45, referralBonus: 125 },
-      gold: { price: 400, count: 25, referralBonus: 200 },
-      platinum: { price: 500, count: 10, referralBonus: 250 },
+      localHero: { name: "Local Hero", price: 29, count: 40, referralBonus: 14.50, valueProp: "Less than $1/day — support local music, get 1 ad/day" },
+      tier1: { name: "Tier 1", price: 79, count: 45, referralBonus: 39.50, valueProp: "2 ads/day, reach engaged music fans" },
+      tier2: { name: "Tier 2", price: 149, count: 25, referralBonus: 74.50, valueProp: "5 ads/day, prominent rotation" },
+      tier3: { name: "Tier 3", price: 299, count: 10, referralBonus: 149.50, valueProp: "10 ads/day, premium placement" },
     },
+    premiums: [
+      { name: "News & Weather Sponsor", price: 299 },
+      { name: "Sponsored Hour", price: 199 },
+      { name: "Week Takeover", price: 599 },
+    ],
     examples: [
-      { name: "Local Business Owner", referrals: 3, tiers: "2 Silver, 1 Bronze", earnings: "$300", description: "Referred coffee shop, gym, and salon" },
-      { name: "Marketing Agency", referrals: 8, tiers: "3 Gold, 5 Silver", earnings: "$1,225", description: "Referred multiple clients" },
-      { name: "Chamber of Commerce Member", referrals: 5, tiers: "2 Platinum, 3 Bronze", earnings: "$650", description: "Networking connections" },
+      { name: "Local Business Owner", referrals: 3, tiers: "2 Tier 1, 1 Local Hero", earnings: "$93.50", description: "Referred coffee shop, gym, and salon" },
+      { name: "Marketing Agency", referrals: 8, tiers: "3 Tier 2, 5 Tier 1", earnings: "$421", description: "Referred multiple clients" },
+      { name: "Chamber of Commerce Member", referrals: 5, tiers: "2 Tier 3, 3 Local Hero", earnings: "$342.50", description: "Networking connections" },
     ]
   };
 
@@ -62,7 +72,7 @@ export default function SponsorOpportunityPage() {
               <div>
                 <h1 className="text-4xl font-bold text-gray-900">Sponsor Referral Program</h1>
                 <p className="text-xl text-gray-600 mt-2">
-                  Earn up to $250 per referral by connecting other businesses with TrueFans RADIO
+                  Earn up to $149.50 per referral by connecting other businesses with TrueFans RADIO
                 </p>
               </div>
             </div>
@@ -99,26 +109,33 @@ export default function SponsorOpportunityPage() {
         {/* Value Proposition */}
         <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg p-8 text-white">
           <h2 className="text-3xl font-bold mb-4">📻 Turn Your Network Into Income</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="flex items-start space-x-3">
               <Check className="w-6 h-6 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="font-bold text-lg mb-1">Earn Generous Referral Bonuses</h3>
-                <p className="text-blue-100">Get 50% of the first month's sponsorship fee for each business you refer!</p>
+                <h3 className="font-bold text-lg mb-1">Starting at Less Than $1/Day</h3>
+                <p className="text-blue-100">Local Hero tier is just $29/mo — the most accessible sponsorship in radio.</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
               <Check className="w-6 h-6 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="font-bold text-lg mb-1">Help Local Businesses Grow</h3>
-                <p className="text-blue-100">Connect your network with an authentic advertising opportunity that actually works.</p>
+                <h3 className="font-bold text-lg mb-1">Support Independent Artists</h3>
+                <p className="text-blue-100">80% of every sponsorship goes directly to artists. Grow your business while funding real music.</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
               <Check className="w-6 h-6 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="font-bold text-lg mb-1">Simple One-Time Payment</h3>
-                <p className="text-blue-100">No ongoing tracking required - get paid once when they sign up!</p>
+                <h3 className="font-bold text-lg mb-1">Reach 1,250+ Daily Listeners</h3>
+                <p className="text-blue-100">Engaged music fans who actively support the station and its sponsors.</p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <Check className="w-6 h-6 flex-shrink-0 mt-1" />
+              <div>
+                <h3 className="font-bold text-lg mb-1">Pro Audio Ads Included</h3>
+                <p className="text-blue-100">Every sponsor gets AI-generated professional audio ads — no production fees.</p>
               </div>
             </div>
           </div>
@@ -132,46 +149,49 @@ export default function SponsorOpportunityPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 border-2 border-gray-300">
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border-2 border-green-300">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-2xl font-bold text-gray-600">🥉</span>
-                <span className="text-xs font-semibold bg-gray-200 text-gray-700 px-2 py-1 rounded">BRONZE</span>
+                <span className="text-2xl font-bold text-green-600">🌱</span>
+                <span className="text-xs font-semibold bg-green-200 text-green-700 px-2 py-1 rounded">LOCAL HERO</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Bronze Tier</h3>
-              <div className="text-sm text-gray-600 mb-2">${referralModel.tiers.bronze.price}/month sponsorship</div>
+              <h3 className="font-bold text-lg text-gray-900 mb-2">Local Hero</h3>
+              <div className="text-sm text-gray-600 mb-1">${referralModel.tiers.localHero.price}/month sponsorship</div>
+              <div className="text-xs text-green-700 mb-2">{referralModel.tiers.localHero.valueProp}</div>
               <div className="bg-white rounded-lg p-3 mb-2">
                 <div className="text-xs text-gray-600">You Earn</div>
-                <div className="text-2xl font-bold text-green-600">${referralModel.tiers.bronze.referralBonus}</div>
+                <div className="text-2xl font-bold text-green-600">${referralModel.tiers.localHero.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500">Per Bronze sponsor referred</p>
+              <p className="text-xs text-gray-500">Per Local Hero sponsor referred</p>
             </div>
 
-            <div className="bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg p-6 border-2 border-gray-400">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-300">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-2xl font-bold text-gray-700">🥈</span>
-                <span className="text-xs font-semibold bg-gray-300 text-gray-800 px-2 py-1 rounded">SILVER</span>
+                <span className="text-2xl font-bold text-blue-600">📻</span>
+                <span className="text-xs font-semibold bg-blue-200 text-blue-700 px-2 py-1 rounded">TIER 1</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Silver Tier</h3>
-              <div className="text-sm text-gray-600 mb-2">${referralModel.tiers.silver.price}/month sponsorship</div>
+              <h3 className="font-bold text-lg text-gray-900 mb-2">Tier 1</h3>
+              <div className="text-sm text-gray-600 mb-1">${referralModel.tiers.tier1.price}/month sponsorship</div>
+              <div className="text-xs text-blue-700 mb-2">{referralModel.tiers.tier1.valueProp}</div>
               <div className="bg-white rounded-lg p-3 mb-2">
                 <div className="text-xs text-gray-600">You Earn</div>
-                <div className="text-2xl font-bold text-green-600">${referralModel.tiers.silver.referralBonus}</div>
+                <div className="text-2xl font-bold text-green-600">${referralModel.tiers.tier1.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500">Per Silver sponsor referred</p>
+              <p className="text-xs text-gray-500">Per Tier 1 sponsor referred</p>
             </div>
 
             <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg p-6 border-2 border-yellow-400">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-2xl font-bold text-yellow-600">🥇</span>
-                <span className="text-xs font-semibold bg-yellow-300 text-yellow-800 px-2 py-1 rounded">GOLD</span>
+                <span className="text-2xl font-bold text-yellow-600">🎯</span>
+                <span className="text-xs font-semibold bg-yellow-300 text-yellow-800 px-2 py-1 rounded">TIER 2</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Gold Tier</h3>
-              <div className="text-sm text-gray-600 mb-2">${referralModel.tiers.gold.price}/month sponsorship</div>
+              <h3 className="font-bold text-lg text-gray-900 mb-2">Tier 2</h3>
+              <div className="text-sm text-gray-600 mb-1">${referralModel.tiers.tier2.price}/month sponsorship</div>
+              <div className="text-xs text-yellow-700 mb-2">{referralModel.tiers.tier2.valueProp}</div>
               <div className="bg-white rounded-lg p-3 mb-2">
                 <div className="text-xs text-gray-600">You Earn</div>
-                <div className="text-2xl font-bold text-green-600">${referralModel.tiers.gold.referralBonus}</div>
+                <div className="text-2xl font-bold text-green-600">${referralModel.tiers.tier2.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500">Per Gold sponsor referred</p>
+              <p className="text-xs text-gray-500">Per Tier 2 sponsor referred</p>
             </div>
 
             <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg p-6 border-4 border-purple-400 relative">
@@ -179,16 +199,17 @@ export default function SponsorOpportunityPage() {
                 MAX
               </div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-2xl font-bold text-purple-600">💎</span>
-                <span className="text-xs font-semibold bg-purple-300 text-purple-800 px-2 py-1 rounded">PLATINUM</span>
+                <span className="text-2xl font-bold text-purple-600">🚀</span>
+                <span className="text-xs font-semibold bg-purple-300 text-purple-800 px-2 py-1 rounded">TIER 3</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Platinum Tier</h3>
-              <div className="text-sm text-gray-600 mb-2">${referralModel.tiers.platinum.price}/month sponsorship</div>
+              <h3 className="font-bold text-lg text-gray-900 mb-2">Tier 3</h3>
+              <div className="text-sm text-gray-600 mb-1">${referralModel.tiers.tier3.price}/month sponsorship</div>
+              <div className="text-xs text-purple-700 mb-2">{referralModel.tiers.tier3.valueProp}</div>
               <div className="bg-white rounded-lg p-3 mb-2">
                 <div className="text-xs text-gray-600">You Earn</div>
-                <div className="text-2xl font-bold text-green-600">${referralModel.tiers.platinum.referralBonus}</div>
+                <div className="text-2xl font-bold text-green-600">${referralModel.tiers.tier3.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500">Per Platinum sponsor referred</p>
+              <p className="text-xs text-gray-500">Per Tier 3 sponsor referred</p>
             </div>
           </div>
 
@@ -268,7 +289,7 @@ export default function SponsorOpportunityPage() {
                 <span className="text-2xl font-bold text-yellow-600">4</span>
               </div>
               <h3 className="font-bold text-gray-900 mb-2">You Get Paid!</h3>
-              <p className="text-sm text-gray-600">Receive 50% of their first month's payment immediately</p>
+              <p className="text-sm text-gray-600">Receive 50% of their first month's payment as a one-time bonus</p>
             </div>
           </div>
         </div>
@@ -299,6 +320,24 @@ export default function SponsorOpportunityPage() {
           </div>
         </div>
 
+        {/* Premium Opportunities */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-bold mb-6 flex items-center">
+            <Radio className="w-6 h-6 mr-2 text-purple-600" />
+            Premium Opportunities
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {referralModel.premiums.map((premium, idx) => (
+              <div key={idx} className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6 border-2 border-purple-200">
+                <h3 className="font-bold text-lg text-gray-900 mb-2">{premium.name}</h3>
+                <div className="text-3xl font-bold text-purple-600 mb-2">${premium.price}<span className="text-sm font-normal text-gray-500">/mo</span></div>
+                <p className="text-xs text-gray-500">AI-generated professional audio ads included</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Bonus Opportunities */}
         <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-xl shadow-lg p-8 text-white">
           <h2 className="text-3xl font-bold mb-6 flex items-center">
@@ -316,8 +355,8 @@ export default function SponsorOpportunityPage() {
 
             <div className="bg-white/10 backdrop-blur rounded-lg p-6">
               <Sparkles className="w-10 h-10 mb-3" />
-              <h3 className="font-bold text-xl mb-2">Platinum Specialist</h3>
-              <p className="text-green-100 mb-2">Refer 3+ Platinum sponsors and get <strong>$150 extra bonus!</strong></p>
+              <h3 className="font-bold text-xl mb-2">Tier 3 Specialist</h3>
+              <p className="text-green-100 mb-2">Refer 3+ Tier 3 sponsors and get <strong>$150 extra bonus!</strong></p>
               <p className="text-xs text-green-200">For bringing premium partnerships</p>
             </div>
           </div>
