@@ -1,5 +1,68 @@
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+
+/** Config key prefix for suspended cron jobs */
+const SUSPEND_KEY_PREFIX = "cron_suspended:";
+
+/**
+ * Check if a cron job is suspended via the Config table.
+ * Returns a 200 JSON response with `suspended: true` if the job is suspended,
+ * or null if the job should proceed.
+ *
+ * Usage at the top of a cron route handler:
+ *   const suspended = await isCronSuspended("riley-daily");
+ *   if (suspended) return suspended;
+ */
+export async function isCronSuspended(jobName: string): Promise<NextResponse | null> {
+  try {
+    const config = await prisma.config.findUnique({
+      where: { key: `${SUSPEND_KEY_PREFIX}${jobName}` },
+    });
+    if (config?.value === "true") {
+      logger.info(`Cron job ${jobName} is suspended — skipping`);
+      return NextResponse.json({
+        success: true,
+        message: `${jobName} is suspended`,
+        suspended: true,
+      });
+    }
+  } catch {
+    // If the Config table doesn't exist or query fails, proceed anyway
+  }
+  return null;
+}
+
+/**
+ * Suspend or resume a cron job by name.
+ */
+export async function setCronSuspended(jobName: string, suspended: boolean): Promise<void> {
+  const key = `${SUSPEND_KEY_PREFIX}${jobName}`;
+  if (suspended) {
+    await prisma.config.upsert({
+      where: { key },
+      update: { value: "true" },
+      create: { key, value: "true" },
+    });
+  } else {
+    await prisma.config.deleteMany({ where: { key } });
+  }
+}
+
+/**
+ * Get suspension status for all known AI team jobs.
+ */
+export async function getSuspendedJobs(): Promise<Record<string, boolean>> {
+  const configs = await prisma.config.findMany({
+    where: { key: { startsWith: SUSPEND_KEY_PREFIX } },
+  });
+  const result: Record<string, boolean> = {};
+  for (const c of configs) {
+    const jobName = c.key.replace(SUSPEND_KEY_PREFIX, "");
+    result[jobName] = c.value === "true";
+  }
+  return result;
+}
 
 /**
  * Log a cron job execution to the database.

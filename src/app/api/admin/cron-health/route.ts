@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth/config";
+import { getSuspendedJobs } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +38,9 @@ export async function GET() {
 
   const jobNames = Object.keys(EXPECTED_JOBS);
 
+  // Get suspension status for all jobs
+  const suspendedMap = await getSuspendedJobs();
+
   // Get the most recent log for each job
   const latestLogs = await prisma.cronLog.findMany({
     where: { jobName: { in: jobNames } },
@@ -49,12 +53,14 @@ export async function GET() {
     const log = latestLogs.find((l) => l.jobName === name);
     const maxGapMs = EXPECTED_JOBS[name] * 60 * 60 * 1000;
 
+    const suspended = suspendedMap[name] || false;
+
     if (!log) {
-      return { name, status: "never_run" as const, lastRun: null, overdue: true };
+      return { name, status: "never_run" as const, lastRun: null, overdue: !suspended, suspended };
     }
 
     const lastRunAt = new Date(log.createdAt).getTime();
-    const overdue = now - lastRunAt > maxGapMs;
+    const overdue = !suspended && (now - lastRunAt > maxGapMs);
 
     return {
       name,
@@ -62,6 +68,7 @@ export async function GET() {
       lastRun: log.createdAt,
       duration: log.duration,
       overdue,
+      suspended,
       error: log.error || undefined,
     };
   });

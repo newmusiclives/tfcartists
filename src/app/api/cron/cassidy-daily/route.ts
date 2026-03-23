@@ -7,7 +7,7 @@ import { amplifyPcm, pcmToWav, saveAudioFile } from "@/lib/radio/voice-track-tts
 import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import OpenAI from "openai";
 import { getConfig } from "@/lib/config";
-import { logCronExecution } from "@/lib/cron/log";
+import { logCronExecution, isCronSuspended } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +36,10 @@ export async function GET(req: NextRequest) {
       logger.warn("Unauthorized cron attempt", { path: "/api/cron/cassidy-daily" });
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    // Check if this job is suspended
+    const suspended = await isCronSuspended("cassidy-daily");
+    if (suspended) return suspended;
 
     logger.info("Starting Cassidy daily submission review");
 

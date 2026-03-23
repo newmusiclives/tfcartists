@@ -5,7 +5,7 @@ import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { socialDiscovery } from "@/lib/discovery/social-discovery";
 import { messageDelivery } from "@/lib/messaging/delivery-service";
-import { logCronExecution } from "@/lib/cron/log";
+import { logCronExecution, isCronSuspended } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +46,10 @@ export async function GET(req: NextRequest) {
       logger.warn("Unauthorized cron attempt", { path: "/api/cron/riley-daily" });
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    // Check if this job is suspended
+    const suspended = await isCronSuspended("riley-daily");
+    if (suspended) return suspended;
 
     // Skip Sundays — Riley works Mon-Sat only
     const dayOfWeek = new Date().getUTCDay(); // 0 = Sunday

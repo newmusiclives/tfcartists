@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { elliot } from "@/lib/ai/elliot-agent";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
-import { logCronExecution } from "@/lib/cron/log";
+import { logCronExecution, isCronSuspended } from "@/lib/cron/log";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +40,10 @@ export async function GET(req: NextRequest) {
       logger.warn("Unauthorized cron attempt", { path: "/api/cron/elliot-daily" });
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    // Check if this job is suspended
+    const suspended = await isCronSuspended("elliot-daily");
+    if (suspended) return suspended;
 
     logger.info("Starting Elliot daily automation");
 
