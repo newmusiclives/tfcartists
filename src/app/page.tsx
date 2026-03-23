@@ -381,7 +381,7 @@ export default async function MarketingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {/* Artists */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
               <div className="text-purple-600 font-semibold text-sm mb-2">For Artists</div>
@@ -421,41 +421,19 @@ export default async function MarketingPage() {
               </Link>
             </div>
 
-            {/* Operators - Launch */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="text-amber-600 font-semibold text-sm mb-2">For Operators</div>
-              <div className="flex items-baseline">
-                <span className="text-3xl font-bold text-gray-900">$150</span>
-                <span className="text-sm text-gray-500 ml-1">/mo</span>
-              </div>
-              <div className="text-sm text-gray-500 mb-6">Launch plan</div>
-              <ul className="space-y-2 mb-6">
-                {["1 station, 2 AI DJs", "150 artists, 12hr/day", "5 AI teams included", "Earn up to $75K/yr"].map((item) => (
-                  <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
-                    <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/operate" className="block text-center border-2 border-amber-600 text-amber-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-amber-50 transition-colors text-sm">
-                Get Started
-              </Link>
-              <p className="text-xs text-center text-gray-400 mt-2">+ $500 one-time setup</p>
-            </div>
-
-            {/* Operators - Growth (Best Value) */}
+            {/* Operators */}
             <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-amber-400 relative hover:shadow-xl transition-shadow">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                BEST VALUE
+                POPULAR
               </div>
               <div className="text-amber-600 font-semibold text-sm mb-2">For Operators</div>
               <div className="flex items-baseline">
                 <span className="text-3xl font-bold text-gray-900">$250</span>
                 <span className="text-sm text-gray-500 ml-1">/mo</span>
               </div>
-              <div className="text-sm text-gray-500 mb-6">Growth plan</div>
+              <div className="text-sm text-gray-500 mb-6">everything you need</div>
               <ul className="space-y-2 mb-6">
-                {["1 station, 6 AI DJs", "340 artists, 24/7 live", "Lower platform fee (10%)", "Full analytics + priority support"].map((item) => (
+                {["6 AI DJs, 24/7 live radio", "340 artists, 125 sponsors", "5 AI teams do all the work", "Earn up to $75K/yr"].map((item) => (
                   <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
                     <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0" />
                     <span>{item}</span>
@@ -463,9 +441,9 @@ export default async function MarketingPage() {
                 ))}
               </ul>
               <Link href="/operate" className="block text-center bg-amber-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-amber-700 transition-colors text-sm">
-                Launch Station
+                Launch Your Station
               </Link>
-              <p className="text-xs text-center text-gray-400 mt-2">+ $500 one-time setup</p>
+              <p className="text-xs text-center text-gray-400 mt-2">Plans from $150/mo · <Link href="/operate" className="text-amber-600 hover:underline">See all plans</Link></p>
             </div>
           </div>
         </div>
