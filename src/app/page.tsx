@@ -404,12 +404,12 @@ export default async function MarketingPage() {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
               <div className="text-green-600 font-semibold text-sm mb-2">For Sponsors</div>
               <div className="flex items-baseline">
-                <span className="text-3xl font-bold text-gray-900">$100</span>
+                <span className="text-3xl font-bold text-gray-900">$30</span>
                 <span className="text-sm text-gray-500 ml-1">/mo</span>
               </div>
-              <div className="text-sm text-gray-500 mb-6">starting at</div>
+              <div className="text-sm text-gray-500 mb-6">less than $1/day</div>
               <ul className="space-y-2 mb-6">
-                {["30+ ad spots/mo", "AI-voiced ads", "Performance stats", "4 tiers to $500/mo"].map((item) => (
+                {["30 ad spots/mo", "AI-produced audio ads", "Performance dashboard", "4 tiers up to $300/mo"].map((item) => (
                   <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                     <span>{item}</span>
@@ -421,19 +421,41 @@ export default async function MarketingPage() {
               </Link>
             </div>
 
-            {/* Operators */}
+            {/* Operators - Launch */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
+              <div className="text-amber-600 font-semibold text-sm mb-2">For Operators</div>
+              <div className="flex items-baseline">
+                <span className="text-3xl font-bold text-gray-900">$150</span>
+                <span className="text-sm text-gray-500 ml-1">/mo</span>
+              </div>
+              <div className="text-sm text-gray-500 mb-6">Launch plan</div>
+              <ul className="space-y-2 mb-6">
+                {["1 station, 2 AI DJs", "150 artists, 12hr/day", "5 AI teams included", "Earn up to $75K/yr"].map((item) => (
+                  <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
+                    <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/operate" className="block text-center border-2 border-amber-600 text-amber-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-amber-50 transition-colors text-sm">
+                Get Started
+              </Link>
+              <p className="text-xs text-center text-gray-400 mt-2">+ $500 one-time setup</p>
+            </div>
+
+            {/* Operators - Growth (Best Value) */}
             <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-amber-400 relative hover:shadow-xl transition-shadow">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                POPULAR
+                BEST VALUE
               </div>
               <div className="text-amber-600 font-semibold text-sm mb-2">For Operators</div>
               <div className="flex items-baseline">
-                <span className="text-3xl font-bold text-gray-900">$300</span>
+                <span className="text-3xl font-bold text-gray-900">$250</span>
                 <span className="text-sm text-gray-500 ml-1">/mo</span>
               </div>
-              <div className="text-sm text-gray-500 mb-6">single station</div>
+              <div className="text-sm text-gray-500 mb-6">Growth plan</div>
               <ul className="space-y-2 mb-6">
-                {["Full AI-powered station", "4 AI agents included", "Keep 100% of artist fees", "20% sponsor commission"].map((item) => (
+                {["1 station, 6 AI DJs", "340 artists, 24/7 live", "Lower platform fee (10%)", "Full analytics + priority support"].map((item) => (
                   <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
                     <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0" />
                     <span>{item}</span>
@@ -443,24 +465,7 @@ export default async function MarketingPage() {
               <Link href="/operate" className="block text-center bg-amber-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-amber-700 transition-colors text-sm">
                 Launch Station
               </Link>
-            </div>
-
-            {/* Enterprise */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="text-gray-600 font-semibold text-sm mb-2">Enterprise / Network</div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">Custom</div>
-              <div className="text-sm text-gray-500 mb-6">multi-station</div>
-              <ul className="space-y-2 mb-6">
-                {["Multiple stations", "White-label option", "Priority support", "Custom integrations"].map((item) => (
-                  <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
-                    <CheckCircle2 className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <a href="mailto:sales@truefans.radio" className="block text-center border-2 border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-sm">
-                Contact Sales
-              </a>
+              <p className="text-xs text-center text-gray-400 mt-2">+ $500 one-time setup</p>
             </div>
           </div>
         </div>
