@@ -1,33 +1,51 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { stationHour, stationToday } from "@/lib/timezone";
+import { stationHour, stationNow, stationToday } from "@/lib/timezone";
 
 const RAILWAY_URL = `${process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app"}/api/now_playing`;
 
 export const dynamic = "force-dynamic";
 
 /**
- * GET /api/now-playing
- *
- * Proxies Railway's now_playing endpoint (source of truth).
- * Falls back to the locked playlist if Railway is unreachable.
+ * Derive the currently-playing song from the locked playlist for this hour.
+ * Uses cumulative song durations for accurate position tracking instead
+ * of just the slot's minute marker.
  */
-export async function GET() {
-  // 1. Try Railway upstream — it knows what's actually playing
-  try {
-    const res = await fetch(RAILWAY_URL, {
-      cache: "no-store",
-      signal: AbortSignal.timeout(5000),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      return NextResponse.json(data);
+function deriveCurrentSong(
+  slots: Array<{ type: string; songTitle?: string; artistName?: string; songId?: string; minute: number; duration?: number }>,
+  minuteOfHour: number,
+  secondOfMinute: number
+) {
+  const elapsedSeconds = minuteOfHour * 60 + secondOfMinute;
+  const songSlots = slots.filter(
+    (s) => s.type === "song" && s.songTitle
+  );
+
+  // Walk through songs by their minute markers + cumulative duration
+  // to find which song should be playing right now.
+  // Each slot has a `minute` field indicating when it starts in the hour.
+  let currentSong: typeof songSlots[0] | null = null;
+
+  for (const slot of songSlots) {
+    const slotStartSec = slot.minute * 60;
+    if (slotStartSec <= elapsedSeconds) {
+      currentSong = slot;
+    } else {
+      break; // Past our current time — the previous song is the one playing
     }
-  } catch {
-    // Railway unreachable — fall through to DB fallback
   }
 
-  // 2. Fallback: derive now-playing from today's locked playlist
+  return currentSong;
+}
+
+/**
+ * GET /api/now-playing
+ *
+ * Derives now-playing from the locked playlist (source of truth for what
+ * Liquidsoap is actually playing). Supplements with Railway data for
+ * listener count when available.
+ */
+export async function GET() {
   try {
     const station = await prisma.station.findFirst({
       where: { isActive: true },
@@ -39,6 +57,9 @@ export async function GET() {
 
     const today = stationToday();
     const hour = stationHour();
+    const now = stationNow();
+    const minuteOfHour = now.getUTCMinutes();
+    const secondOfMinute = now.getUTCSeconds();
 
     const playlist = await prisma.hourPlaylist.findFirst({
       where: {
@@ -64,30 +85,44 @@ export async function GET() {
     });
 
     const slots = JSON.parse(playlist.slots);
-    const minuteOfHour = new Date().getMinutes();
-    const songSlots = slots.filter(
-      (s: { type: string; songTitle?: string }) => s.type === "song" && s.songTitle
-    );
-    const currentSong = songSlots.reduce(
-      (best: { minute: number; songTitle: string; artistName: string } | null, s: { minute: number; songTitle: string; artistName: string }) => {
-        if (s.minute <= minuteOfHour && (!best || s.minute > best.minute)) return s;
-        return best;
-      },
-      null
-    );
+    const currentSong = deriveCurrentSong(slots, minuteOfHour, secondOfMinute);
+
+    // Try to get listener count from Railway (non-blocking, best-effort)
+    let listenerCount = 0;
+    try {
+      const res = await fetch(RAILWAY_URL, {
+        cache: "no-store",
+        signal: AbortSignal.timeout(3000),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        listenerCount = data.listener_count || 0;
+      }
+    } catch {
+      // Railway unreachable — continue with 0 listeners
+    }
+
+    // Look up artwork from the song record if available
+    let artworkUrl: string | null = null;
+    if (currentSong?.songId) {
+      const song = await prisma.song.findUnique({
+        where: { id: currentSong.songId },
+        select: { artworkUrl: true },
+      });
+      artworkUrl = song?.artworkUrl || null;
+    }
 
     return NextResponse.json({
       station: station.name,
       status: "on-air",
       title: currentSong?.songTitle || "Music",
       artist_name: currentSong?.artistName || station.name,
-      artwork_url: null,
-      listener_count: 0,
+      artwork_url: artworkUrl,
+      listener_count: listenerCount,
       dj_name: dj?.name || null,
       dj_id: dj?.slug || null,
       djSlug: dj?.slug || null,
       hourOfDay: hour,
-      source: "playlist-fallback",
     });
   } catch {
     return NextResponse.json(
