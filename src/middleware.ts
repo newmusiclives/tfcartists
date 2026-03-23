@@ -155,8 +155,11 @@ export default auth((req) => {
   }
 
   // CSRF validation for state-changing API requests
-  const csrfError = validateCsrf(req);
-  if (csrfError) return csrfError;
+  // Skip for Liquidsoap machine-to-machine endpoints (no browser, no CSRF token)
+  if (pathname !== "/api/notify_now_playing" && pathname !== "/api/track_played") {
+    const csrfError = validateCsrf(req);
+    if (csrfError) return csrfError;
+  }
 
   // Global rate limit for API writes (baseline safety net)
   if (
