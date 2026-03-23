@@ -697,7 +697,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Expand ad break into 4-element block: sweeper, ad, ad, promo
-      if (slot.type === "ad" || slot.type === "commercial") {
+      if (slot.type === "ad" || slot.type === "commercial" || slot.type === "sponsor") {
         const adPair = resolvedAds.get(slot.position as number);
         const pos = slot.position as number;
         const min = slot.minute as number;
