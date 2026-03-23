@@ -24,7 +24,7 @@ import { mixVoiceWithMusicBed, trimSilence } from "@/lib/radio/audio-mixer";
 
 export const dynamic = "force-dynamic";
 
-const BATCH_SIZE = 5;
+const BATCH_SIZE = 10;
 
 export async function GET(req: NextRequest) {
   const cronStart = Date.now();
