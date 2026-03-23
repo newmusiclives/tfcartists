@@ -57,7 +57,7 @@ export default function OperatePage() {
             Run Your Own AI-Powered Radio Station
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-6">
-            Pay $249/mo + 10% platform fee, earn $8,350/mo = 30x ROI
+            Pay $250/mo + 10% platform fee, earn $8,350/mo = 30x ROI
           </p>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
             No broadcast license needed. No expensive equipment. 5 AI teams handle artist outreach,
@@ -176,8 +176,8 @@ export default function OperatePage() {
                   { tier: "Free", price: "$0/mo", artists: "Unlimited" },
                   { tier: "Bronze", price: "$5/mo", artists: "80 artists" },
                   { tier: "Silver", price: "$15/mo", artists: "40 artists" },
-                  { tier: "Gold", price: "$39/mo", artists: "30 artists" },
-                  { tier: "Platinum", price: "$99/mo", artists: "10 artists" },
+                  { tier: "Gold", price: "$40/mo", artists: "30 artists" },
+                  { tier: "Platinum", price: "$100/mo", artists: "10 artists" },
                 ].map((row) => (
                   <div key={row.tier} className="flex items-center justify-between text-sm py-1.5 border-b border-white/10 last:border-0">
                     <span className="font-medium">{row.tier}</span>
@@ -215,7 +215,7 @@ export default function OperatePage() {
           </div>
 
           <p className="text-center text-amber-300 text-sm mt-6">
-            Operating expenses vary by plan. Growth plan example: $249/mo base + 10% platform fee on revenue + AI services, hosting, and messaging.
+            Operating expenses vary by plan. Growth plan example: $250/mo base + 10% platform fee on revenue + AI services, hosting, and messaging.
           </p>
 
           {/* Pricing Tiers */}
@@ -223,10 +223,10 @@ export default function OperatePage() {
             <h3 className="text-xl font-bold text-center mb-6">Operator Plans</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { plan: "Launch", price: "$149/mo", fee: "15% of revenue", setup: "$499", highlight: false },
-                { plan: "Growth", price: "$249/mo", fee: "10% of revenue", setup: "$499", highlight: true },
-                { plan: "Scale", price: "$399/mo", fee: "7% of revenue", setup: "$999", highlight: false },
-                { plan: "Network", price: "$799/mo", fee: "5% of revenue", setup: "Free", highlight: false },
+                { plan: "Launch", price: "$150/mo", fee: "15% of revenue", setup: "$500", highlight: false },
+                { plan: "Growth", price: "$250/mo", fee: "10% of revenue", setup: "$500", highlight: true },
+                { plan: "Scale", price: "$400/mo", fee: "7% of revenue", setup: "$1,000", highlight: false },
+                { plan: "Network", price: "$800/mo", fee: "5% of revenue", setup: "Free", highlight: false },
               ].map((tier) => (
                 <div
                   key={tier.plan}

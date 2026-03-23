@@ -51,7 +51,7 @@ export const AIRPLAY_TIERS = {
   },
   TIER_50: {
     name: "Gold Airplay",
-    price: 39,
+    price: 40,
     shares: 65,
     description: "Less than Netflix — 65 plays/month, heavy rotation",
     features: [
@@ -65,7 +65,7 @@ export const AIRPLAY_TIERS = {
   },
   TIER_120: {
     name: "Platinum Airplay",
-    price: 99,
+    price: 100,
     shares: 250,
     description: "Power rotation — 250 plays/month, VIP events",
     features: [

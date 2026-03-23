@@ -49,10 +49,10 @@ export const AIRPLAY_TIER_SHARES = {
 
 export const AIRPLAY_TIER_PRICING = {
   FREE: 0,
-  BRONZE: 5,     // "Buy a coffee, get on the radio" — irresistible entry
-  SILVER: 15,    // Was $20 — sweet spot for serious indie artists
-  GOLD: 39,      // Was $50 — "less than Netflix" for heavy rotation
-  PLATINUM: 99,  // Was $120 — premium but accessible for committed artists
+  BRONZE: 5,
+  SILVER: 15,
+  GOLD: 40,
+  PLATINUM: 100,
 } as const;
 
 export const AIRPLAY_TIER_PLAYS_PER_MONTH = {
@@ -82,22 +82,22 @@ export const SPONSOR_AD_SPOTS = {
 } as const;
 
 export const SPONSOR_PRICING = {
-  LOCAL_HERO: 29,   // Was $50 — "less than a dollar a day" entry point
-  TIER_1: 79,       // Was $100 — accessible for small businesses
-  TIER_2: 149,      // Was $200 — clear value step-up
-  TIER_3: 299,      // Was $400 — premium but fair for heavy rotation
-  NEWS_WEATHER: 299, // Was $400 — branded content sponsorship
-  SPONSORED_HOUR: 199, // Was $300 — hourly takeover
-  WEEK_TAKEOVER: 599, // Was $800 — weekly takeover premium
+  LOCAL_HERO: 30,
+  TIER_1: 80,
+  TIER_2: 150,
+  TIER_3: 300,
+  NEWS_WEATHER: 300,
+  SPONSORED_HOUR: 200,
+  WEEK_TAKEOVER: 600,
 } as const;
 
 // OPERATOR PLANS - TrueFans Platform Pricing
 export const OPERATOR_PLANS = {
   STARTER: {
     name: "Launch",
-    monthlyPrice: 149,
+    monthlyPrice: 150,
     platformFeePercent: 15,
-    setupFee: 499,
+    setupFee: 500,
     maxStations: 1,
     maxDJs: 2,
     maxArtists: 150,
@@ -106,9 +106,9 @@ export const OPERATOR_PLANS = {
   },
   PRO: {
     name: "Growth",
-    monthlyPrice: 249,
+    monthlyPrice: 250,
     platformFeePercent: 10,
-    setupFee: 499,
+    setupFee: 500,
     maxStations: 1,
     maxDJs: 6,
     maxArtists: 340,
@@ -117,9 +117,9 @@ export const OPERATOR_PLANS = {
   },
   ENTERPRISE: {
     name: "Scale",
-    monthlyPrice: 399,
+    monthlyPrice: 400,
     platformFeePercent: 7,
-    setupFee: 999,
+    setupFee: 1000,
     maxStations: 3,
     maxDJs: 12,
     maxArtists: 500,
@@ -128,7 +128,7 @@ export const OPERATOR_PLANS = {
   },
   NETWORK: {
     name: "Network",
-    monthlyPrice: 799,
+    monthlyPrice: 800,
     platformFeePercent: 5,
     setupFee: 0,
     maxStations: 10,

@@ -268,8 +268,8 @@ class ManifestFinancial {
     organizationName: string;
   }): Promise<{ subscriptionId: string; checkoutUrl: string }> {
     const planPricing: Record<string, { amount: number; name: string }> = {
-      pro: { amount: 29900, name: "Pro - $299/month" },
-      enterprise: { amount: 99900, name: "Enterprise - $999/month" },
+      pro: { amount: 30000, name: "Pro - $300/month" },
+      enterprise: { amount: 100000, name: "Enterprise - $1,000/month" },
       network: { amount: 249900, name: "Network - $2,499/month" },
     };
 

@@ -22,38 +22,38 @@ export default function SponsorOpportunityPage() {
   const referralModel = capacity === "60" ? {
     totalSponsors: 72,
     tiers: {
-      localHero: { name: "Local Hero", price: 29, count: 24, referralBonus: 14.50, valueProp: "Less than $1/day — support local music, get 1 ad/day" },
-      tier1: { name: "Tier 1", price: 79, count: 27, referralBonus: 39.50, valueProp: "2 ads/day, reach engaged music fans" },
-      tier2: { name: "Tier 2", price: 149, count: 15, referralBonus: 74.50, valueProp: "5 ads/day, prominent rotation" },
-      tier3: { name: "Tier 3", price: 299, count: 6, referralBonus: 149.50, valueProp: "10 ads/day, premium placement" },
+      localHero: { name: "Local Hero", price: 30, count: 24, referralBonus: 15, valueProp: "Less than $1/day — support local music, get 1 ad/day" },
+      tier1: { name: "Tier 1", price: 80, count: 27, referralBonus: 40, valueProp: "2 ads/day, reach engaged music fans" },
+      tier2: { name: "Tier 2", price: 150, count: 15, referralBonus: 75, valueProp: "5 ads/day, prominent rotation" },
+      tier3: { name: "Tier 3", price: 300, count: 6, referralBonus: 150, valueProp: "10 ads/day, premium placement" },
     },
     premiums: [
-      { name: "News & Weather Sponsor", price: 299 },
-      { name: "Sponsored Hour", price: 199 },
-      { name: "Week Takeover", price: 599 },
+      { name: "News & Weather Sponsor", price: 300 },
+      { name: "Sponsored Hour", price: 200 },
+      { name: "Week Takeover", price: 600 },
     ],
     examples: [
-      { name: "Local Business Owner", referrals: 2, tiers: "1 Tier 1, 1 Local Hero", earnings: "$54", description: "Referred coffee shop and gym" },
-      { name: "Marketing Agency", referrals: 5, tiers: "2 Tier 2, 3 Tier 1", earnings: "$267.50", description: "Referred multiple clients" },
-      { name: "Chamber of Commerce Member", referrals: 3, tiers: "1 Tier 3, 2 Local Hero", earnings: "$178.50", description: "Networking connections" },
+      { name: "Local Business Owner", referrals: 2, tiers: "1 Tier 1, 1 Local Hero", earnings: "$55", description: "Referred coffee shop and gym" },
+      { name: "Marketing Agency", referrals: 5, tiers: "2 Tier 2, 3 Tier 1", earnings: "$270", description: "Referred multiple clients" },
+      { name: "Chamber of Commerce Member", referrals: 3, tiers: "1 Tier 3, 2 Local Hero", earnings: "$180", description: "Networking connections" },
     ]
   } : {
     totalSponsors: 120,
     tiers: {
-      localHero: { name: "Local Hero", price: 29, count: 40, referralBonus: 14.50, valueProp: "Less than $1/day — support local music, get 1 ad/day" },
-      tier1: { name: "Tier 1", price: 79, count: 45, referralBonus: 39.50, valueProp: "2 ads/day, reach engaged music fans" },
-      tier2: { name: "Tier 2", price: 149, count: 25, referralBonus: 74.50, valueProp: "5 ads/day, prominent rotation" },
-      tier3: { name: "Tier 3", price: 299, count: 10, referralBonus: 149.50, valueProp: "10 ads/day, premium placement" },
+      localHero: { name: "Local Hero", price: 30, count: 40, referralBonus: 15, valueProp: "Less than $1/day — support local music, get 1 ad/day" },
+      tier1: { name: "Tier 1", price: 80, count: 45, referralBonus: 40, valueProp: "2 ads/day, reach engaged music fans" },
+      tier2: { name: "Tier 2", price: 150, count: 25, referralBonus: 75, valueProp: "5 ads/day, prominent rotation" },
+      tier3: { name: "Tier 3", price: 300, count: 10, referralBonus: 150, valueProp: "10 ads/day, premium placement" },
     },
     premiums: [
-      { name: "News & Weather Sponsor", price: 299 },
-      { name: "Sponsored Hour", price: 199 },
-      { name: "Week Takeover", price: 599 },
+      { name: "News & Weather Sponsor", price: 300 },
+      { name: "Sponsored Hour", price: 200 },
+      { name: "Week Takeover", price: 600 },
     ],
     examples: [
-      { name: "Local Business Owner", referrals: 3, tiers: "2 Tier 1, 1 Local Hero", earnings: "$93.50", description: "Referred coffee shop, gym, and salon" },
-      { name: "Marketing Agency", referrals: 8, tiers: "3 Tier 2, 5 Tier 1", earnings: "$421", description: "Referred multiple clients" },
-      { name: "Chamber of Commerce Member", referrals: 5, tiers: "2 Tier 3, 3 Local Hero", earnings: "$342.50", description: "Networking connections" },
+      { name: "Local Business Owner", referrals: 3, tiers: "2 Tier 1, 1 Local Hero", earnings: "$95", description: "Referred coffee shop, gym, and salon" },
+      { name: "Marketing Agency", referrals: 8, tiers: "3 Tier 2, 5 Tier 1", earnings: "$425", description: "Referred multiple clients" },
+      { name: "Chamber of Commerce Member", referrals: 5, tiers: "2 Tier 3, 3 Local Hero", earnings: "$345", description: "Networking connections" },
     ]
   };
 
@@ -72,7 +72,7 @@ export default function SponsorOpportunityPage() {
               <div>
                 <h1 className="text-4xl font-bold text-gray-900">Sponsor Referral Program</h1>
                 <p className="text-xl text-gray-600 mt-2">
-                  Earn up to $149.50 per referral by connecting other businesses with TrueFans RADIO
+                  Earn up to $150 per referral by connecting other businesses with TrueFans RADIO
                 </p>
               </div>
             </div>
@@ -114,7 +114,7 @@ export default function SponsorOpportunityPage() {
               <Check className="w-6 h-6 flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-bold text-lg mb-1">Starting at Less Than $1/Day</h3>
-                <p className="text-blue-100">Local Hero tier is just $29/mo — the most accessible sponsorship in radio.</p>
+                <p className="text-blue-100">Local Hero tier is just $30/mo — the most accessible sponsorship in radio.</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">

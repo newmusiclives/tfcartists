@@ -181,7 +181,7 @@ export default function ArtistOpportunityPage() {
                 MOST POPULAR
               </div>
               <h3 className="font-bold text-lg text-yellow-900 mb-1">Gold</h3>
-              <div className="text-3xl font-bold text-yellow-600 mb-1">$39<span className="text-base font-normal">/mo</span></div>
+              <div className="text-3xl font-bold text-yellow-600 mb-1">$40<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-yellow-600 font-semibold mb-3">Less than Netflix</div>
               <p className="text-sm text-gray-600 mb-3 flex-1">65 plays/month, heavy rotation, dedicated show segment</p>
               <ul className="text-xs text-gray-500 space-y-1">
@@ -196,7 +196,7 @@ export default function ArtistOpportunityPage() {
             {/* Platinum */}
             <div className="rounded-lg p-5 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-purple-100 flex flex-col">
               <h3 className="font-bold text-lg text-purple-900 mb-1">Platinum</h3>
-              <div className="text-3xl font-bold text-purple-600 mb-1">$99<span className="text-base font-normal">/mo</span></div>
+              <div className="text-3xl font-bold text-purple-600 mb-1">$100<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-purple-500 mb-3">Power rotation</div>
               <p className="text-sm text-gray-600 mb-3 flex-1">250 plays/month, VIP events — earn more from the pool than you pay</p>
               <ul className="text-xs text-gray-500 space-y-1">
@@ -212,7 +212,7 @@ export default function ArtistOpportunityPage() {
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200 text-center">
             <p className="text-sm text-green-800">
               <strong>The math:</strong> At capacity, the artist revenue pool is $17,800/month.
-              Platinum artists with 250 shares can earn <strong>more</strong> from the revenue pool than their $99 subscription costs.
+              Platinum artists with 250 shares can earn <strong>more</strong> from the revenue pool than their $100 subscription costs.
               92 cents of every sponsor dollar goes directly to artists.
             </p>
           </div>
