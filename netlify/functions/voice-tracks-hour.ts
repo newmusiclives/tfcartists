@@ -54,8 +54,16 @@ const handler: Handler = schedule("5 13-23,0 * * *", async () => {
       });
     }
 
+    // After processing pending hours, also catch up any stuck script_ready tracks
+    const catchupRes = await fetch(`${baseUrl}/api/cron/voice-tracks-catchup?limit=3`, {
+      method: "GET",
+      headers: authHeaders,
+    });
+    const catchup = catchupRes.ok ? await catchupRes.json() : { error: "catchup call failed" };
+
     console.log("Voice Tracks Hour completed:", JSON.stringify(results));
-    return { statusCode: 200, body: JSON.stringify({ processed: results.length, results }) };
+    console.log("Voice Tracks Catchup:", JSON.stringify(catchup));
+    return { statusCode: 200, body: JSON.stringify({ processed: results.length, results, catchup }) };
   } catch (error) {
     console.error("Voice Tracks Hour failed:", error);
     return { statusCode: 500, body: JSON.stringify({ error: "Cron job failed" }) };

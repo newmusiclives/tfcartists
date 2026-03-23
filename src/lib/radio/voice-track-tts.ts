@@ -11,6 +11,30 @@ import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
 import * as path from "path";
 
+/** Retry an async function with exponential backoff */
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  opts: { maxRetries?: number; baseDelayMs?: number; label?: string } = {},
+): Promise<T> {
+  const { maxRetries = 3, baseDelayMs = 1000, label = "TTS call" } = opts;
+  let lastError: Error | undefined;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      if (attempt < maxRetries) {
+        const delay = baseDelayMs * Math.pow(2, attempt);
+        logger.warn(`${label} attempt ${attempt + 1} failed, retrying in ${delay}ms`, {
+          error: lastError.message,
+        });
+        await new Promise((r) => setTimeout(r, delay));
+      }
+    }
+  }
+  throw lastError;
+}
+
 /** Convert raw PCM (24kHz, 16-bit, mono) to a WAV buffer */
 export function pcmToWav(pcm: Buffer): Buffer {
   const sampleRate = 24000;
@@ -105,14 +129,15 @@ export async function generateWithOpenAI(text: string, voice: string): Promise<{
   const apiKey = await getConfig("OPENAI_API_KEY");
   if (!apiKey) throw new Error("OPENAI_API_KEY not configured");
 
-  const openai = new OpenAI({ apiKey });
-  const response = await openai.audio.speech.create({
-    model: "tts-1-hd",
-    voice: voice as "alloy" | "ash" | "ballad" | "coral" | "echo" | "fable" | "nova" | "onyx" | "sage" | "shimmer",
-    input: text,
-  });
-
-  return { buffer: Buffer.from(await response.arrayBuffer()), ext: "mp3" };
+  return withRetry(async () => {
+    const openai = new OpenAI({ apiKey });
+    const response = await openai.audio.speech.create({
+      model: "tts-1-hd",
+      voice: voice as "alloy" | "ash" | "ballad" | "coral" | "echo" | "fable" | "nova" | "onyx" | "sage" | "shimmer",
+      input: text,
+    });
+    return { buffer: Buffer.from(await response.arrayBuffer()), ext: "mp3" };
+  }, { label: "OpenAI TTS" });
 }
 
 /** Generate OpenAI TTS as raw PCM (24kHz 16-bit mono) for audio mixing */
@@ -121,52 +146,55 @@ export async function generatePcmWithOpenAI(text: string, voice: string): Promis
   const apiKey = await getConfig("OPENAI_API_KEY");
   if (!apiKey) throw new Error("OPENAI_API_KEY not configured");
 
-  const openai = new OpenAI({ apiKey });
-  const response = await openai.audio.speech.create({
-    model: "tts-1-hd",
-    voice: voice as "alloy" | "ash" | "ballad" | "coral" | "echo" | "fable" | "nova" | "onyx" | "sage" | "shimmer",
-    input: text,
-    response_format: "pcm",
-  });
-
-  return Buffer.from(await response.arrayBuffer());
+  return withRetry(async () => {
+    const openai = new OpenAI({ apiKey });
+    const response = await openai.audio.speech.create({
+      model: "tts-1-hd",
+      voice: voice as "alloy" | "ash" | "ballad" | "coral" | "echo" | "fable" | "nova" | "onyx" | "sage" | "shimmer",
+      input: text,
+      response_format: "pcm",
+    });
+    return Buffer.from(await response.arrayBuffer());
+  }, { label: "OpenAI PCM TTS" });
 }
 
 export async function generateWithGemini(text: string, voice: string, voiceDirection?: string | null): Promise<{ buffer: Buffer; ext: string }> {
   const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) throw new Error("GOOGLE_API_KEY not configured");
 
-  const ai = new GoogleGenAI({ apiKey });
+  return withRetry(async () => {
+    const ai = new GoogleGenAI({ apiKey });
 
-  const direction = voiceDirection
-    ? `Voice direction: ${voiceDirection}\n\nSpeak this text: "${text}"`
-    : `"${text}"`;
-  const prompt = direction;
+    const direction = voiceDirection
+      ? `Voice direction: ${voiceDirection}\n\nSpeak this text: "${text}"`
+      : `"${text}"`;
+    const prompt = direction;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-preview-tts",
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    config: {
-      responseModalities: ["AUDIO"],
-      speechConfig: {
-        voiceConfig: {
-          prebuiltVoiceConfig: {
-            voiceName: voice || "Leda",
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-preview-tts",
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      config: {
+        responseModalities: ["AUDIO"],
+        speechConfig: {
+          voiceConfig: {
+            prebuiltVoiceConfig: {
+              voiceName: voice || "Leda",
+            },
           },
         },
       },
-    },
-  });
+    });
 
-  const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-  if (!audioData) {
-    throw new Error("Gemini returned no audio data");
-  }
+    const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    if (!audioData) {
+      throw new Error("Gemini returned no audio data");
+    }
 
-  const pcmBuffer = Buffer.from(audioData, "base64");
-  const wavBuffer = pcmToWav(pcmBuffer);
+    const pcmBuffer = Buffer.from(audioData, "base64");
+    const wavBuffer = pcmToWav(pcmBuffer);
 
-  return { buffer: wavBuffer, ext: "wav" };
+    return { buffer: wavBuffer, ext: "wav" };
+  }, { label: "Gemini TTS", baseDelayMs: 2000 });
 }
 
 interface GenerateAudioResult {
@@ -317,6 +345,87 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
   }
 
   return { generated, errors };
+}
+
+/**
+ * Generate TTS audio for a single voice track by ID.
+ * Used by the catch-up cron to process leftover script_ready tracks
+ * one at a time within tight serverless timeouts.
+ */
+export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promise<{ success: boolean; error?: string }> {
+  const vt = await prisma.voiceTrack.findUnique({ where: { id: voiceTrackId } });
+  if (!vt || vt.status !== "script_ready" || !vt.scriptText) {
+    return { success: false, error: "Track not found or not in script_ready status" };
+  }
+
+  const dj = await prisma.dJ.findUnique({
+    where: { id: vt.djId },
+    select: { ttsVoice: true, ttsProvider: true, stationId: true, voiceDescription: true },
+  });
+
+  const voice = dj?.ttsVoice || "alloy";
+  const provider = dj?.ttsProvider || "openai";
+  const voiceDirection = dj?.voiceDescription || null;
+
+  // Find music bed
+  let musicBedPath: string | null = null;
+  if (dj?.stationId) {
+    const allBeds = await prisma.musicBed.findMany({
+      where: { stationId: dj.stationId, isActive: true },
+    });
+    const realBeds = allBeds.filter((b) =>
+      b.filePath && !b.filePath.startsWith("data:") && !b.name.toLowerCase().includes("pad")
+    );
+    const bed =
+      realBeds.find((b) => b.category === "soft") ||
+      realBeds[0] ||
+      allBeds.find((b) => b.filePath && !b.filePath.startsWith("data:") && b.category === "soft") ||
+      allBeds.find((b) => b.filePath && !b.filePath.startsWith("data:") && b.category === "general") ||
+      allBeds.find((b) => b.filePath && !b.filePath.startsWith("data:"));
+    if (bed?.filePath) musicBedPath = bed.filePath;
+  }
+
+  try {
+    let voicePcm: Buffer;
+    if (provider === "gemini") {
+      const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
+      voicePcm = buffer.subarray(44);
+    } else {
+      voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
+    }
+
+    voicePcm = trimSilence(voicePcm);
+
+    let finalPcm: Buffer;
+    if (musicBedPath) {
+      const boostedPcm = amplifyPcm(voicePcm, 2.0);
+      finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+        voiceGain: 1.0,
+        bedGain: 0.25,
+        fadeInMs: 200,
+        fadeOutMs: 600,
+      });
+    } else {
+      finalPcm = voicePcm;
+    }
+
+    const wavBuffer = pcmToWav(finalPcm);
+    const filename = `vt-${vt.id}.wav`;
+    const audioFilePath = saveAudioFile(wavBuffer, "voice-tracks", filename);
+    const audioDuration = Math.round((finalPcm.length / 48000) * 10) / 10;
+
+    await prisma.voiceTrack.update({
+      where: { id: vt.id },
+      data: { audioFilePath, audioDuration, ttsVoice: voice, ttsProvider: provider, status: "audio_ready" },
+    });
+
+    return { success: true };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    logger.error("Single voice track TTS failed", { error: msg, voiceTrackId: vt.id });
+    // Don't set to error — leave as script_ready so catch-up can retry later
+    return { success: false, error: msg };
+  }
 }
 
 /**
