@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
 import { verifyStationAccess } from "@/lib/db-scoped";
+import { generateSponsorAdAudio } from "@/lib/radio/sponsor-ad-tts";
 
 export const dynamic = "force-dynamic";
 
@@ -115,6 +116,11 @@ export async function POST(request: NextRequest) {
       },
       include: { musicBed: true },
     });
+
+    // Auto-generate audio if scriptText is provided (fire and forget)
+    if (ad.scriptText) {
+      generateSponsorAdAudio(ad.id).catch(() => {});
+    }
 
     return NextResponse.json({ ad }, { status: 201 });
   } catch (error) {

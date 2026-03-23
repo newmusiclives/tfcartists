@@ -779,8 +779,38 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    // Filter out elements with no playable audio — prevents dead air
+    const playableLog = programLog.filter((entry) => {
+      // Songs: keep even without fileUrl (Railway may have its own copy)
+      if (entry.type === "song") return true;
+      // Voice tracks: skip if no audio
+      if (entry.type === "voice_break" && !entry.voiceTrack?.audioFilePath) {
+        warnings.push(`Voice break at pos ${entry.position} skipped — no audio`);
+        return false;
+      }
+      // Features: skip if no audio
+      if (entry.type === "feature" && !entry.feature?.audioFilePath) {
+        warnings.push(`Feature at pos ${entry.position} skipped — no audio`);
+        return false;
+      }
+      // Ads: skip if no audio
+      if (entry.type === "ad" && !entry.ad?.audioFilePath) {
+        return false; // Already warned during ad resolution
+      }
+      // Imaging/sweeper/promo: skip if no audio (pickImaging already handles this)
+      if ((entry.type === "sweeper" || entry.type === "promo" || entry.type === "station_id") && !entry.imaging?.audioFilePath) {
+        return false;
+      }
+      // Transitions: skip if no audio
+      if (entry.type === "transition" && !entry.transition?.audioFilePath) {
+        warnings.push(`Transition "${entry.transition?.name}" skipped — no audio`);
+        return false;
+      }
+      return true;
+    });
+
     // --- Sort by position and assign sequenceOrder + cumulativeStartSec ---
-    programLog.sort((a, b) => a.position - b.position);
+    playableLog.sort((a, b) => a.position - b.position);
 
     // Crossfade settings from station config
     const xfEnabled = station?.crossfadeEnabled ?? true;
@@ -791,10 +821,10 @@ export async function GET(request: NextRequest) {
     const duckEnabled = station?.duckingEnabled ?? true;
 
     let cumulativeSec = 0;
-    for (let i = 0; i < programLog.length; i++) {
-      const entry = programLog[i];
-      const prev = i > 0 ? programLog[i - 1] : null;
-      const next = i < programLog.length - 1 ? programLog[i + 1] : null;
+    for (let i = 0; i < playableLog.length; i++) {
+      const entry = playableLog[i];
+      const prev = i > 0 ? playableLog[i - 1] : null;
+      const next = i < playableLog.length - 1 ? playableLog[i + 1] : null;
       entry.sequenceOrder = i;
       entry.cumulativeStartSec = cumulativeSec;
 
@@ -886,7 +916,7 @@ export async function GET(request: NextRequest) {
       hourOfDay: playlist.hourOfDay,
       status: playlist.status,
       productionSettings,
-      programLog,
+      programLog: playableLog,
       warnings,
     });
   } catch (error) {
