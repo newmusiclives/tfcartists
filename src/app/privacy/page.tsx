@@ -90,6 +90,36 @@ export default function PrivacyPolicyPage() {
               </li>
             </ul>
 
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 mt-6">
+              Data Collected by User Type
+            </h3>
+            <p className="mb-3">
+              We collect different information depending on your role on the
+              platform:
+            </p>
+            <ul className="list-disc pl-6 space-y-1 mb-4">
+              <li>
+                <strong>Station Operators:</strong> Organization name, contact
+                information, billing details, station configuration, branding
+                assets, programming schedules, and operational analytics.
+              </li>
+              <li>
+                <strong>Artists:</strong> Artist name, bio, genre information,
+                music files and metadata, streaming statistics, subscription
+                tier, and payout information.
+              </li>
+              <li>
+                <strong>Sponsors:</strong> Business name, contact details,
+                advertising content, campaign preferences, billing information,
+                and ad performance metrics.
+              </li>
+              <li>
+                <strong>Listeners:</strong> Display name, email, listening
+                history, station preferences, engagement activity, and
+                community interactions.
+              </li>
+            </ul>
+
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               Usage Data
             </h3>
@@ -117,10 +147,27 @@ export default function PrivacyPolicyPage() {
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               Cookies and Tracking Technologies
             </h3>
+            <p className="mb-3">
+              We use cookies and similar technologies for the following
+              purposes:
+            </p>
+            <ul className="list-disc pl-6 space-y-1 mb-3">
+              <li>
+                <strong>Session cookies:</strong> Required for authentication
+                and maintaining your logged-in state across page navigation
+              </li>
+              <li>
+                <strong>CSRF tokens:</strong> Security cookies that protect
+                against cross-site request forgery attacks on form submissions
+              </li>
+              <li>
+                <strong>Preference cookies:</strong> Store your display
+                preferences such as theme, volume settings, and station
+                favorites
+              </li>
+            </ul>
             <p>
-              We use cookies and similar technologies for authentication, session
-              management, analytics, and to remember your preferences. For
-              detailed information, please see our{" "}
+              For detailed information about our cookie usage, please see our{" "}
               <Link
                 href="/cookies"
                 className="text-amber-700 underline hover:text-amber-900"
@@ -214,6 +261,85 @@ export default function PrivacyPolicyPage() {
             </ul>
           </section>
 
+          {/* 3a. Multi-Tenant Data Isolation */}
+          <section>
+            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+              3a. Multi-Tenant Data Isolation
+            </h2>
+            <p className="mb-3">
+              TrueFans RADIO Network operates as a multi-tenant platform where
+              multiple station operators share the same infrastructure. We
+              maintain strict data isolation between organizations:
+            </p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>
+                Each station operator&apos;s data (including station
+                configuration, artist rosters, sponsor information, and
+                listener data) is logically separated and not accessible to
+                other operators
+              </li>
+              <li>
+                Operator-specific analytics, financial data, and operational
+                information are only visible to authorized members of that
+                organization
+              </li>
+              <li>
+                Artists who submit music to multiple stations maintain separate
+                relationships with each station operator
+              </li>
+              <li>
+                Platform-wide aggregate data (such as total listener counts or
+                general trends) may be used internally but does not expose
+                individual operator or user data
+              </li>
+              <li>
+                Administrative access to cross-tenant data is restricted to
+                authorized TrueFans RADIO Network personnel for platform
+                operations and support purposes only
+              </li>
+            </ul>
+          </section>
+
+          {/* 3b. Third-Party Services */}
+          <section>
+            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+              3b. Third-Party Services
+            </h2>
+            <p className="mb-3">
+              We use the following third-party services to operate the
+              platform. Each service may process certain data as described:
+            </p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>
+                <strong>Manifest Financial:</strong> Payment processing,
+                billing, and financial transactions for subscriptions and
+                payouts.
+              </li>
+              <li>
+                <strong>Cloudflare R2:</strong> Cloud storage for music files,
+                audio assets, station branding, and media content.
+              </li>
+              <li>
+                <strong>GoHighLevel:</strong> Customer relationship management,
+                email communications, and marketing automation.
+              </li>
+              <li>
+                <strong>OpenAI:</strong> AI-powered content generation
+                including DJ voice scripts, show notes, and station
+                programming assistance.
+              </li>
+              <li>
+                <strong>Anthropic:</strong> AI-powered content analysis, music
+                metadata processing, and platform intelligence features.
+              </li>
+            </ul>
+            <p className="mt-3">
+              Each third-party service operates under its own privacy policy
+              and data processing agreements. We only share the minimum data
+              necessary for each service to perform its function.
+            </p>
+          </section>
+
           {/* 4. Data Security */}
           <section>
             <h2 className="text-2xl font-semibold text-amber-800 mb-4">
@@ -233,15 +359,56 @@ export default function PrivacyPolicyPage() {
           {/* 5. Data Retention */}
           <section>
             <h2 className="text-2xl font-semibold text-amber-800 mb-4">
-              5. Data Retention
+              5. Data Retention and Deletion
             </h2>
-            <p>
+            <p className="mb-3">
               We retain your personal information for as long as your account is
               active or as needed to provide you services. We may also retain and
               use your information as necessary to comply with legal obligations,
-              resolve disputes, and enforce our agreements. If you request
-              deletion of your account, we will remove your personal data within
-              a reasonable timeframe, except where retention is required by law.
+              resolve disputes, and enforce our agreements.
+            </p>
+            <p className="mb-3">
+              Specific retention periods:
+            </p>
+            <ul className="list-disc pl-6 space-y-1 mb-3">
+              <li>
+                <strong>Active accounts:</strong> Data is retained for the
+                duration of your account plus 90 days after account closure to
+                allow for reactivation or data export
+              </li>
+              <li>
+                <strong>Music files:</strong> Submitted audio files are removed
+                from our storage within 30 days of an artist&apos;s withdrawal
+                request or account deletion
+              </li>
+              <li>
+                <strong>Financial records:</strong> Transaction and billing
+                records are retained for 7 years as required by tax and
+                financial regulations
+              </li>
+              <li>
+                <strong>Analytics data:</strong> Anonymized, aggregated
+                analytics data may be retained indefinitely for platform
+                improvement purposes
+              </li>
+              <li>
+                <strong>Communication records:</strong> Support tickets and
+                correspondence are retained for 3 years after resolution
+              </li>
+            </ul>
+            <p>
+              <strong>Deletion Rights:</strong> You may request deletion of
+              your account and personal data at any time by contacting us at{" "}
+              <a
+                href="mailto:legal@truefans.radio"
+                className="text-amber-700 underline hover:text-amber-900"
+              >
+                legal@truefans.radio
+              </a>
+              . We will process deletion requests within 30 days, subject to
+              the retention periods described above. Upon deletion, your
+              personal data will be permanently removed from our active systems
+              and backups will be purged within 90 days.
             </p>
           </section>
 

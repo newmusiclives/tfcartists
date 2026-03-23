@@ -90,6 +90,158 @@ export default function TermsOfServicePage() {
                 DJ scheduling, music rotation, and traffic management.
               </li>
             </ul>
+            <p className="mt-3">
+              <strong>Platform Role:</strong> TrueFans RADIO Network is a
+              technology provider that enables station operators to create and
+              manage internet radio stations. We are not a broadcaster. We
+              provide the tools, infrastructure, and AI services that power
+              radio stations operated by independent operators. We do not
+              control or take responsibility for the programming decisions,
+              music selections, or content broadcast by individual station
+              operators.
+            </p>
+          </section>
+
+          {/* 2a. Operator Responsibilities */}
+          <section>
+            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+              2a. Station Operator Responsibilities
+            </h2>
+            <p className="mb-3">
+              If you operate a radio station on the TrueFans RADIO Network
+              platform, you are solely responsible for:
+            </p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>
+                Obtaining and maintaining all necessary music performance
+                licenses (e.g., ASCAP, BMI, SESAC, SoundExchange) required for
+                your station&apos;s broadcasts in your jurisdiction
+              </li>
+              <li>
+                Ensuring all content broadcast through your station complies
+                with applicable local, state, national, and international laws
+                and regulations
+              </li>
+              <li>
+                Managing your station&apos;s content, programming, and
+                scheduling in accordance with community standards and applicable
+                broadcasting regulations
+              </li>
+              <li>
+                Maintaining accurate records of music played and reporting as
+                required by performance rights organizations
+              </li>
+              <li>
+                Responding to and resolving any complaints, disputes, or legal
+                claims related to content broadcast on your station
+              </li>
+              <li>
+                Ensuring that advertising and sponsor content on your station
+                complies with applicable advertising standards and regulations
+              </li>
+            </ul>
+            <p className="mt-3">
+              TrueFans RADIO Network does not monitor or pre-approve content
+              broadcast by station operators. Failure to comply with these
+              responsibilities may result in suspension or termination of your
+              station and account.
+            </p>
+          </section>
+
+          {/* 2b. Artist Content Rights */}
+          <section>
+            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+              2b. Artist Content Rights
+            </h2>
+            <p className="mb-3">
+              By submitting music or other content to the TrueFans RADIO
+              Network platform, artists acknowledge and agree to the following:
+            </p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>
+                You grant all station operators on the TrueFans RADIO Network a
+                non-exclusive, royalty-free license to broadcast, stream, and
+                publicly perform your submitted music through their radio
+                stations on the platform
+              </li>
+              <li>
+                You represent and warrant that you own or have the necessary
+                rights, licenses, and permissions to submit the content and
+                authorize its broadcast
+              </li>
+              <li>
+                You retain full ownership and copyright of your original music
+                and content at all times
+              </li>
+              <li>
+                You may withdraw your music from the platform at any time by
+                contacting us; removal will be processed within 7 business days
+              </li>
+              <li>
+                The airplay license granted herein does not transfer any
+                ownership rights and does not grant rights to download,
+                redistribute, or sublicense your music outside the platform
+              </li>
+            </ul>
+          </section>
+
+          {/* 2c. DMCA and Copyright Takedown */}
+          <section>
+            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+              2c. DMCA and Copyright Takedown
+            </h2>
+            <p className="mb-3">
+              TrueFans RADIO Network respects the intellectual property rights
+              of others and complies with the Digital Millennium Copyright Act
+              (DMCA). If you believe that content on our platform infringes
+              your copyright, please submit a takedown notice to:
+            </p>
+            <p className="mb-3">
+              <strong>Email:</strong>{" "}
+              <a
+                href="mailto:copyright@truefansradio.com"
+                className="text-amber-700 underline hover:text-amber-900"
+              >
+                copyright@truefansradio.com
+              </a>
+            </p>
+            <p className="mb-3">
+              Your DMCA takedown notice must include the following:
+            </p>
+            <ul className="list-disc pl-6 space-y-1 mb-3">
+              <li>
+                Identification of the copyrighted work you claim has been
+                infringed
+              </li>
+              <li>
+                Identification of the material on our platform that you claim
+                is infringing, with enough detail for us to locate it
+              </li>
+              <li>
+                Your contact information (name, address, telephone number,
+                email address)
+              </li>
+              <li>
+                A statement that you have a good-faith belief that use of the
+                material is not authorized by the copyright owner, its agent,
+                or the law
+              </li>
+              <li>
+                A statement, under penalty of perjury, that the information in
+                your notice is accurate and that you are the copyright owner or
+                authorized to act on the owner&apos;s behalf
+              </li>
+              <li>
+                Your physical or electronic signature
+              </li>
+            </ul>
+            <p>
+              Upon receipt of a valid DMCA takedown notice, we will remove or
+              disable access to the allegedly infringing content within 48
+              hours. We will notify the content provider and may provide them
+              an opportunity to submit a counter-notification in accordance
+              with the DMCA.
+            </p>
           </section>
 
           {/* 3. User Accounts & Registration */}
@@ -285,6 +437,46 @@ export default function TermsOfServicePage() {
             </ul>
           </section>
 
+          {/* 7a. Platform Fees and Billing */}
+          <section>
+            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+              7a. Platform Fees and Billing
+            </h2>
+            <p className="mb-3">
+              Certain services on the TrueFans RADIO Network platform require
+              payment of fees. By subscribing to a paid service, you agree to
+              the following:
+            </p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>
+                All fees are stated in US dollars and are billed on a recurring
+                monthly basis unless otherwise specified
+              </li>
+              <li>
+                Payment is processed through our third-party payment provider,
+                Manifest Financial. You agree to their terms of service as
+                applicable to payment processing
+              </li>
+              <li>
+                You authorize us to charge your selected payment method for all
+                applicable fees on each billing date
+              </li>
+              <li>
+                Failed payments may result in suspension of service until
+                payment is resolved
+              </li>
+              <li>
+                We reserve the right to change our pricing with 30 days&apos;
+                prior written notice; continued use after the effective date of
+                a price change constitutes acceptance of the new pricing
+              </li>
+              <li>
+                Refunds are issued only as required by applicable law or at our
+                sole discretion
+              </li>
+            </ul>
+          </section>
+
           {/* 8. Disclaimer of Warranties */}
           <section>
             <h2 className="text-2xl font-semibold text-amber-800 mb-4">
@@ -376,6 +568,15 @@ export default function TermsOfServicePage() {
                 support@truefans.radio
               </a>
               .
+            </p>
+            <p className="mt-3">
+              <strong>30-Day Notice:</strong> Either party may terminate a paid
+              subscription or operator account with 30 days&apos; written
+              notice. Upon providing notice, your service will continue through
+              the end of the 30-day notice period. After termination, we will
+              retain your data for 90 days to allow for data export, after
+              which it will be permanently deleted unless retention is required
+              by law.
             </p>
           </section>
 
