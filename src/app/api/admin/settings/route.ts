@@ -50,10 +50,6 @@ const CONFIG_DEFINITIONS: Record<string, { category: string; label: string; encr
   SPOTIFY_CLIENT_ID: { category: "discovery", label: "Spotify Client ID", encrypted: true },
   SPOTIFY_CLIENT_SECRET: { category: "discovery", label: "Spotify Client Secret", encrypted: true },
 
-  // Voice AI
-  VAPI_API_KEY: { category: "discovery", label: "Vapi AI API Key", encrypted: true },
-  VAPI_PHONE_NUMBER: { category: "discovery", label: "Vapi Phone Number", encrypted: false },
-
   // Automation
   CRON_SECRET: { category: "automation", label: "Cron Job Secret", encrypted: true },
   RILEY_ACTIVE: { category: "automation", label: "Riley Active (true/false)", encrypted: false },

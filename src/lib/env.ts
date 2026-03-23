@@ -37,10 +37,6 @@ const envSchema = z.object({
   SPOTIFY_CLIENT_ID: z.string().optional(),
   SPOTIFY_CLIENT_SECRET: z.string().optional(),
 
-  // Voice AI (Harper's calls)
-  VAPI_API_KEY: z.string().optional(),
-  VAPI_PHONE_NUMBER: z.string().optional(),
-
   // NextAuth (optional for now, required for production)
   NEXTAUTH_SECRET: z.string().optional(),
   NEXTAUTH_URL: z.string().optional(),
