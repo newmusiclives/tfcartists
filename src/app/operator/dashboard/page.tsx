@@ -9,6 +9,7 @@ import {
   BarChart3, Megaphone, ArrowRight, Loader2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { OnboardingChecklist } from "@/components/onboarding-checklist";
 
 interface StationData {
   id: string;
@@ -17,11 +18,13 @@ interface StationData {
   genre: string;
   isActive: boolean;
   stationCode: string | null;
+  streamUrl: string | null;
   _count: {
     songs: number;
     clockTemplates: number;
     stationDJs: number;
     imagingVoices: number;
+    clockAssignments: number;
   };
 }
 
@@ -105,6 +108,22 @@ export default function OperatorDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Onboarding Checklist */}
+        <OnboardingChecklist
+          stationData={
+            station
+              ? {
+                  id: station.id,
+                  _count: station._count,
+                  streamUrl: station.streamUrl,
+                  clockAssignmentCount: station._count.clockAssignments,
+                }
+              : null
+          }
+          artistCount={data?.artistCount || 0}
+          sponsorCount={data?.sponsorCount || 0}
+        />
+
         {/* Station Overview */}
         {station ? (
           <div className="bg-white rounded-xl shadow-sm border p-6 mb-8">

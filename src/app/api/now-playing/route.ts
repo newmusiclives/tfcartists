@@ -8,6 +8,10 @@ const RAILWAY_URL = `${process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-bac
 
 export const dynamic = "force-dynamic";
 
+// In-memory cache for Icecast metadata — avoids reading the stream on every poll
+let cachedMeta: { title: string; updatedAt: number } | null = null;
+const CACHE_TTL_MS = 10_000; // 10 seconds
+
 /**
  * Read the Icecast stream metadata to get the actual currently-playing track.
  * Icecast embeds metadata every `icy-metaint` bytes in the audio stream.
@@ -129,7 +133,16 @@ export async function GET() {
       : null;
 
     // 1. Try reading Icecast stream metadata (actual source of truth)
-    const streamMeta = await readIcecastMetadata(STREAM_URL);
+    // Use cached value if fresh (avoids reading stream bytes on every 10s poll)
+    let streamMeta: string | null = null;
+    if (cachedMeta && Date.now() - cachedMeta.updatedAt < CACHE_TTL_MS) {
+      streamMeta = cachedMeta.title;
+    } else {
+      streamMeta = await readIcecastMetadata(STREAM_URL);
+      if (streamMeta) {
+        cachedMeta = { title: streamMeta, updatedAt: Date.now() };
+      }
+    }
 
     if (streamMeta) {
       // Parse "Artist - Title" format

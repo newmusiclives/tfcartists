@@ -120,6 +120,16 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Fire-and-forget welcome email if artist has an email
+    if (artist.email) {
+      try {
+        const { sendArtistWelcomeEmail } = await import("@/lib/messaging/transactional-emails");
+        await sendArtistWelcomeEmail(artist.email, artist.name);
+      } catch (err) {
+        logger.warn("Failed to send artist welcome email", { error: err instanceof Error ? err.message : String(err) });
+      }
+    }
+
     return NextResponse.json({ artist }, { status: 201 });
   } catch (error) {
     logger.error("Error creating artist", { error });

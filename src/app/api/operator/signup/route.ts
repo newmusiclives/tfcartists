@@ -137,6 +137,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Fire-and-forget welcome email
+    try {
+      const { sendOperatorWelcomeEmail } = await import("@/lib/messaging/transactional-emails");
+      await sendOperatorWelcomeEmail(email, name, plan || "launch");
+    } catch (err) {
+      logger.warn("Failed to send operator welcome email", { error: err instanceof Error ? err.message : String(err) });
+    }
+
     return NextResponse.json(
       {
         success: true,
