@@ -407,7 +407,7 @@ export default async function MarketingPage() {
                 <span className="text-3xl font-bold text-gray-900">$30</span>
                 <span className="text-sm text-gray-500 ml-1">/mo</span>
               </div>
-              <div className="text-sm text-gray-500 mb-6">less than $1/day</div>
+              <div className="text-sm text-gray-500 mb-6">a dollar a day</div>
               <ul className="space-y-2 mb-6">
                 {["30 ad spots/mo", "AI-produced audio ads", "Performance dashboard", "4 tiers up to $300/mo"].map((item) => (
                   <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
