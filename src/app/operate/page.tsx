@@ -57,12 +57,12 @@ export default function OperatePage() {
             Run Your Own AI-Powered Radio Station
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-6">
-            Pay $250/mo + 10% platform fee, earn $8,350/mo = 30x ROI
+            Build a real business. Earn up to $75K/year. Launch in days.
           </p>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            No broadcast license needed. No expensive equipment. 5 AI teams handle artist outreach,
-            sponsor sales, listener growth, music curation, and station programming — launch in days, not months.
-            Potential $50K+/year net profit while AI does all the work.
+            No broadcast license. No expensive equipment. No technical skills needed.
+            Five AI teams handle artist outreach, sponsor sales, listener growth, music curation,
+            and 24/7 station programming. You focus on your community — the AI does the rest.
           </p>
           <button
             onClick={scrollToCTA}
@@ -155,8 +155,8 @@ export default function OperatePage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
             {[
               { value: "$9,950/mo", label: "Gross Revenue at Capacity" },
-              { value: "$50K+/yr", label: "Annual Net Profit Potential" },
-              { value: "$8,350/mo", label: "Net Profit (Growth Plan)" },
+              { value: "$75K/yr", label: "Annual Revenue Potential" },
+              { value: "$6,400/mo", label: "Operator Revenue at Capacity" },
             ].map((stat) => (
               <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
                 <div className="text-3xl font-bold mb-1">{stat.value}</div>
@@ -215,7 +215,7 @@ export default function OperatePage() {
           </div>
 
           <p className="text-center text-amber-300 text-sm mt-6">
-            Operating expenses vary by plan. Growth plan example: $250/mo base + 10% platform fee on revenue + AI services, hosting, and messaging.
+            Operating expenses vary by plan. Includes platform subscription, AI services, hosting, and messaging. All plans include 5 AI teams and full automation.
           </p>
 
           {/* Pricing Tiers */}

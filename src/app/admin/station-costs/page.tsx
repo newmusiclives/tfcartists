@@ -518,7 +518,7 @@ export default function StationCostsPage() {
               const margin = plan.price - costs.total;
               const positive = margin >= 0;
               // Example: at full capacity operator earns ~$8,350/mo
-              const exampleRevenue = 8350;
+              const exampleRevenue = 6400;
               const platformFee = exampleRevenue * (plan.fee / 100);
               const totalTfRevenue = plan.price + platformFee;
               return (
