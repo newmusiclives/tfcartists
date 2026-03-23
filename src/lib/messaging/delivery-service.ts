@@ -7,6 +7,8 @@ import { logger } from "@/lib/logger";
  */
 
 const GHL_BASE_URL = "https://services.leadconnectorhq.com";
+const STATION_NAME = process.env.NEXT_PUBLIC_STATION_NAME || "North Country Radio";
+const TAG_PREFIX = process.env.NEXT_PUBLIC_STATION_CALL_SIGN || "NCR";
 
 export type MessageChannel = "sms" | "email" | "instagram";
 
@@ -134,7 +136,7 @@ class MessageDeliveryService {
    * Build tags array for a GHL contact based on pipeline stage
    */
   private buildTags(pipelineStage?: string): string[] {
-    const tags = ["NCR Riley"];
+    const tags = [`${TAG_PREFIX} Riley`];
     if (pipelineStage) {
       const stageTag = RILEY_STAGE_TAGS[pipelineStage];
       if (stageTag) tags.push(stageTag);
@@ -302,7 +304,7 @@ class MessageDeliveryService {
    * Build tags array for a GHL contact based on Cassidy submission stage
    */
   private buildCassidyTags(stage: string, tier?: string): string[] {
-    const tags = ["NCR Cassidy"];
+    const tags = [`${TAG_PREFIX} Cassidy`];
     const stageTag = CASSIDY_STAGE_TAGS[stage];
     if (stageTag) tags.push(stageTag);
     if (tier && stage === "placed") {
@@ -444,7 +446,7 @@ class MessageDeliveryService {
    * Build tags array for a GHL contact based on Harper sponsor stage
    */
   private buildHarperTags(stage: string, tier?: string): string[] {
-    const tags = ["NCR Harper"];
+    const tags = [`${TAG_PREFIX} Harper`];
     const stageTag = HARPER_STAGE_TAGS[stage];
     if (stageTag) tags.push(stageTag);
     if (tier) {
@@ -589,7 +591,7 @@ class MessageDeliveryService {
    * Build tags array for a GHL contact based on Elliot listener stage
    */
   private buildElliotTags(stage: string, tier?: string): string[] {
-    const tags = ["NCR Elliot"];
+    const tags = [`${TAG_PREFIX} Elliot`];
     const stageTag = ELLIOT_STAGE_TAGS[stage];
     if (stageTag) tags.push(stageTag);
     if (tier) {
@@ -829,7 +831,7 @@ class MessageDeliveryService {
           type: "Email",
           contactId,
           message: content,
-          subject: subject || "North Country Radio",
+          subject: subject || STATION_NAME,
           html: this.formatEmailHTML(content),
         }),
       });
@@ -965,17 +967,17 @@ class MessageDeliveryService {
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>North Country Radio</title>
+          <title>${STATION_NAME}</title>
         </head>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #B45309 0%, #EA580C 100%); padding: 20px; border-radius: 10px 10px 0 0;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">North Country Radio</h1>
+            <h1 style="color: white; margin: 0; font-size: 24px;">${STATION_NAME}</h1>
           </div>
           <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px;">
             ${htmlContent}
             <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
             <p style="color: #6b7280; font-size: 14px; margin: 0;">
-              This message was sent by Riley, your North Country Radio Artist Acquisition Specialist.
+              This message was sent by Riley, your ${STATION_NAME} Artist Acquisition Specialist.
             </p>
           </div>
         </body>
