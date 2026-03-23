@@ -1,65 +1,101 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { stationHour, stationNow, stationToday } from "@/lib/timezone";
+import { stationHour, stationToday } from "@/lib/timezone";
+import https from "https";
 
+const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
 const RAILWAY_URL = `${process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app"}/api/now_playing`;
 
 export const dynamic = "force-dynamic";
 
-// Default durations (seconds) for non-song elements — matches playout/hour
-const DEFAULT_DURATION: Record<string, number> = {
-  imaging: 5, sweeper: 5, promo: 10, station_id: 4,
-  feature: 45, voice_break: 10, song: 210,
-  ad: 20, commercial: 20, transition: 8,
-};
-
 /**
- * Derive the currently-playing song from the locked playlist for this hour.
- * Walks through ALL slots (songs, voice breaks, imaging, ads) with their
- * actual durations to compute cumulative time, then finds which song
- * is playing at the current elapsed seconds.
+ * Read the Icecast stream metadata to get the actual currently-playing track.
+ * Icecast embeds metadata every `icy-metaint` bytes in the audio stream.
+ * Returns "Artist - Title" or null if unavailable.
  */
-function deriveCurrentSong(
-  slots: Array<{ type: string; songTitle?: string; artistName?: string; songId?: string; minute: number; duration?: number }>,
-  minuteOfHour: number,
-  secondOfMinute: number
-) {
-  const elapsedSeconds = minuteOfHour * 60 + secondOfMinute;
+async function readIcecastMetadata(url: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    const timeout = setTimeout(() => resolve(null), 4000);
 
-  // Walk through all slots in order, accumulating time
-  let cumulativeSec = 0;
-  let currentSong: typeof slots[0] | null = null;
+    try {
+      const parsedUrl = new URL(url);
+      const options = {
+        hostname: parsedUrl.hostname,
+        port: parsedUrl.port || 443,
+        path: parsedUrl.pathname,
+        method: "GET",
+        headers: {
+          "Icy-MetaData": "1",
+          "User-Agent": "TrueFans-NowPlaying/1.0",
+        },
+        rejectUnauthorized: false,
+      };
 
-  for (const slot of slots) {
-    const slotDuration = slot.duration || DEFAULT_DURATION[slot.type] || 10;
+      const req = https.request(options, (res) => {
+        const metaint = parseInt(res.headers["icy-metaint"] as string, 10);
+        if (!metaint || isNaN(metaint)) {
+          clearTimeout(timeout);
+          res.destroy();
+          resolve(null);
+          return;
+        }
 
-    if (cumulativeSec + slotDuration > elapsedSeconds) {
-      // We're currently in this slot
-      if (slot.type === "song" && slot.songTitle) {
-        return slot;
-      }
-      // We're in a non-song element — return the most recent song
-      return currentSong;
+        let bytesRead = 0;
+        const chunks: Buffer[] = [];
+
+        res.on("data", (chunk: Buffer) => {
+          chunks.push(chunk);
+          bytesRead += chunk.length;
+
+          // We need metaint bytes of audio + 1 byte length + up to 4080 bytes metadata
+          if (bytesRead > metaint + 1) {
+            res.destroy();
+            clearTimeout(timeout);
+
+            const fullBuffer = Buffer.concat(chunks);
+            // Skip past audio data to the metadata length byte
+            const metaLenByte = fullBuffer[metaint];
+            const metaLen = metaLenByte * 16;
+
+            if (metaLen > 0 && fullBuffer.length >= metaint + 1 + metaLen) {
+              const metaStr = fullBuffer
+                .subarray(metaint + 1, metaint + 1 + metaLen)
+                .toString("utf-8")
+                .replace(/\0+$/, "");
+
+              // Parse StreamTitle='Artist - Title';
+              const match = metaStr.match(/StreamTitle='(.+?)'/);
+              resolve(match ? match[1] : null);
+            } else {
+              resolve(null);
+            }
+          }
+        });
+
+        res.on("error", () => {
+          clearTimeout(timeout);
+          resolve(null);
+        });
+      });
+
+      req.on("error", () => {
+        clearTimeout(timeout);
+        resolve(null);
+      });
+
+      req.end();
+    } catch {
+      clearTimeout(timeout);
+      resolve(null);
     }
-
-    // Track the most recent song we've passed
-    if (slot.type === "song" && slot.songTitle) {
-      currentSong = slot;
-    }
-
-    cumulativeSec += slotDuration;
-  }
-
-  // Past the end of all slots — return last song
-  return currentSong;
+  });
 }
 
 /**
  * GET /api/now-playing
  *
- * Derives now-playing from the locked playlist (source of truth for what
- * Liquidsoap is actually playing). Supplements with Railway data for
- * listener count when available.
+ * Reads the Icecast stream metadata for the actual currently-playing track.
+ * Falls back to Railway, then to playlist derivation if stream is unreachable.
  */
 export async function GET() {
   try {
@@ -71,12 +107,10 @@ export async function GET() {
       return NextResponse.json({ error: "No active station" }, { status: 404 });
     }
 
-    const today = stationToday();
     const hour = stationHour();
-    const now = stationNow();
-    const minuteOfHour = now.getUTCMinutes();
-    const secondOfMinute = now.getUTCSeconds();
 
+    // Get DJ for this hour from the playlist
+    const today = stationToday();
     const playlist = await prisma.hourPlaylist.findFirst({
       where: {
         stationId: station.id,
@@ -87,24 +121,50 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    if (!playlist) {
+    const dj = playlist?.djId
+      ? await prisma.dJ.findUnique({
+          where: { id: playlist.djId },
+          select: { name: true, slug: true },
+        })
+      : null;
+
+    // 1. Try reading Icecast stream metadata (actual source of truth)
+    const streamMeta = await readIcecastMetadata(STREAM_URL);
+
+    if (streamMeta) {
+      // Parse "Artist - Title" format
+      const dashIndex = streamMeta.indexOf(" - ");
+      let title = streamMeta;
+      let artistName = station.name;
+
+      if (dashIndex > 0) {
+        artistName = streamMeta.substring(0, dashIndex).trim();
+        title = streamMeta.substring(dashIndex + 3).trim();
+      }
+
+      // Try to find artwork from our song database
+      let artworkUrl: string | null = null;
+      const song = await prisma.song.findFirst({
+        where: { title, artistName, stationId: station.id },
+        select: { artworkUrl: true },
+      });
+      artworkUrl = song?.artworkUrl || null;
+
       return NextResponse.json({
         station: station.name,
-        status: "off-air",
-        message: "No playlist available for this hour",
+        status: "on-air",
+        title,
+        artist_name: artistName,
+        artwork_url: artworkUrl,
+        listener_count: 0,
+        dj_name: dj?.name || null,
+        dj_id: dj?.slug || null,
+        djSlug: dj?.slug || null,
+        hourOfDay: hour,
       });
     }
 
-    const dj = await prisma.dJ.findUnique({
-      where: { id: playlist.djId },
-      select: { name: true, slug: true },
-    });
-
-    const slots = JSON.parse(playlist.slots);
-    const currentSong = deriveCurrentSong(slots, minuteOfHour, secondOfMinute);
-
-    // Try to get listener count from Railway (non-blocking, best-effort)
-    let listenerCount = 0;
+    // 2. Fallback: try Railway backend
     try {
       const res = await fetch(RAILWAY_URL, {
         cache: "no-store",
@@ -112,32 +172,28 @@ export async function GET() {
       });
       if (res.ok) {
         const data = await res.json();
-        listenerCount = data.listener_count || 0;
+        if (data.title) {
+          return NextResponse.json({
+            ...data,
+            dj_name: dj?.name || data.dj_name,
+            dj_id: dj?.slug || data.dj_id,
+          });
+        }
       }
     } catch {
-      // Railway unreachable — continue with 0 listeners
+      // Railway unreachable
     }
 
-    // Look up artwork from the song record if available
-    let artworkUrl: string | null = null;
-    if (currentSong?.songId) {
-      const song = await prisma.song.findUnique({
-        where: { id: currentSong.songId },
-        select: { artworkUrl: true },
-      });
-      artworkUrl = song?.artworkUrl || null;
-    }
-
+    // 3. Final fallback: station info only
     return NextResponse.json({
       station: station.name,
-      status: "on-air",
-      title: currentSong?.songTitle || "Music",
-      artist_name: currentSong?.artistName || station.name,
-      artwork_url: artworkUrl,
-      listener_count: listenerCount,
+      status: playlist ? "on-air" : "off-air",
+      title: "Music",
+      artist_name: station.name,
+      artwork_url: null,
+      listener_count: 0,
       dj_name: dj?.name || null,
       dj_id: dj?.slug || null,
-      djSlug: dj?.slug || null,
       hourOfDay: hour,
     });
   } catch {
