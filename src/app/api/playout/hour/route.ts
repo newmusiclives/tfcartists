@@ -97,9 +97,9 @@ async function getShiftTransitionInfo(stationId: string, hourOfDay: number): Pro
   };
 }
 
-// Seconds of breathing room after a song before the next element starts.
-// Kept tight — crossfade/ducking handles smooth transitions on the Railway side.
-const SONG_TAIL_PAD_SEC = 0.3;
+// No padding between songs — crossfade handles seamless transitions.
+// Only adds padding when crossfade is disabled (fallback).
+const SONG_TAIL_PAD_SEC = 0;
 
 // Default durations (seconds) when actual duration is unknown
 // Kept tight to minimize dead air — real radio has no silence between elements
@@ -784,9 +784,9 @@ export async function GET(request: NextRequest) {
 
     // Crossfade settings from station config
     const xfEnabled = station?.crossfadeEnabled ?? true;
-    const xfDuration = station?.crossfadeDuration ?? 3.0;
-    const xfFadeIn = station?.crossfadeFadeIn ?? 0.8;
-    const xfFadeOut = station?.crossfadeFadeOut ?? 1.5;
+    const xfDuration = station?.crossfadeDuration ?? 4.0;
+    const xfFadeIn = station?.crossfadeFadeIn ?? 1.0;
+    const xfFadeOut = station?.crossfadeFadeOut ?? 3.0;
     const xfCurve = station?.crossfadeCurve ?? "equal_power";
     const duckEnabled = station?.duckingEnabled ?? true;
 
@@ -810,10 +810,13 @@ export async function GET(request: NextRequest) {
           hint.overlapNext = cues ?? (xfEnabled ? station?.crossfadeStartNext ?? 1.0 : 0);
           hint.curve = xfCurve;
         }
-        // Song → song: crossfade
+        // Song → song: tight crossfade — next song starts before this one ends
         if (next?.type === "song" && xfEnabled) {
           hint.fadeOut = xfFadeOut;
-          hint.overlapNext = station?.crossfadeStartNext ?? 1.5;
+          // Use per-song crossfadeStart cue if available, otherwise default to
+          // 4 seconds of overlap for tight, radio-style transitions with no silence
+          const songCue = entry.song?.crossfadeStart;
+          hint.overlapNext = songCue ?? (station?.crossfadeStartNext ?? 4.0);
           hint.curve = xfCurve;
         }
         // Voice/feature → song: fade in the song
