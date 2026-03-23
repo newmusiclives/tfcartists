@@ -205,17 +205,18 @@ export async function checkRateLimit(
       reset: result.reset,
     };
   } catch (error) {
-    logger.error("Rate limit check failed", {
+    logger.error("Rate limit check failed — falling back to allow", {
       identifier,
       type: limiterType,
       error: error instanceof Error ? error.message : String(error),
     });
 
-    // Fail-closed in production (block request), fail-open in development
-    const isProduction = process.env.NODE_ENV === "production";
+    // Fail-open: allow the request but log the failure.
+    // A Redis outage shouldn't take down the whole site.
+    // The middleware's in-memory rate limiter still provides baseline protection.
     return {
-      success: !isProduction,
-      error: "Rate limit check failed",
+      success: true,
+      error: "Rate limit check failed — request allowed (fallback)",
     };
   }
 }

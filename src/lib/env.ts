@@ -129,6 +129,9 @@ const validateEnv = () => {
     if (!env.UPSTASH_REDIS_REST_URL) missingOptionalVars.push("UPSTASH_REDIS_REST_URL");
     if (!env.UPSTASH_REDIS_REST_TOKEN) missingOptionalVars.push("UPSTASH_REDIS_REST_TOKEN");
     if (!env.GHL_API_KEY) missingOptionalVars.push("GHL_API_KEY");
+    if (!env.CRON_SECRET) missingOptionalVars.push("CRON_SECRET");
+    if (!env.R2_ACCOUNT_ID) missingOptionalVars.push("R2_ACCOUNT_ID");
+    if (!env.SENTRY_DSN && !env.NEXT_PUBLIC_SENTRY_DSN) missingOptionalVars.push("SENTRY_DSN");
 
     // Fail hard on missing critical variables
     if (missingCriticalVars.length > 0) {

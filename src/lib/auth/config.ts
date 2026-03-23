@@ -1,8 +1,17 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { createHash, timingSafeEqual } from "crypto";
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
+
+/** Constant-time string comparison that doesn't leak length info. */
+function safeCompare(a: string, b: string): boolean {
+  const hashA = createHash("sha256").update(a).digest();
+  const hashB = createHash("sha256").update(b).digest();
+  return timingSafeEqual(hashA, hashB);
+}
 
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -41,7 +50,7 @@ export const authConfig: NextAuthConfig = {
               logger.error(`${teamUser.envKey} environment variable not set`);
               return null;
             }
-            if (password === expected) {
+            if (safeCompare(password, expected)) {
               return { id: teamUser.id, name: teamUser.name, email: teamUser.email, role: teamUser.role };
             }
             return null;
@@ -50,7 +59,6 @@ export const authConfig: NextAuthConfig = {
           // Operator login: check OrganizationUser table using shared prisma instance
           try {
             const { prisma } = await import("@/lib/db");
-            const bcrypt = await import("bcryptjs");
 
             const orgUser = await prisma.organizationUser.findFirst({
               where: { email: username, isActive: true },

@@ -1,10 +1,16 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Radio, Loader2 } from "lucide-react";
+import { Radio } from "lucide-react";
 import { StationName } from "@/components/station-name";
+import { prisma } from "@/lib/db";
+import { DJPhoto } from "./dj-photo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Our DJs",
+  description: "Meet the DJs and personalities of our station.",
+};
+
+export const revalidate = 300;
 
 interface DJShow {
   id: string;
@@ -59,40 +65,6 @@ function getShowTimeLabel(dj: DJData): string {
   return `${formatTime(show.startTime)} – ${formatTime(show.endTime)}`;
 }
 
-function DJPhoto({ dj, size = 80 }: { dj: DJData; size?: number }) {
-  const [imgError, setImgError] = useState(false);
-
-  if (dj.photoUrl && !imgError) {
-    return (
-      <img
-        src={dj.photoUrl}
-        alt={dj.name}
-        width={size}
-        height={size}
-        className="rounded-full object-cover"
-        style={{ width: size, height: size }}
-        onError={() => setImgError(true)}
-      />
-    );
-  }
-
-  // Fallback: colored initials circle
-  const initials = dj.name.split(" ").map((n) => n[0]).join("").slice(0, 2);
-  return (
-    <div
-      className="rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
-      style={{
-        width: size,
-        height: size,
-        fontSize: size * 0.35,
-        backgroundColor: dj.colorPrimary || "#6b7280",
-      }}
-    >
-      {initials}
-    </div>
-  );
-}
-
 function DJCard({ dj }: { dj: DJData }) {
   const traits = parseTraits(dj.personalityTraits);
 
@@ -106,7 +78,7 @@ function DJCard({ dj }: { dj: DJData }) {
       >
         <div className="flex items-start space-x-5">
           <div className="flex-shrink-0">
-            <DJPhoto dj={dj} size={96} />
+            <DJPhoto name={dj.name} photoUrl={dj.photoUrl} colorPrimary={dj.colorPrimary} size={96} />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-3xl font-serif font-bold mb-1">{dj.name}</h3>
@@ -158,7 +130,7 @@ function WeekendDJCard({ dj }: { dj: DJData }) {
   return (
     <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 shadow-md">
       <div className="flex items-center space-x-3 mb-3">
-        <DJPhoto dj={dj} size={56} />
+        <DJPhoto name={dj.name} photoUrl={dj.photoUrl} colorPrimary={dj.colorPrimary} size={56} />
         <div>
           <h3 className="text-xl font-bold text-gray-900">{dj.name}</h3>
           <p className="text-sm text-gray-600">
@@ -173,17 +145,15 @@ function WeekendDJCard({ dj }: { dj: DJData }) {
   );
 }
 
-export default function DJsPage() {
-  const [djs, setDjs] = useState<DJData[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/station-djs")
-      .then((r) => r.json())
-      .then((data) => setDjs(data.djs || []))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+export default async function DJsPage() {
+  const djs = await prisma.dJ.findMany({
+    orderBy: { priority: "asc" },
+    take: 200,
+    include: {
+      shows: { where: { isActive: true }, select: { id: true, name: true, dayOfWeek: true, startTime: true, endTime: true } },
+      _count: { select: { clockAssignments: true } },
+    },
+  }) as unknown as DJData[];
 
   const WEEKDAY_ORDER = ["Hank", "Loretta", "Doc", "Cody"];
   const weekdayDJs = djs
@@ -238,72 +208,64 @@ export default function DJsPage() {
         </p>
       </section>
 
-      {loading ? (
-        <div className="flex justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
-        </div>
-      ) : (
-        <>
-          {/* Weekday DJs */}
-          {weekdayDJs.length > 0 && (
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-              <h2 className="text-4xl font-serif font-bold text-center mb-12 text-gray-900">
-                Weekday Lineup <span className="text-xl font-sans text-gray-500">(Mon–Fri)</span>
-              </h2>
-              <div className="space-y-8">
-                {weekdayDJs.map((dj) => (
-                  <DJCard key={dj.id} dj={dj} />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Saturday DJs */}
-          {saturdayDJs.length > 0 && (
-            <section className="bg-white py-16">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-4xl font-serif font-bold text-center mb-12 text-gray-900">
-                  Saturday Lineup
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {saturdayDJs.map((dj) => (
-                    <WeekendDJCard key={dj.id} dj={dj} />
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* Sunday DJs */}
-          {sundayDJs.length > 0 && (
-            <section className="py-16">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-4xl font-serif font-bold text-center mb-12 text-gray-900">
-                  Sunday Lineup
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {sundayDJs.map((dj) => (
-                    <WeekendDJCard key={dj.id} dj={dj} />
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* Automation Note */}
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-            <div className="bg-gray-100 rounded-xl p-6 text-center">
-              <div className="flex items-center justify-center space-x-2 mb-2">
-                <Radio className="w-5 h-5 text-gray-500" />
-                <span className="font-bold text-gray-700">Moonshine</span>
-              </div>
-              <p className="text-gray-600">
-                6:00pm – 6:00am daily · Pure music, no DJ — curated playlists run through the night
-              </p>
-            </div>
-          </section>
-        </>
+      {/* Weekday DJs */}
+      {weekdayDJs.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h2 className="text-4xl font-serif font-bold text-center mb-12 text-gray-900">
+            Weekday Lineup <span className="text-xl font-sans text-gray-500">(Mon–Fri)</span>
+          </h2>
+          <div className="space-y-8">
+            {weekdayDJs.map((dj) => (
+              <DJCard key={dj.id} dj={dj} />
+            ))}
+          </div>
+        </section>
       )}
+
+      {/* Saturday DJs */}
+      {saturdayDJs.length > 0 && (
+        <section className="bg-white py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-serif font-bold text-center mb-12 text-gray-900">
+              Saturday Lineup
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {saturdayDJs.map((dj) => (
+                <WeekendDJCard key={dj.id} dj={dj} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Sunday DJs */}
+      {sundayDJs.length > 0 && (
+        <section className="py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-serif font-bold text-center mb-12 text-gray-900">
+              Sunday Lineup
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {sundayDJs.map((dj) => (
+                <WeekendDJCard key={dj.id} dj={dj} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Automation Note */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="bg-gray-100 rounded-xl p-6 text-center">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <Radio className="w-5 h-5 text-gray-500" />
+            <span className="font-bold text-gray-700">Moonshine</span>
+          </div>
+          <p className="text-gray-600">
+            6:00pm – 6:00am daily · Pure music, no DJ — curated playlists run through the night
+          </p>
+        </div>
+      </section>
 
       {/* Programming Principles */}
       <section className="bg-gradient-to-br from-amber-700 to-orange-700 text-white py-16">

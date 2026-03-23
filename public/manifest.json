@@ -48,8 +48,8 @@
   ],
   "share_target": {
     "action": "/onboard",
-    "method": "GET",
-    "enctype": "application/x-www-form-urlencoded",
+    "method": "POST",
+    "enctype": "multipart/form-data",
     "params": {
       "title": "title",
       "text": "text",

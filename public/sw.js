@@ -1,5 +1,6 @@
 // Service Worker for TrueFans RADIO PWA
-const CACHE_NAME = "tfr-cache-v1";
+// BUILD_TIMESTAMP is replaced at build time by stamp-sw.js
+const CACHE_NAME = "tfr-cache-__BUILD_TIMESTAMP__";
 const OFFLINE_URL = "/offline.html";
 
 // App shell resources to cache on install
