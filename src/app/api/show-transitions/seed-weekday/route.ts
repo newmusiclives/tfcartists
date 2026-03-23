@@ -186,29 +186,73 @@ export async function POST(request: NextRequest) {
     }
 
     // --- Handoff Crosstalk (3 pairs × 2 parts = 6 records) ---
+    // Generated as a CONVERSATION so both parts reference each other naturally
     for (const handoff of HANDOFFS) {
       const fromDj = djBySlug.get(WEEKDAY_DJS[handoff.fromIdx].slug)!;
       const toDj = djBySlug.get(WEEKDAY_DJS[handoff.toIdx].slug)!;
 
-      // Part 1: outgoing DJ wraps up and tosses to incoming DJ
       const part1Name = `${fromDj.name} → ${toDj.name} Handoff Pt.1`;
+      const part2Name = `${fromDj.name} → ${toDj.name} Handoff Pt.2`;
+
       const existingPt1 = await prisma.showTransition.findFirst({
-        where: {
-          stationId,
-          transitionType: "handoff",
-          handoffGroupId: handoff.groupId,
-          handoffPart: 1,
-        },
+        where: { stationId, transitionType: "handoff", handoffGroupId: handoff.groupId, handoffPart: 1 },
+      });
+      const existingPt2 = await prisma.showTransition.findFirst({
+        where: { stationId, transitionType: "handoff", handoffGroupId: handoff.groupId, handoffPart: 2 },
       });
 
-      if (!existingPt1) {
-        const fromPersona = buildPersonaContext(fromDj);
-        const script1 = await generateScript(
-          fromPersona,
-          `Write ${fromDj.name} tossing to ${toDj.name} on North Country Radio. MUST be under 20 words. In character. No stage directions, just the spoken words.`,
-          fromDj.gptTemperature
-        );
+      if (existingPt1 && existingPt2) {
+        skipped.push(part1Name, part2Name);
+        continue;
+      }
 
+      // Generate both parts as a single conversation so they flow naturally
+      const fromPersona = buildPersonaContext(fromDj);
+      const toPersona = buildPersonaContext(toDj);
+
+      const conversationResult = await aiProvider.chat(
+        [
+          {
+            role: "system",
+            content: `You are a scriptwriter for North Country Radio. Write a natural, warm DJ handoff conversation between two DJs.
+
+${fromDj.name}'s personality: ${fromPersona}
+
+${toDj.name}'s personality: ${toPersona}`,
+          },
+          {
+            role: "user",
+            content: `Write a short, natural handoff between ${fromDj.name} (finishing their shift) and ${toDj.name} (starting their shift) on North Country Radio.
+
+Rules:
+- ${fromDj.name} speaks first (wrapping up, tossing to ${toDj.name})
+- ${toDj.name} responds naturally (acknowledging ${fromDj.name}, starting their show)
+- Each DJ speaks UNDER 20 words
+- Must feel like a real conversation, not two separate announcements
+- No stage directions, just the spoken words
+- Stay in character for both DJs
+
+Format your response EXACTLY like this:
+PART1: [${fromDj.name}'s line]
+PART2: [${toDj.name}'s line]`,
+          },
+        ],
+        { temperature: Math.max(fromDj.gptTemperature, toDj.gptTemperature), maxTokens: 200 }
+      );
+
+      const lines = conversationResult.content.trim().split("\n");
+      let script1 = "";
+      let script2 = "";
+      for (const line of lines) {
+        if (line.startsWith("PART1:")) script1 = line.replace("PART1:", "").trim();
+        if (line.startsWith("PART2:")) script2 = line.replace("PART2:", "").trim();
+      }
+
+      // Fallback if parsing fails
+      if (!script1) script1 = `That's my time, ${toDj.name} is up next. Take it away!`;
+      if (!script2) script2 = `Thanks ${fromDj.name}! Great show. Let's keep this music rolling.`;
+
+      if (!existingPt1) {
         await prisma.showTransition.create({
           data: {
             stationId,
@@ -232,25 +276,7 @@ export async function POST(request: NextRequest) {
         skipped.push(part1Name);
       }
 
-      // Part 2: incoming DJ takes over
-      const part2Name = `${fromDj.name} → ${toDj.name} Handoff Pt.2`;
-      const existingPt2 = await prisma.showTransition.findFirst({
-        where: {
-          stationId,
-          transitionType: "handoff",
-          handoffGroupId: handoff.groupId,
-          handoffPart: 2,
-        },
-      });
-
       if (!existingPt2) {
-        const toPersona = buildPersonaContext(toDj);
-        const script2 = await generateScript(
-          toPersona,
-          `Write ${toDj.name} taking over from ${fromDj.name} on North Country Radio. MUST be under 20 words. In character, upbeat. No stage directions, just the spoken words.`,
-          toDj.gptTemperature
-        );
-
         await prisma.showTransition.create({
           data: {
             stationId,
