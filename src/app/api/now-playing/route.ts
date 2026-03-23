@@ -98,11 +98,17 @@ async function readIcecastMetadata(url: string): Promise<string | null> {
 /**
  * GET /api/now-playing
  *
- * Reads the Icecast stream metadata for the actual currently-playing track.
- * Falls back to Railway, then to playlist derivation if stream is unreachable.
+ * Priority chain:
+ * 1. Liquidsoap push (POST /api/notify_now_playing) — fastest, most accurate
+ * 2. Icecast stream metadata — reads actual stream
+ * 3. Railway backend — may be stale
+ * 4. Station info only
  */
 export async function GET() {
   try {
+    // Import Liquidsoap push data (same process, in-memory)
+    const { getLiquidoapNowPlaying } = await import("@/app/api/notify_now_playing/route");
+
     const station = await prisma.station.findFirst({
       where: { isActive: true },
       select: { id: true, name: true },
@@ -132,7 +138,31 @@ export async function GET() {
         })
       : null;
 
-    // 1. Try reading Icecast stream metadata (actual source of truth)
+    // 1. Check Liquidsoap push data (fastest — already in memory)
+    const liqNow = getLiquidoapNowPlaying();
+    if (liqNow) {
+      let artworkUrl: string | null = null;
+      const song = await prisma.song.findFirst({
+        where: { title: liqNow.title, artistName: liqNow.artist_name, stationId: station.id },
+        select: { artworkUrl: true },
+      });
+      artworkUrl = song?.artworkUrl || null;
+
+      return NextResponse.json({
+        station: station.name,
+        status: "on-air",
+        title: liqNow.title,
+        artist_name: liqNow.artist_name,
+        artwork_url: artworkUrl,
+        listener_count: 0,
+        dj_name: dj?.name || null,
+        dj_id: dj?.slug || null,
+        djSlug: dj?.slug || null,
+        hourOfDay: hour,
+      });
+    }
+
+    // 2. Try reading Icecast stream metadata (fallback)
     // Use cached value if fresh (avoids reading stream bytes on every 10s poll)
     let streamMeta: string | null = null;
     if (cachedMeta && Date.now() - cachedMeta.updatedAt < CACHE_TTL_MS) {
