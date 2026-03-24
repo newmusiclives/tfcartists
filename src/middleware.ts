@@ -207,6 +207,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.mp3$|.*\\.wav$|.*\\.ogg$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/notify_now_playing|api/track_played|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.mp3$|.*\\.wav$|.*\\.ogg$).*)",
   ],
 };
