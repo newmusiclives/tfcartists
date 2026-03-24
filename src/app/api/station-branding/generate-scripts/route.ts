@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { aiProvider } from "@/lib/ai/providers";
 import { handleApiError } from "@/lib/api/errors";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
+import { getCachedImagingScripts, setCachedImagingScripts } from "@/lib/ai/content-cache";
 
 export const dynamic = "force-dynamic";
 
@@ -148,6 +149,17 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Check content cache before calling AI — imaging scripts rarely change
+    const cached = await getCachedImagingScripts(stationId, category);
+    if (cached) {
+      try {
+        const scripts = JSON.parse(cached) as ImagingScript[];
+        return NextResponse.json({ scripts, cached: true });
+      } catch {
+        // Corrupted cache entry — fall through to regenerate
+      }
+    }
+
     const prompt = buildPrompt(station, config.type, config.count, dj);
 
     const response = await aiProvider.chat(
@@ -178,6 +190,9 @@ export async function POST(request: NextRequest) {
       text: s.text || "",
       musicBed: s.musicBed || "",
     }));
+
+    // Cache the generated scripts for future requests (7-day TTL)
+    await setCachedImagingScripts(stationId, category, JSON.stringify(scripts));
 
     return NextResponse.json({ scripts });
   } catch (error) {

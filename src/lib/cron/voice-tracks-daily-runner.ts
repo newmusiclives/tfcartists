@@ -8,6 +8,7 @@ import { fillTemplate, djFirstName, type SongData } from "@/lib/radio/template-u
 import { stationToday, stationDayType } from "@/lib/timezone";
 import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
 import { filterContent } from "@/lib/ai/content-filter";
+import { getCachedRelinkDialogue, setCachedRelinkDialogue } from "@/lib/ai/content-cache";
 
 interface ShiftHour {
   djId: string;
@@ -408,26 +409,48 @@ async function relinkFeatures(
       songData,
     );
 
-    // Use AI to generate actual spoken DJ dialogue from the filled template
-    const systemPrompt = buildSystemPrompt(djPersona);
-    const aiResponse = await aiProvider.chat(
-      [
-        { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: `${filledPrompt}\n\nOutput ONLY the spoken text — no stage directions, no quotes, no labels. 2-4 sentences, 20-30 seconds when spoken.`,
-        },
-      ],
-      {
-        maxTokens: 200,
-        temperature: djPersona.gptTemperature || 0.8,
-      },
+    // Check cache for previously generated dialogue with this template+song combo
+    const cachedDialogue = await getCachedRelinkDialogue(
+      featureContent.featureTypeId,
+      adjacentSong.songId,
+      djId,
     );
-    const newContent = aiResponse.content.trim();
-    await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 200 });
 
-    const filtered = filterContent(newContent, "feature");
-    const finalContent = filtered ? filtered.text : newContent;
+    let finalContent: string;
+
+    if (cachedDialogue) {
+      // Reuse cached dialogue — no AI call needed
+      finalContent = cachedDialogue;
+    } else {
+      // Use AI to generate actual spoken DJ dialogue from the filled template
+      const systemPrompt = buildSystemPrompt(djPersona);
+      const aiResponse = await aiProvider.chat(
+        [
+          { role: "system", content: systemPrompt },
+          {
+            role: "user",
+            content: `${filledPrompt}\n\nOutput ONLY the spoken text — no stage directions, no quotes, no labels. 2-4 sentences, 20-30 seconds when spoken.`,
+          },
+        ],
+        {
+          maxTokens: 200,
+          temperature: djPersona.gptTemperature || 0.8,
+        },
+      );
+      const newContent = aiResponse.content.trim();
+      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 200 });
+
+      const filtered = filterContent(newContent, "feature");
+      finalContent = filtered ? filtered.text : newContent;
+
+      // Cache the generated dialogue for future reuse (30-day TTL)
+      await setCachedRelinkDialogue(
+        featureContent.featureTypeId,
+        adjacentSong.songId,
+        djId,
+        finalContent,
+      );
+    }
 
     await prisma.featureContent.update({
       where: { id: featureContent.id },

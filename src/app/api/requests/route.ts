@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { optionalAuth, requireAuth, getOrgScope } from "@/lib/api/auth";
+import { requireAuth, getOrgScope } from "@/lib/api/auth";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { z } from "zod";
@@ -22,8 +22,8 @@ const requestSchema = z.object({
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await optionalAuth();
-    const orgScope = session ? getOrgScope(session) : {};
+    const session = await requireAuth();
+    const orgScope = getOrgScope(session);
     const stationId = request.nextUrl.searchParams.get("stationId");
     const status = request.nextUrl.searchParams.get("status");
 

@@ -3,7 +3,6 @@ import Credentials from "next-auth/providers/credentials";
 import { createHash, timingSafeEqual } from "crypto";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 
 /** Constant-time string comparison that doesn't leak length info. */
@@ -19,7 +18,9 @@ const loginSchema = z.object({
 });
 
 // Team user lookup table — avoids repetitive if/else chains
-const TEAM_USERS: Record<string, { envKey: keyof typeof env; id: string; name: string; email: string; role: string }> = {
+// Uses process.env directly (not the Zod-validated env) so this works in both
+// Node and Edge runtimes without importing heavy validation logic.
+const TEAM_USERS: Record<string, { envKey: string; id: string; name: string; email: string; role: string }> = {
   admin:   { envKey: "ADMIN_PASSWORD",   id: "admin-1",   name: "TrueFans Admin",         email: "admin@truefansradio.com",   role: "admin"   },
   riley:   { envKey: "RILEY_PASSWORD",   id: "riley-1",   name: "Riley (Artist Team)",     email: "riley@truefansradio.com",   role: "riley"   },
   harper:  { envKey: "HARPER_PASSWORD",  id: "harper-1",  name: "Harper (Sponsor Team)",   email: "harper@truefansradio.com",  role: "harper"  },
@@ -45,7 +46,7 @@ export const authConfig: NextAuthConfig = {
           // Team user authentication
           const teamUser = TEAM_USERS[username.toLowerCase()];
           if (teamUser) {
-            const expected = env[teamUser.envKey];
+            const expected = process.env[teamUser.envKey];
             if (!expected) {
               logger.error(`${teamUser.envKey} environment variable not set`);
               return null;
@@ -132,7 +133,10 @@ export const authConfig: NextAuthConfig = {
     },
   },
   trustHost: true,
-  secret: env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
+  // Use AUTH_SECRET (NextAuth v5 canonical) with NEXTAUTH_SECRET as fallback.
+  // Read directly from process.env to ensure the same secret is used in both
+  // Edge (middleware) and Node (API route) runtimes.
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

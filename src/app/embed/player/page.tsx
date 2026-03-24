@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/api/playout/stream";
 const NOW_PLAYING_URL = "/api/now-playing";
-const POLL_INTERVAL = 10_000;
+const POLL_INTERVAL = 15_000;
 
 interface NowPlaying {
   title: string;
@@ -12,6 +12,7 @@ interface NowPlaying {
   artwork_url: string;
   listener_count: number;
   dj_name: string;
+  station: string;
 }
 
 function useSearchParam(name: string, fallback: string): string {
@@ -23,10 +24,54 @@ function useSearchParam(name: string, fallback: string): string {
   return value;
 }
 
+/** Parse a hex color (with or without #) into an rgba string with given alpha */
+function hexToRgba(hex: string, alpha: number): string {
+  const clean = hex.replace("#", "");
+  const r = parseInt(clean.substring(0, 2), 16);
+  const g = parseInt(clean.substring(2, 4), 16);
+  const b = parseInt(clean.substring(4, 6), 16);
+  if (isNaN(r) || isNaN(g) || isNaN(b)) return `rgba(120,53,15,${alpha})`;
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+/** Darken a hex color by a percentage */
+function darkenHex(hex: string, pct: number): string {
+  const clean = hex.replace("#", "");
+  const r = Math.max(0, Math.round(parseInt(clean.substring(0, 2), 16) * (1 - pct)));
+  const g = Math.max(0, Math.round(parseInt(clean.substring(2, 4), 16) * (1 - pct)));
+  const b = Math.max(0, Math.round(parseInt(clean.substring(4, 6), 16) * (1 - pct)));
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+}
+
+/** Lighten a hex color by a percentage */
+function lightenHex(hex: string, pct: number): string {
+  const clean = hex.replace("#", "");
+  const r = Math.min(255, Math.round(parseInt(clean.substring(0, 2), 16) + (255 - parseInt(clean.substring(0, 2), 16)) * pct));
+  const g = Math.min(255, Math.round(parseInt(clean.substring(2, 4), 16) + (255 - parseInt(clean.substring(2, 4), 16)) * pct));
+  const b = Math.min(255, Math.round(parseInt(clean.substring(4, 6), 16) + (255 - parseInt(clean.substring(4, 6), 16)) * pct));
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+}
+
 export default function EmbedPlayerPage() {
-  const size = useSearchParam("size", "compact");
+  const theme = useSearchParam("theme", "dark");
+  const accentColor = useSearchParam("color", "#f59e0b");
+  const bgColor = useSearchParam("bg", theme === "light" ? "#ffffff" : "#1a1a2e");
   const refCode = useSearchParam("ref", "");
-  const accentColor = useSearchParam("color", "#b45309");
+
+  const isDark = theme !== "light";
+
+  // Derived theme colors
+  const textPrimary = isDark ? "#ffffff" : "#111827";
+  const textSecondary = isDark ? "rgba(255,255,255,0.7)" : "rgba(17,24,39,0.6)";
+  const textMuted = isDark ? "rgba(255,255,255,0.4)" : "rgba(17,24,39,0.4)";
+  const bgGradient = isDark
+    ? `linear-gradient(135deg, ${darkenHex(bgColor, 0.2)} 0%, ${bgColor} 50%, ${lightenHex(bgColor, 0.1)} 100%)`
+    : `linear-gradient(135deg, ${bgColor} 0%, ${darkenHex(bgColor, 0.03)} 100%)`;
+  const artworkFallbackBg = isDark
+    ? `linear-gradient(135deg, ${darkenHex(accentColor, 0.6)} 0%, ${darkenHex(accentColor, 0.3)} 100%)`
+    : `linear-gradient(135deg, ${lightenHex(accentColor, 0.7)} 0%, ${lightenHex(accentColor, 0.5)} 100%)`;
+  const volumeTrackBg = isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.1)";
+  const volumeIconColor = accentColor;
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "playing" | "error">("idle");
@@ -66,9 +111,11 @@ export default function EmbedPlayerPage() {
   }, [volume]);
 
   useEffect(() => {
-    // Pre-fetch now playing on mount for artwork even before play
     fetchNowPlaying();
-    return () => { if (pollRef.current) clearInterval(pollRef.current); if (reconnectRef.current) clearTimeout(reconnectRef.current); };
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+      if (reconnectRef.current) clearTimeout(reconnectRef.current);
+    };
   }, [fetchNowPlaying]);
 
   const clearReconnect = useCallback(() => {
@@ -134,331 +181,27 @@ export default function EmbedPlayerPage() {
     pollRef.current = setInterval(fetchNowPlaying, POLL_INTERVAL);
   }, [fetchNowPlaying, clearReconnect]);
 
-  const trackTitle = nowPlaying?.title || "North Country Radio";
-  const trackArtist = nowPlaying?.artist_name || "Americana & Country";
+  const trackTitle = nowPlaying?.title || "TrueFans Radio";
+  const trackArtist = nowPlaying?.artist_name || "Live Radio";
   const djName = nowPlaying?.dj_name;
-  const listenerCount = nowPlaying?.listener_count;
   const artworkUrl = nowPlaying?.artwork_url;
+  const stationName = nowPlaying?.station || "TrueFans Radio";
   const showActive = status === "playing";
   const showLoading = status === "loading";
   const showError = status === "error";
 
-  // Audio element shared across all sizes
-  const audioEl = (
-    <>
-      <style>{styles}</style>
-      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <audio
-        ref={audioRef}
-        onPlaying={onPlaying}
-        onError={() => { if (!userStoppedRef.current) { setIsPlaying(false); reconnectStream(); } }}
-        onEnded={() => { if (!userStoppedRef.current) { setIsPlaying(false); reconnectStream(); } }}
-        onStalled={() => {
-          if (userStoppedRef.current || !audioRef.current || audioRef.current.paused) return;
-          reconnectRef.current = setTimeout(() => {
-            if (userStoppedRef.current || !audioRef.current || audioRef.current.paused) return;
-            reconnectAttemptRef.current = 0;
-            audioRef.current.src = `${STREAM_URL}?_t=${Date.now()}`;
-            audioRef.current.play().catch(() => {});
-          }, 8000);
-        }}
-        preload="none"
-      />
-    </>
-  );
-
-  // Status badge
-  const statusBadge = (small = false) => (
-    <div
-      className={`embed-status-badge ${showActive ? "live" : showLoading ? "loading" : "offline"}`}
-      style={{
-        display: "inline-flex", alignItems: "center", gap: small ? 4 : 5,
-        padding: small ? "2px 6px" : "3px 8px",
-        borderRadius: 20,
-        fontSize: small ? 8 : 10, fontWeight: 700,
-        textTransform: "uppercase" as const, letterSpacing: "0.05em",
-      }}
-    >
-      <span
-        style={{
-          width: small ? 5 : 6, height: small ? 5 : 6, borderRadius: "50%",
-          background: showActive ? "#4ade80" : showLoading ? "#60a5fa" : "#6b7280",
-          animation: (showActive || showLoading) ? "pulse 2s infinite" : undefined,
-        }}
-      />
-      {showActive ? "ON AIR" : showLoading ? "LOADING" : "OFFLINE"}
-    </div>
-  );
-
-  // Equalizer bars
-  const eqBars = (count = 7, height = 20) => (
-    <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 2, height }}>
-      {Array.from({ length: count }, (_, i) => (
-        <div
-          key={i}
-          style={{
-            width: 2.5, borderRadius: 2,
-            backgroundColor: showActive ? "#4ade80" : "rgba(120,53,15,0.3)",
-            height: showActive ? undefined : 3,
-            animation: showActive ? `eq ${0.4 + i * 0.08}s ease-in-out ${i * 0.12}s infinite alternate` : undefined,
-          }}
-        />
-      ))}
-    </div>
-  );
-
-  // Play/pause button
-  const playBtn = (sz = 56) => (
-    <button
-      onClick={togglePlay}
-      aria-label={isPlaying ? "Pause" : "Play"}
-      style={{
-        width: sz, height: sz, borderRadius: "50%",
-        background: "#f59e0b", border: "none", cursor: "pointer",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        flexShrink: 0,
-        boxShadow: "0 4px 14px rgba(120,53,15,0.4)",
-        transition: "transform 0.1s, background 0.2s",
-      }}
-      onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.93)")}
-      onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-    >
-      {isPlaying || showLoading ? (
-        <svg width={sz * 0.38} height={sz * 0.38} viewBox="0 0 24 24" fill="#451a03">
-          <rect x="5" y="3" width="4" height="18" rx="1" />
-          <rect x="15" y="3" width="4" height="18" rx="1" />
-        </svg>
-      ) : (
-        <svg width={sz * 0.38} height={sz * 0.38} viewBox="0 0 24 24" fill="#451a03" style={{ marginLeft: sz * 0.04 }}>
-          <polygon points="6,3 20,12 6,21" />
-        </svg>
-      )}
-    </button>
-  );
-
-  // Volume control
-  const volumeControl = (width = 80) => (
-    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-      <button
-        onClick={() => setVolume((v) => (v > 0 ? 0 : 80))}
-        style={{ background: "none", border: "none", cursor: "pointer", padding: 2, display: "flex" }}
-        aria-label={volume === 0 ? "Unmute" : "Mute"}
-      >
-        {volume === 0 ? (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-        ) : (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
-        )}
-      </button>
-      <input
-        type="range" min="0" max="100" value={volume}
-        onChange={(e) => setVolume(Number(e.target.value))}
-        className="embed-volume"
-        style={{ width, height: 4 }}
-        aria-label="Volume"
-      />
-    </div>
-  );
-
-  // Artwork with fallback
-  const artwork = (sz: number, radius = 12) => (
-    <div style={{
-      width: sz, height: sz, borderRadius: radius, overflow: "hidden", flexShrink: 0,
-      background: "linear-gradient(135deg, #451a03 0%, #78350f 100%)",
-      boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
-    }}>
-      {artworkUrl ? (
-        <img src={artworkUrl} alt={trackTitle} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-      ) : (
-        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <img src="/logos/ncr-logo.png" alt="NCR" style={{ width: sz * 0.5, height: sz * 0.5, objectFit: "contain", opacity: 0.5 }} />
-        </div>
-      )}
-    </div>
-  );
-
-  // ─── COMPACT: 320×80 ───
-  if (size === "compact") {
-    return (
-      <div style={{
-        width: 320, height: 80, borderRadius: 14, overflow: "hidden",
-        background: "linear-gradient(135deg, #451a03 0%, #78350f 50%, #9a3412 100%)",
-        fontFamily: "system-ui, -apple-system, sans-serif",
-        display: "flex", alignItems: "center", padding: "0 12px", gap: 10,
-        color: "#fff",
-      }}>
-        {audioEl}
-
-        {/* Mini artwork */}
-        {artwork(48, 8)}
-
-        {/* Track info */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
-            <img src="/logos/ncr-logo.png" alt="NCR" style={{ height: 16, width: "auto", objectFit: "contain" }} />
-            <span style={{ fontSize: 9, fontWeight: 700, color: "#fde68a", letterSpacing: "0.05em" }}>NORTH COUNTRY RADIO</span>
-            {statusBadge(true)}
-          </div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#fef3c7", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-            {showError ? "Stream Unavailable" : showLoading ? "Connecting..." : trackTitle}
-          </div>
-          <div style={{ fontSize: 11, color: "rgba(253,230,138,0.7)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-            {showError ? "Tap play to retry" : showActive ? trackArtist : "Americana & Country"}
-          </div>
-        </div>
-
-        {/* Play button */}
-        {playBtn(40)}
-      </div>
-    );
-  }
-
-  // ─── CARD: 320×200 ───
-  if (size === "card") {
-    return (
-      <div style={{
-        width: 320, height: 200, borderRadius: 16, overflow: "hidden",
-        background: "linear-gradient(180deg, #451a03 0%, #78350f 60%, #9a3412 100%)",
-        fontFamily: "system-ui, -apple-system, sans-serif",
-        display: "flex", flexDirection: "column",
-        color: "#fff",
-      }}>
-        {audioEl}
-
-        {/* Station header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "10px 16px 0" }}>
-          <img src="/logos/ncr-logo.png" alt="NCR" style={{ height: 18, width: "auto", objectFit: "contain" }} />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#fde68a", letterSpacing: "0.04em" }}>NORTH COUNTRY RADIO</span>
-          {statusBadge(true)}
-        </div>
-
-        {/* Main content: artwork + info */}
-        <div style={{ flex: 1, display: "flex", alignItems: "center", padding: "8px 16px", gap: 14 }}>
-          {artwork(90, 12)}
-
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color: "#fff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {showError ? "Stream Unavailable" : showLoading ? "Connecting..." : trackTitle}
-            </div>
-            <div style={{ fontSize: 12, color: "rgba(253,230,138,0.75)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginTop: 3 }}>
-              {showError ? "Tap play to retry" : showActive ? trackArtist : "Americana & Country"}
-            </div>
-            {showActive && djName && (
-              <div style={{ fontSize: 11, color: "rgba(253,230,138,0.5)", marginTop: 3 }}>DJ {djName}</div>
-            )}
-            {showActive && listenerCount != null && (
-              <div style={{ fontSize: 10, color: "rgba(253,230,138,0.4)", marginTop: 2 }}>
-                {listenerCount.toLocaleString()} listener{listenerCount !== 1 ? "s" : ""}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Controls bar */}
-        <div style={{ display: "flex", alignItems: "center", padding: "0 16px 12px", gap: 10 }}>
-          {playBtn(42)}
-          {eqBars(5, 16)}
-          <div style={{ flex: 1 }} />
-          {volumeControl(64)}
-          <a
-            href="https://truefans-radio.netlify.app"
-            target="_blank" rel="noopener noreferrer"
-            style={{ fontSize: 8, color: "rgba(253,230,138,0.4)", textDecoration: "none", lineHeight: 1.2 }}
-          >
-            Powered by<br />TrueFans
-          </a>
-        </div>
-      </div>
-    );
-  }
-
-  // ─── FULL: 320×440 (matches /player layout) ───
-  return (
-    <div style={{
-      width: 320, height: 440, borderRadius: 20, overflow: "hidden",
-      background: "linear-gradient(180deg, #451a03 0%, #78350f 40%, #7c2d12 70%, #9a3412 100%)",
-      fontFamily: "system-ui, -apple-system, sans-serif",
-      display: "flex", flexDirection: "column", alignItems: "center",
-      color: "#fff",
-    }}>
-      {audioEl}
-
-      {/* Station branding */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, paddingTop: 16, paddingBottom: 6 }}>
-        <img src="/logos/ncr-logo.png" alt="NCR" style={{ height: 24, width: "auto", objectFit: "contain" }} />
-        <span style={{ fontSize: 13, fontWeight: 700, color: "#fde68a", letterSpacing: "0.04em" }}>North Country Radio</span>
-        {statusBadge()}
-      </div>
-
-      {/* Album artwork — large, centered */}
-      <div style={{ padding: "8px 0 12px", flexShrink: 0 }}>
-        {artwork(180, 16)}
-      </div>
-
-      {/* Track info */}
-      <div style={{ textAlign: "center", width: "100%", padding: "0 24px", flexShrink: 0 }}>
-        <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {showError ? "Stream Unavailable" : showLoading ? "Connecting..." : trackTitle}
-        </div>
-        <div style={{ fontSize: 13, color: "rgba(253,230,138,0.75)", marginTop: 3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {showError ? "Tap play to retry" : showLoading ? "Buffering stream..." : trackArtist}
-        </div>
-      </div>
-
-      {/* DJ + listener count */}
-      {showActive && (djName || listenerCount != null) && (
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 4, fontSize: 11, color: "rgba(253,230,138,0.5)" }}>
-          {djName && <span>DJ {djName}</span>}
-          {listenerCount != null && (
-            <span>{listenerCount.toLocaleString()} listener{listenerCount !== 1 ? "s" : ""}</span>
-          )}
-        </div>
-      )}
-
-      {/* Equalizer */}
-      <div style={{ padding: "8px 0" }}>
-        {eqBars(7, 20)}
-      </div>
-
-      {/* Spacer */}
-      <div style={{ flex: 1 }} />
-
-      {/* Play button */}
-      <div style={{ paddingBottom: 12 }}>
-        {playBtn(60)}
-      </div>
-
-      {/* Volume */}
-      <div style={{ paddingBottom: 8, width: "100%", display: "flex", justifyContent: "center" }}>
-        {volumeControl(120)}
-      </div>
-
-      {/* Powered by link */}
-      <a
-        href="https://truefans-radio.netlify.app/listen/register"
-        target="_blank" rel="noopener noreferrer"
-        style={{
-          display: "flex", alignItems: "center", gap: 4,
-          fontSize: 10, color: "rgba(253,230,138,0.4)", textDecoration: "none",
-          paddingBottom: 14, transition: "color 0.2s",
-        }}
-      >
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Open Full Site
-      </a>
-    </div>
-  );
-}
-
-const styles = `
+  const dynamicStyles = `
 @keyframes eq {
   0% { height: 3px; }
-  100% { height: 18px; }
+  100% { height: 16px; }
 }
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 .embed-status-badge.live {
   background: rgba(34,197,94,0.15);
@@ -478,7 +221,7 @@ const styles = `
 .embed-volume {
   -webkit-appearance: none;
   appearance: none;
-  background: rgba(120,53,15,0.5);
+  background: ${volumeTrackBg};
   border-radius: 4px;
   outline: none;
   cursor: pointer;
@@ -489,15 +232,188 @@ const styles = `
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #fbbf24;
+  background: ${accentColor};
   cursor: pointer;
 }
 .embed-volume::-moz-range-thumb {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #fbbf24;
+  background: ${accentColor};
   border: none;
   cursor: pointer;
 }
 `;
+
+  return (
+    <>
+      <style>{dynamicStyles}</style>
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+      <audio
+        ref={audioRef}
+        onPlaying={onPlaying}
+        onError={() => { if (!userStoppedRef.current) { setIsPlaying(false); reconnectStream(); } }}
+        onEnded={() => { if (!userStoppedRef.current) { setIsPlaying(false); reconnectStream(); } }}
+        onStalled={() => {
+          if (userStoppedRef.current || !audioRef.current || audioRef.current.paused) return;
+          reconnectRef.current = setTimeout(() => {
+            if (userStoppedRef.current || !audioRef.current || audioRef.current.paused) return;
+            reconnectAttemptRef.current = 0;
+            audioRef.current.src = `${STREAM_URL}?_t=${Date.now()}`;
+            audioRef.current.play().catch(() => {});
+          }, 8000);
+        }}
+        preload="none"
+      />
+
+      <div style={{
+        width: "100%",
+        maxWidth: 400,
+        height: 80,
+        borderRadius: 12,
+        overflow: "hidden",
+        background: bgGradient,
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        display: "flex",
+        alignItems: "center",
+        padding: "0 12px",
+        gap: 10,
+        color: textPrimary,
+        boxShadow: isDark ? "0 4px 20px rgba(0,0,0,0.3)" : "0 2px 12px rgba(0,0,0,0.08)",
+        border: isDark ? "none" : "1px solid rgba(0,0,0,0.08)",
+        boxSizing: "border-box",
+      }}>
+        {/* Artwork */}
+        <div style={{
+          width: 52,
+          height: 52,
+          borderRadius: 8,
+          overflow: "hidden",
+          flexShrink: 0,
+          background: artworkFallbackBg,
+        }}>
+          {artworkUrl ? (
+            <img src={artworkUrl} alt={trackTitle} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : (
+            <div style={{
+              width: "100%", height: "100%",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="2" strokeLinecap="round">
+                <path d="M9 18V5l12-2v13"/>
+                <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+              </svg>
+            </div>
+          )}
+        </div>
+
+        {/* Track info */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
+            <div
+              className={`embed-status-badge ${showActive ? "live" : showLoading ? "loading" : "offline"}`}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 4,
+                padding: "1px 6px", borderRadius: 20,
+                fontSize: 8, fontWeight: 700,
+                textTransform: "uppercase" as const, letterSpacing: "0.05em",
+              }}
+            >
+              <span style={{
+                width: 5, height: 5, borderRadius: "50%",
+                background: showActive ? "#4ade80" : showLoading ? "#60a5fa" : "#6b7280",
+                animation: (showActive || showLoading) ? "pulse 2s infinite" : undefined,
+              }} />
+              {showActive ? "LIVE" : showLoading ? "..." : "OFF"}
+            </div>
+            {djName && showActive && (
+              <span style={{ fontSize: 9, color: textMuted, fontWeight: 500 }}>DJ {djName}</span>
+            )}
+          </div>
+          <div style={{
+            fontSize: 13, fontWeight: 700, color: textPrimary,
+            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+          }}>
+            {showError ? "Stream Unavailable" : showLoading ? "Connecting..." : trackTitle}
+          </div>
+          <div style={{
+            fontSize: 11, color: textSecondary,
+            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+          }}>
+            {showError ? "Tap play to retry" : showActive ? trackArtist : stationName}
+          </div>
+        </div>
+
+        {/* Volume slider */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flexShrink: 0 }}>
+          {/* Play button */}
+          <button
+            onClick={togglePlay}
+            aria-label={isPlaying ? "Pause" : "Play"}
+            style={{
+              width: 38, height: 38, borderRadius: "50%",
+              background: accentColor, border: "none", cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              flexShrink: 0,
+              boxShadow: `0 2px 8px ${hexToRgba(accentColor, 0.4)}`,
+              transition: "transform 0.1s",
+            }}
+            onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.93)")}
+            onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            {isPlaying || showLoading ? (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill={isDark ? "#000" : "#fff"}>
+                <rect x="5" y="3" width="4" height="18" rx="1" />
+                <rect x="15" y="3" width="4" height="18" rx="1" />
+              </svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill={isDark ? "#000" : "#fff"} style={{ marginLeft: 2 }}>
+                <polygon points="6,3 20,12 6,21" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {/* Volume */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, flexShrink: 0 }}>
+          <button
+            onClick={() => setVolume((v) => (v > 0 ? 0 : 80))}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 2, display: "flex" }}
+            aria-label={volume === 0 ? "Unmute" : "Mute"}
+          >
+            {volume === 0 ? (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={volumeIconColor} strokeWidth="2" strokeLinecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+            ) : (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={volumeIconColor} strokeWidth="2" strokeLinecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+            )}
+          </button>
+          <input
+            type="range" min="0" max="100" value={volume}
+            onChange={(e) => setVolume(Number(e.target.value))}
+            className="embed-volume"
+            style={{ width: 48, height: 3 }}
+            aria-label="Volume"
+          />
+        </div>
+      </div>
+
+      {/* Powered by */}
+      <div style={{
+        width: "100%", maxWidth: 400,
+        textAlign: "center", padding: "4px 0",
+      }}>
+        <a
+          href="https://truefans-radio.netlify.app"
+          target="_blank" rel="noopener noreferrer"
+          style={{
+            fontSize: 9, color: textMuted, textDecoration: "none",
+            fontFamily: "system-ui, -apple-system, sans-serif",
+          }}
+        >
+          Powered by TrueFans
+        </a>
+      </div>
+    </>
+  );
+}

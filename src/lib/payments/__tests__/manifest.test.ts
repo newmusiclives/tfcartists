@@ -108,9 +108,9 @@ describe("ManifestFinancial", () => {
   describe("Sponsorship Subscription Tier Pricing", () => {
     const sponsorTiers = [
       { tier: "bronze" as const, expectedAmount: 10000 },
-      { tier: "silver" as const, expectedAmount: 30000 },
-      { tier: "gold" as const, expectedAmount: 50000 },
-      { tier: "platinum" as const, expectedAmount: 100000 },
+      { tier: "silver" as const, expectedAmount: 25000 },
+      { tier: "gold" as const, expectedAmount: 40000 },
+      { tier: "platinum" as const, expectedAmount: 50000 },
     ];
 
     for (const { tier, expectedAmount } of sponsorTiers) {

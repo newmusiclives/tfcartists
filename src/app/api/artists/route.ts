@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { withPagination } from "@/lib/api/helpers";
-import { requireRole, optionalAuth, getOrgScope } from "@/lib/api/auth";
+import { requireRole, requireAuth, getOrgScope } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -14,8 +14,8 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await optionalAuth();
-    const orgScope = session ? getOrgScope(session) : {};
+    const session = await requireAuth();
+    const orgScope = getOrgScope(session);
 
     const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get("status");

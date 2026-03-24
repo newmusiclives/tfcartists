@@ -31,6 +31,7 @@ import {
   X,
   ChevronRight,
   Calculator,
+  Code,
 } from "lucide-react";
 import { StationSwitcher } from "@/components/station-switcher";
 
@@ -299,6 +300,9 @@ export function SharedNav() {
                     </Link>
                     <Link href="/station-admin/transitions" className={activeLinkClass("/station-admin/transitions", "amber")}>
                       <span className="flex items-center space-x-2"><ArrowRightLeft className="w-4 h-4 text-amber-600" /><span>Show Transitions</span></span>
+                    </Link>
+                    <Link href="/station-admin/embed" className={activeLinkClass("/station-admin/embed", "amber")}>
+                      <span className="flex items-center space-x-2"><Code className="w-4 h-4 text-amber-600" /><span>Embed Widget</span></span>
                     </Link>
                   </div>
                 )}
@@ -694,6 +698,7 @@ export function SharedNav() {
                   <Link href="/station-admin/features" className="block px-4 py-2 text-sm text-gray-600">Show Features</Link>
                   <Link href="/station-admin/stream" className="block px-4 py-2 text-sm text-gray-600">Stream Engineering</Link>
                   <Link href="/station-admin/transitions" className="block px-4 py-2 text-sm text-gray-600">Show Transitions</Link>
+                  <Link href="/station-admin/embed" className="block px-4 py-2 text-sm text-gray-600">Embed Widget</Link>
                 </div>
               )}
 

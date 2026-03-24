@@ -4,7 +4,7 @@ import { handleApiError } from "@/lib/api/errors";
 import { notifyListenerWelcome } from "@/lib/messaging/notifications";
 import { withRateLimit, getRateLimitIdentifier } from "@/lib/rate-limit/limiter";
 import { createListenerSchema } from "@/lib/validation/schemas";
-import { optionalAuth, getOrgScope } from "@/lib/api/auth";
+import { requireAuth, getOrgScope } from "@/lib/api/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -15,8 +15,8 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get("limit") || "50"), 100);
     const offset = Math.max(0, parseInt(searchParams.get("offset") || "0"));
 
-    const session = await optionalAuth();
-    const orgScope = session ? getOrgScope(session) : {};
+    const session = await requireAuth();
+    const orgScope = getOrgScope(session);
     const where: Record<string, unknown> = { ...orgScope };
     if (status) where.status = status;
 

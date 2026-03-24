@@ -222,6 +222,97 @@ async function updateDatabaseUrls(urlMap: Map<string, string>) {
     }
   }
   console.log(`  FeatureContent: ${fCount} records ${DRY_RUN ? "would be" : ""} updated`);
+
+  // Update Song fileUrl
+  const songRecords = await prisma.song.findMany({
+    where: { fileUrl: { not: null } },
+    select: { id: true, fileUrl: true },
+  });
+  let songCount = 0;
+  for (const song of songRecords) {
+    if (song.fileUrl && urlMap.has(song.fileUrl)) {
+      if (!DRY_RUN) {
+        await prisma.song.update({
+          where: { id: song.id },
+          data: { fileUrl: urlMap.get(song.fileUrl)! },
+        });
+      }
+      songCount++;
+    }
+  }
+  console.log(`  Song: ${songCount} records ${DRY_RUN ? "would be" : ""} updated`);
+}
+
+/**
+ * Migrate Song records that have local/relative fileUrl paths.
+ * Uploads each file to R2 under songs/ prefix and updates the DB record.
+ * Skips songs that already have http URLs (already on R2) or have no file.
+ */
+async function migrateSongFileUrls(client: S3Client, bucket: string) {
+  console.log("\nMigrating Song fileUrl records...");
+  const publicUrl = process.env.R2_PUBLIC_URL?.replace(/\/$/, "") || "";
+
+  const songs = await prisma.song.findMany({
+    where: { fileUrl: { not: null } },
+    select: { id: true, title: true, artistName: true, fileUrl: true },
+  });
+
+  let migrated = 0;
+  let skipped = 0;
+  let missing = 0;
+
+  for (const song of songs) {
+    if (!song.fileUrl) {
+      skipped++;
+      continue;
+    }
+
+    // Already an R2/HTTP URL — skip
+    if (song.fileUrl.startsWith("http")) {
+      skipped++;
+      continue;
+    }
+
+    // Local path (e.g., /audio/songs/file.mp3 or /songs/file.mp3)
+    const localPath = song.fileUrl.startsWith("/")
+      ? path.join(process.cwd(), "public", song.fileUrl)
+      : path.join(process.cwd(), "public", song.fileUrl);
+
+    if (!fs.existsSync(localPath)) {
+      console.log(`  Skip "${song.title}" by ${song.artistName} — local file not found: ${localPath}`);
+      missing++;
+      continue;
+    }
+
+    // Upload to R2 under songs/ prefix, preserving filename
+    const filename = path.basename(localPath);
+    const key = `songs/${filename}`;
+
+    if (DRY_RUN) {
+      console.log(`  [DRY RUN] Would upload: ${key} (${song.title})`);
+    } else {
+      const buffer = fs.readFileSync(localPath);
+      await client.send(
+        new PutObjectCommand({
+          Bucket: bucket,
+          Key: key,
+          Body: buffer,
+          ContentType: getContentType(localPath),
+        })
+      );
+
+      const r2Url = publicUrl ? `${publicUrl}/${key}` : key;
+      await prisma.song.update({
+        where: { id: song.id },
+        data: { fileUrl: r2Url },
+      });
+    }
+
+    migrated++;
+    if (migrated % 10 === 0) console.log(`  Progress: ${migrated} songs uploaded...`);
+  }
+
+  console.log(`  Songs: ${migrated} ${DRY_RUN ? "would be" : ""} migrated, ${skipped} skipped (already R2/no URL), ${missing} missing files`);
 }
 
 async function main() {
@@ -235,6 +326,10 @@ async function main() {
   console.log("Uploading audio files...");
   const audioMap = await uploadDir(client, bucket, path.join(publicDir, "audio"), "audio");
 
+  // Upload songs directory (if songs are stored locally under public/songs/)
+  console.log("\nUploading songs directory...");
+  const songsMap = await uploadDir(client, bucket, path.join(publicDir, "songs"), "songs");
+
   // Upload team images
   console.log("\nUploading team images...");
   const teamMap = await uploadDir(client, bucket, path.join(publicDir, "team"), "team");
@@ -244,10 +339,13 @@ async function main() {
   const djMap = await uploadDir(client, bucket, path.join(publicDir, "djs"), "djs");
 
   // Merge all URL mappings
-  const allUrls = new Map([...audioMap, ...teamMap, ...djMap]);
+  const allUrls = new Map([...audioMap, ...songsMap, ...teamMap, ...djMap]);
 
   // Update database records
   await updateDatabaseUrls(allUrls);
+
+  // Migrate Song records with local fileUrl paths not covered by directory upload
+  await migrateSongFileUrls(client, bucket);
 
   console.log(`\n✅ Migration ${DRY_RUN ? "dry run" : ""} complete!`);
   console.log(`   Total files: ${allUrls.size}`);

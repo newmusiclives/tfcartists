@@ -127,6 +127,13 @@ const actionCards = [
     icon: Timer,
     color: "bg-slate-500",
   },
+  {
+    title: "System Monitoring",
+    description: "Health checks, error tracking, AI spend, and API performance",
+    href: "/station-admin/monitoring",
+    icon: Activity,
+    color: "bg-red-500",
+  },
 ];
 
 export default function StationAdminHub() {

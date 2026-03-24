@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { optionalAuth, requireAuth } from "@/lib/api/auth";
-import { unauthorized } from "@/lib/api/errors";
+import { requireAuth } from "@/lib/api/auth";
+import { handleApiError, unauthorized } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
+    await requireAuth();
     const station = await prisma.station.findFirst({
       where: { isActive: true },
       select: { id: true },
@@ -45,7 +46,7 @@ export async function GET() {
 
     return NextResponse.json(result);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch clock templates" }, { status: 500 });
+    return handleApiError(error, "/api/clock-templates");
   }
 }
 

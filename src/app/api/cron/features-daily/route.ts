@@ -183,6 +183,23 @@ export async function GET(req: NextRequest) {
             song = pick(allSongs);
           }
 
+          // Dedup: check if an unused FeatureContent with same featureTypeId + relatedSongId already exists
+          if (song?.id) {
+            const existingDup = await prisma.featureContent.findFirst({
+              where: {
+                stationId: station.id,
+                featureTypeId: combo.featureTypeId,
+                relatedSongId: song.id,
+                isUsed: false,
+              },
+            });
+            if (existingDup) {
+              // Already have an unused feature for this template+song combo — skip generation
+              skipped++;
+              continue;
+            }
+          }
+
           const content = fillTemplate(combo.template, firstName, song);
 
           await prisma.featureContent.create({
