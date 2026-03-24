@@ -156,7 +156,9 @@ export default auth((req) => {
 
   // CSRF validation for state-changing API requests
   // Skip for Liquidsoap machine-to-machine endpoints (no browser, no CSRF token)
-  if (pathname !== "/api/notify_now_playing" && pathname !== "/api/track_played") {
+  const csrfSkipPaths = ["/api/notify_now_playing", "/api/track_played"];
+  const skipCsrf = csrfSkipPaths.some((p) => pathname.startsWith(p));
+  if (!skipCsrf) {
     const csrfError = validateCsrf(req);
     if (csrfError) return csrfError;
   }
