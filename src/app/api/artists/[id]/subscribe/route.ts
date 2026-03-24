@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAuth } from "@/lib/api/auth";
 import { handleApiError } from "@/lib/api/errors";
+import { logger } from "@/lib/logger";
 import type { AirplayTier } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +17,7 @@ export async function POST(
 
     const { id } = await params;
     const body = await request.json();
-    const { tier, paymentMethodId } = body;
+    const { tier, paymentMethodId, email, name } = body;
 
     // Validate tier — amounts in dollars matching schema (Float, not cents)
     const validTiers: Record<string, number> = {
@@ -49,8 +50,39 @@ export async function POST(
       return NextResponse.json({ success: true, tier: "FREE", amount: 0 });
     }
 
-    // For paid tiers, create payment record
-    // In production, this would process payment via Manifest Financial
+    // Try Manifest Financial for paid subscriptions
+    const { manifest } = await import("@/lib/payments/manifest");
+
+    if (manifest.isConfigured()) {
+      try {
+        const subscription = await manifest.createAirplaySubscription({
+          artistId: id,
+          tier: tier as "TIER_5" | "TIER_20" | "TIER_50" | "TIER_120",
+          email: email || "",
+          name: name || artist.name,
+        });
+
+        // Update tier immediately — webhook will confirm payment
+        await prisma.artist.update({
+          where: { id },
+          data: { airplayTier: tier as AirplayTier },
+        });
+
+        return NextResponse.json({
+          success: true,
+          tier,
+          amount,
+          subscriptionId: subscription.subscriptionId,
+          checkoutUrl: subscription.checkoutUrl,
+          message: `Redirecting to payment for ${tier} ($${amount}/mo)`,
+        });
+      } catch (err) {
+        logger.error("Manifest subscription failed, falling back to local", { error: err });
+        // Fall through to local handling
+      }
+    }
+
+    // Fallback: local-only (Manifest not configured or failed)
     const period = new Date().toISOString().slice(0, 7); // "2026-03"
 
     await prisma.$transaction([

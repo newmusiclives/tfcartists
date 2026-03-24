@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { stationHour, stationToday } from "@/lib/timezone";
 import https from "https";
+import { withCircuitBreaker } from "@/lib/ai/circuit-breaker";
 
 const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
 const RAILWAY_URL = `${process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app"}/api/now_playing`;
@@ -207,24 +208,25 @@ export async function GET() {
       });
     }
 
-    // 2. Fallback: try Railway backend
+    // 2. Fallback: try Railway backend (with circuit breaker)
     try {
-      const res = await fetch(RAILWAY_URL, {
-        cache: "no-store",
-        signal: AbortSignal.timeout(3000),
+      const data = await withCircuitBreaker("railway", async () => {
+        const res = await fetch(RAILWAY_URL, {
+          cache: "no-store",
+          signal: AbortSignal.timeout(3000),
+        });
+        if (!res.ok) throw new Error(`Railway ${res.status}`);
+        return res.json();
       });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.title) {
-          return NextResponse.json({
-            ...data,
-            dj_name: dj?.name || data.dj_name,
-            dj_id: dj?.slug || data.dj_id,
-          });
-        }
+      if (data?.title) {
+        return NextResponse.json({
+          ...data,
+          dj_name: dj?.name || data.dj_name,
+          dj_id: dj?.slug || data.dj_id,
+        });
       }
     } catch {
-      // Railway unreachable
+      // Railway unreachable or circuit open
     }
 
     // 3. Final fallback: station info only

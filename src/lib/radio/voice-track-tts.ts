@@ -6,6 +6,7 @@
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { mixVoiceWithMusicBed, trimSilence } from "@/lib/radio/audio-mixer";
+import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
@@ -255,6 +256,10 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
   let generated = 0;
   const errors: string[] = [];
 
+  if (await isAiSpendLimitReached()) {
+    return { generated: 0, errors: ["AI daily spend limit reached — skipping TTS generation"] };
+  }
+
   for (const vt of voiceTracks) {
     try {
       if (!vt.scriptText) continue;
@@ -271,6 +276,7 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
         } else {
           voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
         }
+        await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: vt.scriptText!.length });
 
         // Trim leading/trailing silence from TTS output for tighter stream flow
         voicePcm = trimSilence(voicePcm);
@@ -310,6 +316,7 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
         } else {
           voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
         }
+        await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: vt.scriptText!.length });
 
         // Trim leading/trailing silence for tighter stream flow
         voicePcm = trimSilence(voicePcm);
@@ -353,6 +360,10 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
  * one at a time within tight serverless timeouts.
  */
 export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promise<{ success: boolean; error?: string }> {
+  if (await isAiSpendLimitReached()) {
+    return { success: false, error: "AI daily spend limit reached" };
+  }
+
   const vt = await prisma.voiceTrack.findUnique({ where: { id: voiceTrackId } });
   if (!vt || vt.status !== "script_ready" || !vt.scriptText) {
     return { success: false, error: "Track not found or not in script_ready status" };
@@ -393,6 +404,7 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
     } else {
       voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
     }
+    await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: vt.scriptText!.length });
 
     voicePcm = trimSilence(voicePcm);
 
@@ -493,6 +505,10 @@ export async function generateFeatureAudio(
   let generated = 0;
   const errors: string[] = [];
 
+  if (await isAiSpendLimitReached()) {
+    return { generated: 0, errors: ["AI daily spend limit reached — skipping feature TTS"] };
+  }
+
   for (const fc of features) {
     try {
       if (musicBedPath) {
@@ -503,6 +519,7 @@ export async function generateFeatureAudio(
         } else {
           voicePcm = await generatePcmWithOpenAI(fc.content, voice);
         }
+        await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: fc.content.length });
 
         // Trim silence for tighter stream flow
         voicePcm = trimSilence(voicePcm);
@@ -533,6 +550,7 @@ export async function generateFeatureAudio(
         } else {
           voicePcm = await generatePcmWithOpenAI(fc.content, voice);
         }
+        await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: fc.content.length });
 
         voicePcm = trimSilence(voicePcm);
 

@@ -4,6 +4,7 @@ import { logger } from "@/lib/logger";
 import { logCronExecution } from "@/lib/cron/log";
 import { runDataCleanup } from "@/lib/cron/cleanup";
 import { withCronLock } from "@/lib/cron/lock";
+import { checkMonthlyCostAlerts } from "@/lib/ai/monthly-cost-alerts";
 
 export const dynamic = "force-dynamic";
 
@@ -20,15 +21,23 @@ export async function GET(req: NextRequest) {
     try {
       const results = await runDataCleanup();
 
+      // Check monthly AI cost alerts
+      let costAlerts = null;
+      try {
+        costAlerts = await checkMonthlyCostAlerts();
+      } catch (err) {
+        logger.warn("Failed to check monthly cost alerts", { error: String(err) });
+      }
+
       await logCronExecution({
         jobName: "maintenance",
         status: "success",
         duration: Date.now() - start,
-        summary: results as Record<string, unknown>,
+        summary: { ...(results as Record<string, unknown>), costAlerts },
         startedAt,
       });
 
-      return NextResponse.json({ success: true, ...results });
+      return NextResponse.json({ success: true, ...results, costAlerts });
     } catch (error) {
       await logCronExecution({
         jobName: "maintenance",

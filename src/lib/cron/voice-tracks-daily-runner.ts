@@ -6,6 +6,8 @@ import { generateVoiceTrackAudio, generateFeatureAudio } from "@/lib/radio/voice
 import { aiProvider } from "@/lib/ai/providers";
 import { fillTemplate, djFirstName, type SongData } from "@/lib/radio/template-utils";
 import { stationToday, stationDayType } from "@/lib/timezone";
+import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
+import { filterContent } from "@/lib/ai/content-filter";
 
 interface ShiftHour {
   djId: string;
@@ -143,6 +145,11 @@ export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
 
   // Track songs used per DJ across their entire shift to prevent repeats
   const djUsedSongs = new Map<string, Set<string>>();
+
+  if (await isAiSpendLimitReached()) {
+    logger.warn("AI daily spend limit reached — skipping voice tracks daily");
+    return { success: true, ...results, message: "Skipped: AI daily spend limit reached", timestamp: new Date().toISOString() };
+  }
 
   for (const shift of shiftHours) {
     try {
@@ -417,11 +424,15 @@ async function relinkFeatures(
       },
     );
     const newContent = aiResponse.content.trim();
+    await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 200 });
+
+    const filtered = filterContent(newContent, "feature");
+    const finalContent = filtered ? filtered.text : newContent;
 
     await prisma.featureContent.update({
       where: { id: featureContent.id },
       data: {
-        content: newContent,
+        content: finalContent,
         isUsed: true,
         relatedSongId: adjacentSong.songId,
         contextData: JSON.stringify({

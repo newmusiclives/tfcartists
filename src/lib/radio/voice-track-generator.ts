@@ -9,6 +9,8 @@
 import { prisma } from "@/lib/db";
 import { aiProvider } from "@/lib/ai/providers";
 import { logger } from "@/lib/logger";
+import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
+import { filterContent } from "@/lib/ai/content-filter";
 
 interface ResolvedSlot {
   position: number;
@@ -103,6 +105,11 @@ export async function generateVoiceTrackScripts(
   // Discover voice break positions and types from the actual clock pattern
   const voiceBreaks = discoverVoiceBreaks(slots);
 
+  // Check AI spend limit before generating
+  if (await isAiSpendLimitReached()) {
+    return { generated: 0, errors: ["AI daily spend limit reached — skipping voice track generation"] };
+  }
+
   for (const vb of voiceBreaks) {
     try {
       // Skip positions that will use generic tracks
@@ -135,6 +142,7 @@ export async function generateVoiceTrackScripts(
           temperature: dj.gptTemperature || 0.8,
         }
       );
+      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 200 });
 
       // Validate tense accuracy — regenerate once if wrong
       let scriptText = response.content.trim();
@@ -150,8 +158,20 @@ export async function generateVoiceTrackScripts(
           ],
           { maxTokens: 200, temperature: Math.max(0.3, (dj.gptTemperature || 0.8) - 0.2) }
         );
+        await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 200 });
         scriptText = retry.content.trim();
       }
+
+      // Content safety filter
+      const filtered = filterContent(scriptText, "voice_track");
+      if (!filtered) {
+        errors.push(`VT position ${vb.position}: content rejected by safety filter`);
+        continue;
+      }
+      if (filtered.warnings.length > 0) {
+        logger.warn("Voice track content filtered", { position: vb.position, warnings: filtered.warnings });
+      }
+      scriptText = filtered.text;
 
       // Upsert voice track record
       const existingVt = await prisma.voiceTrack.findFirst({

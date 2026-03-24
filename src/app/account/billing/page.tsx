@@ -59,6 +59,9 @@ export default function BillingPage() {
   const [session, setSession] = useState<SessionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [billingHistory, setBillingHistory] = useState<
+    { date: string; description: string; amount: number; status: string }[]
+  >([]);
 
   const fetchSession = useCallback(async () => {
     try {
@@ -66,6 +69,17 @@ export default function BillingPage() {
       if (res.ok) {
         const data = await res.json();
         setSession(data);
+
+        // Fetch billing history if user is authenticated
+        try {
+          const billingRes = await fetch("/api/payments/history", { credentials: "include" });
+          if (billingRes.ok) {
+            const billingData = await billingRes.json();
+            setBillingHistory(billingData.payments || []);
+          }
+        } catch {
+          // Billing history fetch is non-critical
+        }
       } else {
         setSession(null);
       }
@@ -233,20 +247,12 @@ export default function BillingPage() {
                 </p>
               </div>
             </div>
-            <div className="relative group">
-              <button
-                disabled
-                className="px-4 py-2 bg-stone-200 text-stone-400 text-sm font-medium rounded-lg cursor-not-allowed"
-              >
-                Add Payment Method
-              </button>
-              <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block">
-                <div className="bg-stone-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-lg">
-                  Coming soon — Manifest Financial integration in progress
-                  <div className="absolute top-full right-4 w-2 h-2 bg-stone-900 rotate-45 -translate-y-1" />
-                </div>
-              </div>
-            </div>
+            <button
+              onClick={() => window.location.href = "/checkout?type=operator&plan=" + (planKey || "launch")}
+              className="px-4 py-2 bg-amber-700 text-white text-sm font-medium rounded-lg hover:bg-amber-800 transition-colors"
+            >
+              Add Payment Method
+            </button>
           </div>
         </div>
 
@@ -278,14 +284,47 @@ export default function BillingPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td
-                    colSpan={4}
-                    className="text-center py-8 text-stone-400"
-                  >
-                    No invoices yet
-                  </td>
-                </tr>
+                {billingHistory.length > 0 ? (
+                  billingHistory.map((item, i) => (
+                    <tr key={i} className="border-b border-stone-100">
+                      <td className="py-3 px-4 text-stone-700">
+                        {new Date(item.date).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </td>
+                      <td className="py-3 px-4 text-stone-700">
+                        {item.description}
+                      </td>
+                      <td className="py-3 px-4 text-stone-700">
+                        ${item.amount.toFixed(2)}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
+                            item.status === "paid"
+                              ? "bg-green-100 text-green-700"
+                              : item.status === "pending"
+                                ? "bg-amber-100 text-amber-700"
+                                : "bg-stone-100 text-stone-600"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className="text-center py-8 text-stone-400"
+                    >
+                      No invoices yet
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

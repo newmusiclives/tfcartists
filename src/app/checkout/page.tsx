@@ -189,7 +189,7 @@ function CheckoutContent() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [cardNumber] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -543,7 +543,6 @@ function CheckoutContent() {
                   />
                 </div>
 
-                {/* Payment card placeholder */}
                 <div>
                   <label
                     htmlFor="checkout-card"
@@ -555,17 +554,15 @@ function CheckoutContent() {
                     <input
                       id="checkout-card"
                       type="text"
-                      disabled
                       value={cardNumber}
+                      onChange={(e) => setCardNumber(e.target.value.replace(/[^\d\s]/g, "").slice(0, 19))}
                       placeholder="4242 4242 4242 4242"
-                      className="w-full px-4 py-2.5 border border-stone-200 rounded-lg bg-stone-50 text-stone-400 cursor-not-allowed"
+                      className="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-shadow text-stone-900"
                     />
                     <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
                   </div>
-                  <p className="mt-1.5 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-3 py-2">
-                    Payment processing via Manifest Financial — coming soon.
-                    Card fields will be enabled once Manifest is fully
-                    configured. Your subscription will be activated immediately.
+                  <p className="mt-1.5 text-xs text-stone-500">
+                    Payments processed securely via Manifest Financial.
                   </p>
                 </div>
 
