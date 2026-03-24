@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Play, Pause, Volume2, VolumeX, Headphones } from "lucide-react";
 import { useStation } from "@/contexts/StationContext";
 
-const DEFAULT_STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
+const DEFAULT_STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-hq.mp3";
 const NOW_PLAYING_URL = "/api/now-playing";
 const POLL_INTERVAL = 10_000;
 

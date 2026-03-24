@@ -16,7 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useStation } from "@/contexts/StationContext";
 
-const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "https://tfc-radio.netlify.app/stream/americana-hq.mp3";
+const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-hq.mp3";
 const NOW_PLAYING_URL = "/api/now-playing";
 const POLL_INTERVAL = 10_000;
 
