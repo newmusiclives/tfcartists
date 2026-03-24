@@ -5,23 +5,35 @@ import { logger } from "@/lib/logger";
 export const dynamic = "force-dynamic";
 
 /**
- * POST /api/track_played
+ * GET/POST /api/track_played
  *
  * Called by Liquidsoap when a song finishes playing.
- * Increments play count and updates rotation tracking.
- *
- * Body: { "artist": "Artist Name", "title": "Song Title" }
+ * GET: ?artist=Name&title=Title (CSRF-free for Liquidsoap)
+ * POST: JSON body (may be blocked by CSRF on some deployments)
  */
+export async function GET(req: NextRequest) {
+  const artist = req.nextUrl.searchParams.get("artist");
+  const title = req.nextUrl.searchParams.get("title");
+  return handleTrackPlayed(artist, title);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { artist, title } = body;
+    return handleTrackPlayed(body.artist, body.title);
+  } catch (error) {
+    logger.warn("track_played error", { error: String(error) });
+    return NextResponse.json({ error: "Failed" }, { status: 500 });
+  }
+}
 
-    if (!artist || !title) {
-      return NextResponse.json({ error: "artist and title required" }, { status: 400 });
-    }
+async function handleTrackPlayed(artist: string | null, title: string | null) {
 
-    // Find the song and increment play count
+  if (!artist || !title) {
+    return NextResponse.json({ error: "artist and title required" }, { status: 400 });
+  }
+
+  try {
     const song = await prisma.song.findFirst({
       where: { artistName: artist, title },
       select: { id: true },
@@ -38,7 +50,6 @@ export async function POST(req: NextRequest) {
     }
 
     logger.info("Track played", { artist, title, songId: song?.id || "not_found" });
-
     return NextResponse.json({ success: true });
   } catch (error) {
     logger.warn("track_played error", { error: String(error) });
