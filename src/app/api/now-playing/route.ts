@@ -108,7 +108,7 @@ async function readIcecastMetadata(url: string): Promise<string | null> {
 export async function GET() {
   try {
     // Import Liquidsoap push data (same process, in-memory)
-    const { getLiquidoapNowPlaying } = await import("@/app/api/notify_now_playing/route");
+    const { getLiquidoapNowPlaying } = await import("@/lib/radio/liquidsoap-state");
 
     const station = await prisma.station.findFirst({
       where: { isActive: true },
