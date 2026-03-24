@@ -22,4 +22,11 @@
 # Note: Scheduled functions require Netlify Pro plan or higher
 # Schedules are defined in netlify/functions/*.ts files using @netlify/functions
 
+# Proxy Icecast stream through Netlify to avoid mixed-content (HTTP→HTTPS) blocks
+[[redirects]]
+  from = "/stream/*"
+  to = "http://89.167.23.152:8000/:splat"
+  status = 200
+  force = true
+
 # Security headers are managed in middleware.ts to avoid conflicts
