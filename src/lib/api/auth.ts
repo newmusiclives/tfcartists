@@ -14,7 +14,7 @@ import type { Session } from "next-auth";
 export type UserRole = "admin" | "riley" | "harper" | "elliot" | "cassidy";
 
 function isDemoMode(): boolean {
-  return process.env.DEMO_MODE === "true";
+  return process.env.DEMO_MODE === "true" && process.env.NODE_ENV !== "production";
 }
 
 const DEMO_SESSION: Session = {

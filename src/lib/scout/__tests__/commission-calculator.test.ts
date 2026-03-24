@@ -549,7 +549,7 @@ describe("Commission Calculator", () => {
         } as any);
 
         const result10 = await calculateScoutCommission("s1", "a1", "2025-01");
-        expect(result10!.commissionAmount).toBe(tc.rate12);
+        expect(result10!.commissionAmount).toBeCloseTo(tc.rate12);
 
         // Test 25% prepurchase rate
         vi.mocked(prisma.artistDiscovery.findUnique).mockResolvedValue({

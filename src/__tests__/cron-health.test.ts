@@ -10,6 +10,9 @@ vi.mock("@/lib/db", () => ({
     cronLog: {
       findMany: vi.fn(),
     },
+    config: {
+      findMany: vi.fn().mockResolvedValue([]),
+    },
   },
 }));
 
@@ -23,6 +26,7 @@ const mockFindMany = vi.mocked(prisma.cronLog.findMany);
 describe("GET /api/admin/cron-health", () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    vi.mocked(prisma.config.findMany).mockResolvedValue([]);
   });
 
   it("returns 403 when not authenticated", async () => {

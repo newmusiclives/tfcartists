@@ -22,10 +22,9 @@ describe("API Auth Helpers", () => {
   });
 
   describe("requireAuth", () => {
-    it("returns null when no session exists", async () => {
+    it("throws when no session exists", async () => {
       mockAuth.mockResolvedValue(null as any);
-      const result = await requireAuth();
-      expect(result).toBeNull();
+      await expect(requireAuth()).rejects.toThrow("Authentication required");
     });
 
     it("returns session when user is authenticated", async () => {
@@ -42,8 +41,7 @@ describe("API Auth Helpers", () => {
       process.env.DEMO_MODE = "true";
       mockAuth.mockResolvedValue(null as any);
 
-      const result = await requireAuth();
-      expect(result).toBeNull();
+      await expect(requireAuth()).rejects.toThrow("Authentication required");
 
       // @ts-ignore
       process.env.NODE_ENV = origEnv;
@@ -59,8 +57,7 @@ describe("API Auth Helpers", () => {
 
     it("does NOT bypass auth when DEMO_MODE is not set", async () => {
       mockAuth.mockResolvedValue(null as any);
-      const result = await requireAuth();
-      expect(result).toBeNull();
+      await expect(requireAuth()).rejects.toThrow("Authentication required");
       expect(mockAuth).toHaveBeenCalled();
     });
   });
