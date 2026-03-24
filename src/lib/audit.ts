@@ -153,3 +153,53 @@ export function getClientIP(headers: Headers): string {
     "unknown"
   );
 }
+
+/**
+ * Log an admin action for audit trail.
+ * Stored in the Config table with a prefix for lightweight tracking.
+ */
+export async function logAdminAction(opts: {
+  userId: string;
+  action: string;
+  target: string;
+  details?: string;
+}): Promise<void> {
+  try {
+    const key = `audit:${Date.now()}:${opts.userId}`;
+    await prisma.config.create({
+      data: {
+        key,
+        value: JSON.stringify({
+          action: opts.action,
+          target: opts.target,
+          details: opts.details,
+          userId: opts.userId,
+          timestamp: new Date().toISOString(),
+        }),
+      },
+    });
+  } catch {
+    logger.warn("Failed to log audit action", opts);
+  }
+}
+
+/**
+ * Get recent admin actions.
+ */
+export async function getRecentAuditLog(limit = 50): Promise<Array<{
+  action: string;
+  target: string;
+  details?: string;
+  userId: string;
+  timestamp: string;
+}>> {
+  const entries = await prisma.config.findMany({
+    where: { key: { startsWith: "audit:" } },
+    orderBy: { key: "desc" },
+    take: limit,
+  });
+
+  return entries.map(e => {
+    try { return JSON.parse(e.value); } catch { return { action: "unknown", target: e.key, userId: "unknown", timestamp: "" }; }
+  });
+}
