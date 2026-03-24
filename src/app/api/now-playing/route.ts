@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { stationHour, stationToday } from "@/lib/timezone";
+import http from "http";
 import https from "https";
 import { withCircuitBreaker } from "@/lib/ai/circuit-breaker";
 
@@ -24,9 +25,10 @@ async function readIcecastMetadata(url: string): Promise<string | null> {
 
     try {
       const parsedUrl = new URL(url);
+      const isHttps = parsedUrl.protocol === "https:";
       const options = {
         hostname: parsedUrl.hostname,
-        port: parsedUrl.port || 443,
+        port: parsedUrl.port || (isHttps ? 443 : 80),
         path: parsedUrl.pathname,
         method: "GET",
         headers: {
@@ -36,7 +38,7 @@ async function readIcecastMetadata(url: string): Promise<string | null> {
         rejectUnauthorized: false,
       };
 
-      const req = https.request(options, (res) => {
+      const req = (isHttps ? https : http).request(options, (res) => {
         const metaint = parseInt(res.headers["icy-metaint"] as string, 10);
         if (!metaint || isNaN(metaint)) {
           clearTimeout(timeout);
