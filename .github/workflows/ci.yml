@@ -1,17 +1,17 @@
 name: CI
 
-  on:
+on:
     push:
       branches: [main]
     pull_request:
       branches: [main]
 
-  env:
+env:
     DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
     NEXTAUTH_SECRET: "ci-test-secret"
     NEXTAUTH_URL: "http://localhost:3000"
 
-  jobs:
+jobs:
     lint-and-typecheck:
       name: Lint & Typecheck
       runs-on: ubuntu-latest
