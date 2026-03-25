@@ -32,6 +32,8 @@ import {
   ChevronRight,
   Calculator,
   Code,
+  Webhook,
+  AudioLines,
 } from "lucide-react";
 import { StationSwitcher } from "@/components/station-switcher";
 
@@ -283,6 +285,9 @@ export function SharedNav() {
                     <Link href="/station-admin/dj-editor" className={activeLinkClass("/station-admin/dj-editor", "amber")}>
                       <span className="flex items-center space-x-2"><Users className="w-4 h-4 text-amber-600" /><span>DJ Editor</span></span>
                     </Link>
+                    <Link href="/station-admin/voice-clone" className={activeLinkClass("/station-admin/voice-clone", "amber")}>
+                      <span className="flex items-center space-x-2"><AudioLines className="w-4 h-4 text-amber-600" /><span>Voice Cloning</span></span>
+                    </Link>
                     <Link href="/station-admin/schedule-editor" className={activeLinkClass("/station-admin/schedule-editor", "amber")}>
                       <span className="flex items-center space-x-2"><CalendarDays className="w-4 h-4 text-amber-600" /><span>Schedule Editor</span></span>
                     </Link>
@@ -306,6 +311,9 @@ export function SharedNav() {
                     </Link>
                     <Link href="/station-admin/social" className={activeLinkClass("/station-admin/social", "amber")}>
                       <span className="flex items-center space-x-2"><Globe className="w-4 h-4 text-amber-600" /><span>Social Posting</span></span>
+                    </Link>
+                    <Link href="/station-admin/webhooks" className={activeLinkClass("/station-admin/webhooks", "amber")}>
+                      <span className="flex items-center space-x-2"><Webhook className="w-4 h-4 text-amber-600" /><span>Webhooks</span></span>
                     </Link>
                   </div>
                 )}
@@ -695,6 +703,7 @@ export function SharedNav() {
                   <Link href="/station-admin/clocks" className="block px-4 py-2 text-sm text-gray-600">Radio Clocks</Link>
                   <Link href="/station-admin/music" className="block px-4 py-2 text-sm text-gray-600">Music Library</Link>
                   <Link href="/station-admin/dj-editor" className="block px-4 py-2 text-sm text-gray-600">DJ Editor</Link>
+                  <Link href="/station-admin/voice-clone" className="block px-4 py-2 text-sm text-gray-600">Voice Cloning</Link>
                   <Link href="/station-admin/schedule-editor" className="block px-4 py-2 text-sm text-gray-600">Schedule Editor</Link>
                   <Link href="/station-admin/imaging" className="block px-4 py-2 text-sm text-gray-600">Station Imaging</Link>
                   <Link href="/station-admin/branding" className="block px-4 py-2 text-sm text-gray-600">Station Branding</Link>
@@ -703,6 +712,7 @@ export function SharedNav() {
                   <Link href="/station-admin/transitions" className="block px-4 py-2 text-sm text-gray-600">Show Transitions</Link>
                   <Link href="/station-admin/embed" className="block px-4 py-2 text-sm text-gray-600">Embed Widget</Link>
                   <Link href="/station-admin/social" className="block px-4 py-2 text-sm text-gray-600">Social Posting</Link>
+                  <Link href="/station-admin/webhooks" className="block px-4 py-2 text-sm text-gray-600">Webhooks</Link>
                 </div>
               )}
 

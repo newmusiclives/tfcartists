@@ -15,6 +15,7 @@ const OfflineBanner = dynamic(() => import("@/components/offline-banner").then(m
 import { MobileNav } from "@/components/mobile-nav";
 import { StationProvider } from "@/contexts/StationContext";
 import { ToastProvider } from "@/contexts/ToastContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -143,6 +144,7 @@ export default function RootLayout({
         </a>
         <ErrorBoundary>
           <SessionProvider>
+            <LanguageProvider>
             <StationProvider>
               <ToastProvider>
                 <RadioPlayerWrapper>{children}</RadioPlayerWrapper>
@@ -152,6 +154,7 @@ export default function RootLayout({
                 <PWAInstallPrompt />
               </ToastProvider>
             </StationProvider>
+            </LanguageProvider>
           </SessionProvider>
         </ErrorBoundary>
 
