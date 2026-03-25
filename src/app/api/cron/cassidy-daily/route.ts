@@ -8,6 +8,8 @@ import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import OpenAI from "openai";
 import { getConfig } from "@/lib/config";
 import { logCronExecution, isCronSuspended } from "@/lib/cron/log";
+import { withCronLock } from "@/lib/cron/lock";
+import { isAiSpendLimitReached } from "@/lib/ai/spend-tracker";
 
 export const dynamic = "force-dynamic";
 
@@ -37,11 +39,17 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if this job is suspended
-    const suspended = await isCronSuspended("cassidy-daily");
-    if (suspended) return suspended;
+    return withCronLock("cassidy-daily", async () => {
+      // Check if this job is suspended
+      const suspended = await isCronSuspended("cassidy-daily");
+      if (suspended) return suspended;
 
-    logger.info("Starting Cassidy daily submission review");
+      // Check AI spend limit
+      if (await isAiSpendLimitReached()) {
+        return NextResponse.json({ success: true, message: "AI daily spend limit reached — skipping Cassidy" });
+      }
+
+      logger.info("Starting Cassidy daily submission review");
 
     const results = {
       assigned: 0,
@@ -233,7 +241,7 @@ export async function GET(req: NextRequest) {
 
             // Call the generate-audio route internally
             const baseUrl = process.env.NEXTAUTH_URL
-              || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+              || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://truefans-radio.netlify.app");
 
             const regenResponse = await fetch(`${baseUrl}/api/station-imaging/generate-audio`, {
               method: "POST",
@@ -354,6 +362,7 @@ export async function GET(req: NextRequest) {
       message: "Cassidy daily submission review completed",
       results,
       timestamp: new Date().toISOString(),
+    });
     });
   } catch (error) {
     logger.error("Cassidy daily submission review failed", { error });

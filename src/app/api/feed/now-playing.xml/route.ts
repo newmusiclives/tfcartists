@@ -31,7 +31,7 @@ export async function GET() {
       return new NextResponse("No active station", { status: 404 });
     }
 
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXTAUTH_URL || "https://truefans-radio.netlify.app";
 
     let title = "Music";
     let artistName = station.name;

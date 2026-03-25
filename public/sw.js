@@ -1,7 +1,9 @@
 // Service Worker for TrueFans RADIO PWA
 // BUILD_TIMESTAMP is replaced at build time by stamp-sw.js
-const CACHE_NAME = "tfr-cache-__BUILD_TIMESTAMP__";
+const CACHE_NAME = "tfr-cache-mn3apekh";
 const OFFLINE_URL = "/offline.html";
+const SYNC_TAG = "tfr-offline-sync";
+const PERIODIC_SYNC_TAG = "tfr-now-playing";
 
 // App shell resources to cache on install
 const APP_SHELL = [
@@ -16,6 +18,76 @@ const APP_SHELL = [
 
 // Network-first cache duration for now-playing (5 minutes)
 const NOW_PLAYING_CACHE_MAX_AGE = 5 * 60 * 1000;
+
+// --- IndexedDB helpers (mirror of offline-store.ts for SW context) ---
+const DB_NAME = "tfr-offline";
+const DB_VERSION = 1;
+const STORE_NAME = "pending-actions";
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+      }
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function getPendingActions() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+    tx.oncomplete = () => db.close();
+  });
+}
+
+async function clearAction(id) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.delete(id);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+    tx.oncomplete = () => db.close();
+  });
+}
+
+async function replayQueue() {
+  const actions = await getPendingActions();
+  let synced = 0;
+
+  for (const action of actions) {
+    try {
+      const response = await fetch(action.url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: action.body,
+      });
+
+      if (response.ok && action.id !== undefined) {
+        await clearAction(action.id);
+        synced++;
+      } else if (response.status >= 400 && response.status < 500) {
+        if (action.id !== undefined) await clearAction(action.id);
+      }
+    } catch {
+      // Still offline — stop trying
+      break;
+    }
+  }
+
+  return synced;
+}
 
 // Install: cache the app shell and offline page
 self.addEventListener("install", (event) => {
@@ -50,6 +122,25 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
+
+  // For POST requests: attempt network, register background sync on failure
+  if (request.method === "POST" && url.origin === self.location.origin) {
+    event.respondWith(
+      fetch(request.clone()).catch(async () => {
+        // Request failed (offline) — register background sync
+        try {
+          await self.registration.sync.register(SYNC_TAG);
+        } catch {
+          // Background Sync API not supported — client will handle via syncAll()
+        }
+        return new Response(
+          JSON.stringify({ queued: true, offline: true }),
+          { status: 202, headers: { "Content-Type": "application/json" } }
+        );
+      })
+    );
+    return;
+  }
 
   // Skip non-GET requests
   if (request.method !== "GET") return;
@@ -125,6 +216,46 @@ self.addEventListener("notificationclick", (event) => {
         return self.clients.openWindow(targetUrl);
       })
   );
+});
+
+// Background Sync: replay queued offline actions
+self.addEventListener("sync", (event) => {
+  if (event.tag === SYNC_TAG) {
+    event.waitUntil(
+      replayQueue().then((count) => {
+        if (count > 0) {
+          console.log(`[SW] Background sync replayed ${count} actions`);
+        }
+      })
+    );
+  }
+});
+
+// Periodic Background Sync: refresh now-playing data
+self.addEventListener("periodicsync", (event) => {
+  if (event.tag === PERIODIC_SYNC_TAG) {
+    event.waitUntil(
+      (async () => {
+        try {
+          const response = await fetch("/api/now-playing");
+          if (response.ok) {
+            const cache = await caches.open(CACHE_NAME);
+            const headers = new Headers(response.headers);
+            headers.set("sw-cached-at", Date.now().toString());
+            const cachedResponse = new Response(await response.clone().blob(), {
+              status: response.status,
+              statusText: response.statusText,
+              headers,
+            });
+            await cache.put(new Request("/api/now-playing"), cachedResponse);
+            console.log("[SW] Periodic sync updated now-playing cache");
+          }
+        } catch {
+          // Network unavailable — skip this cycle
+        }
+      })()
+    );
+  }
 });
 
 // --- Strategy helpers ---

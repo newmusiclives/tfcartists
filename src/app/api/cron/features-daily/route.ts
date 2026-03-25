@@ -8,8 +8,12 @@ import { withCronLock } from "@/lib/cron/lock";
 
 export const dynamic = "force-dynamic";
 
-const POOL_TARGET = 2; // unused items per DJ per feature type
-const MAX_TOTAL_FEATURES = 500; // hard cap — delete oldest used features beyond this
+const POOL_TARGET = 1; // unused items per DJ per feature type
+const LIVE_HOURS = 12; // 6am-6pm
+const FEATURES_PER_HOUR = 2;
+const MAX_DAYS_AHEAD = 3;
+const MAX_UNUSED_SCRIPTS = LIVE_HOURS * FEATURES_PER_HOUR * MAX_DAYS_AHEAD; // 72 — enough scripts to feed 3 days of audio
+const MAX_TOTAL_FEATURES = 150; // hard cap — scripts + recently used
 const MAX_GENERATE_PER_RUN = 20; // prevent runaway generation
 
 export async function GET(req: NextRequest) {
@@ -113,9 +117,20 @@ export async function GET(req: NextRequest) {
         }
       }
 
+      // Check total unused scripts — skip generation if we already have enough
+      const totalUnused = await prisma.featureContent.count({
+        where: { stationId: station.id, isUsed: false },
+      });
+
       let generated = 0;
       let skipped = 0;
       const byDj: Record<string, number> = {};
+
+      if (totalUnused >= MAX_UNUSED_SCRIPTS) {
+        logger.info("Feature script pool full", { totalUnused, max: MAX_UNUSED_SCRIPTS });
+        await logCronExecution({ jobName: "features-daily", status: "success", duration: Date.now() - _cronStart, summary: { generated: 0, skipped: combos.size, expired, cleaned, totalUnused, message: "Script pool full" } as Record<string, unknown>, startedAt: _cronStartedAt });
+        return NextResponse.json({ success: true, generated: 0, skipped: combos.size, expired, cleaned, totalUnused, message: `Script pool full (${totalUnused}/${MAX_UNUSED_SCRIPTS})` });
+      }
 
       // 6. For each combo, check pool and generate if needed
       for (const combo of combos.values()) {

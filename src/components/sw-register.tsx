@@ -31,6 +31,25 @@ export function ServiceWorkerRegister() {
           });
         });
 
+        // Register periodic background sync for now-playing (if supported)
+        if ("periodicSync" in registration) {
+          try {
+            const status = await navigator.permissions.query({
+              // @ts-expect-error — periodicSync is not yet in the TS Permission typings
+              name: "periodic-background-sync",
+            });
+            if (status.state === "granted") {
+              await (registration as unknown as { periodicSync: { register: (tag: string, options: { minInterval: number }) => Promise<void> } }).periodicSync.register(
+                "tfr-now-playing",
+                { minInterval: 60 * 1000 } // 1 minute minimum
+              );
+              console.log("[SW] Periodic background sync registered");
+            }
+          } catch {
+            // Periodic sync not available — that's fine
+          }
+        }
+
         console.log("[SW] Registered with scope:", registration.scope);
       } catch (error) {
         console.warn("[SW] Registration failed:", error);
@@ -42,6 +61,25 @@ export function ServiceWorkerRegister() {
     } else {
       window.addEventListener("load", register, { once: true });
     }
+
+    // When coming back online, sync any queued offline actions
+    const handleOnline = async () => {
+      try {
+        const { syncAll } = await import("@/lib/offline-store");
+        const synced = await syncAll();
+        if (synced > 0) {
+          console.log(`[SW] Online — synced ${synced} queued actions`);
+        }
+      } catch (err) {
+        console.warn("[SW] Online sync failed:", err);
+      }
+    };
+
+    window.addEventListener("online", handleOnline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+    };
   }, []);
 
   return null;

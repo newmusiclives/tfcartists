@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { logCronExecution, isCronSuspended } from "@/lib/cron/log";
+import { withCronLock } from "@/lib/cron/lock";
+import { isAiSpendLimitReached } from "@/lib/ai/spend-tracker";
 
 export const dynamic = "force-dynamic";
 
@@ -40,106 +42,113 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if this job is suspended
-    const suspended = await isCronSuspended("harper-daily");
-    if (suspended) return suspended;
+    return withCronLock("harper-daily", async () => {
+      // Check if this job is suspended
+      const suspended = await isCronSuspended("harper-daily");
+      if (suspended) return suspended;
 
-    logger.info("Starting Harper daily automation");
+      // Check AI spend limit
+      if (await isAiSpendLimitReached()) {
+        return NextResponse.json({ success: true, message: "AI daily spend limit reached — skipping Harper" });
+      }
 
-    const results = {
-      followUps: 0,
-      renewals: 0,
-      errors: 0,
-    };
+      logger.info("Starting Harper daily automation");
 
-    // 1. Send follow-ups to sponsors
-    const followUpSponsors = await prisma.sponsor.findMany({
-      where: {
-        nextFollowUpAt: {
-          lte: new Date(),
+      const results = {
+        followUps: 0,
+        renewals: 0,
+        errors: 0,
+      };
+
+      // 1. Send follow-ups to sponsors
+      const followUpSponsors = await prisma.sponsor.findMany({
+        where: {
+          nextFollowUpAt: {
+            lte: new Date(),
+          },
+          status: {
+            in: ["CONTACTED", "INTERESTED", "NEGOTIATING"],
+          },
         },
-        status: {
-          in: ["CONTACTED", "INTERESTED", "NEGOTIATING"],
-        },
-      },
-      take: 20, // Limit to 20 per day
-    });
+        take: 20, // Limit to 20 per day
+      });
 
-    logger.info(`Found ${followUpSponsors.length} sponsors needing follow-up`);
+      logger.info(`Found ${followUpSponsors.length} sponsors needing follow-up`);
 
-    const { HarperAgent } = await import("@/lib/ai/harper-agent");
-    const harper = new HarperAgent();
+      const { HarperAgent } = await import("@/lib/ai/harper-agent");
+      const harper = new HarperAgent();
 
-    for (const sponsor of followUpSponsors) {
-      try {
-        // Determine intent based on stage
-        let intent: any = "educate_value";
-        if (sponsor.pipelineStage === "interested") {
-          intent = "pitch_packages";
-        } else if (sponsor.pipelineStage === "negotiating") {
-          intent = "negotiate";
+      for (const sponsor of followUpSponsors) {
+        try {
+          // Determine intent based on stage
+          let intent: any = "educate_value";
+          if (sponsor.pipelineStage === "interested") {
+            intent = "pitch_packages";
+          } else if (sponsor.pipelineStage === "negotiating") {
+            intent = "negotiate";
+          }
+
+          await harper.sendMessage(sponsor.id, "", intent);
+
+          // Schedule next follow-up
+          const nextFollowUp = new Date();
+          nextFollowUp.setDate(nextFollowUp.getDate() + 5); // 5 days
+
+          await prisma.sponsor.update({
+            where: { id: sponsor.id },
+            data: { nextFollowUpAt: nextFollowUp },
+          });
+
+          results.followUps++;
+        } catch (error) {
+          logger.error("Sponsor follow-up failed", { sponsorId: sponsor.id, error });
+          results.errors++;
         }
-
-        await harper.sendMessage(sponsor.id, "", intent);
-
-        // Schedule next follow-up
-        const nextFollowUp = new Date();
-        nextFollowUp.setDate(nextFollowUp.getDate() + 5); // 5 days
-
-        await prisma.sponsor.update({
-          where: { id: sponsor.id },
-          data: { nextFollowUpAt: nextFollowUp },
-        });
-
-        results.followUps++;
-      } catch (error) {
-        logger.error("Sponsor follow-up failed", { sponsorId: sponsor.id, error });
-        results.errors++;
       }
-    }
 
-    // 2. Identify sponsorships expiring in next 30 days
-    const expiringSponsors = await prisma.sponsorship.findMany({
-      where: {
-        endDate: {
-          gte: new Date(),
-          lte: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      // 2. Identify sponsorships expiring in next 30 days
+      const expiringSponsors = await prisma.sponsorship.findMany({
+        where: {
+          endDate: {
+            gte: new Date(),
+            lte: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          },
+          status: "active",
         },
-        status: "active",
-      },
-      include: {
-        sponsor: true,
-      },
-    });
+        include: {
+          sponsor: true,
+        },
+      });
 
-    for (const sponsorship of expiringSponsors) {
-      try {
-        // Send renewal message
-        await harper.sendMessage(
-          sponsorship.sponsorId,
-          "",
-          "pitch_packages" // Pitch renewal
-        );
+      for (const sponsorship of expiringSponsors) {
+        try {
+          // Send renewal message
+          await harper.sendMessage(
+            sponsorship.sponsorId,
+            "",
+            "pitch_packages" // Pitch renewal
+          );
 
-        results.renewals++;
-      } catch (error) {
-        logger.error("Renewal message failed", {
-          sponsorshipId: sponsorship.id,
-          error,
-        });
-        results.errors++;
+          results.renewals++;
+        } catch (error) {
+          logger.error("Renewal message failed", {
+            sponsorshipId: sponsorship.id,
+            error,
+          });
+          results.errors++;
+        }
       }
-    }
 
-    logger.info("Harper daily automation completed", results);
+      logger.info("Harper daily automation completed", results);
 
-    await logCronExecution({ jobName: "harper-daily", status: "success", duration: Date.now() - _cronStart, summary: results as Record<string, unknown>, startedAt: _cronStartedAt });
+      await logCronExecution({ jobName: "harper-daily", status: "success", duration: Date.now() - _cronStart, summary: results as Record<string, unknown>, startedAt: _cronStartedAt });
 
-    return NextResponse.json({
-      success: true,
-      message: "Harper daily automation completed",
-      results,
-      timestamp: new Date().toISOString(),
+      return NextResponse.json({
+        success: true,
+        message: "Harper daily automation completed",
+        results,
+        timestamp: new Date().toISOString(),
+      });
     });
 
   } catch (error) {

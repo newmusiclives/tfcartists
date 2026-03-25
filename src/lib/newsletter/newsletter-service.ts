@@ -272,7 +272,7 @@ export async function sendNewsletter(params: {
   for (const sub of subscribers) {
     try {
       // Append unsubscribe link
-      const unsubLink = `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/newsletter/unsubscribe?token=${sub.unsubscribeToken}`;
+      const unsubLink = `${process.env.NEXTAUTH_URL || "https://truefans-radio.netlify.app"}/newsletter/unsubscribe?token=${sub.unsubscribeToken}`;
       const personalizedHtml = htmlContent.replace(
         "</div>\n  ",
         `<p style="font-size: 12px; color: #999; margin-top: 20px;"><a href="${unsubLink}">Unsubscribe</a> | <a href="${unsubLink}&prefs=1">Manage preferences</a></p></div>\n  `
@@ -338,7 +338,7 @@ export async function generateNowPlayingRss(organizationId?: string): Promise<st
   });
 
   const stationName = station?.name || "TrueFans RADIO";
-  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXTAUTH_URL || "https://truefans-radio.netlify.app";
 
   const items = recentSongs.map((song) => `
     <item>

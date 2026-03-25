@@ -3,6 +3,8 @@ import { elliot } from "@/lib/ai/elliot-agent";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { logCronExecution, isCronSuspended } from "@/lib/cron/log";
+import { withCronLock } from "@/lib/cron/lock";
+import { isAiSpendLimitReached } from "@/lib/ai/spend-tracker";
 
 export const dynamic = "force-dynamic";
 
@@ -41,24 +43,31 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if this job is suspended
-    const suspended = await isCronSuspended("elliot-daily");
-    if (suspended) return suspended;
+    return withCronLock("elliot-daily", async () => {
+      // Check if this job is suspended
+      const suspended = await isCronSuspended("elliot-daily");
+      if (suspended) return suspended;
 
-    logger.info("Starting Elliot daily automation");
+      // Check AI spend limit
+      if (await isAiSpendLimitReached()) {
+        return NextResponse.json({ success: true, message: "AI daily spend limit reached — skipping Elliot" });
+      }
 
-    // Run Elliot's daily automation
-    const results = await elliot.runDailyAutomation();
+      logger.info("Starting Elliot daily automation");
 
-    logger.info("Elliot daily automation completed", results);
+      // Run Elliot's daily automation
+      const results = await elliot.runDailyAutomation();
 
-    await logCronExecution({ jobName: "elliot-daily", status: "success", duration: Date.now() - _cronStart, summary: results as Record<string, unknown>, startedAt: _cronStartedAt });
+      logger.info("Elliot daily automation completed", results);
 
-    return NextResponse.json({
-      success: true,
-      message: "Elliot daily automation completed",
-      results,
-      timestamp: new Date().toISOString(),
+      await logCronExecution({ jobName: "elliot-daily", status: "success", duration: Date.now() - _cronStart, summary: results as Record<string, unknown>, startedAt: _cronStartedAt });
+
+      return NextResponse.json({
+        success: true,
+        message: "Elliot daily automation completed",
+        results,
+        timestamp: new Date().toISOString(),
+      });
     });
 
   } catch (error) {

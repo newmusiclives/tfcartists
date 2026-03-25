@@ -20,6 +20,8 @@ export async function POST(request: NextRequest) {
       city,
       businessType,
       sponsorshipTier,
+      message,
+      adPreferences,
     } = body;
 
     if (!businessName || !email) {
@@ -53,6 +55,10 @@ export async function POST(request: NextRequest) {
         status: "DISCOVERED",
         pipelineStage: "discovery",
         sponsorshipTier: sponsorshipTier || null,
+        metadata: {
+          ...(message ? { message } : {}),
+          ...(adPreferences ? { adPreferences } : {}),
+        },
       },
     });
 

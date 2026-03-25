@@ -29,7 +29,8 @@ export const dynamic = "force-dynamic";
 const BATCH_SIZE = 10;
 const LIVE_HOURS = 12; // 6am-6pm
 const FEATURES_PER_HOUR = 2;
-const MAX_AUDIO_BANK = LIVE_HOURS * FEATURES_PER_HOUR * 2; // 2 days ahead = 48
+const MAX_DAYS_AHEAD = 3;
+const MAX_AUDIO_BANK = LIVE_HOURS * FEATURES_PER_HOUR * MAX_DAYS_AHEAD; // 3 days ahead = 72
 
 export async function GET(req: NextRequest) {
   const cronStart = Date.now();

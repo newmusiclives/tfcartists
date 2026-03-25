@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { logCronExecution, isCronSuspended } from "@/lib/cron/log";
+import { withCronLock } from "@/lib/cron/lock";
+import { isAiSpendLimitReached } from "@/lib/ai/spend-tracker";
 
 export const dynamic = "force-dynamic";
 
@@ -33,104 +35,111 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if this job is suspended
-    const suspended = await isCronSuspended("parker-daily");
-    if (suspended) return suspended;
+    return withCronLock("parker-daily", async () => {
+      // Check if this job is suspended
+      const suspended = await isCronSuspended("parker-daily");
+      if (suspended) return suspended;
 
-    logger.info("Starting Parker daily station management");
-
-    const station = await prisma.station.findFirst();
-    if (!station) {
-      return NextResponse.json({ error: "No station found" }, { status: 404 });
-    }
-
-    const results = {
-      scheduleAudit: { coveredShifts: 0, gaps: 0 },
-      musicHealth: { totalSongs: 0, categories: {} as Record<string, number> },
-      adInventory: { activeAds: 0, totalWeight: 0, expiringSoon: 0 },
-      clockCoverage: { templates: 0, assignments: 0 },
-      alerts: [] as string[],
-    };
-
-    // 1. Schedule coverage audit — check clock assignments exist
-    const clockAssignments = await prisma.clockAssignment.findMany({
-      where: { stationId: station.id },
-      include: { dj: true, clockTemplate: true },
-    });
-
-    results.scheduleAudit.coveredShifts = clockAssignments.length;
-
-    // Check for day types without coverage
-    const dayTypes = ["weekday", "saturday", "sunday"];
-    for (const dayType of dayTypes) {
-      const assignments = clockAssignments.filter((a) => a.dayType === dayType);
-      if (assignments.length === 0) {
-        results.scheduleAudit.gaps++;
-        results.alerts.push(`No clock assignments for ${dayType}`);
+      // Check AI spend limit
+      if (await isAiSpendLimitReached()) {
+        return NextResponse.json({ success: true, message: "AI daily spend limit reached — skipping Parker" });
       }
-    }
 
-    // 2. Music library health
-    const songsByCategory = await prisma.song.groupBy({
-      by: ["rotationCategory"],
-      where: { stationId: station.id },
-      _count: { id: true },
-    });
+      logger.info("Starting Parker daily station management");
 
-    let totalSongs = 0;
-    for (const cat of songsByCategory) {
-      const category = cat.rotationCategory || "uncategorized";
-      results.musicHealth.categories[category] = cat._count.id;
-      totalSongs += cat._count.id;
-    }
-    results.musicHealth.totalSongs = totalSongs;
+      const station = await prisma.station.findFirst();
+      if (!station) {
+        return NextResponse.json({ error: "No station found" }, { status: 404 });
+      }
 
-    if (totalSongs < 500) {
-      results.alerts.push(`Music library low: ${totalSongs} songs (recommend 500+)`);
-    }
+      const results = {
+        scheduleAudit: { coveredShifts: 0, gaps: 0 },
+        musicHealth: { totalSongs: 0, categories: {} as Record<string, number> },
+        adInventory: { activeAds: 0, totalWeight: 0, expiringSoon: 0 },
+        clockCoverage: { templates: 0, assignments: 0 },
+        alerts: [] as string[],
+      };
 
-    // 3. Ad inventory check
-    const activeAds = await prisma.sponsorAd.findMany({
-      where: { stationId: station.id, isActive: true },
-    });
+      // 1. Schedule coverage audit — check clock assignments exist
+      const clockAssignments = await prisma.clockAssignment.findMany({
+        where: { stationId: station.id },
+        include: { dj: true, clockTemplate: true },
+      });
 
-    results.adInventory.activeAds = activeAds.length;
-    results.adInventory.totalWeight = activeAds.reduce((s, a) => s + a.weight, 0);
+      results.scheduleAudit.coveredShifts = clockAssignments.length;
 
-    if (activeAds.length < 5) {
-      results.alerts.push(`Ad inventory low: only ${activeAds.length} active ads`);
-    }
+      // Check for day types without coverage
+      const dayTypes = ["weekday", "saturday", "sunday"];
+      for (const dayType of dayTypes) {
+        const assignments = clockAssignments.filter((a) => a.dayType === dayType);
+        if (assignments.length === 0) {
+          results.scheduleAudit.gaps++;
+          results.alerts.push(`No clock assignments for ${dayType}`);
+        }
+      }
 
-    // Check for expiring sponsorships (next 14 days)
-    const expiringSponsorships = await prisma.sponsorship.count({
-      where: {
-        status: "active",
-        endDate: {
-          gte: new Date(),
-          lte: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+      // 2. Music library health
+      const songsByCategory = await prisma.song.groupBy({
+        by: ["rotationCategory"],
+        where: { stationId: station.id },
+        _count: { id: true },
+      });
+
+      let totalSongs = 0;
+      for (const cat of songsByCategory) {
+        const category = cat.rotationCategory || "uncategorized";
+        results.musicHealth.categories[category] = cat._count.id;
+        totalSongs += cat._count.id;
+      }
+      results.musicHealth.totalSongs = totalSongs;
+
+      if (totalSongs < 500) {
+        results.alerts.push(`Music library low: ${totalSongs} songs (recommend 500+)`);
+      }
+
+      // 3. Ad inventory check
+      const activeAds = await prisma.sponsorAd.findMany({
+        where: { stationId: station.id, isActive: true },
+      });
+
+      results.adInventory.activeAds = activeAds.length;
+      results.adInventory.totalWeight = activeAds.reduce((s, a) => s + a.weight, 0);
+
+      if (activeAds.length < 5) {
+        results.alerts.push(`Ad inventory low: only ${activeAds.length} active ads`);
+      }
+
+      // Check for expiring sponsorships (next 14 days)
+      const expiringSponsorships = await prisma.sponsorship.count({
+        where: {
+          status: "active",
+          endDate: {
+            gte: new Date(),
+            lte: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+          },
         },
-      },
-    });
-    results.adInventory.expiringSoon = expiringSponsorships;
-    if (expiringSponsorships > 0) {
-      results.alerts.push(`${expiringSponsorships} sponsorship(s) expiring within 14 days`);
-    }
+      });
+      results.adInventory.expiringSoon = expiringSponsorships;
+      if (expiringSponsorships > 0) {
+        results.alerts.push(`${expiringSponsorships} sponsorship(s) expiring within 14 days`);
+      }
 
-    // 4. Clock template coverage
-    results.clockCoverage.templates = await prisma.clockTemplate.count({
-      where: { stationId: station.id },
-    });
-    results.clockCoverage.assignments = clockAssignments.length;
+      // 4. Clock template coverage
+      results.clockCoverage.templates = await prisma.clockTemplate.count({
+        where: { stationId: station.id },
+      });
+      results.clockCoverage.assignments = clockAssignments.length;
 
-    logger.info("Parker daily station management completed", results);
+      logger.info("Parker daily station management completed", results);
 
-    await logCronExecution({ jobName: "parker-daily", status: "success", duration: Date.now() - _cronStart, summary: results as Record<string, unknown>, startedAt: _cronStartedAt });
+      await logCronExecution({ jobName: "parker-daily", status: "success", duration: Date.now() - _cronStart, summary: results as Record<string, unknown>, startedAt: _cronStartedAt });
 
-    return NextResponse.json({
-      success: true,
-      message: "Parker daily station management completed",
-      results,
-      timestamp: new Date().toISOString(),
+      return NextResponse.json({
+        success: true,
+        message: "Parker daily station management completed",
+        results,
+        timestamp: new Date().toISOString(),
+      });
     });
   } catch (error) {
     logger.error("Parker daily station management failed", { error });

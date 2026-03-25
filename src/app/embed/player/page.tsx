@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 
-const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/api/playout/stream";
+const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-hq.mp3";
 const NOW_PLAYING_URL = "/api/now-playing";
 const POLL_INTERVAL = 15_000;
 
