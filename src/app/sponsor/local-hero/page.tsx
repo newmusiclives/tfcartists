@@ -15,11 +15,55 @@ import {
 import { useStation } from "@/contexts/StationContext";
 
 const BUSINESS_TYPES = [
+  { value: "accounting", label: "Accounting & Tax Services" },
+  { value: "auto_dealer", label: "Auto Dealer" },
+  { value: "auto_repair", label: "Auto Repair & Service" },
+  { value: "bakery", label: "Bakery" },
+  { value: "bank_credit_union", label: "Bank / Credit Union" },
+  { value: "bar_pub", label: "Bar / Pub" },
+  { value: "beauty_salon", label: "Beauty Salon / Barbershop" },
+  { value: "brewery_winery", label: "Brewery / Winery / Distillery" },
+  { value: "cafe_coffee", label: "Cafe / Coffee Shop" },
+  { value: "catering", label: "Catering" },
+  { value: "childcare", label: "Childcare / Daycare" },
+  { value: "chiropractor", label: "Chiropractor / Wellness" },
+  { value: "church", label: "Church / Place of Worship" },
+  { value: "cleaning_service", label: "Cleaning Service" },
+  { value: "clothing_boutique", label: "Clothing / Boutique" },
+  { value: "construction", label: "Construction / Contractor" },
+  { value: "dentist", label: "Dentist" },
+  { value: "electrician", label: "Electrician" },
+  { value: "event_venue", label: "Event Venue / Hall" },
+  { value: "farm_ranch", label: "Farm / Ranch / Ag Supply" },
+  { value: "fitness_gym", label: "Fitness / Gym / Yoga" },
+  { value: "florist", label: "Florist" },
+  { value: "funeral_home", label: "Funeral Home" },
+  { value: "grocery", label: "Grocery / Market" },
+  { value: "hardware_store", label: "Hardware Store" },
+  { value: "hotel_motel", label: "Hotel / Motel / B&B" },
+  { value: "hvac", label: "HVAC / Heating & Cooling" },
+  { value: "insurance", label: "Insurance Agency" },
+  { value: "jewelry", label: "Jewelry Store" },
+  { value: "landscaping", label: "Landscaping / Lawn Care" },
+  { value: "laundromat", label: "Laundromat / Dry Cleaning" },
+  { value: "lawyer", label: "Law Office / Attorney" },
+  { value: "medical", label: "Medical / Doctor's Office" },
+  { value: "music_store", label: "Music Store / Lessons" },
+  { value: "nonprofit", label: "Nonprofit / Charity" },
+  { value: "optometrist", label: "Optometrist / Eye Care" },
+  { value: "pet_services", label: "Pet Store / Grooming / Vet" },
+  { value: "pharmacy", label: "Pharmacy" },
+  { value: "photography", label: "Photography / Videography" },
+  { value: "plumber", label: "Plumber" },
+  { value: "real_estate", label: "Real Estate Agent / Agency" },
   { value: "restaurant", label: "Restaurant" },
-  { value: "retail", label: "Retail" },
-  { value: "service", label: "Service" },
-  { value: "professional_services", label: "Professional" },
-  { value: "nonprofit", label: "Nonprofit" },
+  { value: "roofing", label: "Roofing" },
+  { value: "school", label: "School / Tutoring" },
+  { value: "spa_massage", label: "Spa / Massage" },
+  { value: "sports_recreation", label: "Sports & Recreation" },
+  { value: "storage", label: "Storage Facility" },
+  { value: "tech_repair", label: "Tech / Phone / Computer Repair" },
+  { value: "thrift_store", label: "Thrift Store / Consignment" },
   { value: "other", label: "Other" },
 ];
 
@@ -51,6 +95,7 @@ type FormData = {
   email: string;
   phone: string;
   businessType: string;
+  exclusiveCategory: boolean;
   timeSlots: string[];
   adStyle: string;
   businessDescription: string;
@@ -69,6 +114,7 @@ export default function LocalHeroSignup() {
     email: "",
     phone: "",
     businessType: "",
+    exclusiveCategory: false,
     timeSlots: [],
     adStyle: "",
     businessDescription: "",
@@ -105,11 +151,13 @@ export default function LocalHeroSignup() {
           phone: form.phone || undefined,
           businessType: form.businessType || "other",
           sponsorshipTier: "LOCAL_HERO",
-          message: `LOCAL_HERO signup. Ad style: ${form.adStyle || "No preference"}. Time slots: ${form.timeSlots.length > 0 ? form.timeSlots.join(", ") : "No preference"}.`,
+          message: `LOCAL_HERO signup${form.exclusiveCategory ? " + EXCLUSIVE CATEGORY" : ""}. Ad style: ${form.adStyle || "No preference"}. Time slots: ${form.timeSlots.length > 0 ? form.timeSlots.join(", ") : "No preference"}. Monthly: $${form.exclusiveCategory ? "75" : "30"}.`,
           adPreferences: {
             timeSlots: form.timeSlots,
             adStyle: form.adStyle,
             businessDescription: form.businessDescription,
+            exclusiveCategory: form.exclusiveCategory,
+            monthlyAmount: form.exclusiveCategory ? 75 : 30,
           },
         }),
       });
@@ -269,10 +317,15 @@ export default function LocalHeroSignup() {
         </div>
 
         {/* Price badge */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center gap-2 mb-8">
           <span className="inline-flex items-center gap-1.5 bg-green-500/15 text-green-400 px-4 py-2 rounded-full text-sm font-semibold border border-green-500/20">
-            $30 / month
+            {form.exclusiveCategory ? "$75" : "$30"} / month
           </span>
+          {form.exclusiveCategory && (
+            <span className="inline-flex items-center gap-1.5 bg-amber-500/15 text-amber-400 px-3 py-2 rounded-full text-xs font-semibold border border-amber-500/20">
+              Includes Exclusive Category
+            </span>
+          )}
         </div>
 
         <StepIndicator />
@@ -395,6 +448,45 @@ export default function LocalHeroSignup() {
                   ))}
                 </select>
               </div>
+
+              {/* Exclusive Category Upsell */}
+              {form.businessType && form.businessType !== "other" && (
+                <div
+                  className={`rounded-xl border-2 p-5 transition-all cursor-pointer ${
+                    form.exclusiveCategory
+                      ? "bg-amber-500/10 border-amber-500/50"
+                      : "bg-zinc-800/30 border-zinc-700/50 hover:border-zinc-600"
+                  }`}
+                  onClick={() => updateForm({ exclusiveCategory: !form.exclusiveCategory })}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`mt-0.5 w-6 h-6 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                      form.exclusiveCategory
+                        ? "bg-amber-500 border-amber-500"
+                        : "border-zinc-600"
+                    }`}>
+                      {form.exclusiveCategory && <Check className="w-4 h-4 text-white" />}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-semibold text-white">Be the Exclusive{" "}
+                          <span className="text-amber-400">
+                            {BUSINESS_TYPES.find((t) => t.value === form.businessType)?.label}
+                          </span>
+                          {" "}Sponsor
+                        </span>
+                        <span className="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-medium">
+                          +$45/mo
+                        </span>
+                      </div>
+                      <p className="text-sm text-zinc-400 leading-relaxed">
+                        No other {BUSINESS_TYPES.find((t) => t.value === form.businessType)?.label.toLowerCase()} can sponsor this station.
+                        You&apos;ll be the only one in your category — every listener associates your business type with your name.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <button
@@ -562,6 +654,12 @@ export default function LocalHeroSignup() {
                     }
                   />
                 )}
+                {form.exclusiveCategory && (
+                  <SummaryRow
+                    label="Exclusive"
+                    value={`Only ${BUSINESS_TYPES.find((t) => t.value === form.businessType)?.label} on this station`}
+                  />
+                )}
                 {form.timeSlots.length > 0 && (
                   <SummaryRow
                     label="Time Slots"
@@ -598,11 +696,18 @@ export default function LocalHeroSignup() {
             {/* Package details */}
             <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-6 sm:p-8">
               <h3 className="text-lg font-semibold text-white mb-1">
-                Local Hero Package
+                Local Hero Package{form.exclusiveCategory ? " + Exclusive Category" : ""}
               </h3>
-              <p className="text-2xl font-bold text-green-400 mb-5">
-                $30 / month
-              </p>
+              <div className="flex items-baseline gap-3 mb-5">
+                <p className="text-2xl font-bold text-green-400">
+                  ${form.exclusiveCategory ? "75" : "30"} / month
+                </p>
+                {form.exclusiveCategory && (
+                  <p className="text-sm text-zinc-500">
+                    ($30 base + $45 exclusivity)
+                  </p>
+                )}
+              </div>
 
               <h4 className="text-sm font-medium text-zinc-400 uppercase tracking-wide mb-3">
                 What you get
@@ -617,6 +722,22 @@ export default function LocalHeroSignup() {
                     {benefit}
                   </li>
                 ))}
+                {form.exclusiveCategory && (
+                  <>
+                    <li className="flex items-start gap-3 text-amber-300 text-base font-medium">
+                      <Check className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+                      Exclusive {BUSINESS_TYPES.find((t) => t.value === form.businessType)?.label} sponsor
+                    </li>
+                    <li className="flex items-start gap-3 text-amber-300 text-base font-medium">
+                      <Check className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+                      No competing businesses in your category
+                    </li>
+                    <li className="flex items-start gap-3 text-amber-300 text-base font-medium">
+                      <Check className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+                      &quot;Brought to you exclusively by...&quot; on-air mentions
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
 
