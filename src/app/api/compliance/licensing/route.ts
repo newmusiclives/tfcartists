@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 // ---------------------------------------------------------------------------
 // GET /api/compliance/licensing?period=month&month=2026-03
 // ---------------------------------------------------------------------------

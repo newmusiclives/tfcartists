@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { getConfig } from "@/lib/config";
 import { logger } from "@/lib/logger";
 
+export const dynamic = "force-dynamic";
+
 // ---------------------------------------------------------------------------
 // Simple in-memory rate limiter: max 10 messages per IP per minute
 // ---------------------------------------------------------------------------
