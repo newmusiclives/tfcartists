@@ -10,6 +10,8 @@ import { ServiceWorkerRegister } from "@/components/sw-register";
 import { ErrorBoundary } from "@/lib/monitoring/error-boundary";
 import dynamic from "next/dynamic";
 const PWAInstallPrompt = dynamic(() => import("@/components/pwa-install-prompt").then(m => ({ default: m.PWAInstallPrompt })), { ssr: false });
+const DJChat = dynamic(() => import("@/components/dj-chat"), { ssr: false });
+const OfflineBanner = dynamic(() => import("@/components/offline-banner").then(m => ({ default: m.OfflineBanner })), { ssr: false });
 import { MobileNav } from "@/components/mobile-nav";
 import { StationProvider } from "@/contexts/StationContext";
 import { ToastProvider } from "@/contexts/ToastContext";
@@ -145,6 +147,8 @@ export default function RootLayout({
               <ToastProvider>
                 <RadioPlayerWrapper>{children}</RadioPlayerWrapper>
                 <MobileNav />
+                <DJChat />
+                <OfflineBanner />
                 <PWAInstallPrompt />
               </ToastProvider>
             </StationProvider>

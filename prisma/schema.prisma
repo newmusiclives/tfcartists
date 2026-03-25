@@ -2575,6 +2575,7 @@ model SongRequest {
 
   // Status
   status        String   @default("pending") // pending, queued, played, rejected
+  votes         Int      @default(0)
   playedAt      DateTime?
   rejectedReason String?
 
