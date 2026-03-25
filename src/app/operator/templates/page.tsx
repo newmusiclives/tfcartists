@@ -1,11 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Radio, X, Loader2, Music, Users, Clock, Mic2, ArrowRight } from "lucide-react";
 import { STATION_TEMPLATES, type StationTemplate } from "@/lib/station-templates";
 
 export default function TemplatePickerPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
+      <TemplatePickerInner />
+    </Suspense>
+  );
+}
+
+function TemplatePickerInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") || "growth";
