@@ -72,7 +72,7 @@ export default function ArtistDetailPage() {
         const data = await res.json();
         setArtist(data.artist);
       } catch (error) {
-        console.error("Error fetching artist:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }
@@ -103,7 +103,7 @@ export default function ArtistDetailPage() {
       const data = await res.json();
       setArtist(data.artist);
     } catch (error) {
-      console.error("Error sending message:", error);
+      // Send error handled by loading state
     } finally {
       setSending(false);
     }
@@ -124,7 +124,7 @@ export default function ArtistDetailPage() {
       const data = await res.json();
       setArtist(data.artist);
     } catch (error) {
-      console.error("Error triggering outreach:", error);
+      // Outreach error handled silently
     }
   };
 

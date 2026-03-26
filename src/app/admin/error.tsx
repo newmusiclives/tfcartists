@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertCircle, Home, RefreshCcw } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function AdminError({
   error,
@@ -12,7 +13,7 @@ export default function AdminError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Admin error:", error);
+    logger.error("Admin error", { message: error.message, digest: error.digest });
   }, [error]);
 
   return (

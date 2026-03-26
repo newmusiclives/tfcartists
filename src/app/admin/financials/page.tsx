@@ -19,6 +19,7 @@ import {
   Award,
   PieChart,
 } from "lucide-react";
+import { ExportButtons } from "@/components/export-buttons";
 
 interface FinancialData {
   currentPeriod: string;

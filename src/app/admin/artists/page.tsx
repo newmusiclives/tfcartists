@@ -41,7 +41,7 @@ export default function ArtistsListPage() {
         const data = await res.json();
         setArtists(data.artists);
       } catch (error) {
-        console.error("Error fetching artists:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

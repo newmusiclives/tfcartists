@@ -27,9 +27,17 @@ model Organization {
   domain      String?   // Custom domain (e.g., "acmeradio.com")
 
   // Branding
-  logoUrl     String?
-  primaryColor String?
+  logoUrl        String?
+  primaryColor   String?
   secondaryColor String?
+
+  // White-label / custom domain
+  customDomain     String?   @unique // e.g. "radio.theirbrand.com"
+  customLogo       String?   // URL to their uploaded logo
+  customFavicon    String?   // URL to their uploaded favicon
+  customColors     Json?     // { primary, secondary, accent, background }
+  customFooterText String?   // Custom footer text
+  whiteLabel       Boolean   @default(false) // hides "Powered by TrueFans" when true
 
   // Contact
   ownerName   String
@@ -55,9 +63,11 @@ model Organization {
   listeners   Listener[]
   newsletterSubscribers NewsletterSubscriber[]
   newsletterEditions    NewsletterEdition[]
+  webhookEndpoints      WebhookEndpoint[]
 
   @@index([slug])
   @@index([ownerEmail])
+  @@index([customDomain])
 }
 
 // Organization users with role-based access
@@ -2766,4 +2776,49 @@ model NewsletterEdition {
 
   @@index([organizationId])
   @@index([type])
+}
+
+// =============================================================================
+// WEBHOOK ENDPOINTS & DELIVERY LOG
+// =============================================================================
+// Operator-scoped webhook endpoints for Zapier / Make / custom integrations.
+model WebhookEndpoint {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  name           String            // Human-readable label, e.g. "Zapier Song Alerts"
+  url            String            // Target URL (https://hooks.zapier.com/...)
+  secret         String            // HMAC-SHA256 signing secret
+  events         String[]          // Subscribed event types, e.g. ["track.played","artist.created"]
+  active         Boolean  @default(true)
+
+  deliveries     WebhookDelivery[]
+
+  @@index([organizationId])
+  @@index([active])
+}
+
+// Individual delivery attempt for auditing & debugging.
+model WebhookDelivery {
+  id          String   @id @default(cuid())
+  deliveredAt DateTime @default(now())
+
+  endpointId  String
+  endpoint    WebhookEndpoint @relation(fields: [endpointId], references: [id], onDelete: Cascade)
+
+  event       String            // e.g. "artist.created"
+  payload     Json              // Full payload sent
+  statusCode  Int?              // HTTP response status (null if network error)
+  response    String?           // First 1 KB of response body
+  success     Boolean @default(false)
+  error       String?           // Error message if failed
+  duration    Int?              // Round-trip time in ms
+
+  @@index([endpointId])
+  @@index([event])
+  @@index([deliveredAt])
 }

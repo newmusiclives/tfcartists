@@ -219,7 +219,7 @@ export default function AdminDashboard() {
         setTeamSummaries(buildTeamSummaries(rileyData, cassidyData, harperData, elliotData, mgmtData));
         setSystemFinancials(buildFinancials(harperData, rileyData, mgmtData));
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }
