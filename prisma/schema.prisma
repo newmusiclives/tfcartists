@@ -2460,13 +2460,16 @@ model VoiceTrack {
   stationId       String
   djId            String
 
-  // Link to hour playlist
-  hourPlaylistId  String
-  hourPlaylist    HourPlaylist @relation(fields: [hourPlaylistId], references: [id], onDelete: Cascade)
+  // Link to hour playlist (optional for dedications)
+  hourPlaylistId  String?
+  hourPlaylist    HourPlaylist? @relation(fields: [hourPlaylistId], references: [id], onDelete: Cascade)
 
   // Position in clock
-  position        Int      // Clock slot position (e.g. 4, 11, 19)
-  trackType       String   // "intro" | "back_announce_intro" | "back_announce"
+  position        Int      @default(0) // Clock slot position (e.g. 4, 11, 19); 0 for dedications
+  trackType       String   // "intro" | "back_announce_intro" | "back_announce" | "dedication"
+
+  // Dedication link
+  songRequestId   String?  // Link to SongRequest for dedications
 
   // Song context for script generation
   prevSongId      String?
