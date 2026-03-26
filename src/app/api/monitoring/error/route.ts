@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { createHash } from "crypto";
+import { logger } from "@/lib/logger";
 
 /**
  * POST /api/monitoring/error
@@ -84,7 +85,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("[monitoring/error] Failed to log error:", err);
+    logger.error("[monitoring/error] Failed to log error", { error: err instanceof Error ? err.message : String(err) });
     return NextResponse.json(
       { error: "Failed to log error" },
       { status: 500 }

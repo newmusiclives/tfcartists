@@ -15,14 +15,21 @@ function buildDJPhotoPrompt(dj: {
   background: string | null;
   vibe: string | null;
 }): string {
-  const parts = [
-    `Professional radio DJ portrait photo. ${dj.name}`,
-    dj.age ? `${dj.age} years old` : null,
-    dj.background ? `${dj.background}` : null,
-    dj.vibe ? `Vibe: ${dj.vibe}.` : null,
-    "Style: photorealistic headshot, warm studio lighting, radio station setting. No text or watermarks.",
-  ];
-  return parts.filter(Boolean).join(". ");
+  const ageDesc = dj.age ? `, ${dj.age} years old` : "";
+  const vibeDesc = dj.vibe ? ` Their personality: ${dj.vibe}.` : "";
+  const bgDesc = dj.background
+    ? ` Background context: ${dj.background.slice(0, 200)}.`
+    : "";
+
+  return (
+    `Professional headshot photograph of a radio DJ named ${dj.name}${ageDesc}.` +
+    `${vibeDesc}${bgDesc} ` +
+    `Realistic photograph with natural lighting, shallow depth of field. ` +
+    `Natural skin texture, authentic expression, no airbrushing. ` +
+    `Casual clothing suitable for a country/Americana radio host. ` +
+    `Warm-toned background suggesting a cozy radio studio. ` +
+    `Shot in the style of editorial magazine photography. No text, no watermarks, no logos.`
+  );
 }
 
 export async function POST(

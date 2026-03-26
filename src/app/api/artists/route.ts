@@ -130,6 +130,17 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Fire-and-forget webhook dispatch
+    import("@/lib/webhooks/dispatch").then(({ dispatchWebhook }) => {
+      dispatchWebhook("artist.created", {
+        artistId: artist.id,
+        name: artist.name,
+        genre: artist.genre,
+        discoverySource: artist.discoverySource,
+        createdAt: artist.createdAt,
+      }, session.user.organizationId || undefined).catch(() => {});
+    }).catch(() => {});
+
     return NextResponse.json({ artist }, { status: 201 });
   } catch (error) {
     logger.error("Error creating artist", { error });

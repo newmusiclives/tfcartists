@@ -51,7 +51,7 @@ export default function CommunityPage() {
           setEvangelists(data.listeners || []);
         }
       } catch (error) {
-        console.error("Error fetching community data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

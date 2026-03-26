@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertCircle, Home, RefreshCcw } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function ElliotError({
   error,
@@ -12,7 +13,7 @@ export default function ElliotError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Elliot error:", error);
+    logger.error("Elliot error", { message: error.message, digest: error.digest });
   }, [error]);
 
   return (

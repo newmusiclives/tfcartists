@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertCircle, Home, RefreshCcw } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function HarperError({
   error,
@@ -12,7 +13,7 @@ export default function HarperError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Harper error:", error);
+    logger.error("Harper error", { message: error.message, digest: error.digest });
   }, [error]);
 
   return (

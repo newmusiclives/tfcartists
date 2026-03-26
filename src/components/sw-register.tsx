@@ -26,7 +26,6 @@ export function ServiceWorkerRegister() {
               navigator.serviceWorker.controller
             ) {
               // New service worker activated — content has been cached for offline use
-              console.log("[SW] Updated and activated");
             }
           });
         });
@@ -43,16 +42,16 @@ export function ServiceWorkerRegister() {
                 "tfr-now-playing",
                 { minInterval: 60 * 1000 } // 1 minute minimum
               );
-              console.log("[SW] Periodic background sync registered");
+              // Periodic background sync registered
             }
           } catch {
             // Periodic sync not available — that's fine
           }
         }
 
-        console.log("[SW] Registered with scope:", registration.scope);
-      } catch (error) {
-        console.warn("[SW] Registration failed:", error);
+        // Service worker registered successfully
+      } catch {
+        // Service worker registration failed — non-critical
       }
     };
 
@@ -68,10 +67,10 @@ export function ServiceWorkerRegister() {
         const { syncAll } = await import("@/lib/offline-store");
         const synced = await syncAll();
         if (synced > 0) {
-          console.log(`[SW] Online — synced ${synced} queued actions`);
+          // Online — synced queued actions
         }
-      } catch (err) {
-        console.warn("[SW] Online sync failed:", err);
+      } catch {
+        // Online sync failed — non-critical
       }
     };
 

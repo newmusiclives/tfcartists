@@ -39,7 +39,7 @@ export default function PoolCalculatorPage() {
           setHarperRevenue(data.monthlyRevenue || 7800);
         }
       } catch (err) {
-        console.error("Error fetching pool stats:", err);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

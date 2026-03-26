@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Users, TrendingUp, Heart, BarChart3, Video, Share2, Clock, Target, UserCircle } from "lucide-react";
+import { ExportButtons } from "@/components/export-buttons";
 
 interface ElliotStats {
   totalListeners: number;
@@ -62,7 +63,7 @@ export default function ElliotDashboardPage() {
           setCampaigns((data.campaigns || []).slice(0, 4));
         }
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }
@@ -174,6 +175,7 @@ export default function ElliotDashboardPage() {
               </p>
             </div>
           </div>
+          <ExportButtons type="listeners" color="blue" />
         </div>
       </div>
 

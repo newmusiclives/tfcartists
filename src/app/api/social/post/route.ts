@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import {
+  postToTwitter,
+  postToFacebook,
+  postToInstagram,
+  postToTikTok,
+  type Platform,
+  type SocialPostResult,
+} from "@/lib/social/platforms";
 
 export const dynamic = "force-dynamic";
 
@@ -9,13 +17,23 @@ const DEFAULT_TEMPLATE =
   '\u{1F3B5} Now Playing on {station}: "{title}" by {artist} | Listen live: {url} #NowPlaying #{stationHashtag}';
 
 interface SocialPostBody {
-  platform: "twitter" | "facebook" | "instagram";
+  platform: "twitter" | "facebook" | "instagram" | "tiktok";
   content?: string;
   imageUrl?: string;
   songTitle: string;
   artistName: string;
   stationId?: string;
 }
+
+const PLATFORM_POSTERS: Record<
+  string,
+  (content: string, mediaUrl?: string) => Promise<SocialPostResult>
+> = {
+  twitter: postToTwitter,
+  facebook: postToFacebook,
+  instagram: postToInstagram,
+  tiktok: postToTikTok,
+};
 
 /**
  * Fill a post template with track data.
@@ -59,9 +77,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!["twitter", "facebook", "instagram"].includes(platform)) {
+    if (!["twitter", "facebook", "instagram", "tiktok"].includes(platform)) {
       return NextResponse.json(
-        { error: "platform must be twitter, facebook, or instagram" },
+        { error: "platform must be twitter, facebook, instagram, or tiktok" },
         { status: 400 }
       );
     }
@@ -109,6 +127,18 @@ export async function POST(req: NextRequest) {
       content = `${content} ${extra}`;
     }
 
+    // Attempt to post to the real platform API
+    const posterFn = PLATFORM_POSTERS[platform];
+    let apiResult: SocialPostResult | null = null;
+    let postStatus: "sent" | "logged" = "logged";
+
+    if (posterFn) {
+      apiResult = await posterFn(content, imageUrl || undefined);
+      if (apiResult.success) {
+        postStatus = "sent";
+      }
+    }
+
     // Build the post record
     const postRecord = {
       id: crypto.randomUUID(),
@@ -119,12 +149,13 @@ export async function POST(req: NextRequest) {
       artistName,
       stationId: station.id,
       stationName: station.name,
-      status: "logged" as const, // "logged" = stored only, "sent" = dispatched to API
+      status: postStatus,
+      platformPostId: apiResult?.postId || null,
+      error: apiResult?.error || null,
       createdAt: new Date().toISOString(),
     };
 
-    // TODO: When API keys are configured, dispatch to the real platform API here.
-    // For now, store the post in a Config-based JSON log.
+    // Store the post in a Config-based JSON log
     const logKey = "social_post_log";
     const existingLog = await prisma.config.findUnique({ where: { key: logKey } });
     const posts: typeof postRecord[] = existingLog
@@ -146,6 +177,7 @@ export async function POST(req: NextRequest) {
       songTitle,
       artistName,
       status: postRecord.status,
+      platformPostId: postRecord.platformPostId,
     });
 
     return NextResponse.json({

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { Radio, Mail, Rss, Calendar, Music, Users } from "lucide-react";
 import { NewsletterSignupForm } from "./signup-form";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 export const metadata: Metadata = {
   title: "Newsletter | TrueFans RADIO",
@@ -160,7 +161,7 @@ export default async function NewsletterPage() {
             </h3>
             <div
               className="newsletter-content prose prose-sm max-w-none"
-              dangerouslySetInnerHTML={{ __html: latestDigest.htmlContent }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(latestDigest.htmlContent) }}
             />
           </section>
         )}

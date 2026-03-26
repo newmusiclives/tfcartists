@@ -127,7 +127,7 @@ const endpoints = [
     "genre": "Americana, Country, Singer-Songwriter",
     "primaryColor": "#B45309",
     "secondaryColor": "#EA580C",
-    "streamUrl": "http://89.167.23.152:8000/americana-hq.mp3",
+    "streamUrl": "/stream/americana-hq.mp3",
     "isActive": true
   },
   "timestamp": "2026-03-25T15:30:00.000Z"

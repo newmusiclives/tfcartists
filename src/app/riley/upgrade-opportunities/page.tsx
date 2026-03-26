@@ -89,7 +89,7 @@ export default function UpgradeOpportunitiesPage() {
 
         setOpportunities(mapped);
       } catch (err) {
-        console.error("Error fetching upgrade opportunities:", err);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

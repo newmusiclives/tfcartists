@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { Play, Pause, Volume2, VolumeX, Headphones } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { useStation } from "@/contexts/StationContext";
+import { ListenerCount } from "@/components/listener-count";
 
 const DEFAULT_STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-hq.mp3";
 const NOW_PLAYING_URL = "/api/now-playing";
@@ -268,7 +269,6 @@ export function RadioPlayer() {
   const trackTitle = nowPlaying?.title || currentStation.name;
   const trackArtist = nowPlaying?.artist_name || currentStation.genre;
   const djName = nowPlaying?.dj_name;
-  const listenerCount = nowPlaying?.listener_count;
   const artworkUrl = nowPlaying?.artwork_url;
 
   const showActive = status === "playing";
@@ -448,12 +448,9 @@ export function RadioPlayer() {
               </span>
             </div>
 
-            {showActive && listenerCount != null && (
-              <div className="hidden lg:flex items-center space-x-1.5 text-sm text-amber-300/80">
-                <Headphones className="w-4 h-4" />
-                <span>{listenerCount.toLocaleString()}</span>
-              </div>
-            )}
+            <div className="hidden lg:block">
+              <ListenerCount mode="compact" />
+            </div>
 
             <div className="hidden sm:flex items-center space-x-2">
               <button

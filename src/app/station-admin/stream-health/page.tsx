@@ -570,11 +570,11 @@ export default function StreamHealthDashboard() {
                     },
                     {
                       label: "Stream URL",
-                      value: "http://89.167.23.152:8000/americana-hq.mp3",
+                      value: "/stream/americana-hq.mp3",
                     },
                     {
                       label: "Status Endpoint",
-                      value: "http://89.167.23.152:8000/status-json.xsl",
+                      value: "/stream/status-json.xsl",
                     },
                     {
                       label: "Last Check",

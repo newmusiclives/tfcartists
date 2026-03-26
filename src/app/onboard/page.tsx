@@ -80,7 +80,7 @@ export default function OnboardPage() {
       // Success! Show confirmation
       router.push(`/onboard/success?name=${encodeURIComponent(formData.name)}`);
     } catch (error) {
-      console.error("Error during onboarding:", error);
+      // Onboarding error — user sees alert below
       alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Users, Music, DollarSign, TrendingUp, Upload, CheckCircle, Clock, XCircle, Search, UserCircle, Play, Zap } from "lucide-react";
 import { ARTIST_CAPACITY, AIRPLAY_TIER_SHARES, AIRPLAY_TIER_PRICING, AIRPLAY_TIER_PLAYS_PER_MONTH } from "@/lib/calculations/station-capacity";
+import { ExportButtons } from "@/components/export-buttons";
 
 interface RileyStats {
   totalArtists: number;
@@ -82,7 +83,7 @@ export default function RileyDashboardPage() {
           );
         }
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }
@@ -187,6 +188,7 @@ export default function RileyDashboardPage() {
               </p>
             </div>
           </div>
+          <ExportButtons type="artists" color="purple" />
         </div>
       </div>
 

@@ -145,7 +145,35 @@ function getClientIp(req: NextRequest): string {
   );
 }
 
-export default auth((req) => {
+/**
+ * Custom domain → organization ID resolution.
+ *
+ * Maintains a short-lived in-memory cache so we don't hit the DB
+ * on every single request. The cache entry lives for 5 minutes.
+ *
+ * NOTE: We cannot import Prisma in Edge middleware. Instead we use a
+ * lightweight fetch to our own /api/branding?domain=... endpoint
+ * (which runs in Node) to resolve the org. On first cold-start this
+ * adds one internal round-trip; the cache eliminates it for subsequent
+ * requests within the TTL.
+ */
+const domainCache = new Map<string, { orgId: string | null; expiresAt: number }>();
+const DOMAIN_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function isCustomDomain(host: string): boolean {
+  const clean = host.split(":")[0].toLowerCase();
+  // Skip known platform domains — these are NOT custom
+  const platformHosts = [
+    "localhost",
+    "truefans-radio.netlify.app",
+    process.env.NEXT_PUBLIC_SITE_URL
+      ? new URL(process.env.NEXT_PUBLIC_SITE_URL).hostname
+      : "",
+  ].filter(Boolean);
+  return !platformHosts.some((h) => clean === h || clean.endsWith(`.${h}`));
+}
+
+export default auth(async (req) => {
   const { pathname } = req.nextUrl;
 
   // Handle preflight requests
@@ -177,8 +205,51 @@ export default auth((req) => {
     }
   }
 
+  // --- Custom domain resolution ---
+  const host = req.headers.get("host") || "";
+  let resolvedOrgId: string | null = null;
+
+  if (host && isCustomDomain(host)) {
+    const cleanHost = host.split(":")[0].toLowerCase();
+    const cached = domainCache.get(cleanHost);
+    if (cached && Date.now() < cached.expiresAt) {
+      resolvedOrgId = cached.orgId;
+    } else {
+      // Resolve via internal API call (runs in Node runtime)
+      try {
+        const origin = req.nextUrl.origin;
+        const res = await fetch(
+          `${origin}/api/branding?domain=${encodeURIComponent(cleanHost)}`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          resolvedOrgId = data.orgId || null;
+        }
+      } catch {
+        // Silently fall back — branding is non-critical
+      }
+      domainCache.set(cleanHost, {
+        orgId: resolvedOrgId,
+        expiresAt: Date.now() + DOMAIN_CACHE_TTL,
+      });
+    }
+  }
+
   // All pages are public — auth is optional for role-based UI
   const response = NextResponse.next();
+
+  // Propagate resolved org via request header so downstream code can read it
+  if (resolvedOrgId) {
+    response.headers.set("x-org-id", resolvedOrgId);
+    // Also set a cookie so client-side code (BrandProvider) can pick it up
+    response.cookies.set("x-org-id", resolvedOrgId, {
+      path: "/",
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60, // 1 hour
+    });
+  }
 
   // Track API response time — log slow requests (>2s)
   if (pathname.startsWith("/api")) {

@@ -81,6 +81,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Fire-and-forget webhook
+    import("@/lib/webhooks/dispatch").then(({ dispatchWebhook }) => {
+      dispatchWebhook("payment.received", {
+        paymentId: subscriptionResult.subscriptionId,
+        type,
+        tier,
+        entityId,
+        name,
+        receivedAt: new Date().toISOString(),
+      }).catch(() => {});
+    }).catch(() => {});
+
     return NextResponse.json({
       success: true,
       subscriptionId: subscriptionResult.subscriptionId,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Radio, Music, Users, DollarSign, Heart, TrendingUp, Clock, MapPin } from "lucide-react";
 import { StationName } from "@/components/station-name";
+import { ListenerCount } from "@/components/listener-count";
 
 export const metadata: Metadata = {
   title: "Station | TrueFans RADIO",
@@ -73,6 +74,10 @@ export default function StationPage() {
             A 24/7 Americana / Country / Singer-Songwriter station curated for warmth,
             storytelling, and authenticity.
           </p>
+
+          <div className="mt-8 flex justify-center">
+            <ListenerCount mode="full" />
+          </div>
         </div>
       </section>
 

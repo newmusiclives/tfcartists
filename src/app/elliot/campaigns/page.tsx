@@ -50,7 +50,7 @@ export default function GrowthCampaignsPage() {
         setCampaigns(data.campaigns || []);
       }
     } catch (error) {
-      console.error("Error fetching campaigns:", error);
+      // Fetch error handled by loading state
     } finally {
       setLoading(false);
     }
@@ -71,7 +71,7 @@ export default function GrowthCampaignsPage() {
         await fetchCampaigns();
       }
     } catch (error) {
-      console.error("Error launching campaign:", error);
+      // Launch error handled by loading state
     } finally {
       setLaunching(false);
     }

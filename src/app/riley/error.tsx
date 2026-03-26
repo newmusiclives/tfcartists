@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertCircle, Home, RefreshCcw } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function RileyError({
   error,
@@ -12,7 +13,7 @@ export default function RileyError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Riley error:", error);
+    logger.error("Riley error", { message: error.message, digest: error.digest });
   }, [error]);
 
   return (

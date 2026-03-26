@@ -8,6 +8,9 @@ import { CsrfProvider } from "@/components/csrf-provider";
 import { SessionProvider } from "@/components/session-provider";
 import { ServiceWorkerRegister } from "@/components/sw-register";
 import { ErrorBoundary } from "@/lib/monitoring/error-boundary";
+import { sanitizeHtml } from "@/lib/sanitize";
+import { resolveBranding } from "@/lib/branding-resolver";
+import { BrandProvider } from "@/components/brand-provider";
 import dynamic from "next/dynamic";
 const PWAInstallPrompt = dynamic(() => import("@/components/pwa-install-prompt").then(m => ({ default: m.PWAInstallPrompt })), { ssr: false });
 const DJChat = dynamic(() => import("@/components/dj-chat"), { ssr: false });
@@ -103,14 +106,32 @@ const GHL_WIDGET_ID = process.env.NEXT_PUBLIC_GHL_WIDGET_ID || "";
 const GHL_TRACKING_ID = process.env.NEXT_PUBLIC_GHL_TRACKING_ID || "";
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Resolve white-label branding for the current request
+  let branding;
+  try {
+    branding = await resolveBranding();
+  } catch {
+    branding = null;
+  }
+
+  const faviconUrl = branding?.favicon || "/icons/icon-192.png";
+  const themeColor = branding?.colors?.primary || THEME_COLOR;
+  const resolvedName = branding?.stationName || NETWORK_NAME;
+
   return (
     <html lang="en">
       <head>
+        {/* Dynamic favicon from white-label branding */}
+        {branding?.favicon && (
+          <link rel="icon" href={branding.favicon} />
+        )}
+        {/* Dynamic theme-color */}
+        <meta name="theme-color" content={themeColor} />
         {/* GoHighLevel Tracking Script */}
         {GHL_TRACKING_ID && (
           <script
@@ -128,7 +149,7 @@ export default function RootLayout({
             />
             <script
               dangerouslySetInnerHTML={{
-                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
+                __html: sanitizeHtml(`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`),
               }}
             />
           </>
@@ -144,6 +165,7 @@ export default function RootLayout({
         </a>
         <ErrorBoundary>
           <SessionProvider>
+            <BrandProvider orgId={branding?.orgId || undefined}>
             <LanguageProvider>
             <StationProvider>
               <ToastProvider>
@@ -155,6 +177,7 @@ export default function RootLayout({
               </ToastProvider>
             </StationProvider>
             </LanguageProvider>
+            </BrandProvider>
           </SessionProvider>
         </ErrorBoundary>
 

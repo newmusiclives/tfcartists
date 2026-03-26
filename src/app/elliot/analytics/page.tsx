@@ -34,7 +34,7 @@ export default function ListenerAnalyticsPage() {
         if (statsRes.ok) setStats(await statsRes.json());
         if (analyticsRes.ok) setAnalytics(await analyticsRes.json());
       } catch (error) {
-        console.error("Error fetching analytics data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

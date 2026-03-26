@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { STATION_TEMPLATES } from "@/lib/station-templates";
 import { generateWithOpenAI, saveAudioFile } from "@/lib/radio/voice-track-tts";
 import { getConfig } from "@/lib/config";
+import { logger } from "@/lib/logger";
 import OpenAI from "openai";
 
 export const dynamic = "force-dynamic";
@@ -160,7 +161,7 @@ Write it as a single flowing script — no labels, no annotations, just the word
       },
     });
   } catch (error) {
-    console.error("Demo generation error:", error);
+    logger.error("Demo generation error", { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json(
       { error: "Failed to generate demo. Please try again." },
       { status: 500 },

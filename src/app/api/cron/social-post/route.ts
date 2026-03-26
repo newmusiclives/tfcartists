@@ -4,6 +4,12 @@ import { logger } from "@/lib/logger";
 import { env } from "@/lib/env";
 import { logCronExecution, isCronSuspended } from "@/lib/cron/log";
 import { withCronLock } from "@/lib/cron/lock";
+import {
+  postToAllPlatforms,
+  type Platform,
+  type SocialPostResult,
+} from "@/lib/social/platforms";
+import { generateNowPlayingPost } from "@/lib/social/content-generator";
 
 export const dynamic = "force-dynamic";
 
@@ -92,10 +98,11 @@ export async function GET(req: NextRequest) {
       }
 
       const settings = JSON.parse(settingsRow.value);
-      const enabledPlatforms: string[] = [];
+      const enabledPlatforms: Platform[] = [];
       if (settings.twitterEnabled) enabledPlatforms.push("twitter");
       if (settings.facebookEnabled) enabledPlatforms.push("facebook");
       if (settings.instagramEnabled) enabledPlatforms.push("instagram");
+      if (settings.tiktokEnabled) enabledPlatforms.push("tiktok");
 
       if (enabledPlatforms.length === 0) {
         logger.info("No social platforms enabled — skipping");
@@ -205,71 +212,96 @@ export async function GET(req: NextRequest) {
         });
       }
 
-      // 5. Generate post content from template
-      const template = settings.postTemplate || DEFAULT_TEMPLATE;
+      // 5. Generate post content using content generator
       const hashtags: string[] = settings.hashtags || [];
-      const stationHashtag =
-        hashtags[0] ||
-        (station.callSign || station.name).replace(/[^a-zA-Z0-9]/g, "");
+      const extraHashtags = hashtags
+        .map((h: string) => (h.startsWith("#") ? h : `#${h}`));
       const siteUrl = settings.siteUrl || "https://truefans-radio.netlify.app";
 
-      let postContent = fillPostTemplate(template, {
-        title,
-        artist,
-        station: station.name,
-        url: siteUrl,
-        dj: djName,
-        stationHashtag,
-      });
+      // Use the custom template if set, otherwise use the content generator
+      const useCustomTemplate = Boolean(settings.postTemplate);
 
-      // Append extra hashtags
-      if (hashtags.length > 1) {
-        const extra = hashtags
-          .slice(1)
-          .map((h: string) => (h.startsWith("#") ? h : `#${h}`))
-          .join(" ");
-        postContent = `${postContent} ${extra}`;
+      // Generate platform-specific content via content generator (used for all platforms)
+      const generatedByPlatform: Record<string, { text: string; mediaUrl?: string }> = {};
+      for (const p of enabledPlatforms) {
+        if (useCustomTemplate) {
+          // Fill the user-defined template
+          const template = settings.postTemplate || DEFAULT_TEMPLATE;
+          const stationHashtag =
+            hashtags[0]?.replace(/^#/, "") ||
+            (station.callSign || station.name).replace(/[^a-zA-Z0-9]/g, "");
+          const filled = fillPostTemplate(template, {
+            title,
+            artist,
+            station: station.name,
+            url: siteUrl,
+            dj: djName,
+            stationHashtag,
+          });
+          generatedByPlatform[p] = { text: filled };
+        } else {
+          const generated = generateNowPlayingPost(
+            { title, artist, djName },
+            { name: station.name, listenUrl: siteUrl },
+            p,
+            extraHashtags
+          );
+          generatedByPlatform[p] = { text: generated.text, mediaUrl: generated.mediaUrl };
+        }
       }
 
-      // 6. Create post records for each enabled platform
-      const results: { platform: string; status: string }[] = [];
+      // 6. Post to all enabled platforms via real APIs
+      const apiResults: SocialPostResult[] = await postToAllPlatforms(
+        enabledPlatforms,
+        // Use the first platform's text as the base (all are similar for now-playing)
+        generatedByPlatform[enabledPlatforms[0]]?.text || "",
+        generatedByPlatform[enabledPlatforms[0]]?.mediaUrl
+      );
 
-      for (const platform of enabledPlatforms) {
-        // TODO: When API keys are configured, dispatch to real platform APIs:
-        //   - Twitter: POST https://api.twitter.com/2/tweets
-        //   - Facebook: POST https://graph.facebook.com/{page-id}/feed
-        //   - Instagram: POST https://graph.facebook.com/{ig-user-id}/media
+      // Build post records and store in log
+      const results: { platform: string; status: string; postId?: string | null; error?: string }[] = [];
+      const logKey = "social_post_log";
+      const existingLog = await prisma.config.findUnique({ where: { key: logKey } });
+      const posts = existingLog ? JSON.parse(existingLog.value) : [];
 
-        // For now, store in the post log
+      for (let i = 0; i < enabledPlatforms.length; i++) {
+        const platform = enabledPlatforms[i];
+        const apiResult = apiResults[i];
+        const content = generatedByPlatform[platform]?.text || "";
+        const postStatus = apiResult?.success ? "sent" : "logged";
+
         const postRecord = {
           id: crypto.randomUUID(),
           platform,
-          content: postContent,
-          imageUrl: null,
+          content,
+          imageUrl: generatedByPlatform[platform]?.mediaUrl || null,
           songTitle: title,
           artistName: artist,
           stationId: station.id,
           stationName: station.name,
-          status: "logged",
+          status: postStatus,
+          platformPostId: apiResult?.postId || null,
+          error: apiResult?.error || null,
           createdAt: new Date().toISOString(),
         };
 
-        // Append to log
-        const logKey = "social_post_log";
-        const existingLog = await prisma.config.findUnique({ where: { key: logKey } });
-        const posts = existingLog ? JSON.parse(existingLog.value) : [];
         posts.unshift(postRecord);
-        if (posts.length > 100) posts.length = 100;
-
-        await prisma.config.upsert({
-          where: { key: logKey },
-          update: { value: JSON.stringify(posts) },
-          create: { key: logKey, value: JSON.stringify(posts) },
+        results.push({
+          platform,
+          status: postStatus,
+          postId: apiResult?.postId,
+          error: apiResult?.error,
         });
-
-        results.push({ platform, status: "logged" });
-        logger.info("Social post logged", { platform, title, artist });
+        logger.info("Social post processed", { platform, title, artist, status: postStatus });
       }
+
+      // Trim log and persist
+      if (posts.length > 100) posts.length = 100;
+      await prisma.config.upsert({
+        where: { key: logKey },
+        update: { value: JSON.stringify(posts) },
+        create: { key: logKey, value: JSON.stringify(posts) },
+      });
 
       // 7. Update last post time and last song
       await prisma.config.upsert({

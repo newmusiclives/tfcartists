@@ -7,8 +7,8 @@ import { withCronLock } from "@/lib/cron/lock";
 
 export const dynamic = "force-dynamic";
 
-const ICECAST_STREAM_URL = "http://89.167.23.152:8000/americana-hq.mp3";
-const ICECAST_STATUS_URL = "http://89.167.23.152:8000/status-json.xsl";
+const ICECAST_STREAM_URL = process.env.ICECAST_URL || "/stream/americana-hq.mp3";
+const ICECAST_STATUS_URL = process.env.ICECAST_STATUS_URL || "/stream/status-json.xsl";
 const HISTORY_KEY = "stream_health_history";
 const UPTIME_KEY = "stream_uptime_stats";
 const MAX_HISTORY = 288; // 24 hours at 5-minute intervals

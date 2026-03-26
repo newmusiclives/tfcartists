@@ -99,7 +99,7 @@ export async function logCronExecution(opts: {
     }
   } catch {
     // Don't let logging failures break the cron job
-    console.error(`[cron-log] Failed to log ${opts.jobName} execution`);
+    logger.error(`[cron-log] Failed to log ${opts.jobName} execution`);
   }
 }
 

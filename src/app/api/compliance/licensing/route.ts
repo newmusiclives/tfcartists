@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -141,7 +142,7 @@ export async function GET(req: NextRequest) {
       artists: artistList,
     });
   } catch (error) {
-    console.error("[licensing] Error:", error);
+    logger.error("[licensing] Error", { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json(
       { error: "Failed to generate licensing report" },
       { status: 500 }

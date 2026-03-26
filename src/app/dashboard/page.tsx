@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, Users, TrendingUp, MessageCircle, DollarSign, Radio, Target, Award, Music, Settings, Building2 } from "lucide-react";
 import { StationName } from "@/components/station-name";
 import { prisma } from "@/lib/db";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 const NETWORK_NAME = process.env.NEXT_PUBLIC_NETWORK_NAME || "TrueFans RADIO";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://truefans-radio.netlify.app";
@@ -48,7 +49,7 @@ export default async function HomePage() {
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(JSON.stringify(jsonLd)) }}
       />
       {/* Navigation */}
       <nav className="border-b bg-white/80 backdrop-blur-sm">

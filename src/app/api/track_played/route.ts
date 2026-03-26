@@ -50,6 +50,17 @@ async function handleTrackPlayed(artist: string | null, title: string | null) {
     }
 
     logger.info("Track played", { artist, title, songId: song?.id || "not_found" });
+
+    // Fire-and-forget webhook
+    import("@/lib/webhooks/dispatch").then(({ dispatchWebhook }) => {
+      dispatchWebhook("track.played", {
+        songId: song?.id || null,
+        title,
+        artist,
+        playedAt: new Date().toISOString(),
+      }).catch(() => {});
+    }).catch(() => {});
+
     return NextResponse.json({ success: true });
   } catch (error) {
     logger.warn("track_played error", { error: String(error) });

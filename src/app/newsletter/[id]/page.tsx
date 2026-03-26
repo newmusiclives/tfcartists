@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { ArrowLeft, Calendar, Users } from "lucide-react";
 import { notFound } from "next/navigation";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -78,7 +79,7 @@ export default async function NewsletterEditionPage({ params }: Props) {
 
           <div
             className="p-6 newsletter-content prose prose-sm max-w-none"
-            dangerouslySetInnerHTML={{ __html: edition.htmlContent }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(edition.htmlContent) }}
           />
         </div>
       </div>

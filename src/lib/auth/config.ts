@@ -57,18 +57,24 @@ export const authConfig: NextAuthConfig = {
             return null;
           }
 
-          // Operator login: check OrganizationUser table using shared prisma instance
+          // Per-user login: check OrganizationUser table using shared prisma instance.
+          // Auto-detects email logins (contains @) OR falls through for any non-team username.
           try {
             const { prisma } = await import("@/lib/db");
 
             const orgUser = await prisma.organizationUser.findFirst({
-              where: { email: username, isActive: true },
+              where: { email: username.toLowerCase(), isActive: true },
               include: { organization: { select: { id: true, name: true } } },
             });
 
             if (orgUser?.passwordHash) {
               const isValid = await bcrypt.compare(password, orgUser.passwordHash);
               if (isValid) {
+                // Update last login timestamp (fire-and-forget)
+                prisma.organizationUser
+                  .update({ where: { id: orgUser.id }, data: { lastLoginAt: new Date() } })
+                  .catch((err: unknown) => logger.error("Failed to update lastLoginAt", { error: err }));
+
                 return {
                   id: orgUser.id,
                   name: orgUser.name,

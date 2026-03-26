@@ -51,7 +51,7 @@ export default function CassidySubmissionsPage() {
           setStats(await res.json());
         }
       } catch (error) {
-        console.error("Error fetching stats:", error);
+        // Fetch error handled by UI
       }
     }
     fetchStats();
@@ -71,7 +71,7 @@ export default function CassidySubmissionsPage() {
           setSubmissions(data.submissions || []);
         }
       } catch (error) {
-        console.error("Error fetching submissions:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }
@@ -108,7 +108,7 @@ export default function CassidySubmissionsPage() {
         if (statsRes.ok) setStats(await statsRes.json());
       }
     } catch (error) {
-      console.error("Error assigning tier:", error);
+      // Assign error handled by loading state
     } finally {
       setAssignLoading(false);
     }

@@ -114,21 +114,17 @@ export async function syncAll(): Promise<number> {
         if (action.id !== undefined) {
           await clearAction(action.id);
         }
-        console.warn(
-          `[OfflineStore] Discarded action "${action.action}" — server returned ${response.status}`
-        );
+        // Discarded — server returned client error, retrying won't help
       }
       // 5xx errors are left in the queue for the next sync attempt
     } catch {
       // Still offline or network error — leave in queue
-      console.warn(
-        `[OfflineStore] Failed to sync "${action.action}" — will retry later`
-      );
+      // Still offline or network error — leave in queue for next sync
     }
   }
 
   if (synced > 0) {
-    console.log(`[OfflineStore] Synced ${synced}/${actions.length} actions`);
+    // Synced successfully
   }
 
   return synced;

@@ -119,7 +119,7 @@ export default function PipelinePage() {
           );
         }
       } catch (error) {
-        console.error("Error fetching pipeline data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

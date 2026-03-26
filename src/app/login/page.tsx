@@ -4,9 +4,14 @@ import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { LogIn, Radio, AlertCircle, Building2, Users } from "lucide-react";
+import { LogIn, Radio, AlertCircle, Building2, Users, Mail } from "lucide-react";
 
 type LoginMode = "team" | "operator";
+
+/** Returns true when the value looks like an email address. */
+function looksLikeEmail(value: string): boolean {
+  return value.includes("@");
+}
 
 function LoginForm() {
   const router = useRouter();
@@ -19,6 +24,10 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Auto-detect mode when the user types an email address
+  const isEmailInput = looksLikeEmail(username);
+  const effectiveMode = isEmailInput ? "operator" : mode;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -26,9 +35,9 @@ function LoginForm() {
 
     try {
       // Both team and operator login go through the same NextAuth credentials provider.
-      // Team uses username (admin, riley, etc.), operator uses email.
+      // Team uses username (admin, riley, etc.), operator/user uses email.
       const result = await signIn("credentials", {
-        username,
+        username: username.trim(),
         password,
         redirect: false,
       });
@@ -36,8 +45,8 @@ function LoginForm() {
       if (result?.error) {
         setError("Invalid credentials. Please check your username/email and password.");
       } else if (result?.ok) {
-        // Operators go to their dashboard, team goes to admin
-        const redirect = mode === "operator" ? "/operator/dashboard" : callbackUrl;
+        // Email logins go to operator dashboard, team logins go to admin
+        const redirect = effectiveMode === "operator" ? "/operator/dashboard" : callbackUrl;
         router.push(redirect);
         router.refresh();
       }
@@ -100,18 +109,30 @@ function LoginForm() {
 
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1.5">
-                {mode === "team" ? "Username" : "Email"}
+                {effectiveMode === "operator" ? "Email" : "Username or Email"}
               </label>
-              <input
-                id="username"
-                type={mode === "operator" ? "email" : "text"}
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                placeholder={mode === "team" ? "e.g. admin, riley, harper" : "you@example.com"}
-                required
-                disabled={isLoading}
-              />
+              <div className="relative">
+                <input
+                  id="username"
+                  type={effectiveMode === "operator" ? "email" : "text"}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  placeholder={mode === "team" ? "e.g. admin, riley, or you@email.com" : "you@example.com"}
+                  required
+                  disabled={isLoading}
+                />
+                {isEmailInput && mode === "team" && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <Mail className="w-4 h-4 text-amber-600" />
+                  </span>
+                )}
+              </div>
+              {isEmailInput && mode === "team" && (
+                <p className="text-xs text-amber-600 mt-1">
+                  Detected email address — signing in as organization user
+                </p>
+              )}
             </div>
 
             <div>
@@ -134,7 +155,7 @@ function LoginForm() {
               type="submit"
               disabled={isLoading}
               className={`w-full text-white py-3 rounded-lg font-medium focus:ring-4 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 ${
-                mode === "team"
+                effectiveMode === "team"
                   ? "bg-purple-600 hover:bg-purple-700 focus:ring-purple-300"
                   : "bg-amber-700 hover:bg-amber-800 focus:ring-amber-300"
               }`}
@@ -153,19 +174,19 @@ function LoginForm() {
             </button>
           </form>
 
-          {mode === "operator" && (
+          {effectiveMode === "operator" && (
             <div className="mt-4 text-center">
               <Link href="/operator/signup" className="text-sm text-amber-700 hover:text-amber-800 font-medium">
-                Don't have an account? Sign up
+                Don&apos;t have an account? Sign up
               </Link>
             </div>
           )}
 
           <div className="mt-6 pt-5 border-t border-gray-200">
             <p className="text-xs text-gray-500 text-center">
-              {mode === "team"
-                ? "Contact your administrator for team credentials."
-                : "Operator accounts manage station programming and settings."}
+              {effectiveMode === "team"
+                ? "Contact your administrator for credentials. You can also sign in with your email."
+                : "Organization accounts manage station programming and settings."}
             </p>
           </div>
         </div>

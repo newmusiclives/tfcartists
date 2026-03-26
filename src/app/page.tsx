@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { sanitizeHtml } from "@/lib/sanitize";
 import {
   ArrowRight,
   Radio,
@@ -18,6 +19,7 @@ import {
   Sparkles,
   Play,
 } from "lucide-react";
+import { ListenerCount } from "@/components/listener-count";
 import { prisma } from "@/lib/db";
 
 const NETWORK_NAME = process.env.NEXT_PUBLIC_NETWORK_NAME || "TrueFans RADIO";
@@ -39,11 +41,41 @@ const jsonLd = {
     "AI-powered radio platform for independent artists, businesses, and communities.",
   url: SITE_URL,
   applicationCategory: "MultimediaApplication",
+  operatingSystem: "All",
   offers: {
     "@type": "AggregateOffer",
     lowPrice: "0",
     highPrice: "499",
     priceCurrency: "USD",
+  },
+};
+
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: NETWORK_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/logos/ncr-og.png`,
+  sameAs: [],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    url: `${SITE_URL}/contact`,
+  },
+};
+
+const radioJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "RadioStation",
+  name: process.env.NEXT_PUBLIC_STATION_NAME || "North Country Radio",
+  url: SITE_URL,
+  broadcastDisplayName: process.env.NEXT_PUBLIC_STATION_NAME || "North Country Radio",
+  broadcastTimezone: process.env.STATION_TIMEZONE || "America/Denver",
+  genre: process.env.NEXT_PUBLIC_STATION_GENRE || "Americana",
+  description: "24/7 AI-powered independent radio station championing local and independent artists.",
+  parentOrganization: {
+    "@type": "Organization",
+    name: NETWORK_NAME,
   },
 };
 
@@ -68,7 +100,15 @@ export default async function MarketingPage() {
     <main className="min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(JSON.stringify(jsonLd)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(JSON.stringify(orgJsonLd)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(JSON.stringify(radioJsonLd)) }}
       />
 
       {/* Navigation */}
@@ -164,6 +204,11 @@ export default async function MarketingPage() {
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900">24/7</div>
                 <div className="text-sm text-gray-500">Live Radio</div>
               </div>
+            </div>
+
+            {/* Live listener count */}
+            <div className="mt-8 flex justify-center">
+              <ListenerCount mode="full" />
             </div>
           </div>
         </div>

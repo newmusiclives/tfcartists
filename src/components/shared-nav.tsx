@@ -235,7 +235,7 @@ export function SharedNav() {
                 <button
                   onClick={() => toggleMenu("station")}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
-                    isActive("/station") || isActive("/station-admin") || isActive("/schedule") || isActive("/djs") || isActive("/capacity") || isActive("/revenue")
+                    isActive("/station") || isActive("/station-admin") || isActive("/schedule") || isActive("/djs") || isActive("/capacity") || isActive("/revenue") || isActive("/whats-playing")
                       ? "bg-amber-100 text-amber-700"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
@@ -254,6 +254,9 @@ export function SharedNav() {
                     </Link>
                     <Link href="/capacity" className={activeLinkClass("/capacity", "amber")}>
                       <span className="flex items-center space-x-2"><PieChart className="w-4 h-4" /><span>Capacity Calculator</span></span>
+                    </Link>
+                    <Link href="/whats-playing" className={activeLinkClass("/whats-playing", "amber")}>
+                      <span className="flex items-center space-x-2"><AudioLines className="w-4 h-4" /><span>What&apos;s Playing</span></span>
                     </Link>
                     <Link href="/schedule" className={activeLinkClass("/schedule", "amber")}>
                       <span className="flex items-center space-x-2"><CalendarDays className="w-4 h-4" /><span>DJ Schedule</span></span>
@@ -692,6 +695,7 @@ export function SharedNav() {
                 <div className="pl-4 pb-2 space-y-0.5">
                   <Link href="/revenue/projections" className="block px-4 py-2 text-sm font-semibold text-green-700">Revenue Model</Link>
                   <Link href="/capacity" className="block px-4 py-2 text-sm text-gray-600">Capacity Calculator</Link>
+                  <Link href="/whats-playing" className="block px-4 py-2 text-sm text-gray-600">What&apos;s Playing</Link>
                   <Link href="/schedule" className="block px-4 py-2 text-sm text-gray-600">DJ Schedule</Link>
                   <Link href="/djs" className="block px-4 py-2 text-sm text-gray-600">DJ Profiles</Link>
                   <Link href="/station" className="block px-4 py-2 text-sm text-gray-600">Station Info</Link>

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getConfig } from "@/lib/config";
 import { handleApiError } from "@/lib/api/errors";
+import { logger } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -86,12 +87,10 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
         );
         if (!response.ok && response.status !== 404) {
           // Log but don't fail — we still want to clear the local reference
-          console.warn(
-            `ElevenLabs voice deletion returned ${response.status}`
-          );
+          logger.warn(`ElevenLabs voice deletion returned ${response.status}`);
         }
       } catch (err) {
-        console.warn("Failed to delete voice from ElevenLabs:", err);
+        logger.warn("Failed to delete voice from ElevenLabs", { error: err instanceof Error ? err.message : String(err) });
       }
     }
 

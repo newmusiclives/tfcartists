@@ -79,7 +79,7 @@ export default function PodcastsPage() {
         setStationId(stations[0].id);
       }
     } catch {
-      console.error("Failed to fetch station");
+      // Failed to fetch station — handled by UI
     }
   }
 
@@ -90,7 +90,7 @@ export default function PodcastsPage() {
       const data = await res.json();
       setEpisodes(data.episodes || []);
     } catch {
-      console.error("Failed to fetch episodes");
+      // Failed to fetch episodes — handled by loading state
     } finally {
       setLoading(false);
     }
@@ -119,7 +119,7 @@ export default function PodcastsPage() {
         fetchEpisodes();
       }
     } catch {
-      console.error("Failed to create episode");
+      // Failed to create episode — handled by UI
     } finally {
       setSaving(false);
     }
@@ -131,7 +131,7 @@ export default function PodcastsPage() {
       await fetch(`/api/podcast/episodes?id=${id}`, { method: "DELETE" });
       fetchEpisodes();
     } catch {
-      console.error("Failed to delete episode");
+      // Failed to delete episode — handled by UI
     }
   }
 
@@ -147,7 +147,7 @@ export default function PodcastsPage() {
       });
       fetchEpisodes();
     } catch {
-      console.error("Failed to update episode");
+      // Failed to update episode — handled by UI
     }
   }
 

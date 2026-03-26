@@ -5,7 +5,7 @@ import http from "http";
 import https from "https";
 import { withCircuitBreaker } from "@/lib/ai/circuit-breaker";
 
-const STREAM_URL = process.env.ICECAST_URL || "http://89.167.23.152:8000/americana-hq.mp3";
+const STREAM_URL = process.env.ICECAST_URL || "/stream/americana-hq.mp3";
 const RAILWAY_URL = `${process.env.RAILWAY_BACKEND_URL || "https://tfc-radio-backend-production.up.railway.app"}/api/now_playing`;
 
 export const dynamic = "force-dynamic";

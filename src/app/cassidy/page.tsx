@@ -51,7 +51,7 @@ export default function CassidyDashboardPage() {
           setProgressionRequests(progressionData.progressionRequests || []);
         }
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

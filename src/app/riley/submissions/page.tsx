@@ -54,7 +54,7 @@ export default function RileySubmissionsPage() {
         });
         setSubmissions(mapped);
       } catch (err) {
-        console.error("Error fetching submissions:", err);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

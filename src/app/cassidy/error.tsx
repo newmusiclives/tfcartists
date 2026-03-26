@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertCircle, Home, RefreshCcw } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 export default function CassidyError({
   error,
@@ -12,7 +13,7 @@ export default function CassidyError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("Cassidy error:", error);
+    logger.error("Cassidy error", { message: error.message, digest: error.digest });
   }, [error]);
 
   return (

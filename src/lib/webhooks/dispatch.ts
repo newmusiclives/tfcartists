@@ -1,34 +1,29 @@
 import { createHmac } from "crypto";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { WEBHOOK_EVENT_LIST, WEBHOOK_EVENT_EXAMPLES } from "./events";
+import type { WebhookEventType } from "./events";
 
-/**
- * Webhook event types supported by TrueFans Radio.
- */
-export const WEBHOOK_EVENTS = [
-  "song.played",
-  "sponsor.new",
-  "artist.new",
-  "request.submitted",
-  "listener.milestone",
-  "ad.played",
-] as const;
+// Re-export for backward compatibility with existing imports
+export { WEBHOOK_EVENT_LIST as WEBHOOK_EVENTS, WEBHOOK_EVENT_EXAMPLES };
+export type { WebhookEventType as WebhookEvent };
 
-export type WebhookEvent = (typeof WEBHOOK_EVENTS)[number];
-
-export interface WebhookEndpoint {
+// Re-export types used by old UI/config routes (backward compat)
+export type WebhookEndpoint = {
   id: string;
   name: string;
   url: string;
   secret: string;
-  events: WebhookEvent[];
+  events: string[];
   enabled: boolean;
+  active?: boolean;
   createdAt: string;
   lastTriggered?: string;
   lastStatus?: "success" | "failed";
-}
+  organizationId?: string;
+};
 
-export interface WebhookDelivery {
+export type WebhookDelivery = {
   id: string;
   endpointId: string;
   endpointName: string;
@@ -38,52 +33,11 @@ export interface WebhookDelivery {
   timestamp: string;
   duration?: number;
   error?: string;
-}
-
-/** Example payloads for each event type (used in docs / test pings). */
-export const WEBHOOK_EVENT_EXAMPLES: Record<WebhookEvent, object> = {
-  "song.played": {
-    songId: "clx123abc",
-    title: "Summer Breeze",
-    artist: "The Sunny Days",
-    duration: 234,
-    playedAt: new Date().toISOString(),
-  },
-  "sponsor.new": {
-    sponsorId: "clx456def",
-    name: "Acme Corp",
-    dealValue: 500,
-    startDate: new Date().toISOString(),
-  },
-  "artist.new": {
-    artistId: "clx789ghi",
-    name: "New Artist",
-    genre: "Indie Rock",
-    submittedAt: new Date().toISOString(),
-  },
-  "request.submitted": {
-    requestId: "clx012jkl",
-    songTitle: "Midnight Drive",
-    requestedBy: "listener42",
-    submittedAt: new Date().toISOString(),
-  },
-  "listener.milestone": {
-    listenerId: "clx345mno",
-    milestone: "100_hours",
-    totalHours: 100,
-    achievedAt: new Date().toISOString(),
-  },
-  "ad.played": {
-    adId: "clx678pqr",
-    sponsorName: "Acme Corp",
-    duration: 30,
-    playedAt: new Date().toISOString(),
-  },
 };
 
-const WEBHOOK_CONFIG_KEY = "webhook_endpoints";
-const WEBHOOK_DELIVERIES_KEY = "webhook_deliveries";
-const MAX_DELIVERIES = 50;
+const MAX_RETRIES = 3;
+const RETRY_BASE_DELAY_MS = 1000; // 1s, 2s, 4s exponential backoff
+const DELIVERY_TIMEOUT_MS = 10000;
 
 /**
  * Sign a payload body with HMAC-SHA256.
@@ -93,15 +47,26 @@ export function signPayload(body: string, secret: string): string {
 }
 
 /**
- * Load all webhook endpoints from SystemConfig.
+ * Load all webhook endpoints from the database.
+ * If organizationId is provided, only returns that org's endpoints.
  */
-export async function getWebhookEndpoints(): Promise<WebhookEndpoint[]> {
+export async function getWebhookEndpoints(organizationId?: string): Promise<WebhookEndpoint[]> {
   try {
-    const config = await prisma.systemConfig.findUnique({
-      where: { key: WEBHOOK_CONFIG_KEY },
-    });
-    if (!config) return [];
-    return JSON.parse(config.value) as WebhookEndpoint[];
+    const where: Record<string, unknown> = {};
+    if (organizationId) where.organizationId = organizationId;
+
+    const endpoints = await prisma.webhookEndpoint.findMany({ where, orderBy: { createdAt: "desc" } });
+    return endpoints.map((ep) => ({
+      id: ep.id,
+      name: ep.name,
+      url: ep.url,
+      secret: ep.secret,
+      events: ep.events,
+      enabled: ep.active,
+      active: ep.active,
+      createdAt: ep.createdAt.toISOString(),
+      organizationId: ep.organizationId,
+    }));
   } catch (err) {
     logger.error("Failed to load webhook endpoints", { error: String(err) });
     return [];
@@ -109,59 +74,89 @@ export async function getWebhookEndpoints(): Promise<WebhookEndpoint[]> {
 }
 
 /**
- * Save webhook endpoints to SystemConfig.
+ * Save / upsert a webhook endpoint (used by old config route for backward compat).
  */
 export async function saveWebhookEndpoints(endpoints: WebhookEndpoint[]): Promise<void> {
-  await prisma.systemConfig.upsert({
-    where: { key: WEBHOOK_CONFIG_KEY },
-    create: {
-      key: WEBHOOK_CONFIG_KEY,
-      value: JSON.stringify(endpoints),
-      category: "webhooks",
-      label: "Webhook Endpoints",
-      encrypted: false,
-    },
-    update: {
-      value: JSON.stringify(endpoints),
-      updatedAt: new Date(),
-    },
-  });
+  // This is kept for backward compatibility but the new system uses direct Prisma calls.
+  // The old config route will be updated to use the new endpoints API.
+  for (const ep of endpoints) {
+    await prisma.webhookEndpoint.upsert({
+      where: { id: ep.id },
+      create: {
+        id: ep.id,
+        name: ep.name,
+        url: ep.url,
+        secret: ep.secret,
+        events: ep.events,
+        active: ep.enabled ?? true,
+        organizationId: ep.organizationId || "default",
+      },
+      update: {
+        name: ep.name,
+        url: ep.url,
+        secret: ep.secret,
+        events: ep.events,
+        active: ep.enabled ?? true,
+      },
+    });
+  }
 }
 
 /**
- * Load recent webhook deliveries from SystemConfig.
+ * Load recent webhook deliveries.
  */
-export async function getWebhookDeliveries(): Promise<WebhookDelivery[]> {
+export async function getWebhookDeliveries(endpointId?: string, limit = 50): Promise<WebhookDelivery[]> {
   try {
-    const config = await prisma.systemConfig.findUnique({
-      where: { key: WEBHOOK_DELIVERIES_KEY },
+    const where: Record<string, unknown> = {};
+    if (endpointId) where.endpointId = endpointId;
+
+    const deliveries = await prisma.webhookDelivery.findMany({
+      where,
+      orderBy: { deliveredAt: "desc" },
+      take: limit,
+      include: { endpoint: { select: { name: true } } },
     });
-    if (!config) return [];
-    return JSON.parse(config.value) as WebhookDelivery[];
+
+    return deliveries.map((d) => ({
+      id: d.id,
+      endpointId: d.endpointId,
+      endpointName: d.endpoint.name,
+      event: d.event,
+      status: d.success ? "success" : "failed",
+      statusCode: d.statusCode ?? undefined,
+      timestamp: d.deliveredAt.toISOString(),
+      duration: d.duration ?? undefined,
+      error: d.error ?? undefined,
+    }));
   } catch {
     return [];
   }
 }
 
 /**
- * Record a webhook delivery attempt.
+ * Record a webhook delivery attempt in the database.
  */
-async function recordDelivery(delivery: WebhookDelivery): Promise<void> {
+async function recordDelivery(delivery: {
+  endpointId: string;
+  event: string;
+  payload: object;
+  statusCode?: number;
+  response?: string;
+  success: boolean;
+  error?: string;
+  duration?: number;
+}): Promise<void> {
   try {
-    const existing = await getWebhookDeliveries();
-    const updated = [delivery, ...existing].slice(0, MAX_DELIVERIES);
-    await prisma.systemConfig.upsert({
-      where: { key: WEBHOOK_DELIVERIES_KEY },
-      create: {
-        key: WEBHOOK_DELIVERIES_KEY,
-        value: JSON.stringify(updated),
-        category: "webhooks",
-        label: "Webhook Delivery Log",
-        encrypted: false,
-      },
-      update: {
-        value: JSON.stringify(updated),
-        updatedAt: new Date(),
+    await prisma.webhookDelivery.create({
+      data: {
+        endpointId: delivery.endpointId,
+        event: delivery.event,
+        payload: delivery.payload as Record<string, unknown>,
+        statusCode: delivery.statusCode ?? null,
+        response: delivery.response ? delivery.response.slice(0, 1024) : null,
+        success: delivery.success,
+        error: delivery.error ?? null,
+        duration: delivery.duration ?? null,
       },
     });
   } catch (err) {
@@ -170,29 +165,11 @@ async function recordDelivery(delivery: WebhookDelivery): Promise<void> {
 }
 
 /**
- * Update an endpoint's last-triggered metadata after dispatch.
- */
-async function updateEndpointStatus(
-  endpointId: string,
-  status: "success" | "failed"
-): Promise<void> {
-  try {
-    const endpoints = await getWebhookEndpoints();
-    const idx = endpoints.findIndex((e) => e.id === endpointId);
-    if (idx === -1) return;
-    endpoints[idx].lastTriggered = new Date().toISOString();
-    endpoints[idx].lastStatus = status;
-    await saveWebhookEndpoints(endpoints);
-  } catch {
-    // best-effort
-  }
-}
-
-/**
- * Send a webhook to a single endpoint. Returns the delivery record.
+ * Send a single webhook with retry logic.
+ * Retries up to MAX_RETRIES times with exponential backoff on failure.
  */
 export async function sendWebhook(
-  endpoint: WebhookEndpoint,
+  endpoint: { id: string; name: string; url: string; secret: string },
   event: string,
   payload: object
 ): Promise<WebhookDelivery> {
@@ -203,85 +180,157 @@ export async function sendWebhook(
   });
 
   const signature = signPayload(body, endpoint.secret);
-  const start = Date.now();
-  const deliveryId = `del_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const timestamp = new Date().toISOString();
+  let lastError: string | undefined;
+  let lastStatusCode: number | undefined;
+  let lastDuration: number | undefined;
+  let lastResponse: string | undefined;
 
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    if (attempt > 0) {
+      // Exponential backoff: 1s, 2s, 4s
+      const delay = RETRY_BASE_DELAY_MS * Math.pow(2, attempt - 1);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
 
-    const res = await fetch(endpoint.url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Webhook-Signature": signature,
-        "X-Webhook-Event": event,
-        "User-Agent": "TrueFans-Radio-Webhook/1.0",
-      },
-      body,
-      signal: controller.signal,
-    });
+    const start = Date.now();
 
-    clearTimeout(timeout);
-    const duration = Date.now() - start;
-    const status = res.ok ? "success" : "failed";
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), DELIVERY_TIMEOUT_MS);
 
-    const delivery: WebhookDelivery = {
-      id: deliveryId,
-      endpointId: endpoint.id,
-      endpointName: endpoint.name,
-      event,
-      status,
-      statusCode: res.status,
-      timestamp: new Date().toISOString(),
-      duration,
-      error: res.ok ? undefined : `HTTP ${res.status}`,
-    };
+      const res = await fetch(endpoint.url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Webhook-Signature": signature,
+          "X-Webhook-Event": event,
+          "X-Webhook-Timestamp": timestamp,
+          "User-Agent": "TrueFans-Radio-Webhook/2.0",
+        },
+        body,
+        signal: controller.signal,
+      });
 
-    return delivery;
-  } catch (err) {
-    const duration = Date.now() - start;
-    const errorMsg = err instanceof Error ? err.message : String(err);
+      clearTimeout(timeout);
+      lastDuration = Date.now() - start;
+      lastStatusCode = res.status;
 
-    const delivery: WebhookDelivery = {
-      id: deliveryId,
-      endpointId: endpoint.id,
-      endpointName: endpoint.name,
-      event,
-      status: "failed",
-      timestamp: new Date().toISOString(),
-      duration,
-      error: errorMsg,
-    };
+      try {
+        lastResponse = await res.text();
+      } catch {
+        lastResponse = undefined;
+      }
 
-    return delivery;
+      if (res.ok) {
+        // Success: record and return
+        await recordDelivery({
+          endpointId: endpoint.id,
+          event,
+          payload,
+          statusCode: res.status,
+          response: lastResponse,
+          success: true,
+          duration: lastDuration,
+        });
+
+        return {
+          id: `del_${Date.now()}`,
+          endpointId: endpoint.id,
+          endpointName: endpoint.name,
+          event,
+          status: "success",
+          statusCode: res.status,
+          timestamp,
+          duration: lastDuration,
+        };
+      }
+
+      lastError = `HTTP ${res.status}`;
+    } catch (err) {
+      lastDuration = Date.now() - start;
+      lastError = err instanceof Error ? err.message : String(err);
+    }
+
+    // Log retry attempt
+    if (attempt < MAX_RETRIES) {
+      logger.info("Webhook delivery retry", {
+        endpointId: endpoint.id,
+        event,
+        attempt: attempt + 1,
+        error: lastError,
+      });
+    }
   }
+
+  // All retries exhausted: record failure
+  await recordDelivery({
+    endpointId: endpoint.id,
+    event,
+    payload,
+    statusCode: lastStatusCode,
+    response: lastResponse,
+    success: false,
+    error: lastError,
+    duration: lastDuration,
+  });
+
+  return {
+    id: `del_${Date.now()}`,
+    endpointId: endpoint.id,
+    endpointName: endpoint.name,
+    event,
+    status: "failed",
+    statusCode: lastStatusCode,
+    timestamp,
+    duration: lastDuration,
+    error: lastError,
+  };
 }
 
 /**
- * Dispatch a webhook event to all subscribed endpoints.
+ * Dispatch a webhook event to all subscribed, active endpoints.
+ *
+ * This is the main entry point. Call it from any API route:
+ *   dispatchWebhook("artist.created", { artistId: "...", name: "..." }, "org_123")
+ *
  * Fire-and-forget: does not throw, logs failures.
+ * If organizationId is omitted, dispatches to ALL active endpoints subscribed to the event.
  */
-export async function dispatchWebhook(event: string, payload: object): Promise<void> {
+export async function dispatchWebhook(
+  event: string,
+  payload: object,
+  organizationId?: string
+): Promise<void> {
   try {
-    const endpoints = await getWebhookEndpoints();
-    const subscribers = endpoints.filter(
-      (ep) => ep.enabled && ep.events.includes(event as WebhookEvent)
-    );
+    const where: Record<string, unknown> = {
+      active: true,
+      events: { has: event },
+    };
+    if (organizationId) where.organizationId = organizationId;
 
-    if (subscribers.length === 0) return;
+    const endpoints = await prisma.webhookEndpoint.findMany({ where });
 
-    logger.info("Dispatching webhook", { event, endpointCount: subscribers.length });
+    if (endpoints.length === 0) return;
 
-    // Fire-and-forget: run all in parallel, don't await in caller's hot path
+    logger.info("Dispatching webhook", { event, endpointCount: endpoints.length });
+
+    // Fire-and-forget: run all in parallel
     Promise.allSettled(
-      subscribers.map(async (endpoint) => {
-        const delivery = await sendWebhook(endpoint, event, payload);
-        await recordDelivery(delivery);
-        await updateEndpointStatus(endpoint.id, delivery.status);
+      endpoints.map(async (endpoint) => {
+        const delivery = await sendWebhook(
+          {
+            id: endpoint.id,
+            name: endpoint.name,
+            url: endpoint.url,
+            secret: endpoint.secret,
+          },
+          event,
+          payload
+        );
 
         if (delivery.status === "failed") {
-          logger.warn("Webhook delivery failed", {
+          logger.warn("Webhook delivery failed after retries", {
             endpointId: endpoint.id,
             endpointName: endpoint.name,
             event,

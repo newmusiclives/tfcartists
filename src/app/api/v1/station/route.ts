@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-const STREAM_URL = process.env.ICECAST_URL || "http://89.167.23.152:8000/americana-hq.mp3";
+const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-hq.mp3";
 
 /**
  * GET /api/v1/station

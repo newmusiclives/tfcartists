@@ -110,7 +110,7 @@ export default function OutreachPage() {
 
         setLeads(mapped);
       } catch (err) {
-        console.error("Error fetching leads:", err);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

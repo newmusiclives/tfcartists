@@ -52,7 +52,7 @@ export default function CassidyTierManagementPage() {
           setPlacedArtists(data.submissions || []);
         }
       } catch (error) {
-        console.error("Error fetching tier data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

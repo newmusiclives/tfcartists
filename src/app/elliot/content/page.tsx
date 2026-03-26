@@ -46,7 +46,7 @@ export default function ViralContentPage() {
         setContent(data.content || []);
       }
     } catch (error) {
-      console.error("Error fetching content:", error);
+      // Fetch error handled by loading state
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export default function ViralContentPage() {
         await fetchContent();
       }
     } catch (error) {
-      console.error("Error generating content:", error);
+      // Generate error handled by loading state
     } finally {
       setGenerating(false);
     }

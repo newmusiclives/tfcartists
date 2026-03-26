@@ -161,41 +161,54 @@ export async function generatePcmWithOpenAI(text: string, voice: string): Promis
 
 export async function generateWithGemini(text: string, voice: string, voiceDirection?: string | null): Promise<{ buffer: Buffer; ext: string }> {
   const apiKey = process.env.GOOGLE_API_KEY;
-  if (!apiKey) throw new Error("GOOGLE_API_KEY not configured");
+  if (!apiKey) {
+    logger.warn("GOOGLE_API_KEY not configured — falling back to OpenAI TTS");
+    return generateWithOpenAI(text, "shimmer");
+  }
 
-  return withRetry(async () => {
-    const ai = new GoogleGenAI({ apiKey });
+  try {
+    return await withRetry(async () => {
+      const ai = new GoogleGenAI({ apiKey });
 
-    const direction = voiceDirection
-      ? `Voice direction: ${voiceDirection}\n\nSpeak this text: "${text}"`
-      : `"${text}"`;
-    const prompt = direction;
+      const direction = voiceDirection
+        ? `Voice direction: ${voiceDirection}\n\nSpeak this text: "${text}"`
+        : `"${text}"`;
+      const prompt = direction;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-tts",
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      config: {
-        responseModalities: ["AUDIO"],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: {
-              voiceName: voice || "Leda",
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash-preview-tts",
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        config: {
+          responseModalities: ["AUDIO"],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: {
+                voiceName: voice || "Leda",
+              },
             },
           },
         },
-      },
-    });
+      });
 
-    const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-    if (!audioData) {
-      throw new Error("Gemini returned no audio data");
+      const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if (!audioData) {
+        throw new Error("Gemini returned no audio data");
+      }
+
+      const pcmBuffer = Buffer.from(audioData, "base64");
+      const wavBuffer = pcmToWav(pcmBuffer);
+
+      return { buffer: wavBuffer, ext: "wav" };
+    }, { label: "Gemini TTS", baseDelayMs: 2000 });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // On auth/permission errors, fall back to OpenAI instead of failing the whole track
+    if (msg.includes("401") || msg.includes("403") || msg.includes("Unauthorized") || msg.includes("Forbidden") || msg.includes("PERMISSION_DENIED")) {
+      logger.warn("Gemini TTS auth failed — falling back to OpenAI TTS", { error: msg });
+      return generateWithOpenAI(text, "shimmer");
     }
-
-    const pcmBuffer = Buffer.from(audioData, "base64");
-    const wavBuffer = pcmToWav(pcmBuffer);
-
-    return { buffer: wavBuffer, ext: "wav" };
-  }, { label: "Gemini TTS", baseDelayMs: 2000 });
+    throw err;
+  }
 }
 
 interface GenerateAudioResult {

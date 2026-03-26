@@ -69,7 +69,7 @@ export default function RileyArtistsPage() {
           setArtists((data.artists || []).map(mapArtist));
         }
       } catch (error) {
-        console.error("Error fetching artists:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

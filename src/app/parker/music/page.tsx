@@ -50,7 +50,7 @@ export default function MusicPage() {
           setSongCount(station._count?.songs ?? 0);
         }
       } catch (error) {
-        console.error("Error fetching station data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }

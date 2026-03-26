@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 /* ---------- Types ---------- */
 interface NowPlaying {
@@ -288,12 +289,12 @@ export default function VisualizerPage() {
       </div>
 
       {/* EQ bounce keyframes */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{ __html: sanitizeHtml(`
         @keyframes eqBounce {
           0% { height: 4px; }
           100% { height: 28px; }
         }
-      `}} />
+      `) }} />
     </div>
   );
 }

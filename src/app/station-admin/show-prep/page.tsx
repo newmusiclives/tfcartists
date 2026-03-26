@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { SharedNav } from "@/components/shared-nav";
 import {
   FileText,
@@ -630,10 +631,10 @@ export default function ShowPrepPage() {
                                     </span>
                                     <span
                                       dangerouslySetInnerHTML={{
-                                        __html: formatted.replace(
+                                        __html: sanitizeHtml(formatted.replace(
                                           /^[-*]\s/,
                                           ""
-                                        ),
+                                        )),
                                       }}
                                     />
                                   </div>
@@ -653,10 +654,10 @@ export default function ShowPrepPage() {
                                     </span>
                                     <span
                                       dangerouslySetInnerHTML={{
-                                        __html: formatted.replace(
+                                        __html: sanitizeHtml(formatted.replace(
                                           /^\d+\.\s/,
                                           ""
-                                        ),
+                                        )),
                                       }}
                                     />
                                   </div>
@@ -673,7 +674,7 @@ export default function ShowPrepPage() {
                                   key={lineIdx}
                                   className="mb-1"
                                   dangerouslySetInnerHTML={{
-                                    __html: formatted,
+                                    __html: sanitizeHtml(formatted),
                                   }}
                                 />
                               );

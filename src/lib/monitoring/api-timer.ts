@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 
 const SLOW_THRESHOLD_MS = 5000;
 
@@ -36,9 +37,7 @@ export function withApiTimer(
       updateTimerStats(endpointName, duration).catch(() => {});
 
       if (duration > SLOW_THRESHOLD_MS) {
-        console.warn(
-          `[api-timer] Slow response: ${endpointName} took ${duration}ms (threshold: ${SLOW_THRESHOLD_MS}ms)`
-        );
+        logger.warn(`[api-timer] Slow response: ${endpointName} took ${duration}ms`, { threshold: SLOW_THRESHOLD_MS });
       }
 
       return response;
@@ -47,9 +46,7 @@ export function withApiTimer(
       updateTimerStats(endpointName, duration).catch(() => {});
 
       if (duration > SLOW_THRESHOLD_MS) {
-        console.warn(
-          `[api-timer] Slow + failed response: ${endpointName} took ${duration}ms`
-        );
+        logger.warn(`[api-timer] Slow + failed response: ${endpointName} took ${duration}ms`);
       }
 
       throw err;

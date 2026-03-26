@@ -1504,7 +1504,7 @@ export default function RadioClocksPage() {
         const errMsg = !tRes.ok
           ? `Templates: ${tRes.status} ${tRes.statusText}`
           : `Assignments: ${aRes.status} ${aRes.statusText}`;
-        console.error("Clock API error:", errMsg);
+        // Clock API error — user sees toast
         showToast(`Failed to load clocks (${errMsg})`);
       } else {
         const tData = await tRes.json();
@@ -1513,7 +1513,7 @@ export default function RadioClocksPage() {
         setAssignments(Array.isArray(aData) ? aData : aData.assignments || []);
       }
     } catch (err) {
-      console.error("Failed to fetch templates/assignments:", err);
+      // Failed to fetch templates/assignments — user sees toast
       showToast("Network error loading clocks");
     }
 
@@ -1525,7 +1525,7 @@ export default function RadioClocksPage() {
         setDjs(Array.isArray(dData) ? dData : dData.djs || []);
       }
     } catch (err) {
-      console.error("Failed to fetch DJs:", err);
+      // Failed to fetch DJs — non-critical
     }
 
     setLoading(false);

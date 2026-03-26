@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, DollarSign, Building2, TrendingUp, Phone, Calendar, Target, UserCircle, Send, Radio, CreditCard, GitBranch, Loader2 } from "lucide-react";
 import { SPONSOR_AD_SPOTS, SPONSOR_PRICING } from "@/lib/calculations/station-capacity";
+import { ExportButtons } from "@/components/export-buttons";
 
 interface HarperStats {
   totalSponsors: number;
@@ -72,7 +73,7 @@ export default function HarperDashboardPage() {
           setDeals(data.deals || []);
         }
       } catch (error) {
-        console.error("Error fetching Harper data:", error);
+        // Fetch error handled by loading state
       } finally {
         setLoading(false);
       }
@@ -136,6 +137,7 @@ export default function HarperDashboardPage() {
               </p>
             </div>
           </div>
+          <ExportButtons type="sponsors" color="green" />
         </div>
       </div>
 

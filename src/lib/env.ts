@@ -6,6 +6,7 @@
  */
 
 import { z } from "zod";
+import { logger } from "@/lib/logger";
 
 const envSchema = z.object({
   // Database (optional during build, required at runtime)
@@ -85,7 +86,7 @@ const validateEnv = () => {
   const parsed = envSchema.safeParse(process.env);
 
   if (!parsed.success) {
-    console.error("❌ Invalid environment variables:", parsed.error.flatten().fieldErrors);
+    logger.error("Invalid environment variables", { fields: parsed.error.flatten().fieldErrors });
     throw new Error("Invalid environment variables");
   }
 
@@ -96,8 +97,7 @@ const validateEnv = () => {
   const isBuildTime = process.env.npm_lifecycle_event === 'build' || process.env.NETLIFY === 'true';
 
   if (!isBuildTime && !env.OPENAI_API_KEY && !env.ANTHROPIC_API_KEY) {
-    console.warn("⚠️  No AI provider API key configured (OPENAI_API_KEY or ANTHROPIC_API_KEY)");
-    console.warn("⚠️  AI features will not work until you configure at least one provider.");
+    logger.warn("No AI provider API key configured (OPENAI_API_KEY or ANTHROPIC_API_KEY). AI features will not work until you configure at least one provider.");
   }
 
   // Strict production requirements (skip during build time)
@@ -112,7 +112,7 @@ const validateEnv = () => {
 
     // Validate NEXTAUTH_SECRET strength in production
     if (env.NEXTAUTH_SECRET && env.NEXTAUTH_SECRET.length < 32) {
-      console.error("❌ NEXTAUTH_SECRET must be at least 32 characters in production");
+      logger.error("NEXTAUTH_SECRET must be at least 32 characters in production");
       throw new Error("NEXTAUTH_SECRET too weak for production");
     }
 
@@ -131,14 +131,13 @@ const validateEnv = () => {
 
     // Fail hard on missing critical variables
     if (missingCriticalVars.length > 0) {
-      console.error("❌ CRITICAL: Missing required production variables:", missingCriticalVars.join(", "));
+      logger.error("CRITICAL: Missing required production variables", { missing: missingCriticalVars.join(", ") });
       throw new Error(`Production deployment failed: Missing critical environment variables: ${missingCriticalVars.join(", ")}`);
     }
 
     // Warn about missing optional variables
     if (missingOptionalVars.length > 0) {
-      console.warn("⚠️  Production deployment missing optional variables:", missingOptionalVars.join(", "));
-      console.warn("⚠️  Some features may not work without these variables.");
+      logger.warn("Production deployment missing optional variables. Some features may not work.", { missing: missingOptionalVars.join(", ") });
     }
 
     // Production environment validation passed
