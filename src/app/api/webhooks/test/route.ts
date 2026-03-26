@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Send a test event with example payload
-    const testEvent = "song.played";
+    const testEvent = "track.played";
     const testPayload = {
       _test: true,
       _message: "This is a test webhook delivery from TrueFans Radio",
