@@ -151,7 +151,7 @@ async function recordDelivery(delivery: {
       data: {
         endpointId: delivery.endpointId,
         event: delivery.event,
-        payload: delivery.payload as Record<string, unknown>,
+        payload: JSON.parse(JSON.stringify(delivery.payload)),
         statusCode: delivery.statusCode ?? null,
         response: delivery.response ? delivery.response.slice(0, 1024) : null,
         success: delivery.success,

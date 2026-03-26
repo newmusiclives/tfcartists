@@ -1,4 +1,7 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: {
@@ -13,5 +16,5 @@ export default function PortalLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <Suspense>{children}</Suspense>;
 }
