@@ -83,39 +83,65 @@ export default function ShowReelPage() {
     setPlayingIdx(null);
     setLoadingStep(0);
 
-    // Animate through steps
-    const stepInterval = setInterval(() => {
-      setLoadingStep((s) => Math.min(s + 1, GENERATION_STEPS.length - 1));
-    }, 8000);
+    const segments: Segment[] = [];
+    const djNames = ["Hank", "Loretta Merrick", "Doc", "Cody"];
 
     try {
-      const res = await fetch("/api/showreel/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      // Generate each segment one at a time (avoids serverless timeout)
+      for (let i = 0; i < 4; i++) {
+        // Update loading step: each DJ has 2 steps (writing + recording)
+        setLoadingStep(i * 2);
+
+        const res = await fetch("/api/showreel/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            stationName: stationName.trim(),
+            tagline: tagline.trim() || undefined,
+            genre,
+            venueName: venueName.trim() || undefined,
+            prospectName: prospectName.trim() || undefined,
+            segmentIndex: i,
+          }),
+        });
+
+        setLoadingStep(i * 2 + 1);
+
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.error || `Failed to generate ${djNames[i]}'s segment`);
+        }
+
+        const segment = await res.json();
+        segments.push({
+          djName: segment.djName,
+          slot: segment.slot,
+          timeLabel: segment.timeLabel,
+          script: segment.script,
+          audioUrl: segment.audioUrl,
+          isPersonalized: segment.isPersonalized,
+        });
+
+        // Show partial results as they arrive
+        setResult({
           stationName: stationName.trim(),
-          tagline: tagline.trim() || undefined,
+          tagline: tagline.trim() || genre,
           genre,
-          venueName: venueName.trim() || undefined,
-          prospectName: prospectName.trim() || undefined,
-        }),
-      });
+          venueName: venueName.trim() || null,
+          prospectName: prospectName.trim() || null,
+          usedElevenLabs: segments.some((s) => s.isPersonalized),
+          segments: [...segments],
+        });
 
-      clearInterval(stepInterval);
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to generate show reel");
+        if (i === 0) {
+          setTimeout(() => {
+            resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 300);
+        }
       }
 
-      const data: ShowReelResult = await res.json();
-      setResult(data);
-
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 300);
+      setLoadingStep(GENERATION_STEPS.length - 1);
     } catch (err) {
-      clearInterval(stepInterval);
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
