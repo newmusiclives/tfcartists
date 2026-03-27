@@ -11,8 +11,10 @@ import {
   amplifyPcm,
   pcmToWav,
   saveAudioFile,
+  generatePcmWithElevenLabs,
 } from "@/lib/radio/voice-track-tts";
 import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
+import { trackAiSpend } from "@/lib/ai/spend-tracker";
 import OpenAI from "openai";
 
 const voiceMap: Record<string, string> = {
@@ -24,8 +26,7 @@ const VOICE_GAIN = 3.5;
 
 /**
  * Generate TTS audio for a sponsor ad and save it.
- * This is the same logic as the /api/sponsor-ads/[id]/generate-audio route,
- * but callable as a plain function (no HTTP request/response).
+ * Supports OpenAI and ElevenLabs TTS providers.
  */
 export async function generateSponsorAdAudio(adId: string): Promise<void> {
   const ad = await prisma.sponsorAd.findUnique({
@@ -38,6 +39,34 @@ export async function generateSponsorAdAudio(adId: string): Promise<void> {
     return;
   }
 
+  // Check if station has an ElevenLabs DJ voice to use for ads
+  const stationDj = await prisma.dJ.findFirst({
+    where: { stationId: ad.stationId, ttsProvider: "elevenlabs", voiceProfileId: { not: null }, isActive: true },
+    select: { voiceProfileId: true, voiceStability: true, voiceSimilarityBoost: true },
+  });
+
+  let rawPcm: Buffer;
+  let provider: string;
+
+  if (stationDj?.voiceProfileId) {
+    // Use ElevenLabs cloned voice
+    const elevenLabsKey = await getConfig("ELEVENLABS_API_KEY");
+    if (!elevenLabsKey) {
+      logger.warn("generateSponsorAdAudio: ELEVENLABS_API_KEY not configured, falling back to OpenAI");
+    } else {
+      rawPcm = await generatePcmWithElevenLabs(ad.scriptText, stationDj.voiceProfileId, {
+        stability: stationDj.voiceStability ?? 0.75,
+        similarityBoost: stationDj.voiceSimilarityBoost ?? 0.75,
+      });
+      provider = "elevenlabs";
+      await trackAiSpend({ provider: "elevenlabs", operation: "tts", cost: (ad.scriptText.length / 1000) * 0.30, characters: ad.scriptText.length });
+
+      const boostedPcm = amplifyPcm(rawPcm!, VOICE_GAIN);
+      return finalizeSponsorAd(ad, boostedPcm, adId);
+    }
+  }
+
+  // Fall back to OpenAI
   const apiKey = await getConfig("OPENAI_API_KEY");
   if (!apiKey) {
     logger.warn("generateSponsorAdAudio: OPENAI_API_KEY not configured");
@@ -68,9 +97,19 @@ export async function generateSponsorAdAudio(adId: string): Promise<void> {
     response_format: "pcm",
   });
 
-  const rawPcm = Buffer.from(await response.arrayBuffer());
+  rawPcm = Buffer.from(await response.arrayBuffer());
+  await trackAiSpend({ provider: "openai", operation: "tts", cost: 0.015, characters: ad.scriptText.length });
   const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
 
+  await finalizeSponsorAd(ad, boostedPcm, adId);
+}
+
+/** Mix with music bed (if any), save WAV, and update the DB record */
+async function finalizeSponsorAd(
+  ad: { adTitle: string; musicBed?: { filePath: string | null } | null },
+  boostedPcm: Buffer,
+  adId: string,
+): Promise<void> {
   // Mix with music bed if the ad has one assigned
   let finalPcm = boostedPcm;
   if (ad.musicBed?.filePath) {

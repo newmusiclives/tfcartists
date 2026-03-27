@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 
-const MONTHLY_BUDGET = parseFloat(process.env.AI_MONTHLY_BUDGET || "200"); // $200/month default
+const MONTHLY_BUDGET = parseFloat(process.env.AI_MONTHLY_BUDGET || "250"); // $250/month default (ElevenLabs Creator + AI)
 const ALERT_THRESHOLDS = [0.5, 0.75, 0.9, 1.0]; // Alert at 50%, 75%, 90%, 100%
 
 /**

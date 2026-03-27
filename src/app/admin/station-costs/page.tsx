@@ -18,27 +18,46 @@ import {
   Server,
   ToggleLeft,
   ToggleRight,
+  AlertTriangle,
+  Info,
 } from "lucide-react";
 
-// --- Cost constants ---
-const TTS_HD_RATE = 0.03; // per 1K chars
-const TTS_STD_RATE = 0.015;
+// --- TTS Provider Pricing ---
+// OpenAI
+const OPENAI_HD_RATE = 0.03; // per 1K chars
+const OPENAI_STD_RATE = 0.015;
+// Gemini
+const GEMINI_RATE = 0.004; // per generation (flat)
+// ElevenLabs subscription plans
+const ELEVENLABS_PLANS = [
+  { name: "Creator", price: 22, chars: 100_000, overageRate: 0.30 },
+  { name: "Pro", price: 99, chars: 500_000, overageRate: 0.24 },
+  { name: "Scale", price: 330, chars: 2_000_000, overageRate: 0.18 },
+  { name: "Business", price: 1320, chars: 11_000_000, overageRate: 0.12 },
+] as const;
+
+// AI Chat costs
 const CHAT_INPUT_RATE = 0.15 / 1_000_000; // per token
 const CHAT_OUTPUT_RATE = 0.6 / 1_000_000;
+
+// Other costs
 const SMS_RATE = 0.02; // avg per text
 const RAILWAY_COST = 5;
 const INFRA_COST = 0;
 
+// Character counts per audio type
 const VOICE_TRACK_CHARS = 300;
 const TRANSITION_CHARS = 500;
 const FEATURE_CHARS = 400;
 const IMAGING_CHARS = 200;
 const SPONSOR_AD_CHARS = 400;
 
+// Daily generation counts
 const TRANSITIONS_PER_DAY = 16;
 const FEATURES_PER_DAY = 20;
 const IMAGING_PER_DAY = 30;
 
+// Chat token counts per type
 const DJ_SCRIPT_TOKENS = 2000;
 const FEATURE_CONTENT_TOKENS = 3000;
 const OUTREACH_TOKENS = 2000;
@@ -60,8 +79,16 @@ const SPONSOR_TIERS = [
   { name: "Tier 3", price: 300 },
 ];
 
+type TTSProvider = "openai-hd" | "openai-std" | "elevenlabs" | "gemini";
+
 function fmt(n: number): string {
   return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function fmtK(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
+  return n.toString();
 }
 
 function Slider({
@@ -143,14 +170,14 @@ function Toggle({
   );
 }
 
-function CostRow({ label, amount, icon }: { label: string; amount: number; icon?: React.ReactNode }) {
+function CostRow({ label, amount, icon, highlight }: { label: string; amount: number; icon?: React.ReactNode; highlight?: boolean }) {
   return (
-    <div className="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">
+    <div className={`flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0 ${highlight ? "bg-amber-50 -mx-2 px-2 rounded" : ""}`}>
       <div className="flex items-center gap-2">
         {icon}
         <span className="text-sm text-gray-700">{label}</span>
       </div>
-      <span className="text-sm font-semibold text-gray-900">${fmt(amount)}</span>
+      <span className={`text-sm font-semibold ${highlight ? "text-amber-700" : "text-gray-900"}`}>${fmt(amount)}</span>
     </div>
   );
 }
@@ -160,42 +187,84 @@ export default function StationCostsPage() {
   const [numDJs, setNumDJs] = useState(4);
   const [tracksPerHour, setTracksPerHour] = useState(3);
   const [liveHours, setLiveHours] = useState(12);
-  const [useHDTTS, setUseHDTTS] = useState(true);
+  const [ttsProvider, setTTSProvider] = useState<TTSProvider>("elevenlabs");
+  const [elevenLabsPlan, setElevenLabsPlan] = useState(0); // index into ELEVENLABS_PLANS (Creator)
   const [smsPerDay, setSmsPerDay] = useState(50);
   const [sponsorAdsPerDay, setSponsorAdsPerDay] = useState(5);
 
   // --- Optimization toggles ---
-  const [optStdTTS, setOptStdTTS] = useState(false);
   const [optReduceTracks, setOptReduceTracks] = useState(false);
-  const [optGeminiTTS, setOptGeminiTTS] = useState(false);
   const [optSkipFeatures, setOptSkipFeatures] = useState(false);
+  const [optGeminiImaging, setOptGeminiImaging] = useState(false);
 
   // --- Calculate costs ---
   const costs = useMemo(() => {
-    const ttsRate = optStdTTS || !useHDTTS ? TTS_STD_RATE : TTS_HD_RATE;
     const effectiveTracks = optReduceTracks ? Math.min(tracksPerHour, 2) : tracksPerHour;
 
-    // TTS costs
+    // Calculate total character usage per month
     const voiceTracksPerDay = numDJs * effectiveTracks * liveHours;
-    const voiceTrackMonthly = (voiceTracksPerDay * VOICE_TRACK_CHARS / 1000) * ttsRate * 30;
+    const voiceTrackCharsMonth = voiceTracksPerDay * VOICE_TRACK_CHARS * 30;
+    const transitionCharsMonth = TRANSITIONS_PER_DAY * TRANSITION_CHARS * 30;
+    const featureCharsMonth = optSkipFeatures ? 0 : FEATURES_PER_DAY * FEATURE_CHARS * 30;
+    const imagingCharsMonth = optGeminiImaging ? 0 : IMAGING_PER_DAY * IMAGING_CHARS * 30;
+    const sponsorAdCharsMonth = sponsorAdsPerDay * SPONSOR_AD_CHARS * 30;
 
-    const transitionMonthly = optGeminiTTS
-      ? 0
-      : (TRANSITIONS_PER_DAY * TRANSITION_CHARS / 1000) * ttsRate * 30;
+    const totalCharsMonth = voiceTrackCharsMonth + transitionCharsMonth + featureCharsMonth + imagingCharsMonth + sponsorAdCharsMonth;
 
-    const featureMonthly = optSkipFeatures
-      ? 0
-      : (FEATURES_PER_DAY * FEATURE_CHARS / 1000) * ttsRate * 30;
+    // TTS costs depend on provider
+    let voiceTrackMonthly = 0;
+    let transitionMonthly = 0;
+    let featureMonthly = 0;
+    let imagingMonthly = 0;
+    let sponsorAdMonthly = 0;
+    let elevenLabsSubscription = 0;
+    let elevenLabsOverage = 0;
+    let elevenLabsOverageChars = 0;
 
-    const imagingMonthly = optGeminiTTS
-      ? 0
-      : (IMAGING_PER_DAY * IMAGING_CHARS / 1000) * ttsRate * 30;
+    if (ttsProvider === "elevenlabs") {
+      const plan = ELEVENLABS_PLANS[elevenLabsPlan];
+      elevenLabsSubscription = plan.price;
 
-    const sponsorAdMonthly = (sponsorAdsPerDay * SPONSOR_AD_CHARS / 1000) * ttsRate * 30;
+      // Calculate if we exceed the plan's character quota
+      if (totalCharsMonth > plan.chars) {
+        elevenLabsOverageChars = totalCharsMonth - plan.chars;
+        elevenLabsOverage = (elevenLabsOverageChars / 1000) * plan.overageRate;
+      }
+
+      // Break down ElevenLabs cost proportionally for display
+      const effectiveRate = totalCharsMonth > 0
+        ? (elevenLabsSubscription + elevenLabsOverage) / (totalCharsMonth / 1000)
+        : 0;
+
+      voiceTrackMonthly = (voiceTrackCharsMonth / 1000) * effectiveRate;
+      transitionMonthly = (transitionCharsMonth / 1000) * effectiveRate;
+      featureMonthly = (featureCharsMonth / 1000) * effectiveRate;
+      imagingMonthly = (imagingCharsMonth / 1000) * effectiveRate;
+      sponsorAdMonthly = (sponsorAdCharsMonth / 1000) * effectiveRate;
+    } else if (ttsProvider === "gemini") {
+      // Gemini charges per generation, not per character
+      voiceTrackMonthly = voiceTracksPerDay * GEMINI_RATE * 30;
+      transitionMonthly = TRANSITIONS_PER_DAY * GEMINI_RATE * 30;
+      featureMonthly = optSkipFeatures ? 0 : FEATURES_PER_DAY * GEMINI_RATE * 30;
+      imagingMonthly = IMAGING_PER_DAY * GEMINI_RATE * 30;
+      sponsorAdMonthly = sponsorAdsPerDay * GEMINI_RATE * 30;
+    } else {
+      const ttsRate = ttsProvider === "openai-hd" ? OPENAI_HD_RATE : OPENAI_STD_RATE;
+      voiceTrackMonthly = (voiceTrackCharsMonth / 1000) * ttsRate;
+      transitionMonthly = (transitionCharsMonth / 1000) * ttsRate;
+      featureMonthly = optSkipFeatures ? 0 : (featureCharsMonth / 1000) * ttsRate;
+      imagingMonthly = optGeminiImaging ? 0 : (imagingCharsMonth / 1000) * ttsRate;
+      sponsorAdMonthly = (sponsorAdCharsMonth / 1000) * ttsRate;
+    }
+
+    // For imaging with Gemini override (when using non-Gemini primary)
+    if (optGeminiImaging && ttsProvider !== "gemini") {
+      imagingMonthly = IMAGING_PER_DAY * GEMINI_RATE * 30;
+    }
 
     const ttsTotal = voiceTrackMonthly + transitionMonthly + featureMonthly + imagingMonthly + sponsorAdMonthly;
 
-    // Chat/AI costs
+    // Chat/AI costs (same regardless of TTS provider)
     const djScriptCalls = numDJs * effectiveTracks * liveHours;
     const djScriptMonthly = djScriptCalls * DJ_SCRIPT_TOKENS * (CHAT_INPUT_RATE + CHAT_OUTPUT_RATE) * 30;
     const featureContentMonthly = FEATURES_PER_DAY * FEATURE_CONTENT_TOKENS * (CHAT_INPUT_RATE + CHAT_OUTPUT_RATE) * 30;
@@ -205,7 +274,7 @@ export default function StationCostsPage() {
 
     // GHL
     const smsMonthly = smsPerDay * SMS_RATE * 30;
-    const emailMonthly = 0.50; // negligible
+    const emailMonthly = 0.50;
     const ghlTotal = smsMonthly + emailMonthly;
 
     const total = ttsTotal + chatTotal + ghlTotal + RAILWAY_COST + INFRA_COST;
@@ -217,6 +286,10 @@ export default function StationCostsPage() {
       imagingMonthly,
       sponsorAdMonthly,
       ttsTotal,
+      elevenLabsSubscription,
+      elevenLabsOverage,
+      elevenLabsOverageChars,
+      totalCharsMonth,
       djScriptMonthly,
       featureContentMonthly,
       outreachMonthly,
@@ -229,18 +302,18 @@ export default function StationCostsPage() {
       infra: INFRA_COST,
       total,
     };
-  }, [numDJs, tracksPerHour, liveHours, useHDTTS, smsPerDay, sponsorAdsPerDay, optStdTTS, optReduceTracks, optGeminiTTS, optSkipFeatures]);
+  }, [numDJs, tracksPerHour, liveHours, ttsProvider, elevenLabsPlan, smsPerDay, sponsorAdsPerDay, optReduceTracks, optSkipFeatures, optGeminiImaging]);
 
-  // --- Optimized vs full cost ---
-  const fullCosts = useMemo(() => {
-    const ttsRate = useHDTTS ? TTS_HD_RATE : TTS_STD_RATE;
+  // --- Compare against OpenAI baseline for savings display ---
+  const baselineCost = useMemo(() => {
     const voiceTracksPerDay = numDJs * tracksPerHour * liveHours;
-    const ttsTotal =
-      (voiceTracksPerDay * VOICE_TRACK_CHARS / 1000) * ttsRate * 30 +
-      (TRANSITIONS_PER_DAY * TRANSITION_CHARS / 1000) * ttsRate * 30 +
-      (FEATURES_PER_DAY * FEATURE_CHARS / 1000) * ttsRate * 30 +
-      (IMAGING_PER_DAY * IMAGING_CHARS / 1000) * ttsRate * 30 +
-      (sponsorAdsPerDay * SPONSOR_AD_CHARS / 1000) * ttsRate * 30;
+    const totalChars =
+      (voiceTracksPerDay * VOICE_TRACK_CHARS +
+        TRANSITIONS_PER_DAY * TRANSITION_CHARS +
+        FEATURES_PER_DAY * FEATURE_CHARS +
+        IMAGING_PER_DAY * IMAGING_CHARS +
+        sponsorAdsPerDay * SPONSOR_AD_CHARS) * 30;
+    const ttsTotal = (totalChars / 1000) * OPENAI_HD_RATE;
 
     const djScriptCalls = numDJs * tracksPerHour * liveHours;
     const chatTotal =
@@ -251,17 +324,16 @@ export default function StationCostsPage() {
 
     const ghlTotal = smsPerDay * SMS_RATE * 30 + 0.50;
     return ttsTotal + chatTotal + ghlTotal + RAILWAY_COST;
-  }, [numDJs, tracksPerHour, liveHours, useHDTTS, smsPerDay, sponsorAdsPerDay]);
+  }, [numDJs, tracksPerHour, liveHours, smsPerDay, sponsorAdsPerDay]);
 
-  const savings = fullCosts - costs.total;
-  const hasOptimizations = optStdTTS || optReduceTracks || optGeminiTTS || optSkipFeatures;
+  const costDiff = costs.total - baselineCost;
 
-  // --- Operator plan pricing ---
+  // --- Operator plan pricing (ElevenLabs Creator @ $22/mo keeps costs low) ---
   const operatorPlans = [
-    { name: "Launch", price: 150, fee: 15, setup: 500 },
-    { name: "Growth", price: 250, fee: 10, setup: 500, recommended: true },
-    { name: "Scale", price: 400, fee: 7, setup: 1000 },
-    { name: "Network", price: 800, fee: 5, setup: 0 },
+    { name: "Launch", price: 199, fee: 15, setup: 500 },
+    { name: "Growth", price: 299, fee: 10, setup: 500, recommended: true },
+    { name: "Scale", price: 449, fee: 7, setup: 1000 },
+    { name: "Network", price: 899, fee: 5, setup: 0 },
   ];
 
   return (
@@ -282,8 +354,99 @@ export default function StationCostsPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Station Cost Calculator</h1>
-            <p className="text-gray-500 text-sm">Interactive per-station operating cost estimator</p>
+            <p className="text-gray-500 text-sm">Interactive per-station operating cost estimator with ElevenLabs support</p>
           </div>
+        </div>
+
+        {/* TTS Provider Selector */}
+        <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <Mic className="w-5 h-5 text-gray-400" />
+            TTS Provider
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            {([
+              { id: "elevenlabs" as TTSProvider, label: "ElevenLabs", sub: "Cloned voices", badge: "Active" },
+              { id: "openai-hd" as TTSProvider, label: "OpenAI HD", sub: "$0.030/1K chars" },
+              { id: "openai-std" as TTSProvider, label: "OpenAI Std", sub: "$0.015/1K chars" },
+              { id: "gemini" as TTSProvider, label: "Gemini", sub: "$0.004/gen" },
+            ]).map((p) => (
+              <button
+                key={p.id}
+                onClick={() => setTTSProvider(p.id)}
+                className={`p-3 rounded-xl border-2 text-left transition-colors ${
+                  ttsProvider === p.id
+                    ? "border-indigo-400 bg-indigo-50"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-bold text-gray-900">{p.label}</p>
+                  {p.badge && ttsProvider === p.id && (
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">{p.badge}</span>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500 mt-0.5">{p.sub}</p>
+              </button>
+            ))}
+          </div>
+
+          {/* ElevenLabs Plan Selector */}
+          {ttsProvider === "elevenlabs" && (
+            <div>
+              <p className="text-sm font-medium text-gray-700 mb-2">ElevenLabs Plan</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {ELEVENLABS_PLANS.map((plan, i) => {
+                  const isOver = costs.totalCharsMonth > plan.chars;
+                  return (
+                    <button
+                      key={plan.name}
+                      onClick={() => setElevenLabsPlan(i)}
+                      className={`p-3 rounded-lg border-2 text-left transition-colors ${
+                        elevenLabsPlan === i
+                          ? "border-indigo-400 bg-indigo-50"
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <p className="text-sm font-bold text-gray-900">{plan.name}</p>
+                      <p className="text-lg font-bold text-gray-900">${plan.price}<span className="text-xs font-normal text-gray-500">/mo</span></p>
+                      <p className="text-xs text-gray-500">{fmtK(plan.chars)} chars included</p>
+                      {elevenLabsPlan === i && isOver && (
+                        <p className="text-[10px] text-amber-600 font-medium mt-1 flex items-center gap-1">
+                          <AlertTriangle className="w-3 h-3" /> Over quota
+                        </p>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Character usage bar */}
+              <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                <div className="flex justify-between text-xs mb-1">
+                  <span className="text-gray-600">Character usage</span>
+                  <span className="font-semibold text-gray-900">
+                    {fmtK(costs.totalCharsMonth)} / {fmtK(ELEVENLABS_PLANS[elevenLabsPlan].chars)}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                  <div
+                    className={`h-2.5 rounded-full transition-all ${
+                      costs.totalCharsMonth > ELEVENLABS_PLANS[elevenLabsPlan].chars
+                        ? "bg-amber-500"
+                        : "bg-indigo-500"
+                    }`}
+                    style={{ width: `${Math.min((costs.totalCharsMonth / ELEVENLABS_PLANS[elevenLabsPlan].chars) * 100, 100)}%` }}
+                  />
+                </div>
+                {costs.elevenLabsOverageChars > 0 && (
+                  <p className="text-xs text-amber-600 mt-1">
+                    {fmtK(costs.elevenLabsOverageChars)} chars overage at ${ELEVENLABS_PLANS[elevenLabsPlan].overageRate}/1K = ${fmt(costs.elevenLabsOverage)} extra
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Main Grid: Inputs + Costs */}
@@ -301,19 +464,15 @@ export default function StationCostsPage() {
             <Slider label="SMS Messages per Day" value={smsPerDay} min={0} max={200} step={10} onChange={setSmsPerDay} />
             <Slider label="Sponsor Ads per Day" value={sponsorAdsPerDay} min={0} max={30} onChange={setSponsorAdsPerDay} />
 
-            <div className="mt-4 pt-4 border-t">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">TTS Model</span>
-                <button
-                  onClick={() => setUseHDTTS(!useHDTTS)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                    useHDTTS
-                      ? "bg-indigo-100 text-indigo-700"
-                      : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {useHDTTS ? "tts-1-hd ($0.030/1K)" : "tts-1 ($0.015/1K)"}
-                </button>
+            {/* Quick stats */}
+            <div className="mt-4 pt-4 border-t grid grid-cols-2 gap-3">
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500">Daily voice tracks</p>
+                <p className="text-lg font-bold text-gray-900">{numDJs * (optReduceTracks ? Math.min(tracksPerHour, 2) : tracksPerHour) * liveHours}</p>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500">Monthly chars (TTS)</p>
+                <p className="text-lg font-bold text-gray-900">{fmtK(costs.totalCharsMonth)}</p>
               </div>
             </div>
           </div>
@@ -325,9 +484,31 @@ export default function StationCostsPage() {
               Monthly Cost Breakdown
             </h2>
 
-            {/* TTS Section */}
+            {/* ElevenLabs subscription line */}
+            {ttsProvider === "elevenlabs" && (
+              <div className="mb-3">
+                <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">ElevenLabs Subscription</p>
+                <CostRow
+                  label={`${ELEVENLABS_PLANS[elevenLabsPlan].name} plan (${fmtK(ELEVENLABS_PLANS[elevenLabsPlan].chars)} chars)`}
+                  amount={costs.elevenLabsSubscription}
+                  icon={<Mic className="w-4 h-4 text-amber-500" />}
+                  highlight
+                />
+                {costs.elevenLabsOverage > 0 && (
+                  <CostRow
+                    label={`Overage (${fmtK(costs.elevenLabsOverageChars)} chars)`}
+                    amount={costs.elevenLabsOverage}
+                    highlight
+                  />
+                )}
+              </div>
+            )}
+
+            {/* TTS Audio Breakdown */}
             <div className="mb-3">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">TTS Audio</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
+                TTS Audio {ttsProvider === "elevenlabs" ? "(allocation breakdown)" : ""}
+              </p>
               <CostRow label="Voice Tracks" amount={costs.voiceTrackMonthly} icon={<Mic className="w-4 h-4 text-indigo-400" />} />
               <CostRow label="Transitions / Handoffs" amount={costs.transitionMonthly} />
               <CostRow label="Features (trivia, weather)" amount={costs.featureMonthly} />
@@ -359,10 +540,21 @@ export default function StationCostsPage() {
               <span className="text-2xl font-bold text-indigo-600">${fmt(costs.total)}</span>
             </div>
 
-            {hasOptimizations && savings > 0 && (
-              <div className="mt-2 bg-green-50 rounded-lg p-3 flex items-center justify-between">
-                <span className="text-sm font-medium text-green-800">Savings from optimizations</span>
-                <span className="text-lg font-bold text-green-600">-${fmt(savings)}/mo</span>
+            {/* Cost comparison vs OpenAI HD baseline */}
+            {ttsProvider === "elevenlabs" && (
+              <div className="mt-2 p-3 rounded-lg bg-amber-50 border border-amber-200">
+                <div className="flex items-start gap-2">
+                  <Info className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+                  <div className="text-xs text-amber-800">
+                    <p className="font-semibold">
+                      {costDiff > 0 ? `+$${fmt(costDiff)}/mo` : `-$${fmt(Math.abs(costDiff))}/mo`} vs OpenAI HD baseline
+                    </p>
+                    <p className="mt-0.5">
+                      ElevenLabs delivers premium cloned voices but costs more.
+                      The voice quality and brand identity justify premium operator pricing.
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -418,12 +610,12 @@ export default function StationCostsPage() {
             <h3 className="text-sm font-semibold text-gray-700 mb-3">Mixed Revenue Scenarios</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {[
-                { desc: "2 Gold artists + 1 Local Hero sponsor", rev: 2 * 40 + 30 },
-                { desc: "1 Platinum artist + 1 Tier 1 sponsor", rev: 100 + 80 },
-                { desc: "4 Silver artists + 1 Tier 2 sponsor", rev: 4 * 15 + 150 },
-                { desc: "1 Tier 3 sponsor only", rev: 300 },
-                { desc: "10 Bronze artists + 1 Tier 1 sponsor", rev: 10 * 5 + 80 },
-                { desc: "2 Gold artists + 2 Local Hero sponsors", rev: 2 * 40 + 2 * 30 },
+                { desc: "3 Gold artists + 2 Tier 1 sponsors", rev: 3 * 40 + 2 * 80 },
+                { desc: "2 Platinum artists + 1 Tier 2 sponsor", rev: 2 * 100 + 150 },
+                { desc: "5 Silver artists + 1 Tier 3 sponsor", rev: 5 * 15 + 300 },
+                { desc: "1 Tier 3 + 1 Tier 2 sponsors", rev: 300 + 150 },
+                { desc: "10 Gold artists + 2 Local Hero sponsors", rev: 10 * 40 + 2 * 30 },
+                { desc: "3 Platinum artists + 1 Tier 3 sponsor", rev: 3 * 100 + 300 },
               ].map((scenario) => {
                 const surplus = scenario.rev - costs.total;
                 const positive = surplus >= 0;
@@ -459,51 +651,39 @@ export default function StationCostsPage() {
             Cost Optimizations
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-            <Toggle
-              label="Use standard TTS (tts-1)"
-              enabled={optStdTTS}
-              onToggle={() => setOptStdTTS(!optStdTTS)}
-              savings="Saves ~$30/mo"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
             <Toggle
               label="Reduce voice tracks to 2/hr"
               enabled={optReduceTracks}
               onToggle={() => setOptReduceTracks(!optReduceTracks)}
-              savings="Saves ~$20/mo"
+              savings="Fewer chars"
             />
             <Toggle
-              label="Use Gemini TTS for imaging"
-              enabled={optGeminiTTS}
-              onToggle={() => setOptGeminiTTS(!optGeminiTTS)}
-              savings="Saves ~$12/mo"
+              label="Use Gemini for station imaging"
+              enabled={optGeminiImaging}
+              onToggle={() => setOptGeminiImaging(!optGeminiImaging)}
+              savings="$0.004/gen"
             />
             <Toggle
               label="Skip feature audio (text only)"
               enabled={optSkipFeatures}
               onToggle={() => setOptSkipFeatures(!optSkipFeatures)}
-              savings="Saves ~$7/mo"
+              savings="Fewer chars"
             />
           </div>
 
-          <div className="flex items-center gap-4 p-4 rounded-lg bg-gray-50">
-            <div>
-              <p className="text-xs text-gray-500">Full Cost</p>
-              <p className="text-lg font-bold text-gray-400 line-through">${fmt(fullCosts)}/mo</p>
+          {ttsProvider === "elevenlabs" && (
+            <div className="p-4 rounded-lg bg-indigo-50 border border-indigo-200">
+              <p className="text-sm font-medium text-indigo-900 mb-1">ElevenLabs cost tip</p>
+              <p className="text-xs text-indigo-700">
+                Reducing character usage can let you fit within a smaller ElevenLabs plan.
+                At {fmtK(costs.totalCharsMonth)} chars/mo, you {costs.elevenLabsOverageChars > 0 ? "exceed" : "fit within"} the {ELEVENLABS_PLANS[elevenLabsPlan].name} plan
+                ({fmtK(ELEVENLABS_PLANS[elevenLabsPlan].chars)} chars).
+                {costs.elevenLabsOverageChars > 0 && elevenLabsPlan < ELEVENLABS_PLANS.length - 1 &&
+                  ` Consider upgrading to ${ELEVENLABS_PLANS[elevenLabsPlan + 1].name} ($${ELEVENLABS_PLANS[elevenLabsPlan + 1].price}/mo) to avoid $${fmt(costs.elevenLabsOverage)}/mo in overage.`}
+              </p>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-300" />
-            <div>
-              <p className="text-xs text-gray-500">Optimized Cost</p>
-              <p className="text-lg font-bold text-indigo-600">${fmt(costs.total)}/mo</p>
-            </div>
-            {hasOptimizations && savings > 0 && (
-              <div className="ml-auto">
-                <span className="bg-green-100 text-green-700 text-sm font-semibold px-3 py-1 rounded-full">
-                  Save ${fmt(savings)}/mo
-                </span>
-              </div>
-            )}
-          </div>
+          )}
         </div>
 
         {/* Pricing for Operators */}
@@ -513,12 +693,16 @@ export default function StationCostsPage() {
             Operator Pricing & Margins
           </h2>
 
+          <p className="text-sm text-gray-500 mb-4">
+            Pricing reflects ElevenLabs cloned voices on the Creator plan, with creative use of generic audio to stay within quota.
+          </p>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {operatorPlans.map((plan) => {
               const margin = plan.price - costs.total;
               const positive = margin >= 0;
-              // Example: at full capacity operator earns ~$8,350/mo
-              const exampleRevenue = 6400;
+              // Example: operator earns from artist subs + sponsor deals
+              const exampleRevenue = 8000;
               const platformFee = exampleRevenue * (plan.fee / 100);
               const totalTfRevenue = plan.price + platformFee;
               return (
@@ -555,6 +739,44 @@ export default function StationCostsPage() {
                 </div>
               );
             })}
+          </div>
+
+          {/* Margin analysis table */}
+          <div className="mt-6 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-2 text-gray-500 font-medium">Plan</th>
+                  <th className="text-right py-2 text-gray-500 font-medium">Price</th>
+                  <th className="text-right py-2 text-gray-500 font-medium">Op. Cost</th>
+                  <th className="text-right py-2 text-gray-500 font-medium">SaaS Margin</th>
+                  <th className="text-right py-2 text-gray-500 font-medium">Margin %</th>
+                  <th className="text-right py-2 text-gray-500 font-medium">+ Platform Fee</th>
+                </tr>
+              </thead>
+              <tbody>
+                {operatorPlans.map((plan) => {
+                  const margin = plan.price - costs.total;
+                  const marginPct = (margin / plan.price) * 100;
+                  const exFee = 8000 * (plan.fee / 100);
+                  return (
+                    <tr key={plan.name} className="border-b border-gray-100">
+                      <td className="py-2 font-medium text-gray-900">{plan.name}</td>
+                      <td className="py-2 text-right text-gray-700">${plan.price}</td>
+                      <td className="py-2 text-right text-gray-700">${fmt(costs.total)}</td>
+                      <td className={`py-2 text-right font-semibold ${margin >= 0 ? "text-green-600" : "text-red-600"}`}>
+                        {margin >= 0 ? "+" : ""}${fmt(margin)}
+                      </td>
+                      <td className={`py-2 text-right ${marginPct >= 0 ? "text-green-600" : "text-red-600"}`}>
+                        {marginPct.toFixed(0)}%
+                      </td>
+                      <td className="py-2 text-right text-gray-500">${fmt(exFee)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <p className="text-xs text-gray-400 mt-1">Platform fee column assumes $8,000/mo operator revenue at capacity</p>
           </div>
         </div>
 

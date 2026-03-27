@@ -159,6 +159,100 @@ export async function generatePcmWithOpenAI(text: string, voice: string): Promis
   }, { label: "OpenAI PCM TTS" });
 }
 
+/**
+ * Generate TTS using an ElevenLabs cloned voice.
+ * voiceId should be the ElevenLabs voice_id stored on the DJ record.
+ */
+export async function generateWithElevenLabs(
+  text: string,
+  voiceId: string,
+  opts?: { stability?: number; similarityBoost?: number },
+): Promise<{ buffer: Buffer; ext: string }> {
+  const { getConfig } = await import("@/lib/config");
+  const apiKey = await getConfig("ELEVENLABS_API_KEY");
+  if (!apiKey) throw new Error("ELEVENLABS_API_KEY not configured");
+
+  return withRetry(async () => {
+    const response = await fetch(
+      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": apiKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text,
+          model_id: "eleven_multilingual_v2",
+          voice_settings: {
+            stability: opts?.stability ?? 0.75,
+            similarity_boost: opts?.similarityBoost ?? 0.75,
+          },
+          output_format: "pcm_24000",
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const msg =
+        errorData?.detail?.message ||
+        errorData?.detail ||
+        `ElevenLabs TTS error (${response.status})`;
+      throw new Error(msg);
+    }
+
+    // pcm_24000 returns raw 16-bit PCM at 24kHz mono — same as OpenAI PCM
+    const pcmBuffer = Buffer.from(await response.arrayBuffer());
+    const wavBuffer = pcmToWav(pcmBuffer);
+    return { buffer: wavBuffer, ext: "wav" };
+  }, { label: "ElevenLabs TTS", baseDelayMs: 2000 });
+}
+
+/** Generate ElevenLabs TTS as raw PCM (24kHz 16-bit mono) for audio mixing */
+export async function generatePcmWithElevenLabs(
+  text: string,
+  voiceId: string,
+  opts?: { stability?: number; similarityBoost?: number },
+): Promise<Buffer> {
+  const { getConfig } = await import("@/lib/config");
+  const apiKey = await getConfig("ELEVENLABS_API_KEY");
+  if (!apiKey) throw new Error("ELEVENLABS_API_KEY not configured");
+
+  return withRetry(async () => {
+    const response = await fetch(
+      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": apiKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text,
+          model_id: "eleven_multilingual_v2",
+          voice_settings: {
+            stability: opts?.stability ?? 0.75,
+            similarity_boost: opts?.similarityBoost ?? 0.75,
+          },
+          output_format: "pcm_24000",
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const msg =
+        errorData?.detail?.message ||
+        errorData?.detail ||
+        `ElevenLabs TTS error (${response.status})`;
+      throw new Error(msg);
+    }
+
+    return Buffer.from(await response.arrayBuffer());
+  }, { label: "ElevenLabs PCM TTS", baseDelayMs: 2000 });
+}
+
 export async function generateWithGemini(text: string, voice: string, voiceDirection?: string | null): Promise<{ buffer: Buffer; ext: string }> {
   const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) {
@@ -237,12 +331,13 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
   const djId = voiceTracks[0].djId;
   const dj = await prisma.dJ.findUnique({
     where: { id: djId },
-    select: { ttsVoice: true, ttsProvider: true, stationId: true, voiceDescription: true },
+    select: { ttsVoice: true, ttsProvider: true, stationId: true, voiceDescription: true, voiceProfileId: true, voiceStability: true, voiceSimilarityBoost: true },
   });
 
   const voice = dj?.ttsVoice || "alloy";
   const provider = dj?.ttsProvider || "openai";
   const voiceDirection = dj?.voiceDescription || null;
+  const elevenLabsOpts = { stability: dj?.voiceStability ?? 0.75, similarityBoost: dj?.voiceSimilarityBoost ?? 0.75 };
 
   // Try to find an active music bed for voice tracks
   // Prefer real uploaded beds (MP3s) over synthetic pads, then prefer "soft" category
@@ -277,79 +372,55 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
     try {
       if (!vt.scriptText) continue;
 
-      // If we have a music bed, generate as PCM so we can mix
+      // Generate PCM based on provider
+      let voicePcm: Buffer;
+      let ttsCost: number;
+
+      if (provider === "elevenlabs" && dj?.voiceProfileId) {
+        voicePcm = await generatePcmWithElevenLabs(vt.scriptText, dj.voiceProfileId, elevenLabsOpts);
+        ttsCost = (vt.scriptText!.length / 1000) * 0.30; // ElevenLabs ~$0.30/1K chars effective
+      } else if (provider === "gemini") {
+        const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
+        voicePcm = buffer.subarray(44); // skip WAV header
+        ttsCost = 0.004;
+      } else {
+        voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
+        ttsCost = 0.015;
+      }
+      await trackAiSpend({ provider, operation: "tts", cost: ttsCost, characters: vt.scriptText!.length });
+
+      // Trim leading/trailing silence from TTS output for tighter stream flow
+      voicePcm = trimSilence(voicePcm);
+
+      let finalPcm: Buffer;
       if (musicBedPath) {
-        let voicePcm: Buffer;
-
-        if (provider === "gemini") {
-          // Gemini returns WAV containing PCM — extract the PCM
-          const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
-          // Skip the 44-byte WAV header to get raw PCM
-          voicePcm = buffer.subarray(44);
-        } else {
-          voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
-        }
-        await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: vt.scriptText!.length });
-
-        // Trim leading/trailing silence from TTS output for tighter stream flow
-        voicePcm = trimSilence(voicePcm);
-
         // Boost voice, then mix with bed underneath
         const boostedPcm = amplifyPcm(voicePcm, 2.0);
-        const mixedPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+        finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
           bedGain: 0.25, // audible bed for a radio feel
           fadeInMs: 200,
           fadeOutMs: 600,
         });
-
-        const wavBuffer = pcmToWav(mixedPcm);
-        const filename = `vt-${vt.id}.wav`;
-        const audioFilePath = saveAudioFile(wavBuffer, "voice-tracks", filename);
-
-        const audioDuration = Math.round((mixedPcm.length / 48000) * 10) / 10;
-
-        await prisma.voiceTrack.update({
-          where: { id: vt.id },
-          data: {
-            audioFilePath,
-            audioDuration,
-            ttsVoice: voice,
-            ttsProvider: provider,
-            status: "audio_ready",
-          },
-        });
       } else {
-        // No music bed — generate as PCM, trim silence, save as WAV
-        let voicePcm: Buffer;
-
-        if (provider === "gemini") {
-          const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
-          voicePcm = buffer.subarray(44); // skip WAV header
-        } else {
-          voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
-        }
-        await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: vt.scriptText!.length });
-
-        // Trim leading/trailing silence for tighter stream flow
-        voicePcm = trimSilence(voicePcm);
-
-        const wavBuffer = pcmToWav(voicePcm);
-        const filename = `vt-${vt.id}.wav`;
-        const audioFilePath = saveAudioFile(wavBuffer, "voice-tracks", filename);
-        const audioDuration = Math.round((voicePcm.length / 48000) * 10) / 10;
-
-        await prisma.voiceTrack.update({
-          where: { id: vt.id },
-          data: {
-            audioFilePath,
-            audioDuration,
-            ttsVoice: voice,
-            ttsProvider: provider,
-            status: "audio_ready",
-          },
-        });
+        finalPcm = voicePcm;
       }
+
+      const wavBuffer = pcmToWav(finalPcm);
+      const filename = `vt-${vt.id}.wav`;
+      const audioFilePath = saveAudioFile(wavBuffer, "voice-tracks", filename);
+      const audioDuration = Math.round((finalPcm.length / 48000) * 10) / 10;
+
+      await prisma.voiceTrack.update({
+        where: { id: vt.id },
+        data: {
+          audioFilePath,
+          audioDuration,
+          ttsVoice: provider === "elevenlabs" ? dj?.voiceProfileId || voice : voice,
+          ttsProvider: provider,
+          status: "audio_ready",
+        },
+      });
 
       generated++;
     } catch (err) {
@@ -384,12 +455,13 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
 
   const dj = await prisma.dJ.findUnique({
     where: { id: vt.djId },
-    select: { ttsVoice: true, ttsProvider: true, stationId: true, voiceDescription: true },
+    select: { ttsVoice: true, ttsProvider: true, stationId: true, voiceDescription: true, voiceProfileId: true, voiceStability: true, voiceSimilarityBoost: true },
   });
 
   const voice = dj?.ttsVoice || "alloy";
   const provider = dj?.ttsProvider || "openai";
   const voiceDirection = dj?.voiceDescription || null;
+  const elevenLabsOpts = { stability: dj?.voiceStability ?? 0.75, similarityBoost: dj?.voiceSimilarityBoost ?? 0.75 };
 
   // Find music bed
   let musicBedPath: string | null = null;
@@ -411,13 +483,19 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
 
   try {
     let voicePcm: Buffer;
-    if (provider === "gemini") {
+    let ttsCost: number;
+    if (provider === "elevenlabs" && dj?.voiceProfileId) {
+      voicePcm = await generatePcmWithElevenLabs(vt.scriptText, dj.voiceProfileId, elevenLabsOpts);
+      ttsCost = (vt.scriptText!.length / 1000) * 0.30;
+    } else if (provider === "gemini") {
       const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
       voicePcm = buffer.subarray(44);
+      ttsCost = 0.004;
     } else {
       voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
+      ttsCost = 0.015;
     }
-    await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: vt.scriptText!.length });
+    await trackAiSpend({ provider, operation: "tts", cost: ttsCost, characters: vt.scriptText!.length });
 
     voicePcm = trimSilence(voicePcm);
 
@@ -493,11 +571,12 @@ export async function generateFeatureAudio(
   // Load DJ TTS config once
   const dj = await prisma.dJ.findUnique({
     where: { id: djId },
-    select: { ttsVoice: true, ttsProvider: true, stationId: true, voiceDescription: true },
+    select: { ttsVoice: true, ttsProvider: true, stationId: true, voiceDescription: true, voiceProfileId: true, voiceStability: true, voiceSimilarityBoost: true },
   });
   const voice = dj?.ttsVoice || "alloy";
   const provider = dj?.ttsProvider || "openai";
   const featureVoiceDirection = dj?.voiceDescription || null;
+  const elevenLabsOpts = { stability: dj?.voiceStability ?? 0.75, similarityBoost: dj?.voiceSimilarityBoost ?? 0.75 };
 
   // Try to find an active music bed — prefer real uploads over synthetic pads
   let musicBedPath: string | null = null;
@@ -524,59 +603,47 @@ export async function generateFeatureAudio(
 
   for (const fc of features) {
     try {
+      // Generate PCM based on provider
+      let voicePcm: Buffer;
+      let ttsCost: number;
+
+      if (provider === "elevenlabs" && dj?.voiceProfileId) {
+        voicePcm = await generatePcmWithElevenLabs(fc.content, dj.voiceProfileId, elevenLabsOpts);
+        ttsCost = (fc.content.length / 1000) * 0.30;
+      } else if (provider === "gemini") {
+        const { buffer } = await generateWithGemini(fc.content, voice, featureVoiceDirection);
+        voicePcm = buffer.subarray(44);
+        ttsCost = 0.004;
+      } else {
+        voicePcm = await generatePcmWithOpenAI(fc.content, voice);
+        ttsCost = 0.015;
+      }
+      await trackAiSpend({ provider, operation: "tts", cost: ttsCost, characters: fc.content.length });
+
+      voicePcm = trimSilence(voicePcm);
+
+      let finalPcm: Buffer;
       if (musicBedPath) {
-        let voicePcm: Buffer;
-        if (provider === "gemini") {
-          const { buffer } = await generateWithGemini(fc.content, voice, featureVoiceDirection);
-          voicePcm = buffer.subarray(44);
-        } else {
-          voicePcm = await generatePcmWithOpenAI(fc.content, voice);
-        }
-        await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: fc.content.length });
-
-        // Trim silence for tighter stream flow
-        voicePcm = trimSilence(voicePcm);
-
         const boostedPcm = amplifyPcm(voicePcm, 2.0);
-        const mixedPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+        finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
           bedGain: 0.25,
           fadeInMs: 200,
           fadeOutMs: 600,
         });
-
-        const wavBuffer = pcmToWav(mixedPcm);
-        const filename = `fc-${fc.id}.wav`;
-        const audioFilePath = saveAudioFile(wavBuffer, "features", filename);
-        const audioDuration = Math.round((mixedPcm.length / 48000) * 10) / 10;
-
-        await prisma.featureContent.update({
-          where: { id: fc.id },
-          data: { audioFilePath, audioDuration },
-        });
       } else {
-        // No music bed — generate as PCM, trim silence, save as WAV
-        let voicePcm: Buffer;
-        if (provider === "gemini") {
-          const { buffer } = await generateWithGemini(fc.content, voice, featureVoiceDirection);
-          voicePcm = buffer.subarray(44);
-        } else {
-          voicePcm = await generatePcmWithOpenAI(fc.content, voice);
-        }
-        await trackAiSpend({ provider, operation: "tts", cost: provider === "gemini" ? 0.004 : 0.015, characters: fc.content.length });
-
-        voicePcm = trimSilence(voicePcm);
-
-        const wavBuffer = pcmToWav(voicePcm);
-        const filename = `fc-${fc.id}.wav`;
-        const audioFilePath = saveAudioFile(wavBuffer, "features", filename);
-        const audioDuration = Math.round((voicePcm.length / 48000) * 10) / 10;
-
-        await prisma.featureContent.update({
-          where: { id: fc.id },
-          data: { audioFilePath, audioDuration },
-        });
+        finalPcm = voicePcm;
       }
+
+      const wavBuffer = pcmToWav(finalPcm);
+      const filename = `fc-${fc.id}.wav`;
+      const audioFilePath = saveAudioFile(wavBuffer, "features", filename);
+      const audioDuration = Math.round((finalPcm.length / 48000) * 10) / 10;
+
+      await prisma.featureContent.update({
+        where: { id: fc.id },
+        data: { audioFilePath, audioDuration },
+      });
 
       generated++;
     } catch (err) {
