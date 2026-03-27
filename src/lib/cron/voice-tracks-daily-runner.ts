@@ -9,6 +9,7 @@ import { stationToday, stationDayType } from "@/lib/timezone";
 import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
 import { filterContent } from "@/lib/ai/content-filter";
 import { getCachedRelinkDialogue, setCachedRelinkDialogue } from "@/lib/ai/content-cache";
+import { enforceElevenLabsQuota } from "@/lib/elevenlabs/quota-guard";
 
 interface ShiftHour {
   djId: string;
@@ -59,6 +60,27 @@ export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
       featuresRelinked: 0,
       featureAudioGenerated: 0,
       errors: ["No station found"],
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // 1b. Enforce ElevenLabs quota — station MUST have ElevenLabs voices
+  const quotaCheck = await enforceElevenLabsQuota();
+  if (!quotaCheck.proceed) {
+    logger.error("Voice tracks daily BLOCKED by ElevenLabs quota guard", {
+      reason: quotaCheck.reason,
+    });
+    return {
+      success: false,
+      hoursProcessed: 0,
+      playlistsBuilt: 0,
+      scriptsGenerated: 0,
+      audioGenerated: 0,
+      genericTracksUsed: 0,
+      featuresRelinked: 0,
+      featureAudioGenerated: 0,
+      errors: [quotaCheck.reason || "ElevenLabs quota exhausted — station off-air"],
+      message: "STATION OFF-AIR: ElevenLabs credits exhausted",
       timestamp: new Date().toISOString(),
     };
   }

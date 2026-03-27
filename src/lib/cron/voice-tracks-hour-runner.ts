@@ -4,6 +4,7 @@ import { buildHourPlaylist } from "@/lib/radio/playlist-builder";
 import { generateVoiceTrackScripts } from "@/lib/radio/voice-track-generator";
 import { generateVoiceTrackAudio, generateFeatureAudio } from "@/lib/radio/voice-track-tts";
 import { stationToday, stationDayType } from "@/lib/timezone";
+import { isStationOffAir } from "@/lib/elevenlabs/quota-guard";
 
 export interface HourResult {
   success: boolean;
@@ -41,6 +42,22 @@ export async function runVoiceTracksHour(params: {
   const start = Date.now();
   const { stationId, djId, clockTemplateId, hourOfDay, excludeSongIds } = params;
   const airDate = params.airDate || stationToday();
+
+  // Check if station is off-air due to ElevenLabs quota
+  if (await isStationOffAir()) {
+    return {
+      success: false,
+      djName: djId,
+      hourOfDay,
+      playlistBuilt: false,
+      scriptsGenerated: 0,
+      audioGenerated: 0,
+      featuresRelinked: 0,
+      featureAudioGenerated: 0,
+      errors: ["Station off-air: ElevenLabs credits exhausted"],
+      durationMs: Date.now() - start,
+    };
+  }
 
   const dj = await prisma.dJ.findUnique({
     where: { id: djId },
