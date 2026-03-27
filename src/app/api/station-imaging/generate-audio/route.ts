@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
-import { amplifyPcm, pcmToWav, saveAudioFile } from "@/lib/radio/voice-track-tts";
+import { amplifyPcm, pcmToWav, saveAudioFile, generatePcmWithElevenLabs } from "@/lib/radio/voice-track-tts";
 import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import OpenAI from "openai";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
@@ -154,7 +154,11 @@ export async function POST(request: NextRequest) {
       const metadata = voice.metadata as ImagingMetadata | null;
       if (!metadata?.scripts) continue;
 
-      // Use energetic imaging voices for punchier delivery
+      // Check for ElevenLabs cloned voice first, fall back to OpenAI
+      const hasElevenLabs = !!(voice as Record<string, unknown>).elevenlabsVoiceId;
+      const elevenLabsVoiceId = (voice as Record<string, unknown>).elevenlabsVoiceId as string | null;
+      const elStability = ((voice as Record<string, unknown>).voiceStability as number) ?? 0.75;
+      const elSimilarity = ((voice as Record<string, unknown>).voiceSimilarityBoost as number) ?? 0.75;
       const openaiVoice = IMAGING_VOICE_MAP[voice.voiceType] || voiceMap[voice.voiceType] || "echo";
       const voiceSlug = voice.displayName
         .toLowerCase()
@@ -168,15 +172,24 @@ export async function POST(request: NextRequest) {
 
         for (const script of scripts) {
           try {
-            // Generate TTS as raw PCM for mixing
-            const response = await openai.audio.speech.create({
-              model: "tts-1-hd",
-              voice: openaiVoice,
-              input: script.text,
-              response_format: "pcm",
-            });
+            // Generate TTS as raw PCM for mixing — prefer ElevenLabs if configured
+            let rawPcm: Buffer;
 
-            const rawPcm = Buffer.from(await response.arrayBuffer());
+            if (hasElevenLabs && elevenLabsVoiceId) {
+              rawPcm = await generatePcmWithElevenLabs(script.text, elevenLabsVoiceId, {
+                stability: elStability,
+                similarityBoost: elSimilarity,
+              });
+            } else {
+              const response = await openai.audio.speech.create({
+                model: "tts-1-hd",
+                voice: openaiVoice,
+                input: script.text,
+                response_format: "pcm",
+              });
+              rawPcm = Buffer.from(await response.arrayBuffer());
+            }
+
             const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
 
             // Try to find a matching music bed by category

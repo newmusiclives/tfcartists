@@ -34,10 +34,10 @@ const PLAN_DETAILS: Record<
   string,
   { name: string; price: number; fee: string }
 > = {
-  launch: { name: "Launch", price: 150, fee: "15%" },
-  growth: { name: "Growth", price: 250, fee: "10%" },
-  scale: { name: "Scale", price: 400, fee: "7%" },
-  network: { name: "Network", price: 800, fee: "5%" },
+  launch: { name: "Launch", price: 199, fee: "15%" },
+  growth: { name: "Growth", price: 299, fee: "10%" },
+  scale: { name: "Scale", price: 449, fee: "7%" },
+  network: { name: "Network", price: 899, fee: "5%" },
 };
 
 function getNextBillingDate(startDate?: string): string {

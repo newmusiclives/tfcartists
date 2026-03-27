@@ -375,7 +375,7 @@ export default function CommunityRadioPage() {
               </Link>
             </div>
             <p className="text-emerald-100 text-sm mt-6">
-              Station operators start at $250/month. Sponsors start at $30/month.
+              Station operators start at $299/month. Sponsors start at $30/month.
             </p>
           </div>
         </div>

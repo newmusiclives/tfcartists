@@ -40,7 +40,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How much does it cost?",
-    a: "Plans start at $150/month with a one-time setup fee. You can earn back your costs through built-in sponsor management and revenue tools. Book a call to find the right plan for your station.",
+    a: "Plans start at $199/month with a one-time setup fee. You can earn back your costs through built-in sponsor management and revenue tools. Book a call to find the right plan for your station.",
   },
   {
     q: "Can I customize my DJ's voice and personality?",
@@ -312,7 +312,7 @@ export default function DemoPage() {
                 </details>
 
                 {/* CTA */}
-                <div className="pt-4">
+                <div className="pt-4 space-y-3">
                   <Link
                     href="/operator/signup"
                     className="flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-lg bg-white text-black hover:bg-zinc-100 transition-colors active:scale-[0.98]"
@@ -320,8 +320,15 @@ export default function DemoPage() {
                     Ready to Launch?
                     <ArrowRight className="w-5 h-5" />
                   </Link>
+                  <Link
+                    href="/showreel"
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 transition-colors"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Want more? Try our 20-minute personalized show reel
+                  </Link>
                   <p className="text-center text-xs text-zinc-500 mt-3">
-                    Go live in 48 hours. Plans from $150/mo.
+                    Go live in 48 hours. Plans from $199/mo.
                   </p>
                 </div>
               </div>

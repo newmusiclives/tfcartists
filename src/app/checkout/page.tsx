@@ -33,12 +33,12 @@ const PLANS: Record<
   operator: {
     launch: {
       name: "Launch",
-      price: 150,
+      price: 199,
       interval: "month",
       fee: "15% of revenue",
       features: [
         "1 AI-powered radio station",
-        "AI DJ automation",
+        "AI DJ automation with ElevenLabs voices",
         "Basic scheduling",
         "Up to 500 songs",
         "15% platform fee on revenue",
@@ -46,12 +46,12 @@ const PLANS: Record<
     },
     growth: {
       name: "Growth",
-      price: 250,
+      price: 299,
       interval: "month",
       fee: "10% of revenue",
       features: [
         "Up to 3 stations",
-        "Advanced AI DJs",
+        "Advanced AI DJs with cloned voices",
         "Full scheduling suite",
         "Unlimited songs",
         "Sponsor management",
@@ -60,7 +60,7 @@ const PLANS: Record<
     },
     scale: {
       name: "Scale",
-      price: 400,
+      price: 449,
       interval: "month",
       fee: "7% of revenue",
       features: [
@@ -74,7 +74,7 @@ const PLANS: Record<
     },
     network: {
       name: "Network",
-      price: 800,
+      price: 899,
       interval: "month",
       fee: "5% of revenue",
       features: [
