@@ -183,7 +183,7 @@ export async function generateWithElevenLabs(
         },
         body: JSON.stringify({
           text,
-          model_id: "eleven_multilingual_v2",
+          model_id: "eleven_flash_v2_5",
           voice_settings: {
             stability: opts?.stability ?? 0.75,
             similarity_boost: opts?.similarityBoost ?? 0.75,
@@ -230,7 +230,7 @@ export async function generatePcmWithElevenLabs(
         },
         body: JSON.stringify({
           text,
-          model_id: "eleven_multilingual_v2",
+          model_id: "eleven_flash_v2_5",
           voice_settings: {
             stability: opts?.stability ?? 0.75,
             similarity_boost: opts?.similarityBoost ?? 0.75,
@@ -378,7 +378,7 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
 
       if (provider === "elevenlabs" && dj?.voiceProfileId) {
         voicePcm = await generatePcmWithElevenLabs(vt.scriptText, dj.voiceProfileId, elevenLabsOpts);
-        ttsCost = (vt.scriptText!.length / 1000) * 0.30; // ElevenLabs ~$0.30/1K chars effective
+        ttsCost = (vt.scriptText!.length / 1000) * 0.15; // ElevenLabs Flash v2.5 ~$0.15/1K chars
       } else if (provider === "gemini") {
         const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
         voicePcm = buffer.subarray(44); // skip WAV header
@@ -486,7 +486,7 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
     let ttsCost: number;
     if (provider === "elevenlabs" && dj?.voiceProfileId) {
       voicePcm = await generatePcmWithElevenLabs(vt.scriptText, dj.voiceProfileId, elevenLabsOpts);
-      ttsCost = (vt.scriptText!.length / 1000) * 0.30;
+      ttsCost = (vt.scriptText!.length / 1000) * 0.15;
     } else if (provider === "gemini") {
       const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
       voicePcm = buffer.subarray(44);
@@ -609,7 +609,7 @@ export async function generateFeatureAudio(
 
       if (provider === "elevenlabs" && dj?.voiceProfileId) {
         voicePcm = await generatePcmWithElevenLabs(fc.content, dj.voiceProfileId, elevenLabsOpts);
-        ttsCost = (fc.content.length / 1000) * 0.30;
+        ttsCost = (fc.content.length / 1000) * 0.15;
       } else if (provider === "gemini") {
         const { buffer } = await generateWithGemini(fc.content, voice, featureVoiceDirection);
         voicePcm = buffer.subarray(44);

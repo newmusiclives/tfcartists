@@ -14,7 +14,8 @@ import { logger } from "@/lib/logger";
 import { setCronSuspended } from "@/lib/cron/log";
 
 // Minimum characters remaining before we trigger off-air (buffer zone)
-const MIN_CHARS_BUFFER = 2_000;
+// Flash v2.5 uses 0.5 credits/char so effective chars are 2x the credit count
+const MIN_CHARS_BUFFER = 500;
 
 // Config keys for persisting state
 const CONFIG_KEY_OFFAIR = "elevenlabs:station_offair";
