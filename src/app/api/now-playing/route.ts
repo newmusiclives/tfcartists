@@ -141,8 +141,28 @@ export async function GET() {
         })
       : null;
 
-    // 1. Check Liquidsoap push data (fastest — already in memory)
-    const liqNow = getLiquidoapNowPlaying();
+    // 1. Check Liquidsoap push data — first in-memory, then database
+    let liqNow = getLiquidoapNowPlaying();
+
+    // On serverless (Netlify), in-memory state is lost between invocations.
+    // Read the persisted value from the database instead.
+    if (!liqNow) {
+      try {
+        const dbNow = await prisma.config.findUnique({
+          where: { key: "now_playing:current" },
+        });
+        if (dbNow?.value) {
+          const parsed = JSON.parse(dbNow.value);
+          // Only use if updated within the last 5 minutes
+          if (parsed.updatedAt && Date.now() - parsed.updatedAt < 5 * 60 * 1000) {
+            liqNow = { title: parsed.title, artist_name: parsed.artist_name, updatedAt: parsed.updatedAt };
+          }
+        }
+      } catch {
+        // DB read failed — continue to fallbacks
+      }
+    }
+
     if (liqNow) {
       let artworkUrl: string | null = null;
       const song = await prisma.song.findFirst({

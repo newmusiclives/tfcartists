@@ -37,11 +37,26 @@ export async function GET() {
       playedAt: string | null;
     } | null = null;
 
+    // Try Liquidsoap push data — in-memory first, then database (for serverless)
     try {
       const { getLiquidoapNowPlaying } = await import(
         "@/lib/radio/liquidsoap-state"
       );
-      const liqNow = getLiquidoapNowPlaying();
+      let liqNow = getLiquidoapNowPlaying();
+
+      // On serverless, in-memory state is lost. Read from database.
+      if (!liqNow) {
+        const dbNow = await prisma.config.findUnique({
+          where: { key: "now_playing:current" },
+        });
+        if (dbNow?.value) {
+          const parsed = JSON.parse(dbNow.value);
+          if (parsed.updatedAt && Date.now() - parsed.updatedAt < 5 * 60 * 1000) {
+            liqNow = { title: parsed.title, artist_name: parsed.artist_name, updatedAt: parsed.updatedAt };
+          }
+        }
+      }
+
       if (liqNow) {
         const song = await prisma.song.findFirst({
           where: {
