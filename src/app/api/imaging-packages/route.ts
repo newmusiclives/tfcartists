@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   }
 
   const packages = await prisma.imagingPackage.findMany({
-    where: { stationId },
+    where: stationId === "all" ? {} : { stationId },
     orderBy: { createdAt: "desc" },
     include: {
       _count: { select: { elements: true } },
@@ -36,11 +36,18 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { stationId, tier, stationName, tagline, genre, djNames, seasonalTheme } = body;
 
-    if (!stationId || !tier || !stationName || !genre || !djNames?.length) {
+    if (!tier || !stationName || !genre || !djNames?.length) {
       return NextResponse.json(
-        { error: "Required: stationId, tier, stationName, genre, djNames" },
+        { error: "Required: tier, stationName, genre, djNames" },
         { status: 400 },
       );
+    }
+
+    // Resolve station ID — use first active station if "default"
+    let resolvedStationId = stationId;
+    if (!resolvedStationId || resolvedStationId === "default") {
+      const station = await prisma.station.findFirst({ where: { isActive: true }, select: { id: true } });
+      resolvedStationId = station?.id || "unknown";
     }
 
     if (!["basic", "pro", "enterprise"].includes(tier)) {
@@ -48,7 +55,7 @@ export async function POST(req: NextRequest) {
     }
 
     const packageId = await createImagingPackage({
-      stationId,
+      stationId: resolvedStationId,
       tier,
       stationName,
       tagline: tagline || "",
