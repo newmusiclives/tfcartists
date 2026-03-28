@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { stationHour, stationToday } from "@/lib/timezone";
+import { stationHour, stationToday, stationDayOfWeek } from "@/lib/timezone";
 import http from "http";
 import https from "https";
 import { withCircuitBreaker } from "@/lib/ai/circuit-breaker";
@@ -134,12 +134,31 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    const dj = playlist?.djId
+    let dj = playlist?.djId
       ? await prisma.dJ.findUnique({
           where: { id: playlist.djId },
           select: { name: true, slug: true },
         })
       : null;
+
+    // Fallback: look up DJ from the DJShow schedule if no playlist exists
+    if (!dj) {
+      const dayOfWeek = stationDayOfWeek();
+      const timeStr = String(hour).padStart(2, "0") + ":00";
+      const show = await prisma.dJShow.findFirst({
+        where: {
+          isActive: true,
+          dayOfWeek,
+          startTime: { lte: timeStr },
+          endTime: { gt: timeStr },
+          dj: { stationId: station.id },
+        },
+        include: { dj: { select: { name: true, slug: true } } },
+      });
+      if (show) {
+        dj = show.dj;
+      }
+    }
 
     // 1. Check Liquidsoap push data — first in-memory, then database
     let liqNow = getLiquidoapNowPlaying();
