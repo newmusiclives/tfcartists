@@ -164,7 +164,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         },
         body: JSON.stringify({
           text,
-          model_id: "eleven_flash_v2_5",
+          model_id: "eleven_multilingual_v2",
           voice_settings: {
             stability: dj.voiceStability ?? 0.75,
             similarity_boost: dj.voiceSimilarityBoost ?? 0.75,

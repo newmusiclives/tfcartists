@@ -183,7 +183,7 @@ export async function generateWithElevenLabs(
         },
         body: JSON.stringify({
           text,
-          model_id: "eleven_flash_v2_5",
+          model_id: "eleven_multilingual_v2",
           voice_settings: {
             stability: opts?.stability ?? 0.75,
             similarity_boost: opts?.similarityBoost ?? 0.75,
@@ -230,7 +230,7 @@ export async function generatePcmWithElevenLabs(
         },
         body: JSON.stringify({
           text,
-          model_id: "eleven_flash_v2_5",
+          model_id: "eleven_multilingual_v2",
           voice_settings: {
             stability: opts?.stability ?? 0.75,
             similarity_boost: opts?.similarityBoost ?? 0.75,
