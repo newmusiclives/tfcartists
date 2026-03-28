@@ -16,6 +16,8 @@ interface NowPlaying {
   artwork_url: string;
   listener_count: number;
   dj_name: string;
+  station: string;
+  status: string;
 }
 
 export function RadioPlayer() {
@@ -269,6 +271,7 @@ export function RadioPlayer() {
   const trackTitle = nowPlaying?.title || currentStation.name;
   const trackArtist = nowPlaying?.artist_name || currentStation.genre;
   const djName = nowPlaying?.dj_name;
+  const stationName = nowPlaying?.station || currentStation.name;
   const artworkUrl = nowPlaying?.artwork_url;
 
   const showActive = status === "playing";
@@ -326,8 +329,11 @@ export function RadioPlayer() {
             </button>
 
             <div className="min-w-0" aria-live="polite">
-              <div className="text-base font-bold text-white truncate flex items-center gap-1.5">
-                <Image src="/logos/ncr-logo.png" alt="" width={20} height={20} className="object-contain flex-shrink-0" />
+              <div className="text-xs text-amber-400/70 truncate flex items-center gap-1.5">
+                <Image src="/logos/ncr-logo.png" alt="" width={14} height={14} className="object-contain flex-shrink-0" />
+                {stationName}{djName ? ` · DJ ${djName}` : ""}
+              </div>
+              <div className="text-base font-bold text-white truncate">
                 {showError
                   ? "Stream unavailable"
                   : showLoading
@@ -342,9 +348,9 @@ export function RadioPlayer() {
                   : showLoading
                     ? "Buffering stream..."
                     : showActive
-                      ? `${trackArtist}${djName ? ` · DJ ${djName}` : ""}`
+                      ? trackArtist
                       : nowPlaying?.artist_name
-                        ? `${nowPlaying.artist_name}${djName ? ` · DJ ${djName}` : ""} — Press play`
+                        ? `${nowPlaying.artist_name} — Press play`
                         : "Press play to listen"}
               </div>
             </div>
