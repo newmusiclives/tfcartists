@@ -465,17 +465,17 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
 
       // Trim leading/trailing silence, then add tail padding for crossfade protection
       voicePcm = trimSilence(voicePcm);
-      voicePcm = appendSilence(voicePcm, 500);
+      voicePcm = appendSilence(voicePcm, 400);
 
       let finalPcm: Buffer;
       if (musicBedPath) {
-        // Boost voice, then mix with bed underneath
-        const boostedPcm = amplifyPcm(voicePcm, 2.0);
+        // Boost voice (3.0x for presence in the mix), then mix with bed
+        const boostedPcm = amplifyPcm(voicePcm, 3.0);
         finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
-          bedGain: 0.25, // audible bed for a radio feel
-          fadeInMs: 200,
-          fadeOutMs: 600,
+          bedGain: 0.20,
+          fadeInMs: 150,
+          fadeOutMs: 400,
         });
       } else {
         finalPcm = voicePcm;
@@ -566,16 +566,16 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
     await trackAiSpend({ provider: ttsResult.usedProvider, operation: "tts", cost: ttsResult.cost, characters: vt.scriptText!.length });
 
     voicePcm = trimSilence(voicePcm);
-    voicePcm = appendSilence(voicePcm, 500);
+    voicePcm = appendSilence(voicePcm, 400);
 
     let finalPcm: Buffer;
     if (musicBedPath) {
-      const boostedPcm = amplifyPcm(voicePcm, 2.0);
+      const boostedPcm = amplifyPcm(voicePcm, 3.0);
       finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
         voiceGain: 1.0,
-        bedGain: 0.25,
-        fadeInMs: 200,
-        fadeOutMs: 600,
+        bedGain: 0.20,
+        fadeInMs: 150,
+        fadeOutMs: 400,
       });
     } else {
       finalPcm = voicePcm;
@@ -681,16 +681,16 @@ export async function generateFeatureAudio(
       await trackAiSpend({ provider: ttsResult.usedProvider, operation: "tts", cost: ttsResult.cost, characters: fc.content.length });
 
       voicePcm = trimSilence(voicePcm);
-      voicePcm = appendSilence(voicePcm, 500);
+      voicePcm = appendSilence(voicePcm, 400);
 
       let finalPcm: Buffer;
       if (musicBedPath) {
-        const boostedPcm = amplifyPcm(voicePcm, 2.0);
+        const boostedPcm = amplifyPcm(voicePcm, 3.0);
         finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
-          bedGain: 0.25,
-          fadeInMs: 200,
-          fadeOutMs: 600,
+          bedGain: 0.20,
+          fadeInMs: 150,
+          fadeOutMs: 400,
         });
       } else {
         finalPcm = voicePcm;
