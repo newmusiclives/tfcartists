@@ -197,11 +197,11 @@ export async function enforceElevenLabsQuota(): Promise<{
     return { proceed: true };
   }
 
-  // 3. Check if credits are exhausted — switch to degraded mode, NOT off-air
+  // 3. If credits are low, log warning but NEVER block generation.
+  // The TTS fallback chain in voice-track-tts.ts handles provider failures.
   if (quota.charactersRemaining <= MIN_CHARS_BUFFER) {
-    const reason = `ElevenLabs credits exhausted: ${quota.charactersRemaining} chars remaining of ${quota.characterLimit} (${quota.tier} plan). Next reset: ${quota.nextResetDate || "unknown"}`;
-    logger.warn("ElevenLabs credits exhausted — TTS will use Gemini/OpenAI fallback", { reason });
-    // Still proceed — the TTS fallback chain in voice-track-tts.ts handles this
+    const reason = `ElevenLabs credits low: ${quota.charactersRemaining} chars remaining`;
+    logger.warn("ElevenLabs credits low — TTS fallback chain will handle failures", { reason });
     return { proceed: true, reason, quota };
   }
 
