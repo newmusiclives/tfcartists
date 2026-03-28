@@ -178,9 +178,17 @@ export async function GET(request: NextRequest) {
       // but get_track.py primarily needs songs + voice intros + features
     }
 
+    // Look up clock template name for show structure (Hour 1 Opener vs Hour 2 vs Hour 3 Closer)
+    const clockTemplate = playlist.clockTemplateId
+      ? await prisma.clockTemplate.findUnique({
+          where: { id: playlist.clockTemplateId },
+          select: { name: true },
+        })
+      : null;
+
     return NextResponse.json({
       hour_sequence: hourSequence,
-      clock_template: `hour-${hourOfDay}`,
+      clock_template: clockTemplate?.name || `hour-${hourOfDay}`,
       dj_id: playlist.djId,
       dj_slug: scheduledDj?.djSlug ?? null,
       hour: hourOfDay,
