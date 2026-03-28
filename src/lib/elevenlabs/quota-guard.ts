@@ -179,14 +179,9 @@ export async function enforceElevenLabsQuota(): Promise<{
   });
 
   if (elevenLabsDjs.length === 0) {
-    // No ElevenLabs DJs configured — station MUST have them
-    await takeStationOffAir(
-      "No active DJs with ElevenLabs voices configured. Station requires ElevenLabs voices to broadcast.",
-    );
-    return {
-      proceed: false,
-      reason: "No ElevenLabs DJs configured — station cannot broadcast without cloned voices",
-    };
+    // No ElevenLabs DJs — station can still broadcast using Gemini/OpenAI fallback
+    logger.warn("No active DJs with ElevenLabs voices — TTS will use Gemini/OpenAI fallback");
+    return { proceed: true };
   }
 
   // 2. Check ElevenLabs quota
@@ -202,13 +197,12 @@ export async function enforceElevenLabsQuota(): Promise<{
     return { proceed: true };
   }
 
-  // 3. Check if credits are exhausted
+  // 3. Check if credits are exhausted — switch to degraded mode, NOT off-air
   if (quota.charactersRemaining <= MIN_CHARS_BUFFER) {
     const reason = `ElevenLabs credits exhausted: ${quota.charactersRemaining} chars remaining of ${quota.characterLimit} (${quota.tier} plan). Next reset: ${quota.nextResetDate || "unknown"}`;
-
-    await takeStationOffAir(reason, quota);
-
-    return { proceed: false, reason, quota };
+    logger.warn("ElevenLabs credits exhausted — TTS will use Gemini/OpenAI fallback", { reason });
+    // Still proceed — the TTS fallback chain in voice-track-tts.ts handles this
+    return { proceed: true, reason, quota };
   }
 
   // 4. Credits available — if station was off-air, bring it back

@@ -5,7 +5,7 @@
 
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { mixVoiceWithMusicBed, trimSilence } from "@/lib/radio/audio-mixer";
+import { mixVoiceWithMusicBed, trimSilence, appendSilence } from "@/lib/radio/audio-mixer";
 import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
@@ -305,6 +305,89 @@ export async function generateWithGemini(text: string, voice: string, voiceDirec
   }
 }
 
+/**
+ * Generate TTS with automatic provider fallback.
+ * Tries: configured provider → Gemini → OpenAI
+ * This ensures voice tracks always generate even when ElevenLabs credits are exhausted.
+ */
+async function generatePcmWithFallback(
+  text: string,
+  provider: string,
+  voice: string,
+  voiceDirection: string | null,
+  elevenLabsOpts: { voiceProfileId?: string | null; stability: number; similarityBoost: number },
+): Promise<{ pcm: Buffer; cost: number; usedProvider: string }> {
+  const providers: Array<{ name: string; generate: () => Promise<{ pcm: Buffer; cost: number }> }> = [];
+
+  // Primary: configured provider
+  if (provider === "elevenlabs" && elevenLabsOpts.voiceProfileId) {
+    providers.push({
+      name: "elevenlabs",
+      generate: async () => ({
+        pcm: await generatePcmWithElevenLabs(text, elevenLabsOpts.voiceProfileId!, {
+          stability: elevenLabsOpts.stability,
+          similarityBoost: elevenLabsOpts.similarityBoost,
+        }),
+        cost: (text.length / 1000) * 0.30,
+      }),
+    });
+  } else if (provider === "gemini") {
+    providers.push({
+      name: "gemini",
+      generate: async () => {
+        const { buffer } = await generateWithGemini(text, voice, voiceDirection);
+        return { pcm: buffer.subarray(44), cost: 0.004 };
+      },
+    });
+  } else {
+    providers.push({
+      name: "openai",
+      generate: async () => ({
+        pcm: await generatePcmWithOpenAI(text, voice),
+        cost: 0.015,
+      }),
+    });
+  }
+
+  // Fallback 1: Gemini (cheapest)
+  if (provider !== "gemini") {
+    providers.push({
+      name: "gemini",
+      generate: async () => {
+        const { buffer } = await generateWithGemini(text, voice, voiceDirection);
+        return { pcm: buffer.subarray(44), cost: 0.004 };
+      },
+    });
+  }
+
+  // Fallback 2: OpenAI
+  if (provider !== "openai") {
+    providers.push({
+      name: "openai",
+      generate: async () => ({
+        pcm: await generatePcmWithOpenAI(text, voice || "alloy"),
+        cost: 0.015,
+      }),
+    });
+  }
+
+  for (const p of providers) {
+    try {
+      const result = await p.generate();
+      if (p.name !== provider) {
+        logger.warn(`TTS fallback: ${provider} → ${p.name}`);
+      }
+      return { ...result, usedProvider: p.name };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      logger.warn(`TTS provider ${p.name} failed: ${msg}`);
+      if (p === providers[providers.length - 1]) throw err; // last provider, rethrow
+    }
+  }
+
+  throw new Error("All TTS providers failed");
+}
+
 interface GenerateAudioResult {
   generated: number;
   errors: string[];
@@ -372,25 +455,17 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
     try {
       if (!vt.scriptText) continue;
 
-      // Generate PCM based on provider
-      let voicePcm: Buffer;
-      let ttsCost: number;
+      // Generate PCM with automatic fallback (ElevenLabs → Gemini → OpenAI)
+      const ttsResult = await generatePcmWithFallback(
+        vt.scriptText, provider, voice, voiceDirection,
+        { voiceProfileId: dj?.voiceProfileId, stability: elevenLabsOpts.stability, similarityBoost: elevenLabsOpts.similarityBoost },
+      );
+      let voicePcm = ttsResult.pcm;
+      await trackAiSpend({ provider: ttsResult.usedProvider, operation: "tts", cost: ttsResult.cost, characters: vt.scriptText!.length });
 
-      if (provider === "elevenlabs" && dj?.voiceProfileId) {
-        voicePcm = await generatePcmWithElevenLabs(vt.scriptText, dj.voiceProfileId, elevenLabsOpts);
-        ttsCost = (vt.scriptText!.length / 1000) * 0.30; // ElevenLabs Multilingual v2 ~$0.30/1K chars
-      } else if (provider === "gemini") {
-        const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
-        voicePcm = buffer.subarray(44); // skip WAV header
-        ttsCost = 0.004;
-      } else {
-        voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
-        ttsCost = 0.015;
-      }
-      await trackAiSpend({ provider, operation: "tts", cost: ttsCost, characters: vt.scriptText!.length });
-
-      // Trim leading/trailing silence from TTS output for tighter stream flow
+      // Trim leading/trailing silence, then add tail padding for crossfade protection
       voicePcm = trimSilence(voicePcm);
+      voicePcm = appendSilence(voicePcm, 500);
 
       let finalPcm: Buffer;
       if (musicBedPath) {
@@ -482,22 +557,16 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
   }
 
   try {
-    let voicePcm: Buffer;
-    let ttsCost: number;
-    if (provider === "elevenlabs" && dj?.voiceProfileId) {
-      voicePcm = await generatePcmWithElevenLabs(vt.scriptText, dj.voiceProfileId, elevenLabsOpts);
-      ttsCost = (vt.scriptText!.length / 1000) * 0.30;
-    } else if (provider === "gemini") {
-      const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
-      voicePcm = buffer.subarray(44);
-      ttsCost = 0.004;
-    } else {
-      voicePcm = await generatePcmWithOpenAI(vt.scriptText, voice);
-      ttsCost = 0.015;
-    }
-    await trackAiSpend({ provider, operation: "tts", cost: ttsCost, characters: vt.scriptText!.length });
+    // Generate PCM with automatic fallback (ElevenLabs → Gemini → OpenAI)
+    const ttsResult = await generatePcmWithFallback(
+      vt.scriptText, provider, voice, voiceDirection,
+      { voiceProfileId: dj?.voiceProfileId, stability: elevenLabsOpts.stability, similarityBoost: elevenLabsOpts.similarityBoost },
+    );
+    let voicePcm = ttsResult.pcm;
+    await trackAiSpend({ provider: ttsResult.usedProvider, operation: "tts", cost: ttsResult.cost, characters: vt.scriptText!.length });
 
     voicePcm = trimSilence(voicePcm);
+    voicePcm = appendSilence(voicePcm, 500);
 
     let finalPcm: Buffer;
     if (musicBedPath) {
@@ -603,24 +672,16 @@ export async function generateFeatureAudio(
 
   for (const fc of features) {
     try {
-      // Generate PCM based on provider
-      let voicePcm: Buffer;
-      let ttsCost: number;
-
-      if (provider === "elevenlabs" && dj?.voiceProfileId) {
-        voicePcm = await generatePcmWithElevenLabs(fc.content, dj.voiceProfileId, elevenLabsOpts);
-        ttsCost = (fc.content.length / 1000) * 0.15;
-      } else if (provider === "gemini") {
-        const { buffer } = await generateWithGemini(fc.content, voice, featureVoiceDirection);
-        voicePcm = buffer.subarray(44);
-        ttsCost = 0.004;
-      } else {
-        voicePcm = await generatePcmWithOpenAI(fc.content, voice);
-        ttsCost = 0.015;
-      }
-      await trackAiSpend({ provider, operation: "tts", cost: ttsCost, characters: fc.content.length });
+      // Generate PCM with automatic fallback (ElevenLabs → Gemini → OpenAI)
+      const ttsResult = await generatePcmWithFallback(
+        fc.content, provider, voice, featureVoiceDirection,
+        { voiceProfileId: dj?.voiceProfileId, stability: elevenLabsOpts.stability, similarityBoost: elevenLabsOpts.similarityBoost },
+      );
+      let voicePcm = ttsResult.pcm;
+      await trackAiSpend({ provider: ttsResult.usedProvider, operation: "tts", cost: ttsResult.cost, characters: fc.content.length });
 
       voicePcm = trimSilence(voicePcm);
+      voicePcm = appendSilence(voicePcm, 500);
 
       let finalPcm: Buffer;
       if (musicBedPath) {

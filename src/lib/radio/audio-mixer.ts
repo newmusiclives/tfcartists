@@ -251,6 +251,17 @@ export function trimSilence(
 }
 
 /**
+ * Append silence to the end of PCM audio.
+ * Used to add tail padding so Liquidsoap crossfade overlaps silence, not voice.
+ */
+export function appendSilence(pcm: Buffer, durationMs: number, sampleRate = 24000): Buffer {
+  const silenceSamples = Math.round((durationMs / 1000) * sampleRate);
+  const silenceBytes = silenceSamples * 2; // 16-bit = 2 bytes per sample
+  const silence = Buffer.alloc(silenceBytes, 0);
+  return Buffer.concat([pcm, silence]);
+}
+
+/**
  * High-level: mix voice PCM with a music bed file.
  *
  * Reads the music bed WAV, resamples to 24kHz mono, loops to match voice duration,
