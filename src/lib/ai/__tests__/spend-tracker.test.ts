@@ -79,8 +79,8 @@ describe("spend-tracker", () => {
     });
 
     it("returns true when spend reaches the limit", async () => {
-      // Default limit is $10
-      mockPrisma.config.findUnique.mockResolvedValue({ value: "10.00" });
+      // Default limit is $12
+      mockPrisma.config.findUnique.mockResolvedValue({ value: "12.00" });
 
       const result = await isAiSpendLimitReached();
       expect(result).toBe(true);
