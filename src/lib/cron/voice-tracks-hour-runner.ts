@@ -69,7 +69,7 @@ export async function runVoiceTracksHour(params: {
   try {
     // Check if a locked playlist already exists — don't overwrite it
     const normalizedDate = new Date(airDate);
-    normalizedDate.setHours(0, 0, 0, 0);
+    normalizedDate.setUTCHours(0, 0, 0, 0);
     const existingLocked = await prisma.hourPlaylist.findFirst({
       where: {
         stationId,

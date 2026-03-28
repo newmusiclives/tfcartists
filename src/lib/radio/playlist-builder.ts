@@ -173,7 +173,7 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
   //    Railway hasn't written playback records back to the database).
   const cooldownHours = Math.max(...Object.values(REPEAT_COOLDOWN));
   const cooldownSince = new Date(airDate);
-  cooldownSince.setHours(hourOfDay - cooldownHours, 0, 0, 0);
+  cooldownSince.setUTCHours(hourOfDay - cooldownHours, 0, 0, 0);
 
   const recentPlayMap = new Map<string, Date>();
 
@@ -200,7 +200,7 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
   const lockedPlaylists = await prisma.hourPlaylist.findMany({
     where: {
       stationId,
-      airDate: new Date(new Date(airDate).setHours(0, 0, 0, 0)),
+      airDate: new Date(new Date(airDate).setUTCHours(0, 0, 0, 0)),
       status: { in: ["locked", "aired", "draft"] },
       hourOfDay: { not: hourOfDay }, // exclude current hour (we're rebuilding it)
     },
@@ -213,7 +213,7 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
     );
     // Treat locked-playlist songs as "played" at the start of that hour
     const playedAt = new Date(airDate);
-    playedAt.setHours(lp.hourOfDay, 0, 0, 0);
+    playedAt.setUTCHours(lp.hourOfDay, 0, 0, 0);
     for (const slot of lpSlots) {
       if (slot.songId) {
         const existing = recentPlayMap.get(slot.songId);
@@ -314,9 +314,9 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
     resolvedSlots.push(resolved);
   }
 
-  // 6. Normalize airDate to midnight
+  // 6. Normalize airDate to midnight UTC
   const normalizedDate = new Date(airDate);
-  normalizedDate.setHours(0, 0, 0, 0);
+  normalizedDate.setUTCHours(0, 0, 0, 0);
 
   // 7. Save to DB
   // Check if a playlist already exists — if so, delete stale voice tracks
@@ -427,7 +427,7 @@ function selectSong(opts: SelectSongOptions): SongCandidate | null {
       const lastPlayed = recentPlayMap.get(song.id);
       if (lastPlayed) {
         const broadcastTime = new Date(airDate);
-        broadcastTime.setHours(hourOfDay, 0, 0, 0);
+        broadcastTime.setUTCHours(hourOfDay, 0, 0, 0);
         if (broadcastTime.getTime() - lastPlayed.getTime() < cooldownMs) return false;
       }
 
