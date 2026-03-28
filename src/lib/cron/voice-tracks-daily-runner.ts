@@ -64,25 +64,13 @@ export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
     };
   }
 
-  // 1b. Enforce ElevenLabs quota — station MUST have ElevenLabs voices
+  // 1b. Check ElevenLabs quota — if exhausted, still build playlists but skip voice audio
   const quotaCheck = await enforceElevenLabsQuota();
-  if (!quotaCheck.proceed) {
-    logger.error("Voice tracks daily BLOCKED by ElevenLabs quota guard", {
+  const skipVoiceAudio = !quotaCheck.proceed;
+  if (skipVoiceAudio) {
+    logger.warn("ElevenLabs quota exhausted — will build playlists but skip voice track audio", {
       reason: quotaCheck.reason,
     });
-    return {
-      success: false,
-      hoursProcessed: 0,
-      playlistsBuilt: 0,
-      scriptsGenerated: 0,
-      audioGenerated: 0,
-      genericTracksUsed: 0,
-      featuresRelinked: 0,
-      featureAudioGenerated: 0,
-      errors: [quotaCheck.reason || "ElevenLabs quota exhausted — station off-air"],
-      message: "STATION OFF-AIR: ElevenLabs credits exhausted",
-      timestamp: new Date().toISOString(),
-    };
   }
 
   // 2. Determine today's day type (in Mountain Time)
@@ -234,79 +222,81 @@ export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
         });
       }
 
-      // 5c. Find the last voice break in the clock and try to replace it with a generic track
-      const lastVbPos = findLastVoiceBreakPosition(playlistSlots);
-      let genericSkipPositions: number[] = [];
-      if (lastVbPos !== null) {
-        const genericTrack = await pickGenericTrack(shift.djId, station.id);
-        if (genericTrack) {
-          const lastVbSlot = playlistSlots.find(
-            (s: { position: number }) => s.position === lastVbPos
-          );
-          await prisma.voiceTrack.create({
-            data: {
-              stationId: station.id,
-              djId: shift.djId,
-              hourPlaylistId: playlistId,
-              position: lastVbPos,
-              trackType: "generic",
-              scriptText: genericTrack.scriptText,
-              audioFilePath: genericTrack.audioFilePath,
-              audioDuration: genericTrack.audioDuration,
-              ttsVoice: genericTrack.ttsVoice,
-              ttsProvider: genericTrack.ttsProvider,
-              status: "audio_ready",
-              airDate: today,
-              hourOfDay: shift.hourOfDay,
-              minuteOfHour: lastVbSlot?.minute ?? 47,
-            },
-          });
+      if (!skipVoiceAudio) {
+        // 5c. Find the last voice break in the clock and try to replace it with a generic track
+        const lastVbPos = findLastVoiceBreakPosition(playlistSlots);
+        let genericSkipPositions: number[] = [];
+        if (lastVbPos !== null) {
+          const genericTrack = await pickGenericTrack(shift.djId, station.id);
+          if (genericTrack) {
+            const lastVbSlot = playlistSlots.find(
+              (s: { position: number }) => s.position === lastVbPos
+            );
+            await prisma.voiceTrack.create({
+              data: {
+                stationId: station.id,
+                djId: shift.djId,
+                hourPlaylistId: playlistId,
+                position: lastVbPos,
+                trackType: "generic",
+                scriptText: genericTrack.scriptText,
+                audioFilePath: genericTrack.audioFilePath,
+                audioDuration: genericTrack.audioDuration,
+                ttsVoice: genericTrack.ttsVoice,
+                ttsProvider: genericTrack.ttsProvider,
+                status: "audio_ready",
+                airDate: today,
+                hourOfDay: shift.hourOfDay,
+                minuteOfHour: lastVbSlot?.minute ?? 47,
+              },
+            });
 
-          await prisma.genericVoiceTrack.update({
-            where: { id: genericTrack.id },
-            data: {
-              useCount: { increment: 1 },
-              lastUsedAt: new Date(),
-            },
-          });
+            await prisma.genericVoiceTrack.update({
+              where: { id: genericTrack.id },
+              data: {
+                useCount: { increment: 1 },
+                lastUsedAt: new Date(),
+              },
+            });
 
-          genericSkipPositions = [lastVbPos];
-          results.genericTracksUsed++;
+            genericSkipPositions = [lastVbPos];
+            results.genericTracksUsed++;
+          }
         }
-      }
 
-      // 5d. Generate voice track scripts (skip last VB position if generic was used)
-      const scripts = await generateVoiceTrackScripts(
-        playlistId,
-        genericSkipPositions.length > 0 ? { skipPositions: genericSkipPositions } : undefined,
-      );
-      results.scriptsGenerated += scripts.generated;
-      if (scripts.errors.length > 0) {
-        results.errors.push(...scripts.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`));
-      }
-
-      // 5e. Generate voice track audio (skips tracks already at audio_ready)
-      const audio = await generateVoiceTrackAudio(playlistId);
-      results.audioGenerated += audio.generated;
-      if (audio.errors.length > 0) {
-        results.errors.push(...audio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`));
-      }
-
-      // 5f. Re-link feature content to actual adjacent songs
-      const relinked = await relinkFeatures(station.id, shift.djId, playlistId, playlistSlots);
-      results.featuresRelinked += relinked;
-
-      // 5g. Generate TTS audio for feature content (always run — content may exist from previous runs)
-      const featureAudio = await generateFeatureAudio(
-        playlistId,
-        station.id,
-        shift.djId,
-      );
-      results.featureAudioGenerated += featureAudio.generated;
-      if (featureAudio.errors.length > 0) {
-        results.errors.push(
-          ...featureAudio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`)
+        // 5d. Generate voice track scripts (skip last VB position if generic was used)
+        const scripts = await generateVoiceTrackScripts(
+          playlistId,
+          genericSkipPositions.length > 0 ? { skipPositions: genericSkipPositions } : undefined,
         );
+        results.scriptsGenerated += scripts.generated;
+        if (scripts.errors.length > 0) {
+          results.errors.push(...scripts.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`));
+        }
+
+        // 5e. Generate voice track audio (skips tracks already at audio_ready)
+        const audio = await generateVoiceTrackAudio(playlistId);
+        results.audioGenerated += audio.generated;
+        if (audio.errors.length > 0) {
+          results.errors.push(...audio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`));
+        }
+
+        // 5f. Re-link feature content to actual adjacent songs
+        const relinked = await relinkFeatures(station.id, shift.djId, playlistId, playlistSlots);
+        results.featuresRelinked += relinked;
+
+        // 5g. Generate TTS audio for feature content (always run — content may exist from previous runs)
+        const featureAudio = await generateFeatureAudio(
+          playlistId,
+          station.id,
+          shift.djId,
+        );
+        results.featureAudioGenerated += featureAudio.generated;
+        if (featureAudio.errors.length > 0) {
+          results.errors.push(
+            ...featureAudio.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`)
+          );
+        }
       }
 
       results.hoursProcessed++;

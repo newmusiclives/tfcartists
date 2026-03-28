@@ -329,10 +329,6 @@ export function RadioPlayer() {
             </button>
 
             <div className="min-w-0" aria-live="polite">
-              <div className="text-xs text-amber-400/70 truncate flex items-center gap-1.5">
-                <Image src="/logos/ncr-logo.png" alt="" width={14} height={14} className="object-contain flex-shrink-0" />
-                {stationName}{djName ? ` · DJ ${djName}` : ""}
-              </div>
               <div className="text-base font-bold text-white truncate">
                 {showError
                   ? "Stream unavailable"
@@ -352,6 +348,10 @@ export function RadioPlayer() {
                       : nowPlaying?.artist_name
                         ? `${nowPlaying.artist_name} — Press play`
                         : "Press play to listen"}
+              </div>
+              <div className="text-xs text-amber-400/70 truncate flex items-center gap-1.5">
+                <Image src="/logos/ncr-logo.png" alt="" width={14} height={14} className="object-contain flex-shrink-0" />
+                {stationName}{djName ? ` · DJ ${djName}` : ""}
               </div>
             </div>
           </div>

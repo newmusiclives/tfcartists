@@ -44,20 +44,8 @@ export async function runVoiceTracksHour(params: {
   const airDate = params.airDate || stationToday();
 
   // Check if station is off-air due to ElevenLabs quota
-  if (await isStationOffAir()) {
-    return {
-      success: false,
-      djName: djId,
-      hourOfDay,
-      playlistBuilt: false,
-      scriptsGenerated: 0,
-      audioGenerated: 0,
-      featuresRelinked: 0,
-      featureAudioGenerated: 0,
-      errors: ["Station off-air: ElevenLabs credits exhausted"],
-      durationMs: Date.now() - start,
-    };
-  }
+  // Still build playlists so the clock schedule runs — just skip voice track audio
+  const offAir = await isStationOffAir();
 
   const dj = await prisma.dJ.findUnique({
     where: { id: djId },
@@ -118,29 +106,34 @@ export async function runVoiceTracksHour(params: {
       });
     }
 
-    // 3. Generate voice track scripts
-    const scripts = await generateVoiceTrackScripts(playlistId);
-    result.scriptsGenerated = scripts.generated;
-    if (scripts.errors.length > 0) {
-      result.errors.push(...scripts.errors);
-    }
+    if (offAir) {
+      // Playlist built but skip voice/feature audio — ElevenLabs credits exhausted
+      result.errors.push("Skipped voice track audio: ElevenLabs credits exhausted");
+    } else {
+      // 3. Generate voice track scripts
+      const scripts = await generateVoiceTrackScripts(playlistId);
+      result.scriptsGenerated = scripts.generated;
+      if (scripts.errors.length > 0) {
+        result.errors.push(...scripts.errors);
+      }
 
-    // 4. Generate voice track audio
-    const audio = await generateVoiceTrackAudio(playlistId);
-    result.audioGenerated = audio.generated;
-    if (audio.errors.length > 0) {
-      result.errors.push(...audio.errors);
-    }
+      // 4. Generate voice track audio
+      const audio = await generateVoiceTrackAudio(playlistId);
+      result.audioGenerated = audio.generated;
+      if (audio.errors.length > 0) {
+        result.errors.push(...audio.errors);
+      }
 
-    // 5. Generate feature audio (features were linked during daily cron)
-    const featureAudio = await generateFeatureAudio(
-      playlistId,
-      stationId,
-      djId,
-    );
-    result.featureAudioGenerated = featureAudio.generated;
-    if (featureAudio.errors.length > 0) {
-      result.errors.push(...featureAudio.errors);
+      // 5. Generate feature audio (features were linked during daily cron)
+      const featureAudio = await generateFeatureAudio(
+        playlistId,
+        stationId,
+        djId,
+      );
+      result.featureAudioGenerated = featureAudio.generated;
+      if (featureAudio.errors.length > 0) {
+        result.errors.push(...featureAudio.errors);
+      }
     }
 
     result.success = true;
