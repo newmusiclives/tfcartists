@@ -2822,3 +2822,72 @@ model WebhookDelivery {
   @@index([event])
   @@index([deliveredAt])
 }
+
+// =============================================================================
+// IMAGING PACKAGE SYSTEM
+// =============================================================================
+
+// A complete imaging package for a station (Basic/Pro/Enterprise tier)
+model ImagingPackage {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  stationId       String
+  tier            String   // "basic", "pro", "enterprise"
+  status          String   @default("pending") // pending, generating, complete, failed
+
+  // Generation config
+  voiceConfig     String?  // JSON: voice IDs, provider settings
+  djNames         String?  // JSON: array of DJ names for personalized elements
+  stationName     String?  // Station name for scripts
+  tagline         String?  // Station tagline
+  genre           String?  // Station genre/format for themed scripts
+  seasonalTheme   String?  // "spring", "summer", "holiday", etc.
+
+  // Results
+  totalElements   Int      @default(0)
+  generatedCount  Int      @default(0)
+  failedCount     Int      @default(0)
+
+  // Pricing
+  priceMonthly    Float?
+
+  elements        ImagingElement[]
+
+  @@index([stationId])
+  @@index([tier])
+  @@index([status])
+}
+
+// A single imaging element within a package (TOH, sweeper, promo, etc.)
+model ImagingElement {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+
+  packageId       String
+  package         ImagingPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  // Element type and variation
+  elementType     String   // "toh", "station_id", "sweeper", "promo", "show_intro", "show_outro", "handoff", "feature_bumper"
+  variationNum    Int      // 1, 2, 3... for multiple variations
+  label           String?  // Human-readable label
+
+  // Content
+  scriptText      String
+  djName          String?  // null for generic, DJ name for personalized
+  targetDjPair    String?  // "hank->loretta" for handoff transitions
+
+  // Audio
+  audioFilePath   String?
+  audioDuration   Float?
+  musicBedId      String?
+
+  // Status
+  status          String   @default("pending") // pending, script_ready, audio_ready, failed
+  error           String?
+
+  @@index([packageId])
+  @@index([elementType])
+  @@index([status])
+}
