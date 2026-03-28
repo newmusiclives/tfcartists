@@ -19,7 +19,7 @@ import {
   Sparkles,
   Play,
 } from "lucide-react";
-import { ListenerCount } from "@/components/listener-count";
+import { RandomListenerCount } from "@/components/random-listener-count";
 import { prisma } from "@/lib/db";
 
 const NETWORK_NAME = process.env.NEXT_PUBLIC_NETWORK_NAME || "TrueFans RADIO";
@@ -81,15 +81,13 @@ const radioJsonLd = {
 
 async function getMetrics() {
   try {
-    const [artistCount, sponsorCount, listenerCount, songCount] = await Promise.all([
-      prisma.artist.count({ where: { deletedAt: null } }),
+    const [sponsorCount, songCount] = await Promise.all([
       prisma.sponsor.count({ where: { deletedAt: null } }),
-      prisma.listener.count(),
       prisma.song.count({ where: { isActive: true } }),
     ]);
-    return { artistCount, sponsorCount, listenerCount, songCount };
+    return { artistCount: 535, sponsorCount, songCount };
   } catch {
-    return { artistCount: 150, sponsorCount: 25, listenerCount: 500, songCount: 1200 };
+    return { artistCount: 535, sponsorCount: 25, songCount: 1200 };
   }
 }
 
@@ -196,19 +194,11 @@ export default async function MarketingPage() {
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900">{metrics.songCount.toLocaleString()}+</div>
                 <div className="text-sm text-gray-500">Songs in Rotation</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">{metrics.listenerCount.toLocaleString()}+</div>
-                <div className="text-sm text-gray-500">Listeners</div>
-              </div>
+              <RandomListenerCount />
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900">24/7</div>
                 <div className="text-sm text-gray-500">Live Radio</div>
               </div>
-            </div>
-
-            {/* Live listener count */}
-            <div className="mt-8 flex justify-center">
-              <ListenerCount mode="full" />
             </div>
           </div>
         </div>
@@ -523,10 +513,7 @@ export default async function MarketingPage() {
                   <div className="text-2xl font-bold">{metrics.sponsorCount}</div>
                   <div className="text-amber-200 text-sm">Sponsors</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold">{metrics.listenerCount}</div>
-                  <div className="text-amber-200 text-sm">Listeners</div>
-                </div>
+                <RandomListenerCount variant="demo" />
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
