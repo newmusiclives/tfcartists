@@ -173,9 +173,39 @@ export async function GET(request: NextRequest) {
             },
           });
         }
+      } else if (slot.type === "sweeper" || slot.type === "station_id" || slot.category === "Imaging" || slot.category === "TOH") {
+        // Imaging slots — resolve from ProducedImaging if audio exists
+        const imagingType = slot.category === "TOH" ? "toh" : slot.type === "station_id" ? "id" : "sweeper";
+        hourSequence.push({
+          type: "imaging",
+          audio_file_path: null, // get_track.py will inject from static assets
+          metadata: {
+            imaging_type: imagingType,
+            clock_minute: slot.minute,
+            no_crossfade: true,
+            dj_id: scheduledDj?.djSlug || null,
+          },
+        });
+      } else if (slot.type === "sponsor" || slot.category === "Sponsor") {
+        // Sponsor ad slots — load active ads
+        const ad = await prisma.sponsorAd.findFirst({
+          where: { stationId: station.id, isActive: true },
+          orderBy: { playCount: "asc" }, // least-played first
+          select: { id: true, adTitle: true, audioFilePath: true, durationSeconds: true, sponsorId: true },
+        });
+        if (ad?.audioFilePath) {
+          hourSequence.push({
+            type: "ad",
+            audio_file_path: resolveAudio(ad.audioFilePath, ad.id),
+            metadata: {
+              sponsor_name: ad.adTitle,
+              clock_minute: slot.minute,
+              duration: ad.durationSeconds,
+              no_crossfade: true,
+            },
+          });
+        }
       }
-      // Imaging/ad/transition slots are handled by the playout/hour route
-      // but get_track.py primarily needs songs + voice intros + features
     }
 
     // Look up clock template name for show structure (Hour 1 Opener vs Hour 2 vs Hour 3 Closer)
@@ -186,8 +216,41 @@ export async function GET(request: NextRequest) {
         })
       : null;
 
+    // Load show transitions (intro/outro/handoff) for this hour
+    const dayOfWeek = now.getUTCDay();
+    const transitions = await prisma.showTransition.findMany({
+      where: {
+        stationId: station.id,
+        dayOfWeek,
+        hourOfDay,
+        isActive: true,
+        audioFilePath: { not: null },
+      },
+      orderBy: { handoffPart: "asc" },
+    });
+
+    // Prepend show intro, append show outro/handoff
+    const finalSequence = [...hourSequence];
+    for (const t of transitions) {
+      if (!t.audioFilePath) continue;
+      const item = {
+        type: "transition",
+        audio_file_path: resolveAudio(t.audioFilePath, t.id),
+        metadata: {
+          transition_subtype: t.transitionType,
+          dj_id: scheduledDj?.djSlug || null,
+          no_crossfade: true,
+        },
+      };
+      if (t.transitionType === "show_intro") {
+        finalSequence.unshift(item);
+      } else {
+        finalSequence.push(item);
+      }
+    }
+
     return NextResponse.json({
-      hour_sequence: hourSequence,
+      hour_sequence: finalSequence,
       clock_template: clockTemplate?.name || `hour-${hourOfDay}`,
       dj_id: playlist.djId,
       dj_slug: scheduledDj?.djSlug ?? null,
