@@ -59,7 +59,7 @@ export async function generateSponsorAdAudio(adId: string): Promise<void> {
         similarityBoost: stationDj.voiceSimilarityBoost ?? 0.75,
       });
       provider = "elevenlabs";
-      await trackAiSpend({ provider: "elevenlabs", operation: "tts", cost: (ad.scriptText.length / 1000) * 0.15, characters: ad.scriptText.length });
+      await trackAiSpend({ provider: "elevenlabs", operation: "tts", cost: (ad.scriptText.length / 1000) * 0.30, characters: ad.scriptText.length });
 
       const boostedPcm = amplifyPcm(rawPcm!, VOICE_GAIN);
       return finalizeSponsorAd(ad, boostedPcm, adId);

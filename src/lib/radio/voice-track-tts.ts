@@ -378,7 +378,7 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
 
       if (provider === "elevenlabs" && dj?.voiceProfileId) {
         voicePcm = await generatePcmWithElevenLabs(vt.scriptText, dj.voiceProfileId, elevenLabsOpts);
-        ttsCost = (vt.scriptText!.length / 1000) * 0.15; // ElevenLabs Flash v2.5 ~$0.15/1K chars
+        ttsCost = (vt.scriptText!.length / 1000) * 0.30; // ElevenLabs Multilingual v2 ~$0.30/1K chars
       } else if (provider === "gemini") {
         const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
         voicePcm = buffer.subarray(44); // skip WAV header
@@ -486,7 +486,7 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
     let ttsCost: number;
     if (provider === "elevenlabs" && dj?.voiceProfileId) {
       voicePcm = await generatePcmWithElevenLabs(vt.scriptText, dj.voiceProfileId, elevenLabsOpts);
-      ttsCost = (vt.scriptText!.length / 1000) * 0.15;
+      ttsCost = (vt.scriptText!.length / 1000) * 0.30;
     } else if (provider === "gemini") {
       const { buffer } = await generateWithGemini(vt.scriptText, voice, voiceDirection);
       voicePcm = buffer.subarray(44);

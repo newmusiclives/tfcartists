@@ -28,12 +28,12 @@ const OPENAI_HD_RATE = 0.03; // per 1K chars
 const OPENAI_STD_RATE = 0.015;
 // Gemini
 const GEMINI_RATE = 0.004; // per generation (flat)
-// ElevenLabs subscription plans (Flash v2.5 — 0.5 credits/char = 2x the included chars)
+// ElevenLabs subscription plans (Multilingual v2 — 1 credit/char)
 const ELEVENLABS_PLANS = [
-  { name: "Creator", price: 22, chars: 200_000, overageRate: 0.15 },
-  { name: "Pro", price: 99, chars: 1_000_000, overageRate: 0.12 },
-  { name: "Scale", price: 330, chars: 4_000_000, overageRate: 0.09 },
-  { name: "Business", price: 1320, chars: 22_000_000, overageRate: 0.06 },
+  { name: "Creator", price: 22, chars: 100_000, overageRate: 0.30 },
+  { name: "Pro", price: 99, chars: 500_000, overageRate: 0.24 },
+  { name: "Scale", price: 330, chars: 2_000_000, overageRate: 0.18 },
+  { name: "Business", price: 1320, chars: 11_000_000, overageRate: 0.12 },
 ] as const;
 
 // AI Chat costs

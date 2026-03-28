@@ -202,7 +202,7 @@ Write it as a single flowing script — no labels, just the words the DJ speaks.
       await trackAiSpend({
         provider: "elevenlabs",
         operation: "tts",
-        cost: (script.length / 1000) * 0.15,
+        cost: (script.length / 1000) * 0.30,
         characters: script.length,
       });
     } else {
