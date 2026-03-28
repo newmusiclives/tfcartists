@@ -104,16 +104,17 @@ export function saveAudioFile(buffer: Buffer, dir: string, filename: string): st
     return `/audio/${dir}/${filename}`;
   }
 
-  // No R2 — local only
+  // No R2 — save locally AND as data URI so serverless playout can serve it
+  const mimeType = filename.endsWith(".wav") ? "audio/wav" : "audio/mpeg";
   try {
     const outputDir = path.join(process.cwd(), "public", "audio", dir);
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(path.join(outputDir, filename), buffer);
-    return `/audio/${dir}/${filename}`;
   } catch {
-    const mimeType = filename.endsWith(".wav") ? "audio/wav" : "audio/mpeg";
-    return `data:${mimeType};base64,${buffer.toString("base64")}`;
+    // Serverless — can't write locally
   }
+  // Always return data URI so the playout audio API can serve it on Netlify
+  return `data:${mimeType};base64,${buffer.toString("base64")}`;
 }
 
 /**

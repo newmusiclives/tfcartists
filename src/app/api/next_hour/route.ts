@@ -112,13 +112,12 @@ export async function GET(request: NextRequest) {
     const baseUrl = request.nextUrl.origin;
     const audioBaseUrl = `${baseUrl}/api/playout/audio`;
 
-    // Helper to resolve audio path
+    // Helper to resolve audio path — always use the API route for database-stored audio
+    // so Hetzner can download it regardless of where the file was originally saved
     const resolveAudio = (path: string | null | undefined, id: string) => {
       if (!path) return null;
-      if (path.startsWith("data:")) return `${audioBaseUrl}/${id}`;
-      if (path.startsWith("http")) return path;
-      // Relative paths like /audio/voice-tracks/vt-xxx.wav — make absolute
-      return `${baseUrl}${path}`;
+      // Always serve through the playout audio API for reliability
+      return `${audioBaseUrl}/${id}`;
     };
 
     // Build hour sequence
