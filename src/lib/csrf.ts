@@ -31,6 +31,7 @@ const CSRF_EXEMPT_PREFIXES = [
   "/api/stream",         // Audio stream
   "/api/notify_now_playing", // Liquidsoap pushes current track
   "/api/track_played",   // Liquidsoap reports track plays
+  "/api/admin/station-onair", // Admin station control
 ];
 
 /**
