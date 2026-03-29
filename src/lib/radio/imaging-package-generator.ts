@@ -275,14 +275,16 @@ export async function generatePackageAudio(packageId: string): Promise<{ generat
 
       let finalPcm: Buffer;
       if (musicBedPath) {
-        finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+        const mixed = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
           bedGain: 0.30,
           fadeInMs: 150,
           fadeOutMs: 400,
         });
+        // If mixer failed (returned input buffer unchanged), fall back to gentle boost
+        finalPcm = mixed === boostedPcm ? amplifyPcm(voicePcm, 1.5) : mixed;
       } else {
-        finalPcm = boostedPcm;
+        finalPcm = amplifyPcm(voicePcm, 1.5);
       }
 
       const wavBuffer = pcmToWav(finalPcm);

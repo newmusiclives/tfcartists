@@ -474,14 +474,17 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
       if (musicBedPath) {
         // Boost voice (3.0x for presence in the mix), then mix with bed
         const boostedPcm = amplifyPcm(voicePcm, 3.0);
-        finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+        const mixed = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
           bedGain: 0.20,
           fadeInMs: 150,
           fadeOutMs: 400,
         });
+        // If the bed file wasn't found (serverless), mixVoiceWithMusicBed returns
+        // the boosted input unchanged — use gentle boost on original instead
+        finalPcm = mixed === boostedPcm ? amplifyPcm(voicePcm, 1.5) : mixed;
       } else {
-        finalPcm = voicePcm;
+        finalPcm = amplifyPcm(voicePcm, 1.5);
       }
 
       const wavBuffer = pcmToWav(finalPcm);
@@ -574,14 +577,16 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
     let finalPcm: Buffer;
     if (musicBedPath) {
       const boostedPcm = amplifyPcm(voicePcm, 3.0);
-      finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+      const mixed = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
         voiceGain: 1.0,
         bedGain: 0.20,
         fadeInMs: 150,
         fadeOutMs: 400,
       });
+      // If bed file unavailable (serverless), use gentle boost on original
+      finalPcm = mixed === boostedPcm ? amplifyPcm(voicePcm, 1.5) : mixed;
     } else {
-      finalPcm = voicePcm;
+      finalPcm = amplifyPcm(voicePcm, 1.5);
     }
 
     const wavBuffer = pcmToWav(finalPcm);
@@ -689,14 +694,15 @@ export async function generateFeatureAudio(
       let finalPcm: Buffer;
       if (musicBedPath) {
         const boostedPcm = amplifyPcm(voicePcm, 3.0);
-        finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+        const mixed = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
           bedGain: 0.20,
           fadeInMs: 150,
           fadeOutMs: 400,
         });
+        finalPcm = mixed === boostedPcm ? amplifyPcm(voicePcm, 1.5) : mixed;
       } else {
-        finalPcm = voicePcm;
+        finalPcm = amplifyPcm(voicePcm, 1.5);
       }
 
       const wavBuffer = pcmToWav(finalPcm);

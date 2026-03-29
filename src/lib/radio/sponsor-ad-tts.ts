@@ -62,7 +62,7 @@ export async function generateSponsorAdAudio(adId: string): Promise<void> {
       await trackAiSpend({ provider: "elevenlabs", operation: "tts", cost: (ad.scriptText.length / 1000) * 0.30, characters: ad.scriptText.length });
 
       const boostedPcm = amplifyPcm(rawPcm!, VOICE_GAIN);
-      return finalizeSponsorAd(ad, boostedPcm, adId);
+      return finalizeSponsorAd(ad, rawPcm!, boostedPcm, adId);
     }
   }
 
@@ -101,24 +101,29 @@ export async function generateSponsorAdAudio(adId: string): Promise<void> {
   await trackAiSpend({ provider: "openai", operation: "tts", cost: 0.015, characters: ad.scriptText.length });
   const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
 
-  await finalizeSponsorAd(ad, boostedPcm, adId);
+  await finalizeSponsorAd(ad, rawPcm, boostedPcm, adId);
 }
 
 /** Mix with music bed (if any), save WAV, and update the DB record */
 async function finalizeSponsorAd(
   ad: { adTitle: string; musicBed?: { filePath: string | null } | null },
+  originalPcm: Buffer,
   boostedPcm: Buffer,
   adId: string,
 ): Promise<void> {
   // Mix with music bed if the ad has one assigned
-  let finalPcm = boostedPcm;
+  let finalPcm: Buffer;
   if (ad.musicBed?.filePath) {
-    finalPcm = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
+    const mixed = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
       voiceGain: 1.0,
       bedGain: 0.7,
       fadeInMs: 300,
       fadeOutMs: 800,
     });
+    // If mixer failed (returned input buffer unchanged), fall back to gentle boost
+    finalPcm = mixed === boostedPcm ? amplifyPcm(originalPcm, 1.5) : mixed;
+  } else {
+    finalPcm = amplifyPcm(originalPcm, 1.5);
   }
 
   const wavBuffer = pcmToWav(finalPcm);

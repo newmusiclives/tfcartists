@@ -310,17 +310,21 @@ export async function GET(req: NextRequest) {
               });
 
               const rawPcm = Buffer.from(await response.arrayBuffer());
-              const boostedPcm = amplifyPcm(rawPcm, 3.5);
 
               // Mix with music bed if the ad has one assigned
-              let finalPcm = boostedPcm;
+              let finalPcm: Buffer;
               if (ad.musicBed?.filePath) {
-                finalPcm = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
+                const boostedPcm = amplifyPcm(rawPcm, 3.5);
+                const mixed = mixVoiceWithMusicBed(boostedPcm, ad.musicBed.filePath, {
                   voiceGain: 1.0,
                   bedGain: 0.7,
                   fadeInMs: 300,
                   fadeOutMs: 800,
                 });
+                // If bed file unavailable (serverless), use gentle boost on original
+                finalPcm = mixed === boostedPcm ? amplifyPcm(rawPcm, 1.5) : mixed;
+              } else {
+                finalPcm = amplifyPcm(rawPcm, 1.5);
               }
 
               const wavBuffer = pcmToWav(finalPcm);

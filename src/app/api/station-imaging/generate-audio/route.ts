@@ -193,7 +193,7 @@ export async function POST(request: NextRequest) {
             const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
 
             // Try to find a matching music bed by category
-            let finalPcm = boostedPcm;
+            let finalPcm: Buffer = amplifyPcm(rawPcm, 1.5); // default: gentle boost only
             let hasMusicBed = false;
 
             if (musicBeds.length > 0) {
@@ -201,13 +201,17 @@ export async function POST(request: NextRequest) {
               const bed = selectMusicBed(musicBeds, category);
 
               if (bed?.filePath) {
-                finalPcm = mixVoiceWithMusicBed(boostedPcm, bed.filePath, {
+                const mixed = mixVoiceWithMusicBed(boostedPcm, bed.filePath, {
                   voiceGain: 1.0,   // already boosted by VOICE_GAIN
                   bedGain: 0.55,    // music bed audible but not overpowering
                   fadeInMs: 200,    // tight fade-in for punchy imaging
                   fadeOutMs: 600,   // quick fade-out to next element
                 });
-                hasMusicBed = true;
+                // If mixer failed (returned input buffer unchanged), keep gentle boost
+                if (mixed !== boostedPcm) {
+                  finalPcm = mixed;
+                  hasMusicBed = true;
+                }
               }
             }
 

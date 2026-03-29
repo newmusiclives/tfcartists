@@ -155,14 +155,16 @@ export async function GET(req: NextRequest) {
           let finalPcm: Buffer;
           if (musicBedPath) {
             const boostedPcm = amplifyPcm(voicePcm, 2.0);
-            finalPcm = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
+            const mixed = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
               voiceGain: 1.0,
               bedGain: 0.25,
               fadeInMs: 200,
               fadeOutMs: 600,
             });
+            // If mixer failed (returned input buffer unchanged), fall back to gentle boost
+            finalPcm = mixed === boostedPcm ? amplifyPcm(voicePcm, 1.5) : mixed;
           } else {
-            finalPcm = voicePcm;
+            finalPcm = amplifyPcm(voicePcm, 1.5);
           }
 
           const wavBuffer = pcmToWav(finalPcm);
