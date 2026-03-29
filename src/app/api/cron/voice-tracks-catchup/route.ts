@@ -18,6 +18,7 @@ export const dynamic = "force-dynamic";
  * Optional query params:
  *   - limit: max tracks to process per call (default 3)
  *   - date: target date YYYY-MM-DD (default today)
+ *   - force: if "true", also re-process audio_ready tracks (for fixing corrupted audio)
  */
 export async function GET(req: NextRequest) {
   const start = Date.now();
@@ -30,7 +31,22 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = Math.min(parseInt(searchParams.get("limit") || "3", 10), 10);
     const dateParam = searchParams.get("date");
+    const force = searchParams.get("force") === "true";
     const airDate = dateParam ? new Date(dateParam + "T00:00:00.000Z") : stationToday();
+
+    // When force=true, reset audio_ready tracks back to script_ready
+    // so they get regenerated (used to fix corrupted audio)
+    if (force) {
+      const resetCount = await prisma.voiceTrack.updateMany({
+        where: {
+          airDate,
+          status: "audio_ready",
+          scriptText: { not: null },
+        },
+        data: { status: "script_ready", audioFilePath: null, audioDuration: null },
+      });
+      logger.info(`Catchup force mode: reset ${resetCount.count} audio_ready tracks to script_ready`);
+    }
 
     // Find voice tracks stuck at script_ready for the target date
     const stuckTracks = await prisma.voiceTrack.findMany({

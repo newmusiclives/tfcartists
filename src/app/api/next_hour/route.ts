@@ -120,6 +120,41 @@ export async function GET(request: NextRequest) {
       return `${audioBaseUrl}/${id}`;
     };
 
+    // --- Resolve imaging audio from StationImagingVoice metadata ---
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let imagingScripts: Record<string, Array<{ label: string; audioFilePath?: string; audioDuration?: number }>> | null = null;
+
+    const imagingVoice = await prisma.stationImagingVoice.findFirst({
+      where: { stationId: station.id, isActive: true },
+    });
+    if (imagingVoice?.metadata) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const meta = imagingVoice.metadata as any;
+      if (meta?.scripts) imagingScripts = meta.scripts;
+    }
+
+    // Time-of-day filtering for imaging scripts
+    const timePeriod =
+      hourOfDay < 6 ? "overnight" :
+      hourOfDay < 10 ? "morning" :
+      hourOfDay < 14 ? "midday" :
+      hourOfDay < 18 ? "afternoon" : "evening";
+    const wrongTimePeriods = ["morning", "midday", "afternoon", "evening", "overnight", "late night"]
+      .filter((p) => p !== timePeriod && !(timePeriod === "overnight" && p === "late night"));
+
+    const pickImagingAudio = (slotType: string): string | null => {
+      if (!imagingScripts) return null;
+      const allScripts = imagingScripts[slotType] || imagingScripts["sweeper"] || [];
+      const timeFiltered = allScripts.filter((s) => {
+        const label = s.label.toLowerCase();
+        return !wrongTimePeriods.some((wp) => label.includes(wp));
+      });
+      const scripts = timeFiltered.length > 0 ? timeFiltered : allScripts;
+      const withAudio = scripts.filter((s) => s.audioFilePath);
+      if (withAudio.length === 0) return null;
+      return withAudio[Math.floor(Math.random() * withAudio.length)].audioFilePath!;
+    };
+
     // Build hour sequence
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const hourSequence: Array<{ type: string; audio_file_path: string | null; metadata: Record<string, any> }> = [];
@@ -173,11 +208,12 @@ export async function GET(request: NextRequest) {
           });
         }
       } else if (slot.type === "sweeper" || slot.type === "station_id" || slot.category === "Imaging" || slot.category === "TOH") {
-        // Imaging slots — resolve from ProducedImaging if audio exists
+        // Imaging slots — resolve audio from StationImagingVoice metadata
         const imagingType = slot.category === "TOH" ? "toh" : slot.type === "station_id" ? "id" : "sweeper";
+        const imagingAudioPath = pickImagingAudio(slot.type === "station_id" ? "station_id" : imagingType === "toh" ? "station_id" : "sweeper");
         hourSequence.push({
           type: "imaging",
-          audio_file_path: null, // get_track.py will inject from static assets
+          audio_file_path: imagingAudioPath,
           metadata: {
             imaging_type: imagingType,
             clock_minute: slot.minute,

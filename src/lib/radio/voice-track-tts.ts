@@ -174,8 +174,11 @@ export async function generateWithElevenLabs(
   if (!apiKey) throw new Error("ELEVENLABS_API_KEY not configured");
 
   return withRetry(async () => {
+    // output_format MUST be a query parameter, not in the JSON body —
+    // ElevenLabs ignores it in the body and returns MP3 (default), which
+    // sounds like static when interpreted as raw PCM.
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=pcm_24000`,
       {
         method: "POST",
         headers: {
@@ -189,7 +192,6 @@ export async function generateWithElevenLabs(
             stability: opts?.stability ?? 0.75,
             similarity_boost: opts?.similarityBoost ?? 0.75,
           },
-          output_format: "pcm_24000",
         }),
       },
     );
@@ -221,8 +223,9 @@ export async function generatePcmWithElevenLabs(
   if (!apiKey) throw new Error("ELEVENLABS_API_KEY not configured");
 
   return withRetry(async () => {
+    // output_format MUST be a query parameter (same fix as generateWithElevenLabs)
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=pcm_24000`,
       {
         method: "POST",
         headers: {
@@ -236,7 +239,6 @@ export async function generatePcmWithElevenLabs(
             stability: opts?.stability ?? 0.75,
             similarity_boost: opts?.similarityBoost ?? 0.75,
           },
-          output_format: "pcm_24000",
         }),
       },
     );
