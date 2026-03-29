@@ -499,7 +499,7 @@ export default function ShowReelPage() {
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="text-xs text-zinc-500 mt-3">
-                Go live in 48 hours. Plans from $199/mo.
+                Go live in 48 hours. Plans from $200/mo.
               </p>
             </div>
           </div>

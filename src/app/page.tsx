@@ -463,7 +463,7 @@ export default async function MarketingPage() {
               </div>
               <div className="text-amber-600 font-semibold text-sm mb-2">For Operators</div>
               <div className="flex items-baseline">
-                <span className="text-3xl font-bold text-gray-900">$199</span>
+                <span className="text-3xl font-bold text-gray-900">$200</span>
                 <span className="text-sm text-gray-500 ml-1">/mo</span>
               </div>
               <div className="text-sm text-gray-500 mb-6">launch your station</div>

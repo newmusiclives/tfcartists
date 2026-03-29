@@ -40,7 +40,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "How much does it cost?",
-    a: "Plans start at $199/month with a one-time setup fee. You can earn back your costs through built-in sponsor management and revenue tools. Book a call to find the right plan for your station.",
+    a: "Plans start at $200/month with a one-time setup fee. You can earn back your costs through built-in sponsor management and revenue tools. Book a call to find the right plan for your station.",
   },
   {
     q: "Can I customize my DJ's voice and personality?",
@@ -317,9 +317,9 @@ export default function DemoPage() {
                   <p className="text-sm text-zinc-400 text-center mb-4">Pick a plan and go live in 48 hours</p>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {[
-                      { id: "launch", name: "Launch", price: 199, line: "1 station, 2 DJs, 12hr/day" },
-                      { id: "growth", name: "Growth", price: 299, line: "1 station, 6 DJs, 24/7", popular: true },
-                      { id: "scale", name: "Scale", price: 449, line: "3 stations, 12 DJs, 24/7" },
+                      { id: "launch", name: "Launch", price: 200, line: "1 station, 2 DJs, 12hr/day" },
+                      { id: "growth", name: "Growth", price: 300, line: "1 station, 6 DJs, 24/7", popular: true },
+                      { id: "scale", name: "Scale", price: 500, line: "3 stations, 12 DJs, 24/7" },
                     ].map((plan) => (
                       <Link
                         key={plan.id}

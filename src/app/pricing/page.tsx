@@ -26,7 +26,7 @@ const OPERATOR_PLANS = [
   {
     id: "launch",
     name: "Launch",
-    price: 199,
+    price: 200,
     setup: 500,
     description: "Perfect for getting started with your first station",
     features: [
@@ -44,7 +44,7 @@ const OPERATOR_PLANS = [
   {
     id: "growth",
     name: "Growth",
-    price: 299,
+    price: 300,
     setup: 500,
     description: "Most popular — full 24/7 station with more DJs",
     features: [
@@ -63,7 +63,7 @@ const OPERATOR_PLANS = [
   {
     id: "scale",
     name: "Scale",
-    price: 449,
+    price: 500,
     setup: 1000,
     description: "Multiple stations for networks and brands",
     features: [
@@ -81,7 +81,7 @@ const OPERATOR_PLANS = [
   {
     id: "network",
     name: "Network",
-    price: 899,
+    price: 1000,
     setup: 0,
     description: "Enterprise — unlimited scale with dedicated support",
     features: [
@@ -101,9 +101,9 @@ const OPERATOR_PLANS = [
 
 const ARTIST_PLANS = [
   {
-    id: "free",
-    name: "Free",
-    price: 0,
+    id: "starter",
+    name: "Starter",
+    price: 5,
     description: "Get your music on the radio",
     features: [
       "Radio airplay on partner stations",
@@ -115,10 +115,10 @@ const ARTIST_PLANS = [
   {
     id: "pro",
     name: "Pro",
-    price: 5,
+    price: 15,
     description: "Priority rotation and deeper insights",
     features: [
-      "Everything in Free",
+      "Everything in Starter",
       "Priority rotation placement",
       "Detailed listener demographics",
       "DJ shoutouts for new releases",
@@ -128,7 +128,7 @@ const ARTIST_PLANS = [
   {
     id: "premium",
     name: "Premium",
-    price: 49,
+    price: 30,
     description: "Maximum exposure with dedicated segments",
     features: [
       "Everything in Pro",
@@ -136,7 +136,20 @@ const ARTIST_PLANS = [
       "Custom DJ intro for your songs",
       "Cross-station promotion",
       "Monthly performance reports",
+    ],
+  },
+  {
+    id: "elite",
+    name: "Elite",
+    price: 50,
+    description: "Full promotion engine for serious artists",
+    features: [
+      "Everything in Premium",
+      "Multi-station promotion",
       "Direct sponsor introductions",
+      "Branded artist radio hour",
+      "Priority playlist placement",
+      "Quarterly performance review",
     ],
   },
 ];
@@ -364,8 +377,8 @@ export default function PricingPage() {
       {/* Artist Plans */}
       {audience === "artists" && (
         <section className="px-4 pb-16">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {ARTIST_PLANS.map((plan) => (
                 <div
                   key={plan.id}
@@ -373,14 +386,8 @@ export default function PricingPage() {
                 >
                   <div className="text-purple-600 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
-                    {plan.price === 0 ? (
-                      <span className="text-4xl font-bold text-gray-900">Free</span>
-                    ) : (
-                      <>
-                        <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
-                        <span className="text-sm text-gray-500 ml-1">/mo</span>
-                      </>
-                    )}
+                    <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
+                    <span className="text-sm text-gray-500 ml-1">/mo</span>
                   </div>
                   <p className="text-sm text-gray-500 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
@@ -395,7 +402,7 @@ export default function PricingPage() {
                     href="/onboard"
                     className="block text-center bg-purple-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors text-sm"
                   >
-                    {plan.price === 0 ? "Submit Music Free" : "Get Started"}
+                    Get Started
                   </Link>
                 </div>
               ))}

@@ -223,10 +223,10 @@ export default function OperatePage() {
             <h3 className="text-xl font-bold text-center mb-6">Operator Plans</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { plan: "Launch", price: "$199/mo", fee: "15% of revenue", setup: "$500", highlight: false },
-                { plan: "Growth", price: "$299/mo", fee: "10% of revenue", setup: "$500", highlight: true },
-                { plan: "Scale", price: "$449/mo", fee: "7% of revenue", setup: "$1,000", highlight: false },
-                { plan: "Network", price: "$899/mo", fee: "5% of revenue", setup: "Free", highlight: false },
+                { plan: "Launch", price: "$200/mo", fee: "15% of revenue", setup: "$500", highlight: false },
+                { plan: "Growth", price: "$300/mo", fee: "10% of revenue", setup: "$500", highlight: true },
+                { plan: "Scale", price: "$500/mo", fee: "7% of revenue", setup: "$1,000", highlight: false },
+                { plan: "Network", price: "$1,000/mo", fee: "5% of revenue", setup: "Free", highlight: false },
               ].map((tier) => (
                 <div
                   key={tier.plan}

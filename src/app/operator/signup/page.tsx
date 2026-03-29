@@ -9,7 +9,7 @@ const OPERATOR_PLANS = [
   {
     id: "launch",
     name: "Launch",
-    price: 199,
+    price: 200,
     fee: "15%",
     setup: 500,
     stations: 1,
@@ -20,7 +20,7 @@ const OPERATOR_PLANS = [
   {
     id: "growth",
     name: "Growth",
-    price: 299,
+    price: 300,
     fee: "10%",
     setup: 500,
     stations: 1,
@@ -31,7 +31,7 @@ const OPERATOR_PLANS = [
   {
     id: "scale",
     name: "Scale",
-    price: 449,
+    price: 500,
     fee: "7%",
     setup: 1000,
     stations: 3,
@@ -42,7 +42,7 @@ const OPERATOR_PLANS = [
   {
     id: "network",
     name: "Network",
-    price: 899,
+    price: 1000,
     fee: "5%",
     setup: 0,
     stations: 10,
