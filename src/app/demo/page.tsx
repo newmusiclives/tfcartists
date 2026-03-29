@@ -132,10 +132,10 @@ export default function DemoPage() {
             <span>TrueFans Radio</span>
           </Link>
           <Link
-            href="/operator/signup"
+            href="/pricing"
             className="text-sm text-zinc-400 hover:text-white transition-colors"
           >
-            Launch Your Station
+            Pricing
           </Link>
         </div>
       </nav>
@@ -311,25 +311,47 @@ export default function DemoPage() {
                   </div>
                 </details>
 
-                {/* CTA */}
-                <div className="pt-4 space-y-3">
-                  <Link
-                    href="/operator/signup"
-                    className="flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-lg bg-white text-black hover:bg-zinc-100 transition-colors active:scale-[0.98]"
-                  >
-                    Ready to Launch?
-                    <ArrowRight className="w-5 h-5" />
-                  </Link>
-                  <Link
-                    href="/showreel"
-                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 transition-colors"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    Want more? Try our 20-minute personalized show reel
-                  </Link>
-                  <p className="text-center text-xs text-zinc-500 mt-3">
-                    Go live in 48 hours. Plans from $199/mo.
-                  </p>
+                {/* CTA — Quick plan cards */}
+                <div className="pt-6 space-y-4">
+                  <h3 className="text-lg font-bold text-center mb-1">Ready to Launch?</h3>
+                  <p className="text-sm text-zinc-400 text-center mb-4">Pick a plan and go live in 48 hours</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {[
+                      { id: "launch", name: "Launch", price: 199, line: "1 station, 2 DJs, 12hr/day" },
+                      { id: "growth", name: "Growth", price: 299, line: "1 station, 6 DJs, 24/7", popular: true },
+                      { id: "scale", name: "Scale", price: 449, line: "3 stations, 12 DJs, 24/7" },
+                    ].map((plan) => (
+                      <Link
+                        key={plan.id}
+                        href={`/operator/signup?plan=${plan.id}`}
+                        className={`block p-4 rounded-xl border text-center transition-all hover:scale-[1.02] ${
+                          plan.popular
+                            ? "border-amber-500/50 bg-amber-500/10"
+                            : "border-zinc-700/50 bg-zinc-800/40 hover:border-zinc-600"
+                        }`}
+                      >
+                        {plan.popular && (
+                          <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Most Popular</span>
+                        )}
+                        <div className="text-xl font-bold">${plan.price}<span className="text-sm font-normal text-zinc-400">/mo</span></div>
+                        <div className="text-xs text-zinc-400 mt-1">{plan.line}</div>
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-center gap-4 pt-2">
+                    <Link
+                      href="/pricing"
+                      className="text-sm text-amber-400 hover:text-amber-300 font-medium transition-colors"
+                    >
+                      See full pricing &rarr;
+                    </Link>
+                    <Link
+                      href="/showreel"
+                      className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+                    >
+                      Try 20-min showreel
+                    </Link>
+                  </div>
                 </div>
               </div>
             )}

@@ -120,8 +120,8 @@ export default async function MarketingPage() {
             <div className="hidden md:flex items-center space-x-6">
               <a href="#artists" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Artists</a>
               <a href="#operators" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Operators</a>
-              <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Pricing</a>
-              <a href="#demo" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Demo Station</a>
+              <Link href="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Pricing</Link>
+              <Link href="/demo" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Demo</Link>
               <Link
                 href="/player"
                 className="inline-flex items-center space-x-1 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors text-sm font-semibold"
@@ -478,7 +478,7 @@ export default async function MarketingPage() {
               <Link href="/operate" className="block text-center bg-amber-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-amber-700 transition-colors text-sm">
                 Learn More
               </Link>
-              <p className="text-xs text-center text-gray-400 mt-2"><Link href="/operate" className="text-amber-600 hover:underline">See all plans</Link></p>
+              <p className="text-xs text-center text-gray-400 mt-2"><Link href="/pricing" className="text-amber-600 hover:underline">See all plans</Link></p>
             </div>
           </div>
         </div>
