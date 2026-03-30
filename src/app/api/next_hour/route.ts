@@ -99,12 +99,32 @@ export async function GET(request: NextRequest) {
       : [];
     const songMap = new Map(songs.map((s) => [s.id, s]));
 
-    // Load features
-    const featureIds = slots
+    // Load features — fill unlinked feature slots from available pool
+    const featureSlots = slots.filter((s: { type: string }) => s.type === "feature");
+    const linkedFeatureIds = featureSlots
       .filter((s: { featureContentId?: string }) => s.featureContentId)
       .map((s: { featureContentId: string }) => s.featureContentId);
-    const features = featureIds.length > 0
-      ? await prisma.featureContent.findMany({ where: { id: { in: featureIds } } })
+    const unlinkedFeatureSlots = featureSlots.filter((s: { featureContentId?: string }) => !s.featureContentId);
+
+    // Fill unlinked feature slots from available FeatureContent pool
+    if (unlinkedFeatureSlots.length > 0) {
+      const availableFeatures = await prisma.featureContent.findMany({
+        where: {
+          stationId: station.id,
+          audioFilePath: { not: "" },
+          id: { notIn: linkedFeatureIds },
+        },
+        orderBy: { createdAt: "desc" },
+        take: unlinkedFeatureSlots.length,
+      });
+      for (let i = 0; i < Math.min(unlinkedFeatureSlots.length, availableFeatures.length); i++) {
+        unlinkedFeatureSlots[i].featureContentId = availableFeatures[i].id;
+        linkedFeatureIds.push(availableFeatures[i].id);
+      }
+    }
+
+    const features = linkedFeatureIds.length > 0
+      ? await prisma.featureContent.findMany({ where: { id: { in: linkedFeatureIds } } })
       : [];
     const featureMap = new Map(features.map((f) => [f.id, f]));
 
@@ -222,13 +242,19 @@ export async function GET(request: NextRequest) {
           },
         });
       } else if (slot.type === "sponsor" || slot.category === "Sponsor") {
-        // Sponsor ad slots — load active ads
-        const ad = await prisma.sponsorAd.findFirst({
+        // Sponsor ad slots — pick random ad from the least-played pool
+        const lowestAd = await prisma.sponsorAd.findFirst({
           where: { stationId: station.id, isActive: true },
-          orderBy: { playCount: "asc" }, // least-played first
-          select: { id: true, adTitle: true, audioFilePath: true, durationSeconds: true, sponsorId: true },
+          orderBy: { playCount: "asc" },
+          select: { playCount: true },
         });
-        if (ad?.audioFilePath) {
+        const adPool = lowestAd ? await prisma.sponsorAd.findMany({
+          where: { stationId: station.id, isActive: true, playCount: { lte: lowestAd.playCount + 1 } },
+          select: { id: true, adTitle: true, audioFilePath: true, durationSeconds: true, sponsorId: true },
+        }) : [];
+        const adsWithAudio = adPool.filter((a) => a.audioFilePath);
+        const ad = adsWithAudio.length > 0 ? adsWithAudio[Math.floor(Math.random() * adsWithAudio.length)] : null;
+        if (ad) {
           hourSequence.push({
             type: "ad",
             audio_file_path: resolveAudio(ad.audioFilePath, ad.id),
