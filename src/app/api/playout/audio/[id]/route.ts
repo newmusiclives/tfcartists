@@ -51,6 +51,15 @@ export async function GET(
     audioPath = ad?.audioFilePath || ad?.audioDataUri;
   }
 
+  // Try produced imaging (sweepers, promos, IDs, TOH)
+  if (!audioPath) {
+    const pi = await prisma.producedImaging.findFirst({
+      where: { id },
+      select: { filePath: true },
+    });
+    audioPath = pi?.filePath || null;
+  }
+
   if (!audioPath) {
     return NextResponse.json({ error: "Audio not found" }, { status: 404 });
   }

@@ -470,53 +470,61 @@ export async function GET(request: NextRequest) {
     );
     const resolvedImaging = new Map<number, { type: string; audioFilePath: string | null; audioDuration?: number }>();
 
-    // Imaging voice metadata — shared between standalone imaging slots and ad break bookends
-    let imagingVoiceMeta: { scripts?: Record<string, Array<{ label: string; audioFilePath?: string; audioDuration?: number }>> } | null = null;
+    // Load ProducedImaging records grouped by category
+    const producedImaging = await prisma.producedImaging.findMany({
+      where: { stationId, isActive: true, filePath: { not: "" } },
+      select: { id: true, category: true, filePath: true, durationSeconds: true },
+    });
+    const imagingByCategory = new Map<string, typeof producedImaging>();
+    for (const pi of producedImaging) {
+      if (!imagingByCategory.has(pi.category)) imagingByCategory.set(pi.category, []);
+      imagingByCategory.get(pi.category)!.push(pi);
+    }
 
-    // Time-of-day period for filtering imaging scripts
+    // Map slot types to ProducedImaging categories
+    const categoryMap: Record<string, string[]> = {
+      station_id: ["station_id", "id"],
+      sweeper: ["sweeper"],
+      promo: ["promo"],
+      imaging: ["sweeper"],
+    };
+
+    if (imagingSlots.length > 0) {
+      for (const slot of imagingSlots) {
+        const slotType = slot.type as string;
+        const cats = categoryMap[slotType] || [slotType, "sweeper"];
+        for (const cat of cats) {
+          const items = imagingByCategory.get(cat);
+          if (items && items.length > 0) {
+            const pick = items[Math.floor(Math.random() * items.length)];
+            resolvedImaging.set(slot.position as number, {
+              type: slotType,
+              audioFilePath: pick.filePath,
+              audioDuration: pick.durationSeconds ?? undefined,
+            });
+            break;
+          }
+        }
+      }
+    }
+
+    // Imaging voice metadata — still needed for ad break bookend imaging
+    let imagingVoiceMeta: { scripts?: Record<string, Array<{ label: string; audioFilePath?: string; audioDuration?: number }>> } | null = null;
+    const imagingVoice = await prisma.stationImagingVoice.findFirst({
+      where: { stationId, isActive: true },
+    });
+    if (imagingVoice?.metadata) {
+      imagingVoiceMeta = imagingVoice.metadata as any;
+    }
+
+    // Time-of-day period for filtering ad break imaging scripts
     const timePeriod =
       hourOfDay < 6 ? "overnight" :
       hourOfDay < 10 ? "morning" :
       hourOfDay < 14 ? "midday" :
       hourOfDay < 18 ? "afternoon" : "evening";
-
-    // Labels that DON'T match the current time period should be excluded
     const wrongTimePeriods = ["morning", "midday", "afternoon", "evening", "overnight", "late night"]
-      .filter((p) => p !== timePeriod && !(timePeriod === "overnight" && p === "late night"));
-
-    if (imagingSlots.length > 0 || adSlots.length > 0) {
-      // Find imaging voice with audio metadata
-      const imagingVoice = await prisma.stationImagingVoice.findFirst({
-        where: { stationId, isActive: true },
-      });
-
-      if (imagingVoice?.metadata) {
-        imagingVoiceMeta = imagingVoice.metadata as any;
-        if (imagingVoiceMeta?.scripts) {
-          for (const slot of imagingSlots) {
-            const slotType = slot.type as string;
-            const allScripts = imagingVoiceMeta.scripts[slotType] || imagingVoiceMeta.scripts["sweeper"] || [];
-            // Filter out scripts whose labels reference the wrong time of day
-            const timeFiltered = allScripts.filter((s) => {
-              const label = s.label.toLowerCase();
-              return !wrongTimePeriods.some((wp) => label.includes(wp));
-            });
-            const scripts = timeFiltered.length > 0 ? timeFiltered : allScripts;
-            if (scripts.length > 0) {
-              // Pick a random imaging script for variety
-              const pick = scripts[Math.floor(Math.random() * scripts.length)];
-              if (pick.audioFilePath) {
-                resolvedImaging.set(slot.position as number, {
-                  type: slotType,
-                  audioFilePath: pick.audioFilePath,
-                  audioDuration: pick.audioDuration,
-                });
-              }
-            }
-          }
-        }
-      }
-    }
+      .filter((p: string) => p !== timePeriod && !(timePeriod === "overnight" && p === "late night"));
 
     // --- Load station production settings for crossfade/transition hints ---
     const station = await prisma.station.findUnique({

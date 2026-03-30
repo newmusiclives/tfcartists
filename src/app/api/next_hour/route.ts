@@ -120,39 +120,37 @@ export async function GET(request: NextRequest) {
       return `${audioBaseUrl}/${id}`;
     };
 
-    // --- Resolve imaging audio from StationImagingVoice metadata ---
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let imagingScripts: Record<string, Array<{ label: string; audioFilePath?: string; audioDuration?: number }>> | null = null;
-
-    const imagingVoice = await prisma.stationImagingVoice.findFirst({
-      where: { stationId: station.id, isActive: true },
+    // --- Resolve imaging audio from ProducedImaging records ---
+    // Group by category for random selection per slot type
+    const producedImaging = await prisma.producedImaging.findMany({
+      where: { stationId: station.id, isActive: true, filePath: { not: "" } },
+      select: { id: true, name: true, category: true, filePath: true, durationSeconds: true },
     });
-    if (imagingVoice?.metadata) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const meta = imagingVoice.metadata as any;
-      if (meta?.scripts) imagingScripts = meta.scripts;
+    const imagingByCategory = new Map<string, typeof producedImaging>();
+    for (const pi of producedImaging) {
+      const cat = pi.category;
+      if (!imagingByCategory.has(cat)) imagingByCategory.set(cat, []);
+      imagingByCategory.get(cat)!.push(pi);
     }
 
-    // Time-of-day filtering for imaging scripts
-    const timePeriod =
-      hourOfDay < 6 ? "overnight" :
-      hourOfDay < 10 ? "morning" :
-      hourOfDay < 14 ? "midday" :
-      hourOfDay < 18 ? "afternoon" : "evening";
-    const wrongTimePeriods = ["morning", "midday", "afternoon", "evening", "overnight", "late night"]
-      .filter((p) => p !== timePeriod && !(timePeriod === "overnight" && p === "late night"));
-
-    const pickImagingAudio = (slotType: string): string | null => {
-      if (!imagingScripts) return null;
-      const allScripts = imagingScripts[slotType] || imagingScripts["sweeper"] || [];
-      const timeFiltered = allScripts.filter((s) => {
-        const label = s.label.toLowerCase();
-        return !wrongTimePeriods.some((wp) => label.includes(wp));
-      });
-      const scripts = timeFiltered.length > 0 ? timeFiltered : allScripts;
-      const withAudio = scripts.filter((s) => s.audioFilePath);
-      if (withAudio.length === 0) return null;
-      return withAudio[Math.floor(Math.random() * withAudio.length)].audioFilePath!;
+    // Map clock slot types to ProducedImaging categories
+    const pickImagingAudio = (slotType: string): { id: string; audioFilePath: string; duration?: number | null } | null => {
+      // Try exact category match, then fallback to sweeper
+      const categoryMap: Record<string, string[]> = {
+        station_id: ["station_id", "id"],
+        sweeper: ["sweeper"],
+        promo: ["promo"],
+        toh: ["station_id", "id", "toh"],
+      };
+      const cats = categoryMap[slotType] || [slotType, "sweeper"];
+      for (const cat of cats) {
+        const items = imagingByCategory.get(cat);
+        if (items && items.length > 0) {
+          const pick = items[Math.floor(Math.random() * items.length)];
+          return { id: pick.id, audioFilePath: `${audioBaseUrl}/${pick.id}`, duration: pick.durationSeconds };
+        }
+      }
+      return null;
     };
 
     // Build hour sequence
@@ -208,15 +206,17 @@ export async function GET(request: NextRequest) {
           });
         }
       } else if (slot.type === "sweeper" || slot.type === "promo" || slot.type === "station_id" || slot.category === "Imaging" || slot.category === "TOH") {
-        // Imaging slots — resolve audio from StationImagingVoice metadata
+        // Imaging slots — resolve audio from ProducedImaging records
         const imagingType = slot.category === "TOH" ? "toh" : slot.type === "station_id" ? "id" : slot.type === "promo" ? "promo" : "sweeper";
-        const imagingAudioPath = pickImagingAudio(slot.type === "station_id" ? "station_id" : slot.type === "promo" ? "promo" : imagingType === "toh" ? "station_id" : "sweeper");
+        const lookupType = slot.category === "TOH" ? "toh" : slot.type === "station_id" ? "station_id" : slot.type === "promo" ? "promo" : "sweeper";
+        const imaging = pickImagingAudio(lookupType);
         hourSequence.push({
           type: "imaging",
-          audio_file_path: imagingAudioPath,
+          audio_file_path: imaging?.audioFilePath || null,
           metadata: {
             imaging_type: imagingType,
             clock_minute: slot.minute,
+            duration: imaging?.duration,
             no_crossfade: true,
             dj_id: scheduledDj?.djSlug || null,
           },
