@@ -7,7 +7,8 @@
  * - Sponsor breaks NOT adjacent to station features (at least 1 song gap)
  * - 3 A-category tracks: 1st song of the hour + 1 after each of the other 2 ad breaks
  * - 2 station features per hour
- * - 2 song-referencing voice tracks + 1 generic pre-recorded
+ * - 2 song-referencing voice tracks per hour
+ * - 1 promo imaging slot per hour
  * - Hour 1: show intro at top
  * - Hour 3: show transition (Hank/Loretta/Doc) or just closer (Cody)
  */
@@ -42,8 +43,8 @@ const prisma = new PrismaClient();
  * :49  Feature 2
  * :52  Song D
  * :56  Sweeper → SPONSOR BREAK 3 (2x15s)
- * :56  Generic VT
- * :57  Song C closer
+ * :57  Promo
+ * :58  Song C closer
  */
 function hour1Pattern() {
   return [
@@ -78,7 +79,7 @@ function hour1Pattern() {
     { position: 24, minute: 56, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into sponsor break 3" },
     { position: 25, minute: 56, duration: 1, category: "Sponsor", type: "sponsor",     notes: "Sponsor break 3 — spot 1 (15s)" },
     { position: 26, minute: 56, duration: 1, category: "Sponsor", type: "sponsor",     notes: "Sponsor break 3 — spot 2 (15s)" },
-    { position: 27, minute: 57, duration: 1, category: "DJ",      type: "voice_break", notes: "Generic pre-recorded voice track" },
+    { position: 27, minute: 57, duration: 1, category: "Imaging", type: "promo",       notes: "Station promo" },
     { position: 28, minute: 58, duration: 4, category: "C",       type: "song",        notes: "Medium rotation closer" },
   ];
 }
@@ -118,7 +119,7 @@ function hour2Pattern() {
     { position: 23, minute: 54, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into sponsor break 3" },
     { position: 24, minute: 54, duration: 1, category: "Sponsor", type: "sponsor",     notes: "Sponsor break 3 — spot 1 (15s)" },
     { position: 25, minute: 54, duration: 1, category: "Sponsor", type: "sponsor",     notes: "Sponsor break 3 — spot 2 (15s)" },
-    { position: 26, minute: 55, duration: 1, category: "DJ",      type: "voice_break", notes: "Generic pre-recorded voice track" },
+    { position: 26, minute: 55, duration: 1, category: "Imaging", type: "promo",       notes: "Station promo" },
     { position: 27, minute: 56, duration: 4, category: "C",       type: "song",        notes: "Medium rotation closer" },
   ];
 }
@@ -159,10 +160,11 @@ function hour3WithHandoffPattern() {
     { position: 23, minute: 54, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into sponsor break 3" },
     { position: 24, minute: 54, duration: 1, category: "Sponsor", type: "sponsor",     notes: "Sponsor break 3 — spot 1 (15s)" },
     { position: 25, minute: 54, duration: 1, category: "Sponsor", type: "sponsor",     notes: "Sponsor break 3 — spot 2 (15s)" },
+    { position: 26, minute: 55, duration: 1, category: "Imaging", type: "promo",       notes: "Station promo" },
     // Show transition + closer
-    { position: 26, minute: 55, duration: 2, category: "DJ",      type: "voice_break", notes: "SHOW TRANSITION — DJ hands off to next DJ" },
-    { position: 27, minute: 57, duration: 4, category: "B",       type: "song",        notes: "Final song" },
-    { position: 28, minute: 59, duration: 1, category: "DJ",      type: "voice_break", notes: "SHOW CLOSER — DJ signs off" },
+    { position: 27, minute: 55, duration: 2, category: "DJ",      type: "voice_break", notes: "SHOW TRANSITION — DJ hands off to next DJ" },
+    { position: 28, minute: 57, duration: 4, category: "B",       type: "song",        notes: "Final song" },
+    { position: 29, minute: 59, duration: 1, category: "DJ",      type: "voice_break", notes: "SHOW CLOSER — DJ signs off" },
   ];
 }
 
@@ -201,10 +203,11 @@ function hour3NoHandoffPattern() {
     { position: 23, minute: 54, duration: 1, category: "Imaging", type: "sweeper",     notes: "Sweeper into sponsor break 3" },
     { position: 24, minute: 54, duration: 1, category: "Sponsor", type: "sponsor",     notes: "Sponsor break 3 — spot 1 (15s)" },
     { position: 25, minute: 54, duration: 1, category: "Sponsor", type: "sponsor",     notes: "Sponsor break 3 — spot 2 (15s)" },
+    { position: 26, minute: 55, duration: 1, category: "Imaging", type: "promo",       notes: "Station promo" },
     // Final songs + closer (no handoff)
-    { position: 26, minute: 55, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
-    { position: 27, minute: 57, duration: 1, category: "DJ",      type: "voice_break", notes: "SHOW CLOSER — DJ signs off for the day" },
-    { position: 28, minute: 58, duration: 4, category: "C",       type: "song",        notes: "Final song of the day" },
+    { position: 27, minute: 55, duration: 4, category: "B",       type: "song",        notes: "Heavy rotation" },
+    { position: 28, minute: 57, duration: 1, category: "DJ",      type: "voice_break", notes: "SHOW CLOSER — DJ signs off for the day" },
+    { position: 29, minute: 58, duration: 4, category: "C",       type: "song",        notes: "Final song of the day" },
   ];
 }
 
@@ -245,10 +248,12 @@ async function main() {
       const sponsorBreaks = sponsorSpots / 2;
       const features = p.filter(s => s.type === "feature").length;
       const vts = p.filter(s => s.type === "voice_break").length;
+      const promos = p.filter(s => s.type === "promo").length;
+      const sweepers = p.filter(s => s.type === "sweeper").length;
       const aCat = p.filter(s => s.type === "song" && s.category === "A").length;
 
       const name = `${dj.clockPrefix} — ${labels[i]}`;
-      const desc = `${i === 0 ? "Show intro. " : i === 2 ? (dj.hasFollowingDj ? "Show transition + closer. " : "Show closer. ") : ""}${songs} songs (${aCat}xA), ${sponsorBreaks} sponsor breaks (${sponsorSpots} spots), ${features} features, ${vts} voice tracks.`;
+      const desc = `${i === 0 ? "Show intro. " : i === 2 ? (dj.hasFollowingDj ? "Show transition + closer. " : "Show closer. ") : ""}${songs} songs (${aCat}xA), ${sponsorBreaks} sponsor breaks (${sponsorSpots} spots), ${features} features, ${vts} voice tracks, ${sweepers} sweepers, ${promos} promo.`;
 
       const template = await prisma.clockTemplate.create({
         data: {

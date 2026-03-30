@@ -472,8 +472,8 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
 
       let finalPcm: Buffer;
       if (musicBedPath) {
-        // Boost voice (3.0x for presence in the mix), then mix with bed
-        const boostedPcm = amplifyPcm(voicePcm, 3.0);
+        // Boost voice (2.0x for presence in the mix), then mix with bed
+        const boostedPcm = amplifyPcm(voicePcm, 2.0);
         const mixed = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
           bedGain: 0.20,
@@ -576,7 +576,7 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
 
     let finalPcm: Buffer;
     if (musicBedPath) {
-      const boostedPcm = amplifyPcm(voicePcm, 3.0);
+      const boostedPcm = amplifyPcm(voicePcm, 2.0);
       const mixed = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
         voiceGain: 1.0,
         bedGain: 0.20,
@@ -693,7 +693,7 @@ export async function generateFeatureAudio(
 
       let finalPcm: Buffer;
       if (musicBedPath) {
-        const boostedPcm = amplifyPcm(voicePcm, 3.0);
+        const boostedPcm = amplifyPcm(voicePcm, 2.0);
         const mixed = mixVoiceWithMusicBed(boostedPcm, musicBedPath, {
           voiceGain: 1.0,
           bedGain: 0.20,

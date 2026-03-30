@@ -207,10 +207,10 @@ export async function GET(request: NextRequest) {
             },
           });
         }
-      } else if (slot.type === "sweeper" || slot.type === "station_id" || slot.category === "Imaging" || slot.category === "TOH") {
+      } else if (slot.type === "sweeper" || slot.type === "promo" || slot.type === "station_id" || slot.category === "Imaging" || slot.category === "TOH") {
         // Imaging slots — resolve audio from StationImagingVoice metadata
-        const imagingType = slot.category === "TOH" ? "toh" : slot.type === "station_id" ? "id" : "sweeper";
-        const imagingAudioPath = pickImagingAudio(slot.type === "station_id" ? "station_id" : imagingType === "toh" ? "station_id" : "sweeper");
+        const imagingType = slot.category === "TOH" ? "toh" : slot.type === "station_id" ? "id" : slot.type === "promo" ? "promo" : "sweeper";
+        const imagingAudioPath = pickImagingAudio(slot.type === "station_id" ? "station_id" : slot.type === "promo" ? "promo" : imagingType === "toh" ? "station_id" : "sweeper");
         hourSequence.push({
           type: "imaging",
           audio_file_path: imagingAudioPath,
