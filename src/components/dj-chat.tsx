@@ -169,7 +169,7 @@ export default function DJChat() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-zinc-900/90 border border-zinc-700/50 px-4 py-3 shadow-lg backdrop-blur-md hover:bg-zinc-800/90 transition-colors"
+        className="fixed bottom-20 right-6 z-50 flex items-center gap-2 rounded-full bg-zinc-900/90 border border-zinc-700/50 px-4 py-3 shadow-lg backdrop-blur-md hover:bg-zinc-800/90 transition-colors"
         title={`Chat with ${djName}`}
       >
         {/* Chat icon */}
@@ -198,7 +198,7 @@ export default function DJChat() {
   // Expanded chat panel
   // ==========================================================================
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex w-[350px] flex-col rounded-2xl border border-zinc-700/50 bg-zinc-950/90 shadow-2xl backdrop-blur-xl"
+    <div className="fixed bottom-20 right-6 z-50 flex w-[350px] flex-col rounded-2xl border border-zinc-700/50 bg-zinc-950/90 shadow-2xl backdrop-blur-xl"
       style={{ height: 500 }}
     >
       {/* ---- Header ---- */}
