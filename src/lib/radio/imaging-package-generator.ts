@@ -253,11 +253,19 @@ export async function generatePackageAudio(packageId: string): Promise<{ generat
         : null;
 
       if (imagingVoice?.elevenlabsVoiceId) {
+        const { getElevenLabsDailyBudget, trackElevenLabsChars } = await import("@/lib/elevenlabs/daily-budget");
+        const budget = await getElevenLabsDailyBudget();
+        if (!budget.canUseElevenLabs) {
+          const msg = `${el.elementType} #${el.variationNum}: daily ElevenLabs budget exhausted (${budget.usedToday}/${budget.dailyBudget} chars)`;
+          errors.push(msg);
+          continue;
+        }
         const { generatePcmWithElevenLabs: genEL } = await import("@/lib/radio/voice-track-tts");
         voicePcm = await genEL(el.scriptText, imagingVoice.elevenlabsVoiceId, {
           stability: imagingVoice.voiceStability ?? 0.75,
           similarityBoost: imagingVoice.voiceSimilarityBoost ?? 0.75,
         });
+        await trackElevenLabsChars(el.scriptText.length);
       } else {
         // Fallback: try Gemini, then OpenAI
         try {

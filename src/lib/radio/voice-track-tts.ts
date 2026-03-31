@@ -319,9 +319,13 @@ export async function generateWithGemini(text: string, voice: string, voiceDirec
 }
 
 /**
- * Generate TTS with automatic provider fallback.
- * Tries: configured provider → Gemini → OpenAI
- * This ensures voice tracks always generate even when ElevenLabs credits are exhausted.
+ * Generate TTS with the configured provider.
+ *
+ * For ElevenLabs DJs: checks the daily character budget first. If the
+ * budget is exhausted, throws immediately — the station does NOT fall
+ * back to Gemini/OpenAI (the cloned voice IS the station identity).
+ *
+ * For non-ElevenLabs DJs: uses Gemini or OpenAI as configured.
  */
 async function generatePcmWithFallback(
   text: string,
@@ -330,75 +334,45 @@ async function generatePcmWithFallback(
   voiceDirection: string | null,
   elevenLabsOpts: { voiceProfileId?: string | null; stability: number; similarityBoost: number },
 ): Promise<{ pcm: Buffer; cost: number; usedProvider: string }> {
-  const providers: Array<{ name: string; generate: () => Promise<{ pcm: Buffer; cost: number }> }> = [];
 
-  // Primary: configured provider
   if (provider === "elevenlabs" && elevenLabsOpts.voiceProfileId) {
-    providers.push({
-      name: "elevenlabs",
-      generate: async () => ({
-        pcm: await generatePcmWithElevenLabs(text, elevenLabsOpts.voiceProfileId!, {
-          stability: elevenLabsOpts.stability,
-          similarityBoost: elevenLabsOpts.similarityBoost,
-        }),
-        cost: (text.length / 1000) * 0.30,
-      }),
+    // Check daily budget BEFORE calling the API — don't waste a failed call
+    const { getElevenLabsDailyBudget, trackElevenLabsChars } = await import("@/lib/elevenlabs/daily-budget");
+    const budget = await getElevenLabsDailyBudget();
+
+    if (!budget.canUseElevenLabs) {
+      throw new Error(
+        `ElevenLabs daily budget exhausted (${budget.usedToday.toLocaleString()}/${budget.dailyBudget.toLocaleString()} chars). ` +
+        `Skipping voice generation to preserve monthly quota.`
+      );
+    }
+
+    const pcm = await generatePcmWithElevenLabs(text, elevenLabsOpts.voiceProfileId, {
+      stability: elevenLabsOpts.stability,
+      similarityBoost: elevenLabsOpts.similarityBoost,
     });
-  } else if (provider === "gemini") {
-    providers.push({
-      name: "gemini",
-      generate: async () => {
-        const { buffer } = await generateWithGemini(text, voice, voiceDirection);
-        return { pcm: buffer.subarray(44), cost: 0.004 };
-      },
-    });
-  } else {
-    providers.push({
-      name: "openai",
-      generate: async () => ({
-        pcm: await generatePcmWithOpenAI(text, voice),
-        cost: 0.015,
-      }),
-    });
+
+    // Track characters used against daily budget
+    await trackElevenLabsChars(text.length);
+
+    return { pcm, cost: (text.length / 1000) * 0.30, usedProvider: "elevenlabs" };
   }
 
-  // Fallback 1: Gemini (cheapest)
-  if (provider !== "gemini") {
-    providers.push({
-      name: "gemini",
-      generate: async () => {
-        const { buffer } = await generateWithGemini(text, voice, voiceDirection);
-        return { pcm: buffer.subarray(44), cost: 0.004 };
-      },
-    });
-  }
-
-  // Fallback 2: OpenAI
-  if (provider !== "openai") {
-    providers.push({
-      name: "openai",
-      generate: async () => ({
-        pcm: await generatePcmWithOpenAI(text, voice || "alloy"),
-        cost: 0.015,
-      }),
-    });
-  }
-
-  for (const p of providers) {
+  // Non-ElevenLabs providers: try Gemini first, then OpenAI
+  if (provider === "gemini") {
     try {
-      const result = await p.generate();
-      if (p.name !== provider) {
-        logger.warn(`TTS fallback: ${provider} → ${p.name}`);
-      }
-      return { ...result, usedProvider: p.name };
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      logger.warn(`TTS provider ${p.name} failed: ${msg}`);
-      if (p === providers[providers.length - 1]) throw err; // last provider, rethrow
+      const { buffer } = await generateWithGemini(text, voice, voiceDirection);
+      return { pcm: buffer.subarray(44), cost: 0.004, usedProvider: "gemini" };
+    } catch {
+      // Fall back to OpenAI
+      const pcm = await generatePcmWithOpenAI(text, voice || "alloy");
+      return { pcm, cost: 0.015, usedProvider: "openai" };
     }
   }
 
-  throw new Error("All TTS providers failed");
+  // Default: OpenAI
+  const pcm = await generatePcmWithOpenAI(text, voice);
+  return { pcm, cost: 0.015, usedProvider: "openai" };
 }
 
 interface GenerateAudioResult {

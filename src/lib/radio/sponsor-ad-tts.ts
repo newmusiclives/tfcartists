@@ -15,6 +15,7 @@ import {
 } from "@/lib/radio/voice-track-tts";
 import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import { trackAiSpend } from "@/lib/ai/spend-tracker";
+import { getElevenLabsDailyBudget, trackElevenLabsChars } from "@/lib/elevenlabs/daily-budget";
 import OpenAI from "openai";
 
 const voiceMap: Record<string, string> = {
@@ -55,16 +56,25 @@ export async function generateSponsorAdAudio(adId: string): Promise<void> {
   let provider: string;
 
   if (stationDj?.voiceProfileId) {
-    // Use ElevenLabs cloned voice
+    // Use ElevenLabs cloned voice — but check daily budget first
     const elevenLabsKey = await getConfig("ELEVENLABS_API_KEY");
     if (!elevenLabsKey) {
       logger.warn("generateSponsorAdAudio: ELEVENLABS_API_KEY not configured, falling back to OpenAI");
     } else {
+      const budget = await getElevenLabsDailyBudget();
+      if (!budget.canUseElevenLabs) {
+        logger.warn("generateSponsorAdAudio: daily ElevenLabs budget exhausted, skipping", {
+          adId, usedToday: budget.usedToday, dailyBudget: budget.dailyBudget,
+        });
+        return;
+      }
+
       rawPcm = await generatePcmWithElevenLabs(ad.scriptText, stationDj.voiceProfileId, {
         stability: stationDj.voiceStability ?? 0.75,
         similarityBoost: stationDj.voiceSimilarityBoost ?? 0.75,
       });
       provider = "elevenlabs";
+      await trackElevenLabsChars(ad.scriptText.length);
       await trackAiSpend({ provider: "elevenlabs", operation: "tts", cost: (ad.scriptText.length / 1000) * 0.30, characters: ad.scriptText.length });
 
       const boostedPcm = amplifyPcm(rawPcm!, VOICE_GAIN);

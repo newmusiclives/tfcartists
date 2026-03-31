@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
 import { amplifyPcm, pcmToWav, saveAudioFile, generatePcmWithElevenLabs } from "@/lib/radio/voice-track-tts";
 import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
+import { getElevenLabsDailyBudget, trackElevenLabsChars } from "@/lib/elevenlabs/daily-budget";
 import OpenAI from "openai";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { getConfig } from "@/lib/config";
@@ -189,10 +190,23 @@ export async function POST(request: NextRequest) {
             let rawPcm: Buffer;
 
             if (hasElevenLabs && elevenLabsVoiceId) {
+              // Check daily budget before using ElevenLabs credits
+              const budget = await getElevenLabsDailyBudget();
+              if (!budget.canUseElevenLabs) {
+                results.push({
+                  voiceName: voice.displayName,
+                  type: scriptType,
+                  label: script.label,
+                  success: false,
+                  error: `Daily ElevenLabs budget exhausted (${budget.usedToday}/${budget.dailyBudget} chars)`,
+                });
+                continue;
+              }
               rawPcm = await generatePcmWithElevenLabs(script.text, elevenLabsVoiceId, {
                 stability: elStability,
                 similarityBoost: elSimilarity,
               });
+              await trackElevenLabsChars(script.text.length);
             } else {
               const response = await openai.audio.speech.create({
                 model: "tts-1-hd",
