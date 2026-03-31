@@ -12,7 +12,9 @@ import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
 import * as path from "path";
 
-/** Retry an async function with exponential backoff */
+/** Retry an async function with exponential backoff.
+ *  Does NOT retry on rate-limit (429) or quota-exhaustion errors
+ *  to avoid burning credits on calls that will keep failing. */
 async function withRetry<T>(
   fn: () => Promise<T>,
   opts: { maxRetries?: number; baseDelayMs?: number; label?: string } = {},
@@ -24,6 +26,14 @@ async function withRetry<T>(
       return await fn();
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err));
+
+      // Don't retry on rate-limit or quota errors — they won't resolve with retries
+      const msg = lastError.message.toLowerCase();
+      if (msg.includes("429") || msg.includes("rate limit") || msg.includes("quota") || msg.includes("exceeded") || msg.includes("too many requests")) {
+        logger.error(`${label} hit rate limit / quota — aborting without retry`, { error: lastError.message });
+        throw lastError;
+      }
+
       if (attempt < maxRetries) {
         const delay = baseDelayMs * Math.pow(2, attempt);
         logger.warn(`${label} attempt ${attempt + 1} failed, retrying in ${delay}ms`, {
@@ -468,7 +478,7 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
 
       // Trim leading/trailing silence, then add tail padding for crossfade protection
       voicePcm = trimSilence(voicePcm);
-      voicePcm = appendSilence(voicePcm, 400);
+      voicePcm = appendSilence(voicePcm, 800);
 
       let finalPcm: Buffer;
       if (musicBedPath) {
@@ -689,7 +699,7 @@ export async function generateFeatureAudio(
       await trackAiSpend({ provider: ttsResult.usedProvider, operation: "tts", cost: ttsResult.cost, characters: fc.content.length });
 
       voicePcm = trimSilence(voicePcm);
-      voicePcm = appendSilence(voicePcm, 400);
+      voicePcm = appendSilence(voicePcm, 800);
 
       let finalPcm: Buffer;
       if (musicBedPath) {

@@ -171,6 +171,19 @@ export async function POST(request: NextRequest) {
         if (!scripts || scripts.length === 0) continue;
 
         for (const script of scripts) {
+          // Skip scripts that already have audio — avoid redundant TTS calls
+          if (script.audioFilePath) {
+            results.push({
+              voiceName: voice.displayName,
+              type: scriptType,
+              label: script.label,
+              success: true,
+              audioFilePath: script.audioFilePath,
+              hasMusicBed: script.hasMusicBed,
+            });
+            continue;
+          }
+
           try {
             // Generate TTS as raw PCM for mixing — prefer ElevenLabs if configured
             let rawPcm: Buffer;
@@ -260,6 +273,39 @@ export async function POST(request: NextRequest) {
         await prisma.stationImagingVoice.update({
           where: { id: voice.id },
           data: { metadata: JSON.parse(JSON.stringify(metadata)) },
+        });
+      }
+    }
+
+    // Map imaging script types to ProducedImaging categories used by playout
+    const piCategoryMap: Record<string, string> = {
+      station_id: "station_id",
+      sweeper: "sweeper",
+      promo: "promo",
+      commercial: "sweeper",
+    };
+
+    // Upsert ProducedImaging records so the next_hour playout can find them
+    for (const r of results) {
+      if (!r.success || !r.audioFilePath) continue;
+      const category = piCategoryMap[r.type] || "sweeper";
+      const safeName = `${r.voiceName} ${r.type} ${r.label}`.substring(0, 120);
+      const safeFileName = r.audioFilePath.split("/").pop() || `imaging-${Date.now()}.wav`;
+
+      // Use upsert keyed on filePath to avoid duplicates on re-runs
+      const existing = await prisma.producedImaging.findFirst({
+        where: { stationId, filePath: r.audioFilePath },
+      });
+      if (!existing) {
+        await prisma.producedImaging.create({
+          data: {
+            stationId,
+            name: safeName,
+            fileName: safeFileName,
+            filePath: r.audioFilePath,
+            category,
+            isActive: true,
+          },
         });
       }
     }

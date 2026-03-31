@@ -39,6 +39,12 @@ export async function generateSponsorAdAudio(adId: string): Promise<void> {
     return;
   }
 
+  // Skip if audio already exists — avoid redundant TTS calls
+  if (ad.audioFilePath) {
+    logger.info("generateSponsorAdAudio: audio already exists, skipping", { adId, audioFilePath: ad.audioFilePath });
+    return;
+  }
+
   // Check if station has an ElevenLabs DJ voice to use for ads
   const stationDj = await prisma.dJ.findFirst({
     where: { stationId: ad.stationId, ttsProvider: "elevenlabs", voiceProfileId: { not: null }, isActive: true },

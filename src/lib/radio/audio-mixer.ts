@@ -221,7 +221,7 @@ export function trimSilence(
   pcm: Buffer,
   options: { threshold?: number; padSamples?: number } = {}
 ): Buffer {
-  const { threshold = 300, padSamples = 480 } = options; // 300 ≈ -40dBFS, 480 = 20ms at 24kHz
+  const { threshold = 300, padSamples = 2400 } = options; // 300 ≈ -40dBFS, 2400 = 100ms pad at 24kHz
   const numSamples = pcm.length / 2;
   if (numSamples === 0) return pcm;
 

@@ -207,64 +207,55 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // 4. Regenerate imaging scripts that were generated without a music bed
+    // 4. Regenerate imaging scripts that are MISSING audio entirely
+    //    (Skip scripts that already have audio — even without a music bed —
+    //     to avoid burning ElevenLabs credits on redundant regeneration)
     if (station) {
       try {
-        const activeMusicBeds = await prisma.musicBed.findMany({
+        const imagingVoices = await prisma.stationImagingVoice.findMany({
           where: { stationId: station.id, isActive: true },
         });
 
-        if (activeMusicBeds.length > 0) {
-          const imagingVoices = await prisma.stationImagingVoice.findMany({
-            where: { stationId: station.id, isActive: true },
-          });
-
-          // Check if any scripts have audioFilePath but hasMusicBed is false/missing
-          let needsRegen = false;
-          for (const voice of imagingVoices) {
-            const metadata = voice.metadata as Record<string, unknown> | null;
-            const scripts = (metadata?.scripts || {}) as Record<string, Array<{ audioFilePath?: string; hasMusicBed?: boolean }>>;
-            for (const type of Object.keys(scripts)) {
-              for (const script of scripts[type] || []) {
-                if (script.audioFilePath && !script.hasMusicBed) {
-                  needsRegen = true;
-                  break;
-                }
+        let missingAudioCount = 0;
+        for (const voice of imagingVoices) {
+          const metadata = voice.metadata as Record<string, unknown> | null;
+          const scripts = (metadata?.scripts || {}) as Record<string, Array<{ audioFilePath?: string; hasMusicBed?: boolean }>>;
+          for (const type of Object.keys(scripts)) {
+            for (const script of scripts[type] || []) {
+              if (!script.audioFilePath) {
+                missingAudioCount++;
               }
-              if (needsRegen) break;
-            }
-            if (needsRegen) break;
-          }
-
-          if (needsRegen) {
-            logger.info("Imaging scripts need regeneration with music beds — triggering internal regen");
-
-            // Call the generate-audio route internally
-            const baseUrl = process.env.NEXTAUTH_URL
-              || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://truefans-radio.netlify.app");
-
-            const regenResponse = await fetch(`${baseUrl}/api/station-imaging/generate-audio`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                stationId: station.id,
-                types: ["station_id", "sweeper", "promo"],
-              }),
-            });
-
-            if (regenResponse.ok) {
-              const regenData = await regenResponse.json();
-              const regenCount = regenData.results?.filter((r: { success: boolean }) => r.success).length || 0;
-              results.imagingRegenerated = regenCount;
-              logger.info("Imaging regeneration complete", { regenerated: regenCount });
-            } else {
-              logger.error("Imaging regeneration request failed", { status: regenResponse.status });
-              results.errors++;
             }
           }
         }
+
+        if (missingAudioCount > 0) {
+          logger.info(`${missingAudioCount} imaging scripts missing audio — triggering generation for missing only`);
+
+          const baseUrl = process.env.NEXTAUTH_URL
+            || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://truefans-radio.netlify.app");
+
+          const regenResponse = await fetch(`${baseUrl}/api/station-imaging/generate-audio`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              stationId: station.id,
+              types: ["station_id", "sweeper", "promo"],
+            }),
+          });
+
+          if (regenResponse.ok) {
+            const regenData = await regenResponse.json();
+            const regenCount = regenData.results?.filter((r: { success: boolean }) => r.success).length || 0;
+            results.imagingRegenerated = regenCount;
+            logger.info("Imaging generation complete", { regenerated: regenCount });
+          } else {
+            logger.error("Imaging generation request failed", { status: regenResponse.status });
+            results.errors++;
+          }
+        }
       } catch (error) {
-        logger.error("Imaging regeneration step failed", { error });
+        logger.error("Imaging generation step failed", { error });
         results.errors++;
       }
     }
