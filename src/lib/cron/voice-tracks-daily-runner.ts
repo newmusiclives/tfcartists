@@ -441,16 +441,16 @@ async function relinkFeatures(
           { role: "system", content: systemPrompt },
           {
             role: "user",
-            content: `${filledPrompt}\n\nOutput ONLY the spoken text — no stage directions, no quotes, no labels. 2-4 sentences, 20-30 seconds when spoken.`,
+            content: `${filledPrompt}\n\nOutput ONLY the spoken text — no stage directions, no quotes, no labels. 2-3 COMPLETE sentences, 15-20 seconds when spoken. Every sentence MUST end with punctuation — never leave a thought unfinished.`,
           },
         ],
         {
-          maxTokens: 200,
+          maxTokens: 350,
           temperature: djPersona.gptTemperature || 0.8,
         },
       );
       const newContent = aiResponse.content.trim();
-      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 200 });
+      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 350 });
 
       const filtered = filterContent(newContent, "feature");
       finalContent = filtered ? filtered.text : newContent;

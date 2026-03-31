@@ -146,8 +146,24 @@ export async function GET(request: NextRequest) {
       where: { stationId: station.id, isActive: true, filePath: { not: "" } },
       select: { id: true, name: true, category: true, filePath: true, durationSeconds: true },
     });
+
+    // Get all DJ names so we can filter out promos that mention off-air DJs
+    const allDjs = await prisma.dJ.findMany({
+      where: { stationId: station.id, isActive: true },
+      select: { name: true, slug: true },
+    });
+    const currentDjName = scheduledDj ? allDjs.find(d => d.slug === scheduledDj.djSlug)?.name : null;
+    const otherDjNames = allDjs
+      .filter(d => d.slug !== scheduledDj?.djSlug)
+      .map(d => d.name.toLowerCase());
+
     const imagingByCategory = new Map<string, typeof producedImaging>();
     for (const pi of producedImaging) {
+      // Filter out promos/imaging that mention another DJ's name
+      const nameLower = pi.name.toLowerCase();
+      const mentionsOtherDj = otherDjNames.some(dj => nameLower.includes(dj.split(" ")[0].toLowerCase()));
+      if (mentionsOtherDj) continue;
+
       const cat = pi.category;
       if (!imagingByCategory.has(cat)) imagingByCategory.set(cat, []);
       imagingByCategory.get(cat)!.push(pi);

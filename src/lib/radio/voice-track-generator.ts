@@ -12,6 +12,29 @@ import { logger } from "@/lib/logger";
 import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
 import { filterContent } from "@/lib/ai/content-filter";
 
+/**
+ * Trim a script to the last complete sentence if it was truncated mid-thought.
+ * Prevents voice tracks that end with dangling words like "whether" or "the".
+ */
+function trimToCompleteSentence(text: string): string {
+  // Already ends with sentence-ending punctuation — good
+  if (/[.!?]"?\s*$/.test(text)) return text;
+
+  // Find the last sentence-ending punctuation
+  const lastPeriod = text.lastIndexOf(".");
+  const lastBang = text.lastIndexOf("!");
+  const lastQuestion = text.lastIndexOf("?");
+  const lastEnd = Math.max(lastPeriod, lastBang, lastQuestion);
+
+  if (lastEnd > 0) {
+    // Trim to last complete sentence
+    return text.substring(0, lastEnd + 1).trim();
+  }
+
+  // No sentence ending at all — append period to salvage it
+  return text.trim() + ".";
+}
+
 interface ResolvedSlot {
   position: number;
   minute: number;
@@ -138,14 +161,14 @@ export async function generateVoiceTrackScripts(
           { role: "user", content: userPrompt },
         ],
         {
-          maxTokens: 200,
+          maxTokens: 350,
           temperature: dj.gptTemperature || 0.8,
         }
       );
-      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 200 });
+      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 350 });
 
       // Validate tense accuracy — regenerate once if wrong
-      let scriptText = response.content.trim();
+      let scriptText = trimToCompleteSentence(response.content.trim());
       const tenseIssue = validateVoiceTrackTense(vb.trackType, scriptText, prevSong, nextSong);
       if (tenseIssue) {
         logger.warn("Voice track tense violation detected, regenerating", {
@@ -158,8 +181,8 @@ export async function generateVoiceTrackScripts(
           ],
           { maxTokens: 200, temperature: Math.max(0.3, (dj.gptTemperature || 0.8) - 0.2) }
         );
-        await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 200 });
-        scriptText = retry.content.trim();
+        await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 350 });
+        scriptText = trimToCompleteSentence(retry.content.trim());
       }
 
       // Content safety filter
@@ -307,7 +330,9 @@ function buildUserPrompt(
     hourOfDay < 18 ? "afternoon" : "evening";
 
   const rules = `Rules:
-- 2-4 sentences max (10-20 seconds when spoken)
+- 2-3 COMPLETE sentences (10-15 seconds when spoken)
+- Every sentence MUST end with a period, exclamation mark, or question mark
+- NEVER leave a sentence unfinished — if you're running long, end the current sentence and stop
 - Natural, conversational, in-character
 - Match ${timeOfDay} energy
 - Output ONLY the spoken text — no stage directions, no quotes, no labels`;
