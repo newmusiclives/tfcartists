@@ -240,10 +240,16 @@ async function generatePcmWithFallback(
   voiceDirection: string | null,
 ): Promise<{ pcm: Buffer; cost: number; usedProvider: string }> {
 
-  // Gemini is the primary provider (also handles legacy "elevenlabs" DJs)
+  // Gemini is the primary provider (also handles legacy "elevenlabs" DJs).
+  // If the stored voice name looks like an OpenAI voice (lowercase like "alloy"),
+  // default to "Leda" for Gemini. Otherwise use the voice as-is — legacy
+  // elevenlabs DJs that have been migrated to Gemini voice names like
+  // "Enceladus" should keep their voice.
   if (provider === "gemini" || provider === "elevenlabs") {
     try {
-      const geminiVoice = provider === "elevenlabs" ? "Leda" : voice;
+      const openaiVoiceNames = ["alloy", "ash", "ballad", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"];
+      const isOpenAiVoiceName = voice && openaiVoiceNames.includes(voice.toLowerCase());
+      const geminiVoice = (!voice || isOpenAiVoiceName) ? "Leda" : voice;
       const { buffer } = await generateWithGemini(text, geminiVoice, voiceDirection);
       return { pcm: buffer.subarray(44), cost: 0.004, usedProvider: "gemini" };
     } catch {
