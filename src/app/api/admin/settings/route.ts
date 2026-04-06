@@ -26,6 +26,7 @@ const CONFIG_DEFINITIONS: Record<string, { category: string; label: string; encr
   // AI Providers
   OPENAI_API_KEY: { category: "ai", label: "OpenAI API Key", encrypted: true },
   ANTHROPIC_API_KEY: { category: "ai", label: "Anthropic API Key", encrypted: true },
+  GOOGLE_API_KEY: { category: "ai", label: "Google AI Key (Gemini TTS)", encrypted: true },
   DEFAULT_AI_PROVIDER: { category: "ai", label: "Default AI Provider (openai or claude)", encrypted: false },
 
   // Cloudflare R2 Object Storage

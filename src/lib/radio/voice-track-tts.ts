@@ -171,10 +171,11 @@ export async function generatePcmWithOpenAI(text: string, voice: string): Promis
 }
 
 export async function generateWithGemini(text: string, voice: string, voiceDirection?: string | null): Promise<{ buffer: Buffer; ext: string }> {
-  const apiKey = process.env.GOOGLE_API_KEY;
+  // Read from database config first, then environment variable
+  const { getConfig } = await import("@/lib/config");
+  const apiKey = (await getConfig("GOOGLE_API_KEY")) || process.env.GOOGLE_API_KEY;
   if (!apiKey) {
-    logger.warn("GOOGLE_API_KEY not configured — falling back to OpenAI TTS");
-    return generateWithOpenAI(text, "shimmer");
+    throw new Error("GOOGLE_API_KEY not configured. Set it in Admin > Settings or as a Netlify environment variable.");
   }
 
   try {
