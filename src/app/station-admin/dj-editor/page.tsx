@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SharedNav } from "@/components/shared-nav";
 import { Users, Plus, Loader2, X, Volume2, Square } from "lucide-react";
+import { csrfFetch } from "@/lib/csrf-client";
 
 interface DJData {
   id: string;
@@ -68,9 +69,8 @@ export default function DJEditorPage() {
 
     setLoadingDjId(dj.id);
     try {
-      const res = await fetch("/api/voice-preview", {
+      const res = await csrfFetch("/api/voice-preview", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           voice: dj.ttsVoice || "Leda",
           provider: dj.ttsProvider || "gemini",
@@ -88,9 +88,12 @@ export default function DJEditorPage() {
         };
         await audio.play();
         setPlayingDjId(dj.id);
+      } else if (data.error) {
+        console.error("Voice preview error:", data.error);
+        alert(`Voice preview failed: ${data.error}`);
       }
-    } catch {
-      // silently fail
+    } catch (err) {
+      console.error("Voice preview network error:", err);
     } finally {
       setLoadingDjId(null);
     }
