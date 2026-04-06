@@ -12,6 +12,7 @@ interface ImagingScript {
 
 interface ImagingMetadata {
   voiceCharacter?: string;
+  voiceDirection?: string;
   scripts?: {
     station_id?: ImagingScript[];
     sweeper?: ImagingScript[];
@@ -24,7 +25,9 @@ interface ImagingVoice {
   id: string;
   displayName: string;
   voiceType: string;
-  ttsVoiceId: string | null;
+  // Stored in DB column `elevenlabsVoiceId` for legacy reasons,
+  // now holds the Gemini prebuilt voice name (e.g. "Algieba", "Autonoe")
+  elevenlabsVoiceId: string | null;
   voiceStability: number;
   voiceSimilarityBoost: number;
   voiceStyle: number;
@@ -32,6 +35,41 @@ interface ImagingVoice {
   isActive: boolean;
   metadata?: ImagingMetadata | null;
 }
+
+const GEMINI_VOICES_FEMALE = [
+  { name: "Zephyr", desc: "Bright, cheerful" },
+  { name: "Kore", desc: "Firm, confident" },
+  { name: "Leda", desc: "Youthful, energetic" },
+  { name: "Aoede", desc: "Warm" },
+  { name: "Autonoe", desc: "Bright, optimistic" },
+  { name: "Callirhoe", desc: "Easy-going, relaxed" },
+  { name: "Despina", desc: "Smooth, flowing" },
+  { name: "Erinome", desc: "Clear, precise" },
+  { name: "Gacrux", desc: "Mature, experienced" },
+  { name: "Laomedeia", desc: "Upbeat, lively" },
+  { name: "Pulcherrima", desc: "Forward, expressive" },
+  { name: "Vindemiatrix", desc: "Gentle, kind" },
+  { name: "Achernar", desc: "Soft, gentle" },
+];
+
+const GEMINI_VOICES_MALE = [
+  { name: "Puck", desc: "Upbeat, energetic" },
+  { name: "Charon", desc: "Informative, clear" },
+  { name: "Fenrir", desc: "Excitable, dynamic" },
+  { name: "Orus", desc: "Firm, decisive" },
+  { name: "Achird", desc: "Friendly, approachable" },
+  { name: "Algenib", desc: "Gravelly texture" },
+  { name: "Algieba", desc: "Smooth, pleasant" },
+  { name: "Alnilam", desc: "Firm, strong" },
+  { name: "Enceladus", desc: "Breathy, soft" },
+  { name: "Iapetus", desc: "Clear, articulate" },
+  { name: "Rasalgethi", desc: "Informative, professional" },
+  { name: "Sadachbia", desc: "Lively, animated" },
+  { name: "Sadaltager", desc: "Knowledgeable, authoritative" },
+  { name: "Schedar", desc: "Deliberate" },
+  { name: "Umbriel", desc: "Easy-going" },
+  { name: "Zubenelgenubi", desc: "Inventive" },
+];
 
 interface MusicBedItem {
   id: string;
@@ -53,7 +91,7 @@ interface ProducedImagingItem {
   isActive: boolean;
 }
 
-const USAGE_OPTIONS = ["promo", "id", "sweeper"];
+const USAGE_OPTIONS = ["promo", "id", "sweeper", "sponsor"];
 const BED_CATEGORIES = ["general", "upbeat", "soft", "corporate", "country"];
 const PRODUCED_CATEGORIES = ["promo", "sweeper", "station_id", "toh", "positioning"];
 
@@ -67,7 +105,7 @@ export default function StationImagingPage() {
   const [newVoice, setNewVoice] = useState({
     displayName: "",
     voiceType: "male",
-    ttsVoiceId: "",
+    elevenlabsVoiceId: "",
     usageTypes: "id",
   });
 
@@ -124,7 +162,7 @@ export default function StationImagingPage() {
     if (data.voice) {
       setVoices([data.voice, ...voices]);
       setShowAdd(false);
-      setNewVoice({ displayName: "", voiceType: "male", ttsVoiceId: "", usageTypes: "id" });
+      setNewVoice({ displayName: "", voiceType: "male", elevenlabsVoiceId: "", usageTypes: "id" });
     }
   };
 
@@ -306,19 +344,22 @@ export default function StationImagingPage() {
               />
               <select
                 value={newVoice.voiceType}
-                onChange={(e) => setNewVoice({ ...newVoice, voiceType: e.target.value })}
+                onChange={(e) => setNewVoice({ ...newVoice, voiceType: e.target.value, elevenlabsVoiceId: "" })}
                 className="border rounded-lg px-3 py-2 text-sm"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
-              <input
-                type="text"
-                value={newVoice.ttsVoiceId}
-                onChange={(e) => setNewVoice({ ...newVoice, ttsVoiceId: e.target.value })}
-                className="border rounded-lg px-3 py-2 text-sm font-mono"
-                placeholder="TTS Voice ID"
-              />
+              <select
+                value={newVoice.elevenlabsVoiceId}
+                onChange={(e) => setNewVoice({ ...newVoice, elevenlabsVoiceId: e.target.value })}
+                className="border rounded-lg px-3 py-2 text-sm"
+              >
+                <option value="">Select Gemini voice...</option>
+                {(newVoice.voiceType === "female" ? GEMINI_VOICES_FEMALE : GEMINI_VOICES_MALE).map((v) => (
+                  <option key={v.name} value={v.name}>{v.name} — {v.desc}</option>
+                ))}
+              </select>
             </div>
             <button onClick={addVoice} className="bg-rose-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-rose-700">
               Add Voice
@@ -404,13 +445,19 @@ export default function StationImagingPage() {
                     <div className="mt-4 pt-4 border-t space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="text-xs text-gray-500 block mb-1">TTS Voice ID</label>
-                          <input
-                            type="text"
-                            value={current.ttsVoiceId || ""}
-                            onChange={(e) => setEditing({ ...current, ttsVoiceId: e.target.value })}
-                            className="w-full border rounded-lg px-3 py-2 text-sm font-mono"
-                          />
+                          <label className="text-xs text-gray-500 block mb-1">Gemini Voice</label>
+                          <select
+                            value={current.elevenlabsVoiceId || ""}
+                            onChange={(e) => setEditing({ ...current, elevenlabsVoiceId: e.target.value })}
+                            className="w-full border rounded-lg px-3 py-2 text-sm"
+                          >
+                            <option value="">Not set</option>
+                            <optgroup label={current.voiceType === "female" ? "Female Voices" : "Male Voices"}>
+                              {(current.voiceType === "female" ? GEMINI_VOICES_FEMALE : GEMINI_VOICES_MALE).map((v) => (
+                                <option key={v.name} value={v.name}>{v.name} — {v.desc}</option>
+                              ))}
+                            </optgroup>
+                          </select>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 block mb-1">Voice Type</label>
@@ -423,6 +470,17 @@ export default function StationImagingPage() {
                             <option value="female">Female</option>
                           </select>
                         </div>
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500 block mb-1">Voice Direction (Gemini prompt instructions)</label>
+                        <p className="text-xs text-gray-400 mb-1">Tone, accent, pacing, atmosphere — passed to Gemini before each script.</p>
+                        <textarea
+                          value={current.metadata?.voiceDirection || ""}
+                          onChange={(e) => setEditing({ ...current, metadata: { ...(current.metadata || {}), voiceDirection: e.target.value } })}
+                          rows={6}
+                          className="w-full border rounded-lg px-3 py-2 text-sm"
+                          placeholder="Role: Authoritative station voice. Voice Texture: Deep, resonant. Atmosphere: Sound-treated room, close-mic. Personality: Confident, commanding. Delivery: Smooth, measured pacing."
+                        />
                       </div>
                       <div className="grid grid-cols-3 gap-4">
                         <div>

@@ -142,9 +142,11 @@ export async function POST(request: NextRequest) {
       const metadata = voice.metadata as ImagingMetadata | null;
       if (!metadata?.scripts) continue;
 
-      // Map voice type to Gemini voice names
-      const geminiVoiceMap: Record<string, string> = { male: "Charon", female: "Kore" };
-      const geminiVoice = geminiVoiceMap[voice.voiceType] || "Kore";
+      // Read Gemini voice from the imaging voice record (elevenlabsVoiceId
+      // is repurposed to store the Gemini voice name like "Algieba" or "Autonoe")
+      const fallbackVoice = voice.voiceType === "female" ? "Autonoe" : "Algieba";
+      const geminiVoice = (voice as { elevenlabsVoiceId?: string | null }).elevenlabsVoiceId || fallbackVoice;
+      const voiceDirection = (voice.metadata as { voiceDirection?: string } | null)?.voiceDirection || null;
       const voiceSlug = voice.displayName
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
@@ -173,7 +175,7 @@ export async function POST(request: NextRequest) {
             // Generate TTS as raw PCM — Gemini primary, OpenAI fallback
             let rawPcm: Buffer;
             try {
-              const { buffer } = await generateWithGemini(script.text, geminiVoice, null);
+              const { buffer } = await generateWithGemini(script.text, geminiVoice, voiceDirection);
               rawPcm = buffer.subarray(44); // strip WAV header
             } catch {
               rawPcm = await generatePcmWithOpenAI(script.text, IMAGING_VOICE_MAP[voice.voiceType] || "echo");

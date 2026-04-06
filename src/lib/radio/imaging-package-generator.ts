@@ -245,16 +245,27 @@ export async function generatePackageAudio(packageId: string): Promise<{ generat
 
   for (const el of elements) {
     try {
-      // Pick voice: use imaging voice if available, otherwise OpenAI
+      // Pick voice: rotate through configured imaging voices
       let voicePcm: Buffer;
 
-      const imagingVoice = imagingVoices.length > 0
-        ? imagingVoices[el.variationNum % imagingVoices.length]
+      // Filter to imaging voices (not sponsor-only ones)
+      const imagingOnly = imagingVoices.filter((v) =>
+        !v.usageTypes || v.usageTypes.split(",").some((t) => ["id", "promo", "sweeper"].includes(t.trim()))
+      );
+      const imagingVoice = imagingOnly.length > 0
+        ? imagingOnly[el.variationNum % imagingOnly.length]
         : null;
+
+      // Read Gemini voice name and direction from the imaging voice record
+      // (elevenlabsVoiceId is repurposed to store Gemini voice name)
+      const geminiVoice = imagingVoice?.elevenlabsVoiceId
+        || (imagingVoice?.voiceType === "female" ? "Autonoe" : "Algieba");
+      const voiceDirection =
+        (imagingVoice?.metadata as { voiceDirection?: string } | null)?.voiceDirection || null;
 
       // Generate with Gemini (primary), OpenAI fallback
       try {
-        const { buffer } = await generateWithGemini(el.scriptText, "Kore", null);
+        const { buffer } = await generateWithGemini(el.scriptText, geminiVoice, voiceDirection);
         voicePcm = buffer.subarray(44);
       } catch {
         voicePcm = await generatePcmWithOpenAI(el.scriptText, "echo");

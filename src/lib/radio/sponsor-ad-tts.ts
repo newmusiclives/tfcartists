@@ -45,26 +45,44 @@ export async function generateSponsorAdAudio(adId: string): Promise<void> {
     return;
   }
 
-  // Determine Gemini voice: ad metadata > station imaging voice > default "Kore"
-  let geminiVoice = "Kore";
-  const geminiVoiceMap: Record<string, string> = { male: "Charon", female: "Kore" };
+  // Determine Gemini voice: prefer sponsor-specific imaging voices, then any imaging voice
+  // Rotate across multiple sponsor voices using ad ID hash for consistent variety
+  let geminiVoice = "Algieba";
+  let voiceDirection: string | null = null;
   const adMeta = (ad.metadata as Record<string, unknown>) || {};
   const adVoiceType = adMeta.voiceType as string | undefined;
-  if (adVoiceType && geminiVoiceMap[adVoiceType]) {
-    geminiVoice = geminiVoiceMap[adVoiceType];
+
+  // Find imaging voices that include "sponsor" in their usageTypes
+  const sponsorVoices = await prisma.stationImagingVoice.findMany({
+    where: { stationId: ad.stationId, isActive: true, usageTypes: { contains: "sponsor" } },
+  });
+
+  let chosenVoice: typeof sponsorVoices[number] | null = null;
+  if (sponsorVoices.length > 0) {
+    // If ad declares a voiceType, prefer matching gender; otherwise rotate by ad id hash
+    const matchingByGender = adVoiceType
+      ? sponsorVoices.filter((v) => v.voiceType === adVoiceType)
+      : sponsorVoices;
+    const pool = matchingByGender.length > 0 ? matchingByGender : sponsorVoices;
+    const hash = adId.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    chosenVoice = pool[hash % pool.length];
   } else {
-    const imagingVoice = await prisma.stationImagingVoice.findFirst({
+    // Fall back to any active imaging voice
+    chosenVoice = await prisma.stationImagingVoice.findFirst({
       where: { stationId: ad.stationId, isActive: true },
     });
-    if (imagingVoice) {
-      geminiVoice = geminiVoiceMap[imagingVoice.voiceType] || "Kore";
-    }
+  }
+
+  if (chosenVoice) {
+    const fallback = chosenVoice.voiceType === "female" ? "Autonoe" : "Algieba";
+    geminiVoice = chosenVoice.elevenlabsVoiceId || fallback;
+    voiceDirection = (chosenVoice.metadata as { voiceDirection?: string } | null)?.voiceDirection || null;
   }
 
   // Generate TTS with Gemini (primary) or OpenAI (fallback)
   let rawPcm: Buffer;
   try {
-    const { buffer } = await generateWithGemini(ad.scriptText, geminiVoice, null);
+    const { buffer } = await generateWithGemini(ad.scriptText, geminiVoice, voiceDirection);
     rawPcm = buffer.subarray(44); // strip WAV header to get PCM
     await trackAiSpend({ provider: "google", operation: "tts", cost: 0.004, characters: ad.scriptText.length });
   } catch {
