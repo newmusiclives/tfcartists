@@ -181,10 +181,13 @@ export async function generateWithGemini(text: string, voice: string, voiceDirec
     return await withRetry(async () => {
       const ai = new GoogleGenAI({ apiKey });
 
-      const direction = voiceDirection
-        ? `Voice direction: ${voiceDirection}\n\nSpeak this text: "${text}"`
-        : `"${text}"`;
-      const prompt = direction;
+      // Gemini TTS expects natural-language style direction inline with the text.
+      // The recommended pattern is: "[Director's notes describing style/tone/accent]\nSay: \"[text]\""
+      // This matches how Google AI Studio formats TTS prompts and lets the voice
+      // (Enceladus, Kore, etc.) properly inherit the requested delivery style.
+      const prompt = voiceDirection
+        ? `${voiceDirection}\n\nSay: "${text}"`
+        : `Say: "${text}"`;
 
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash-preview-tts",
