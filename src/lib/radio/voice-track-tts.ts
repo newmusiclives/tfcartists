@@ -171,9 +171,13 @@ export async function generatePcmWithOpenAI(text: string, voice: string): Promis
 }
 
 export async function generateWithGemini(text: string, voice: string, voiceDirection?: string | null): Promise<{ buffer: Buffer; ext: string }> {
-  // Read from database config first, then environment variable
-  const { getConfig } = await import("@/lib/config");
-  const apiKey = (await getConfig("GOOGLE_API_KEY")) || process.env.GOOGLE_API_KEY;
+  // Read from environment variable first (set in Netlify), then database config.
+  // Env-var-first lets you fix a bad db-stored key by just updating Netlify env vars.
+  let apiKey: string | undefined = process.env.GOOGLE_API_KEY;
+  if (!apiKey) {
+    const { getConfig } = await import("@/lib/config");
+    apiKey = (await getConfig("GOOGLE_API_KEY")) || undefined;
+  }
   if (!apiKey) {
     throw new Error("GOOGLE_API_KEY not configured. Set it in Admin > Settings or as a Netlify environment variable.");
   }

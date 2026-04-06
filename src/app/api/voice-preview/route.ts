@@ -7,12 +7,24 @@ export const dynamic = "force-dynamic";
 
 /**
  * GET /api/voice-preview?debug=1
- * Diagnostic endpoint — returns where GOOGLE_API_KEY is being read from
- * and the first/last 4 chars so we can verify the right key is in use.
+ * Diagnostic endpoint — returns where GOOGLE_API_KEY is being read from.
+ *
+ * GET /api/voice-preview?clearDbKey=1
+ * Deletes the GOOGLE_API_KEY entry from the SystemConfig table so the
+ * code falls back to the environment variable.
  */
 export async function GET(request: NextRequest) {
-  if (request.nextUrl.searchParams.get("debug") !== "1") {
-    return NextResponse.json({ error: "Use ?debug=1 to inspect key source" }, { status: 400 });
+  const params = request.nextUrl.searchParams;
+
+  if (params.get("clearDbKey") === "1") {
+    const { prisma } = await import("@/lib/db");
+    const deleted = await prisma.systemConfig.deleteMany({ where: { key: "GOOGLE_API_KEY" } });
+    clearConfigCache();
+    return NextResponse.json({ success: true, deleted: deleted.count });
+  }
+
+  if (params.get("debug") !== "1") {
+    return NextResponse.json({ error: "Use ?debug=1 or ?clearDbKey=1" }, { status: 400 });
   }
   clearConfigCache();
   const dbKey = await getConfig("GOOGLE_API_KEY");
@@ -22,7 +34,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     fromGetConfig: mask(dbKey),
     fromEnv: mask(envKey),
-    note: "fromGetConfig is what generateWithGemini will use (db first, env fallback)",
+    note: "generateWithGemini now reads env first, then db (env wins if set)",
   });
 }
 
