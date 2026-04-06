@@ -1,8 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateWithGemini, generateWithOpenAI } from "@/lib/radio/voice-track-tts";
 import { handleApiError } from "@/lib/api/errors";
+import { getConfig, clearConfigCache } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
+
+/**
+ * GET /api/voice-preview?debug=1
+ * Diagnostic endpoint — returns where GOOGLE_API_KEY is being read from
+ * and the first/last 4 chars so we can verify the right key is in use.
+ */
+export async function GET(request: NextRequest) {
+  if (request.nextUrl.searchParams.get("debug") !== "1") {
+    return NextResponse.json({ error: "Use ?debug=1 to inspect key source" }, { status: 400 });
+  }
+  clearConfigCache();
+  const dbKey = await getConfig("GOOGLE_API_KEY");
+  const envKey = process.env.GOOGLE_API_KEY;
+  const mask = (k: string | undefined) =>
+    k ? `${k.slice(0, 6)}...${k.slice(-4)} (len ${k.length})` : "(not set)";
+  return NextResponse.json({
+    fromGetConfig: mask(dbKey),
+    fromEnv: mask(envKey),
+    note: "fromGetConfig is what generateWithGemini will use (db first, env fallback)",
+  });
+}
 
 /**
  * POST /api/voice-preview
@@ -11,6 +33,9 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(request: NextRequest) {
   try {
+    // Always clear cache so a freshly-saved key is picked up immediately
+    clearConfigCache();
+
     const body = await request.json();
     const voice = body.voice || "Leda";
     const provider = body.provider || "gemini";
