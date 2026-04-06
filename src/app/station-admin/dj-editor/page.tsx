@@ -90,7 +90,8 @@ export default function DJEditorPage() {
         setPlayingDjId(dj.id);
       } else if (data.error) {
         console.error("Voice preview error:", data.error);
-        alert(`Voice preview failed: ${data.error}`);
+        const msg = typeof data.error === "string" ? data.error : (data.error.message || JSON.stringify(data.error));
+        alert(`Voice preview failed: ${msg}`);
       }
     } catch (err) {
       console.error("Voice preview network error:", err);
