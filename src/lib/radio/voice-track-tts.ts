@@ -216,13 +216,11 @@ export async function generateWithGemini(text: string, voice: string, voiceDirec
       return { buffer: wavBuffer, ext: "wav" };
     }, { label: "Gemini TTS", baseDelayMs: 2000 });
   } catch (err) {
+    // Re-throw with a clear message — never silently fall back to a different
+    // voice (the previous OpenAI shimmer fallback caused male DJs to sound female)
     const msg = err instanceof Error ? err.message : String(err);
-    // On auth/permission errors, fall back to OpenAI instead of failing the whole track
-    if (msg.includes("401") || msg.includes("403") || msg.includes("Unauthorized") || msg.includes("Forbidden") || msg.includes("PERMISSION_DENIED")) {
-      logger.warn("Gemini TTS auth failed — falling back to OpenAI TTS", { error: msg });
-      return generateWithOpenAI(text, "shimmer");
-    }
-    throw err;
+    logger.error("Gemini TTS failed", { error: msg, voice });
+    throw new Error(`Gemini TTS failed: ${msg}`);
   }
 }
 
