@@ -264,24 +264,20 @@ export default function VoiceClonePage() {
           </p>
         </div>
 
-        {/* ElevenLabs not configured banner */}
-        {!elevenlabsConfigured && (
-          <div className="bg-amber-950/50 border border-amber-800/50 rounded-xl p-4 mb-6 flex items-start gap-3">
-            <Info className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
-            <div>
-              <p className="text-amber-200 font-medium">
-                ElevenLabs API key required
-              </p>
-              <p className="text-amber-300/70 text-sm mt-0.5">
-                Voice cloning requires an ElevenLabs API key. Add your{" "}
-                <code className="bg-amber-900/50 px-1.5 py-0.5 rounded text-amber-200 text-xs">
-                  ELEVENLABS_API_KEY
-                </code>{" "}
-                in Admin &gt; Settings to get started.
-              </p>
-            </div>
+        {/* Voice cloning unavailable banner */}
+        <div className="bg-amber-950/50 border border-amber-800/50 rounded-xl p-5 mb-6 flex items-start gap-3">
+          <AlertCircle className="w-6 h-6 text-amber-400 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="text-amber-200 font-semibold text-lg">
+              Voice cloning is not currently available
+            </p>
+            <p className="text-amber-300/70 text-sm mt-1">
+              Voice cloning is not supported with the current TTS provider (Google Gemini).
+              AI-powered voices are assigned automatically based on each DJ&apos;s personality settings.
+              This page is kept for reference but cloning functionality is disabled.
+            </p>
           </div>
-        )}
+        </div>
 
         {loading ? (
           <div className="flex justify-center py-16">
@@ -346,7 +342,7 @@ export default function VoiceClonePage() {
                         </div>
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-zinc-400">Provider</span>
-                          <span className="text-zinc-300">ElevenLabs</span>
+                          <span className="text-zinc-300">Google Gemini</span>
                         </div>
                       </div>
 
@@ -395,9 +391,9 @@ export default function VoiceClonePage() {
                       {showDeleteConfirm && (
                         <div className="bg-red-950/30 border border-red-900/50 rounded-lg p-4 mt-2">
                           <p className="text-red-200 text-sm mb-3">
-                            This will permanently delete the cloned voice from
-                            ElevenLabs and revert {selectedDj?.name} to default
-                            TTS. Are you sure?
+                            This will permanently delete the cloned voice and
+                            revert {selectedDj?.name} to default TTS. Are you
+                            sure?
                           </p>
                           <div className="flex items-center gap-2">
                             <button
@@ -564,12 +560,7 @@ export default function VoiceClonePage() {
                   {/* Submit button */}
                   <button
                     onClick={handleClone}
-                    disabled={
-                      uploading ||
-                      !audioFile ||
-                      !voiceName.trim() ||
-                      !elevenlabsConfigured
-                    }
+                    disabled={true}
                     className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-lg font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {uploading ? (
@@ -658,21 +649,17 @@ export default function VoiceClonePage() {
                   <div className="text-sm text-zinc-400 space-y-2">
                     <p>
                       <strong className="text-zinc-300">
-                        How voice cloning works
+                        Voice cloning unavailable
                       </strong>
                     </p>
                     <p>
-                      Upload a short audio sample of someone speaking. ElevenLabs
-                      will analyze the voice characteristics and create a
-                      synthetic voice that sounds like the original speaker.
+                      Voice cloning is not supported with the current TTS provider
+                      (Google Gemini). AI voices are automatically assigned based
+                      on each DJ&apos;s personality configuration.
                     </p>
                     <p>
-                      Your cloned voice will be used for all AI-generated voice
-                      tracks, intros, and personality segments for this DJ.
-                    </p>
-                    <p className="text-zinc-500">
-                      Voice cloning requires an ElevenLabs API key. Add it in
-                      Admin &gt; Settings.
+                      Existing cloned voices shown here are for reference only.
+                      New cloning operations are disabled.
                     </p>
                   </div>
                 </div>

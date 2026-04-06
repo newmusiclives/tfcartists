@@ -10,8 +10,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { STATION_TEMPLATES } from "@/lib/station-templates";
 import {
-  generatePcmWithElevenLabs,
   generatePcmWithOpenAI,
+  generateWithGemini,
   amplifyPcm,
   pcmToWav,
   saveAudioFile,
@@ -105,28 +105,6 @@ export async function POST(request: NextRequest) {
     }
     const openai = new OpenAI({ apiKey: openaiKey });
 
-    // Check for Loretta's ElevenLabs voice
-    let lorettaVoiceId: string | null = null;
-    let lorettaStability = 0.75;
-    let lorettaSimilarity = 0.75;
-
-    if (dj.isPersonalized) {
-      const elevenLabsKey = await getConfig("ELEVENLABS_API_KEY");
-      const lorettaDj = await prisma.dJ.findFirst({
-        where: {
-          name: { contains: "Loretta" },
-          ttsProvider: "elevenlabs",
-          voiceProfileId: { not: null },
-        },
-        select: { voiceProfileId: true, voiceStability: true, voiceSimilarityBoost: true },
-      });
-      if (lorettaDj?.voiceProfileId && elevenLabsKey) {
-        lorettaVoiceId = lorettaDj.voiceProfileId;
-        lorettaStability = lorettaDj.voiceStability ?? 0.75;
-        lorettaSimilarity = lorettaDj.voiceSimilarityBoost ?? 0.75;
-      }
-    }
-
     // Find a music bed
     let musicBedPath: string | null = null;
     try {
@@ -194,18 +172,12 @@ Write it as a single flowing script — no labels, just the words the DJ speaks.
     // Generate TTS audio
     let voicePcm: Buffer;
 
-    if (isLoretta && lorettaVoiceId) {
-      voicePcm = await generatePcmWithElevenLabs(script, lorettaVoiceId, {
-        stability: lorettaStability,
-        similarityBoost: lorettaSimilarity,
-      });
-      await trackAiSpend({
-        provider: "elevenlabs",
-        operation: "tts",
-        cost: (script.length / 1000) * 0.30,
-        characters: script.length,
-      });
-    } else {
+    // Use Gemini TTS for all DJ segments, fall back to OpenAI
+    try {
+      const { buffer } = await generateWithGemini(script, dj.voice || "Leda", null);
+      voicePcm = buffer.subarray(44); // strip WAV header
+      await trackAiSpend({ provider: "google", operation: "tts", cost: 0.004, characters: script.length });
+    } catch {
       voicePcm = await generatePcmWithOpenAI(script, dj.voice);
       await trackAiSpend({ provider: "openai", operation: "tts", cost: 0.015, characters: script.length });
     }
@@ -252,7 +224,7 @@ Write it as a single flowing script — no labels, just the words the DJ speaks.
       script,
       audioUrl,
       isPersonalized: !!hasPersonalization,
-      usedElevenLabs: !!(isLoretta && lorettaVoiceId),
+      usedPersonalizedVoice: !!hasPersonalization,
     });
   } catch (error) {
     logger.error("Show reel segment generation error", {

@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 
-const DAILY_SPEND_LIMIT = parseFloat(process.env.AI_DAILY_SPEND_LIMIT || "12"); // $12/day default (ElevenLabs Creator + AI)
+const DAILY_SPEND_LIMIT = parseFloat(process.env.AI_DAILY_SPEND_LIMIT || "12"); // $12/day default (Gemini TTS + AI)
 
 interface SpendEntry {
   provider: string; // "openai" | "anthropic" | "google"

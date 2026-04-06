@@ -227,7 +227,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Can I customize my DJ's voice and personality?",
-    a: "Absolutely. Choose from preset DJ personalities or create your own with custom names, voice styles, personality traits, and catchphrases. You can even clone a real voice with ElevenLabs integration.",
+    a: "Absolutely. Choose from preset DJ personalities or create your own with custom names, voice styles, personality traits, and catchphrases. AI-powered voices from Google Gemini bring your DJs to life.",
   },
   {
     q: "What are AI management teams?",

@@ -4,7 +4,6 @@ import { handleApiError } from "@/lib/api/errors";
 import {
   generateWithOpenAI,
   generateWithGemini,
-  generateWithElevenLabs,
   saveAudioFile,
 } from "@/lib/radio/voice-track-tts";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
@@ -73,12 +72,7 @@ export async function POST(
     let buffer: Buffer;
     let ext: string;
 
-    if (provider === "elevenlabs" && voiceProfileId) {
-      ({ buffer, ext } = await generateWithElevenLabs(transition.scriptText, voiceProfileId, {
-        stability: voiceStability ?? 0.75,
-        similarityBoost: voiceSimilarityBoost ?? 0.75,
-      }));
-    } else if (provider === "gemini") {
+    if (provider === "gemini" || provider === "elevenlabs") {
       ({ buffer, ext } = await generateWithGemini(transition.scriptText, voice, voiceDesc));
     } else {
       ({ buffer, ext } = await generateWithOpenAI(transition.scriptText, voice));

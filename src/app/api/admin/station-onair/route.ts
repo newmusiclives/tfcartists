@@ -1,33 +1,22 @@
 /**
- * Admin: Bring station back on-air manually.
- * GET  — check current status
- * POST — bring station on-air (resumes all crons)
+ * Admin: Station on-air status.
+ * GET  — check current status (always on-air now that ElevenLabs quota is gone)
+ * POST — no-op, kept for backward compatibility
  */
 
 import { NextResponse } from "next/server";
-import { isStationOffAir, bringStationOnAir, getElevenLabsQuota } from "@/lib/elevenlabs/quota-guard";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const offAir = await isStationOffAir();
-  const quota = await getElevenLabsQuota();
   return NextResponse.json({
-    stationOffAir: offAir,
-    quota: quota ? {
-      used: quota.characterCount,
-      limit: quota.characterLimit,
-      remaining: quota.charactersRemaining,
-      tier: quota.tier,
-      nextReset: quota.nextResetDate,
-    } : null,
+    stationOffAir: false,
   });
 }
 
 export async function POST() {
-  await bringStationOnAir();
   return NextResponse.json({
     success: true,
-    message: "Station brought back on-air. All cron jobs resumed.",
+    message: "Station is on-air. Gemini TTS has no quota restrictions.",
   });
 }

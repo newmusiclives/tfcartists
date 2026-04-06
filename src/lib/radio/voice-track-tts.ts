@@ -170,102 +170,6 @@ export async function generatePcmWithOpenAI(text: string, voice: string): Promis
   }, { label: "OpenAI PCM TTS" });
 }
 
-/**
- * Generate TTS using an ElevenLabs cloned voice.
- * voiceId should be the ElevenLabs voice_id stored on the DJ record.
- */
-export async function generateWithElevenLabs(
-  text: string,
-  voiceId: string,
-  opts?: { stability?: number; similarityBoost?: number },
-): Promise<{ buffer: Buffer; ext: string }> {
-  const { getConfig } = await import("@/lib/config");
-  const apiKey = await getConfig("ELEVENLABS_API_KEY");
-  if (!apiKey) throw new Error("ELEVENLABS_API_KEY not configured");
-
-  return withRetry(async () => {
-    // output_format MUST be a query parameter, not in the JSON body —
-    // ElevenLabs ignores it in the body and returns MP3 (default), which
-    // sounds like static when interpreted as raw PCM.
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=pcm_24000`,
-      {
-        method: "POST",
-        headers: {
-          "xi-api-key": apiKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text,
-          model_id: "eleven_multilingual_v2",
-          voice_settings: {
-            stability: opts?.stability ?? 0.75,
-            similarity_boost: opts?.similarityBoost ?? 0.75,
-          },
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      const msg =
-        errorData?.detail?.message ||
-        errorData?.detail ||
-        `ElevenLabs TTS error (${response.status})`;
-      throw new Error(msg);
-    }
-
-    // pcm_24000 returns raw 16-bit PCM at 24kHz mono — same as OpenAI PCM
-    const pcmBuffer = Buffer.from(await response.arrayBuffer());
-    const wavBuffer = pcmToWav(pcmBuffer);
-    return { buffer: wavBuffer, ext: "wav" };
-  }, { label: "ElevenLabs TTS", baseDelayMs: 2000 });
-}
-
-/** Generate ElevenLabs TTS as raw PCM (24kHz 16-bit mono) for audio mixing */
-export async function generatePcmWithElevenLabs(
-  text: string,
-  voiceId: string,
-  opts?: { stability?: number; similarityBoost?: number },
-): Promise<Buffer> {
-  const { getConfig } = await import("@/lib/config");
-  const apiKey = await getConfig("ELEVENLABS_API_KEY");
-  if (!apiKey) throw new Error("ELEVENLABS_API_KEY not configured");
-
-  return withRetry(async () => {
-    // output_format MUST be a query parameter (same fix as generateWithElevenLabs)
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=pcm_24000`,
-      {
-        method: "POST",
-        headers: {
-          "xi-api-key": apiKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text,
-          model_id: "eleven_multilingual_v2",
-          voice_settings: {
-            stability: opts?.stability ?? 0.75,
-            similarity_boost: opts?.similarityBoost ?? 0.75,
-          },
-        }),
-      },
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      const msg =
-        errorData?.detail?.message ||
-        errorData?.detail ||
-        `ElevenLabs TTS error (${response.status})`;
-      throw new Error(msg);
-    }
-
-    return Buffer.from(await response.arrayBuffer());
-  }, { label: "ElevenLabs PCM TTS", baseDelayMs: 2000 });
-}
-
 export async function generateWithGemini(text: string, voice: string, voiceDirection?: string | null): Promise<{ buffer: Buffer; ext: string }> {
   const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) {
@@ -321,47 +225,23 @@ export async function generateWithGemini(text: string, voice: string, voiceDirec
 /**
  * Generate TTS with the configured provider.
  *
- * For ElevenLabs DJs: checks the daily character budget first. If the
- * budget is exhausted, throws immediately — the station does NOT fall
- * back to Gemini/OpenAI (the cloned voice IS the station identity).
+ * Primary: Gemini TTS ($0.004/generation flat rate).
+ * Fallback: OpenAI TTS ($0.015/generation).
  *
- * For non-ElevenLabs DJs: uses Gemini or OpenAI as configured.
+ * Legacy "elevenlabs" provider DJs are treated as Gemini.
  */
 async function generatePcmWithFallback(
   text: string,
   provider: string,
   voice: string,
   voiceDirection: string | null,
-  elevenLabsOpts: { voiceProfileId?: string | null; stability: number; similarityBoost: number },
 ): Promise<{ pcm: Buffer; cost: number; usedProvider: string }> {
 
-  if (provider === "elevenlabs" && elevenLabsOpts.voiceProfileId) {
-    // Check daily budget BEFORE calling the API — don't waste a failed call
-    const { getElevenLabsDailyBudget, trackElevenLabsChars } = await import("@/lib/elevenlabs/daily-budget");
-    const budget = await getElevenLabsDailyBudget();
-
-    if (!budget.canUseElevenLabs) {
-      throw new Error(
-        `ElevenLabs daily budget exhausted (${budget.usedToday.toLocaleString()}/${budget.dailyBudget.toLocaleString()} chars). ` +
-        `Skipping voice generation to preserve monthly quota.`
-      );
-    }
-
-    const pcm = await generatePcmWithElevenLabs(text, elevenLabsOpts.voiceProfileId, {
-      stability: elevenLabsOpts.stability,
-      similarityBoost: elevenLabsOpts.similarityBoost,
-    });
-
-    // Track characters used against daily budget
-    await trackElevenLabsChars(text.length);
-
-    return { pcm, cost: (text.length / 1000) * 0.30, usedProvider: "elevenlabs" };
-  }
-
-  // Non-ElevenLabs providers: try Gemini first, then OpenAI
-  if (provider === "gemini") {
+  // Gemini is the primary provider (also handles legacy "elevenlabs" DJs)
+  if (provider === "gemini" || provider === "elevenlabs") {
     try {
-      const { buffer } = await generateWithGemini(text, voice, voiceDirection);
+      const geminiVoice = provider === "elevenlabs" ? "Leda" : voice;
+      const { buffer } = await generateWithGemini(text, geminiVoice, voiceDirection);
       return { pcm: buffer.subarray(44), cost: 0.004, usedProvider: "gemini" };
     } catch {
       // Fall back to OpenAI
@@ -370,9 +250,20 @@ async function generatePcmWithFallback(
     }
   }
 
-  // Default: OpenAI
-  const pcm = await generatePcmWithOpenAI(text, voice);
-  return { pcm, cost: 0.015, usedProvider: "openai" };
+  // OpenAI provider
+  if (provider === "openai") {
+    const pcm = await generatePcmWithOpenAI(text, voice);
+    return { pcm, cost: 0.015, usedProvider: "openai" };
+  }
+
+  // Default: Gemini
+  try {
+    const { buffer } = await generateWithGemini(text, voice || "Leda", voiceDirection);
+    return { pcm: buffer.subarray(44), cost: 0.004, usedProvider: "gemini" };
+  } catch {
+    const pcm = await generatePcmWithOpenAI(text, voice || "alloy");
+    return { pcm, cost: 0.015, usedProvider: "openai" };
+  }
 }
 
 interface GenerateAudioResult {
@@ -407,7 +298,6 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
   const voice = dj?.ttsVoice || "alloy";
   const provider = dj?.ttsProvider || "openai";
   const voiceDirection = dj?.voiceDescription || null;
-  const elevenLabsOpts = { stability: dj?.voiceStability ?? 0.75, similarityBoost: dj?.voiceSimilarityBoost ?? 0.75 };
 
   // Try to find an active music bed for voice tracks
   // Prefer real uploaded beds (MP3s) over synthetic pads, then prefer "soft" category
@@ -442,10 +332,9 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
     try {
       if (!vt.scriptText) continue;
 
-      // Generate PCM with automatic fallback (ElevenLabs → Gemini → OpenAI)
+      // Generate PCM with automatic fallback (Gemini → OpenAI)
       const ttsResult = await generatePcmWithFallback(
         vt.scriptText, provider, voice, voiceDirection,
-        { voiceProfileId: dj?.voiceProfileId, stability: elevenLabsOpts.stability, similarityBoost: elevenLabsOpts.similarityBoost },
       );
       let voicePcm = ttsResult.pcm;
       await trackAiSpend({ provider: ttsResult.usedProvider, operation: "tts", cost: ttsResult.cost, characters: vt.scriptText!.length });
@@ -481,8 +370,8 @@ export async function generateVoiceTrackAudio(hourPlaylistId: string): Promise<G
         data: {
           audioFilePath,
           audioDuration,
-          ttsVoice: provider === "elevenlabs" ? dj?.voiceProfileId || voice : voice,
-          ttsProvider: provider,
+          ttsVoice: voice,
+          ttsProvider: ttsResult.usedProvider,
           status: "audio_ready",
         },
       });
@@ -526,7 +415,6 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
   const voice = dj?.ttsVoice || "alloy";
   const provider = dj?.ttsProvider || "openai";
   const voiceDirection = dj?.voiceDescription || null;
-  const elevenLabsOpts = { stability: dj?.voiceStability ?? 0.75, similarityBoost: dj?.voiceSimilarityBoost ?? 0.75 };
 
   // Find music bed
   let musicBedPath: string | null = null;
@@ -547,10 +435,9 @@ export async function generateSingleVoiceTrackAudio(voiceTrackId: string): Promi
   }
 
   try {
-    // Generate PCM with automatic fallback (ElevenLabs → Gemini → OpenAI)
+    // Generate PCM with automatic fallback (Gemini → OpenAI)
     const ttsResult = await generatePcmWithFallback(
       vt.scriptText, provider, voice, voiceDirection,
-      { voiceProfileId: dj?.voiceProfileId, stability: elevenLabsOpts.stability, similarityBoost: elevenLabsOpts.similarityBoost },
     );
     let voicePcm = ttsResult.pcm;
     await trackAiSpend({ provider: ttsResult.usedProvider, operation: "tts", cost: ttsResult.cost, characters: vt.scriptText!.length });
@@ -637,7 +524,6 @@ export async function generateFeatureAudio(
   const voice = dj?.ttsVoice || "alloy";
   const provider = dj?.ttsProvider || "openai";
   const featureVoiceDirection = dj?.voiceDescription || null;
-  const elevenLabsOpts = { stability: dj?.voiceStability ?? 0.75, similarityBoost: dj?.voiceSimilarityBoost ?? 0.75 };
 
   // Try to find an active music bed — prefer real uploads over synthetic pads
   let musicBedPath: string | null = null;
@@ -664,10 +550,9 @@ export async function generateFeatureAudio(
 
   for (const fc of features) {
     try {
-      // Generate PCM with automatic fallback (ElevenLabs → Gemini → OpenAI)
+      // Generate PCM with automatic fallback (Gemini → OpenAI)
       const ttsResult = await generatePcmWithFallback(
         fc.content, provider, voice, featureVoiceDirection,
-        { voiceProfileId: dj?.voiceProfileId, stability: elevenLabsOpts.stability, similarityBoost: elevenLabsOpts.similarityBoost },
       );
       let voicePcm = ttsResult.pcm;
       await trackAiSpend({ provider: ttsResult.usedProvider, operation: "tts", cost: ttsResult.cost, characters: fc.content.length });

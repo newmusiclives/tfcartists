@@ -9,7 +9,6 @@ import { stationToday, stationDayType } from "@/lib/timezone";
 import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
 import { filterContent } from "@/lib/ai/content-filter";
 import { getCachedRelinkDialogue, setCachedRelinkDialogue } from "@/lib/ai/content-cache";
-import { enforceElevenLabsQuota } from "@/lib/elevenlabs/quota-guard";
 
 interface ShiftHour {
   djId: string;
@@ -62,15 +61,6 @@ export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
       errors: ["No station found"],
       timestamp: new Date().toISOString(),
     };
-  }
-
-  // 1b. Check ElevenLabs quota — if exhausted, still build playlists but skip voice audio
-  const quotaCheck = await enforceElevenLabsQuota();
-  const skipVoiceAudio = !quotaCheck.proceed;
-  if (skipVoiceAudio) {
-    logger.warn("ElevenLabs quota exhausted — will build playlists but skip voice track audio", {
-      reason: quotaCheck.reason,
-    });
   }
 
   // 2. Determine today's day type (in Mountain Time)
@@ -222,7 +212,7 @@ export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
         });
       }
 
-      if (!skipVoiceAudio) {
+      {
         // 5c. Find the last voice break in the clock and try to replace it with a generic track
         const lastVbPos = findLastVoiceBreakPosition(playlistSlots);
         let genericSkipPositions: number[] = [];

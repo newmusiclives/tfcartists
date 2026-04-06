@@ -18,7 +18,6 @@ import {
   Server,
   ToggleLeft,
   ToggleRight,
-  AlertTriangle,
   Info,
 } from "lucide-react";
 
@@ -28,13 +27,6 @@ const OPENAI_HD_RATE = 0.03; // per 1K chars
 const OPENAI_STD_RATE = 0.015;
 // Gemini
 const GEMINI_RATE = 0.004; // per generation (flat)
-// ElevenLabs subscription plans (Multilingual v2 — 1 credit/char)
-const ELEVENLABS_PLANS = [
-  { name: "Creator", price: 22, chars: 100_000, overageRate: 0.30 },
-  { name: "Pro", price: 99, chars: 500_000, overageRate: 0.24 },
-  { name: "Scale", price: 330, chars: 2_000_000, overageRate: 0.18 },
-  { name: "Business", price: 1320, chars: 11_000_000, overageRate: 0.12 },
-] as const;
 
 // AI Chat costs
 const CHAT_INPUT_RATE = 0.15 / 1_000_000; // per token
@@ -79,7 +71,7 @@ const SPONSOR_TIERS = [
   { name: "Tier 3", price: 300 },
 ];
 
-type TTSProvider = "openai-hd" | "openai-std" | "elevenlabs" | "gemini";
+type TTSProvider = "openai-hd" | "openai-std" | "gemini";
 
 function fmt(n: number): string {
   return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -187,8 +179,7 @@ export default function StationCostsPage() {
   const [numDJs, setNumDJs] = useState(4);
   const [tracksPerHour, setTracksPerHour] = useState(3);
   const [liveHours, setLiveHours] = useState(12);
-  const [ttsProvider, setTTSProvider] = useState<TTSProvider>("elevenlabs");
-  const [elevenLabsPlan, setElevenLabsPlan] = useState(0); // index into ELEVENLABS_PLANS (Creator)
+  const [ttsProvider, setTTSProvider] = useState<TTSProvider>("gemini");
   const [smsPerDay, setSmsPerDay] = useState(50);
   const [sponsorAdsPerDay, setSponsorAdsPerDay] = useState(5);
 
@@ -217,31 +208,7 @@ export default function StationCostsPage() {
     let featureMonthly = 0;
     let imagingMonthly = 0;
     let sponsorAdMonthly = 0;
-    let elevenLabsSubscription = 0;
-    let elevenLabsOverage = 0;
-    let elevenLabsOverageChars = 0;
-
-    if (ttsProvider === "elevenlabs") {
-      const plan = ELEVENLABS_PLANS[elevenLabsPlan];
-      elevenLabsSubscription = plan.price;
-
-      // Calculate if we exceed the plan's character quota
-      if (totalCharsMonth > plan.chars) {
-        elevenLabsOverageChars = totalCharsMonth - plan.chars;
-        elevenLabsOverage = (elevenLabsOverageChars / 1000) * plan.overageRate;
-      }
-
-      // Break down ElevenLabs cost proportionally for display
-      const effectiveRate = totalCharsMonth > 0
-        ? (elevenLabsSubscription + elevenLabsOverage) / (totalCharsMonth / 1000)
-        : 0;
-
-      voiceTrackMonthly = (voiceTrackCharsMonth / 1000) * effectiveRate;
-      transitionMonthly = (transitionCharsMonth / 1000) * effectiveRate;
-      featureMonthly = (featureCharsMonth / 1000) * effectiveRate;
-      imagingMonthly = (imagingCharsMonth / 1000) * effectiveRate;
-      sponsorAdMonthly = (sponsorAdCharsMonth / 1000) * effectiveRate;
-    } else if (ttsProvider === "gemini") {
+    if (ttsProvider === "gemini") {
       // Gemini charges per generation, not per character
       voiceTrackMonthly = voiceTracksPerDay * GEMINI_RATE * 30;
       transitionMonthly = TRANSITIONS_PER_DAY * GEMINI_RATE * 30;
@@ -286,9 +253,6 @@ export default function StationCostsPage() {
       imagingMonthly,
       sponsorAdMonthly,
       ttsTotal,
-      elevenLabsSubscription,
-      elevenLabsOverage,
-      elevenLabsOverageChars,
       totalCharsMonth,
       djScriptMonthly,
       featureContentMonthly,
@@ -302,7 +266,7 @@ export default function StationCostsPage() {
       infra: INFRA_COST,
       total,
     };
-  }, [numDJs, tracksPerHour, liveHours, ttsProvider, elevenLabsPlan, smsPerDay, sponsorAdsPerDay, optReduceTracks, optSkipFeatures, optGeminiImaging]);
+  }, [numDJs, tracksPerHour, liveHours, ttsProvider, smsPerDay, sponsorAdsPerDay, optReduceTracks, optSkipFeatures, optGeminiImaging]);
 
   // --- Compare against OpenAI baseline for savings display ---
   const baselineCost = useMemo(() => {
@@ -328,7 +292,7 @@ export default function StationCostsPage() {
 
   const costDiff = costs.total - baselineCost;
 
-  // --- Operator plan pricing (ElevenLabs Creator @ $22/mo keeps costs low) ---
+  // --- Operator plan pricing (Gemini TTS @ $0.004/gen keeps costs low) ---
   const operatorPlans = [
     { name: "Launch", price: 199, fee: 15, setup: 500 },
     { name: "Growth", price: 299, fee: 10, setup: 500, recommended: true },
@@ -354,7 +318,7 @@ export default function StationCostsPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Station Cost Calculator</h1>
-            <p className="text-gray-500 text-sm">Interactive per-station operating cost estimator with ElevenLabs support</p>
+            <p className="text-gray-500 text-sm">Interactive per-station operating cost estimator</p>
           </div>
         </div>
 
@@ -366,10 +330,9 @@ export default function StationCostsPage() {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
             {([
-              { id: "elevenlabs" as TTSProvider, label: "ElevenLabs", sub: "Cloned voices", badge: "Active" },
+              { id: "gemini" as TTSProvider, label: "Gemini", sub: "$0.004/gen", badge: "Active" },
               { id: "openai-hd" as TTSProvider, label: "OpenAI HD", sub: "$0.030/1K chars" },
               { id: "openai-std" as TTSProvider, label: "OpenAI Std", sub: "$0.015/1K chars" },
-              { id: "gemini" as TTSProvider, label: "Gemini", sub: "$0.004/gen" },
             ]).map((p) => (
               <button
                 key={p.id}
@@ -391,60 +354,10 @@ export default function StationCostsPage() {
             ))}
           </div>
 
-          {/* ElevenLabs Plan Selector */}
-          {ttsProvider === "elevenlabs" && (
-            <div>
-              <p className="text-sm font-medium text-gray-700 mb-2">ElevenLabs Plan</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {ELEVENLABS_PLANS.map((plan, i) => {
-                  const isOver = costs.totalCharsMonth > plan.chars;
-                  return (
-                    <button
-                      key={plan.name}
-                      onClick={() => setElevenLabsPlan(i)}
-                      className={`p-3 rounded-lg border-2 text-left transition-colors ${
-                        elevenLabsPlan === i
-                          ? "border-indigo-400 bg-indigo-50"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <p className="text-sm font-bold text-gray-900">{plan.name}</p>
-                      <p className="text-lg font-bold text-gray-900">${plan.price}<span className="text-xs font-normal text-gray-500">/mo</span></p>
-                      <p className="text-xs text-gray-500">{fmtK(plan.chars)} chars included</p>
-                      {elevenLabsPlan === i && isOver && (
-                        <p className="text-[10px] text-amber-600 font-medium mt-1 flex items-center gap-1">
-                          <AlertTriangle className="w-3 h-3" /> Over quota
-                        </p>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Character usage bar */}
-              <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="text-gray-600">Character usage</span>
-                  <span className="font-semibold text-gray-900">
-                    {fmtK(costs.totalCharsMonth)} / {fmtK(ELEVENLABS_PLANS[elevenLabsPlan].chars)}
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div
-                    className={`h-2.5 rounded-full transition-all ${
-                      costs.totalCharsMonth > ELEVENLABS_PLANS[elevenLabsPlan].chars
-                        ? "bg-amber-500"
-                        : "bg-indigo-500"
-                    }`}
-                    style={{ width: `${Math.min((costs.totalCharsMonth / ELEVENLABS_PLANS[elevenLabsPlan].chars) * 100, 100)}%` }}
-                  />
-                </div>
-                {costs.elevenLabsOverageChars > 0 && (
-                  <p className="text-xs text-amber-600 mt-1">
-                    {fmtK(costs.elevenLabsOverageChars)} chars overage at ${ELEVENLABS_PLANS[elevenLabsPlan].overageRate}/1K = ${fmt(costs.elevenLabsOverage)} extra
-                  </p>
-                )}
-              </div>
+          {/* Gemini flat rate info */}
+          {ttsProvider === "gemini" && (
+            <div className="mt-2 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-700">Gemini TTS charges a flat <strong>$0.004 per generation</strong>, regardless of text length. No subscription or character quota required.</p>
             </div>
           )}
         </div>
@@ -484,30 +397,10 @@ export default function StationCostsPage() {
               Monthly Cost Breakdown
             </h2>
 
-            {/* ElevenLabs subscription line */}
-            {ttsProvider === "elevenlabs" && (
-              <div className="mb-3">
-                <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-1">ElevenLabs Subscription</p>
-                <CostRow
-                  label={`${ELEVENLABS_PLANS[elevenLabsPlan].name} plan (${fmtK(ELEVENLABS_PLANS[elevenLabsPlan].chars)} chars)`}
-                  amount={costs.elevenLabsSubscription}
-                  icon={<Mic className="w-4 h-4 text-amber-500" />}
-                  highlight
-                />
-                {costs.elevenLabsOverage > 0 && (
-                  <CostRow
-                    label={`Overage (${fmtK(costs.elevenLabsOverageChars)} chars)`}
-                    amount={costs.elevenLabsOverage}
-                    highlight
-                  />
-                )}
-              </div>
-            )}
-
             {/* TTS Audio Breakdown */}
             <div className="mb-3">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
-                TTS Audio {ttsProvider === "elevenlabs" ? "(allocation breakdown)" : ""}
+                TTS Audio
               </p>
               <CostRow label="Voice Tracks" amount={costs.voiceTrackMonthly} icon={<Mic className="w-4 h-4 text-indigo-400" />} />
               <CostRow label="Transitions / Handoffs" amount={costs.transitionMonthly} />
@@ -541,17 +434,16 @@ export default function StationCostsPage() {
             </div>
 
             {/* Cost comparison vs OpenAI HD baseline */}
-            {ttsProvider === "elevenlabs" && (
-              <div className="mt-2 p-3 rounded-lg bg-amber-50 border border-amber-200">
+            {ttsProvider === "gemini" && (
+              <div className="mt-2 p-3 rounded-lg bg-green-50 border border-green-200">
                 <div className="flex items-start gap-2">
-                  <Info className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-                  <div className="text-xs text-amber-800">
+                  <Info className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                  <div className="text-xs text-green-800">
                     <p className="font-semibold">
                       {costDiff > 0 ? `+$${fmt(costDiff)}/mo` : `-$${fmt(Math.abs(costDiff))}/mo`} vs OpenAI HD baseline
                     </p>
                     <p className="mt-0.5">
-                      ElevenLabs delivers premium cloned voices but costs more.
-                      The voice quality and brand identity justify premium operator pricing.
+                      Gemini TTS provides high-quality AI voices at a flat $0.004/generation rate with no subscription required.
                     </p>
                   </div>
                 </div>
@@ -672,15 +564,12 @@ export default function StationCostsPage() {
             />
           </div>
 
-          {ttsProvider === "elevenlabs" && (
+          {ttsProvider === "gemini" && (
             <div className="p-4 rounded-lg bg-indigo-50 border border-indigo-200">
-              <p className="text-sm font-medium text-indigo-900 mb-1">ElevenLabs cost tip</p>
+              <p className="text-sm font-medium text-indigo-900 mb-1">Gemini cost tip</p>
               <p className="text-xs text-indigo-700">
-                Reducing character usage can let you fit within a smaller ElevenLabs plan.
-                At {fmtK(costs.totalCharsMonth)} chars/mo, you {costs.elevenLabsOverageChars > 0 ? "exceed" : "fit within"} the {ELEVENLABS_PLANS[elevenLabsPlan].name} plan
-                ({fmtK(ELEVENLABS_PLANS[elevenLabsPlan].chars)} chars).
-                {costs.elevenLabsOverageChars > 0 && elevenLabsPlan < ELEVENLABS_PLANS.length - 1 &&
-                  ` Consider upgrading to ${ELEVENLABS_PLANS[elevenLabsPlan + 1].name} ($${ELEVENLABS_PLANS[elevenLabsPlan + 1].price}/mo) to avoid $${fmt(costs.elevenLabsOverage)}/mo in overage.`}
+                Gemini charges $0.004 per generation regardless of text length. Reducing the number of
+                generations (fewer voice tracks, skipping features) directly lowers your monthly cost.
               </p>
             </div>
           )}
@@ -694,7 +583,7 @@ export default function StationCostsPage() {
           </h2>
 
           <p className="text-sm text-gray-500 mb-4">
-            Pricing reflects ElevenLabs cloned voices on the Creator plan, with creative use of generic audio to stay within quota.
+            Pricing reflects Gemini TTS at $0.004/generation flat rate, with no subscription overhead.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

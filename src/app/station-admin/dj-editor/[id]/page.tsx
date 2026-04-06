@@ -371,25 +371,22 @@ export default function DJEditorDetailPage() {
             <h2 className="font-semibold mb-4">Voice Configuration</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-gray-500 block mb-1">ElevenLabs Voice ID</label>
-                <input type="text" value={dj.voiceProfileId || ""} onChange={(e) => setDj({ ...dj, voiceProfileId: e.target.value })} className="w-full border rounded-lg px-3 py-2 text-sm font-mono" placeholder="voice_abc123..." />
-              </div>
-              <div>
                 <label className="text-xs text-gray-500 block mb-1">TTS Provider</label>
                 <select
-                  value={dj.ttsProvider || "openai"}
+                  value={dj.ttsProvider || "gemini"}
                   onChange={(e) => setDj({ ...dj, ttsProvider: e.target.value, ttsVoice: null })}
                   className="w-full border rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="openai">OpenAI</option>
                   <option value="gemini">Google Gemini</option>
+                  <option value="openai">OpenAI</option>
                 </select>
               </div>
+              <div />
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
                 <label className="text-xs text-gray-500 block mb-1">TTS Voice</label>
-                {(dj.ttsProvider || "openai") === "openai" ? (
+                {(dj.ttsProvider || "gemini") === "openai" ? (
                   <select
                     value={dj.ttsVoice || ""}
                     onChange={(e) => setDj({ ...dj, ttsVoice: e.target.value || null })}
@@ -414,28 +411,43 @@ export default function DJEditorDetailPage() {
                     className="w-full border rounded-lg px-3 py-2 text-sm"
                   >
                     <option value="">Not set</option>
-                    <option value="Zephyr">Zephyr</option>
-                    <option value="Puck">Puck</option>
-                    <option value="Charon">Charon</option>
-                    <option value="Kore">Kore</option>
-                    <option value="Fenrir">Fenrir</option>
-                    <option value="Leda">Leda</option>
-                    <option value="Orus">Orus</option>
-                    <option value="Aoede">Aoede</option>
+                    <optgroup label="Female Voices">
+                      <option value="Zephyr">Zephyr — Bright, cheerful</option>
+                      <option value="Kore">Kore — Firm, confident</option>
+                      <option value="Leda">Leda — Youthful, energetic</option>
+                      <option value="Aoede">Aoede — Warm</option>
+                      <option value="Autonoe">Autonoe — Bright, optimistic</option>
+                      <option value="Callirhoe">Callirhoe — Easy-going, relaxed</option>
+                      <option value="Despina">Despina — Smooth, flowing</option>
+                      <option value="Erinome">Erinome — Clear, precise</option>
+                      <option value="Gacrux">Gacrux — Mature, experienced</option>
+                      <option value="Laomedeia">Laomedeia — Upbeat, lively</option>
+                      <option value="Pulcherrima">Pulcherrima — Forward, expressive</option>
+                      <option value="Vindemiatrix">Vindemiatrix — Gentle, kind</option>
+                      <option value="Achernar">Achernar — Soft, gentle</option>
+                    </optgroup>
+                    <optgroup label="Male Voices">
+                      <option value="Puck">Puck — Upbeat, energetic</option>
+                      <option value="Charon">Charon — Informative, clear</option>
+                      <option value="Fenrir">Fenrir — Excitable, dynamic</option>
+                      <option value="Orus">Orus — Firm, decisive</option>
+                      <option value="Achird">Achird — Friendly, approachable</option>
+                      <option value="Algenib">Algenib — Gravelly texture</option>
+                      <option value="Algieba">Algieba — Smooth, pleasant</option>
+                      <option value="Alnilam">Alnilam — Firm, strong</option>
+                      <option value="Enceladus">Enceladus — Breathy, soft</option>
+                      <option value="Iapetus">Iapetus — Clear, articulate</option>
+                      <option value="Rasalgethi">Rasalgethi — Informative, professional</option>
+                      <option value="Sadachbia">Sadachbia — Lively, animated</option>
+                      <option value="Sadaltager">Sadaltager — Knowledgeable, authoritative</option>
+                      <option value="Schedar">Schedar — Deliberate</option>
+                      <option value="Umbriel">Umbriel — Easy-going</option>
+                      <option value="Zubenelgenubi">Zubenelgenubi — Inventive</option>
+                    </optgroup>
                   </select>
                 )}
               </div>
               <div />
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div>
-                <label className="text-xs text-gray-500 block mb-1">Voice Stability: {dj.voiceStability}</label>
-                <input type="range" min="0" max="1" step="0.05" value={dj.voiceStability} onChange={(e) => setDj({ ...dj, voiceStability: parseFloat(e.target.value) })} className="w-full" />
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 block mb-1">Voice Similarity: {dj.voiceSimilarityBoost}</label>
-                <input type="range" min="0" max="1" step="0.05" value={dj.voiceSimilarityBoost} onChange={(e) => setDj({ ...dj, voiceSimilarityBoost: parseFloat(e.target.value) })} className="w-full" />
-              </div>
             </div>
           </div>
 

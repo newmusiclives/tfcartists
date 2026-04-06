@@ -38,7 +38,7 @@ const PLANS: Record<
       fee: "15% of revenue",
       features: [
         "1 AI-powered radio station",
-        "AI DJ automation with ElevenLabs voices",
+        "AI DJ automation with Gemini voices",
         "Basic scheduling",
         "Up to 500 songs",
         "15% platform fee on revenue",

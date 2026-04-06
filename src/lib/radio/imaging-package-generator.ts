@@ -6,7 +6,7 @@
  * - Pro ($149/mo): + DJ-specific sweepers, show intros/outros, feature bumpers
  * - Enterprise ($299/mo): + DJ handoffs, seasonal refresh, custom music beds
  *
- * Uses the station's configured voices (ElevenLabs clones or TTS fallback).
+ * Uses Google Gemini TTS for all voices, with OpenAI fallback.
  */
 
 import { prisma } from "@/lib/db";
@@ -240,7 +240,7 @@ export async function generatePackageAudio(packageId: string): Promise<{ generat
   const errors: string[] = [];
 
   // Dynamic import for TTS functions (avoid circular deps)
-  const { generatePcmWithOpenAI, generateWithGemini, generatePcmWithElevenLabs, amplifyPcm } =
+  const { generatePcmWithOpenAI, generateWithGemini, amplifyPcm } =
     await import("@/lib/radio/voice-track-tts");
 
   for (const el of elements) {
@@ -252,28 +252,12 @@ export async function generatePackageAudio(packageId: string): Promise<{ generat
         ? imagingVoices[el.variationNum % imagingVoices.length]
         : null;
 
-      if (imagingVoice?.elevenlabsVoiceId) {
-        const { getElevenLabsDailyBudget, trackElevenLabsChars } = await import("@/lib/elevenlabs/daily-budget");
-        const budget = await getElevenLabsDailyBudget();
-        if (!budget.canUseElevenLabs) {
-          const msg = `${el.elementType} #${el.variationNum}: daily ElevenLabs budget exhausted (${budget.usedToday}/${budget.dailyBudget} chars)`;
-          errors.push(msg);
-          continue;
-        }
-        const { generatePcmWithElevenLabs: genEL } = await import("@/lib/radio/voice-track-tts");
-        voicePcm = await genEL(el.scriptText, imagingVoice.elevenlabsVoiceId, {
-          stability: imagingVoice.voiceStability ?? 0.75,
-          similarityBoost: imagingVoice.voiceSimilarityBoost ?? 0.75,
-        });
-        await trackElevenLabsChars(el.scriptText.length);
-      } else {
-        // Fallback: try Gemini, then OpenAI
-        try {
-          const { buffer } = await generateWithGemini(el.scriptText, "Kore", null);
-          voicePcm = buffer.subarray(44);
-        } catch {
-          voicePcm = await generatePcmWithOpenAI(el.scriptText, "echo");
-        }
+      // Generate with Gemini (primary), OpenAI fallback
+      try {
+        const { buffer } = await generateWithGemini(el.scriptText, "Kore", null);
+        voicePcm = buffer.subarray(44);
+      } catch {
+        voicePcm = await generatePcmWithOpenAI(el.scriptText, "echo");
       }
 
       // Process audio: trim, boost, mix with bed

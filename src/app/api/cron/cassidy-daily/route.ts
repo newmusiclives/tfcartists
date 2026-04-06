@@ -209,7 +209,7 @@ export async function GET(req: NextRequest) {
 
     // 4. Regenerate imaging scripts that are MISSING audio entirely
     //    (Skip scripts that already have audio — even without a music bed —
-    //     to avoid burning ElevenLabs credits on redundant regeneration)
+    //     to avoid burning TTS credits on redundant regeneration)
     if (station) {
       try {
         const imagingVoices = await prisma.stationImagingVoice.findMany({

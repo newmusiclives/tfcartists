@@ -65,7 +65,7 @@ const VOICE_OPTIONS = [
   { value: "nova", label: "Nova", description: "Friendly, upbeat" },
   { value: "onyx", label: "Onyx", description: "Deep, authoritative" },
   { value: "shimmer", label: "Shimmer", description: "Clear, bright" },
-  { value: "elevenlabs", label: "Clone a Voice", description: "Upload audio to clone with ElevenLabs" },
+  { value: "gemini", label: "Gemini TTS", description: "Google Gemini AI voice" },
 ];
 
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -929,27 +929,14 @@ export default function StationWizard() {
                           </div>
                         </div>
 
-                        {/* ElevenLabs Voice Clone Upload */}
-                        {dj.voice === "elevenlabs" && (
+                        {/* Gemini TTS info */}
+                        {dj.voice === "gemini" && (
                           <div className="p-3 rounded-lg bg-indigo-50 border border-indigo-200">
                             <p className="text-xs font-medium text-indigo-700 mb-2">
-                              Upload a voice sample (WAV or MP3, max 10MB) to clone this DJ&apos;s voice with ElevenLabs.
+                              Google Gemini TTS will be used for this DJ. Voice characteristics are configured automatically based on the DJ&apos;s personality.
                             </p>
-                            <input
-                              type="file"
-                              accept="audio/wav,audio/mpeg,audio/mp3"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  const u = [...djs];
-                                  u[i] = { ...dj, voiceCloneFile: file } as DJForm & { voiceCloneFile: File };
-                                  setDjs(u);
-                                }
-                              }}
-                              className="block w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
-                            />
                             <p className="text-[10px] text-indigo-500 mt-1">
-                              Voice cloning will be processed after the station is created. You can also clone voices later in Station Admin &gt; Voice Clone.
+                              Gemini TTS provides high-quality AI voices at $0.004 per generation.
                             </p>
                           </div>
                         )}

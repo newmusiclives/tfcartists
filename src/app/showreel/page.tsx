@@ -45,7 +45,7 @@ interface ShowReelResult {
   genre: string;
   venueName: string | null;
   prospectName: string | null;
-  usedElevenLabs: boolean;
+  usedPersonalizedVoice: boolean;
   segments: Segment[];
 }
 
@@ -129,7 +129,7 @@ export default function ShowReelPage() {
           genre,
           venueName: venueName.trim() || null,
           prospectName: prospectName.trim() || null,
-          usedElevenLabs: segments.some((s) => s.isPersonalized),
+          usedPersonalizedVoice: segments.some((s) => s.isPersonalized),
           segments: [...segments],
         });
 
@@ -233,7 +233,7 @@ export default function ShowReelPage() {
             </span>
           </h1>
           <p className="text-lg text-zinc-400 max-w-xl mx-auto leading-relaxed">
-            4 AI DJs. Your station name. Your venue. Your name spoken by our cloned voice DJ.
+            4 AI DJs. Your station name. Your venue. Your name spoken by our AI-powered DJ.
             A personalized 20-minute show reel that sells itself.
           </p>
         </div>
@@ -400,10 +400,10 @@ export default function ShowReelPage() {
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold mb-2">{result.stationName}</h2>
               <p className="text-zinc-400">{result.tagline}</p>
-              {result.usedElevenLabs && (
+              {result.usedPersonalizedVoice && (
                 <div className="inline-flex items-center gap-2 mt-3 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-medium">
                   <Sparkles className="w-3 h-3" />
-                  Loretta&apos;s segment uses her cloned ElevenLabs voice
+                  Loretta&apos;s segment uses her personalized AI voice
                 </div>
               )}
             </div>

@@ -24,7 +24,7 @@ interface ImagingVoice {
   id: string;
   displayName: string;
   voiceType: string;
-  elevenlabsVoiceId: string | null;
+  ttsVoiceId: string | null;
   voiceStability: number;
   voiceSimilarityBoost: number;
   voiceStyle: number;
@@ -67,7 +67,7 @@ export default function StationImagingPage() {
   const [newVoice, setNewVoice] = useState({
     displayName: "",
     voiceType: "male",
-    elevenlabsVoiceId: "",
+    ttsVoiceId: "",
     usageTypes: "id",
   });
 
@@ -124,7 +124,7 @@ export default function StationImagingPage() {
     if (data.voice) {
       setVoices([data.voice, ...voices]);
       setShowAdd(false);
-      setNewVoice({ displayName: "", voiceType: "male", elevenlabsVoiceId: "", usageTypes: "id" });
+      setNewVoice({ displayName: "", voiceType: "male", ttsVoiceId: "", usageTypes: "id" });
     }
   };
 
@@ -314,10 +314,10 @@ export default function StationImagingPage() {
               </select>
               <input
                 type="text"
-                value={newVoice.elevenlabsVoiceId}
-                onChange={(e) => setNewVoice({ ...newVoice, elevenlabsVoiceId: e.target.value })}
+                value={newVoice.ttsVoiceId}
+                onChange={(e) => setNewVoice({ ...newVoice, ttsVoiceId: e.target.value })}
                 className="border rounded-lg px-3 py-2 text-sm font-mono"
-                placeholder="ElevenLabs Voice ID"
+                placeholder="TTS Voice ID"
               />
             </div>
             <button onClick={addVoice} className="bg-rose-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-rose-700">
@@ -404,11 +404,11 @@ export default function StationImagingPage() {
                     <div className="mt-4 pt-4 border-t space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="text-xs text-gray-500 block mb-1">ElevenLabs Voice ID</label>
+                          <label className="text-xs text-gray-500 block mb-1">TTS Voice ID</label>
                           <input
                             type="text"
-                            value={current.elevenlabsVoiceId || ""}
-                            onChange={(e) => setEditing({ ...current, elevenlabsVoiceId: e.target.value })}
+                            value={current.ttsVoiceId || ""}
+                            onChange={(e) => setEditing({ ...current, ttsVoiceId: e.target.value })}
                             className="w-full border rounded-lg px-3 py-2 text-sm font-mono"
                           />
                         </div>

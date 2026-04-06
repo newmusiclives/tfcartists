@@ -267,7 +267,7 @@ export async function POST(request: NextRequest) {
             stationId: newStation.id,
             displayName: voice.displayName,
             voiceType: voice.voiceType,
-            elevenlabsVoiceId: voice.elevenlabsVoiceId,
+            elevenlabsVoiceId: voice.elevenlabsVoiceId, // legacy field — retained for DB compatibility
             voiceStability: voice.voiceStability,
             voiceSimilarityBoost: voice.voiceSimilarityBoost,
             voiceStyle: voice.voiceStyle,

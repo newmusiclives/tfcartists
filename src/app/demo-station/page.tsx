@@ -56,7 +56,7 @@ export default function DemoStationPage() {
   }
 
   const features = [
-    { icon: Mic, title: "AI DJ Personalities", desc: "4 unique AI DJs with cloned ElevenLabs voices, each with their own show and personality" },
+    { icon: Mic, title: "AI DJ Personalities", desc: "4 unique AI DJs with AI-powered voices, each with their own show and personality" },
     { icon: Music, title: "Clock-Scheduled Programming", desc: "Professional radio clocks with A/B/C/D/E rotation categories, voice breaks, and imaging" },
     { icon: Radio, title: "Full Station Imaging", desc: "TOH IDs, sweepers, promos, show intros/outros, and DJ handoff transitions" },
     { icon: Users, title: "Artist Promotion", desc: "Independent artists get real airplay with DJ introductions alongside mainstream hits" },
@@ -191,7 +191,7 @@ export default function DemoStationPage() {
       <div className="max-w-4xl mx-auto px-4 py-20 text-center">
         <h2 className="text-3xl font-bold mb-4">Launch Your Own AI Radio Station</h2>
         <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-          Everything you hear on North Country Radio can be yours. Custom DJs, cloned voices,
+          Everything you hear on North Country Radio can be yours. Custom DJs, AI-powered voices,
           professional imaging, and a complete station management platform.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

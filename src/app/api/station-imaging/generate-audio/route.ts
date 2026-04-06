@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
-import { amplifyPcm, pcmToWav, saveAudioFile, generatePcmWithElevenLabs } from "@/lib/radio/voice-track-tts";
+import { amplifyPcm, pcmToWav, saveAudioFile, generateWithGemini, generatePcmWithOpenAI } from "@/lib/radio/voice-track-tts";
 import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
-import { getElevenLabsDailyBudget, trackElevenLabsChars } from "@/lib/elevenlabs/daily-budget";
-import OpenAI from "openai";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
-import { getConfig } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
 
@@ -106,16 +103,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const apiKey = await getConfig("OPENAI_API_KEY");
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "OPENAI_API_KEY not configured. Set it in Admin → Settings." },
-        { status: 500 }
-      );
-    }
-
-    const openai = new OpenAI({ apiKey });
-
     const voices = await prisma.stationImagingVoice.findMany({
       where: { stationId, isActive: true },
     });
@@ -155,12 +142,9 @@ export async function POST(request: NextRequest) {
       const metadata = voice.metadata as ImagingMetadata | null;
       if (!metadata?.scripts) continue;
 
-      // Check for ElevenLabs cloned voice first, fall back to OpenAI
-      const hasElevenLabs = !!(voice as Record<string, unknown>).elevenlabsVoiceId;
-      const elevenLabsVoiceId = (voice as Record<string, unknown>).elevenlabsVoiceId as string | null;
-      const elStability = ((voice as Record<string, unknown>).voiceStability as number) ?? 0.75;
-      const elSimilarity = ((voice as Record<string, unknown>).voiceSimilarityBoost as number) ?? 0.75;
-      const openaiVoice = IMAGING_VOICE_MAP[voice.voiceType] || voiceMap[voice.voiceType] || "echo";
+      // Map voice type to Gemini voice names
+      const geminiVoiceMap: Record<string, string> = { male: "Charon", female: "Kore" };
+      const geminiVoice = geminiVoiceMap[voice.voiceType] || "Kore";
       const voiceSlug = voice.displayName
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
@@ -186,35 +170,13 @@ export async function POST(request: NextRequest) {
           }
 
           try {
-            // Generate TTS as raw PCM for mixing — prefer ElevenLabs if configured
+            // Generate TTS as raw PCM — Gemini primary, OpenAI fallback
             let rawPcm: Buffer;
-
-            if (hasElevenLabs && elevenLabsVoiceId) {
-              // Check daily budget before using ElevenLabs credits
-              const budget = await getElevenLabsDailyBudget();
-              if (!budget.canUseElevenLabs) {
-                results.push({
-                  voiceName: voice.displayName,
-                  type: scriptType,
-                  label: script.label,
-                  success: false,
-                  error: `Daily ElevenLabs budget exhausted (${budget.usedToday}/${budget.dailyBudget} chars)`,
-                });
-                continue;
-              }
-              rawPcm = await generatePcmWithElevenLabs(script.text, elevenLabsVoiceId, {
-                stability: elStability,
-                similarityBoost: elSimilarity,
-              });
-              await trackElevenLabsChars(script.text.length);
-            } else {
-              const response = await openai.audio.speech.create({
-                model: "tts-1-hd",
-                voice: openaiVoice,
-                input: script.text,
-                response_format: "pcm",
-              });
-              rawPcm = Buffer.from(await response.arrayBuffer());
+            try {
+              const { buffer } = await generateWithGemini(script.text, geminiVoice, null);
+              rawPcm = buffer.subarray(44); // strip WAV header
+            } catch {
+              rawPcm = await generatePcmWithOpenAI(script.text, IMAGING_VOICE_MAP[voice.voiceType] || "echo");
             }
 
             const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
