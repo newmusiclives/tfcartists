@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
 import OpenAI from "openai";
-import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
 import * as path from "path";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
 import { getConfig } from "@/lib/config";
+import { generateWithGemini as generateWithGeminiShared } from "@/lib/radio/voice-track-tts";
 
 export const dynamic = "force-dynamic";
 
@@ -71,41 +71,6 @@ async function generateWithOpenAI(
   return { buffer: Buffer.from(await response.arrayBuffer()), ext: "mp3" };
 }
 
-async function generateWithGemini(
-  ai: GoogleGenAI,
-  text: string,
-  voice: string,
-  voiceDirection?: string | null,
-): Promise<{ buffer: Buffer; ext: string }> {
-  const prompt = voiceDirection
-    ? `Voice direction: ${voiceDirection}\n\nSpeak this text: "${text}"`
-    : `"${text}"`;
-
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-preview-tts",
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    config: {
-      responseModalities: ["AUDIO"],
-      speechConfig: {
-        voiceConfig: {
-          prebuiltVoiceConfig: {
-            voiceName: voice || "Leda",
-          },
-        },
-      },
-    },
-  });
-
-  const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-  if (!audioData) {
-    throw new Error("Gemini returned no audio data");
-  }
-
-  const pcmBuffer = Buffer.from(audioData, "base64");
-  const wavBuffer = pcmToWav(pcmBuffer);
-
-  return { buffer: wavBuffer, ext: "wav" };
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -139,9 +104,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Initialize providers lazily
+    // Initialize OpenAI lazily (Gemini handled by shared helper)
     let openai: OpenAI | null = null;
-    let gemini: GoogleGenAI | null = null;
 
     const results: Array<{
       id: string;
@@ -187,13 +151,8 @@ export async function POST(request: NextRequest) {
         let buffer: Buffer;
         let ext: string;
 
-        if (provider === "gemini") {
-          if (!gemini) {
-            const apiKey = await getConfig("GOOGLE_API_KEY");
-            if (!apiKey) throw new Error("GOOGLE_API_KEY not configured. Set it in Admin → Settings.");
-            gemini = new GoogleGenAI({ apiKey });
-          }
-          ({ buffer, ext } = await generateWithGemini(gemini, transition.scriptText!, voice, voiceDesc));
+        if (provider === "gemini" || provider === "elevenlabs") {
+          ({ buffer, ext } = await generateWithGeminiShared(transition.scriptText!, voice, voiceDesc));
         } else {
           if (!openai) {
             const apiKey = await getConfig("OPENAI_API_KEY");
