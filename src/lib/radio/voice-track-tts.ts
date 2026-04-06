@@ -8,7 +8,6 @@ import { logger } from "@/lib/logger";
 import { mixVoiceWithMusicBed, trimSilence, appendSilence } from "@/lib/radio/audio-mixer";
 import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
 import OpenAI from "openai";
-import { GoogleGenAI } from "@google/genai";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -172,7 +171,6 @@ export async function generatePcmWithOpenAI(text: string, voice: string): Promis
 
 export async function generateWithGemini(text: string, voice: string, voiceDirection?: string | null): Promise<{ buffer: Buffer; ext: string }> {
   // Read from environment variable first (set in Netlify), then database config.
-  // Env-var-first lets you fix a bad db-stored key by just updating Netlify env vars.
   let apiKey: string | undefined = process.env.GOOGLE_API_KEY;
   if (!apiKey) {
     const { getConfig } = await import("@/lib/config");
@@ -184,32 +182,41 @@ export async function generateWithGemini(text: string, voice: string, voiceDirec
 
   try {
     return await withRetry(async () => {
-      const ai = new GoogleGenAI({ apiKey });
-
-      // Gemini TTS expects natural-language style direction inline with the text.
-      // The recommended pattern is: "[Director's notes describing style/tone/accent]\nSay: \"[text]\""
-      // This matches how Google AI Studio formats TTS prompts and lets the voice
-      // (Enceladus, Kore, etc.) properly inherit the requested delivery style.
+      // Direct REST call instead of @google/genai SDK — the SDK auto-detects
+      // Vertex AI / GOOGLE_APPLICATION_CREDENTIALS in some environments and
+      // ignores the API key, causing 401s. The REST API is simpler and
+      // guaranteed to use the key we pass.
       const prompt = voiceDirection
         ? `${voiceDirection}\n\nSay: "${text}"`
         : `Say: "${text}"`;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash-preview-tts",
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        config: {
-          responseModalities: ["AUDIO"],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: {
-                voiceName: voice || "Leda",
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${encodeURIComponent(apiKey!)}`;
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseModalities: ["AUDIO"],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: {
+                  voiceName: voice || "Leda",
+                },
               },
             },
           },
-        },
+        }),
       });
 
-      const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if (!response.ok) {
+        const errBody = await response.text().catch(() => "");
+        throw new Error(`Gemini API ${response.status}: ${errBody.slice(0, 300)}`);
+      }
+
+      const data = await response.json();
+      const audioData = data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
       if (!audioData) {
         throw new Error("Gemini returned no audio data");
       }
@@ -220,8 +227,6 @@ export async function generateWithGemini(text: string, voice: string, voiceDirec
       return { buffer: wavBuffer, ext: "wav" };
     }, { label: "Gemini TTS", baseDelayMs: 2000 });
   } catch (err) {
-    // Re-throw with a clear message — never silently fall back to a different
-    // voice (the previous OpenAI shimmer fallback caused male DJs to sound female)
     const msg = err instanceof Error ? err.message : String(err);
     logger.error("Gemini TTS failed", { error: msg, voice });
     throw new Error(`Gemini TTS failed: ${msg}`);
