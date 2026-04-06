@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SharedNav } from "@/components/shared-nav";
-import { Users, Plus, Loader2, X } from "lucide-react";
+import { Users, Plus, Loader2, X, Volume2, Square } from "lucide-react";
 
 interface DJData {
   id: string;
@@ -17,6 +17,9 @@ interface DJData {
   colorPrimary: string | null;
   isActive: boolean;
   isWeekend: boolean;
+  ttsVoice: string | null;
+  ttsProvider: string | null;
+  voiceDescription: string | null;
   shows: { id: string; name: string; dayOfWeek: number; startTime: string; endTime: string }[];
   _count: { clockAssignments: number };
 }
@@ -39,7 +42,59 @@ export default function DJEditorPage() {
   const [newBio, setNewBio] = useState("");
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
+  const [playingDjId, setPlayingDjId] = useState<string | null>(null);
+  const [loadingDjId, setLoadingDjId] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const router = useRouter();
+
+  const playVoiceDemo = async (e: React.MouseEvent, dj: DJData) => {
+    e.preventDefault(); // don't navigate to DJ editor
+    e.stopPropagation();
+
+    // If already playing this DJ, stop
+    if (playingDjId === dj.id) {
+      audioRef.current?.pause();
+      audioRef.current = null;
+      setPlayingDjId(null);
+      return;
+    }
+
+    // Stop any currently playing audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+      setPlayingDjId(null);
+    }
+
+    setLoadingDjId(dj.id);
+    try {
+      const res = await fetch("/api/voice-preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          voice: dj.ttsVoice || "Leda",
+          provider: dj.ttsProvider || "gemini",
+          voiceDirection: dj.voiceDescription,
+          text: `Hey there, I'm ${dj.name}. You're listening to North Country Radio. Stay tuned, we've got some great music coming up next.`,
+        }),
+      });
+      const data = await res.json();
+      if (data.audio) {
+        const audio = new Audio(data.audio);
+        audioRef.current = audio;
+        audio.onended = () => {
+          setPlayingDjId(null);
+          audioRef.current = null;
+        };
+        await audio.play();
+        setPlayingDjId(dj.id);
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setLoadingDjId(null);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/stations")
@@ -172,6 +227,29 @@ export default function DJEditorPage() {
                     <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
                       <span>{getShowTime(dj)}</span>
                       {dj.isWeekend && <span className="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">Weekend</span>}
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <button
+                        onClick={(e) => playVoiceDemo(e, dj)}
+                        disabled={loadingDjId === dj.id}
+                        className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium transition-colors ${
+                          playingDjId === dj.id
+                            ? "bg-purple-100 text-purple-700"
+                            : "bg-gray-100 text-gray-600 hover:bg-purple-50 hover:text-purple-600"
+                        } disabled:opacity-50`}
+                      >
+                        {loadingDjId === dj.id ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : playingDjId === dj.id ? (
+                          <Square className="w-3 h-3" />
+                        ) : (
+                          <Volume2 className="w-3 h-3" />
+                        )}
+                        {loadingDjId === dj.id ? "Generating..." : playingDjId === dj.id ? "Stop" : "Voice Demo"}
+                      </button>
+                      {dj.ttsVoice && (
+                        <span className="text-xs text-gray-400">{dj.ttsVoice}</span>
+                      )}
                     </div>
                   </div>
                 </div>
