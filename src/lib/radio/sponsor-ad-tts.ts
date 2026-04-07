@@ -6,7 +6,6 @@
 
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { getConfig } from "@/lib/config";
 import {
   amplifyPcm,
   pcmToWav,
@@ -15,12 +14,6 @@ import {
 } from "@/lib/radio/voice-track-tts";
 import { mixVoiceWithMusicBed } from "@/lib/radio/audio-mixer";
 import { trackAiSpend } from "@/lib/ai/spend-tracker";
-import OpenAI from "openai";
-
-const voiceMap: Record<string, string> = {
-  male: "onyx",
-  female: "nova",
-};
 
 const VOICE_GAIN = 3.5;
 
@@ -79,33 +72,14 @@ export async function generateSponsorAdAudio(adId: string): Promise<void> {
     voiceDirection = (chosenVoice.metadata as { voiceDirection?: string } | null)?.voiceDirection || null;
   }
 
-  // Generate TTS with Gemini (primary) or OpenAI (fallback)
-  let rawPcm: Buffer;
-  try {
-    const { buffer } = await generateWithGemini(ad.scriptText, geminiVoice, voiceDirection);
-    rawPcm = buffer.subarray(44); // strip WAV header to get PCM
-    await trackAiSpend({ provider: "google", operation: "tts", cost: 0.004, characters: ad.scriptText.length });
-  } catch {
-    // Fall back to OpenAI
-    const apiKey = await getConfig("OPENAI_API_KEY");
-    if (!apiKey) {
-      logger.warn("generateSponsorAdAudio: neither Gemini nor OpenAI available");
-      return;
-    }
-    const openaiVoice = voiceMap[adVoiceType || ""] || "onyx";
-    const openai = new OpenAI({ apiKey });
-    const response = await openai.audio.speech.create({
-      model: "tts-1-hd",
-      voice: openaiVoice as "onyx" | "nova" | "alloy" | "echo" | "fable" | "shimmer",
-      input: ad.scriptText,
-      response_format: "pcm",
-    });
-    rawPcm = Buffer.from(await response.arrayBuffer());
-    await trackAiSpend({ provider: "openai", operation: "tts", cost: 0.015, characters: ad.scriptText.length });
-  }
+  // Gemini-only — no OpenAI fallback. Errors propagate to the caller so a
+  // failed Gemini call is visible instead of silently producing OpenAI audio.
+  const { buffer } = await generateWithGemini(ad.scriptText, geminiVoice, voiceDirection);
+  const rawPcm = buffer.subarray(44); // strip WAV header to get PCM
+  await trackAiSpend({ provider: "google", operation: "tts", cost: 0.004, characters: ad.scriptText.length });
 
   const boostedPcm = amplifyPcm(rawPcm, VOICE_GAIN);
-  await finalizeSponsorAd(ad, rawPcm, boostedPcm, adId);
+  await finalizeSponsorAd(ad, rawPcm, boostedPcm, adId, geminiVoice);
 }
 
 /** Mix with music bed (if any), save WAV, and update the DB record */
@@ -114,6 +88,7 @@ async function finalizeSponsorAd(
   originalPcm: Buffer,
   boostedPcm: Buffer,
   adId: string,
+  geminiVoice: string,
 ): Promise<void> {
   // Mix with music bed if the ad has one assigned
   let finalPcm: Buffer;
@@ -143,8 +118,14 @@ async function finalizeSponsorAd(
 
   await prisma.sponsorAd.update({
     where: { id: adId },
-    data: { audioFilePath, durationSeconds },
+    data: {
+      audioFilePath,
+      durationSeconds,
+      generatedByProvider: "gemini",
+      generatedVoiceName: geminiVoice,
+      generatedAt: new Date(),
+    },
   });
 
-  logger.info("Auto-generated sponsor ad audio", { adId, audioFilePath, durationSeconds });
+  logger.info("Auto-generated sponsor ad audio", { adId, audioFilePath, durationSeconds, voice: geminiVoice });
 }

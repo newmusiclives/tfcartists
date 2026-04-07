@@ -9,6 +9,8 @@
  * Uses Google Gemini TTS for all voices, with OpenAI fallback.
  */
 
+import fs from "fs";
+import path from "path";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { aiProvider } from "@/lib/ai/providers";
@@ -226,21 +228,36 @@ export async function generatePackageAudio(packageId: string): Promise<{ generat
     where: { stationId: pkg.stationId, isActive: true },
   });
 
-  // Find a music bed
+  // Find a music bed. Reject any bed that's missing on disk or smaller
+  // than 10KB — those are corrupt placeholders that previously caused
+  // ffmpeg to fail and stripped the bed entirely. Pads are preferred over
+  // nothing; we used to skip them but the only "non-pad" bed in this DB
+  // was the corrupt one.
   const allBeds = await prisma.musicBed.findMany({
     where: { stationId: pkg.stationId, isActive: true },
   });
-  const realBeds = allBeds.filter((b) =>
-    b.filePath && !b.filePath.startsWith("data:") && !b.name.toLowerCase().includes("pad")
-  );
-  const bed = realBeds.find((b) => b.category === "upbeat") || realBeds[0];
+  const realBeds = allBeds.filter((b) => {
+    if (!b.filePath || b.filePath.startsWith("data:")) return false;
+    try {
+      const rel = b.filePath.startsWith("/") ? b.filePath.slice(1) : b.filePath;
+      const abs = path.join(process.cwd(), "public", rel);
+      return fs.existsSync(abs) && fs.statSync(abs).size > 10_000;
+    } catch {
+      return false;
+    }
+  });
+  const bed =
+    realBeds.find((b) => b.category === "upbeat" && !b.name.toLowerCase().includes("pad"))
+    || realBeds.find((b) => b.category === "upbeat")
+    || realBeds.find((b) => !b.name.toLowerCase().includes("pad"))
+    || realBeds[0];
   const musicBedPath = bed?.filePath || null;
 
   let generated = 0;
   const errors: string[] = [];
 
   // Dynamic import for TTS functions (avoid circular deps)
-  const { generatePcmWithOpenAI, generateWithGemini, amplifyPcm } =
+  const { generateWithGemini, amplifyPcm } =
     await import("@/lib/radio/voice-track-tts");
 
   for (const el of elements) {
@@ -263,13 +280,10 @@ export async function generatePackageAudio(packageId: string): Promise<{ generat
       const voiceDirection =
         (imagingVoice?.metadata as { voiceDirection?: string } | null)?.voiceDirection || null;
 
-      // Generate with Gemini (primary), OpenAI fallback
-      try {
-        const { buffer } = await generateWithGemini(el.scriptText, geminiVoice, voiceDirection);
-        voicePcm = buffer.subarray(44);
-      } catch {
-        voicePcm = await generatePcmWithOpenAI(el.scriptText, "echo");
-      }
+      // Gemini-only — no OpenAI fallback. If Gemini fails, the element is
+      // marked failed so we never silently ship OpenAI audio for imaging.
+      const { buffer } = await generateWithGemini(el.scriptText, geminiVoice, voiceDirection);
+      voicePcm = buffer.subarray(44);
 
       // Process audio: trim, boost, mix with bed
       voicePcm = trimSilence(voicePcm);
@@ -297,7 +311,14 @@ export async function generatePackageAudio(packageId: string): Promise<{ generat
 
       await prisma.imagingElement.update({
         where: { id: el.id },
-        data: { audioFilePath, audioDuration, status: "audio_ready" },
+        data: {
+          audioFilePath,
+          audioDuration,
+          status: "audio_ready",
+          generatedByProvider: "gemini",
+          generatedVoiceName: geminiVoice,
+          generatedAt: new Date(),
+        },
       });
 
       generated++;

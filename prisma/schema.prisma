@@ -2404,6 +2404,11 @@ model SponsorAd {
   audioDataUri    String?  // Base64 data URI (persistent, survives redeploys)
   durationSeconds Float?
 
+  // Generation provenance — which TTS provider/voice produced the audio
+  generatedByProvider String?  // "gemini" (single source of truth post-Apr-2026)
+  generatedVoiceName  String?  // e.g. "Rasalgethi", "Laomedeia"
+  generatedAt         DateTime?
+
   // Tier & scheduling
   tier            String   @default("bronze") // "bronze", "silver", "gold", "platinum"
   weight          Int      @default(1)        // For weighted rotation
@@ -2882,6 +2887,11 @@ model ImagingElement {
   audioFilePath   String?
   audioDuration   Float?
   musicBedId      String?
+
+  // Generation provenance — which TTS provider/voice produced the audio
+  generatedByProvider String?  // "gemini" (single source of truth post-Apr-2026)
+  generatedVoiceName  String?  // e.g. "Algieba", "Autonoe"
+  generatedAt         DateTime?
 
   // Status
   status          String   @default("pending") // pending, script_ready, audio_ready, failed

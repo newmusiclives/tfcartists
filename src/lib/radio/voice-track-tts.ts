@@ -85,44 +85,48 @@ export function amplifyPcm(pcm: Buffer, gain: number): Buffer {
 }
 
 /**
- * Save audio file to R2 object storage (or local fallback).
- * This is now async — callers should await the result.
- * The sync signature is preserved for backward compatibility
- * by falling back to local storage synchronously when R2 is unavailable.
+ * Save audio file to R2 object storage (or local disk fallback).
+ *
+ * Resolution order:
+ *   1. R2 configured → write to local /public/audio/ AND fire-and-forget R2
+ *      upload, return the public path. This is the production-on-Netlify path.
+ *   2. R2 not configured → try local disk write. If it succeeds, return the
+ *      public path so the file can be served by Next.js. This is the local
+ *      dev path.
+ *   3. R2 not configured AND local disk write failed (e.g. read-only
+ *      serverless filesystem) → fall back to a base64 data URI inlined into
+ *      the DB so the playout API can still serve it.
+ *
+ * Previously this function ALWAYS returned a data URI when R2 wasn't
+ * configured, which bloated the DB even on local dev where disk writes work.
  */
 export function saveAudioFile(buffer: Buffer, dir: string, filename: string): string {
-  // Start async R2 upload in background — return local path immediately
-  // so existing sync call sites don't break. The R2 URL will be used
-  // by the next read since DB stores the path.
   const { uploadFile, isR2Configured } = require("@/lib/storage");
+  const publicPath = `/audio/${dir}/${filename}`;
 
-  if (isR2Configured()) {
-    // Return a placeholder and update DB asynchronously
-    // For new code, use saveAudioFileAsync instead
-    try {
-      const outputDir = path.join(process.cwd(), "public", "audio", dir);
-      if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
-      fs.writeFileSync(path.join(outputDir, filename), buffer);
-    } catch {
-      // Serverless — can't write locally, that's fine
-    }
-
-    // Fire-and-forget R2 upload
-    (uploadFile as typeof import("@/lib/storage").uploadFile)(buffer, dir, filename).catch(() => {});
-
-    return `/audio/${dir}/${filename}`;
-  }
-
-  // No R2 — save locally AND as data URI so serverless playout can serve it
-  const mimeType = filename.endsWith(".wav") ? "audio/wav" : "audio/mpeg";
+  // Try to write to local disk first — this works on local dev and on
+  // Netlify-build-time, and is required so R2 has a source to upload from.
+  let localWriteOk = false;
   try {
     const outputDir = path.join(process.cwd(), "public", "audio", dir);
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(path.join(outputDir, filename), buffer);
+    localWriteOk = true;
   } catch {
-    // Serverless — can't write locally
+    // Read-only filesystem (serverless runtime) — fall through.
   }
-  // Always return data URI so the playout audio API can serve it on Netlify
+
+  if (isR2Configured()) {
+    // Fire-and-forget R2 upload; the DB stores the public path either way.
+    (uploadFile as typeof import("@/lib/storage").uploadFile)(buffer, dir, filename).catch(() => {});
+    return publicPath;
+  }
+
+  // No R2: prefer the on-disk file if we managed to write it, otherwise
+  // inline a data URI so the audio still survives the request.
+  if (localWriteOk) return publicPath;
+
+  const mimeType = filename.endsWith(".wav") ? "audio/wav" : "audio/mpeg";
   return `data:${mimeType};base64,${buffer.toString("base64")}`;
 }
 
@@ -234,53 +238,25 @@ export async function generateWithGemini(text: string, voice: string, voiceDirec
 }
 
 /**
- * Generate TTS with the configured provider.
+ * Generate TTS via Gemini. All voices are Gemini-only — no OpenAI fallback.
+ * If Gemini fails the error propagates so the caller can mark the track as
+ * failed instead of silently producing OpenAI audio.
  *
- * Primary: Gemini TTS ($0.004/generation flat rate).
- * Fallback: OpenAI TTS ($0.015/generation).
- *
- * Legacy "elevenlabs" provider DJs are treated as Gemini.
+ * Legacy "elevenlabs" / "openai" provider rows are treated as Gemini and any
+ * OpenAI-style voice name (e.g. "alloy") is remapped to a sensible Gemini
+ * default ("Leda").
  */
 async function generatePcmWithFallback(
   text: string,
-  provider: string,
+  _provider: string,
   voice: string,
   voiceDirection: string | null,
 ): Promise<{ pcm: Buffer; cost: number; usedProvider: string }> {
-
-  // Gemini is the primary provider (also handles legacy "elevenlabs" DJs).
-  // If the stored voice name looks like an OpenAI voice (lowercase like "alloy"),
-  // default to "Leda" for Gemini. Otherwise use the voice as-is — legacy
-  // elevenlabs DJs that have been migrated to Gemini voice names like
-  // "Enceladus" should keep their voice.
-  if (provider === "gemini" || provider === "elevenlabs") {
-    try {
-      const openaiVoiceNames = ["alloy", "ash", "ballad", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"];
-      const isOpenAiVoiceName = voice && openaiVoiceNames.includes(voice.toLowerCase());
-      const geminiVoice = (!voice || isOpenAiVoiceName) ? "Leda" : voice;
-      const { buffer } = await generateWithGemini(text, geminiVoice, voiceDirection);
-      return { pcm: buffer.subarray(44), cost: 0.004, usedProvider: "gemini" };
-    } catch {
-      // Fall back to OpenAI
-      const pcm = await generatePcmWithOpenAI(text, voice || "alloy");
-      return { pcm, cost: 0.015, usedProvider: "openai" };
-    }
-  }
-
-  // OpenAI provider
-  if (provider === "openai") {
-    const pcm = await generatePcmWithOpenAI(text, voice);
-    return { pcm, cost: 0.015, usedProvider: "openai" };
-  }
-
-  // Default: Gemini
-  try {
-    const { buffer } = await generateWithGemini(text, voice || "Leda", voiceDirection);
-    return { pcm: buffer.subarray(44), cost: 0.004, usedProvider: "gemini" };
-  } catch {
-    const pcm = await generatePcmWithOpenAI(text, voice || "alloy");
-    return { pcm, cost: 0.015, usedProvider: "openai" };
-  }
+  const openaiVoiceNames = ["alloy", "ash", "ballad", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"];
+  const isOpenAiVoiceName = voice && openaiVoiceNames.includes(voice.toLowerCase());
+  const geminiVoice = (!voice || isOpenAiVoiceName) ? "Leda" : voice;
+  const { buffer } = await generateWithGemini(text, geminiVoice, voiceDirection);
+  return { pcm: buffer.subarray(44), cost: 0.004, usedProvider: "gemini" };
 }
 
 interface GenerateAudioResult {

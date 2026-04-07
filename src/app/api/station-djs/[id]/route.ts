@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole, pickFields } from "@/lib/api/auth";
+import { resolveTtsProvider } from "@/lib/tts/voice-providers";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +41,18 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   try {
     const { id } = await params;
     const body = await request.json();
-    const dj = await prisma.dJ.update({ where: { id }, data: pickFields(body, ALLOWED_FIELDS) });
+    const data = pickFields(body, ALLOWED_FIELDS) as Record<string, unknown>;
+
+    // Normalize ttsProvider from ttsVoice when a recognized voice name is set.
+    // The DJ Editor's voice picker doesn't always sync the provider field
+    // (e.g. legacy rows with ttsProvider="elevenlabs" stay that way even
+    // after picking a Gemini voice from the dropdown).
+    if (typeof data.ttsVoice === "string") {
+      const resolved = resolveTtsProvider(data.ttsVoice);
+      if (resolved) data.ttsProvider = resolved;
+    }
+
+    const dj = await prisma.dJ.update({ where: { id }, data });
     return NextResponse.json({ dj });
   } catch (error) {
     return handleApiError(error, "/api/station-djs/[id]");
