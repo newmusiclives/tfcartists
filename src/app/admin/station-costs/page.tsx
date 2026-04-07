@@ -28,28 +28,39 @@ const OPENAI_STD_RATE = 0.015;
 // Gemini
 const GEMINI_RATE = 0.004; // per generation (flat)
 
-// AI Chat costs
-const CHAT_INPUT_RATE = 0.15 / 1_000_000; // per token
-const CHAT_OUTPUT_RATE = 0.6 / 1_000_000;
+// AI Chat costs — calibrated to Claude 3.5 Sonnet (the model wired into
+// aiProvider.chat() in src/lib/ai/providers.ts). Previously these were set
+// to GPT-4o-mini rates and undercounted chat spend by ~20×.
+const CHAT_INPUT_RATE = 3.0 / 1_000_000; // $3.00 / 1M input tokens
+const CHAT_OUTPUT_RATE = 15.0 / 1_000_000; // $15.00 / 1M output tokens
 
-// Other costs
-const SMS_RATE = 0.02; // avg per text
-const RAILWAY_COST = 5;
-const INFRA_COST = 0;
+// Fixed infrastructure costs (per station, per month). Calibrated to the
+// current TrueFans RADIO stack as of April 2026.
+const SMS_RATE = 0.02; // avg per text (GHL)
+const STREAMING_VPS_COST = 5; // Hetzner CX22 running Liquidsoap/Icecast
+const DATABASE_COST = 0; // Neon Postgres free tier — bump to 19 on Pro
+const HOSTING_COST = 0; // Netlify free tier — bump to 19 on Pro
+const STORAGE_COST = 1; // Cloudflare R2 (a few GB of audio)
 
-// Character counts per audio type
+// Character counts per audio type — used for OpenAI per-1K-char billing
+// only. Gemini is flat-rate per generation so these are informational.
 const VOICE_TRACK_CHARS = 300;
 const TRANSITION_CHARS = 500;
 const FEATURE_CHARS = 400;
 const IMAGING_CHARS = 200;
 const SPONSOR_AD_CHARS = 400;
 
-// Daily generation counts
-const TRANSITIONS_PER_DAY = 16;
+// Daily generation counts — calibrated to actual telemetry from North
+// Country Radio (April 2026). Imaging packages refresh ~monthly so the
+// 158-element enterprise package amortizes to ~5/day. Transitions get
+// regenerated only when DJ rosters or handoff scripts change, so keep
+// the daily allowance low. Features run on a real daily cron.
+const TRANSITIONS_PER_DAY = 1;
 const FEATURES_PER_DAY = 20;
-const IMAGING_PER_DAY = 30;
+const IMAGING_PER_DAY = 5;
 
-// Chat token counts per type
+// Chat token counts per type — typical request/response sizes observed
+// in the voice-track + feature generators.
 const DJ_SCRIPT_TOKENS = 2000;
 const FEATURE_CONTENT_TOKENS = 3000;
 const OUTREACH_TOKENS = 2000;
@@ -176,12 +187,14 @@ function CostRow({ label, amount, icon, highlight }: { label: string; amount: nu
 
 export default function StationCostsPage() {
   // --- Adjustable inputs ---
-  const [numDJs, setNumDJs] = useState(4);
+  // Defaults match the live North Country Radio station: 5 DJs (4 weekday +
+  // Night Owl overnight), 3 voice breaks per hour, fully automated 24/7.
+  const [numDJs, setNumDJs] = useState(5);
   const [tracksPerHour, setTracksPerHour] = useState(3);
-  const [liveHours, setLiveHours] = useState(12);
+  const [liveHours, setLiveHours] = useState(24);
   const [ttsProvider, setTTSProvider] = useState<TTSProvider>("gemini");
-  const [smsPerDay, setSmsPerDay] = useState(50);
-  const [sponsorAdsPerDay, setSponsorAdsPerDay] = useState(5);
+  const [smsPerDay, setSmsPerDay] = useState(0);
+  const [sponsorAdsPerDay, setSponsorAdsPerDay] = useState(1);
 
   // --- Optimization toggles ---
   const [optReduceTracks, setOptReduceTracks] = useState(false);
@@ -244,7 +257,8 @@ export default function StationCostsPage() {
     const emailMonthly = 0.50;
     const ghlTotal = smsMonthly + emailMonthly;
 
-    const total = ttsTotal + chatTotal + ghlTotal + RAILWAY_COST + INFRA_COST;
+    const infraTotal = STREAMING_VPS_COST + DATABASE_COST + HOSTING_COST + STORAGE_COST;
+    const total = ttsTotal + chatTotal + ghlTotal + infraTotal;
 
     return {
       voiceTrackMonthly,
@@ -262,8 +276,11 @@ export default function StationCostsPage() {
       smsMonthly,
       emailMonthly,
       ghlTotal,
-      railway: RAILWAY_COST,
-      infra: INFRA_COST,
+      streamingVps: STREAMING_VPS_COST,
+      database: DATABASE_COST,
+      hosting: HOSTING_COST,
+      storage: STORAGE_COST,
+      infraTotal,
       total,
     };
   }, [numDJs, tracksPerHour, liveHours, ttsProvider, smsPerDay, sponsorAdsPerDay, optReduceTracks, optSkipFeatures, optGeminiImaging]);
@@ -287,7 +304,7 @@ export default function StationCostsPage() {
       10 * IMAGING_SCRIPT_TOKENS * (CHAT_INPUT_RATE + CHAT_OUTPUT_RATE) * 30;
 
     const ghlTotal = smsPerDay * SMS_RATE * 30 + 0.50;
-    return ttsTotal + chatTotal + ghlTotal + RAILWAY_COST;
+    return ttsTotal + chatTotal + ghlTotal + STREAMING_VPS_COST + DATABASE_COST + HOSTING_COST + STORAGE_COST;
   }, [numDJs, tracksPerHour, liveHours, smsPerDay, sponsorAdsPerDay]);
 
   const costDiff = costs.total - baselineCost;
@@ -411,20 +428,22 @@ export default function StationCostsPage() {
 
             {/* AI Chat Section */}
             <div className="mb-3">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">AI Chat (GPT-4o-mini)</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">AI Chat (Claude 3.5 Sonnet)</p>
               <CostRow label="DJ Script Generation" amount={costs.djScriptMonthly} />
               <CostRow label="Feature Content" amount={costs.featureContentMonthly} />
               <CostRow label="Outreach Messages" amount={costs.outreachMonthly} />
               <CostRow label="Imaging Scripts" amount={costs.imagingScriptMonthly} />
             </div>
 
-            {/* Other */}
+            {/* Infrastructure */}
             <div className="mb-4">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Other</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Infrastructure</p>
+              <CostRow label="Streaming VPS (Hetzner)" amount={costs.streamingVps} icon={<Server className="w-4 h-4 text-gray-400" />} />
+              <CostRow label="Database (Neon Postgres)" amount={costs.database} />
+              <CostRow label="Hosting (Netlify)" amount={costs.hosting} />
+              <CostRow label="Object Storage (Cloudflare R2)" amount={costs.storage} />
               <CostRow label="GHL SMS" amount={costs.smsMonthly} icon={<MessageSquare className="w-4 h-4 text-blue-400" />} />
               <CostRow label="GHL Email" amount={costs.emailMonthly} />
-              <CostRow label="Railway Backend" amount={costs.railway} icon={<Server className="w-4 h-4 text-gray-400" />} />
-              <CostRow label="Infrastructure (free tiers)" amount={costs.infra} />
             </div>
 
             {/* Total */}
