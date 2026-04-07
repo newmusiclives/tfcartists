@@ -194,26 +194,45 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
     }
   }
 
-  // Source B: Already-locked playlists for today — prevents repeats across
-  //          adjacent hours even when TrackPlayback records don't exist yet.
-  //          This is the PRIMARY repeat prevention for freshly-built playlists.
+  // Source B: Already-locked playlists for the cooldown window — prevents
+  //          repeats across adjacent hours AND across days. This is the
+  //          PRIMARY repeat prevention because Liquidsoap currently writes
+  //          TrackPlayback rows with null trackId, leaving Source A empty.
+  //
+  //          Previously this only looked at TODAY which meant a song
+  //          played yesterday could be picked again today even though the
+  //          longest cooldown is 12 hours.
+  const broadcastTime = new Date(airDate);
+  broadcastTime.setUTCHours(hourOfDay, 0, 0, 0);
+  const lockbackStart = new Date(broadcastTime.getTime() - cooldownHours * 3600_000);
+  // Date-bucket inclusive range for the airDate filter (column is a day-only date)
+  const lockbackStartDate = new Date(lockbackStart);
+  lockbackStartDate.setUTCHours(0, 0, 0, 0);
+
   const lockedPlaylists = await prisma.hourPlaylist.findMany({
     where: {
       stationId,
-      airDate: new Date(new Date(airDate).setUTCHours(0, 0, 0, 0)),
+      airDate: { gte: lockbackStartDate, lte: broadcastTime },
       status: { in: ["locked", "aired", "draft"] },
-      hourOfDay: { not: hourOfDay }, // exclude current hour (we're rebuilding it)
     },
-    select: { slots: true, hourOfDay: true },
+    select: { slots: true, hourOfDay: true, airDate: true },
   });
   for (const lp of lockedPlaylists) {
     if (!lp.slots) continue;
+    // Skip the playlist we're rebuilding right now
+    if (
+      lp.hourOfDay === hourOfDay &&
+      new Date(lp.airDate).getTime() === new Date(airDate).getTime()
+    ) {
+      continue;
+    }
     const lpSlots: Array<{ songId?: string }> = JSON.parse(
       typeof lp.slots === "string" ? lp.slots : JSON.stringify(lp.slots)
     );
     // Treat locked-playlist songs as "played" at the start of that hour
-    const playedAt = new Date(airDate);
+    const playedAt = new Date(lp.airDate);
     playedAt.setUTCHours(lp.hourOfDay, 0, 0, 0);
+    if (playedAt < lockbackStart) continue; // outside cooldown window
     for (const slot of lpSlots) {
       if (slot.songId) {
         const existing = recentPlayMap.get(slot.songId);
@@ -366,6 +385,22 @@ export async function buildHourPlaylist(opts: BuildPlaylistOptions): Promise<Bui
       status: "draft",
     },
   });
+
+  // Update Song.playCount + lastPlayedAt for every song that just got
+  // scheduled. The freshScore in selectSong relies on these to spread
+  // plays across the catalogue, but Liquidsoap currently writes
+  // TrackPlayback rows with null trackId so they were never updated.
+  const scheduledSongIds = Array.from(
+    new Set(resolvedSlots.map((s) => s.songId).filter((id): id is string => !!id)),
+  );
+  if (scheduledSongIds.length > 0) {
+    const scheduledAt = new Date(normalizedDate);
+    scheduledAt.setUTCHours(hourOfDay, 0, 0, 0);
+    await prisma.song.updateMany({
+      where: { id: { in: scheduledSongIds } },
+      data: { lastPlayedAt: scheduledAt, playCount: { increment: 1 } },
+    });
+  }
 
   return {
     hourPlaylistId: hourPlaylist.id,

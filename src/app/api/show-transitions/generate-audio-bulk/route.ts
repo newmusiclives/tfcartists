@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { handleApiError } from "@/lib/api/errors";
-import OpenAI from "openai";
 import * as fs from "fs";
 import * as path from "path";
 import { withRateLimit } from "@/lib/rate-limit/limiter";
-import { getConfig } from "@/lib/config";
 import { generateWithGemini as generateWithGeminiShared } from "@/lib/radio/voice-track-tts";
 
 export const dynamic = "force-dynamic";
@@ -57,21 +55,6 @@ function saveAudioFile(buffer: Buffer, filename: string): string {
   }
 }
 
-async function generateWithOpenAI(
-  openai: OpenAI,
-  text: string,
-  voice: string
-): Promise<{ buffer: Buffer; ext: string }> {
-  const response = await openai.audio.speech.create({
-    model: "tts-1-hd",
-    voice: voice as "alloy" | "ash" | "ballad" | "coral" | "echo" | "fable" | "nova" | "onyx" | "sage" | "shimmer",
-    input: text,
-  });
-
-  return { buffer: Buffer.from(await response.arrayBuffer()), ext: "mp3" };
-}
-
-
 export async function POST(request: NextRequest) {
   try {
     const rateLimited = await withRateLimit(request, "ai");
@@ -104,9 +87,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Initialize OpenAI lazily (Gemini handled by shared helper)
-    let openai: OpenAI | null = null;
-
     const results: Array<{
       id: string;
       name: string;
@@ -131,36 +111,25 @@ export async function POST(request: NextRequest) {
           voiceDjId = transition.toDjId;
         }
 
-        let voice = "alloy";
-        let provider = "openai";
+        // Always use Gemini — even legacy openai/elevenlabs DJs are
+        // routed through Gemini per the April 2026 migration.
+        let voice = "Leda";
         let voiceDesc: string | null = null;
         if (voiceDjId) {
           const dj = await prisma.dJ.findUnique({
             where: { id: voiceDjId },
-            select: { ttsVoice: true, ttsProvider: true, voiceDescription: true },
+            select: { ttsVoice: true, voiceDescription: true },
           });
-          if (dj?.ttsVoice) {
-            voice = dj.ttsVoice;
-          }
-          if (dj?.ttsProvider) {
-            provider = dj.ttsProvider;
-          }
+          if (dj?.ttsVoice) voice = dj.ttsVoice;
           voiceDesc = dj?.voiceDescription || null;
         }
 
-        let buffer: Buffer;
-        let ext: string;
-
-        if (provider === "gemini" || provider === "elevenlabs") {
-          ({ buffer, ext } = await generateWithGeminiShared(transition.scriptText!, voice, voiceDesc));
-        } else {
-          if (!openai) {
-            const apiKey = await getConfig("OPENAI_API_KEY");
-            if (!apiKey) throw new Error("OPENAI_API_KEY not configured. Set it in Admin → Settings.");
-            openai = new OpenAI({ apiKey });
-          }
-          ({ buffer, ext } = await generateWithOpenAI(openai, transition.scriptText!, voice));
-        }
+        const { buffer, ext } = await generateWithGeminiShared(
+          transition.scriptText!,
+          voice,
+          voiceDesc,
+        );
+        const provider = "gemini";
 
         const safeName = transition.name
           .toLowerCase()

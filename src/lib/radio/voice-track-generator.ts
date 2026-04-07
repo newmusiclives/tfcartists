@@ -13,26 +13,63 @@ import { isAiSpendLimitReached, trackAiSpend } from "@/lib/ai/spend-tracker";
 import { filterContent } from "@/lib/ai/content-filter";
 
 /**
- * Trim a script to the last complete sentence if it was truncated mid-thought.
- * Prevents voice tracks that end with dangling words like "whether" or "the".
+ * Trim a script to the last *complete* sentence and discard any trailing
+ * fragment. A sentence is considered complete when it has a sentence-ending
+ * punctuation mark (`.`, `!`, `?`) AND, if a comma appears after the last
+ * such mark, the words after the comma form an actual continuation rather
+ * than a stub like "let's." or "isn't.".
+ *
+ * Previously this function only checked the very last character. If the LLM
+ * happened to produce a fragment that ended with a period (e.g. "...road,
+ * let's.") it slipped through and the TTS faithfully spoke the truncation,
+ * making the DJ sound clipped mid-thought.
  */
 function trimToCompleteSentence(text: string): string {
-  // Already ends with sentence-ending punctuation — good
-  if (/[.!?]"?\s*$/.test(text)) return text;
+  let cleaned = text.trim();
+  if (!cleaned) return cleaned;
 
-  // Find the last sentence-ending punctuation
-  const lastPeriod = text.lastIndexOf(".");
-  const lastBang = text.lastIndexOf("!");
-  const lastQuestion = text.lastIndexOf("?");
-  const lastEnd = Math.max(lastPeriod, lastBang, lastQuestion);
-
-  if (lastEnd > 0) {
-    // Trim to last complete sentence
-    return text.substring(0, lastEnd + 1).trim();
+  // Find every position that ends a sentence.
+  const endings: number[] = [];
+  for (let i = 0; i < cleaned.length; i++) {
+    const c = cleaned[i];
+    if (c === "." || c === "!" || c === "?") endings.push(i);
   }
 
-  // No sentence ending at all — append period to salvage it
-  return text.trim() + ".";
+  if (endings.length === 0) {
+    // No sentence ending at all — return empty so the caller can retry
+    // rather than ship a fragment with a fake period.
+    return "";
+  }
+
+  // Look at the tail after the last sentence ending. If there's anything
+  // there, it's an incomplete fragment — drop it.
+  const lastEnd = endings[endings.length - 1];
+  const tail = cleaned.substring(lastEnd + 1).trim();
+  if (tail.length > 0) {
+    cleaned = cleaned.substring(0, lastEnd + 1).trim();
+  }
+
+  // Also catch the "...road, let's." case: a sentence whose tail after the
+  // last comma is too short to be a complete clause. Drop the whole final
+  // sentence and back up to the previous one.
+  const lastCommaInFinal = cleaned.lastIndexOf(",", cleaned.length - 1);
+  const finalSentenceStart = endings.length >= 2 ? endings[endings.length - 2] + 1 : 0;
+  if (lastCommaInFinal > finalSentenceStart) {
+    const afterComma = cleaned.substring(lastCommaInFinal + 1, cleaned.length - 1).trim();
+    // If the trailing clause is just one or two short words (likely a
+    // truncated continuation like "let's" or "isn't"), drop the final
+    // sentence entirely.
+    const wordsAfter = afterComma.split(/\s+/).filter(Boolean);
+    const isStubClause =
+      wordsAfter.length <= 2 &&
+      afterComma.length <= 12 &&
+      !/^(yes|no|please|thanks|cheers|amen|right|sure|enjoy|okay)\b/i.test(afterComma);
+    if (isStubClause && endings.length >= 2) {
+      cleaned = cleaned.substring(0, endings[endings.length - 2] + 1).trim();
+    }
+  }
+
+  return cleaned;
 }
 
 interface ResolvedSlot {
@@ -154,18 +191,20 @@ export async function generateVoiceTrackScripts(
         playlist.hourOfDay,
       );
 
-      // Generate script via AI
+      // Generate script via AI. maxTokens raised from 350→600 so the model
+      // has plenty of headroom to finish its 2-3 sentences without bumping
+      // the token ceiling and producing a clipped fragment.
       const response = await aiProvider.chat(
         [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
         {
-          maxTokens: 350,
+          maxTokens: 600,
           temperature: dj.gptTemperature || 0.8,
         }
       );
-      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 350 });
+      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 600 });
 
       // Validate tense accuracy — regenerate once if wrong
       let scriptText = trimToCompleteSentence(response.content.trim());
@@ -179,9 +218,9 @@ export async function generateVoiceTrackScripts(
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt + `\n\nIMPORTANT CORRECTION: Your previous attempt had a tense error: "${tenseIssue}". Fix this in your new response.` },
           ],
-          { maxTokens: 200, temperature: Math.max(0.3, (dj.gptTemperature || 0.8) - 0.2) }
+          { maxTokens: 600, temperature: Math.max(0.3, (dj.gptTemperature || 0.8) - 0.2) }
         );
-        await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 350 });
+        await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 600 });
         scriptText = trimToCompleteSentence(retry.content.trim());
       }
 

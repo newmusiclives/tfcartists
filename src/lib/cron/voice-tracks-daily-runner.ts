@@ -213,52 +213,15 @@ export async function runVoiceTracksDaily(): Promise<VoiceTracksDailyResult> {
       }
 
       {
-        // 5c. Find the last voice break in the clock and try to replace it with a generic track
-        const lastVbPos = findLastVoiceBreakPosition(playlistSlots);
-        let genericSkipPositions: number[] = [];
-        if (lastVbPos !== null) {
-          const genericTrack = await pickGenericTrack(shift.djId, station.id);
-          if (genericTrack) {
-            const lastVbSlot = playlistSlots.find(
-              (s: { position: number }) => s.position === lastVbPos
-            );
-            await prisma.voiceTrack.create({
-              data: {
-                stationId: station.id,
-                djId: shift.djId,
-                hourPlaylistId: playlistId,
-                position: lastVbPos,
-                trackType: "generic",
-                scriptText: genericTrack.scriptText,
-                audioFilePath: genericTrack.audioFilePath,
-                audioDuration: genericTrack.audioDuration,
-                ttsVoice: genericTrack.ttsVoice,
-                ttsProvider: genericTrack.ttsProvider,
-                status: "audio_ready",
-                airDate: today,
-                hourOfDay: shift.hourOfDay,
-                minuteOfHour: lastVbSlot?.minute ?? 47,
-              },
-            });
-
-            await prisma.genericVoiceTrack.update({
-              where: { id: genericTrack.id },
-              data: {
-                useCount: { increment: 1 },
-                lastUsedAt: new Date(),
-              },
-            });
-
-            genericSkipPositions = [lastVbPos];
-            results.genericTracksUsed++;
-          }
-        }
-
-        // 5d. Generate voice track scripts (skip last VB position if generic was used)
-        const scripts = await generateVoiceTrackScripts(
-          playlistId,
-          genericSkipPositions.length > 0 ? { skipPositions: genericSkipPositions } : undefined,
-        );
+        // 5c. Generate voice track scripts for ALL voice breaks.
+        //
+        // Previously this branch substituted a pre-canned GenericVoiceTrack
+        // at the last voice break to save TTS credits during the ElevenLabs
+        // era. Removed April 2026: every voice break is now freshly written
+        // by the AI generator and synthesized with Gemini, in the DJ's
+        // configured voice. The GenericVoiceTrack pool itself is being
+        // wiped — see scripts/cleanup-old-voice-tracks.ts equivalent.
+        const scripts = await generateVoiceTrackScripts(playlistId);
         results.scriptsGenerated += scripts.generated;
         if (scripts.errors.length > 0) {
           results.errors.push(...scripts.errors.map((e) => `[${shift.djName} H${shift.hourOfDay}] ${e}`));
@@ -489,34 +452,3 @@ async function relinkFeatures(
   return relinked;
 }
 
-/**
- * Find the last voice_break position in the playlist slots.
- */
-function findLastVoiceBreakPosition(
-  slots: Array<{ position: number; type: string; minute?: number }>,
-): number | null {
-  const vbSlots = slots
-    .filter((s) => s.type === "voice_break")
-    .sort((a, b) => b.position - a.position);
-  return vbSlots.length > 0 ? vbSlots[0].position : null;
-}
-
-/**
- * Pick the least-used active generic voice track for a DJ.
- */
-async function pickGenericTrack(djId: string, stationId: string) {
-  const track = await prisma.genericVoiceTrack.findFirst({
-    where: {
-      djId,
-      stationId,
-      isActive: true,
-      audioFilePath: { not: null },
-    },
-    orderBy: [
-      { useCount: "asc" },
-      { lastUsedAt: "asc" },
-    ],
-  });
-
-  return track;
-}
