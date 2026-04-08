@@ -233,7 +233,12 @@ export async function generateVoiceTrackScripts(
       // playing a half-script.
       if (!scriptText || (vb.trackType === "intro" && nextSong &&
           (!scriptMentionsArtist(scriptText, nextSong.artistName) || !scriptMentionsTitle(scriptText, nextSong.songTitle)))) {
-        errors.push(`VT position ${vb.position}: script missing required artist/title after retry`);
+        const why = !scriptText
+          ? "empty"
+          : !scriptMentionsArtist(scriptText, nextSong!.artistName)
+            ? `no artist "${nextSong!.artistName}"`
+            : `no title "${nextSong!.songTitle}"`;
+        errors.push(`VT pos ${vb.position} [${why}]: ${scriptText.slice(0, 200) || "(empty)"}`);
         const orphan = await prisma.voiceTrack.findFirst({ where: { hourPlaylistId, position: vb.position } });
         if (orphan) {
           await prisma.voiceTrack.update({ where: { id: orphan.id }, data: { status: "error" } });
