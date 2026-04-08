@@ -195,6 +195,10 @@ export async function generateVoiceTrackScripts(
       // for 2 short sentences without bumping the ceiling and producing a
       // clipped fragment. (Was 600, before that 350.)
       const MAX_TOKENS = 800;
+      // Use a lower temperature for voice track generation than the DJ's
+      // chat default. High temperature drives Claude away from the rigid
+      // template into "creative" prose that omits the artist/title.
+      const VOICE_TRACK_TEMPERATURE = 0.5;
       const response = await aiProvider.chat(
         [
           { role: "system", content: systemPrompt },
@@ -202,7 +206,7 @@ export async function generateVoiceTrackScripts(
         ],
         {
           maxTokens: MAX_TOKENS,
-          temperature: dj.gptTemperature || 0.8,
+          temperature: VOICE_TRACK_TEMPERATURE,
         }
       );
       await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: MAX_TOKENS });
@@ -221,7 +225,7 @@ export async function generateVoiceTrackScripts(
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt + `\n\nIMPORTANT CORRECTION: Your previous attempt had this problem: "${issue}". Fix this in your new response.` },
           ],
-          { maxTokens: MAX_TOKENS, temperature: Math.max(0.3, (dj.gptTemperature || 0.8) - 0.2) }
+          { maxTokens: MAX_TOKENS, temperature: 0.3 }
         );
         await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: MAX_TOKENS });
         scriptText = trimToCompleteSentence(retry.content.trim());
@@ -341,27 +345,26 @@ function findNextSong(
   return null;
 }
 
-// Non-negotiable structural rules that take precedence over the DJ persona.
-// Many DJs have elaborate character prompts that tell Claude to be poetic,
-// sensory, and "never over-explain". Without an override, Claude will follow
-// the persona and ship abstract vibe scripts that introduce nothing concrete.
-// These rules are prepended to every system prompt so they're the first
-// thing the model sees.
-const STRUCTURAL_OVERRIDE = `STRUCTURAL OUTPUT RULES — these override any character/persona instructions below:
-
-When the user asks you to write a forward intro, your output MUST include all three of:
-  1. The exact artist name provided in the user message
-  2. The exact song title provided in the user message
-  3. Either your own first name OR the words "North Country Radio"
-
-These three pieces of information are non-negotiable. The character/persona rules below describe HOW you speak (tone, pacing, imagery) — not WHAT you can omit. You must work the artist, title, and station/DJ identification INTO your in-character delivery, not skip them.
-
-If a persona rule conflicts with the structural requirements above, the structural requirements win. A poetic intro that doesn't name the song is a failed intro.
-
----
-
-`;
-
+/**
+ * Build the system prompt for voice track generation.
+ *
+ * IMPORTANT: We deliberately do NOT use the DJ's full `gptSystemPrompt`
+ * field here. That field tends to be a rich character document (2000+
+ * chars of persona, biography, voice rules) intended for long-form
+ * conversation. When we use it for short voice intros, the persona rules
+ * ("be poetic", "use sensory imagery", "never over-explain", "let
+ * meaningful lines breathe") completely override the user prompt's
+ * structural requirements, and Claude ships abstract vibe scripts that
+ * never name the song or artist.
+ *
+ * For voice tracks specifically, we use a tight focused prompt that
+ * captures the DJ's name, format, and a one-line vibe — enough flavor
+ * for the model to sound like the DJ, without the elaborate persona
+ * rules that fight the structural requirements.
+ *
+ * The full gptSystemPrompt is still available to other parts of the app
+ * (live AI chat, Q&A, etc.) — this is voice-tracks-only.
+ */
 export function buildSystemPrompt(dj: {
   name: string;
   gptSystemPrompt: string | null;
@@ -369,22 +372,22 @@ export function buildSystemPrompt(dj: {
   additionalKnowledge: string | null;
   bio: string;
 }): string {
-  let personaPrompt: string;
-  if (dj.gptSystemPrompt) {
-    personaPrompt = dj.gptSystemPrompt;
-    if (dj.catchPhrases) {
-      personaPrompt += `\n\nYour signature phrases (use occasionally, not every time): ${dj.catchPhrases}`;
-    }
-    if (dj.additionalKnowledge) {
-      personaPrompt += `\n\nAdditional context: ${dj.additionalKnowledge}`;
-    }
-  } else {
-    personaPrompt = `You are ${dj.name}, a radio DJ. ${dj.bio}
-You speak naturally and in character. Keep it conversational and warm.${
-      dj.catchPhrases ? `\nYour signature phrases: ${dj.catchPhrases}` : ""
-    }`;
+  const firstName = dj.name.split(" ")[0] || dj.name;
+  // Pull just a one-line vibe from the bio if available
+  const bioLine = dj.bio
+    ? dj.bio.split(/[.\n]/).find((s) => s.trim().length > 10)?.trim() || ""
+    : "";
+
+  let prompt = `You are ${dj.name} ("${firstName}"), a radio DJ on North Country Radio — a country / Americana / country-rock station.`;
+  if (bioLine) prompt += ` ${bioLine}.`;
+  prompt += `
+
+You are writing short forward intros to introduce upcoming songs. Speak warmly and naturally, in character, but ALWAYS follow the user's structural template — every intro must name the artist, the song title, and identify yourself or the station. Two short sentences only.`;
+
+  if (dj.catchPhrases) {
+    prompt += `\n\nYour signature phrases (use sparingly): ${dj.catchPhrases}`;
   }
-  return STRUCTURAL_OVERRIDE + personaPrompt;
+  return prompt;
 }
 
 /**
