@@ -1,0 +1,19 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/no-empty-object-type": "warn",
+    "@typescript-eslint/no-require-imports": "warn",
+    "@typescript-eslint/no-this-alias": "warn",
+    "@typescript-eslint/no-wrapper-object-types": "warn",
+    "@typescript-eslint/no-unsafe-function-type": "warn",
+    "@typescript-eslint/triple-slash-reference": "warn",
+    "react/no-unescaped-entities": "warn",
+    "react-hooks/exhaustive-deps": "warn",
+    "@next/next/no-img-element": "warn",
+    "@next/next/no-html-link-for-pages": "warn",
+    "prefer-const": "warn"
+  }
+}

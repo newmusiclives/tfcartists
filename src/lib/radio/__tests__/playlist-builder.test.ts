@@ -4,7 +4,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 vi.mock("@/lib/db", () => ({
   prisma: {
     clockTemplate: { findUnique: vi.fn() },
-    song: { findMany: vi.fn() },
+    song: { findMany: vi.fn(), updateMany: vi.fn() },
     trackPlayback: { findMany: vi.fn() },
     hourPlaylist: { findMany: vi.fn(), findUnique: vi.fn(), upsert: vi.fn() },
     voiceTrack: { deleteMany: vi.fn() },
@@ -77,6 +77,7 @@ function setupMocks(opts: {
   vi.mocked(prisma.hourPlaylist.findUnique).mockResolvedValue((opts.existingPlaylist || null) as any);
   vi.mocked(prisma.hourPlaylist.upsert).mockResolvedValue({ id: "hp_1" } as any);
   vi.mocked(prisma.voiceTrack.deleteMany).mockResolvedValue({ count: 0 } as any);
+  vi.mocked(prisma.song.updateMany).mockResolvedValue({ count: 0 } as any);
 }
 
 // ── Tests ──────────────────────────────────────────────────────────────────
