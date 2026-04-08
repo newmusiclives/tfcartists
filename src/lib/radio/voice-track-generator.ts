@@ -181,11 +181,14 @@ export async function generateVoiceTrackScripts(
       const prevSong = findPrevSong(slots, vb.position);
       const nextSong = findNextSong(slots, vb.position);
 
-      // Build the AI prompt
+      // Build the AI prompt. For multi-word DJ names like "Night Owl" or
+      // "Marcus 'Doc' Holloway" we want the FULL display name in the prompt
+      // — splitting on whitespace gave us "Night" or "Marcus" which sounded
+      // wrong on-air. Claude can pick the right form to use in conversation.
       const systemPrompt = buildSystemPrompt(dj);
       const userPrompt = buildUserPrompt(
         vb.trackType,
-        dj.name.split(" ")[0] || dj.name,
+        dj.name,
         prevSong,
         nextSong,
         playlist.hourOfDay,
@@ -276,10 +279,10 @@ export async function generateVoiceTrackScripts(
         scriptText = trimToCompleteSentence(retry.content.trim());
       }
 
-      // Hard reject — if even after the retry the script is empty or missing
-      // critical elements, mark this voice track position as error so the
-      // playout filters it out (orphan-drop in /api/next_hour) instead of
-      // playing a half-script.
+      // Also reject if the model HALLUCINATED a different song title (we've
+      // seen Claude generate "Brett Kissel with 'Drink About Me'" when the
+      // actual input was "Brett Kissel — Something You Just Don't Forget").
+      // The orphan-drop in /api/next_hour will skip the slot if rejected.
       if (!scriptText || (vb.trackType === "intro" && nextSong &&
           (!scriptMentionsArtist(scriptText, nextSong.artistName) || !scriptMentionsTitle(scriptText, nextSong.songTitle)))) {
         const why = !scriptText
