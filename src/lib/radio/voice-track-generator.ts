@@ -232,7 +232,7 @@ export async function generateVoiceTrackScripts(
       // playout filters it out (orphan-drop in /api/next_hour) instead of
       // playing a half-script.
       if (!scriptText || (vb.trackType === "intro" && nextSong &&
-          (!normalizedIncludes(scriptText, nextSong.artistName) || !normalizedIncludes(scriptText, nextSong.songTitle)))) {
+          (!scriptMentionsArtist(scriptText, nextSong.artistName) || !scriptMentionsTitle(scriptText, nextSong.songTitle)))) {
         errors.push(`VT position ${vb.position}: script missing required artist/title after retry`);
         const orphan = await prisma.voiceTrack.findFirst({ where: { hourPlaylistId, position: vb.position } });
         if (orphan) {
@@ -552,6 +552,39 @@ function normalizedIncludes(haystack: string, needle: string): boolean {
 }
 
 /**
+ * Check whether a script mentions an artist, tolerating multi-artist names.
+ * Splits on common separators (feat., ft., f., with, &, and, x, /) and
+ * accepts a match if EITHER the full normalized artist OR any of its
+ * primary segments appears. e.g. "Jim Brickman f. Jana Kramer" matches if
+ * the script mentions "Jim Brickman".
+ */
+function scriptMentionsArtist(script: string, artistName: string): boolean {
+  if (normalizedIncludes(script, artistName)) return true;
+  const parts = artistName
+    .split(/\s+(?:feat\.?|ft\.?|f\.|with|&|and|x|\/)\s+/i)
+    .map((p) => p.trim())
+    .filter((p) => p.length >= 3); // ignore tiny stubs
+  for (const p of parts) {
+    if (normalizedIncludes(script, p)) return true;
+  }
+  return false;
+}
+
+/**
+ * Check whether a script mentions a song title. Strips parenthetical suffixes
+ * like "(Radio Edit)" before comparing, since the spoken title rarely
+ * includes those.
+ */
+function scriptMentionsTitle(script: string, songTitle: string): boolean {
+  if (normalizedIncludes(script, songTitle)) return true;
+  const cleanTitle = songTitle.replace(/\s*\([^)]*\)\s*/g, "").trim();
+  if (cleanTitle && cleanTitle !== songTitle) {
+    return normalizedIncludes(script, cleanTitle);
+  }
+  return false;
+}
+
+/**
  * Make sure a forward intro actually says the artist name and song title,
  * AND identifies either the DJ or the station. Without this check, the LLM
  * sometimes ships abstract "vibe" scripts that introduce nothing concrete,
@@ -566,10 +599,10 @@ function validateRequiredContent(
   if (trackType !== "intro" || !nextSong) return null;
   if (!script) return "Empty script";
 
-  if (!normalizedIncludes(script, nextSong.artistName)) {
+  if (!scriptMentionsArtist(script, nextSong.artistName)) {
     return `Script does not mention the artist name "${nextSong.artistName}"`;
   }
-  if (!normalizedIncludes(script, nextSong.songTitle)) {
+  if (!scriptMentionsTitle(script, nextSong.songTitle)) {
     return `Script does not mention the song title "${nextSong.songTitle}"`;
   }
   // At least one of: DJ first name OR "North Country Radio"
