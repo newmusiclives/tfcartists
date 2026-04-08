@@ -119,6 +119,7 @@ jobs:
     # non-blocking until we add a test data seed step. Job still runs
     # and surfaces results; just doesn't fail the workflow.
     continue-on-error: true
+    timeout-minutes: 20
     services:
       postgres:
         image: postgres:16
