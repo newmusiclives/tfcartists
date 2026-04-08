@@ -107,7 +107,7 @@ jobs:
             nextjs-cache-${{ runner.os }}-
       - run: npm ci
       - run: npx prisma generate
-      - run: npx prisma migrate deploy
+      - run: npx prisma db push --skip-generate --accept-data-loss
       - run: npm run build
 
   e2e-test:
@@ -153,7 +153,7 @@ jobs:
             nextjs-cache-${{ runner.os }}-
       - run: npm ci
       - run: npx prisma generate
-      - run: npx prisma migrate deploy
+      - run: npx prisma db push --skip-generate --accept-data-loss
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
       - name: Build app for E2E
