@@ -227,6 +227,11 @@ export async function generateVoiceTrackScripts(
           ]
         : [];
 
+      // Force Claude for voice track generation. The default provider was
+      // resolving to OpenAI (gpt-4o-mini) which is much weaker at following
+      // structural prompts and few-shot examples — every script came back
+      // as a generic vibe monologue with no artist or title. Claude follows
+      // the rigid template + few-shot examples reliably.
       const response = await aiProvider.chat(
         [
           { role: "system", content: systemPrompt },
@@ -234,6 +239,7 @@ export async function generateVoiceTrackScripts(
           { role: "user", content: userPrompt },
         ],
         {
+          provider: "claude",
           maxTokens: MAX_TOKENS,
           temperature: VOICE_TRACK_TEMPERATURE,
         }
@@ -256,7 +262,7 @@ export async function generateVoiceTrackScripts(
             ...fewShotMessages,
             { role: "user", content: userPrompt + `\n\nIMPORTANT CORRECTION: Your previous attempt had this problem: "${issue}". Fix this in your new response.` },
           ],
-          { maxTokens: MAX_TOKENS, temperature: 0.3 }
+          { provider: "claude", maxTokens: MAX_TOKENS, temperature: 0.3 }
         );
         await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: MAX_TOKENS });
         scriptText = trimToCompleteSentence(retry.content.trim());
