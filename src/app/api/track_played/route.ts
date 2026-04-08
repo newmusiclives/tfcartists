@@ -36,7 +36,7 @@ async function handleTrackPlayed(artist: string | null, title: string | null) {
   try {
     const song = await prisma.song.findFirst({
       where: { artistName: artist, title },
-      select: { id: true },
+      select: { id: true, duration: true },
     });
 
     if (song) {
@@ -47,6 +47,33 @@ async function handleTrackPlayed(artist: string | null, title: string | null) {
           lastPlayedAt: new Date(),
         },
       });
+    }
+
+    // Persist to TrackPlayback so the public "recently played" feed updates.
+    // This was missing — only Song.playCount/lastPlayedAt were being touched,
+    // which left /api/whats-playing recentlyPlayed permanently stale.
+    const playedAt = new Date();
+    const hour = playedAt.getUTCHours(); // close enough — UTC bucket is fine for the categorical timeSlot
+    const timeSlot =
+      hour >= 6 && hour < 12
+        ? "morning"
+        : hour >= 12 && hour < 17
+          ? "midday"
+          : hour >= 17 && hour < 22
+            ? "evening"
+            : "late_night";
+    try {
+      await prisma.trackPlayback.create({
+        data: {
+          trackTitle: title,
+          artistName: artist,
+          duration: song?.duration ?? null,
+          timeSlot,
+          playedAt,
+        },
+      });
+    } catch (err) {
+      logger.warn("trackPlayback insert failed", { error: String(err) });
     }
 
     logger.info("Track played", { artist, title, songId: song?.id || "not_found" });
