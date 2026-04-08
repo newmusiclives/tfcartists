@@ -199,9 +199,38 @@ export async function generateVoiceTrackScripts(
       // chat default. High temperature drives Claude away from the rigid
       // template into "creative" prose that omits the artist/title.
       const VOICE_TRACK_TEMPERATURE = 0.5;
+
+      // Few-shot prompting: include 2 fake-prior turns with concrete
+      // intros that follow the required structure. Without few-shot,
+      // Claude's training prior for "DJ intro" produces generic vibe
+      // monologues that ignore the artist/title even when the prompt
+      // demands them. With few-shot, Claude pattern-matches the
+      // assistant turns and produces specific intros that name the song.
+      const fewShotMessages = vb.trackType === "intro" && nextSong
+        ? [
+            {
+              role: "user" as const,
+              content: 'Forward intro. DJ: Hank. Station: North Country Radio. Time: morning. Artist: Eric Church. Song: "Drink In My Hand". Two short sentences. Must literally include "Eric Church" and "Drink In My Hand" and "Hank" or "North Country Radio".',
+            },
+            {
+              role: "assistant" as const,
+              content: 'Hank here on North Country Radio, easing you into the morning. Coming up, Eric Church with "Drink In My Hand."',
+            },
+            {
+              role: "user" as const,
+              content: 'Forward intro. DJ: Loretta. Station: North Country Radio. Time: midday. Artist: Carrie Underwood. Song: "Before He Cheats". Two short sentences. Must literally include "Carrie Underwood" and "Before He Cheats" and "Loretta" or "North Country Radio".',
+            },
+            {
+              role: "assistant" as const,
+              content: 'You\'re locked in with Loretta on North Country Radio. Up next, here\'s Carrie Underwood with "Before He Cheats."',
+            },
+          ]
+        : [];
+
       const response = await aiProvider.chat(
         [
           { role: "system", content: systemPrompt },
+          ...fewShotMessages,
           { role: "user", content: userPrompt },
         ],
         {
@@ -223,6 +252,7 @@ export async function generateVoiceTrackScripts(
         const retry = await aiProvider.chat(
           [
             { role: "system", content: systemPrompt },
+            ...fewShotMessages,
             { role: "user", content: userPrompt + `\n\nIMPORTANT CORRECTION: Your previous attempt had this problem: "${issue}". Fix this in your new response.` },
           ],
           { maxTokens: MAX_TOKENS, temperature: 0.3 }
