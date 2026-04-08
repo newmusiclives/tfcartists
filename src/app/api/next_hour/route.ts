@@ -297,6 +297,9 @@ export async function GET(request: NextRequest) {
       seq.reduce((acc, item) => acc + (Number(item.metadata?.duration) || DEFAULT_ITEM_SECONDS), 0);
 
     let totalSeconds = sumDuration(hourSequence);
+    const startSeconds = totalSeconds;
+    let fillerAdded = 0;
+    let fillerCandidatesCount = 0;
     if (totalSeconds < HOUR_TARGET_SECONDS) {
       const alreadyQueuedSongIds = new Set(
         hourSequence
@@ -311,15 +314,14 @@ export async function GET(request: NextRequest) {
           stationId: station.id,
           isActive: true,
           rotationCategory: { in: ["A", "B"] },
-          fileUrl: { not: null },
           id: { notIn: Array.from(alreadyQueuedSongIds) },
         },
         select: { id: true, title: true, artistName: true, fileUrl: true, duration: true, rotationCategory: true },
-        orderBy: { lastPlayedAt: { sort: "asc", nulls: "first" } },
-        take: 20,
+        orderBy: [{ lastPlayedAt: "asc" }, { playCount: "asc" }],
+        take: 30,
       });
+      fillerCandidatesCount = fillerCandidates.length;
 
-      let fillerAdded = 0;
       for (const song of fillerCandidates) {
         if (totalSeconds >= HOUR_TARGET_SECONDS) break;
         const songFilePath = song.fileUrl || `${song.artistName} - ${song.title}.mp3`;
@@ -342,7 +344,7 @@ export async function GET(request: NextRequest) {
       if (fillerAdded > 0) {
         console.log(
           `[next_hour] Padded hour ${hourOfDay} with ${fillerAdded} filler songs ` +
-            `(was ${Math.round(totalSeconds - fillerAdded * DEFAULT_ITEM_SECONDS)}s, now ~${Math.round(totalSeconds)}s)`,
+            `(was ${Math.round(startSeconds)}s, now ~${Math.round(totalSeconds)}s)`,
         );
       }
     }
@@ -396,6 +398,13 @@ export async function GET(request: NextRequest) {
       hour: hourOfDay,
       date: dateStr,
       playlist_id: playlist.id,
+      _padding: {
+        start_seconds: startSeconds,
+        end_seconds: totalSeconds,
+        target_seconds: HOUR_TARGET_SECONDS,
+        candidates_found: fillerCandidatesCount,
+        filler_added: fillerAdded,
+      },
     });
   } catch (error) {
     return NextResponse.json(
