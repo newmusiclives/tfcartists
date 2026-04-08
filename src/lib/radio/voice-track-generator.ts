@@ -238,7 +238,8 @@ export async function generateVoiceTrackScripts(
           temperature: VOICE_TRACK_TEMPERATURE,
         }
       );
-      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: MAX_TOKENS });
+      logger.info("voice-track gen", { provider: response.provider, position: vb.position });
+      await trackAiSpend({ provider: response.provider === "openai" ? "openai" : "anthropic", operation: "chat", cost: 0.003, tokens: MAX_TOKENS });
 
       // Validate tense accuracy AND required content — regenerate once if wrong
       let scriptText = trimToCompleteSentence(response.content.trim());
@@ -272,7 +273,7 @@ export async function generateVoiceTrackScripts(
           : !scriptMentionsArtist(scriptText, nextSong!.artistName)
             ? `no artist "${nextSong!.artistName}"`
             : `no title "${nextSong!.songTitle}"`;
-        errors.push(`VT pos ${vb.position} [${why}]: ${scriptText || "(empty)"}`);
+        errors.push(`VT pos ${vb.position} (${response.provider}) [${why}]: ${scriptText || "(empty)"}`);
         const orphan = await prisma.voiceTrack.findFirst({ where: { hourPlaylistId, position: vb.position } });
         if (orphan) {
           await prisma.voiceTrack.update({ where: { id: orphan.id }, data: { status: "error" } });
