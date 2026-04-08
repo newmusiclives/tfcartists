@@ -285,6 +285,68 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // --- Pad the hour to ≥60 minutes of content ---
+    // Clock templates often total 50–58 min. Without padding, the playout
+    // queue empties before TOH and re-fetches the same hour, causing the
+    // playlist to loop within the wall-clock hour. Append filler songs from
+    // the least-recently-played pool so the queue lasts until the next TOH
+    // flush. Excess filler is discarded by the playout side at TOH.
+    const HOUR_TARGET_SECONDS = 3600 + 120; // 62 min — small buffer past TOH
+    const DEFAULT_ITEM_SECONDS = 180;
+    const sumDuration = (seq: typeof hourSequence) =>
+      seq.reduce((acc, item) => acc + (Number(item.metadata?.duration) || DEFAULT_ITEM_SECONDS), 0);
+
+    let totalSeconds = sumDuration(hourSequence);
+    if (totalSeconds < HOUR_TARGET_SECONDS) {
+      const alreadyQueuedSongIds = new Set(
+        hourSequence
+          .filter((i) => i.type === "song")
+          .map((i) => i.metadata?.song_id)
+          .filter(Boolean) as string[],
+      );
+      // Pull a generous candidate pool — least-recently-played first, Cat A/B
+      // (the rotation tiers most appropriate as filler) — then append until full.
+      const fillerCandidates = await prisma.song.findMany({
+        where: {
+          stationId: station.id,
+          isActive: true,
+          rotationCategory: { in: ["A", "B"] },
+          fileUrl: { not: null },
+          id: { notIn: Array.from(alreadyQueuedSongIds) },
+        },
+        select: { id: true, title: true, artistName: true, fileUrl: true, duration: true, rotationCategory: true },
+        orderBy: { lastPlayedAt: { sort: "asc", nulls: "first" } },
+        take: 20,
+      });
+
+      let fillerAdded = 0;
+      for (const song of fillerCandidates) {
+        if (totalSeconds >= HOUR_TARGET_SECONDS) break;
+        const songFilePath = song.fileUrl || `${song.artistName} - ${song.title}.mp3`;
+        hourSequence.push({
+          type: "song",
+          audio_file_path: songFilePath,
+          metadata: {
+            artist: song.artistName,
+            title: song.title,
+            duration: song.duration,
+            song_id: song.id,
+            rotation_category: song.rotationCategory,
+            clock_minute: null,
+            is_filler: true,
+          },
+        });
+        totalSeconds += song.duration || DEFAULT_ITEM_SECONDS;
+        fillerAdded++;
+      }
+      if (fillerAdded > 0) {
+        console.log(
+          `[next_hour] Padded hour ${hourOfDay} with ${fillerAdded} filler songs ` +
+            `(was ${Math.round(totalSeconds - fillerAdded * DEFAULT_ITEM_SECONDS)}s, now ~${Math.round(totalSeconds)}s)`,
+        );
+      }
+    }
+
     // Look up clock template name for show structure (Hour 1 Opener vs Hour 2 vs Hour 3 Closer)
     const clockTemplate = playlist.clockTemplateId
       ? await prisma.clockTemplate.findUnique({
