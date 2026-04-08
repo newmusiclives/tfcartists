@@ -191,37 +191,54 @@ export async function generateVoiceTrackScripts(
         playlist.hourOfDay,
       );
 
-      // Generate script via AI. maxTokens raised from 350→600 so the model
-      // has plenty of headroom to finish its 2-3 sentences without bumping
-      // the token ceiling and producing a clipped fragment.
+      // Generate script via AI. maxTokens at 800 gives plenty of headroom
+      // for 2 short sentences without bumping the ceiling and producing a
+      // clipped fragment. (Was 600, before that 350.)
+      const MAX_TOKENS = 800;
       const response = await aiProvider.chat(
         [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
         {
-          maxTokens: 600,
+          maxTokens: MAX_TOKENS,
           temperature: dj.gptTemperature || 0.8,
         }
       );
-      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 600 });
+      await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: MAX_TOKENS });
 
-      // Validate tense accuracy — regenerate once if wrong
+      // Validate tense accuracy AND required content — regenerate once if wrong
       let scriptText = trimToCompleteSentence(response.content.trim());
       const tenseIssue = validateVoiceTrackTense(vb.trackType, scriptText, prevSong, nextSong);
-      if (tenseIssue) {
-        logger.warn("Voice track tense violation detected, regenerating", {
-          position: vb.position, trackType: vb.trackType, issue: tenseIssue,
+      const contentIssue = validateRequiredContent(vb.trackType, scriptText, dj.name.split(" ")[0] || dj.name, nextSong);
+      const issue = tenseIssue || contentIssue;
+      if (issue) {
+        logger.warn("Voice track validation failed, regenerating", {
+          position: vb.position, trackType: vb.trackType, issue,
         });
         const retry = await aiProvider.chat(
           [
             { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt + `\n\nIMPORTANT CORRECTION: Your previous attempt had a tense error: "${tenseIssue}". Fix this in your new response.` },
+            { role: "user", content: userPrompt + `\n\nIMPORTANT CORRECTION: Your previous attempt had this problem: "${issue}". Fix this in your new response.` },
           ],
-          { maxTokens: 600, temperature: Math.max(0.3, (dj.gptTemperature || 0.8) - 0.2) }
+          { maxTokens: MAX_TOKENS, temperature: Math.max(0.3, (dj.gptTemperature || 0.8) - 0.2) }
         );
-        await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: 600 });
+        await trackAiSpend({ provider: "anthropic", operation: "chat", cost: 0.003, tokens: MAX_TOKENS });
         scriptText = trimToCompleteSentence(retry.content.trim());
+      }
+
+      // Hard reject — if even after the retry the script is empty or missing
+      // critical elements, mark this voice track position as error so the
+      // playout filters it out (orphan-drop in /api/next_hour) instead of
+      // playing a half-script.
+      if (!scriptText || (vb.trackType === "intro" && nextSong &&
+          (!normalizedIncludes(scriptText, nextSong.artistName) || !normalizedIncludes(scriptText, nextSong.songTitle)))) {
+        errors.push(`VT position ${vb.position}: script missing required artist/title after retry`);
+        const orphan = await prisma.voiceTrack.findFirst({ where: { hourPlaylistId, position: vb.position } });
+        if (orphan) {
+          await prisma.voiceTrack.update({ where: { id: orphan.id }, data: { status: "error" } });
+        }
+        continue;
       }
 
       // Content safety filter
@@ -369,7 +386,7 @@ function buildUserPrompt(
     hourOfDay < 18 ? "afternoon" : "evening";
 
   const rules = `Rules:
-- 2-3 COMPLETE sentences (10-15 seconds when spoken)
+- EXACTLY 2 sentences (8-12 seconds when spoken). Two short complete sentences only — do not write a third.
 - Every sentence MUST end with a period, exclamation mark, or question mark
 - NEVER leave a sentence unfinished — if you're running long, end the current sentence and stop
 - Natural, conversational, in-character
@@ -394,7 +411,7 @@ ${rules}`;
   }
 
   if (trackType === "intro" && nextSong) {
-    return `You are writing a FORWARD INTRO. The song has NOT played yet. You are teasing it BEFORE it starts.
+    return `You are writing a FORWARD INTRO for North Country Radio. The song has NOT played yet. You are teasing it BEFORE it starts.
 
 ${djFirstName} introduces the NEXT song that is ABOUT TO PLAY:
 "${nextSong.songTitle}" by ${nextSong.artistName}
@@ -402,8 +419,16 @@ ${djFirstName} introduces the NEXT song that is ABOUT TO PLAY:
 Time of day: ${timeOfDay}.
 ${rules}
 
+REQUIRED CONTENT — every intro MUST include all three:
+1. The DJ's name "${djFirstName}" (e.g. "I'm ${djFirstName}" or "${djFirstName} here") OR the station name "North Country Radio" — at least one must appear, and ideally both across the two sentences
+2. The artist name "${nextSong.artistName}" — say it explicitly
+3. The song title "${nextSong.songTitle}" — say it explicitly
+
+GOOD EXAMPLE: "You're locked in with ${djFirstName} on North Country Radio. Up next, here's ${nextSong.artistName} with ${nextSong.songTitle}."
+GOOD EXAMPLE: "This is North Country Radio — coming up, ${nextSong.artistName} with ${nextSong.songTitle}."
+
 CRITICAL TENSE RULES — VIOLATION MEANS FAILURE:
-- MUST start with future/present phrasing: "Coming up..." / "Here's..." / "Next up..." / "Now let's hear..."
+- MUST start with future/present phrasing: "Coming up..." / "Here's..." / "Next up..." / "Now let's hear..." / "You're listening to..."
 - The words "that was", "you just heard", "we just listened to", "hope you enjoyed" are BANNED — this song has NOT played yet
 - ONLY mention "${nextSong.songTitle}" — do NOT reference any other song`;
   }
@@ -512,4 +537,46 @@ function validateVoiceTrackTense(
   }
 
   return null; // No issues detected
+}
+
+/**
+ * Case-insensitive, whitespace-tolerant substring check.
+ * Used to verify a generated script actually mentions an artist or title.
+ */
+function normalizedIncludes(haystack: string, needle: string): boolean {
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const h = norm(haystack);
+  const n = norm(needle);
+  if (!n) return true;
+  return h.includes(n);
+}
+
+/**
+ * Make sure a forward intro actually says the artist name and song title,
+ * AND identifies either the DJ or the station. Without this check, the LLM
+ * sometimes ships abstract "vibe" scripts that introduce nothing concrete,
+ * leaving listeners with no idea what they're hearing.
+ */
+function validateRequiredContent(
+  trackType: string,
+  script: string,
+  djFirstName: string,
+  nextSong: { songTitle: string; artistName: string } | null,
+): string | null {
+  if (trackType !== "intro" || !nextSong) return null;
+  if (!script) return "Empty script";
+
+  if (!normalizedIncludes(script, nextSong.artistName)) {
+    return `Script does not mention the artist name "${nextSong.artistName}"`;
+  }
+  if (!normalizedIncludes(script, nextSong.songTitle)) {
+    return `Script does not mention the song title "${nextSong.songTitle}"`;
+  }
+  // At least one of: DJ first name OR "North Country Radio"
+  const hasDjName = normalizedIncludes(script, djFirstName);
+  const hasStation = normalizedIncludes(script, "North Country Radio");
+  if (!hasDjName && !hasStation) {
+    return `Script does not mention DJ name "${djFirstName}" or station name "North Country Radio"`;
+  }
+  return null;
 }
