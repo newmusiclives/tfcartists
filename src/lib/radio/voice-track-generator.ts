@@ -394,46 +394,33 @@ function findNextSong(
  * Build the system prompt for voice track generation.
  *
  * IMPORTANT: We deliberately do NOT use the DJ's full `gptSystemPrompt`
- * field here. That field tends to be a rich character document (2000+
- * chars of persona, biography, voice rules) intended for long-form
- * conversation. When we use it for short voice intros, the persona rules
- * ("be poetic", "use sensory imagery", "never over-explain", "let
- * meaningful lines breathe") completely override the user prompt's
- * structural requirements, and Claude ships abstract vibe scripts that
- * never name the song or artist.
+ * field here. That field is a 2000+ char persona document optimized for
+ * long-form chat ("be poetic", "use sensory imagery", "never over-explain")
+ * and it overrides the structural requirements when used for short intros.
  *
- * For voice tracks specifically, we use a tight focused prompt that
- * captures the DJ's name, format, and a one-line vibe — enough flavor
- * for the model to sound like the DJ, without the elaborate persona
- * rules that fight the structural requirements.
- *
- * The full gptSystemPrompt is still available to other parts of the app
- * (live AI chat, Q&A, etc.) — this is voice-tracks-only.
+ * The system prompt is also intentionally PERSONA-AGNOSTIC — the DJ name
+ * comes through the user message, not the system message. When the system
+ * said "You are Night Owl" while the few-shot demos used "Hank/Loretta/Doc",
+ * Claude got conflicted and improvised as Night Owl instead of using the
+ * user-provided inputs. Now the system describes the JOB and the user
+ * messages provide the variable parts.
  */
-export function buildSystemPrompt(dj: {
+export function buildSystemPrompt(_dj: {
   name: string;
   gptSystemPrompt: string | null;
   catchPhrases: string | null;
   additionalKnowledge: string | null;
   bio: string;
 }): string {
-  const firstName = dj.name.split(" ")[0] || dj.name;
-  // Pull just a one-line vibe from the bio if available
-  const bioLine = dj.bio
-    ? dj.bio.split(/[.\n]/).find((s) => s.trim().length > 10)?.trim() || ""
-    : "";
+  return `You write short, two-sentence radio voice intros for North Country Radio — a country, Americana, and country-rock station. The user message gives you the inputs in a compact format: "DJ: <name>. Artist: <name>. Song: <title>. Time: <morning|midday|afternoon|evening>."
 
-  let prompt = `You are ${dj.name} ("${firstName}"), a radio DJ on North Country Radio — a country / Americana / country-rock station.`;
-  if (bioLine) prompt += ` ${bioLine}.`;
-  prompt += `
+Your output is exactly two sentences:
+  - Sentence 1: a warm one-line greeting that names either the DJ or "North Country Radio" (or both), in-character for the time of day. 6–12 words.
+  - Sentence 2: a forward intro for the song. MUST literally include the artist's name and the song title (in quotes). Start with "Coming up", "Up next", "Here's", "Now", or "Next up". 8–15 words.
 
-You write short two-sentence radio intros for upcoming songs. The user message gives you the inputs in a compact format (DJ, Artist, Song, Time). Your output:
-  - Sentence 1: identify the DJ or "North Country Radio" (or both). One warm in-character line.
-  - Sentence 2: forward-intro the song. Must literally name the artist and put the song title in quotes. Use "Coming up", "Up next", "Here's", "Now", or "Next up".
+The artist and song title from the user message are MANDATORY in your output every single time. Do not write generic vibes. Do not skip the song. Do not improvise around the inputs. Match the format of the prior assistant turns exactly.
 
-The artist and song title from the user message are MANDATORY in your output — every time, no exceptions. Do not write generic vibes. Do not skip the song. Match the format of the prior assistant turns exactly.`;
-
-  return prompt;
+Output ONLY the two sentences. No labels, no quotes around the whole output, no stage directions.`;
 }
 
 /**
