@@ -341,6 +341,27 @@ function findNextSong(
   return null;
 }
 
+// Non-negotiable structural rules that take precedence over the DJ persona.
+// Many DJs have elaborate character prompts that tell Claude to be poetic,
+// sensory, and "never over-explain". Without an override, Claude will follow
+// the persona and ship abstract vibe scripts that introduce nothing concrete.
+// These rules are prepended to every system prompt so they're the first
+// thing the model sees.
+const STRUCTURAL_OVERRIDE = `STRUCTURAL OUTPUT RULES — these override any character/persona instructions below:
+
+When the user asks you to write a forward intro, your output MUST include all three of:
+  1. The exact artist name provided in the user message
+  2. The exact song title provided in the user message
+  3. Either your own first name OR the words "North Country Radio"
+
+These three pieces of information are non-negotiable. The character/persona rules below describe HOW you speak (tone, pacing, imagery) — not WHAT you can omit. You must work the artist, title, and station/DJ identification INTO your in-character delivery, not skip them.
+
+If a persona rule conflicts with the structural requirements above, the structural requirements win. A poetic intro that doesn't name the song is a failed intro.
+
+---
+
+`;
+
 export function buildSystemPrompt(dj: {
   name: string;
   gptSystemPrompt: string | null;
@@ -348,22 +369,22 @@ export function buildSystemPrompt(dj: {
   additionalKnowledge: string | null;
   bio: string;
 }): string {
+  let personaPrompt: string;
   if (dj.gptSystemPrompt) {
-    let prompt = dj.gptSystemPrompt;
+    personaPrompt = dj.gptSystemPrompt;
     if (dj.catchPhrases) {
-      prompt += `\n\nYour signature phrases (use occasionally, not every time): ${dj.catchPhrases}`;
+      personaPrompt += `\n\nYour signature phrases (use occasionally, not every time): ${dj.catchPhrases}`;
     }
     if (dj.additionalKnowledge) {
-      prompt += `\n\nAdditional context: ${dj.additionalKnowledge}`;
+      personaPrompt += `\n\nAdditional context: ${dj.additionalKnowledge}`;
     }
-    return prompt;
-  }
-
-  // Fallback: build from bio
-  return `You are ${dj.name}, a radio DJ. ${dj.bio}
+  } else {
+    personaPrompt = `You are ${dj.name}, a radio DJ. ${dj.bio}
 You speak naturally and in character. Keep it conversational and warm.${
-    dj.catchPhrases ? `\nYour signature phrases: ${dj.catchPhrases}` : ""
-  }`;
+      dj.catchPhrases ? `\nYour signature phrases: ${dj.catchPhrases}` : ""
+    }`;
+  }
+  return STRUCTURAL_OVERRIDE + personaPrompt;
 }
 
 /**
