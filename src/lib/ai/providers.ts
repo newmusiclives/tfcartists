@@ -65,7 +65,7 @@ class AIProviderService {
     const provider = options?.provider || await this.resolveProvider();
     const temperature = options?.temperature || 0.7;
     const maxTokens = options?.maxTokens || 500;
-    const model = options?.model || (provider === "openai" ? "gpt-4o-mini" : "claude-3-5-sonnet-20241022");
+    const model = options?.model || (provider === "openai" ? "gpt-4o-mini" : "claude-sonnet-4-5");
 
     try {
       const { result, duration } = await measureDurationAsync(async () => {
@@ -130,7 +130,7 @@ class AIProviderService {
     const conversationMessages = messages.filter((m) => m.role !== "system");
 
     const response = await anthropic.messages.create({
-      model: model || "claude-3-5-sonnet-20241022",
+      model: model || "claude-sonnet-4-5",
       max_tokens: maxTokens,
       temperature,
       system: systemMessage?.content,
