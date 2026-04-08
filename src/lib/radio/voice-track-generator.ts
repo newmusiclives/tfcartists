@@ -210,7 +210,7 @@ export async function generateVoiceTrackScripts(
         ? [
             {
               role: "user" as const,
-              content: 'Forward intro. DJ: Hank. Station: North Country Radio. Time: morning. Artist: Eric Church. Song: "Drink In My Hand". Two short sentences. Must literally include "Eric Church" and "Drink In My Hand" and "Hank" or "North Country Radio".',
+              content: "DJ: Hank. Artist: Eric Church. Song: Drink In My Hand. Time: morning.",
             },
             {
               role: "assistant" as const,
@@ -218,11 +218,19 @@ export async function generateVoiceTrackScripts(
             },
             {
               role: "user" as const,
-              content: 'Forward intro. DJ: Loretta. Station: North Country Radio. Time: midday. Artist: Carrie Underwood. Song: "Before He Cheats". Two short sentences. Must literally include "Carrie Underwood" and "Before He Cheats" and "Loretta" or "North Country Radio".',
+              content: "DJ: Loretta. Artist: Carrie Underwood. Song: Before He Cheats. Time: midday.",
             },
             {
               role: "assistant" as const,
-              content: 'You\'re locked in with Loretta on North Country Radio. Up next, here\'s Carrie Underwood with "Before He Cheats."',
+              content: 'You\'re locked in with Loretta on North Country Radio. Up next, Carrie Underwood with "Before He Cheats."',
+            },
+            {
+              role: "user" as const,
+              content: "DJ: Doc. Artist: Brad Paisley. Song: Mud On The Tires. Time: afternoon.",
+            },
+            {
+              role: "assistant" as const,
+              content: 'This is Doc on North Country Radio — afternoon drive in full swing. Next up, Brad Paisley with "Mud On The Tires."',
             },
           ]
         : [];
@@ -419,11 +427,12 @@ export function buildSystemPrompt(dj: {
   if (bioLine) prompt += ` ${bioLine}.`;
   prompt += `
 
-You are writing short forward intros to introduce upcoming songs. Speak warmly and naturally, in character, but ALWAYS follow the user's structural template — every intro must name the artist, the song title, and identify yourself or the station. Two short sentences only.`;
+You write short two-sentence radio intros for upcoming songs. The user message gives you the inputs in a compact format (DJ, Artist, Song, Time). Your output:
+  - Sentence 1: identify the DJ or "North Country Radio" (or both). One warm in-character line.
+  - Sentence 2: forward-intro the song. Must literally name the artist and put the song title in quotes. Use "Coming up", "Up next", "Here's", "Now", or "Next up".
 
-  if (dj.catchPhrases) {
-    prompt += `\n\nYour signature phrases (use sparingly): ${dj.catchPhrases}`;
-  }
+The artist and song title from the user message are MANDATORY in your output — every time, no exceptions. Do not write generic vibes. Do not skip the song. Match the format of the prior assistant turns exactly.`;
+
   return prompt;
 }
 
@@ -480,41 +489,9 @@ ${rules}`;
     // Pick the primary artist name (strip featured collabs) so the model
     // doesn't try to recite "Jim Brickman f. Jana Kramer" verbatim.
     const primaryArtist = nextSong.artistName.split(/\s+(?:feat\.?|ft\.?|f\.|with|&|and|x|\/)\s+/i)[0].trim();
-    return `You are writing a forward intro for ${djFirstName} on North Country Radio.
-
-INPUTS:
-- Station: North Country Radio
-- DJ first name: ${djFirstName}
-- Song about to play: "${nextSong.songTitle}"
-- Artist: ${primaryArtist}
-- Time of day: ${timeOfDay}
-
-OUTPUT FORMAT — write EXACTLY two sentences, in this order:
-
-  Sentence 1: A warm, in-character one-line greeting that names EITHER the DJ ("${djFirstName}") OR the station ("North Country Radio"). 6-12 words max.
-  Sentence 2: A forward intro for the song that names BOTH the artist AND the song title. Must start with one of: "Here's", "Up next", "Coming up", "Now", "Next up". 8-15 words. End with a period.
-
-REQUIRED LITERAL STRINGS — your output MUST contain all of these exact strings somewhere:
-  - "${primaryArtist}"
-  - "${nextSong.songTitle}"
-  - Either "${djFirstName}" or "North Country Radio" (or both)
-
-GOOD EXAMPLES (follow this structure):
-  - "You're with ${djFirstName} on a ${timeOfDay} drive. Up next, here's "${nextSong.songTitle}" from ${primaryArtist}."
-  - "This is North Country Radio — ${djFirstName} with you. Coming up, ${primaryArtist} with "${nextSong.songTitle}"."
-  - "${djFirstName} here on North Country Radio. Now here's ${primaryArtist} with "${nextSong.songTitle}"."
-
-BAD EXAMPLES (do NOT do these):
-  - "As the afternoon light fades, there's something about deep cuts..." (NO artist, NO title, NO station/DJ — pure vibes, REJECTED)
-  - "Music has a way of carrying us through the day..." (says nothing concrete, REJECTED)
-
-You MUST use the INPUTS above in your output. The persona below describes HOW to phrase things; it does NOT permit you to omit the song title, artist, or station/DJ identification.
-
-${rules}
-
-TENSE: This song has NOT played yet. NEVER use "that was", "you just heard", "hope you enjoyed". Only forward-looking language.
-
-Output ONLY the two sentences. No labels, no quotes around the whole output, no stage directions.`;
+    // Compact format that matches the few-shot demo turns exactly so Claude
+    // pattern-matches reliably and produces a same-shape response.
+    return `DJ: ${djFirstName}. Artist: ${primaryArtist}. Song: ${nextSong.songTitle}. Time: ${timeOfDay}.`;
   }
 
   if (trackType === "back_announce_intro" && prevSong && nextSong) {
