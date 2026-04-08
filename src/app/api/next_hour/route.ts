@@ -285,6 +285,60 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // --- Drop orphaned voice intros ---
+    // A voice "intro" item exists to introduce the song that immediately
+    // follows it. If the playlist's expected next song was dropped (deactivated,
+    // missing fileUrl, deleted, etc.) the intro becomes orphaned — it would
+    // play "Now here's Clouds by Jim Brickman" and then a totally different
+    // song would play. Filter out any intro whose next_song / next_artist
+    // doesn't match the song that actually follows it in the resolved
+    // hourSequence.
+    const normalize = (s: unknown) =>
+      String(s ?? "")
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .trim();
+    let orphanedIntrosDropped = 0;
+    {
+      const filtered: typeof hourSequence = [];
+      for (let i = 0; i < hourSequence.length; i++) {
+        const item = hourSequence[i];
+        if (item.type === "intro") {
+          // Find the next song item in the sequence
+          let nextSong: (typeof hourSequence)[number] | null = null;
+          for (let j = i + 1; j < hourSequence.length; j++) {
+            if (hourSequence[j].type === "song") {
+              nextSong = hourSequence[j];
+              break;
+            }
+            // Skip imaging/ad/feature/intro between this intro and a song
+          }
+          const expectedTitle = normalize(item.metadata?.next_song);
+          const expectedArtist = normalize(item.metadata?.next_artist);
+          const actualTitle = normalize(nextSong?.metadata?.title);
+          const actualArtist = normalize(nextSong?.metadata?.artist);
+          const matches =
+            !!nextSong &&
+            !!expectedTitle &&
+            !!expectedArtist &&
+            expectedTitle === actualTitle &&
+            expectedArtist === actualArtist;
+          if (!matches) {
+            orphanedIntrosDropped++;
+            continue; // drop the orphaned intro
+          }
+        }
+        filtered.push(item);
+      }
+      hourSequence.length = 0;
+      hourSequence.push(...filtered);
+    }
+    if (orphanedIntrosDropped > 0) {
+      console.log(
+        `[next_hour] Dropped ${orphanedIntrosDropped} orphaned voice intro(s) for hour ${hourOfDay}`,
+      );
+    }
+
     // --- Pad the hour to ≥60 minutes of content ---
     // Clock templates often total 50–58 min. Without padding, the playout
     // queue empties before TOH and re-fetches the same hour, causing the
@@ -404,6 +458,7 @@ export async function GET(request: NextRequest) {
         target_seconds: HOUR_TARGET_SECONDS,
         candidates_found: fillerCandidatesCount,
         filler_added: fillerAdded,
+        orphaned_intros_dropped: orphanedIntrosDropped,
       },
     });
   } catch (error) {
