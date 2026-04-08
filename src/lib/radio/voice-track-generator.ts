@@ -437,26 +437,44 @@ ${rules}`;
   }
 
   if (trackType === "intro" && nextSong) {
-    return `You are writing a FORWARD INTRO for North Country Radio. The song has NOT played yet. You are teasing it BEFORE it starts.
+    // Pick the primary artist name (strip featured collabs) so the model
+    // doesn't try to recite "Jim Brickman f. Jana Kramer" verbatim.
+    const primaryArtist = nextSong.artistName.split(/\s+(?:feat\.?|ft\.?|f\.|with|&|and|x|\/)\s+/i)[0].trim();
+    return `You are writing a forward intro for ${djFirstName} on North Country Radio.
 
-${djFirstName} introduces the NEXT song that is ABOUT TO PLAY:
-"${nextSong.songTitle}" by ${nextSong.artistName}
+INPUTS:
+- Station: North Country Radio
+- DJ first name: ${djFirstName}
+- Song about to play: "${nextSong.songTitle}"
+- Artist: ${primaryArtist}
+- Time of day: ${timeOfDay}
 
-Time of day: ${timeOfDay}.
+OUTPUT FORMAT — write EXACTLY two sentences, in this order:
+
+  Sentence 1: A warm, in-character one-line greeting that names EITHER the DJ ("${djFirstName}") OR the station ("North Country Radio"). 6-12 words max.
+  Sentence 2: A forward intro for the song that names BOTH the artist AND the song title. Must start with one of: "Here's", "Up next", "Coming up", "Now", "Next up". 8-15 words. End with a period.
+
+REQUIRED LITERAL STRINGS — your output MUST contain all of these exact strings somewhere:
+  - "${primaryArtist}"
+  - "${nextSong.songTitle}"
+  - Either "${djFirstName}" or "North Country Radio" (or both)
+
+GOOD EXAMPLES (follow this structure):
+  - "You're with ${djFirstName} on a ${timeOfDay} drive. Up next, here's "${nextSong.songTitle}" from ${primaryArtist}."
+  - "This is North Country Radio — ${djFirstName} with you. Coming up, ${primaryArtist} with "${nextSong.songTitle}"."
+  - "${djFirstName} here on North Country Radio. Now here's ${primaryArtist} with "${nextSong.songTitle}"."
+
+BAD EXAMPLES (do NOT do these):
+  - "As the afternoon light fades, there's something about deep cuts..." (NO artist, NO title, NO station/DJ — pure vibes, REJECTED)
+  - "Music has a way of carrying us through the day..." (says nothing concrete, REJECTED)
+
+You MUST use the INPUTS above in your output. The persona below describes HOW to phrase things; it does NOT permit you to omit the song title, artist, or station/DJ identification.
+
 ${rules}
 
-REQUIRED CONTENT — every intro MUST include all three:
-1. The DJ's name "${djFirstName}" (e.g. "I'm ${djFirstName}" or "${djFirstName} here") OR the station name "North Country Radio" — at least one must appear, and ideally both across the two sentences
-2. The artist name "${nextSong.artistName}" — say it explicitly
-3. The song title "${nextSong.songTitle}" — say it explicitly
+TENSE: This song has NOT played yet. NEVER use "that was", "you just heard", "hope you enjoyed". Only forward-looking language.
 
-GOOD EXAMPLE: "You're locked in with ${djFirstName} on North Country Radio. Up next, here's ${nextSong.artistName} with ${nextSong.songTitle}."
-GOOD EXAMPLE: "This is North Country Radio — coming up, ${nextSong.artistName} with ${nextSong.songTitle}."
-
-CRITICAL TENSE RULES — VIOLATION MEANS FAILURE:
-- MUST start with future/present phrasing: "Coming up..." / "Here's..." / "Next up..." / "Now let's hear..." / "You're listening to..."
-- The words "that was", "you just heard", "we just listened to", "hope you enjoyed" are BANNED — this song has NOT played yet
-- ONLY mention "${nextSong.songTitle}" — do NOT reference any other song`;
+Output ONLY the two sentences. No labels, no quotes around the whole output, no stage directions.`;
   }
 
   if (trackType === "back_announce_intro" && prevSong && nextSong) {
