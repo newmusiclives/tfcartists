@@ -1,11 +1,9 @@
 /**
  * Canonical voice name → provider mapping.
  *
- * Used to normalize the `ttsProvider` column when a voice is selected via
- * UI pickers that don't always update the provider field correctly. The
- * runtime audio path (voice-track-tts.ts) treats legacy "elevenlabs" as
- * Gemini, but persisting the right provider keeps the editor + admin UIs
- * honest and avoids surprises.
+ * ElevenLabs is no longer supported. Voice pickers resolve to "gemini" or
+ * "openai" only; any persisted ttsProvider="elevenlabs" row will throw at
+ * runtime so the row gets fixed instead of silently mis-voicing the station.
  */
 
 export const GEMINI_VOICE_NAMES = new Set([

@@ -238,20 +238,22 @@ export async function generateWithGemini(text: string, voice: string, voiceDirec
 }
 
 /**
- * Generate TTS via Gemini. All voices are Gemini-only — no OpenAI fallback.
- * If Gemini fails the error propagates so the caller can mark the track as
- * failed instead of silently producing OpenAI audio.
- *
- * Legacy "elevenlabs" / "openai" provider rows are treated as Gemini and any
- * OpenAI-style voice name (e.g. "alloy") is remapped to a sensible Gemini
- * default ("Leda").
+ * Generate TTS via Gemini. Gemini is the only supported TTS provider.
+ * ElevenLabs is explicitly refused so bad DB rows fail loudly instead of
+ * being silently remapped. Legacy OpenAI voice names (e.g. "alloy") are
+ * remapped to a sensible Gemini default ("Leda").
  */
 async function generatePcmWithFallback(
   text: string,
-  _provider: string,
+  provider: string,
   voice: string,
   voiceDirection: string | null,
 ): Promise<{ pcm: Buffer; cost: number; usedProvider: string }> {
+  if (provider === "elevenlabs") {
+    throw new Error(
+      `ElevenLabs TTS is not supported — fix the DJ row (voice="${voice}") to use a Gemini voice`,
+    );
+  }
   const openaiVoiceNames = ["alloy", "ash", "ballad", "coral", "echo", "fable", "nova", "onyx", "sage", "shimmer"];
   const isOpenAiVoiceName = voice && openaiVoiceNames.includes(voice.toLowerCase());
   const geminiVoice = (!voice || isOpenAiVoiceName) ? "Leda" : voice;

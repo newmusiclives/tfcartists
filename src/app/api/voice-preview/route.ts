@@ -59,7 +59,10 @@ export async function POST(request: NextRequest) {
     let buffer: Buffer;
     let ext: string;
 
-    if (provider === "gemini" || provider === "elevenlabs") {
+    if (provider === "elevenlabs") {
+      throw new Error("ElevenLabs TTS is no longer supported — use Gemini");
+    }
+    if (provider === "gemini") {
       ({ buffer, ext } = await generateWithGemini(text, voice, voiceDirection));
     } else {
       ({ buffer, ext } = await generateWithOpenAI(text, voice));

@@ -43,10 +43,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const body = await request.json();
     const data = pickFields(body, ALLOWED_FIELDS) as Record<string, unknown>;
 
-    // Normalize ttsProvider from ttsVoice when a recognized voice name is set.
-    // The DJ Editor's voice picker doesn't always sync the provider field
-    // (e.g. legacy rows with ttsProvider="elevenlabs" stay that way even
-    // after picking a Gemini voice from the dropdown).
+    // Normalize ttsProvider from ttsVoice when a recognized voice name is
+    // set. The DJ Editor's voice picker doesn't always sync the provider
+    // field, so we re-resolve from the chosen voice name on every save.
     if (typeof data.ttsVoice === "string") {
       const resolved = resolveTtsProvider(data.ttsVoice);
       if (resolved) data.ttsProvider = resolved;
