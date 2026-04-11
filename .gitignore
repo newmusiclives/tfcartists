@@ -50,3 +50,10 @@ deno.lock
 # Generated audio files (served from R2 in production)
 public/audio/
 .tmp-audio/
+
+# Mureka drop folder — raw downloads stay local; README + example are committed
+drop/mureka-imaging/*.mp3
+drop/mureka-imaging/*.wav
+drop/mureka-imaging/manifest.json
+drop/mureka-imaging/processed/
+drop/mureka-imaging/.tmp/

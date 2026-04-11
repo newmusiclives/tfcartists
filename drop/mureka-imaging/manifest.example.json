@@ -1,0 +1,47 @@
+[
+  {
+    "file": "sung_logo_01.mp3",
+    "folder": "station_female",
+    "category": "openers",
+    "trimStartSec": 8.5,
+    "trimDurationSec": 5.0,
+    "name": "NCR Sung Logo — female upbeat",
+    "prompt": "short sung country radio station ID, female voice, upbeat, 'North Country Radio', 5 seconds"
+  },
+  {
+    "file": "sung_logo_02.mp3",
+    "folder": "station_male",
+    "category": "openers",
+    "trimStartSec": 12.0,
+    "trimDurationSec": 5.0,
+    "name": "NCR Sung Logo — male warm",
+    "prompt": "short sung country radio station ID, male warm baritone, 'North Country Radio'"
+  },
+  {
+    "file": "sung_sweeper_01.mp3",
+    "folder": "station_male",
+    "category": "sweepers",
+    "trimStartSec": 5.0,
+    "trimDurationSec": 4.0,
+    "name": "NCR Sung Sweeper — today and yesterday",
+    "prompt": "sung acoustic country sweeper, male voice, 'the best of today and yesterday'"
+  },
+  {
+    "file": "sung_toh_01.mp3",
+    "folder": "station_female",
+    "category": "toh",
+    "trimStartSec": 15.0,
+    "trimDurationSec": 8.0,
+    "name": "NCR Sung TOH — heart of Americana",
+    "prompt": "sung country radio top of the hour, female, 'North Country Radio — the heart of Americana'"
+  },
+  {
+    "file": "sung_jingle_hank_01.mp3",
+    "folder": "hank_westwood",
+    "category": "openers",
+    "trimStartSec": 10.0,
+    "trimDurationSec": 6.0,
+    "name": "Morning Drive Jingle — Hank Westwood",
+    "prompt": "sung Americana morning drive show jingle, 'Morning Drive with Hank Westwood', warm male voice"
+  }
+]
