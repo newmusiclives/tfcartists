@@ -52,7 +52,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: sanitizeHtml(JSON.stringify(jsonLd)) }}
       />
       {/* Navigation */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
@@ -151,7 +151,7 @@ export default async function HomePage() {
             </span>
           </h1>
 
-          <p className="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 text-lg sm:text-xl text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
             Parker&apos;s team manages day-to-day station operations — programming, music, traffic, and listener services. Riley&apos;s team finds and onboards artists. Cassidy&apos;s team reviews submissions and assigns rotation tiers.
             Elliot&apos;s team builds a passionate listener community. Harper&apos;s team secures sponsors to fund the station.
           </p>
@@ -187,15 +187,15 @@ export default async function HomePage() {
         {/* Team Stats */}
         <div className="mt-16 sm:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-8">
           {/* Row 1: Parker + Riley centered */}
-          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2 lg:col-start-2">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2 lg:col-start-2">
             <div className="flex items-center space-x-3 mb-4">
               <Radio className="w-10 h-10 text-rose-600" />
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Parker&apos;s Team</h3>
-                <p className="text-sm text-gray-600">Station Management</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Station Management</p>
               </div>
             </div>
-            <ul className="space-y-2 text-gray-700">
+            <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
                 <span className="text-rose-600">✓</span>
                 <span>Show scheduling & programming</span>
@@ -219,15 +219,15 @@ export default async function HomePage() {
             </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Users className="w-10 h-10 text-purple-600" />
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Riley's Team</h3>
-                <p className="text-sm text-gray-600">Artist Acquisition</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Artist Acquisition</p>
               </div>
             </div>
-            <ul className="space-y-2 text-gray-700">
+            <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
                 <span className="text-purple-600">✓</span>
                 <span>Discovers emerging artists</span>
@@ -252,15 +252,15 @@ export default async function HomePage() {
           </div>
 
           {/* Row 2: Cassidy, Elliot, Harper */}
-          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Award className="w-10 h-10 text-teal-600" />
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Cassidy's Team</h3>
-                <p className="text-sm text-gray-600">Submission Review</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Submission Review</p>
               </div>
             </div>
-            <ul className="space-y-2 text-gray-700">
+            <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
                 <span className="text-teal-600">✓</span>
                 <span>Expert 6-person review panel</span>
@@ -284,15 +284,15 @@ export default async function HomePage() {
             </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <Target className="w-10 h-10 text-blue-600" />
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Elliot's Team</h3>
-                <p className="text-sm text-gray-600">Listener Growth</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Listener Growth</p>
               </div>
             </div>
-            <ul className="space-y-2 text-gray-700">
+            <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
                 <span className="text-blue-600">✓</span>
                 <span>Viral content creation</span>
@@ -316,15 +316,15 @@ export default async function HomePage() {
             </ul>
           </div>
 
-          <div className="bg-white rounded-xl p-8 shadow-lg lg:col-span-2">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <DollarSign className="w-10 h-10 text-green-600" />
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Harper's Team</h3>
-                <p className="text-sm text-gray-600">Sponsor Acquisition</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Sponsor Acquisition</p>
               </div>
             </div>
-            <ul className="space-y-2 text-gray-700">
+            <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
                 <span className="text-green-600">✓</span>
                 <span>Music-related businesses</span>
@@ -463,11 +463,11 @@ export default async function HomePage() {
               <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Privacy Policy
               </Link>
-              <span className="hidden sm:inline text-gray-600">|</span>
+              <span className="hidden sm:inline text-gray-600 dark:text-zinc-400">|</span>
               <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Terms of Service
               </Link>
-              <span className="hidden sm:inline text-gray-600">|</span>
+              <span className="hidden sm:inline text-gray-600 dark:text-zinc-400">|</span>
               <Link href="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Cookie Policy
               </Link>
@@ -482,10 +482,10 @@ export default async function HomePage() {
 
 function StatCard({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg text-center">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg text-center">
       <div className="flex justify-center mb-4">{icon}</div>
-      <div className="text-3xl font-bold text-gray-900 mb-2">{value}</div>
-      <div className="text-gray-600">{label}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{value}</div>
+      <div className="text-gray-600 dark:text-zinc-400">{label}</div>
     </div>
   );
 }
@@ -497,7 +497,7 @@ function Step({ number, title, description }: { number: string; title: string; d
         {number}
       </div>
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <p className="text-gray-600 dark:text-zinc-400">{description}</p>
     </div>
   );
 }

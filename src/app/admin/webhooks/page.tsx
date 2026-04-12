@@ -144,25 +144,25 @@ export default function WebhooksAdminPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-3">
-            <Link href="/admin" className="text-gray-500 hover:text-gray-700">
+            <Link href="/admin" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <Webhook className="w-7 h-7 text-amber-600" />
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Webhooks</h1>
-              <p className="text-sm text-gray-600">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Webhooks</h1>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">
                 Send real-time events to external services, Zapier, or your CRM
               </p>
             </div>
@@ -207,11 +207,11 @@ export default function WebhooksAdminPage() {
 
         {/* Create form */}
         {showForm && (
-          <div className="bg-white rounded-xl border p-6 mb-6 shadow-sm">
-            <h3 className="font-semibold text-gray-900 mb-4">New Webhook Endpoint</h3>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border p-6 mb-6 shadow-sm">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">New Webhook Endpoint</h3>
             <div className="grid sm:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Name</label>
                 <input
                   type="text"
                   value={formName}
@@ -221,7 +221,7 @@ export default function WebhooksAdminPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">URL</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">URL</label>
                 <input
                   type="url"
                   value={formUrl}
@@ -232,7 +232,7 @@ export default function WebhooksAdminPage() {
               </div>
             </div>
 
-            <label className="block text-sm font-medium text-gray-700 mb-2">Events to Subscribe</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Events to Subscribe</label>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               {Object.entries(WEBHOOK_EVENT_CATEGORIES).map(([key, cat]) => (
                 <div key={key} className="border rounded-lg p-3">
@@ -243,9 +243,9 @@ export default function WebhooksAdminPage() {
                         type="checkbox"
                         checked={formEvents.includes(evt)}
                         onChange={() => toggleEvent(evt)}
-                        className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                        className="rounded border-gray-300 dark:border-zinc-700 text-amber-600 focus:ring-amber-500"
                       />
-                      <span className="text-gray-700">{evt}</span>
+                      <span className="text-gray-700 dark:text-zinc-300">{evt}</span>
                     </label>
                   ))}
                 </div>
@@ -274,22 +274,22 @@ export default function WebhooksAdminPage() {
         {tab === "endpoints" && (
           <div className="space-y-4">
             {endpoints.length === 0 && !showForm && (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
                 <Webhook className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                 <p className="font-medium">No webhook endpoints yet</p>
                 <p className="text-sm mt-1">Add an endpoint to start receiving real-time events</p>
               </div>
             )}
             {endpoints.map((ep) => (
-              <div key={ep.id} className="bg-white rounded-xl border p-5 shadow-sm">
+              <div key={ep.id} className="bg-white dark:bg-zinc-900 rounded-xl border p-5 shadow-sm">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className={`w-2 h-2 rounded-full ${ep.enabled ? "bg-green-500" : "bg-gray-300"}`} />
-                      <h3 className="font-semibold text-gray-900">{ep.name}</h3>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">{ep.name}</h3>
                     </div>
                     <p className="text-sm text-gray-500 font-mono truncate max-w-md">{ep.url}</p>
-                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">
+                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-zinc-500">
                       <span>{ep.events.length} events</span>
                       <span>|</span>
                       <span>Created {new Date(ep.createdAt).toLocaleDateString()}</span>
@@ -313,7 +313,7 @@ export default function WebhooksAdminPage() {
                       <code className="text-xs bg-gray-100 px-2 py-0.5 rounded font-mono">
                         {revealSecrets.has(ep.id) ? ep.secret : "••••••••••••••••"}
                       </code>
-                      <button onClick={() => toggleSecret(ep.id)} className="text-gray-400 hover:text-gray-600">
+                      <button onClick={() => toggleSecret(ep.id)} className="text-gray-400 hover:text-gray-600 dark:text-zinc-400">
                         {revealSecrets.has(ep.id) ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                       </button>
                       <button
@@ -373,25 +373,25 @@ export default function WebhooksAdminPage() {
               </button>
             </div>
             {deliveries.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
                 <p>No deliveries yet. Send a test ping to see results here.</p>
               </div>
             ) : (
-              <div className="bg-white rounded-xl border overflow-hidden">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden">
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50 text-left">
                     <tr>
-                      <th className="px-4 py-3 font-medium text-gray-600">Status</th>
-                      <th className="px-4 py-3 font-medium text-gray-600">Event</th>
-                      <th className="px-4 py-3 font-medium text-gray-600">Endpoint</th>
-                      <th className="px-4 py-3 font-medium text-gray-600">Code</th>
-                      <th className="px-4 py-3 font-medium text-gray-600">Duration</th>
-                      <th className="px-4 py-3 font-medium text-gray-600">Time</th>
+                      <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Status</th>
+                      <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Event</th>
+                      <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Endpoint</th>
+                      <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Code</th>
+                      <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Duration</th>
+                      <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Time</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
                     {deliveries.map((d) => (
-                      <tr key={d.id} className="hover:bg-gray-50">
+                      <tr key={d.id} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
                         <td className="px-4 py-3">
                           {d.status === "success" ? (
                             <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -400,9 +400,9 @@ export default function WebhooksAdminPage() {
                           )}
                         </td>
                         <td className="px-4 py-3 font-mono text-xs">{d.event}</td>
-                        <td className="px-4 py-3 text-gray-700">{d.endpointName}</td>
-                        <td className="px-4 py-3 text-gray-500">{d.statusCode || "-"}</td>
-                        <td className="px-4 py-3 text-gray-500">{d.duration ? `${d.duration}ms` : "-"}</td>
+                        <td className="px-4 py-3 text-gray-700 dark:text-zinc-300">{d.endpointName}</td>
+                        <td className="px-4 py-3 text-gray-500 dark:text-zinc-500">{d.statusCode || "-"}</td>
+                        <td className="px-4 py-3 text-gray-500 dark:text-zinc-500">{d.duration ? `${d.duration}ms` : "-"}</td>
                         <td className="px-4 py-3 text-gray-500 text-xs">
                           {new Date(d.timestamp).toLocaleString()}
                         </td>

@@ -100,7 +100,7 @@ export default function RileyArtistsPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading artists...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading artists...</div>
       </main>
     );
   }
@@ -108,11 +108,11 @@ export default function RileyArtistsPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/riley"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Riley Dashboard</span>
@@ -120,8 +120,8 @@ export default function RileyArtistsPage() {
           <div className="flex items-center space-x-3">
             <Users className="w-8 h-8 text-purple-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Artist Management</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Artist Management</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Manage artist roster and tier tracking - Managed by Marcus Tate
               </p>
             </div>
@@ -159,7 +159,7 @@ export default function RileyArtistsPage() {
         </div>
 
         {/* Tier Distribution */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold mb-4">Artist Distribution by Tier</h2>
           <div className="grid grid-cols-5 gap-4">
             <TierSummaryCard tier="FREE" count={stats.byTier.FREE} capacity={ARTIST_CAPACITY.FREE} />
@@ -171,7 +171,7 @@ export default function RileyArtistsPage() {
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center space-x-4 mb-6">
             <div className="flex-1 relative">
               <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -181,7 +181,7 @@ export default function RileyArtistsPage() {
                 aria-label="Search artists by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
             </div>
             <div className="flex items-center space-x-2">
@@ -190,7 +190,7 @@ export default function RileyArtistsPage() {
                 value={tierFilter}
                 onChange={(e) => setTierFilter(e.target.value as TierFilter)}
                 aria-label="Filter by tier"
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="ALL">All Tiers</option>
                 <option value="FREE">FREE</option>
@@ -205,7 +205,7 @@ export default function RileyArtistsPage() {
           {/* Artists Table */}
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b-2 border-gray-200">
+              <thead className="bg-gray-50 border-b-2 border-gray-200 dark:border-zinc-800">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Artist</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Tier</th>
@@ -216,14 +216,14 @@ export default function RileyArtistsPage() {
                   <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
                 {filteredArtists.map((artist) => (
                   <ArtistRow key={artist.id} artist={artist} onSelect={setSelectedArtist} />
                 ))}
               </tbody>
             </table>
             {filteredArtists.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
                 No artists found matching your criteria
               </div>
             )}
@@ -237,11 +237,11 @@ export default function RileyArtistsPage() {
               <User className="w-8 h-8 text-purple-600" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Marcus Tate</h3>
-              <p className="text-sm text-gray-600 mb-3">Tier Management & Analytics</p>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Marcus Tate</h3>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">Tier Management & Analytics</p>
               <div className="text-sm text-gray-700 space-y-2">
                 <p><strong>Responsibilities:</strong></p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600">
+                <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                   <li>Manage rotation schedules ensuring tier play guarantees</li>
                   <li>Track analytics (play count, listener engagement)</li>
                   <li>Generate monthly reports for artists</li>
@@ -267,13 +267,13 @@ export default function RileyArtistsPage() {
 
 function StatCard({ icon, label, value, subtitle }: { icon: React.ReactNode; label: string; value: string | number; subtitle: string }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -282,10 +282,10 @@ function TierSummaryCard({ tier, count, capacity }: { tier: string; count: numbe
   const percentage = (count / capacity) * 100;
   return (
     <div className="text-center">
-      <div className="text-xs text-gray-500 mb-1">{tier}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500 mb-1">{tier}</div>
       <div className="text-2xl font-bold text-purple-600">{count}</div>
-      <div className="text-xs text-gray-500">of {capacity}</div>
-      <div className="mt-2 bg-gray-200 rounded-full h-2">
+      <div className="text-xs text-gray-500 dark:text-zinc-500">of {capacity}</div>
+      <div className="mt-2 bg-gray-200 dark:bg-zinc-700 rounded-full h-2">
         <div
           className="bg-purple-600 h-2 rounded-full"
           style={{ width: `${percentage}%` }}
@@ -326,10 +326,10 @@ function ArtistRow({ artist, onSelect }: { artist: ReturnType<typeof mapArtist>;
   };
 
   return (
-    <tr className="hover:bg-gray-50">
+    <tr className="hover:bg-gray-50 dark:hover:bg-zinc-800">
       <td className="px-4 py-4">
-        <div className="font-semibold text-gray-900">{artist.name}</div>
-        <div className="text-sm text-gray-500">{artist.email}</div>
+        <div className="font-semibold text-gray-900 dark:text-white">{artist.name}</div>
+        <div className="text-sm text-gray-500 dark:text-zinc-500">{artist.email}</div>
       </td>
       <td className="px-4 py-4">
         <span className={`px-2 py-1 rounded text-xs font-semibold ${tierColors[artist.tier as keyof typeof tierColors] || tierColors.FREE}`}>
@@ -337,11 +337,11 @@ function ArtistRow({ artist, onSelect }: { artist: ReturnType<typeof mapArtist>;
         </span>
       </td>
       <td className="px-4 py-4">
-        <div className="text-sm font-medium text-gray-900">{artist.playsThisMonth}</div>
-        <div className="text-xs text-gray-500">of {AIRPLAY_TIER_PLAYS_PER_MONTH[artist.tier as keyof typeof AIRPLAY_TIER_PLAYS_PER_MONTH]}</div>
+        <div className="text-sm font-medium text-gray-900 dark:text-white">{artist.playsThisMonth}</div>
+        <div className="text-xs text-gray-500 dark:text-zinc-500">of {AIRPLAY_TIER_PLAYS_PER_MONTH[artist.tier as keyof typeof AIRPLAY_TIER_PLAYS_PER_MONTH]}</div>
       </td>
       <td className="px-4 py-4">
-        <div className="text-sm font-medium text-gray-900">{artist.poolShares}</div>
+        <div className="text-sm font-medium text-gray-900 dark:text-white">{artist.poolShares}</div>
       </td>
       <td className="px-4 py-4">
         <div className="text-sm font-semibold text-green-600">${artist.monthlyEarnings.toFixed(2)}</div>
@@ -370,13 +370,13 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b sticky top-0 bg-white z-10">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">{artist.name}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{artist.name}</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-2xl"
+              className="text-gray-400 hover:text-gray-600 dark:text-zinc-400 text-2xl"
             >
               ×
             </button>
@@ -418,7 +418,7 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
             <div className="space-y-6">
               {/* Contact Info */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Contact Information</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Contact Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center space-x-2 text-sm">
                     <Mail className="w-4 h-4 text-gray-400" />
@@ -441,20 +441,20 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
 
               {/* Tier Info */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Subscription Details</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Subscription Details</h3>
                 <div className="bg-purple-50 rounded-lg p-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <div className="text-sm text-gray-600">Current Tier</div>
+                      <div className="text-sm text-gray-600 dark:text-zinc-400">Current Tier</div>
                       <div className="text-2xl font-bold text-purple-600">{artist.tier}</div>
-                      <div className="text-sm text-gray-600 mt-1">
+                      <div className="text-sm text-gray-600 dark:text-zinc-400 mt-1">
                         ${AIRPLAY_TIER_PRICING[artist.tier as keyof typeof AIRPLAY_TIER_PRICING]}/month
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-600">Pool Shares</div>
-                      <div className="text-2xl font-bold text-gray-900">{artist.poolShares}</div>
-                      <div className="text-sm text-gray-600 mt-1">
+                      <div className="text-sm text-gray-600 dark:text-zinc-400">Pool Shares</div>
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">{artist.poolShares}</div>
+                      <div className="text-sm text-gray-600 dark:text-zinc-400 mt-1">
                         {AIRPLAY_TIER_PLAYS_PER_MONTH[artist.tier as keyof typeof AIRPLAY_TIER_PLAYS_PER_MONTH]} plays/month
                       </div>
                     </div>
@@ -464,32 +464,32 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
 
               {/* Performance Stats */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Performance This Month</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Performance This Month</h3>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-gray-50 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-gray-900">{artist.playsThisMonth}</div>
-                    <div className="text-xs text-gray-600">Total Plays</div>
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">{artist.playsThisMonth}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Total Plays</div>
                   </div>
                   <div className="bg-gray-50 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-gray-900">{artist.tracksSubmitted}</div>
-                    <div className="text-xs text-gray-600">Tracks Submitted</div>
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">{artist.tracksSubmitted}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Tracks Submitted</div>
                   </div>
                   <div className="bg-green-50 rounded-lg p-4 text-center">
                     <div className="text-2xl font-bold text-green-600">${artist.monthlyEarnings.toFixed(2)}</div>
-                    <div className="text-xs text-gray-600">Pool Earnings</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Pool Earnings</div>
                   </div>
                 </div>
               </div>
 
               {/* Engagement */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Engagement Level</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Engagement Level</h3>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Current Engagement:</span>
+                    <span className="text-sm text-gray-600 dark:text-zinc-400">Current Engagement:</span>
                     <span className={`px-3 py-1 rounded font-semibold text-sm ${
-                      artist.engagement === "high" ? "bg-green-100 text-green-700" :
-                      artist.engagement === "medium" ? "bg-yellow-100 text-yellow-700" :
+                      artist.engagement === "high" ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" :
+                      artist.engagement === "medium" ? "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400" :
                       "bg-gray-200 text-gray-700"
                     }`}>
                       {artist.engagement.toUpperCase()}
@@ -514,8 +514,8 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
           {activeTab === "tracks" && (
             <div className="text-center py-8">
               <Music className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Track Submission History</h3>
-              <p className="text-sm text-gray-500">Track history will be available once streaming data is connected.</p>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Track Submission History</h3>
+              <p className="text-sm text-gray-500 dark:text-zinc-500">Track history will be available once streaming data is connected.</p>
             </div>
           )}
 
@@ -523,8 +523,8 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
           {activeTab === "plays" && (
             <div className="text-center py-8">
               <BarChart3 className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Monthly Play History</h3>
-              <p className="text-sm text-gray-500">Play history will be available once the Railway streaming backend reports play data.</p>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Monthly Play History</h3>
+              <p className="text-sm text-gray-500 dark:text-zinc-500">Play history will be available once the Railway streaming backend reports play data.</p>
             </div>
           )}
 
@@ -532,28 +532,28 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
           {activeTab === "revenue" && (
             <div className="text-center py-8">
               <DollarSign className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-2">Monthly Revenue History</h3>
-              <p className="text-sm text-gray-500">Revenue tracking will be available once Manifest Financial payments are connected.</p>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Monthly Revenue History</h3>
+              <p className="text-sm text-gray-500 dark:text-zinc-500">Revenue tracking will be available once Manifest Financial payments are connected.</p>
             </div>
           )}
 
           {/* Tier History Tab */}
           {activeTab === "tiers" && (
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Current Tier</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Current Tier</h3>
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-semibold text-gray-900">Current Tier</div>
-                    <div className="text-sm text-gray-500">Since joining</div>
+                    <div className="font-semibold text-gray-900 dark:text-white">Current Tier</div>
+                    <div className="text-sm text-gray-500 dark:text-zinc-500">Since joining</div>
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold text-purple-600">{artist.tier}</div>
-                    <div className="text-sm text-gray-600">${AIRPLAY_TIER_PRICING[artist.tier as keyof typeof AIRPLAY_TIER_PRICING]}/month</div>
+                    <div className="text-sm text-gray-600 dark:text-zinc-400">${AIRPLAY_TIER_PRICING[artist.tier as keyof typeof AIRPLAY_TIER_PRICING]}/month</div>
                   </div>
                 </div>
               </div>
-              <p className="text-sm text-gray-500 mt-3">Full tier progression history will be available in a future update.</p>
+              <p className="text-sm text-gray-500 dark:text-zinc-500 mt-3">Full tier progression history will be available in a future update.</p>
             </div>
           )}
         </div>

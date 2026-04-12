@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { requireAuth } from "@/lib/api/auth";
+import { optionalAuth, requireAuth } from "@/lib/api/auth";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    await requireAuth();
+    await optionalAuth();
     const station = await prisma.station.findFirst({
       where: { isActive: true },
       select: { id: true },

@@ -77,7 +77,7 @@ export default function ViralContentPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading content...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading content...</div>
       </main>
     );
   }
@@ -117,11 +117,11 @@ export default function ViralContentPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/elliot"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Elliot Dashboard</span>
@@ -129,8 +129,8 @@ export default function ViralContentPage() {
           <div className="flex items-center space-x-3">
             <Video className="w-8 h-8 text-purple-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Viral Content Studio</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Viral Content Studio</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Create, track, and optimize content across all platforms
               </p>
             </div>
@@ -169,12 +169,12 @@ export default function ViralContentPage() {
 
         {/* Content Generation Form */}
         {showForm && (
-          <section className="bg-white rounded-xl shadow-lg p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-6">Generate New Content</h2>
             <form onSubmit={handleGenerateContent} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Content Type</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Content Type</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
@@ -188,7 +188,7 @@ export default function ViralContentPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Category</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
@@ -203,7 +203,7 @@ export default function ViralContentPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Artist Name (optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Artist Name (optional)</label>
                   <input
                     type="text"
                     value={formData.artistName}
@@ -213,7 +213,7 @@ export default function ViralContentPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Theme (optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Theme (optional)</label>
                   <input
                     type="text"
                     value={formData.theme}
@@ -244,11 +244,11 @@ export default function ViralContentPage() {
         )}
 
         {/* Content Library */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Content Library</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 {content.length} pieces of content
               </p>
             </div>
@@ -282,7 +282,7 @@ export default function ViralContentPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
                 No content yet. Generate your first piece of viral content.
               </div>
             )}
@@ -291,7 +291,7 @@ export default function ViralContentPage() {
 
         {/* Platform Breakdown */}
         {Object.keys(platforms).length > 0 && (
-          <section className="bg-white rounded-xl shadow-lg p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-6">Performance by Platform</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -325,13 +325,13 @@ export default function ViralContentPage() {
 
 function MetricCard({ icon, label, value, subtitle }: { icon: React.ReactNode; label: string; value: string | number; subtitle: string }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -354,7 +354,7 @@ function ContentCard({ title, platform, creator, publishedDate, views, likes, sh
     viral: { bg: "bg-purple-100", text: "text-purple-700", label: "Viral", border: "border-purple-300" },
     performing: { bg: "bg-green-100", text: "text-green-700", label: "Performing", border: "border-green-300" },
     growing: { bg: "bg-blue-100", text: "text-blue-700", label: "Growing", border: "border-blue-300" },
-    new: { bg: "bg-gray-100", text: "text-gray-700", label: "New", border: "border-gray-300" },
+    new: { bg: "bg-gray-100", text: "text-gray-700", label: "New", border: "border-gray-300 dark:border-zinc-700" },
   };
   const config = statusConfig[status];
   const isViral = views >= viralThreshold;
@@ -366,13 +366,13 @@ function ContentCard({ title, platform, creator, publishedDate, views, likes, sh
           <Video className="w-10 h-10 text-purple-400 flex-shrink-0" />
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="text-lg font-bold text-gray-900">{title}</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h3>
               <span className={`text-xs px-2 py-1 rounded-full ${config.bg} ${config.text} font-medium`}>
                 {config.label}
               </span>
             </div>
-            <p className="text-sm text-gray-600 mb-2">{description}</p>
-            <div className="flex items-center space-x-4 text-xs text-gray-500">
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{description}</p>
+            <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
               <span>{platform}</span>
               <span>•</span>
               <span>By {creator}</span>
@@ -385,39 +385,39 @@ function ContentCard({ title, platform, creator, publishedDate, views, likes, sh
 
       <div className="grid grid-cols-5 gap-4 text-center">
         <div>
-          <div className="flex items-center justify-center space-x-1 text-gray-600 mb-1">
+          <div className="flex items-center justify-center space-x-1 text-gray-600 dark:text-zinc-400 mb-1">
             <Eye className="w-4 h-4" />
           </div>
-          <div className="text-lg font-bold text-gray-900">{views >= 1000 ? `${(views / 1000).toFixed(0)}k` : views}</div>
-          <div className="text-xs text-gray-500">Views</div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white">{views >= 1000 ? `${(views / 1000).toFixed(0)}k` : views}</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">Views</div>
         </div>
         <div>
-          <div className="flex items-center justify-center space-x-1 text-gray-600 mb-1">
+          <div className="flex items-center justify-center space-x-1 text-gray-600 dark:text-zinc-400 mb-1">
             <Heart className="w-4 h-4" />
           </div>
-          <div className="text-lg font-bold text-gray-900">{likes >= 1000 ? `${(likes / 1000).toFixed(1)}k` : likes}</div>
-          <div className="text-xs text-gray-500">Likes</div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white">{likes >= 1000 ? `${(likes / 1000).toFixed(1)}k` : likes}</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">Likes</div>
         </div>
         <div>
-          <div className="flex items-center justify-center space-x-1 text-gray-600 mb-1">
+          <div className="flex items-center justify-center space-x-1 text-gray-600 dark:text-zinc-400 mb-1">
             <Share2 className="w-4 h-4" />
           </div>
-          <div className="text-lg font-bold text-gray-900">{shares >= 1000 ? `${(shares / 1000).toFixed(1)}k` : shares}</div>
-          <div className="text-xs text-gray-500">Shares</div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white">{shares >= 1000 ? `${(shares / 1000).toFixed(1)}k` : shares}</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">Shares</div>
         </div>
         <div>
-          <div className="flex items-center justify-center space-x-1 text-gray-600 mb-1">
+          <div className="flex items-center justify-center space-x-1 text-gray-600 dark:text-zinc-400 mb-1">
             <MessageCircle className="w-4 h-4" />
           </div>
-          <div className="text-lg font-bold text-gray-900">{comments}</div>
-          <div className="text-xs text-gray-500">Comments</div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white">{comments}</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">Comments</div>
         </div>
         <div>
-          <div className="flex items-center justify-center space-x-1 text-gray-600 mb-1">
+          <div className="flex items-center justify-center space-x-1 text-gray-600 dark:text-zinc-400 mb-1">
             <TrendingUp className="w-4 h-4" />
           </div>
           <div className="text-lg font-bold text-green-600">+{conversions}</div>
-          <div className="text-xs text-gray-500">Listeners</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">Listeners</div>
         </div>
       </div>
     </div>

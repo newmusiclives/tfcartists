@@ -15,6 +15,7 @@ import {
   Loader2,
   DollarSign,
   Headphones,
+  Clock,
 } from "lucide-react";
 
 interface StationData {
@@ -146,25 +147,25 @@ export default function NetworkPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <main className="min-h-screen bg-gray-950 text-gray-100">
       {/* Navigation */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b border-white/10 bg-gray-950/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <Globe className="w-6 h-6 text-amber-700" />
-              <span className="font-bold text-xl text-gray-900">
+              <Globe className="w-6 h-6 text-amber-400" />
+              <span className="font-bold text-xl text-white">
                 TrueFans RADIO Network
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/" className="text-gray-400 hover:text-white transition-colors">
                 Home
               </Link>
-              <Link href="/station" className="text-amber-700 hover:text-amber-800 font-medium transition-colors">
+              <Link href="/station" className="text-amber-400 hover:text-amber-300 font-medium transition-colors">
                 NCR
               </Link>
-              <Link href="/management" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/management" className="text-gray-400 hover:text-white transition-colors">
                 Management
               </Link>
             </div>
@@ -174,26 +175,26 @@ export default function NetworkPage() {
 
       {/* Hero */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <div className="inline-flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+        <div className="inline-flex items-center space-x-2 bg-amber-500/15 text-amber-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
           <Globe className="w-4 h-4" />
-          <span>AI-Powered Radio Network</span>
+          <span>Independent Radio Network</span>
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
           TrueFans RADIO
           <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-orange-600 to-red-600">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500">
             Network
           </span>
         </h1>
 
-        <p className="text-2xl text-gray-700 max-w-3xl mx-auto mb-4">
-          AI-Powered Radio Stations for Every Genre and Community
+        <p className="text-2xl text-gray-700 dark:text-zinc-300 max-w-3xl mx-auto mb-4">
+          Radio Stations for Every Genre and Community
         </p>
 
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto">
           A growing network of independent radio stations, each run by a
-          dedicated operator and powered by 4 AI teams. Every station champions
+          dedicated operator and supported by smart automation. Every station champions
           independent artists and builds real community around music.
         </p>
       </section>
@@ -202,30 +203,30 @@ export default function NetworkPage() {
       {!loading && networkStats.totalStations > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="bg-white rounded-xl p-5 shadow-sm border text-center">
+            <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <Radio className="w-6 h-6 text-amber-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{networkStats.totalStations}</div>
-              <div className="text-xs text-gray-500">Active Stations</div>
+              <div className="text-2xl font-bold text-amber-400">{networkStats.totalStations}</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500">Active Stations</div>
             </div>
-            <div className="bg-white rounded-xl p-5 shadow-sm border text-center">
+            <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <Users className="w-6 h-6 text-purple-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{networkStats.totalArtists}</div>
-              <div className="text-xs text-gray-500">Artists</div>
+              <div className="text-2xl font-bold text-amber-400">{networkStats.totalArtists}</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500">Artists</div>
             </div>
-            <div className="bg-white rounded-xl p-5 shadow-sm border text-center">
+            <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <Headphones className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{networkStats.totalListeners}</div>
-              <div className="text-xs text-gray-500">Listeners</div>
+              <div className="text-2xl font-bold text-amber-400">{networkStats.totalListeners}</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500">Listeners</div>
             </div>
-            <div className="bg-white rounded-xl p-5 shadow-sm border text-center">
+            <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <Music className="w-6 h-6 text-teal-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">{networkStats.totalSongs.toLocaleString()}</div>
-              <div className="text-xs text-gray-500">Songs</div>
+              <div className="text-2xl font-bold text-amber-400">{networkStats.totalSongs.toLocaleString()}</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500">Songs</div>
             </div>
-            <div className="bg-white rounded-xl p-5 shadow-sm border text-center">
+            <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <DollarSign className="w-6 h-6 text-green-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-900">${networkStats.totalRevenue.toLocaleString()}</div>
-              <div className="text-xs text-gray-500">Monthly Revenue</div>
+              <div className="text-2xl font-bold text-amber-400">${networkStats.totalRevenue.toLocaleString()}</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500">Monthly Revenue</div>
             </div>
           </div>
         </section>
@@ -233,10 +234,10 @@ export default function NetworkPage() {
 
       {/* Station Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">
+        <h2 className="text-3xl font-bold text-center mb-4 text-white">
           Station Lineup
         </h2>
-        <p className="text-center text-gray-600 mb-12 max-w-xl mx-auto">
+        <p className="text-center text-gray-600 dark:text-zinc-400 mb-12 max-w-xl mx-auto">
           {loading ? "Loading stations..." : `${stations.filter((s) => s.isActive).length} station${stations.filter((s) => s.isActive).length !== 1 ? "s" : ""} live. More coming as the network grows.`}
         </p>
 
@@ -252,7 +253,7 @@ export default function NetworkPage() {
               return (
                 <div
                   key={station.id}
-                  className="relative bg-gradient-to-br from-amber-100 via-amber-50 to-orange-100 rounded-2xl shadow-lg border-2 overflow-hidden"
+                  className="relative bg-gradient-to-br from-amber-900/30 via-gray-900 to-orange-900/20 rounded-2xl border border-amber-500/20 overflow-hidden"
                   style={{ borderColor: station.primaryColor || "#d97706" }}
                 >
                   <div className="absolute top-4 right-4">
@@ -265,7 +266,7 @@ export default function NetworkPage() {
                     <div className="flex items-center space-x-3 mb-4">
                       <Radio className="w-10 h-10" style={{ color: station.primaryColor || "#b45309" }} />
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-900">{station.name}</h3>
+                        <h3 className="text-2xl font-bold text-amber-400">{station.name}</h3>
                         {station.callSign && (
                           <span className="text-sm font-mono font-bold" style={{ color: station.primaryColor || "#b45309" }}>
                             {station.callSign}
@@ -276,22 +277,22 @@ export default function NetworkPage() {
                     {station.tagline && (
                       <p className="text-gray-700 italic mb-2">&ldquo;{station.tagline}&rdquo;</p>
                     )}
-                    <p className="text-gray-600 text-sm mb-4">{station.genre}</p>
+                    <p className="text-gray-600 dark:text-zinc-400 text-sm mb-4">{station.genre}</p>
 
                     {/* Live KPIs */}
                     {kpi && (
                       <div className="grid grid-cols-3 gap-2 mb-4">
-                        <div className="bg-white/60 rounded-lg p-2 text-center">
-                          <div className="text-lg font-bold text-gray-900">{kpi.kpis.artistCount}</div>
-                          <div className="text-[10px] text-gray-500">Artists</div>
+                        <div className="bg-white/10 rounded-lg p-2 text-center">
+                          <div className="text-lg font-bold text-amber-400">{kpi.kpis.artistCount}</div>
+                          <div className="text-[10px] text-gray-500 dark:text-zinc-500">Artists</div>
                         </div>
-                        <div className="bg-white/60 rounded-lg p-2 text-center">
-                          <div className="text-lg font-bold text-gray-900">{kpi.kpis.listenerCount}</div>
-                          <div className="text-[10px] text-gray-500">Listeners</div>
+                        <div className="bg-white/10 rounded-lg p-2 text-center">
+                          <div className="text-lg font-bold text-amber-400">{kpi.kpis.listenerCount}</div>
+                          <div className="text-[10px] text-gray-500 dark:text-zinc-500">Listeners</div>
                         </div>
-                        <div className="bg-white/60 rounded-lg p-2 text-center">
-                          <div className="text-lg font-bold text-gray-900">{kpi.kpis.songCount.toLocaleString()}</div>
-                          <div className="text-[10px] text-gray-500">Songs</div>
+                        <div className="bg-white/10 rounded-lg p-2 text-center">
+                          <div className="text-lg font-bold text-amber-400">{kpi.kpis.songCount.toLocaleString()}</div>
+                          <div className="text-[10px] text-gray-500 dark:text-zinc-500">Songs</div>
                         </div>
                       </div>
                     )}
@@ -313,13 +314,13 @@ export default function NetworkPage() {
             {futureStations.map((station) => (
               <div
                 key={station.callsign}
-                className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 p-8 hover:border-amber-300 hover:shadow-md transition-all"
+                className="bg-gray-800/30 rounded-2xl border border-white/10 p-8 hover:border-amber-500/30 transition-all"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <Radio className="w-8 h-8 text-gray-400" />
                     <div>
-                      <h3 className="text-lg font-bold text-gray-700">
+                      <h3 className="text-lg font-bold text-gray-400">
                         {station.name}
                       </h3>
                       <span className="text-xs font-mono font-bold text-gray-400">
@@ -329,13 +330,10 @@ export default function NetworkPage() {
                   </div>
                 </div>
                 <p className="text-gray-500 text-sm mb-4">{station.genre}</p>
-                <Link
-                  href="/station-admin/wizard"
-                  className="inline-flex items-center space-x-1 bg-amber-100 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-amber-200 transition-colors"
-                >
-                  <Radio className="w-3 h-3" />
-                  <span>Operate This Station</span>
-                </Link>
+                <span className="inline-flex items-center space-x-1 bg-white/5 text-gray-500 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/10">
+                  <Clock className="w-3 h-3" />
+                  <span>Coming Soon</span>
+                </span>
               </div>
             ))}
           </div>
@@ -343,14 +341,14 @@ export default function NetworkPage() {
       </section>
 
       {/* The 4 AI Teams */}
-      <section className="bg-white py-20">
+      <section className="border-t border-white/5 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">
-            Every Station Gets 4 AI Teams
+          <h2 className="text-3xl font-bold text-center mb-4 text-white">
+            Every Station Gets a Full Operations Team
           </h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Each station in the TrueFans RADIO Network is powered by the same
-            proven model: 4 specialized AI teams that handle everything from
+          <p className="text-center text-gray-600 dark:text-zinc-400 mb-12 max-w-2xl mx-auto">
+            Each station in the TrueFans RADIO Network runs on the same
+            proven model: 4 specialized teams that handle everything from
             artist relations to growth analytics.
           </p>
 
@@ -364,7 +362,7 @@ export default function NetworkPage() {
                     : team.color === "green"
                     ? "bg-green-50 border-green-200"
                     : team.color === "amber"
-                    ? "bg-amber-50 border-amber-200"
+                    ? "bg-amber-500/10 border-amber-500/20"
                     : "bg-blue-50 border-blue-200"
                 }`}
               >
@@ -381,7 +379,7 @@ export default function NetworkPage() {
                 >
                   {team.icon}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-1">
+                <h3 className="text-xl font-bold text-white mb-1">
                   {team.name}
                 </h3>
                 <p
@@ -397,14 +395,14 @@ export default function NetworkPage() {
                 >
                   {team.role}
                 </p>
-                <p className="text-gray-600 text-sm">{team.description}</p>
+                <p className="text-gray-600 dark:text-zinc-400 text-sm">{team.description}</p>
               </div>
             ))}
           </div>
 
           <div className="mt-12 text-center">
-            <div className="inline-flex items-center space-x-4 bg-gradient-to-r from-amber-100 to-orange-100 px-8 py-4 rounded-xl border border-amber-200">
-              <TrendingUp className="w-6 h-6 text-amber-700" />
+            <div className="inline-flex items-center space-x-4 bg-amber-500/10 px-8 py-4 rounded-xl border border-amber-500/20">
+              <TrendingUp className="w-6 h-6 text-amber-400" />
               <p className="text-amber-900 font-medium">
                 Same 4 teams. Same playbook. Every station. Infinitely
                 replicable.
@@ -415,7 +413,7 @@ export default function NetworkPage() {
       </section>
 
       {/* Operate a Station CTA */}
-      <section className="bg-gradient-to-r from-amber-700 via-amber-800 to-orange-900 text-white py-20">
+      <section className="border-t border-white/5 bg-gradient-to-b from-gray-900 to-gray-950 py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <Megaphone className="w-12 h-12 text-amber-300 mx-auto mb-6" />
           <h2 className="text-4xl font-bold mb-6">
@@ -423,20 +421,20 @@ export default function NetworkPage() {
           </h2>
           <p className="text-xl text-amber-100 mb-8 max-w-2xl mx-auto">
             Join the TrueFans RADIO Network as a station operator. We provide
-            the AI teams, the platform, and the audience. You bring the genre
+            the operations teams, the platform, and the audience. You bring the genre
             expertise and local community.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/station-admin/wizard"
-              className="inline-flex items-center space-x-2 bg-white text-amber-800 px-8 py-4 rounded-lg text-lg font-bold hover:bg-amber-50 transition-colors shadow-xl"
+              className="inline-flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-gray-950 px-8 py-4 rounded-lg text-lg font-bold transition-colors shadow-xl"
             >
               <Radio className="w-5 h-5" />
               <span>Create a Station</span>
             </Link>
             <a
               href="mailto:operate@truefansradio.com?subject=Station%20Operator%20Inquiry"
-              className="inline-flex items-center space-x-2 border-2 border-white/50 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-white/10 transition-colors"
+              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-white/10 transition-colors"
             >
               <Mail className="w-5 h-5" />
               <span>Contact Us</span>
@@ -446,7 +444,7 @@ export default function NetworkPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
+      <footer className="bg-gray-950 border-t border-white/5 text-gray-500 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-4">
             <span className="text-2xl font-bold text-white">
@@ -457,7 +455,7 @@ export default function NetworkPage() {
             Real music. Real communities. Real support.
           </p>
           <p className="text-sm">
-            Powered by <strong>Riley</strong>, <strong>Harper</strong>,{" "}
+            Built by <strong>Riley</strong>, <strong>Harper</strong>,{" "}
             <strong>Cassidy</strong>, and <strong>Elliot</strong>
           </p>
           <p className="text-xs mt-4">

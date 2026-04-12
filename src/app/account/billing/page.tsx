@@ -110,7 +110,7 @@ export default function BillingPage() {
       <div className="min-h-screen bg-stone-50">
         <SharedNav />
         <div className="max-w-md mx-auto px-4 py-16 text-center">
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
             <Shield className="w-12 h-12 text-stone-400 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-stone-900 mb-2">
               Sign In Required
@@ -157,7 +157,7 @@ export default function BillingPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
         {/* Current Plan */}
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Building2 className="w-5 h-5 text-amber-700" />
@@ -166,7 +166,7 @@ export default function BillingPage() {
               </h2>
             </div>
             {planPrice > 0 && (
-              <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+              <span className="px-3 py-1 bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full">
                 Active
               </span>
             )}
@@ -225,7 +225,7 @@ export default function BillingPage() {
         </div>
 
         {/* Payment Method */}
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6">
           <div className="flex items-center gap-2 mb-4">
             <CreditCard className="w-5 h-5 text-amber-700" />
             <h2 className="text-lg font-bold text-stone-900">
@@ -257,7 +257,7 @@ export default function BillingPage() {
         </div>
 
         {/* Billing History */}
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6">
           <div className="flex items-center gap-2 mb-4">
             <FileText className="w-5 h-5 text-amber-700" />
             <h2 className="text-lg font-bold text-stone-900">
@@ -304,9 +304,9 @@ export default function BillingPage() {
                         <span
                           className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
                             item.status === "paid"
-                              ? "bg-green-100 text-green-700"
+                              ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
                               : item.status === "pending"
-                                ? "bg-amber-100 text-amber-700"
+                                ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400"
                                 : "bg-stone-100 text-stone-600"
                           }`}
                         >
@@ -332,7 +332,7 @@ export default function BillingPage() {
 
         {/* Cancel Subscription */}
         {planPrice > 0 && (
-          <div className="bg-white rounded-xl shadow-md p-6 border border-red-100">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6 border border-red-100">
             <div className="flex items-center gap-2 mb-2">
               <AlertTriangle className="w-5 h-5 text-red-600" />
               <h2 className="text-lg font-bold text-stone-900">
@@ -357,7 +357,7 @@ export default function BillingPage() {
       {/* Cancel Confirmation Dialog */}
       {showCancelDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-stone-900">
                 Cancel Subscription?
@@ -380,7 +380,7 @@ export default function BillingPage() {
               disabled.
             </p>
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
-              <p className="text-sm text-amber-800">
+              <p className="text-sm text-amber-800 dark:text-amber-400">
                 To cancel your subscription, please contact support at{" "}
                 <a
                   href="mailto:support@truefans.fm"

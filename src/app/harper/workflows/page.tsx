@@ -327,27 +327,27 @@ export default function HarperWorkflows() {
 
   const getStatusColor = (status: WorkflowStatus) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-700';
-      case 'paused': return 'bg-yellow-100 text-yellow-700';
+      case 'active': return 'bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400';
+      case 'paused': return 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400';
       case 'draft': return 'bg-gray-100 text-gray-700';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-zinc-900 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700">
+                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
-                <h1 className="text-2xl font-bold text-gray-900">Automated Workflows</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Automated Workflows</h1>
               </div>
-              <p className="text-gray-600 mt-1">Blake Morrison - Sponsor Acquisition Automation</p>
+              <p className="text-gray-600 dark:text-zinc-400 mt-1">Blake Morrison - Sponsor Acquisition Automation</p>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -370,7 +370,7 @@ export default function HarperWorkflows() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live workflow data will appear once automation is connected.
         </div>
       </div>
@@ -378,37 +378,37 @@ export default function HarperWorkflows() {
       {/* Stats */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Enrolled</p>
-                <p className="text-2xl font-bold text-gray-900">{totalEnrolled}</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Total Enrolled</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalEnrolled}</p>
               </div>
               <Users className="w-8 h-8 text-blue-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Currently Active</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Currently Active</p>
                 <p className="text-2xl font-bold text-green-600">{totalActive}</p>
               </div>
               <Play className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Converted</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Total Converted</p>
                 <p className="text-2xl font-bold text-purple-600">{totalConverted}</p>
               </div>
               <CheckCircle className="w-8 h-8 text-purple-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Avg Conversion</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Avg Conversion</p>
                 <p className="text-2xl font-bold text-green-600">{avgConversionRate.toFixed(1)}%</p>
               </div>
               <TrendingUp className="w-8 h-8 text-green-600" />
@@ -419,18 +419,18 @@ export default function HarperWorkflows() {
         {/* Workflows List */}
         <div className="space-y-6">
           {workflows.map((workflow) => (
-            <div key={workflow.id} className="bg-white border rounded-lg overflow-hidden">
+            <div key={workflow.id} className="bg-white dark:bg-zinc-900 border rounded-lg overflow-hidden">
               <div className="p-6 border-b">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <h3 className="text-xl font-bold text-gray-900">{workflow.name}</h3>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">{workflow.name}</h3>
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(workflow.status)}`}>
                         {workflow.status}
                       </span>
                     </div>
-                    <p className="text-gray-600 mb-2">{workflow.description}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-gray-600 dark:text-zinc-400 mb-2">{workflow.description}</p>
+                    <p className="text-sm text-gray-500 dark:text-zinc-500">
                       <span className="font-medium">Trigger:</span> {workflow.trigger}
                     </p>
                   </div>
@@ -445,23 +445,23 @@ export default function HarperWorkflows() {
                 {/* Stats Row */}
                 <div className="grid grid-cols-5 gap-4 mt-4">
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Enrolled</p>
-                    <p className="text-lg font-bold text-gray-900">{workflow.stats.enrolled}</p>
+                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Enrolled</p>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">{workflow.stats.enrolled}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Active</p>
+                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Active</p>
                     <p className="text-lg font-bold text-green-600">{workflow.stats.active}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Completed</p>
+                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Completed</p>
                     <p className="text-lg font-bold text-blue-600">{workflow.stats.completed}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Converted</p>
+                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Converted</p>
                     <p className="text-lg font-bold text-purple-600">{workflow.stats.converted}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Conv. Rate</p>
+                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Conv. Rate</p>
                     <p className="text-lg font-bold text-green-600">{workflow.stats.conversionRate}%</p>
                   </div>
                 </div>
@@ -470,12 +470,12 @@ export default function HarperWorkflows() {
               {/* Workflow Steps (Expandable) */}
               {selectedWorkflow?.id === workflow.id && (
                 <div className="p-6 bg-gray-50">
-                  <h4 className="font-semibold text-gray-900 mb-4">Workflow Steps</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Workflow Steps</h4>
                   <div className="space-y-4">
                     {workflow.steps.map((step, index) => (
                       <div key={index} className="flex items-start space-x-4">
                         <div className="flex-shrink-0">
-                          <div className="w-10 h-10 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-full bg-white border-2 border-gray-300 dark:border-zinc-700 flex items-center justify-center">
                             {getStepIcon(step.type)}
                           </div>
                           {index < workflow.steps.length - 1 && (
@@ -484,17 +484,17 @@ export default function HarperWorkflows() {
                         </div>
                         <div className="flex-1 bg-white p-4 rounded-lg border">
                           <div className="flex items-center justify-between mb-1">
-                            <h5 className="font-semibold text-gray-900">{step.title}</h5>
+                            <h5 className="font-semibold text-gray-900 dark:text-white">{step.title}</h5>
                             {step.delay && (
-                              <span className="text-sm text-gray-500">{step.delay}</span>
+                              <span className="text-sm text-gray-500 dark:text-zinc-500">{step.delay}</span>
                             )}
                           </div>
                           {step.description && (
-                            <p className="text-sm text-gray-600 mb-2">{step.description}</p>
+                            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{step.description}</p>
                           )}
                           {step.template && (
                             <div className="bg-gray-50 p-3 rounded text-sm text-gray-700 mt-2">
-                              <p className="font-medium text-xs text-gray-500 mb-1">Email Template:</p>
+                              <p className="font-medium text-xs text-gray-500 dark:text-zinc-500 mb-1">Email Template:</p>
                               <p className="italic">{step.template}</p>
                             </div>
                           )}

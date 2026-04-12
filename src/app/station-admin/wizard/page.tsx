@@ -430,13 +430,13 @@ export default function StationWizard() {
   // ---------------------------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Create Your Station
         </h1>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 dark:text-zinc-400 mb-8">
           Set up your AI radio station in 5 easy steps
         </p>
 
@@ -510,17 +510,17 @@ export default function StationWizard() {
         {/* ================================================================ */}
         {/* Step Content Card                                                 */}
         {/* ================================================================ */}
-        <div className="bg-white rounded-xl p-6 sm:p-8 shadow-sm border min-h-[420px]">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 sm:p-8 shadow-sm border min-h-[420px]">
           {/* ============================================================== */}
           {/* STEP 0 — Station Setup                                          */}
           {/* ============================================================== */}
           {step === 0 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-1">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                   Station Setup
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Give your station an identity
                 </p>
               </div>
@@ -528,7 +528,7 @@ export default function StationWizard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* Station Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                     Station Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -537,14 +537,14 @@ export default function StationWizard() {
                     onChange={(e) =>
                       setStation({ ...station, name: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                    className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                     placeholder="North Country Radio"
                   />
                 </div>
 
                 {/* Tagline */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                     Tagline
                   </label>
                   <input
@@ -553,14 +553,14 @@ export default function StationWizard() {
                     onChange={(e) =>
                       setStation({ ...station, tagline: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                    className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                     placeholder="Where the music finds you"
                   />
                 </div>
 
                 {/* Genre */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                     Genre <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -568,7 +568,7 @@ export default function StationWizard() {
                     onChange={(e) =>
                       setStation({ ...station, genre: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                    className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                   >
                     {GENRE_PRESETS.map((g) => (
                       <option key={g} value={g}>
@@ -580,7 +580,7 @@ export default function StationWizard() {
 
                 {/* Timezone */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                     Timezone
                   </label>
                   <select
@@ -588,7 +588,7 @@ export default function StationWizard() {
                     onChange={(e) =>
                       setStation({ ...station, timezone: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                    className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                   >
                     {TIMEZONE_OPTIONS.map((tz) => (
                       <option key={tz.value} value={tz.value}>
@@ -607,16 +607,16 @@ export default function StationWizard() {
                       <Radio className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900">
+                      <h3 className="font-bold text-gray-900 dark:text-white">
                         {station.name}
                       </h3>
                       {station.tagline && (
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 dark:text-zinc-500">
                           {station.tagline}
                         </p>
                       )}
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">
+                        <span className="text-xs bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-medium">
                           {station.genre}
                         </span>
                         <span className="text-xs text-gray-400">
@@ -640,10 +640,10 @@ export default function StationWizard() {
           {step === 1 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-1">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                   Import Music
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Upload a CSV with your music catalog, or skip and add music
                   later
                 </p>
@@ -678,9 +678,9 @@ export default function StationWizard() {
               ) : (
                 <>
                   {/* File upload area */}
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-amber-400 transition-colors">
+                  <div className="border-2 border-dashed border-gray-300 dark:border-zinc-700 rounded-xl p-8 text-center hover:border-amber-400 transition-colors">
                     <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-                    <p className="font-medium text-gray-700 mb-1">
+                    <p className="font-medium text-gray-700 dark:text-zinc-300 mb-1">
                       Drop your CSV file here or click to upload
                     </p>
                     <p className="text-xs text-gray-400 mb-4">
@@ -700,13 +700,13 @@ export default function StationWizard() {
 
                   {/* Or paste CSV */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                       Or paste CSV data directly
                     </label>
                     <textarea
                       value={csvText}
                       onChange={(e) => handleCsvPaste(e.target.value)}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                      className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                       rows={6}
                       placeholder={`title,artist,album,genre,duration\nHarvest Moon,Neil Young,Harvest Moon,Americana,312\nJolene,Dolly Parton,Jolene,Country,162`}
                     />
@@ -716,7 +716,7 @@ export default function StationWizard() {
                   {parsedSongs.length > 0 && (
                     <div className="border rounded-xl overflow-hidden">
                       <div className="px-4 py-3 bg-gray-50 border-b flex items-center justify-between">
-                        <h4 className="font-medium text-sm text-gray-700">
+                        <h4 className="font-medium text-sm text-gray-700 dark:text-zinc-300">
                           Preview ({parsedSongs.length} songs found)
                         </h4>
                         <button
@@ -733,39 +733,39 @@ export default function StationWizard() {
                         <table className="w-full text-sm">
                           <thead className="bg-gray-50 sticky top-0">
                             <tr>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
                                 Title
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
                                 Artist
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
                                 Album
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
                                 Genre
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
                                 Duration
                               </th>
                             </tr>
                           </thead>
                           <tbody className="divide-y">
                             {parsedSongs.slice(0, 15).map((song, i) => (
-                              <tr key={i} className="hover:bg-gray-50">
+                              <tr key={i} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
                                 <td className="px-4 py-2 font-medium">
                                   {song.title}
                                 </td>
-                                <td className="px-4 py-2 text-gray-600">
+                                <td className="px-4 py-2 text-gray-600 dark:text-zinc-400">
                                   {song.artist}
                                 </td>
-                                <td className="px-4 py-2 text-gray-500">
+                                <td className="px-4 py-2 text-gray-500 dark:text-zinc-500">
                                   {song.album || "--"}
                                 </td>
-                                <td className="px-4 py-2 text-gray-500">
+                                <td className="px-4 py-2 text-gray-500 dark:text-zinc-500">
                                   {song.genre || "--"}
                                 </td>
-                                <td className="px-4 py-2 text-gray-500">
+                                <td className="px-4 py-2 text-gray-500 dark:text-zinc-500">
                                   {song.duration || "--"}
                                 </td>
                               </tr>
@@ -774,7 +774,7 @@ export default function StationWizard() {
                         </table>
                       </div>
                       {parsedSongs.length > 15 && (
-                        <div className="px-4 py-2 bg-gray-50 border-t text-xs text-gray-500">
+                        <div className="px-4 py-2 bg-gray-50 border-t text-xs text-gray-500 dark:text-zinc-500">
                           Showing 15 of {parsedSongs.length} songs
                         </div>
                       )}
@@ -800,17 +800,17 @@ export default function StationWizard() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-1">
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                     Configure DJs
                   </h2>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">
                     Add AI DJ personalities for your station
                   </p>
                 </div>
                 {!djsSaved && djs.length < 10 && (
                   <button
                     onClick={() => setDjs([...djs, emptyDJ()])}
-                    className="flex items-center gap-1.5 text-sm bg-amber-100 text-amber-700 px-3 py-1.5 rounded-lg hover:bg-amber-200 font-medium transition-colors"
+                    className="flex items-center gap-1.5 text-sm bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 px-3 py-1.5 rounded-lg hover:bg-amber-200 font-medium transition-colors"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     Add DJ
@@ -844,7 +844,7 @@ export default function StationWizard() {
                         </div>
                         <div className="min-w-0">
                           <p className="font-medium text-sm">{dj.name}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 dark:text-zinc-500">
                             Voice: {dj.ttsVoice}
                           </p>
                         </div>
@@ -867,10 +867,10 @@ export default function StationWizard() {
                           borderLeftColor: getDjColor(i),
                         }}
                       >
-                        <span className="text-sm font-semibold text-gray-700">
+                        <span className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
                           DJ #{i + 1}
                           {dj.name && (
-                            <span className="font-normal text-gray-500">
+                            <span className="font-normal text-gray-500 dark:text-zinc-500">
                               {" "}
                               -- {dj.name}
                             </span>
@@ -892,7 +892,7 @@ export default function StationWizard() {
                         {/* Row 1: Name & Voice */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">
+                            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
                               Name <span className="text-red-400">*</span>
                             </label>
                             <input
@@ -903,12 +903,12 @@ export default function StationWizard() {
                                 u[i] = { ...dj, name: e.target.value };
                                 setDjs(u);
                               }}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                              className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                               placeholder="Hank Westwood"
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">
+                            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
                               Voice
                             </label>
                             <select
@@ -918,7 +918,7 @@ export default function StationWizard() {
                                 u[i] = { ...dj, voice: e.target.value };
                                 setDjs(u);
                               }}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                              className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                             >
                               {VOICE_OPTIONS.map((v) => (
                                 <option key={v.value} value={v.value}>
@@ -943,7 +943,7 @@ export default function StationWizard() {
 
                         {/* Row 2: Bio */}
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1">
+                          <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
                             Bio
                           </label>
                           <textarea
@@ -953,7 +953,7 @@ export default function StationWizard() {
                               u[i] = { ...dj, bio: e.target.value };
                               setDjs(u);
                             }}
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                            className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                             rows={2}
                             placeholder="Brief backstory for this DJ personality..."
                           />
@@ -962,7 +962,7 @@ export default function StationWizard() {
                         {/* Row 3: Schedule */}
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">
+                            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
                               <Clock className="w-3 h-3 inline mr-1" />
                               Start Hour
                             </label>
@@ -976,7 +976,7 @@ export default function StationWizard() {
                                 };
                                 setDjs(u);
                               }}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                              className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                             >
                               {HOURS.map((h) => (
                                 <option key={h} value={h}>
@@ -986,7 +986,7 @@ export default function StationWizard() {
                             </select>
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-500 mb-1">
+                            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
                               <Clock className="w-3 h-3 inline mr-1" />
                               End Hour
                             </label>
@@ -1000,7 +1000,7 @@ export default function StationWizard() {
                                 };
                                 setDjs(u);
                               }}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                              className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                             >
                               {HOURS.map((h) => (
                                 <option key={h} value={h}>
@@ -1024,17 +1024,17 @@ export default function StationWizard() {
           {step === 3 && (
             <div className="space-y-5">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-1">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                   Set Schedule
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Click cells to assign DJs to time slots. Select a DJ below,
                   then click hours on the grid.
                 </p>
               </div>
 
               {createdDjs.length === 0 ? (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800 dark:text-amber-400">
                   No DJs configured yet. Go back to the previous step to add
                   DJs first.
                 </div>
@@ -1049,7 +1049,7 @@ export default function StationWizard() {
                         className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
                           selectedDjForSchedule === dj.id
                             ? "border-gray-900 bg-gray-900 text-white shadow-lg"
-                            : "border-gray-200 bg-white hover:border-gray-300"
+                            : "border-gray-200 dark:border-zinc-800 bg-white hover:border-gray-300 dark:border-zinc-700"
                         }`}
                       >
                         <div
@@ -1063,8 +1063,8 @@ export default function StationWizard() {
                       onClick={() => setSelectedDjForSchedule("")}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
                         selectedDjForSchedule === ""
-                          ? "border-red-500 bg-red-50 text-red-700"
-                          : "border-gray-200 bg-white hover:border-gray-300 text-gray-500"
+                          ? "border-red-500 bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400"
+                          : "border-gray-200 dark:border-zinc-800 bg-white hover:border-gray-300 dark:border-zinc-700 text-gray-500"
                       }`}
                     >
                       <Trash2 className="w-3 h-3" />
@@ -1081,7 +1081,7 @@ export default function StationWizard() {
                         {DAYS_OF_WEEK.map((day) => (
                           <div
                             key={day}
-                            className="text-xs font-semibold text-gray-600 text-center py-1.5 bg-gray-100 rounded-t"
+                            className="text-xs font-semibold text-gray-600 dark:text-zinc-400 text-center py-1.5 bg-gray-100 rounded-t"
                           >
                             {day}
                           </div>
@@ -1128,7 +1128,7 @@ export default function StationWizard() {
                                     }
                                   }}
                                   className={`h-6 transition-all hover:opacity-80 ${
-                                    isAssigned ? "" : "bg-white hover:bg-gray-50"
+                                    isAssigned ? "" : "bg-white hover:bg-gray-50 dark:hover:bg-zinc-800"
                                   }`}
                                   style={
                                     isAssigned && djIdx >= 0
@@ -1156,8 +1156,8 @@ export default function StationWizard() {
                   </div>
 
                   {/* Schedule summary */}
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <span className="bg-green-100 text-green-700 px-2.5 py-1 rounded-full font-medium">
+                  <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-zinc-500">
+                    <span className="bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 px-2.5 py-1 rounded-full font-medium">
                       {schedule.length} slots assigned
                     </span>
                     <span className="text-gray-400">
@@ -1178,10 +1178,10 @@ export default function StationWizard() {
                 <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Rocket className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                   Ready to Go Live
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Review your station setup before launching
                 </p>
               </div>
@@ -1192,7 +1192,7 @@ export default function StationWizard() {
                 <div className="border rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Radio className="w-4 h-4 text-amber-600" />
-                    <h3 className="font-semibold text-sm text-gray-900">
+                    <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
                       Station
                     </h3>
                     <button
@@ -1204,22 +1204,22 @@ export default function StationWizard() {
                   </div>
                   <div className="space-y-1.5 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Name</span>
+                      <span className="text-gray-500 dark:text-zinc-500">Name</span>
                       <span className="font-medium">{station.name}</span>
                     </div>
                     {station.tagline && (
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Tagline</span>
-                        <span className="text-gray-700">{station.tagline}</span>
+                        <span className="text-gray-500 dark:text-zinc-500">Tagline</span>
+                        <span className="text-gray-700 dark:text-zinc-300">{station.tagline}</span>
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Genre</span>
+                      <span className="text-gray-500 dark:text-zinc-500">Genre</span>
                       <span className="font-medium">{station.genre}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Timezone</span>
-                      <span className="text-gray-700">
+                      <span className="text-gray-500 dark:text-zinc-500">Timezone</span>
+                      <span className="text-gray-700 dark:text-zinc-300">
                         {TIMEZONE_OPTIONS.find(
                           (t) => t.value === station.timezone
                         )?.label || station.timezone}
@@ -1232,7 +1232,7 @@ export default function StationWizard() {
                 <div className="border rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Music className="w-4 h-4 text-green-600" />
-                    <h3 className="font-semibold text-sm text-gray-900">
+                    <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
                       Music Library
                     </h3>
                     <button
@@ -1251,7 +1251,7 @@ export default function StationWizard() {
                         </span>
                       </div>
                     ) : parsedSongs.length > 0 ? (
-                      <span className="text-gray-600">
+                      <span className="text-gray-600 dark:text-zinc-400">
                         {parsedSongs.length} songs ready to import
                       </span>
                     ) : (
@@ -1267,7 +1267,7 @@ export default function StationWizard() {
                 <div className="border rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Users className="w-4 h-4 text-purple-600" />
-                    <h3 className="font-semibold text-sm text-gray-900">
+                    <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
                       DJs
                     </h3>
                     <button
@@ -1313,7 +1313,7 @@ export default function StationWizard() {
                 <div className="border rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <CalendarDays className="w-4 h-4 text-indigo-600" />
-                    <h3 className="font-semibold text-sm text-gray-900">
+                    <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
                       Schedule
                     </h3>
                     <button
@@ -1352,7 +1352,7 @@ export default function StationWizard() {
                   <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium">Heads up</p>
-                    <ul className="mt-1 space-y-0.5 text-amber-700">
+                    <ul className="mt-1 space-y-0.5 text-amber-700 dark:text-amber-400">
                       {!importResult && (
                         <li>No music imported yet. You can add songs later.</li>
                       )}
@@ -1379,7 +1379,7 @@ export default function StationWizard() {
           <button
             onClick={() => setStep(Math.max(0, step - 1))}
             disabled={step === 0}
-            className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back

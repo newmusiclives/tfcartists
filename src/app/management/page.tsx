@@ -35,7 +35,7 @@ const MANAGEMENT_TEAM = [
     name: "Morgan Reed",
     role: "General Manager (GM)",
     avatar: "MR",
-    color: "bg-amber-100 text-amber-700",
+    color: "bg-amber-500/15 text-amber-400",
     focus: "Overall station success",
     kpi: "Revenue + Growth",
   },
@@ -43,7 +43,7 @@ const MANAGEMENT_TEAM = [
     name: "Avery Quinn",
     role: "Operations Director",
     avatar: "AQ",
-    color: "bg-orange-100 text-orange-700",
+    color: "bg-orange-500/15 text-orange-400",
     focus: "Day-to-day execution",
     kpi: "Task completion",
   },
@@ -51,7 +51,7 @@ const MANAGEMENT_TEAM = [
     name: "Jordan Blake",
     role: "Strategy Director",
     avatar: "JB",
-    color: "bg-red-100 text-red-700",
+    color: "bg-red-500/15 text-red-400",
     focus: "Growth & milestones",
     kpi: "Target attainment",
   },
@@ -132,18 +132,18 @@ export default function ManagementDashboard() {
 
   const priorityBadge = (priority: string) => {
     switch (priority) {
-      case "critical": return <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-red-100 text-red-700">CRITICAL</span>;
-      case "high": return <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-orange-100 text-orange-700">HIGH</span>;
-      default: return <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-yellow-100 text-yellow-700">MEDIUM</span>;
+      case "critical": return <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-red-500/15 text-red-400">CRITICAL</span>;
+      case "high": return <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-orange-500/15 text-orange-400">HIGH</span>;
+      default: return <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-yellow-500/15 text-yellow-400">MEDIUM</span>;
     }
   };
 
   const teamColorMap: Record<string, { bg: string; text: string; border: string; gradient: string }> = {
-    amber: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-300", gradient: "from-amber-500 to-orange-500" },
-    teal: { bg: "bg-teal-50", text: "text-teal-700", border: "border-teal-300", gradient: "from-teal-500 to-cyan-500" },
-    purple: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-300", gradient: "from-purple-500 to-pink-500" },
-    green: { bg: "bg-green-50", text: "text-green-700", border: "border-green-300", gradient: "from-green-500 to-emerald-500" },
-    blue: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-300", gradient: "from-blue-500 to-cyan-500" },
+    amber: { bg: "bg-amber-500/10", text: "text-amber-400", border: "border-amber-500/30", gradient: "from-amber-500 to-orange-500" },
+    teal: { bg: "bg-teal-500/10", text: "text-teal-400", border: "border-teal-500/30", gradient: "from-teal-500 to-cyan-500" },
+    purple: { bg: "bg-purple-500/10", text: "text-purple-400", border: "border-purple-500/30", gradient: "from-purple-500 to-pink-500" },
+    green: { bg: "bg-green-500/10", text: "text-green-400", border: "border-green-500/30", gradient: "from-green-500 to-emerald-500" },
+    blue: { bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/30", gradient: "from-blue-500 to-cyan-500" },
   };
 
   const teamColorForName: Record<string, string> = {
@@ -151,11 +151,11 @@ export default function ManagementDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 text-white">
+      <div className="bg-gradient-to-r from-amber-800/80 via-orange-900/80 to-red-900/60 text-white border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>
@@ -194,7 +194,7 @@ export default function ManagementDashboard() {
             <div className="flex items-center space-x-3">
               <Link
                 href="/management/launch-plan"
-                className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-lg text-amber-700 font-semibold hover:bg-amber-50 transition-colors"
+                className="inline-flex items-center space-x-2 bg-white dark:bg-zinc-800 px-4 py-2 rounded-lg text-amber-700 dark:text-amber-400 font-semibold hover:bg-amber-50 dark:hover:bg-zinc-700 transition-colors"
               >
                 <Zap className="w-4 h-4" />
                 <span>90-Day Launch Plan</span>
@@ -222,21 +222,21 @@ export default function ManagementDashboard() {
         {loading && (
           <div className="text-center py-12">
             <div className="animate-spin w-8 h-8 border-4 border-amber-300 border-t-amber-700 rounded-full mx-auto mb-4" />
-            <p className="text-gray-600">Loading live station data...</p>
+            <p className="text-gray-600 dark:text-zinc-400">Loading live station data...</p>
           </div>
         )}
 
         {/* Management Team Mini Cards */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {MANAGEMENT_TEAM.map((member, idx) => (
-            <div key={idx} className="bg-white rounded-xl shadow-sm border p-4 flex items-center space-x-4">
+            <div key={idx} className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-200 dark:border-zinc-800 p-4 flex items-center space-x-4">
               <div className={`w-12 h-12 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold`}>
                 {member.avatar}
               </div>
               <div className="flex-1">
-                <div className="font-semibold text-gray-900">{member.name}</div>
-                <div className="text-xs text-gray-600">{member.role}</div>
-                <div className="text-xs text-amber-600 font-medium mt-1">Focus: {member.focus}</div>
+                <div className="font-semibold text-gray-900 dark:text-white">{member.name}</div>
+                <div className="text-xs text-gray-600 dark:text-zinc-400">{member.role}</div>
+                <div className="text-xs text-amber-400 font-medium mt-1">Focus: {member.focus}</div>
               </div>
             </div>
           ))}
@@ -244,8 +244,8 @@ export default function ManagementDashboard() {
 
         {/* Live KPIs */}
         {kpis && targets && (
-          <section className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Live Station KPIs</h2>
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Live Station KPIs</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <KPICard
                 label="Monthly Revenue"
@@ -285,16 +285,16 @@ export default function ManagementDashboard() {
 
         {/* Team Health Overview */}
         {playbookPhases.length > 0 && (
-          <section className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Team Health & Progress</h2>
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Team Health & Progress</h2>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {playbookPhases.map((phase) => {
                 const colors = teamColorMap[phase.teamColor];
                 const healthStatus = phase.progress >= 80 ? "healthy" : phase.progress >= 40 ? "active" : "needs_attention";
                 const statusColors = {
-                  healthy: "text-green-600 bg-green-50",
-                  active: "text-blue-600 bg-blue-50",
-                  needs_attention: "text-orange-600 bg-orange-50",
+                  healthy: "text-green-400 bg-green-500/10",
+                  active: "text-blue-400 bg-blue-500/10",
+                  needs_attention: "text-orange-400 bg-orange-500/10",
                 }[healthStatus];
 
                 return (
@@ -308,15 +308,15 @@ export default function ManagementDashboard() {
                           {healthStatus === "healthy" ? "Healthy" : healthStatus === "active" ? "Active" : "Needs Work"}
                         </span>
                       </div>
-                      <div className="font-bold text-gray-900 text-sm mb-1">{phase.team}</div>
-                      <div className="text-xs text-gray-600 mb-3">{phase.name}</div>
-                      <div className="bg-gray-200 rounded-full h-2 overflow-hidden mb-1">
+                      <div className="font-bold text-gray-900 dark:text-white text-sm mb-1">{phase.team}</div>
+                      <div className="text-xs text-gray-600 dark:text-zinc-400 mb-3">{phase.name}</div>
+                      <div className="bg-zinc-700 rounded-full h-2 overflow-hidden mb-1">
                         <div
                           className={`h-full rounded-full bg-gradient-to-r ${colors.gradient}`}
                           style={{ width: `${phase.progress}%` }}
                         />
                       </div>
-                      <div className="text-xs text-gray-500 text-right">{phase.done}/{phase.total} done</div>
+                      <div className="text-xs text-zinc-500 text-right">{phase.done}/{phase.total} done</div>
                     </div>
                   </Link>
                 );
@@ -327,16 +327,16 @@ export default function ManagementDashboard() {
 
         {/* Priority Actions - from API */}
         {priorityActions.length > 0 && (
-          <section className="bg-white rounded-xl shadow-sm p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Priority Actions</h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Priority Actions</h2>
+                <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">
                   Auto-generated from live data — actions to keep the station build on track
                 </p>
               </div>
               <div className="flex items-center space-x-2 text-sm">
-                <span className="inline-flex items-center space-x-1 px-2 py-1 bg-red-50 text-red-700 rounded-full">
+                <span className="inline-flex items-center space-x-1 px-2 py-1 bg-red-500/10 text-red-400 rounded-full">
                   <span className="w-2 h-2 bg-red-500 rounded-full" />
                   <span className="font-medium">{priorityActions.filter((a: any) => a.priority === "critical").length} Critical</span>
                 </span>
@@ -348,18 +348,18 @@ export default function ManagementDashboard() {
                 const colors = teamColorMap[action.teamColor] || teamColorMap.amber;
                 return (
                   <Link key={action.id} href={action.href} className="block group">
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50/30 transition-all">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-lg border border-gray-200 dark:border-zinc-700 hover:border-amber-500/30 dark:hover:bg-amber-500/5 transition-all">
                       <div className="flex items-center space-x-4 flex-1">
                         {priorityBadge(action.priority)}
                         <div className="flex-1">
-                          <div className="font-semibold text-gray-900">{action.title}</div>
-                          <div className="text-sm text-gray-600 mt-0.5">{action.description}</div>
+                          <div className="font-semibold text-gray-900 dark:text-white">{action.title}</div>
+                          <div className="text-sm text-gray-600 dark:text-zinc-400 mt-0.5">{action.description}</div>
                         </div>
                       </div>
                       <div className="flex items-center space-x-4 ml-4">
                         <div className="text-right">
                           <div className={`text-xs font-bold ${colors.text}`}>Team {action.team}</div>
-                          <div className="text-xs text-gray-500">{action.dueLabel}</div>
+                          <div className="text-xs text-gray-500 dark:text-zinc-500">{action.dueLabel}</div>
                         </div>
                         <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -372,29 +372,29 @@ export default function ManagementDashboard() {
         )}
 
         {/* Station Build Progress */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Station Build Playbook</h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Station Build Playbook</h2>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">
                 5-phase plan to build {currentStation.name} from foundation to full operation
               </p>
             </div>
-            <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5">
-              <span className="text-sm font-bold text-amber-700">{overallProgress}% Overall</span>
+            <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-lg px-3 py-1.5">
+              <span className="text-sm font-bold text-amber-700 dark:text-amber-400">{overallProgress}% Overall</span>
             </div>
           </div>
 
           <div className="mb-6">
-            <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-4 bg-zinc-700 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-full transition-all"
                 style={{ width: `${overallProgress}%` }}
               />
             </div>
             <div className="flex items-center justify-between text-sm mt-2">
-              <span className="text-gray-600">Overall Station Build Progress</span>
-              <span className="font-bold text-gray-900">{completedTasks} of {totalTasks} tasks</span>
+              <span className="text-gray-600 dark:text-zinc-400">Overall Station Build Progress</span>
+              <span className="font-bold text-gray-900 dark:text-white">{completedTasks} of {totalTasks} tasks</span>
             </div>
           </div>
 
@@ -404,32 +404,32 @@ export default function ManagementDashboard() {
                 const isExpanded = expandedPhase === phase.id;
                 const colors = teamColorMap[phase.teamColor];
                 return (
-                  <div key={phase.id} className={`border-2 rounded-lg overflow-hidden ${isExpanded ? colors.border : "border-gray-200"}`}>
+                  <div key={phase.id} className={`border-2 rounded-lg overflow-hidden ${isExpanded ? colors.border : "border-gray-200 dark:border-zinc-700"}`}>
                     <button
                       onClick={() => setExpandedPhase(isExpanded ? null : phase.id)}
-                      className={`w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors ${isExpanded ? colors.bg : ""}`}
+                      className={`w-full flex items-center justify-between p-4 text-left dark:hover:bg-zinc-800 transition-colors ${isExpanded ? colors.bg : ""}`}
                     >
                       <div className="flex items-center space-x-4">
                         <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${colors.gradient} text-white flex items-center justify-center font-bold`}>
                           {phase.phase}
                         </div>
                         <div>
-                          <div className="font-bold text-gray-900">{phase.name}</div>
-                          <div className="text-sm text-gray-600">{phase.team}</div>
+                          <div className="font-bold text-gray-900 dark:text-white">{phase.name}</div>
+                          <div className="text-sm text-gray-600 dark:text-zinc-400">{phase.team}</div>
                         </div>
                       </div>
                       <div className="flex items-center space-x-4">
                         <div className="text-right">
-                          <div className="text-sm font-bold text-gray-900">{phase.done}/{phase.total}</div>
+                          <div className="text-sm font-bold text-gray-900 dark:text-white">{phase.done}/{phase.total}</div>
                         </div>
                         <div className="w-20">
-                          <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
+                          <div className="bg-zinc-700 rounded-full h-2 overflow-hidden">
                             <div
                               className={`h-full rounded-full bg-gradient-to-r ${colors.gradient}`}
                               style={{ width: `${phase.progress}%` }}
                             />
                           </div>
-                          <div className="text-xs text-gray-500 text-right mt-0.5">{phase.progress}%</div>
+                          <div className="text-xs text-zinc-500 text-right mt-0.5">{phase.progress}%</div>
                         </div>
                         {isExpanded ? (
                           <ChevronDown className="w-5 h-5 text-gray-400" />
@@ -440,7 +440,7 @@ export default function ManagementDashboard() {
                     </button>
 
                     {isExpanded && (
-                      <div className="border-t px-4 py-3 bg-white">
+                      <div className="border-t dark:border-zinc-700 px-4 py-3 bg-white dark:bg-zinc-900">
                         <div className="mt-3 pt-3 flex justify-end">
                           <Link
                             href={phase.teamHref}
@@ -461,18 +461,18 @@ export default function ManagementDashboard() {
 
         {/* Activity Feed */}
         {activity.length > 0 && (
-          <section className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Activity</h2>
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Recent Activity</h2>
             <div className="space-y-3">
               {activity.map((item) => {
                 const tc = teamColorMap[teamColorForName[item.team] || "amber"];
                 return (
-                  <div key={item.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                  <div key={item.id} className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-zinc-800/50 rounded-lg">
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${tc.bg} ${tc.text}`}>
                       {item.team}
                     </span>
-                    <span className="text-sm text-gray-900 flex-1">{item.details}</span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-sm text-gray-900 dark:text-zinc-100 flex-1">{item.details}</span>
+                    <span className="text-xs text-gray-500 dark:text-zinc-500">
                       {new Date(item.timestamp).toLocaleDateString()}
                     </span>
                   </div>
@@ -483,8 +483,8 @@ export default function ManagementDashboard() {
         )}
 
         {/* Cross-Team Dependencies */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Cross-Team Dependencies</h2>
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Cross-Team Dependencies</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <DependencyCard from="Riley (Artists)" to="Cassidy (Curation)" description="Artists discovered by Riley are submitted to Cassidy's panel for tier placement" status="active" fromColor="purple" toColor="teal" />
             <DependencyCard from="Cassidy (Curation)" to="Station Ops" description="Tier placements feed into rotation clocks and DJ programming" status="active" fromColor="teal" toColor="amber" />
@@ -523,26 +523,26 @@ function DependencyCard({
   toColor: string;
 }) {
   const colorMap: Record<string, string> = {
-    purple: "text-purple-600 bg-purple-50",
-    teal: "text-teal-600 bg-teal-50",
-    green: "text-green-600 bg-green-50",
-    blue: "text-blue-600 bg-blue-50",
-    amber: "text-amber-600 bg-amber-50",
+    purple: "text-purple-400 bg-purple-500/10",
+    teal: "text-teal-400 bg-teal-500/10",
+    green: "text-green-400 bg-green-500/10",
+    blue: "text-blue-400 bg-blue-500/10",
+    amber: "text-amber-400 bg-amber-500/10",
   };
 
   return (
-    <div className="border rounded-lg p-4 hover:border-amber-300 transition-colors">
+    <div className="border border-zinc-800 rounded-lg p-4 hover:border-amber-500/30 transition-colors">
       <div className="flex items-center space-x-2 mb-2">
         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colorMap[fromColor]}`}>{from}</span>
-        <ArrowRight className="w-4 h-4 text-gray-400" />
+        <ArrowRight className="w-4 h-4 text-zinc-500" />
         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colorMap[toColor]}`}>{to}</span>
       </div>
-      <p className="text-sm text-gray-700">{description}</p>
+      <p className="text-sm text-zinc-300">{description}</p>
       <div className="mt-2">
         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-          status === "active" ? "bg-green-100 text-green-700" :
-          status === "blocked" ? "bg-red-100 text-red-700" :
-          "bg-yellow-100 text-yellow-700"
+          status === "active" ? "bg-green-500/15 text-green-400" :
+          status === "blocked" ? "bg-red-500/15 text-red-400" :
+          "bg-yellow-500/15 text-yellow-400"
         }`}>
           {status === "active" ? "Active" : status === "blocked" ? "Blocked" : "Pending Revenue"}
         </span>
@@ -574,21 +574,21 @@ function KPICard({
   };
 
   return (
-    <div className="border rounded-lg p-4">
-      <div className="text-sm text-gray-600 mb-1">{label}</div>
+    <div className="border border-zinc-800 rounded-lg p-4">
+      <div className="text-sm text-zinc-400 mb-1">{label}</div>
       <div className="flex items-baseline space-x-2 mb-2">
-        <span className="text-2xl font-bold text-gray-900">{current}</span>
-        <span className="text-sm text-gray-500">/ {target}</span>
+        <span className="text-2xl font-bold text-gray-900 dark:text-white">{current}</span>
+        <span className="text-sm text-gray-500 dark:text-zinc-500">/ {target}</span>
       </div>
-      <div className="bg-gray-200 rounded-full h-2 overflow-hidden mb-2">
+      <div className="bg-zinc-700 rounded-full h-2 overflow-hidden mb-2">
         <div
           className={`h-full rounded-full ${barColors[color]}`}
           style={{ width: `${progress}%` }}
         />
       </div>
       <div className="flex items-center justify-between text-xs">
-        <span className="text-gray-500">{progress}% of target</span>
-        <span className="font-medium text-gray-600">{team}</span>
+        <span className="text-gray-500 dark:text-zinc-500">{progress}% of target</span>
+        <span className="font-medium text-gray-600 dark:text-zinc-400">{team}</span>
       </div>
     </div>
   );
@@ -606,12 +606,12 @@ function QuickLink({
   color: string;
 }) {
   const colorClasses: Record<string, string> = {
-    amber: "bg-amber-50 text-amber-600 hover:bg-amber-100",
-    purple: "bg-purple-50 text-purple-600 hover:bg-purple-100",
-    teal: "bg-teal-50 text-teal-600 hover:bg-teal-100",
-    green: "bg-green-50 text-green-600 hover:bg-green-100",
-    blue: "bg-blue-50 text-blue-600 hover:bg-blue-100",
-    gray: "bg-gray-50 text-gray-600 hover:bg-gray-100",
+    amber: "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20",
+    purple: "bg-purple-500/10 text-purple-400 hover:bg-purple-500/20",
+    teal: "bg-teal-500/10 text-teal-400 hover:bg-teal-500/20",
+    green: "bg-green-500/10 text-green-400 hover:bg-green-500/20",
+    blue: "bg-blue-500/10 text-blue-400 hover:bg-blue-500/20",
+    gray: "bg-zinc-800 text-zinc-400 hover:bg-zinc-700",
   };
 
   return (

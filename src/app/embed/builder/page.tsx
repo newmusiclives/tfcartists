@@ -158,7 +158,7 @@ export default function WidgetBuilderPage() {
                 <img src="/logos/ncr-logo.png" alt="NCR" className="h-7 w-auto object-contain" />
                 <span className="font-bold text-sm">TrueFans RADIO</span>
               </Link>
-              <span className="text-gray-600">/</span>
+              <span className="text-gray-600 dark:text-zinc-400">/</span>
               <span className="text-sm text-gray-400 flex items-center gap-1.5">
                 <Code className="w-4 h-4" />
                 Widget Builder
@@ -253,8 +253,8 @@ export default function WidgetBuilderPage() {
                             : "border-gray-700 hover:border-gray-600"
                         }`}
                       >
-                        <div className="font-medium text-xs text-gray-200">{val.label} <span className="text-gray-500">({val.width}x{val.height})</span></div>
-                        <div className="text-[11px] text-gray-500 mt-0.5">{val.description}</div>
+                        <div className="font-medium text-xs text-gray-200">{val.label} <span className="text-gray-500 dark:text-zinc-500">({val.width}x{val.height})</span></div>
+                        <div className="text-[11px] text-gray-500 dark:text-zinc-500 mt-0.5">{val.description}</div>
                       </button>
                     ))}
                   </div>
@@ -366,7 +366,7 @@ export default function WidgetBuilderPage() {
                   <label className="flex items-center justify-between px-3 py-2.5 rounded-lg border border-gray-700 hover:border-gray-600 cursor-pointer transition-colors">
                     <div>
                       <span className="text-sm text-gray-300">Auto-play</span>
-                      <p className="text-[11px] text-gray-500 mt-0.5">May be blocked by browsers</p>
+                      <p className="text-[11px] text-gray-500 dark:text-zinc-500 mt-0.5">May be blocked by browsers</p>
                     </div>
                     <button
                       onClick={() => setAutoplay(!autoplay)}
@@ -388,7 +388,7 @@ export default function WidgetBuilderPage() {
                   <label className="block text-xs font-semibold text-gray-300 mb-1 uppercase tracking-wide">
                     Referral Code
                   </label>
-                  <p className="text-[11px] text-gray-500 mb-2">
+                  <p className="text-[11px] text-gray-500 dark:text-zinc-500 mb-2">
                     Earn rewards when listeners play through your embed
                   </p>
                   <input
@@ -408,7 +408,7 @@ export default function WidgetBuilderPage() {
                 {/* Custom CSS */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Custom CSS Override</label>
-                  <p className="text-[11px] text-gray-500 mb-2">
+                  <p className="text-[11px] text-gray-500 dark:text-zinc-500 mb-2">
                     Injected into the embed iframe. Use with caution.
                   </p>
                   <textarea
@@ -444,7 +444,7 @@ export default function WidgetBuilderPage() {
                     ))}
                   </div>
                   {platform === "javascript" && (
-                    <p className="text-[11px] text-gray-500 mt-2">
+                    <p className="text-[11px] text-gray-500 dark:text-zinc-500 mt-2">
                       The JS widget auto-creates an iframe with your settings. Supports TrueFansRadio.init() API.
                     </p>
                   )}

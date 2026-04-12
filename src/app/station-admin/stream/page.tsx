@@ -73,8 +73,8 @@ function RangeSlider({
   return (
     <div className={disabled ? "opacity-50" : ""}>
       <div className="flex items-center justify-between mb-1">
-        <label className="text-sm text-gray-600">{label}</label>
-        <span className="text-sm font-mono font-medium text-gray-900">
+        <label className="text-sm text-gray-600 dark:text-zinc-400">{label}</label>
+        <span className="text-sm font-mono font-medium text-gray-900 dark:text-white">
           {value}
           {unit}
         </span>
@@ -118,7 +118,7 @@ function SectionToggle({
       }`}
     >
       <span
-        className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${
+        className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white dark:bg-zinc-900 rounded-full shadow transition-transform ${
           enabled ? "translate-x-5" : ""
         }`}
       />
@@ -180,7 +180,7 @@ export default function StreamEngineeringPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
         <SharedNav />
         <div className="flex justify-center py-20">
           <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
@@ -191,10 +191,10 @@ export default function StreamEngineeringPage() {
 
   if (!settings) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
         <SharedNav />
         <div className="max-w-4xl mx-auto px-4 py-12 text-center">
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-zinc-500">
             No station found. Create a station first.
           </p>
         </div>
@@ -203,7 +203,7 @@ export default function StreamEngineeringPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
@@ -212,7 +212,7 @@ export default function StreamEngineeringPage() {
               <SlidersHorizontal className="w-8 h-8 text-amber-600" />
               Stream Engineering
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-gray-600 dark:text-zinc-400 mt-1">
               Production controls for {settings.name}
             </p>
           </div>
@@ -238,10 +238,10 @@ export default function StreamEngineeringPage() {
 
         <div className="space-y-6">
           {/* Stream Config */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
             <div className="flex items-center gap-3 mb-4">
               <Radio className="w-5 h-5 text-amber-600" />
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Stream Configuration
               </h2>
             </div>
@@ -310,11 +310,11 @@ export default function StreamEngineeringPage() {
           </div>
 
           {/* Crossfade */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <Waves className="w-5 h-5 text-blue-600" />
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Crossfade
                 </h2>
               </div>
@@ -383,11 +383,11 @@ export default function StreamEngineeringPage() {
           </div>
 
           {/* Normalization */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <Volume2 className="w-5 h-5 text-green-600" />
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Audio Normalization
                 </h2>
               </div>
@@ -441,11 +441,11 @@ export default function StreamEngineeringPage() {
           </div>
 
           {/* Compression */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <Gauge className="w-5 h-5 text-purple-600" />
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Compression
                 </h2>
               </div>
@@ -509,11 +509,11 @@ export default function StreamEngineeringPage() {
           </div>
 
           {/* EQ */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <SlidersHorizontal className="w-5 h-5 text-orange-600" />
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   3-Band EQ
                 </h2>
               </div>
@@ -623,11 +623,11 @@ export default function StreamEngineeringPage() {
           </div>
 
           {/* DJ Voice Ducking */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <Mic className="w-5 h-5 text-rose-600" />
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   DJ Voice Ducking
                 </h2>
               </div>
@@ -636,7 +636,7 @@ export default function StreamEngineeringPage() {
                 onChange={(v) => update("duckingEnabled", v)}
               />
             </div>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-gray-500 dark:text-zinc-500 mb-4">
               Automatically lower music volume when the DJ speaks.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">

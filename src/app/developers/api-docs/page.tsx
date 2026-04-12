@@ -98,24 +98,24 @@ const AUTH_LABELS: Record<string, { label: string; color: string }> = {
 
 export default function ApiDocsPage() {
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <nav className="border-b bg-white">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center gap-4">
-          <Link href="/developers" className="text-gray-500 hover:text-gray-700">
+          <Link href="/developers" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <Code className="w-6 h-6 text-amber-600" />
           <div>
-            <h1 className="font-bold text-gray-900">API Reference</h1>
-            <p className="text-xs text-gray-500">REST API documentation for TrueFans Radio</p>
+            <h1 className="font-bold text-gray-900 dark:text-white">API Reference</h1>
+            <p className="text-xs text-gray-500 dark:text-zinc-500">REST API documentation for TrueFans Radio</p>
           </div>
         </div>
       </nav>
 
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Auth overview */}
-        <div className="bg-white rounded-xl border p-6 mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border p-6 mb-8">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <Lock className="w-5 h-5" /> Authentication
           </h2>
           <div className="grid sm:grid-cols-3 gap-4 text-sm">
@@ -124,25 +124,25 @@ export default function ApiDocsPage() {
                 <Key className="w-4 h-4 text-purple-600" />
                 <span className="font-semibold">API Key</span>
               </div>
-              <p className="text-gray-600">Pass <code className="bg-gray-100 px-1 rounded text-xs">Authorization: Bearer YOUR_API_KEY</code> in the request header.</p>
+              <p className="text-gray-600 dark:text-zinc-400">Pass <code className="bg-gray-100 px-1 rounded text-xs">Authorization: Bearer YOUR_API_KEY</code> in the request header.</p>
             </div>
             <div className="border rounded-lg p-3">
               <div className="flex items-center gap-2 mb-1">
                 <Lock className="w-4 h-4 text-amber-600" />
                 <span className="font-semibold">Session</span>
               </div>
-              <p className="text-gray-600">Authenticated via NextAuth session cookie. Login at <code className="bg-gray-100 px-1 rounded text-xs">/login</code> first.</p>
+              <p className="text-gray-600 dark:text-zinc-400">Authenticated via NextAuth session cookie. Login at <code className="bg-gray-100 px-1 rounded text-xs">/login</code> first.</p>
             </div>
             <div className="border rounded-lg p-3">
               <div className="flex items-center gap-2 mb-1">
                 <Radio className="w-4 h-4 text-green-600" />
                 <span className="font-semibold">Public</span>
               </div>
-              <p className="text-gray-600">No authentication required. Rate-limited to 120 requests/minute per IP.</p>
+              <p className="text-gray-600 dark:text-zinc-400">No authentication required. Rate-limited to 120 requests/minute per IP.</p>
             </div>
           </div>
 
-          <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+          <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800 dark:text-amber-400">
             <p className="font-medium">Webhook Signatures</p>
             <p className="mt-1">All webhook deliveries include <code className="bg-amber-100 px-1 rounded">X-Webhook-Signature</code> (HMAC-SHA256), <code className="bg-amber-100 px-1 rounded">X-Webhook-Event</code>, and <code className="bg-amber-100 px-1 rounded">X-Webhook-Timestamp</code> headers.</p>
           </div>
@@ -151,10 +151,10 @@ export default function ApiDocsPage() {
         {/* Endpoints by category */}
         {Object.entries(ENDPOINTS).map(([category, endpoints]) => (
           <div key={category} className="mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-3">{category}</h2>
-            <div className="bg-white rounded-xl border overflow-hidden divide-y">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">{category}</h2>
+            <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden divide-y">
               {endpoints.map((ep, i) => (
-                <div key={i} className="px-5 py-3 hover:bg-gray-50">
+                <div key={i} className="px-5 py-3 hover:bg-gray-50 dark:hover:bg-zinc-800">
                   <div className="flex items-center gap-3">
                     <span className={`px-2 py-0.5 rounded text-xs font-bold ${METHOD_COLORS[ep.method]}`}>
                       {ep.method}
@@ -164,7 +164,7 @@ export default function ApiDocsPage() {
                       {AUTH_LABELS[ep.auth].label}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-1 ml-14">{ep.description}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1 ml-14">{ep.description}</p>
                   {ep.params && (
                     <p className="text-xs text-gray-400 mt-1 ml-14">
                       Params: {ep.params.join(", ")}
@@ -182,8 +182,8 @@ export default function ApiDocsPage() {
         ))}
 
         {/* Rate limits */}
-        <div className="bg-white rounded-xl border p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-3">Rate Limits</h2>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">Rate Limits</h2>
           <div className="text-sm text-gray-600 space-y-2">
             <p>All API routes are rate-limited to protect service quality:</p>
             <ul className="list-disc list-inside space-y-1">

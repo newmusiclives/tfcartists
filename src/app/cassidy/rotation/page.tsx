@@ -52,7 +52,7 @@ export default function CassidyRotationPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading rotation planner...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading rotation planner...</div>
       </main>
     );
   }
@@ -78,7 +78,7 @@ export default function CassidyRotationPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
@@ -92,10 +92,10 @@ export default function CassidyRotationPage() {
           <div className="flex items-center space-x-3">
             <Radio className="w-8 h-8 text-teal-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Rotation Planner
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-zinc-400">
                 80/20 indie transformation tracker
               </p>
             </div>
@@ -105,12 +105,12 @@ export default function CassidyRotationPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Progress Hero */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               80/20 Rotation Transformation
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-zinc-400">
               Replacing mainstream tracks with curated indie artists
             </p>
           </div>
@@ -126,7 +126,7 @@ export default function CassidyRotationPage() {
                   {indie}%
                 </span>
               </div>
-              <div className="h-6 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-6 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all duration-500"
                   style={{ width: `${indie}%` }}
@@ -137,14 +137,14 @@ export default function CassidyRotationPage() {
             {/* Mainstream Progress */}
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="font-semibold text-gray-600">
+                <span className="font-semibold text-gray-600 dark:text-zinc-400">
                   Mainstream
                 </span>
                 <span className="font-bold text-gray-500 text-lg">
                   {mainstream}%
                 </span>
               </div>
-              <div className="h-6 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-6 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gray-400 rounded-full transition-all duration-500"
                   style={{ width: `${mainstream}%` }}
@@ -156,11 +156,11 @@ export default function CassidyRotationPage() {
             <div className="pt-6 border-t">
               <div className="flex items-center justify-center space-x-3">
                 <Target className="w-6 h-6 text-teal-600" />
-                <span className="text-lg font-semibold text-gray-900">
+                <span className="text-lg font-semibold text-gray-900 dark:text-white">
                   Target: {target}% indie
                 </span>
               </div>
-              <div className="mt-4 h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div className="mt-4 h-3 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-teal-400 via-teal-500 to-cyan-500 rounded-full transition-all duration-500"
                   style={{ width: `${progressPct}%` }}
@@ -178,17 +178,17 @@ export default function CassidyRotationPage() {
 
         {/* Stats Cards */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl p-6 border border-teal-200 shadow-sm">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 border border-teal-200 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <Zap className="w-6 h-6 text-teal-600" />
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">
+            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
               {slotsRemaining}
             </div>
-            <div className="text-sm font-semibold text-gray-700">
+            <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Slots Remaining
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-gray-500 dark:text-zinc-500">
               To reach {target}% indie
             </div>
           </div>
@@ -200,25 +200,25 @@ export default function CassidyRotationPage() {
             <div className="text-3xl font-bold text-teal-700 mb-1">
               {indie}%
             </div>
-            <div className="text-sm font-semibold text-gray-700">
+            <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Current Indie %
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-gray-500 dark:text-zinc-500">
               Up from 20% baseline
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm">
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 dark:border-zinc-800 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <Radio className="w-6 h-6 text-gray-500" />
             </div>
-            <div className="text-3xl font-bold text-gray-700 mb-1">
+            <div className="text-3xl font-bold text-gray-700 dark:text-zinc-300 mb-1">
               {mainstream}%
             </div>
-            <div className="text-sm font-semibold text-gray-700">
+            <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Mainstream %
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-gray-500 dark:text-zinc-500">
               Target: {100 - target}%
             </div>
           </div>
@@ -230,21 +230,21 @@ export default function CassidyRotationPage() {
             <div className="text-3xl font-bold text-purple-700 mb-1">
               {target}%
             </div>
-            <div className="text-sm font-semibold text-gray-700">
+            <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Indie Target
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-gray-500 dark:text-zinc-500">
               {progressPct}% complete
             </div>
           </div>
         </section>
 
         {/* Recently Placed */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Recently Placed</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 Latest indie artists replacing mainstream rotation slots
               </p>
             </div>
@@ -252,7 +252,7 @@ export default function CassidyRotationPage() {
           </div>
 
           {recentlyPlaced.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
               No recently placed artists.
             </div>
           ) : (
@@ -260,23 +260,23 @@ export default function CassidyRotationPage() {
               {recentlyPlaced.map((artist) => (
                 <div
                   key={artist.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-teal-300 transition-colors"
+                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-teal-300 transition-colors"
                 >
                   <div className="flex items-center space-x-3">
                     <Music className="w-5 h-5 text-teal-500" />
                     <div>
-                      <div className="font-semibold text-gray-900">
+                      <div className="font-semibold text-gray-900 dark:text-white">
                         {artist.artistName}
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-gray-600 dark:text-zinc-400">
                         {artist.trackTitle}
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
-                      <div className="text-sm text-gray-600">Placed</div>
-                      <div className="text-sm font-semibold text-gray-900">
+                      <div className="text-sm text-gray-600 dark:text-zinc-400">Placed</div>
+                      <div className="text-sm font-semibold text-gray-900 dark:text-white">
                         {artist.submittedAt}
                       </div>
                     </div>

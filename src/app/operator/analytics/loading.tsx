@@ -1,8 +1,8 @@
 export default function OperatorAnalyticsLoading() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Header skeleton */}
-      <header className="bg-white border-b">
+      <header className="bg-white dark:bg-zinc-900 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
@@ -22,7 +22,7 @@ export default function OperatorAnalyticsLoading() {
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-xl shadow-sm border p-5 animate-pulse"
+              className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-5 animate-pulse"
             >
               <div className="h-3 w-20 bg-gray-200 rounded mb-3" />
               <div className="h-7 w-16 bg-gray-200 rounded mb-2" />
@@ -32,7 +32,7 @@ export default function OperatorAnalyticsLoading() {
         </div>
 
         {/* 2. Listener trend chart */}
-        <div className="bg-white rounded-xl shadow-sm border p-6 animate-pulse">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse">
           <div className="h-5 w-52 bg-gray-200 rounded mb-2" />
           <div className="h-3 w-32 bg-gray-100 rounded mb-5" />
           <div className="flex items-end justify-between gap-2" style={{ height: 180 }}>
@@ -53,7 +53,7 @@ export default function OperatorAnalyticsLoading() {
           {[...Array(2)].map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-xl shadow-sm border p-6 animate-pulse"
+              className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse"
             >
               <div className="h-5 w-40 bg-gray-200 rounded mb-2" />
               <div className="h-3 w-48 bg-gray-100 rounded mb-5" />
@@ -73,7 +73,7 @@ export default function OperatorAnalyticsLoading() {
         </div>
 
         {/* 5. Top songs table */}
-        <div className="bg-white rounded-xl shadow-sm border p-6 animate-pulse">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse">
           <div className="h-5 w-44 bg-gray-200 rounded mb-4" />
           <div className="space-y-2">
             {[...Array(5)].map((_, i) => (
@@ -83,7 +83,7 @@ export default function OperatorAnalyticsLoading() {
         </div>
 
         {/* 6. Revenue breakdown */}
-        <div className="bg-white rounded-xl shadow-sm border p-6 animate-pulse">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse">
           <div className="h-5 w-40 bg-gray-200 rounded mb-5" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-3">

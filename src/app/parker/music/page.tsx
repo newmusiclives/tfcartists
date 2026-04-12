@@ -61,7 +61,7 @@ export default function MusicPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-rose-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
@@ -82,8 +82,8 @@ export default function MusicPage() {
           <div className="flex items-center space-x-3">
             <ListMusic className="w-8 h-8 text-violet-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Music Director Dashboard</h1>
-              <p className="text-gray-600">Managed by Wren Nakamura</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Music Director Dashboard</h1>
+              <p className="text-gray-600 dark:text-zinc-400">Managed by Wren Nakamura</p>
             </div>
           </div>
         </div>
@@ -92,43 +92,43 @@ export default function MusicPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Library Stats */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white rounded-xl p-6 shadow-lg">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
               <Music className="w-6 h-6 text-violet-600" />
-              <div className="text-sm font-medium text-gray-600">Total Songs</div>
+              <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Total Songs</div>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">{loading ? "..." : songCount || "1,510"}</div>
+            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{loading ? "..." : songCount || "1,510"}</div>
             <div className="text-xs text-violet-600">In music library</div>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-lg">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
               <RefreshCw className="w-6 h-6 text-rose-600" />
-              <div className="text-sm font-medium text-gray-600">In Active Rotation</div>
+              <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">In Active Rotation</div>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">500</div>
+            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">500</div>
             <div className="text-xs text-rose-600">Currently rotating</div>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-lg">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
               <TrendingUp className="w-6 h-6 text-green-600" />
-              <div className="text-sm font-medium text-gray-600">New This Month</div>
+              <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">New This Month</div>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">12</div>
+            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">12</div>
             <div className="text-xs text-green-600">Recently added</div>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-lg">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
               <BarChart3 className="w-6 h-6 text-indigo-600" />
-              <div className="text-sm font-medium text-gray-600">Category Balance</div>
+              <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Category Balance</div>
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-1">94%</div>
+            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">94%</div>
             <div className="text-xs text-indigo-600">Score</div>
           </div>
         </section>
 
         {/* Rotation Health */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Rotation Health</h2>
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Rotation Health</h2>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {ROTATION_CATEGORIES.map((cat, idx) => {
               const colorClasses: Record<string, string> = {
@@ -161,27 +161,27 @@ export default function MusicPage() {
         </section>
 
         {/* Recently Added Tracks */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Recently Added Tracks</h2>
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Recently Added Tracks</h2>
           <div className="space-y-3">
             {RECENT_ADDS.map((track, idx) => (
               <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                 <div className="flex items-center space-x-4">
                   <Music className="w-10 h-10 text-gray-400" />
                   <div>
-                    <div className="font-semibold text-gray-900">{track.title}</div>
-                    <div className="text-sm text-gray-600">{track.artist}</div>
+                    <div className="font-semibold text-gray-900 dark:text-white">{track.title}</div>
+                    <div className="text-sm text-gray-600 dark:text-zinc-400">{track.artist}</div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     track.category === "Heavy" ? "bg-rose-100 text-rose-700" :
                     track.category === "Medium" ? "bg-indigo-100 text-indigo-700" :
-                    "bg-amber-100 text-amber-700"
+                    "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400"
                   }`}>
                     {track.category}
                   </span>
-                  <div className="text-sm text-gray-500">{track.addedDate}</div>
+                  <div className="text-sm text-gray-500 dark:text-zinc-500">{track.addedDate}</div>
                 </div>
               </div>
             ))}
@@ -189,18 +189,18 @@ export default function MusicPage() {
         </section>
 
         {/* Category Balance */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Category Balance</h2>
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Category Balance</h2>
           <div className="space-y-4">
             {CATEGORY_BREAKDOWN.map((cat, idx) => {
               const barColors = ["bg-violet-500", "bg-rose-500", "bg-indigo-500", "bg-teal-500", "bg-orange-500", "bg-amber-500"];
               return (
                 <div key={idx}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-700">{cat.name}</span>
-                    <span className="text-sm text-gray-500">{cat.count} songs ({cat.pct}%)</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">{cat.name}</span>
+                    <span className="text-sm text-gray-500 dark:text-zinc-500">{cat.count} songs ({cat.pct}%)</span>
                   </div>
-                  <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
+                  <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-3 overflow-hidden">
                     <div className={`h-full rounded-full ${barColors[idx]} transition-all`} style={{ width: `${cat.pct}%` }} />
                   </div>
                 </div>

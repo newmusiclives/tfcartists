@@ -202,7 +202,7 @@ export default function CassidyTeamPage() {
       blue: {
         bg: "bg-blue-50",
         text: "text-blue-600",
-        badge: "bg-blue-100 text-blue-700",
+        badge: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400",
         hover: "hover:border-blue-400",
       },
       indigo: {
@@ -214,7 +214,7 @@ export default function CassidyTeamPage() {
       purple: {
         bg: "bg-purple-50",
         text: "text-purple-600",
-        badge: "bg-purple-100 text-purple-700",
+        badge: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400",
         hover: "hover:border-purple-400",
       },
       emerald: {
@@ -230,7 +230,7 @@ export default function CassidyTeamPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
       {/* Header */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-40">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -238,12 +238,12 @@ export default function CassidyTeamPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Cassidy's Team</h1>
-                <p className="text-sm text-gray-600">Submission Review & Rotation Curation</p>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Cassidy's Team</h1>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Submission Review & Rotation Curation</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <Link href="/cassidy" className="text-gray-600 hover:text-gray-900 text-sm">
+              <Link href="/cassidy" className="text-gray-600 hover:text-gray-900 dark:text-white text-sm">
                 Back to Dashboard
               </Link>
             </div>
@@ -284,12 +284,12 @@ export default function CassidyTeamPage() {
         </div>
 
         {/* Team Mission */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Our Mission</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Our Mission</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">What We Do</h4>
-              <ul className="space-y-2 text-gray-700">
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">What We Do</h4>
+              <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-2">
                   <span className="text-teal-600 mt-1">✓</span>
                   <span>Expert review of all artist submissions (5-7 day process)</span>
@@ -313,21 +313,21 @@ export default function CassidyTeamPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">The Four-Tier System</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">The Four-Tier System</h4>
               <div className="space-y-2">
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-semibold text-amber-900">🥉 Bronze</span>
-                    <span className="text-xs text-amber-700">60% of artists</span>
+                    <span className="text-xs text-amber-700 dark:text-amber-400">60% of artists</span>
                   </div>
-                  <div className="text-sm text-amber-800">4-6 spins/week • Entry point • Development focus</div>
+                  <div className="text-sm text-amber-800 dark:text-amber-400">4-6 spins/week • Entry point • Development focus</div>
                 </div>
-                <div className="bg-gray-100 border border-gray-300 rounded-lg p-3">
+                <div className="bg-gray-100 border border-gray-300 dark:border-zinc-700 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-semibold text-gray-900">🥈 Silver</span>
-                    <span className="text-xs text-gray-700">25% of artists</span>
+                    <span className="font-semibold text-gray-900 dark:text-white">🥈 Silver</span>
+                    <span className="text-xs text-gray-700 dark:text-zinc-300">25% of artists</span>
                   </div>
-                  <div className="text-sm text-gray-800">10-14 spins/week • Featured status • Growth focus</div>
+                  <div className="text-sm text-gray-800 dark:text-zinc-200">10-14 spins/week • Featured status • Growth focus</div>
                 </div>
                 <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
@@ -350,14 +350,14 @@ export default function CassidyTeamPage() {
 
         {/* Team Members */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">Team Members</h3>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Team Members</h3>
           <div className="space-y-6">
             {teamMembers.map((member) => {
               const colors = getColorClasses(member.color);
               return (
                 <div
                   key={member.id}
-                  className={`bg-white rounded-xl shadow-lg border-2 border-transparent ${colors.hover} transition-all overflow-hidden`}
+                  className={`bg-white dark:bg-zinc-900 rounded-xl shadow-lg border-2 border-transparent ${colors.hover} transition-all overflow-hidden`}
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
@@ -365,12 +365,12 @@ export default function CassidyTeamPage() {
                         <Image src={member.photoUrl} alt={member.name} width={64} height={64} className="w-16 h-16 rounded-xl object-cover shadow-md" />
                         <div>
                           <div className="flex items-center space-x-3 mb-1">
-                            <h4 className="text-xl font-bold text-gray-900">{member.name}</h4>
+                            <h4 className="text-xl font-bold text-gray-900 dark:text-white">{member.name}</h4>
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${colors.badge}`}>
                               {member.role}
                             </span>
                           </div>
-                          <p className="text-gray-600 mb-2">{member.title}</p>
+                          <p className="text-gray-600 dark:text-zinc-400 mb-2">{member.title}</p>
                           <div className="flex items-center space-x-4">
                             {member.dashboardLink && (
                               <Link
@@ -393,8 +393,8 @@ export default function CassidyTeamPage() {
                     <div className="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
                       {member.stats.map((stat, idx) => (
                         <div key={idx} className="text-center">
-                          <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                          <div className="text-xs text-gray-600">{stat.label}</div>
+                          <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                          <div className="text-xs text-gray-600 dark:text-zinc-400">{stat.label}</div>
                         </div>
                       ))}
                     </div>
@@ -402,7 +402,7 @@ export default function CassidyTeamPage() {
                     {/* Responsibilities & Tools */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 text-sm">Key Responsibilities</h5>
+                        <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Key Responsibilities</h5>
                         <ul className="space-y-1">
                           {member.responsibilities.map((resp, idx) => (
                             <li key={idx} className="text-sm text-gray-700 flex items-start space-x-2">
@@ -413,7 +413,7 @@ export default function CassidyTeamPage() {
                         </ul>
                       </div>
                       <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 text-sm">Tools & Systems</h5>
+                        <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Tools & Systems</h5>
                         <div className="flex flex-wrap gap-2">
                           {member.tools.map((tool, idx) => (
                             <span
@@ -434,8 +434,8 @@ export default function CassidyTeamPage() {
         </div>
 
         {/* Review Process */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Review Process (5-7 Days)</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Review Process (5-7 Days)</h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <WorkflowStep
               number="1"
@@ -469,8 +469,8 @@ export default function CassidyTeamPage() {
         </div>
 
         {/* Cross-Team Coordination */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Cross-Team Integration</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Cross-Team Integration</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
               <div className="flex items-center space-x-3 mb-2">
@@ -537,9 +537,9 @@ function WorkflowStep({
       <div className={`inline-flex items-center justify-center w-12 h-12 ${colorClasses[color]} text-white rounded-full text-xl font-bold mb-3`}>
         {number}
       </div>
-      <div className="flex items-center justify-center mb-2 text-gray-600">{icon}</div>
-      <h4 className="font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-sm text-gray-600">{description}</p>
+      <div className="flex items-center justify-center mb-2 text-gray-600 dark:text-zinc-400">{icon}</div>
+      <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{title}</h4>
+      <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
     </div>
   );
 }

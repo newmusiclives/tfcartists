@@ -63,7 +63,7 @@ function PreferencesForm() {
 
   if (!token) {
     return (
-      <div className="text-center text-gray-600">
+      <div className="text-center text-gray-600 dark:text-zinc-400">
         <p>Invalid link. Please use the link from your email.</p>
       </div>
     );
@@ -77,8 +77,8 @@ function PreferencesForm() {
   ];
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8">
-      <h2 className="text-lg font-bold text-gray-900 mb-4">Email Preferences</h2>
+    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+      <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Email Preferences</h2>
       <div className="space-y-4">
         {options.map((opt) => (
           <label key={opt.key} className="flex items-start space-x-3 cursor-pointer">
@@ -89,8 +89,8 @@ function PreferencesForm() {
               className="mt-1 rounded border-gray-300 text-amber-700 focus:ring-amber-500"
             />
             <div>
-              <span className="font-medium text-gray-900">{opt.label}</span>
-              <p className="text-sm text-gray-500">{opt.desc}</p>
+              <span className="font-medium text-gray-900 dark:text-white">{opt.label}</span>
+              <p className="text-sm text-gray-500 dark:text-zinc-500">{opt.desc}</p>
             </div>
           </label>
         ))}
@@ -123,12 +123,12 @@ function PreferencesForm() {
 
 export default function NewsletterPreferencesPage() {
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <Radio className="w-8 h-8 text-amber-700 mx-auto mb-2" />
-          <h1 className="text-2xl font-bold text-gray-900">Newsletter Preferences</h1>
-          <p className="text-gray-600">Choose which emails you'd like to receive</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Newsletter Preferences</h1>
+          <p className="text-gray-600 dark:text-zinc-400">Choose which emails you'd like to receive</p>
         </div>
 
         <Suspense fallback={

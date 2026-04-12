@@ -45,7 +45,7 @@ export default function ListenerAnalyticsPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading analytics...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading analytics...</div>
       </main>
     );
   }
@@ -94,11 +94,11 @@ export default function ListenerAnalyticsPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/elliot"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Elliot Dashboard</span>
@@ -106,8 +106,8 @@ export default function ListenerAnalyticsPage() {
           <div className="flex items-center space-x-3">
             <BarChart3 className="w-8 h-8 text-indigo-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Listener Analytics</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Listener Analytics</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Deep insights into listener behavior and engagement
               </p>
             </div>
@@ -150,9 +150,9 @@ export default function ListenerAnalyticsPage() {
 
         {/* Listener Growth Trend (30 days) */}
         {analytics && analytics.dailyGrowth.length > 0 && (
-          <section className="bg-white rounded-xl shadow-lg p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-2">Listener Growth Trend</h2>
-            <p className="text-gray-600 text-sm mb-6">New listener signups per day (last 30 days)</p>
+            <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">New listener signups per day (last 30 days)</p>
             <div className="flex items-end space-x-1 h-40">
               {analytics.dailyGrowth.map((d) => {
                 const maxCount = Math.max(...analytics.dailyGrowth.map((x) => x.count), 1);
@@ -181,9 +181,9 @@ export default function ListenerAnalyticsPage() {
         {analytics && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Session Duration Distribution */}
-            <section className="bg-white rounded-xl shadow-lg p-6">
+            <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
               <h2 className="text-lg font-bold mb-2">Session Duration</h2>
-              <p className="text-gray-600 text-xs mb-4">Distribution of session lengths (30 days)</p>
+              <p className="text-gray-600 dark:text-zinc-400 text-xs mb-4">Distribution of session lengths (30 days)</p>
               <div className="space-y-3">
                 {analytics.sessionDistribution.map((b) => {
                   const maxCount = Math.max(...analytics.sessionDistribution.map((x) => x.count), 1);
@@ -192,7 +192,7 @@ export default function ListenerAnalyticsPage() {
                     <div key={b.bucket}>
                       <div className="flex justify-between text-sm mb-1">
                         <span className="text-gray-700 font-medium">{b.bucket}</span>
-                        <span className="text-gray-500">{b.count.toLocaleString()}</span>
+                        <span className="text-gray-500 dark:text-zinc-500">{b.count.toLocaleString()}</span>
                       </div>
                       <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
                         <div
@@ -207,9 +207,9 @@ export default function ListenerAnalyticsPage() {
             </section>
 
             {/* Referral Source Funnel */}
-            <section className="bg-white rounded-xl shadow-lg p-6">
+            <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
               <h2 className="text-lg font-bold mb-2">Referral Sources</h2>
-              <p className="text-gray-600 text-xs mb-4">How listeners discovered the station</p>
+              <p className="text-gray-600 dark:text-zinc-400 text-xs mb-4">How listeners discovered the station</p>
               {analytics.referralFunnel.length === 0 ? (
                 <p className="text-sm text-gray-400">No referral data yet</p>
               ) : (
@@ -223,7 +223,7 @@ export default function ListenerAnalyticsPage() {
                       <div key={s.source}>
                         <div className="flex justify-between text-sm mb-1">
                           <span className="text-gray-700 font-medium">{s.source}</span>
-                          <span className="text-gray-500">{s.count.toLocaleString()} ({pct}%)</span>
+                          <span className="text-gray-500 dark:text-zinc-500">{s.count.toLocaleString()} ({pct}%)</span>
                         </div>
                         <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
                           <div
@@ -242,15 +242,15 @@ export default function ListenerAnalyticsPage() {
 
         {/* Retention Cohorts */}
         {analytics && analytics.retentionCohorts.length > 0 && (
-          <section className="bg-white rounded-xl shadow-lg p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-2">Weekly Retention Cohorts</h2>
-            <p className="text-gray-600 text-sm mb-6">
+            <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
               Percentage of each weekly signup cohort still active this week
             </p>
             <div className="grid grid-cols-4 gap-4">
               {analytics.retentionCohorts.map((c) => (
                 <div key={c.week} className="text-center">
-                  <div className="text-xs text-gray-500 mb-2">{c.week}</div>
+                  <div className="text-xs text-gray-500 dark:text-zinc-500 mb-2">{c.week}</div>
                   <div className="relative mx-auto w-20 h-20">
                     <svg className="w-20 h-20 -rotate-90" viewBox="0 0 36 36">
                       <path
@@ -271,10 +271,10 @@ export default function ListenerAnalyticsPage() {
                       />
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-lg font-bold text-gray-900">{c.rate}%</span>
+                      <span className="text-lg font-bold text-gray-900 dark:text-white">{c.rate}%</span>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500 mt-2">{c.active}/{c.total} active</div>
+                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-2">{c.active}/{c.total} active</div>
                 </div>
               ))}
             </div>
@@ -282,9 +282,9 @@ export default function ListenerAnalyticsPage() {
         )}
 
         {/* Listener Tier Distribution */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Listener Tier Distribution</h2>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Current listener base: {totalByTier.toLocaleString()} listeners
           </p>
 
@@ -305,7 +305,7 @@ export default function ListenerAnalyticsPage() {
         </section>
 
         {/* Listening Patterns */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Listening Patterns by Time Slot</h2>
 
           <div className="space-y-4">
@@ -315,7 +315,7 @@ export default function ListenerAnalyticsPage() {
           </div>
 
           <div className="mt-6 pt-6 border-t">
-            <div className="flex items-start space-x-2 text-sm text-gray-600">
+            <div className="flex items-start space-x-2 text-sm text-gray-600 dark:text-zinc-400">
               <Activity className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
               <div>
                 <strong>Peak Time:</strong> Morning (6am-10am) with 450 average listeners. Late night shows highest engagement (45 min avg session).
@@ -325,9 +325,9 @@ export default function ListenerAnalyticsPage() {
         </section>
 
         {/* Top Performing Artists */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Top Performing Artists</h2>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Artists driving the most engagement and new listener acquisition
           </p>
 
@@ -339,7 +339,7 @@ export default function ListenerAnalyticsPage() {
         </section>
 
         {/* Device & Platform */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Device & Platform Breakdown</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -350,7 +350,7 @@ export default function ListenerAnalyticsPage() {
 
           <div className="mt-6 pt-6 border-t">
             <h3 className="font-semibold mb-4">Recommendations</h3>
-            <ul className="space-y-2 text-sm text-gray-700">
+            <ul className="space-y-2 text-sm text-gray-700 dark:text-zinc-300">
               <li className="flex items-start space-x-2">
                 <span className="text-indigo-600">•</span>
                 <span>Mobile is dominant (58%) - prioritize mobile app experience</span>
@@ -404,12 +404,12 @@ function MetricCard({
   positive: boolean;
 }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
       <div className={`text-xs font-semibold ${positive ? 'text-green-600' : 'text-red-600'}`}>
         {change}
       </div>
@@ -425,10 +425,10 @@ function TierCard({ tier, count, percentage, sessions, color }: {
   color: "blue" | "green" | "purple" | "orange";
 }) {
   const colorClasses: Record<string, string> = {
-    blue: "bg-blue-100 text-blue-700 border-blue-200",
-    green: "bg-green-100 text-green-700 border-green-200",
-    purple: "bg-purple-100 text-purple-700 border-purple-200",
-    orange: "bg-orange-100 text-orange-700 border-orange-200",
+    blue: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-200",
+    green: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 border-green-200",
+    purple: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-200",
+    orange: "bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-200",
   };
   const className = colorClasses[color];
 
@@ -446,10 +446,10 @@ function TimeSlotRow({ slot, listeners, avgSession, topDJ }: { slot: string; lis
   return (
     <div className="bg-gray-50 rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
-        <div className="font-semibold text-gray-900">{slot}</div>
-        <div className="text-sm text-gray-600">{listeners} avg listeners</div>
+        <div className="font-semibold text-gray-900 dark:text-white">{slot}</div>
+        <div className="text-sm text-gray-600 dark:text-zinc-400">{listeners} avg listeners</div>
       </div>
-      <div className="flex items-center justify-between text-sm text-gray-600">
+      <div className="flex items-center justify-between text-sm text-gray-600 dark:text-zinc-400">
         <div>Avg session: {avgSession} min</div>
         <div>Top DJ: {topDJ}</div>
       </div>
@@ -465,18 +465,18 @@ function ArtistRow({ rank, name, plays, newListeners, avgCompletion }: { rank: n
           {rank}
         </div>
         <div>
-          <div className="font-semibold text-gray-900">{name}</div>
-          <div className="text-sm text-gray-600">{plays.toLocaleString()} plays</div>
+          <div className="font-semibold text-gray-900 dark:text-white">{name}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">{plays.toLocaleString()} plays</div>
         </div>
       </div>
       <div className="flex items-center space-x-6 text-sm">
         <div className="text-center">
           <div className="text-green-600 font-semibold">+{newListeners}</div>
-          <div className="text-xs text-gray-500">new listeners</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">new listeners</div>
         </div>
         <div className="text-center">
           <div className="text-indigo-600 font-semibold">{avgCompletion}%</div>
-          <div className="text-xs text-gray-500">completion</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">completion</div>
         </div>
       </div>
     </div>
@@ -485,9 +485,9 @@ function ArtistRow({ rank, name, plays, newListeners, avgCompletion }: { rank: n
 
 function DeviceCard({ device, count, percentage }: { device: string; count: number; percentage: number }) {
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-6 border-2 border-gray-200 text-center">
-      <div className="text-sm text-gray-600 mb-2">{device}</div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{count}</div>
+    <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-6 border-2 border-gray-200 dark:border-zinc-800 text-center">
+      <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{device}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{count}</div>
       <div className="text-lg font-semibold text-indigo-600">{percentage}%</div>
     </div>
   );
@@ -495,10 +495,10 @@ function DeviceCard({ device, count, percentage }: { device: string; count: numb
 
 function StatBox({ label, value, icon }: { label: string; value: string | number; icon: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 text-center">
       <div className="flex justify-center mb-3">{icon}</div>
-      <div className="text-sm text-gray-600 mb-2">{label}</div>
-      <div className="text-3xl font-bold text-gray-900">{value}</div>
+      <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{label}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white">{value}</div>
     </div>
   );
 }

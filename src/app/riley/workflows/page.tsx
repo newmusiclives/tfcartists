@@ -313,7 +313,7 @@ export default function WorkflowsPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-40">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -321,8 +321,8 @@ export default function WorkflowsPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Automated Workflows</h1>
-                <p className="text-sm text-gray-600">Grace Holland's outreach automation</p>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Automated Workflows</h1>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Grace Holland's outreach automation</p>
               </div>
             </div>
             <button className="inline-flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
@@ -367,26 +367,26 @@ export default function WorkflowsPage() {
           {workflows.map((workflow) => (
             <div
               key={workflow.id}
-              className="bg-white rounded-xl shadow-lg border-2 border-transparent hover:border-purple-300 transition-all"
+              className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg border-2 border-transparent hover:border-purple-300 transition-all"
             >
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <h3 className="text-lg font-bold text-gray-900">{workflow.name}</h3>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white">{workflow.name}</h3>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
                           workflow.status === "active"
-                            ? "bg-green-100 text-green-700"
+                            ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
                             : workflow.status === "paused"
-                            ? "bg-yellow-100 text-yellow-700"
+                            ? "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400"
                             : "bg-gray-100 text-gray-600"
                         }`}
                       >
                         {workflow.status.toUpperCase()}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">{workflow.description}</p>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">{workflow.description}</p>
                     <div className="flex items-center space-x-2 text-xs text-gray-500 bg-gray-50 rounded px-3 py-2">
                       <Zap className="w-3 h-3" />
                       <span>Trigger: {workflow.trigger}</span>
@@ -407,22 +407,22 @@ export default function WorkflowsPage() {
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900">{workflow.stats.enrolled}</div>
-                    <div className="text-xs text-gray-600">Enrolled</div>
+                    <div className="text-2xl font-bold text-gray-900 dark:text-white">{workflow.stats.enrolled}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Enrolled</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-600">{workflow.stats.completed}</div>
-                    <div className="text-xs text-gray-600">Completed</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Completed</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-purple-600">{workflow.stats.conversionRate}%</div>
-                    <div className="text-xs text-gray-600">Conversion</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Conversion</div>
                   </div>
                 </div>
 
                 {/* Steps Preview */}
                 <div className="mb-4">
-                  <div className="text-sm font-medium text-gray-700 mb-2">{workflow.steps.length} Steps</div>
+                  <div className="text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">{workflow.steps.length} Steps</div>
                   <div className="flex items-center space-x-2 overflow-x-auto pb-2">
                     {workflow.steps.map((step, idx) => (
                       <div key={step.id} className="flex items-center">
@@ -445,7 +445,7 @@ export default function WorkflowsPage() {
                   >
                     View Details
                   </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
+                  <button className="px-4 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium">
                     <Settings className="w-4 h-4" />
                   </button>
                 </div>
@@ -455,36 +455,36 @@ export default function WorkflowsPage() {
         </div>
 
         {/* How It Works */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">How Automated Workflows Work</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">How Automated Workflows Work</h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 text-purple-600 rounded-full mb-3">
                 <Zap className="w-6 h-6" />
               </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Trigger</h4>
-              <p className="text-sm text-gray-600">Workflow starts automatically when condition is met</p>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Trigger</h4>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Workflow starts automatically when condition is met</p>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-full mb-3">
                 <Mail className="w-6 h-6" />
               </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Send Emails</h4>
-              <p className="text-sm text-gray-600">Personalized emails sent at perfect timing</p>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Send Emails</h4>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Personalized emails sent at perfect timing</p>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full mb-3">
                 <Clock className="w-6 h-6" />
               </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Wait & Check</h4>
-              <p className="text-sm text-gray-600">Smart delays and condition checks</p>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Wait & Check</h4>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Smart delays and condition checks</p>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 text-green-600 rounded-full mb-3">
                 <CheckCircle className="w-6 h-6" />
               </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Convert</h4>
-              <p className="text-sm text-gray-600">Artist moves to next pipeline stage</p>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Convert</h4>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Artist moves to next pipeline stage</p>
             </div>
           </div>
         </div>
@@ -493,14 +493,14 @@ export default function WorkflowsPage() {
       {/* Workflow Detail Modal */}
       {selectedWorkflow && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedWorkflow(null)}>
-          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="sticky top-0 bg-white border-b p-6 z-10">
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-1">{selectedWorkflow.name}</h2>
-                  <p className="text-gray-600">{selectedWorkflow.description}</p>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{selectedWorkflow.name}</h2>
+                  <p className="text-gray-600 dark:text-zinc-400">{selectedWorkflow.description}</p>
                 </div>
-                <button onClick={() => setSelectedWorkflow(null)} className="text-gray-400 hover:text-gray-600">
+                <button onClick={() => setSelectedWorkflow(null)} className="text-gray-400 hover:text-gray-600 dark:text-zinc-400">
                   ×
                 </button>
               </div>
@@ -509,7 +509,7 @@ export default function WorkflowsPage() {
             <div className="p-6">
               {/* Trigger */}
               <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 mb-3">Workflow Trigger</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Workflow Trigger</h3>
                 <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                   <div className="flex items-center space-x-2">
                     <Zap className="w-5 h-5 text-purple-600" />
@@ -520,7 +520,7 @@ export default function WorkflowsPage() {
 
               {/* Steps */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Workflow Steps</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Workflow Steps</h3>
                 <div className="space-y-4">
                   {selectedWorkflow.steps.map((step, idx) => (
                     <div key={step.id} className="flex items-start space-x-4">
@@ -533,10 +533,10 @@ export default function WorkflowsPage() {
                         )}
                       </div>
                       <div className="flex-1 pt-1">
-                        <div className="font-semibold text-gray-900">{step.title}</div>
-                        <div className="text-sm text-gray-600">{step.description}</div>
+                        <div className="font-semibold text-gray-900 dark:text-white">{step.title}</div>
+                        <div className="text-sm text-gray-600 dark:text-zinc-400">{step.description}</div>
                         {step.delay && (
-                          <div className="inline-flex items-center space-x-1 text-xs text-gray-500 mt-1 bg-gray-100 px-2 py-1 rounded">
+                          <div className="inline-flex items-center space-x-1 text-xs text-gray-500 dark:text-zinc-500 mt-1 bg-gray-100 px-2 py-1 rounded">
                             <Clock className="w-3 h-3" />
                             <span>Delay: {step.delay}</span>
                           </div>
@@ -576,9 +576,9 @@ function StatCard({
     <div className={`${colorClasses[color]} rounded-xl p-6`}>
       <div className="flex items-center space-x-3 mb-2">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900">{value}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white">{value}</div>
     </div>
   );
 }

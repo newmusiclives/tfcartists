@@ -114,7 +114,7 @@ export function EpisodeList({ episodes, djNames }: EpisodeListProps) {
           {/* DJ Filter */}
           <div className="flex-1">
             <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
-              DJ
+              Host
             </label>
             <select
               value={djFilter}
@@ -124,7 +124,7 @@ export function EpisodeList({ episodes, djNames }: EpisodeListProps) {
               }}
               className="w-full bg-zinc-800 border border-zinc-700 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
-              <option value="all">All DJs</option>
+              <option value="all">All Hosts</option>
               {djNames.map((name) => (
                 <option key={name} value={name}>
                   {name}

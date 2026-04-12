@@ -174,12 +174,12 @@ const initialSponsors: Sponsor[] = [
 ];
 
 const stageConfig: Record<PipelineStage, { label: string; color: string; description: string }> = {
-  discovered: { label: 'Discovered', color: 'bg-gray-100 text-gray-700 border-gray-300', description: 'New potential sponsors identified' },
-  contacted: { label: 'Contacted', color: 'bg-blue-100 text-blue-700 border-blue-300', description: 'Initial outreach made' },
-  interested: { label: 'Interested', color: 'bg-purple-100 text-purple-700 border-purple-300', description: 'Expressed interest in sponsorship' },
-  negotiating: { label: 'Negotiating', color: 'bg-yellow-100 text-yellow-700 border-yellow-300', description: 'Discussing terms and packages' },
-  agreement: { label: 'Agreement', color: 'bg-orange-100 text-orange-700 border-orange-300', description: 'Contract signed, setting up' },
-  activated: { label: 'Activated', color: 'bg-green-100 text-green-700 border-green-300', description: 'Active sponsors running ads' },
+  discovered: { label: 'Discovered', color: 'bg-gray-100 text-gray-700 border-gray-300 dark:border-zinc-700', description: 'New potential sponsors identified' },
+  contacted: { label: 'Contacted', color: 'bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-300', description: 'Initial outreach made' },
+  interested: { label: 'Interested', color: 'bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-300', description: 'Expressed interest in sponsorship' },
+  negotiating: { label: 'Negotiating', color: 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-300', description: 'Discussing terms and packages' },
+  agreement: { label: 'Agreement', color: 'bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-300', description: 'Contract signed, setting up' },
+  activated: { label: 'Activated', color: 'bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 border-green-300', description: 'Active sponsors running ads' },
   renewing: { label: 'Renewing', color: 'bg-teal-100 text-teal-700 border-teal-300', description: 'Contract renewal in progress' }
 };
 
@@ -253,20 +253,20 @@ export default function SponsorPipeline() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-zinc-900 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700">
+                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
-                <h1 className="text-2xl font-bold text-gray-900">Sponsor Pipeline</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Sponsor Pipeline</h1>
               </div>
-              <p className="text-gray-600 mt-1">Complete journey from discovery to activation</p>
+              <p className="text-gray-600 dark:text-zinc-400 mt-1">Complete journey from discovery to activation</p>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -282,7 +282,7 @@ export default function SponsorPipeline() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live sponsor data will appear once the pipeline API is connected.
         </div>
       </div>
@@ -290,38 +290,38 @@ export default function SponsorPipeline() {
       {/* Stats Overview */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Sponsors</p>
-                <p className="text-2xl font-bold text-gray-900">{sponsors.length}</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Total Sponsors</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{sponsors.length}</p>
               </div>
               <Building2 className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Active Sponsors</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Active Sponsors</p>
                 <p className="text-2xl font-bold text-green-600">{activeSponsors}</p>
               </div>
               <TrendingUp className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Potential Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">${totalPotentialRevenue}/mo</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Potential Revenue</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">${totalPotentialRevenue}/mo</p>
               </div>
               <DollarSign className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Avg Days in Stage</p>
-                <p className="text-2xl font-bold text-gray-900">{Math.round(avgDaysInStage)}</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Avg Days in Stage</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{Math.round(avgDaysInStage)}</p>
               </div>
               <Calendar className="w-8 h-8 text-green-600" />
             </div>
@@ -329,8 +329,8 @@ export default function SponsorPipeline() {
         </div>
 
         {/* Pipeline Overview */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Pipeline Overview</h2>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Pipeline Overview</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
             {Object.entries(stageConfig).map(([stageKey, config], idx) => {
               const stageSponsors = getSponsorsByStage(stageKey as PipelineStage);
@@ -342,13 +342,13 @@ export default function SponsorPipeline() {
                   className={`relative p-4 rounded-lg border-2 transition-all cursor-pointer ${
                     selectedStage === stageKey
                       ? "border-green-500 bg-green-100 shadow-lg ring-2 ring-green-200"
-                      : "border-gray-200 hover:border-green-300 hover:shadow-md hover:bg-green-50"
+                      : "border-gray-200 dark:border-zinc-800 hover:border-green-300 hover:shadow-md hover:bg-green-50"
                   }`}
                 >
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-gray-900 mb-1">{stageSponsors.length}</div>
-                    <div className="text-xs font-medium text-gray-600 mb-2">{config.label}</div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stageSponsors.length}</div>
+                    <div className="text-xs font-medium text-gray-600 dark:text-zinc-400 mb-2">{config.label}</div>
+                    <div className="text-xs text-gray-500 dark:text-zinc-500">
                       {getAssignedTo(stageKey as PipelineStage).split(' ')[0]}
                     </div>
                   </div>
@@ -366,7 +366,7 @@ export default function SponsorPipeline() {
               className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer hover:scale-105 ${
                 selectedStage === "all"
                   ? "bg-green-600 text-white shadow-lg ring-2 ring-green-300"
-                  : "bg-green-100 text-green-700 hover:bg-green-200 hover:shadow-md"
+                  : "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 hover:bg-green-200 hover:shadow-md"
               }`}
             >
               {selectedStage === "all" ? "✓ Viewing All Stages" : "View All Stages"} ({sponsors.length} sponsors)
@@ -375,7 +375,7 @@ export default function SponsorPipeline() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white p-4 rounded-lg border mb-6">
+        <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg border mb-6">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="flex-1 w-full">
               <div className="relative">
@@ -416,16 +416,16 @@ export default function SponsorPipeline() {
         </div>
 
         {/* Filtered Sponsors List */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-semibold text-gray-900 text-lg">
+            <h3 className="font-semibold text-gray-900 dark:text-white text-lg">
               {selectedStage === "all" ? "All Sponsors" : `${stageConfig[selectedStage].label} Stage`}
               {" "}({filteredSponsors.length})
             </h3>
           </div>
 
           {filteredSponsors.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
               <Building2 className="w-12 h-12 mx-auto mb-4 text-gray-400" />
               <p>No sponsors found matching your filters.</p>
             </div>
@@ -439,18 +439,18 @@ export default function SponsorPipeline() {
                         >
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex-1">
-                              <h3 className="font-semibold text-gray-900">{sponsor.name}</h3>
-                              <p className="text-sm text-gray-600">{sponsor.businessType}</p>
+                              <h3 className="font-semibold text-gray-900 dark:text-white">{sponsor.name}</h3>
+                              <p className="text-sm text-gray-600 dark:text-zinc-400">{sponsor.businessType}</p>
                             </div>
                             <span className={`px-2 py-1 rounded text-xs font-medium ${getPriorityColor(sponsor.priority)}`}>
                               {sponsor.priority}
                             </span>
                           </div>
                           <div className="space-y-1 mb-3">
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-gray-600 dark:text-zinc-400">
                               <span className="font-medium">Contact:</span> {sponsor.contact}
                             </p>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-gray-600 dark:text-zinc-400">
                               <span className="font-medium">Tier:</span> {sponsor.potentialTier}
                             </p>
                             <p className="text-sm text-green-600 font-medium">
@@ -458,10 +458,10 @@ export default function SponsorPipeline() {
                             </p>
                           </div>
                           <div className="flex items-center justify-between pt-3 border-t">
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-zinc-500">
                               {sponsor.daysInStage} days in stage
                             </span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-zinc-500">
                               {sponsor.assignedTo.split(' ')[0]}
                             </span>
                           </div>
@@ -475,12 +475,12 @@ export default function SponsorPipeline() {
       {/* Sponsor Detail Modal */}
       {showActionModal && selectedSponsor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-zinc-900 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b sticky top-0 bg-white">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-gray-900">{selectedSponsor.name}</h2>
-                  <p className="text-gray-600">{selectedSponsor.businessType}</p>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedSponsor.name}</h2>
+                  <p className="text-gray-600 dark:text-zinc-400">{selectedSponsor.businessType}</p>
                   <div className="flex items-center space-x-2 mt-2">
                     <span className={`px-3 py-1 rounded-full text-sm font-medium border ${stageConfig[selectedSponsor.stage].color}`}>
                       {stageConfig[selectedSponsor.stage].label}
@@ -505,11 +505,11 @@ export default function SponsorPipeline() {
             <div className="p-6 space-y-6">
               {/* Contact Information */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Contact Information</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Contact Information</h3>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2 text-sm">
                     <Mail className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">Contact:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Contact:</span>
                     <span className="font-medium">{selectedSponsor.contact}</span>
                   </div>
                   <div className="flex items-center space-x-2 text-sm">
@@ -535,22 +535,22 @@ export default function SponsorPipeline() {
 
               {/* Sponsorship Details */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Sponsorship Details</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Sponsorship Details</h3>
                 <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Potential Tier:</span>
+                    <span className="text-sm text-gray-600 dark:text-zinc-400">Potential Tier:</span>
                     <span className="text-sm font-medium">{selectedSponsor.potentialTier}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Potential Revenue:</span>
+                    <span className="text-sm text-gray-600 dark:text-zinc-400">Potential Revenue:</span>
                     <span className="text-sm font-medium text-green-600">${selectedSponsor.potentialRevenue}/month</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Days in Stage:</span>
+                    <span className="text-sm text-gray-600 dark:text-zinc-400">Days in Stage:</span>
                     <span className="text-sm font-medium">{selectedSponsor.daysInStage} days</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Assigned To:</span>
+                    <span className="text-sm text-gray-600 dark:text-zinc-400">Assigned To:</span>
                     <span className="text-sm font-medium">{selectedSponsor.assignedTo}</span>
                   </div>
                 </div>
@@ -558,19 +558,19 @@ export default function SponsorPipeline() {
 
               {/* Notes */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Notes</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Notes</h3>
                 <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{selectedSponsor.notes}</p>
               </div>
 
               {/* Next Action */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Next Action</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Next Action</h3>
                 <div className="bg-green-50 p-4 rounded-lg">
                   <div className="flex items-start space-x-2">
                     <Calendar className="w-5 h-5 text-green-600 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{selectedSponsor.nextAction}</p>
-                      <p className="text-sm text-gray-600 mt-1">Due: {selectedSponsor.nextActionDate}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">{selectedSponsor.nextAction}</p>
+                      <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">Due: {selectedSponsor.nextActionDate}</p>
                     </div>
                   </div>
                 </div>
@@ -594,7 +594,7 @@ export default function SponsorPipeline() {
 
               {/* Move to Stage */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Move to Stage</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Move to Stage</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {Object.entries(stageConfig).map(([stageKey, config]) => (
                     <button

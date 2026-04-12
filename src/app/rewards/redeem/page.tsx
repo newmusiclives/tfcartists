@@ -26,10 +26,10 @@ interface RedemptionRecord {
 }
 
 const CATEGORY_CONFIG: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  merch: { label: "Merch", icon: <ShoppingBag className="w-4 h-4" />, color: "bg-blue-100 text-blue-700" },
-  shoutout: { label: "Shoutouts", icon: <Mic className="w-4 h-4" />, color: "bg-purple-100 text-purple-700" },
-  exclusive: { label: "Exclusives", icon: <Star className="w-4 h-4" />, color: "bg-amber-100 text-amber-700" },
-  experience: { label: "Experiences", icon: <Sparkles className="w-4 h-4" />, color: "bg-green-100 text-green-700" },
+  merch: { label: "Merch", icon: <ShoppingBag className="w-4 h-4" />, color: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400" },
+  shoutout: { label: "Shoutouts", icon: <Mic className="w-4 h-4" />, color: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" },
+  exclusive: { label: "Exclusives", icon: <Star className="w-4 h-4" />, color: "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400" },
+  experience: { label: "Experiences", icon: <Sparkles className="w-4 h-4" />, color: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" },
 };
 
 const REWARD_ICONS: Record<string, string> = {
@@ -140,7 +140,7 @@ export default function RedeemRewardsPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/rewards" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
@@ -151,7 +151,7 @@ export default function RedeemRewardsPage() {
             <div className="flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-bold">
               <Star className="w-4 h-4" />
               <span>{userXp.toLocaleString()} XP</span>
-              <span className="text-amber-600">Lv.{userLevel}</span>
+              <span className="text-amber-600 dark:text-amber-400">Lv.{userLevel}</span>
             </div>
           </div>
         </div>
@@ -163,8 +163,8 @@ export default function RedeemRewardsPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-4">
             <Gift className="w-8 h-8 text-amber-700" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Redeem Rewards</h1>
-          <p className="mt-2 text-gray-600">Spend your XP on merch, shoutouts, and exclusive experiences</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Redeem Rewards</h1>
+          <p className="mt-2 text-gray-600 dark:text-zinc-400">Spend your XP on merch, shoutouts, and exclusive experiences</p>
         </div>
 
         {/* Messages */}
@@ -248,8 +248,8 @@ export default function RedeemRewardsPage() {
                     )}
                   </div>
 
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">{reward.name}</h3>
-                  <p className="text-sm text-gray-600 mb-4">{reward.description}</p>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{reward.name}</h3>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400 mb-4">{reward.description}</p>
 
                   {/* Supply indicator */}
                   {reward.totalSupply !== null && (
@@ -265,7 +265,7 @@ export default function RedeemRewardsPage() {
                       </span>
                       {reward.minLevel > 1 && (
                         <span className={`text-xs px-2 py-0.5 rounded-full ${
-                          meetsLevel ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+                          meetsLevel ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-gray-100 text-gray-500"
                         }`}>
                           Lv.{reward.minLevel}+
                         </span>
@@ -307,20 +307,20 @@ export default function RedeemRewardsPage() {
         {/* Redemption History */}
         {redemptions.length > 0 && (
           <div className="mt-8 bg-white rounded-2xl shadow-sm border p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Your Redemptions</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Your Redemptions</h2>
             <div className="space-y-3">
               {redemptions.map((r, idx) => {
                 const reward = rewards.find((rw) => rw.id === r.rewardId);
                 return (
                   <div key={idx} className="flex items-center justify-between py-2 border-b last:border-0">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{reward?.name || "Unknown Reward"}</div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">{reward?.name || "Unknown Reward"}</div>
                       <div className="text-xs text-gray-400">{new Date(r.redeemedAt).toLocaleDateString()}</div>
                     </div>
                     <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                      r.status === "fulfilled" ? "bg-green-100 text-green-700"
-                        : r.status === "cancelled" ? "bg-red-100 text-red-700"
-                          : "bg-yellow-100 text-yellow-700"
+                      r.status === "fulfilled" ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
+                        : r.status === "cancelled" ? "bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400"
+                          : "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400"
                     }`}>
                       {r.status === "fulfilled" ? "Fulfilled" : r.status === "cancelled" ? "Cancelled" : "Pending"}
                     </span>

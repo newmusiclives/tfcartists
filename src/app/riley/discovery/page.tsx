@@ -126,7 +126,7 @@ export default function RileyDiscoveryPage() {
         <div className="flex items-center gap-4 mb-6">
           <Link
             href="/riley"
-            className="p-2 hover:bg-white rounded-lg transition-colors"
+            className="p-2 hover:bg-white dark:bg-zinc-900 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </Link>
@@ -142,7 +142,7 @@ export default function RileyDiscoveryPage() {
         </div>
 
         {/* Search Controls */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-6">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -200,7 +200,7 @@ export default function RileyDiscoveryPage() {
                   className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                     genre === g
                       ? "bg-green-100 border-green-300 text-green-700"
-                      : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100"
+                      : "bg-gray-50 border-gray-200 dark:border-zinc-800 text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   {g
@@ -223,7 +223,7 @@ export default function RileyDiscoveryPage() {
         {/* Results */}
         {artists.length > 0 && (
           <>
-            <div className="text-sm text-gray-500 mb-4">
+            <div className="text-sm text-gray-500 dark:text-zinc-500 mb-4">
               Showing {artists.length} of {total.toLocaleString()} results
             </div>
 
@@ -231,7 +231,7 @@ export default function RileyDiscoveryPage() {
               {artists.map((artist) => (
                 <div
                   key={artist.id}
-                  className="bg-white rounded-xl p-5 shadow-sm border hover:shadow-md transition-shadow"
+                  className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border hover:shadow-md transition-shadow"
                 >
                   <div className="flex gap-4">
                     {/* Artist Image */}
@@ -256,7 +256,7 @@ export default function RileyDiscoveryPage() {
                           <h3 className="font-semibold text-gray-900 truncate">
                             {artist.name}
                           </h3>
-                          <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
+                          <div className="flex items-center gap-3 mt-1 text-xs text-gray-500 dark:text-zinc-500">
                             <span className="flex items-center gap-1">
                               <Users className="w-3 h-3" />
                               {formatFollowers(artist.followers)}
@@ -319,19 +319,19 @@ export default function RileyDiscoveryPage() {
                       {/* Follower Tier Indicator */}
                       <div className="mt-2">
                         {artist.followers < 1000 ? (
-                          <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
+                          <span className="text-xs bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full font-medium">
                             Emerging
                           </span>
                         ) : artist.followers < 10000 ? (
-                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+                          <span className="text-xs bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 px-2 py-0.5 rounded-full font-medium">
                             Rising
                           </span>
                         ) : artist.followers < 50000 ? (
-                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">
+                          <span className="text-xs bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 px-2 py-0.5 rounded-full font-medium">
                             Established Indie
                           </span>
                         ) : (
-                          <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">
+                          <span className="text-xs bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-medium">
                             Mainstream
                           </span>
                         )}
@@ -348,7 +348,7 @@ export default function RileyDiscoveryPage() {
                 <button
                   onClick={() => search(artists.length)}
                   disabled={loading}
-                  className="bg-white border px-6 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                  className="bg-white dark:bg-zinc-900 border px-6 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
                 >
                   {loading ? "Loading..." : "Load More"}
                 </button>
@@ -359,9 +359,9 @@ export default function RileyDiscoveryPage() {
 
         {/* Empty State */}
         {!loading && artists.length === 0 && !error && (
-          <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-12 shadow-sm border text-center">
             <Music className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
               Discover Indie Artists
             </h3>
             <p className="text-gray-500 text-sm max-w-md mx-auto">

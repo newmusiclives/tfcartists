@@ -76,7 +76,7 @@ const TEAM_CONFIG: Record<TeamKey, { label: string; color: string; bg: string; b
   elliot:     { label: "Elliot",     color: "text-blue-700",   bg: "bg-blue-50",    border: "border-blue-200",   href: "/elliot" },
   ops:        { label: "Station Ops",color: "text-amber-700",  bg: "bg-amber-50",   border: "border-amber-200",  href: "/station-admin" },
   management: { label: "Management", color: "text-red-700",    bg: "bg-red-50",     border: "border-red-200",    href: "/management" },
-  all:        { label: "All Teams",  color: "text-gray-700",   bg: "bg-gray-100",   border: "border-gray-300",   href: "/management" },
+  all:        { label: "All Teams",  color: "text-gray-700",   bg: "bg-gray-100",   border: "border-gray-300 dark:border-zinc-700",   href: "/management" },
 };
 
 // ─── Launch Phases ─────────────────────────────────────────────────
@@ -286,7 +286,7 @@ export default function LaunchPlanPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
 
       {/* Hero Header */}
@@ -333,7 +333,7 @@ export default function LaunchPlanPage() {
           <div className="mt-6">
             <div className="h-3 bg-white/20 rounded-full overflow-hidden">
               <div
-                className="h-full bg-white rounded-full transition-all duration-500"
+                className="h-full bg-white dark:bg-zinc-900 rounded-full transition-all duration-500"
                 style={{ width: `${overallPct}%` }}
               />
             </div>
@@ -352,9 +352,9 @@ export default function LaunchPlanPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
         {/* Team Responsibility Matrix */}
-        <section className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Team Responsibilities</h2>
-          <p className="text-sm text-gray-600 mb-6">Each team owns a critical piece of the launch. Click any team to see their dashboard.</p>
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Team Responsibilities</h2>
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-6">Each team owns a critical piece of the launch. Click any team to see their dashboard.</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {(["riley", "harper", "cassidy", "elliot", "ops", "management"] as TeamKey[]).map((key) => {
               const tc = TEAM_CONFIG[key];
@@ -365,11 +365,11 @@ export default function LaunchPlanPage() {
                   <div className={`rounded-xl border-2 ${tc.border} p-4 text-center hover:shadow-md transition-all`}>
                     <div className={`text-sm font-bold ${tc.color}`}>{tc.label}</div>
                     <div className="text-2xl font-bold text-gray-900 mt-1">{counts.done}/{counts.total}</div>
-                    <div className="text-xs text-gray-500">actions</div>
-                    <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="text-xs text-gray-500 dark:text-zinc-500">actions</div>
+                    <div className="mt-2 h-1.5 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                       <div className={`h-full rounded-full ${tc.bg.replace("50", "500").replace("bg-", "bg-")}`} style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">{pct}%</div>
+                    <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{pct}%</div>
                   </div>
                 </Link>
               );
@@ -378,14 +378,14 @@ export default function LaunchPlanPage() {
         </section>
 
         {/* KPI Milestone Targets */}
-        <section className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">KPI Milestones</h2>
-          <p className="text-sm text-gray-600 mb-6">Target metrics at each stage — all teams contribute to hitting these numbers.</p>
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">KPI Milestones</h2>
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-6">Target metrics at each stage — all teams contribute to hitting these numbers.</p>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4 font-semibold text-gray-900">Milestone</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">Milestone</th>
                   <th className="text-center py-3 px-4 font-semibold text-blue-700">
                     <div className="flex items-center justify-center gap-1"><Headphones className="w-4 h-4" /> DAU</div>
                   </th>
@@ -395,20 +395,20 @@ export default function LaunchPlanPage() {
                   <th className="text-center py-3 px-4 font-semibold text-green-700">
                     <div className="flex items-center justify-center gap-1"><Store className="w-4 h-4" /> Sponsors</div>
                   </th>
-                  <th className="text-center py-3 px-4 font-semibold text-amber-700">
+                  <th className="text-center py-3 px-4 font-semibold text-amber-700 dark:text-amber-400">
                     <div className="flex items-center justify-center gap-1"><DollarSign className="w-4 h-4" /> Ad Revenue/mo</div>
                   </th>
-                  <th className="text-center py-3 px-4 font-semibold text-gray-500">Team Owner</th>
+                  <th className="text-center py-3 px-4 font-semibold text-gray-500 dark:text-zinc-500">Team Owner</th>
                 </tr>
               </thead>
               <tbody>
                 {KPI_MILESTONES.map((m, i) => (
                   <tr key={m.period} className={`border-b ${i === KPI_MILESTONES.length - 1 ? "bg-amber-50 font-semibold" : ""}`}>
-                    <td className="py-3 px-4 font-medium text-gray-900">{m.period}</td>
+                    <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{m.period}</td>
                     <td className="py-3 px-4 text-center text-blue-700">{m.dau.toLocaleString()}</td>
                     <td className="py-3 px-4 text-center text-purple-700">{m.artists}</td>
                     <td className="py-3 px-4 text-center text-green-700">{m.sponsors}</td>
-                    <td className="py-3 px-4 text-center text-amber-700">{m.revenue}</td>
+                    <td className="py-3 px-4 text-center text-amber-700 dark:text-amber-400">{m.revenue}</td>
                     <td className="py-3 px-4 text-center text-gray-500 text-xs">
                       {i === 0 ? "All Teams" : i === 1 ? "Riley + Harper" : i === 2 ? "All Teams" : "Management"}
                     </td>
@@ -434,8 +434,8 @@ export default function LaunchPlanPage() {
                   <div className="text-xs text-green-600">Sponsors</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-amber-700">${stats.kpis.totalRevenue?.toLocaleString()}</div>
-                  <div className="text-xs text-amber-600">Revenue</div>
+                  <div className="text-lg font-bold text-amber-700 dark:text-amber-400">${stats.kpis.totalRevenue?.toLocaleString()}</div>
+                  <div className="text-xs text-amber-600 dark:text-amber-400">Revenue</div>
                 </div>
               </div>
             </div>
@@ -444,8 +444,8 @@ export default function LaunchPlanPage() {
 
         {/* Phase-by-Phase Action Plan */}
         <section>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Action Plan — Phase by Phase</h2>
-          <p className="text-sm text-gray-600 mb-6">Check off actions as you complete them. Progress is saved locally.</p>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Action Plan — Phase by Phase</h2>
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-6">Check off actions as you complete them. Progress is saved locally.</p>
 
           <div className="space-y-4">
             {LAUNCH_PHASES.map((phase) => {
@@ -455,11 +455,11 @@ export default function LaunchPlanPage() {
               const isComplete = progress.done === progress.total;
 
               return (
-                <div key={phase.id} className={`border-2 rounded-xl overflow-hidden transition-all ${isExpanded ? colors.border : "border-gray-200"} ${isComplete ? "ring-2 ring-green-300" : ""}`}>
+                <div key={phase.id} className={`border-2 rounded-xl overflow-hidden transition-all ${isExpanded ? colors.border : "border-gray-200 dark:border-zinc-800"} ${isComplete ? "ring-2 ring-green-300" : ""}`}>
                   {/* Phase Header */}
                   <button
                     onClick={() => setExpandedPhase(isExpanded ? null : phase.id)}
-                    className={`w-full flex items-center justify-between p-5 text-left transition-colors ${isExpanded ? colors.bg : "hover:bg-gray-50"}`}
+                    className={`w-full flex items-center justify-between p-5 text-left transition-colors ${isExpanded ? colors.bg : "hover:bg-gray-50 dark:hover:bg-zinc-800"}`}
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colors.gradient} text-white flex items-center justify-center shadow-md`}>
@@ -470,20 +470,20 @@ export default function LaunchPlanPage() {
                           <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colors.light} ${colors.text}`}>
                             Phase {phase.phase}
                           </span>
-                          <span className="text-xs text-gray-500">{phase.timeline}</span>
+                          <span className="text-xs text-gray-500 dark:text-zinc-500">{phase.timeline}</span>
                           {isComplete && (
-                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700">COMPLETE</span>
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400">COMPLETE</span>
                           )}
                         </div>
                         <div className="font-bold text-gray-900 mt-1">{phase.name}</div>
-                        <div className="text-sm text-gray-600">{phase.subtitle}</div>
+                        <div className="text-sm text-gray-600 dark:text-zinc-400">{phase.subtitle}</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <div className="text-lg font-bold text-gray-900">{progress.done}/{progress.total}</div>
+                        <div className="text-lg font-bold text-gray-900 dark:text-white">{progress.done}/{progress.total}</div>
                         <div className="w-24">
-                          <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
+                          <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
                             <div className={`h-full rounded-full bg-gradient-to-r ${colors.gradient}`} style={{ width: `${progress.pct}%` }} />
                           </div>
                           <div className="text-xs text-gray-500 text-right mt-0.5">{progress.pct}%</div>
@@ -501,7 +501,7 @@ export default function LaunchPlanPage() {
                           const isDone = completed.has(action.id);
                           const tc = TEAM_CONFIG[action.team];
                           return (
-                            <div key={action.id} className={`flex items-start gap-4 p-4 transition-colors ${isDone ? "bg-green-50/50" : "hover:bg-gray-50"}`}>
+                            <div key={action.id} className={`flex items-start gap-4 p-4 transition-colors ${isDone ? "bg-green-50/50" : "hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
                               {/* Checkbox */}
                               <button
                                 onClick={() => toggleItem(action.id)}
@@ -554,8 +554,8 @@ export default function LaunchPlanPage() {
         </section>
 
         {/* Revenue Model Summary */}
-        <section className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Revenue Model at Full Capacity (Month 3)</h2>
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Revenue Model at Full Capacity (Month 3)</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-green-50 rounded-xl p-5 border border-green-200">
               <div className="flex items-center gap-2 mb-3">
@@ -596,16 +596,16 @@ export default function LaunchPlanPage() {
             <div className="bg-amber-50 rounded-xl p-5 border border-amber-200">
               <div className="flex items-center gap-2 mb-3">
                 <DollarSign className="w-5 h-5 text-amber-600" />
-                <span className="font-bold text-amber-700">Net Station Revenue</span>
+                <span className="font-bold text-amber-700 dark:text-amber-400">Net Station Revenue</span>
               </div>
-              <div className="text-3xl font-bold text-amber-700">$8,350</div>
+              <div className="text-3xl font-bold text-amber-700 dark:text-amber-400">$8,350</div>
               <div className="text-sm text-amber-600 mt-1">per month at full capacity</div>
-              <div className="mt-3 space-y-1 text-sm text-amber-700">
+              <div className="mt-3 space-y-1 text-sm text-amber-700 dark:text-amber-400">
                 <div className="flex justify-between"><span>Tier revenue</span><span>$3,900</span></div>
                 <div className="flex justify-between"><span>Sponsor net (20%)</span><span>$4,450</span></div>
                 <div className="flex justify-between border-t border-amber-300 pt-1 font-bold"><span>Total</span><span>$8,350</span></div>
               </div>
-              <div className="mt-2 text-xs text-amber-600">Owner: Management</div>
+              <div className="mt-2 text-xs text-amber-600 dark:text-amber-400">Owner: Management</div>
             </div>
           </div>
         </section>
@@ -663,7 +663,7 @@ function QuickLink({ href, label, icon, color }: { href: string; label: string; 
     teal: "bg-teal-50 text-teal-600 hover:bg-teal-100",
     green: "bg-green-50 text-green-600 hover:bg-green-100",
     blue: "bg-blue-50 text-blue-600 hover:bg-blue-100",
-    gray: "bg-gray-50 text-gray-600 hover:bg-gray-100",
+    gray: "bg-gray-50 text-gray-600 hover:bg-gray-100 dark:hover:bg-zinc-800",
   };
 
   return (

@@ -43,7 +43,7 @@ export default async function NewsletterEditionPage({ params }: Props) {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <div className="max-w-3xl mx-auto px-4 py-12">
         <Link
           href="/newsletter"
@@ -53,12 +53,12 @@ export default async function NewsletterEditionPage({ params }: Props) {
           Back to Newsletter
         </Link>
 
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg overflow-hidden">
           <div className="border-b border-gray-100 p-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {edition.subject}
             </h1>
-            <div className="flex items-center gap-4 text-sm text-gray-500">
+            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-zinc-500">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 {new Date(edition.createdAt).toLocaleDateString("en-US", {

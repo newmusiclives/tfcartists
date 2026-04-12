@@ -111,7 +111,7 @@ export default function RileyDashboardPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading dashboard...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading dashboard...</div>
       </main>
     );
   }
@@ -121,7 +121,7 @@ export default function RileyDashboardPage() {
       <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
-          <p className="text-gray-600 mb-4">Sign in as Riley to access this dashboard.</p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-4">Sign in as Riley to access this dashboard.</p>
           <Link href="/login?callbackUrl=/riley" className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">Sign In</Link>
         </div>
       </main>
@@ -161,7 +161,7 @@ export default function RileyDashboardPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
@@ -182,8 +182,8 @@ export default function RileyDashboardPage() {
           <div className="flex items-center space-x-3">
             <Users className="w-8 h-8 text-purple-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Team Riley Dashboard</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Team Riley Dashboard</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Artist Airplay Management & Track Submissions
               </p>
             </div>
@@ -226,7 +226,7 @@ export default function RileyDashboardPage() {
         </section>
 
         {/* Team Members */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
             <Users className="w-6 h-6 text-purple-600" />
             <span>Team Members</span>
@@ -239,13 +239,13 @@ export default function RileyDashboardPage() {
               { name: "Sienna Park", role: "Content Vetting & QC", avatar: "SP", color: "bg-green-100 text-green-600", status: "Reviewing submissions", kpi: `${stats.pendingSubmissions} pending` },
               { name: "Jordan Cross", role: "Payment Processing", avatar: "JC", color: "bg-emerald-100 text-emerald-600", status: "Processing pool payments", kpi: `$${stats.monthlyRevenue.toLocaleString()}` },
             ].map((member, idx) => (
-              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 hover:border-purple-300 transition-colors">
+              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800 hover:border-purple-300 transition-colors">
                 <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>
-                <div className="font-semibold text-gray-900 text-sm">{member.name}</div>
-                <div className="text-xs text-gray-600 mb-2">{member.role}</div>
+                <div className="font-semibold text-gray-900 dark:text-white text-sm">{member.name}</div>
+                <div className="text-xs text-gray-600 dark:text-zinc-400 mb-2">{member.role}</div>
                 <div className="text-xs text-purple-600 mb-2 truncate">{member.status}</div>
-                <div className="mt-2 pt-2 border-t border-gray-200">
-                  <div className="text-xs font-semibold text-gray-700">{member.kpi}</div>
+                <div className="mt-2 pt-2 border-t border-gray-200 dark:border-zinc-800">
+                  <div className="text-xs font-semibold text-gray-700 dark:text-zinc-300">{member.kpi}</div>
                 </div>
               </div>
             ))}
@@ -253,9 +253,9 @@ export default function RileyDashboardPage() {
         </section>
 
         {/* Artist Distribution by Tier */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Artist Distribution by Tier</h2>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Current capacity: {stats.totalArtists} / {ARTIST_CAPACITY.TOTAL} artists
           </p>
 
@@ -310,15 +310,15 @@ export default function RileyDashboardPage() {
           <div className="mt-6 pt-6 border-t">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center">
-                <div className="text-sm text-gray-600">Monthly Revenue</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Monthly Revenue</div>
                 <div className="text-2xl font-bold text-purple-600">${stats.monthlyRevenue.toLocaleString()}</div>
               </div>
               <div className="text-center">
-                <div className="text-sm text-gray-600">Annual Revenue</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Annual Revenue</div>
                 <div className="text-2xl font-bold text-purple-600">${(stats.monthlyRevenue * 12).toLocaleString()}</div>
               </div>
               <div className="text-center">
-                <div className="text-sm text-gray-600">Revenue Status</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Revenue Status</div>
                 <div className="text-sm font-semibold text-green-600">100% Retained by Station</div>
               </div>
             </div>
@@ -326,11 +326,11 @@ export default function RileyDashboardPage() {
         </section>
 
         {/* Recent Track Submissions */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Recent Track Submissions</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 {stats.approvedThisMonth} approved, {stats.rejectedThisMonth} rejected this month
               </p>
             </div>
@@ -353,7 +353,7 @@ export default function RileyDashboardPage() {
         {/* Tier Upgrade Opportunities */}
         <section className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Tier Upgrade Opportunities</h2>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Artists showing high engagement who might upgrade to higher tiers
           </p>
 
@@ -374,11 +374,11 @@ export default function RileyDashboardPage() {
         </section>
 
         {/* Riley Automation Controls */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-2xl font-bold">Riley Automation</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 Run Riley&apos;s daily automation: follow-ups, show reminders, and win celebrations
               </p>
             </div>
@@ -420,19 +420,19 @@ export default function RileyDashboardPage() {
                 <div className="grid grid-cols-4 gap-4 mt-3">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-purple-600">{automationResult.results.followUps}</div>
-                    <div className="text-xs text-gray-600">Follow-ups{automationResult.dryRun ? " (planned)" : " sent"}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Follow-ups{automationResult.dryRun ? " (planned)" : " sent"}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-600">{automationResult.results.showReminders}</div>
-                    <div className="text-xs text-gray-600">Show reminders{automationResult.dryRun ? " (planned)" : " sent"}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Show reminders{automationResult.dryRun ? " (planned)" : " sent"}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-600">{automationResult.results.wins}</div>
-                    <div className="text-xs text-gray-600">Wins{automationResult.dryRun ? " (planned)" : " celebrated"}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Wins{automationResult.dryRun ? " (planned)" : " celebrated"}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-red-600">{automationResult.results.errors}</div>
-                    <div className="text-xs text-gray-600">Errors</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">Errors</div>
                   </div>
                 </div>
               )}
@@ -510,13 +510,13 @@ function MetricCard({
   color: string;
 }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -547,28 +547,28 @@ function TierCard({
   }[color];
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200">
+    <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800">
       <div className="flex items-center justify-between mb-2">
         <div className={`text-xs font-bold px-2 py-1 rounded ${colorClasses}`}>
           {tier}
         </div>
-        <div className="text-xs text-gray-500">${price}/mo</div>
+        <div className="text-xs text-gray-500 dark:text-zinc-500">${price}/mo</div>
       </div>
       <div className="text-3xl font-bold mb-1">{count}</div>
-      <div className="text-xs text-gray-500 mb-3">of {capacity} capacity</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500 mb-3">of {capacity} capacity</div>
 
-      <div className="space-y-1 text-xs text-gray-600">
+      <div className="space-y-1 text-xs text-gray-600 dark:text-zinc-400">
         <div>• {shares} {shares === 1 ? 'share' : 'shares'}</div>
         <div>• {playsPerMonth} {playsPerMonth === 1 ? 'play' : 'plays'}/mo</div>
       </div>
 
-      <div className="mt-3 bg-gray-200 rounded-full h-2 overflow-hidden">
+      <div className="mt-3 bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
         <div
           className="bg-purple-600 h-full rounded-full transition-all"
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="text-xs text-gray-500 mt-1 text-center">{percentage.toFixed(0)}% filled</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1 text-center">{percentage.toFixed(0)}% filled</div>
     </div>
   );
 }
@@ -617,13 +617,13 @@ function SubmissionRow({
       <div className="flex items-center space-x-4 flex-1">
         <Music className="w-10 h-10 text-gray-400" />
         <div>
-          <div className="font-semibold text-gray-900">{track}</div>
-          <div className="text-sm text-gray-600">{artist}</div>
+          <div className="font-semibold text-gray-900 dark:text-white">{track}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">{artist}</div>
         </div>
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-xs text-gray-500">{tier} Tier</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">{tier} Tier</div>
           <div className="text-xs text-gray-400">{submittedAt}</div>
         </div>
         <div className={`px-3 py-1 rounded-full ${statusConfig.bg} ${statusConfig.text} flex items-center space-x-1`}>
@@ -652,19 +652,19 @@ function UpgradeOpportunityCard({
   const suggestedPrice = AIRPLAY_TIER_PRICING[suggestedTier as keyof typeof AIRPLAY_TIER_PRICING];
 
   return (
-    <div className="bg-white rounded-lg p-4 border-2 border-purple-200">
+    <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border-2 border-purple-200">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <div className="font-semibold text-gray-900">{artist}</div>
-          <div className="text-sm text-gray-600 mt-1">
+          <div className="font-semibold text-gray-900 dark:text-white">{artist}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400 mt-1">
             {plays} plays • {engagement} engagement
           </div>
         </div>
         <div className="flex items-center space-x-3">
           <div className="text-center">
-            <div className="text-xs text-gray-500">Current</div>
-            <div className="font-bold text-gray-700">{currentTier}</div>
-            <div className="text-xs text-gray-500">${currentPrice}/mo</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Current</div>
+            <div className="font-bold text-gray-700 dark:text-zinc-300">{currentTier}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">${currentPrice}/mo</div>
           </div>
           <div className="text-gray-400">→</div>
           <div className="text-center">
@@ -698,7 +698,7 @@ function QuickActionCard({
 }) {
   return (
     <Link href={href} className="block">
-      <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border-2 border-transparent hover:border-purple-300">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border-2 border-transparent hover:border-purple-300">
         <div className="flex items-center justify-between mb-3">
           {icon}
           {badge !== undefined && (
@@ -707,11 +707,11 @@ function QuickActionCard({
             </div>
           )}
         </div>
-        <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{title}</h3>
         {managedBy && (
           <p className="text-xs text-purple-600 font-medium mb-1">Managed by {managedBy}</p>
         )}
-        <p className="text-sm text-gray-600">{description}</p>
+        <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
       </div>
     </Link>
   );

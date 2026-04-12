@@ -75,7 +75,7 @@ export default function ArtistDashboardPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/rewards" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
@@ -94,8 +94,8 @@ export default function ArtistDashboardPage() {
             {profile.xpLevel}
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{profile.name}</h1>
-            <div className="flex items-center space-x-3 text-sm text-gray-500">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{profile.name}</h1>
+            <div className="flex items-center space-x-3 text-sm text-gray-500 dark:text-zinc-500">
               <span className="flex items-center space-x-1"><Trophy className="w-3.5 h-3.5" /><span>Rank #{profile.rank}</span></span>
               <span className="flex items-center space-x-1"><Music className="w-3.5 h-3.5" /><span>{profile.airplayTier}</span></span>
             </div>
@@ -103,12 +103,12 @@ export default function ArtistDashboardPage() {
         </div>
 
         {/* XP Progress */}
-        <div className="bg-white rounded-2xl shadow-sm border p-6 mb-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6 mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-semibold text-gray-700">Level {profile.xpLevel}</span>
-            <span className="text-sm text-gray-500">{profile.xpTotal.toLocaleString()} / {profile.nextLevelXp.toLocaleString()} XP</span>
+            <span className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Level {profile.xpLevel}</span>
+            <span className="text-sm text-gray-500 dark:text-zinc-500">{profile.xpTotal.toLocaleString()} / {profile.nextLevelXp.toLocaleString()} XP</span>
           </div>
-          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-full h-3 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full transition-all"
               style={{ width: `${profile.levelProgress}%` }}
@@ -118,30 +118,30 @@ export default function ArtistDashboardPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-white rounded-xl shadow-sm border p-4 text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Users className="w-5 h-5 text-blue-500 mx-auto mb-1" />
-            <div className="text-2xl font-bold text-gray-900">{profile.embedListeners}</div>
-            <div className="text-xs text-gray-500">Embed Listeners</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.embedListeners}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Embed Listeners</div>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border p-4 text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <TrendingUp className="w-5 h-5 text-green-500 mx-auto mb-1" />
-            <div className="text-2xl font-bold text-gray-900">{profile.xpTotal.toLocaleString()}</div>
-            <div className="text-xs text-gray-500">Total XP</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.xpTotal.toLocaleString()}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Total XP</div>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border p-4 text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Trophy className="w-5 h-5 text-amber-500 mx-auto mb-1" />
-            <div className="text-2xl font-bold text-gray-900">#{profile.rank}</div>
-            <div className="text-xs text-gray-500">Rank</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">#{profile.rank}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Rank</div>
           </div>
         </div>
 
         {/* Embed Code */}
-        <div className="bg-white rounded-2xl shadow-sm border p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-2 flex items-center space-x-2">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center space-x-2">
             <Code className="w-5 h-5" />
             <span>Your Embed Code</span>
           </h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-4">
             Put this on your website to let fans listen and earn XP for every play.
           </p>
           <pre className="bg-gray-900 text-gray-300 p-4 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap break-all mb-3">

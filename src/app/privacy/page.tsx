@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
           Last Updated: March 2026
         </p>
 
-        <div className="mt-10 space-y-10 text-gray-700 leading-relaxed">
+        <div className="mt-10 space-y-10 text-gray-700 dark:text-zinc-300 leading-relaxed">
           {/* Introduction */}
           <section>
             <p>
@@ -59,7 +59,7 @@ export default function PrivacyPolicyPage() {
               1. Information We Collect
             </h2>
 
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Personal Information You Provide
             </h3>
             <p className="mb-3">
@@ -90,7 +90,7 @@ export default function PrivacyPolicyPage() {
               </li>
             </ul>
 
-            <h3 className="text-lg font-semibold text-gray-900 mb-2 mt-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 mt-6">
               Data Collected by User Type
             </h3>
             <p className="mb-3">
@@ -120,7 +120,7 @@ export default function PrivacyPolicyPage() {
               </li>
             </ul>
 
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Usage Data
             </h3>
             <p className="mb-3">
@@ -144,7 +144,7 @@ export default function PrivacyPolicyPage() {
               </li>
             </ul>
 
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Cookies and Tracking Technologies
             </h3>
             <p className="mb-3">
@@ -553,7 +553,7 @@ export default function PrivacyPolicyPage() {
         </div>
 
         {/* Cross-links to other legal pages */}
-        <div className="mt-16 pt-8 border-t border-gray-200">
+        <div className="mt-16 pt-8 border-t border-gray-200 dark:border-zinc-800">
           <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
             Related Legal Pages
           </h3>

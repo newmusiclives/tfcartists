@@ -75,7 +75,7 @@ export default function ParkerDashboardPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading dashboard...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading dashboard...</div>
       </main>
     );
   }
@@ -85,7 +85,7 @@ export default function ParkerDashboardPage() {
       <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
-          <p className="text-gray-600 mb-4">Sign in as Parker to access this dashboard.</p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-4">Sign in as Parker to access this dashboard.</p>
           <Link href="/login?callbackUrl=/parker" className="bg-rose-600 text-white px-6 py-2 rounded-lg hover:bg-rose-700">Sign In</Link>
         </div>
       </main>
@@ -106,7 +106,7 @@ export default function ParkerDashboardPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
@@ -127,8 +127,8 @@ export default function ParkerDashboardPage() {
           <div className="flex items-center space-x-3">
             <Radio className="w-8 h-8 text-rose-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Team Parker Dashboard</h1>
-              <p className="text-gray-600">Station Management & Operations</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Team Parker Dashboard</h1>
+              <p className="text-gray-600 dark:text-zinc-400">Station Management & Operations</p>
             </div>
           </div>
         </div>
@@ -164,7 +164,7 @@ export default function ParkerDashboardPage() {
         </section>
 
         {/* Team Members */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
             <Users className="w-6 h-6 text-rose-600" />
             <span>Team Members</span>
@@ -177,13 +177,13 @@ export default function ParkerDashboardPage() {
               { name: "Nolan Torres", role: "Traffic Manager", avatar: "NT", color: "bg-orange-100 text-orange-600", status: "Ad inventory & spots", kpi: `${activeAds} ads` },
               { name: "Ivy Brennan", role: "Listener Services Director", avatar: "IB", color: "bg-teal-100 text-teal-600", status: "Community engagement", kpi: "Listener care" },
             ].map((member, idx) => (
-              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 hover:border-rose-300 transition-colors">
+              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800 hover:border-rose-300 transition-colors">
                 <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>
-                <div className="font-semibold text-gray-900 text-sm">{member.name}</div>
-                <div className="text-xs text-gray-600 mb-2">{member.role}</div>
+                <div className="font-semibold text-gray-900 dark:text-white text-sm">{member.name}</div>
+                <div className="text-xs text-gray-600 dark:text-zinc-400 mb-2">{member.role}</div>
                 <div className="text-xs text-rose-600 mb-2 truncate">{member.status}</div>
-                <div className="mt-2 pt-2 border-t border-gray-200">
-                  <div className="text-xs font-semibold text-gray-700">{member.kpi}</div>
+                <div className="mt-2 pt-2 border-t border-gray-200 dark:border-zinc-800">
+                  <div className="text-xs font-semibold text-gray-700 dark:text-zinc-300">{member.kpi}</div>
                 </div>
               </div>
             ))}
@@ -191,7 +191,7 @@ export default function ParkerDashboardPage() {
         </section>
 
         {/* Station Health */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4 flex items-center space-x-2">
             <Shield className="w-6 h-6 text-rose-600" />
             <span>Station Health</span>
@@ -279,13 +279,13 @@ function MetricCard({
   subtitle: string;
 }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -305,15 +305,15 @@ function QuickActionCard({
 }) {
   return (
     <Link href={href} className="block">
-      <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border-2 border-transparent hover:border-rose-300">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border-2 border-transparent hover:border-rose-300">
         <div className="flex items-center justify-between mb-3">
           {icon}
         </div>
-        <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{title}</h3>
         {managedBy && (
           <p className="text-xs text-rose-600 font-medium mb-1">Managed by {managedBy}</p>
         )}
-        <p className="text-sm text-gray-600">{description}</p>
+        <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
       </div>
     </Link>
   );

@@ -197,7 +197,15 @@ export async function getTodaysShiftHours(): Promise<Array<{
     const startHour = parseInt(assignment.timeSlotStart.split(":")[0], 10);
     const endHour = parseInt(assignment.timeSlotEnd.split(":")[0], 10);
 
-    for (let hour = startHour; hour < endHour; hour++) {
+    // Handle midnight-crossing shifts (e.g., 18:00-06:00)
+    const hoursToProcess = startHour < endHour
+      ? Array.from({ length: endHour - startHour }, (_, i) => startHour + i)
+      : [
+          ...Array.from({ length: 24 - startHour }, (_, i) => startHour + i),
+          ...Array.from({ length: endHour }, (_, i) => i),
+        ];
+
+    for (const hour of hoursToProcess) {
       hours.push({
         djId: assignment.djId,
         djName: assignment.dj.name,

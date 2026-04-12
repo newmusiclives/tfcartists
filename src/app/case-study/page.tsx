@@ -99,7 +99,7 @@ export default function CaseStudyPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-6">
             <Radio className="w-8 h-8 text-amber-600" />
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Case Study: North Country Radio
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
@@ -111,20 +111,20 @@ export default function CaseStudyPage() {
       <div className="max-w-5xl mx-auto px-4 pb-20 space-y-12">
         {/* Station Overview */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8">
             Station Overview
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {stats.map((s) => (
               <div
                 key={s.label}
-                className="bg-white rounded-xl shadow-md p-6 text-center"
+                className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6 text-center"
               >
                 <s.icon className="w-6 h-6 text-amber-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-500 mb-1">{s.label}</p>
-                <p className="text-lg font-bold text-gray-900">{s.value}</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-500 mb-1">{s.label}</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">{s.value}</p>
                 {s.sub && (
-                  <p className="text-xs text-gray-500">{s.sub}</p>
+                  <p className="text-xs text-gray-500 dark:text-zinc-500">{s.sub}</p>
                 )}
               </div>
             ))}
@@ -132,12 +132,12 @@ export default function CaseStudyPage() {
         </section>
 
         {/* The Challenge */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
             <Building2 className="w-6 h-6 text-amber-600" />
             <span>The Challenge</span>
           </h2>
-          <p className="text-lg text-gray-700 leading-relaxed">
+          <p className="text-lg text-gray-700 dark:text-zinc-300 leading-relaxed">
             Traditional radio stations cost $50,000+ to launch and require full-time staff.
             Independent artists have almost no path to radio airplay. Local businesses
             can&apos;t afford traditional radio advertising. The industry needed a fundamentally
@@ -146,12 +146,12 @@ export default function CaseStudyPage() {
         </section>
 
         {/* The Solution */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
             <CheckCircle2 className="w-6 h-6 text-green-600" />
             <span>The Solution</span>
           </h2>
-          <p className="text-lg text-gray-700 leading-relaxed">
+          <p className="text-lg text-gray-700 dark:text-zinc-300 leading-relaxed">
             North Country Radio launched in days using the TrueFans RADIO platform. Five AI
             teams handle everything from artist recruitment to sponsor sales to 24/7
             programming — delivering a professional broadcast experience at a fraction of
@@ -161,13 +161,13 @@ export default function CaseStudyPage() {
 
         {/* Meet the AI DJs */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8 flex items-center justify-center space-x-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8 flex items-center justify-center space-x-2">
             <Headphones className="w-6 h-6 text-amber-600" />
             <span>Meet the AI DJs</span>
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {djs.map((dj) => (
-              <div key={dj.name} className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div key={dj.name} className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg overflow-hidden">
                 <div
                   className={`h-3 bg-gradient-to-r ${dj.color}`}
                 />
@@ -177,7 +177,7 @@ export default function CaseStudyPage() {
                   >
                     {dj.name.split(" ").map((n) => n[0]).join("")}
                   </div>
-                  <h3 className="font-bold text-gray-900 text-lg">{dj.name}</h3>
+                  <h3 className="font-bold text-gray-900 dark:text-white text-lg">{dj.name}</h3>
                   <p className="text-sm text-amber-700 font-medium mb-1">{dj.time}</p>
                   <p className="text-sm text-gray-500 italic">{dj.vibe}</p>
                 </div>
@@ -188,7 +188,7 @@ export default function CaseStudyPage() {
 
         {/* Results */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8 flex items-center justify-center space-x-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8 flex items-center justify-center space-x-2">
             <TrendingUp className="w-6 h-6 text-amber-600" />
             <span>Results</span>
           </h2>
@@ -206,48 +206,48 @@ export default function CaseStudyPage() {
         </section>
 
         {/* Revenue Model */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center space-x-2">
             <BarChart3 className="w-6 h-6 text-amber-600" />
             <span>Revenue Model</span>
           </h2>
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div className="bg-amber-50 rounded-lg p-6 border border-amber-100">
-              <h3 className="font-bold text-gray-900 mb-2">Artist Subscriptions</h3>
+              <h3 className="font-bold text-gray-900 dark:text-white mb-2">Artist Subscriptions</h3>
               <p className="text-3xl font-extrabold text-amber-700 mb-1">$3,200<span className="text-lg">/mo</span></p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-zinc-400">
                 Free to $100/mo tiers — artists pay for premium rotation and analytics
               </p>
             </div>
             <div className="bg-orange-50 rounded-lg p-6 border border-orange-100">
-              <h3 className="font-bold text-gray-900 mb-2">Sponsor Revenue</h3>
+              <h3 className="font-bold text-gray-900 dark:text-white mb-2">Sponsor Revenue</h3>
               <p className="text-3xl font-extrabold text-orange-700 mb-1">$16,340<span className="text-lg">/mo</span></p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-zinc-400">
                 $30 – $300/mo tiers — local businesses sponsor the station
               </p>
             </div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+          <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 dark:border-zinc-800">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <p className="text-sm text-gray-500 mb-1">Revenue Split</p>
-                <p className="text-gray-700">
-                  <span className="font-bold text-amber-700">80%</span> to artist pool{" "}
+                <p className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Revenue Split</p>
+                <p className="text-gray-700 dark:text-zinc-300">
+                  <span className="font-bold text-amber-700 dark:text-amber-400">80%</span> to artist pool{" "}
                   <span className="text-gray-400 mx-2">|</span>
                   <span className="font-bold text-orange-700">20%</span> to operator
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-500 mb-1">Operator Take-Home</p>
-                <p className="text-2xl font-extrabold text-gray-900">~$6,400<span className="text-base text-gray-500">/mo</span></p>
+                <p className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Operator Take-Home</p>
+                <p className="text-2xl font-extrabold text-gray-900 dark:text-white">~$6,400<span className="text-base text-gray-500 dark:text-zinc-500">/mo</span></p>
               </div>
             </div>
           </div>
         </section>
 
         {/* How It Works — Timeline */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center space-x-2">
             <Star className="w-6 h-6 text-amber-600" />
             <span>How It Works</span>
           </h2>
@@ -255,7 +255,7 @@ export default function CaseStudyPage() {
             {timeline.map((step, i) => (
               <div key={step.day} className="flex items-start space-x-4">
                 <div className="flex-shrink-0 w-20 text-right">
-                  <span className="text-sm font-bold text-amber-700">{step.day}</span>
+                  <span className="text-sm font-bold text-amber-700 dark:text-amber-400">{step.day}</span>
                 </div>
                 <div className="relative flex flex-col items-center">
                   <div className="w-4 h-4 rounded-full bg-amber-500 border-2 border-white shadow" />
@@ -272,10 +272,10 @@ export default function CaseStudyPage() {
         </section>
 
         {/* Testimonial */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
           <div className="max-w-2xl mx-auto text-center">
             <Quote className="w-10 h-10 text-amber-300 mx-auto mb-4" />
-            <blockquote className="text-xl italic text-gray-700 leading-relaxed mb-4">
+            <blockquote className="text-xl italic text-gray-700 dark:text-zinc-300 leading-relaxed mb-4">
               &ldquo;This station runs itself. I spend 30 minutes a day checking dashboards and
               the AI handles everything else.&rdquo;
             </blockquote>

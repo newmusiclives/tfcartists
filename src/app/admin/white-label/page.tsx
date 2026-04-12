@@ -185,16 +185,16 @@ export default function WhiteLabelPage() {
 
         <div className="space-y-6">
           {/* Custom Domain Section */}
-          <section className="bg-white rounded-xl shadow-sm border border-amber-200 p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-amber-200 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Globe className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Custom Domain
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Use your own domain for your radio station
                 </p>
               </div>
@@ -202,7 +202,7 @@ export default function WhiteLabelPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                   Domain
                 </label>
                 <input
@@ -215,7 +215,7 @@ export default function WhiteLabelPage() {
                       customDomain: e.target.value || null,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 />
                 <p className="mt-1 text-xs text-gray-400">
                   Leave empty to use the default platform domain
@@ -232,21 +232,21 @@ export default function WhiteLabelPage() {
                     Add the following CNAME record in your domain&apos;s DNS
                     settings:
                   </p>
-                  <div className="bg-white rounded-md p-3 font-mono text-sm border border-blue-100 flex items-center justify-between">
+                  <div className="bg-white dark:bg-zinc-900 rounded-md p-3 font-mono text-sm border border-blue-100 flex items-center justify-between">
                     <div>
-                      <div className="text-gray-500">
+                      <div className="text-gray-500 dark:text-zinc-500">
                         <span className="text-blue-600 font-semibold">
                           Type:
                         </span>{" "}
                         CNAME
                       </div>
-                      <div className="text-gray-500">
+                      <div className="text-gray-500 dark:text-zinc-500">
                         <span className="text-blue-600 font-semibold">
                           Name:
                         </span>{" "}
                         {settings.customDomain}
                       </div>
-                      <div className="text-gray-500">
+                      <div className="text-gray-500 dark:text-zinc-500">
                         <span className="text-blue-600 font-semibold">
                           Value:
                         </span>{" "}
@@ -294,16 +294,16 @@ export default function WhiteLabelPage() {
           </section>
 
           {/* Logo & Favicon Section */}
-          <section className="bg-white rounded-xl shadow-sm border border-amber-200 p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-amber-200 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-purple-100 rounded-lg">
                 <Image className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Logo & Favicon
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Upload your brand assets
                 </p>
               </div>
@@ -311,7 +311,7 @@ export default function WhiteLabelPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                   Logo URL
                 </label>
                 <input
@@ -324,7 +324,7 @@ export default function WhiteLabelPage() {
                       customLogo: e.target.value || null,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 />
                 <p className="mt-1 text-xs text-gray-400">
                   Recommended: 400x100px PNG or SVG with transparent background
@@ -344,7 +344,7 @@ export default function WhiteLabelPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                   Favicon URL
                 </label>
                 <input
@@ -357,7 +357,7 @@ export default function WhiteLabelPage() {
                       customFavicon: e.target.value || null,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 />
                 <p className="mt-1 text-xs text-gray-400">
                   Recommended: 32x32px or 64x64px ICO/PNG
@@ -372,7 +372,7 @@ export default function WhiteLabelPage() {
                         (e.target as HTMLImageElement).style.display = "none";
                       }}
                     />
-                    <span className="text-xs text-gray-500">Preview</span>
+                    <span className="text-xs text-gray-500 dark:text-zinc-500">Preview</span>
                   </div>
                 )}
               </div>
@@ -380,16 +380,16 @@ export default function WhiteLabelPage() {
           </section>
 
           {/* Brand Colors Section */}
-          <section className="bg-white rounded-xl shadow-sm border border-amber-200 p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-amber-200 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-pink-100 rounded-lg">
                 <Palette className="w-5 h-5 text-pink-600" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Brand Colors
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Customize the color palette for your station
                 </p>
               </div>
@@ -415,7 +415,7 @@ export default function WhiteLabelPage() {
                 },
               ].map(({ key, label, desc }) => (
                 <div key={key}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                     {label}
                   </label>
                   <div className="flex items-center gap-2">
@@ -423,14 +423,14 @@ export default function WhiteLabelPage() {
                       type="color"
                       value={colors[key as keyof typeof colors] || DEFAULT_COLORS[key as keyof typeof DEFAULT_COLORS]}
                       onChange={(e) => updateColor(key, e.target.value)}
-                      className="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                      className="w-10 h-10 rounded-lg border border-gray-300 dark:border-zinc-700 cursor-pointer"
                     />
                     <input
                       type="text"
                       value={colors[key as keyof typeof colors] || ""}
                       onChange={(e) => updateColor(key, e.target.value)}
                       placeholder={DEFAULT_COLORS[key as keyof typeof DEFAULT_COLORS]}
-                      className="flex-1 px-2 py-1 border border-gray-300 rounded text-xs font-mono focus:ring-2 focus:ring-amber-500"
+                      className="flex-1 px-2 py-1 border border-gray-300 dark:border-zinc-700 rounded text-xs font-mono focus:ring-2 focus:ring-amber-500"
                     />
                   </div>
                   <p className="mt-1 text-xs text-gray-400">{desc}</p>
@@ -439,8 +439,8 @@ export default function WhiteLabelPage() {
             </div>
 
             {/* Color Preview */}
-            <div className="mt-6 p-4 rounded-lg border border-gray-200">
-              <h3 className="text-sm font-medium text-gray-700 mb-3">
+            <div className="mt-6 p-4 rounded-lg border border-gray-200 dark:border-zinc-800">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-zinc-300 mb-3">
                 Preview
               </h3>
               <div
@@ -484,7 +484,7 @@ export default function WhiteLabelPage() {
           </section>
 
           {/* Footer & White-Label Toggle */}
-          <section className="bg-white rounded-xl shadow-sm border border-amber-200 p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-amber-200 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-green-100 rounded-lg">
                 {settings.whiteLabel ? (
@@ -494,10 +494,10 @@ export default function WhiteLabelPage() {
                 )}
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   White-Label Mode
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Control platform branding visibility
                 </p>
               </div>
@@ -507,10 +507,10 @@ export default function WhiteLabelPage() {
               {/* Toggle */}
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-gray-900 dark:text-white">
                     Hide &quot;Powered by TrueFans&quot;
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">
                     When enabled, all TrueFans platform branding is removed from
                     your station
                   </p>
@@ -536,7 +536,7 @@ export default function WhiteLabelPage() {
 
               {/* Custom footer text */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                   Custom Footer Text
                 </label>
                 <input
@@ -549,7 +549,7 @@ export default function WhiteLabelPage() {
                       customFooterText: e.target.value || null,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 />
                 <p className="mt-1 text-xs text-gray-400">
                   {settings.whiteLabel
@@ -565,7 +565,7 @@ export default function WhiteLabelPage() {
             <button
               onClick={loadSettings}
               disabled={saving}
-              className="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+              className="px-6 py-2.5 border border-gray-300 dark:border-zinc-700 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50"
             >
               Reset
             </button>

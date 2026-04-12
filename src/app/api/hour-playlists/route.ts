@@ -80,7 +80,15 @@ export async function POST(request: NextRequest) {
         if (!djUsedSongs.has(assignment.djId)) djUsedSongs.set(assignment.djId, new Set());
         const excludeSongIds = djUsedSongs.get(assignment.djId)!;
 
-        for (let hour = startHour; hour < endHour; hour++) {
+        // Handle midnight-crossing shifts (e.g., 18:00-06:00)
+        const hoursToProcess = startHour < endHour
+          ? Array.from({ length: endHour - startHour }, (_, i) => startHour + i)
+          : [
+              ...Array.from({ length: 24 - startHour }, (_, i) => startHour + i),
+              ...Array.from({ length: endHour }, (_, i) => i),
+            ];
+
+        for (const hour of hoursToProcess) {
           // Skip already locked
           const existing = await prisma.hourPlaylist.findFirst({
             where: { stationId: station.id, djId: assignment.djId, airDate: today, hourOfDay: hour, status: { in: ["locked", "aired"] } },

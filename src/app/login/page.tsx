@@ -70,7 +70,7 @@ function LoginForm() {
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl p-8">
           {/* Mode Toggle */}
           <div className="flex rounded-lg bg-gray-100 p-1 mb-6">
             <button
@@ -108,7 +108,7 @@ function LoginForm() {
             )}
 
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1.5">
                 {effectiveMode === "operator" ? "Email" : "Username or Email"}
               </label>
               <div className="relative">
@@ -136,7 +136,7 @@ function LoginForm() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1.5">
                 Password
               </label>
               <input
@@ -182,7 +182,7 @@ function LoginForm() {
             </div>
           )}
 
-          <div className="mt-6 pt-5 border-t border-gray-200">
+          <div className="mt-6 pt-5 border-t border-gray-200 dark:border-zinc-800">
             <p className="text-xs text-gray-500 text-center">
               {effectiveMode === "team"
                 ? "Contact your administrator for credentials. You can also sign in with your email."

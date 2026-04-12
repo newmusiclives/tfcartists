@@ -65,7 +65,7 @@ export default function AirplayPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b">
+      <header className="bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link
@@ -86,13 +86,13 @@ export default function AirplayPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Get Your Music on{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
               TrueFans RADIO
             </span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
+          <p className="text-xl text-gray-600 dark:text-zinc-400 max-w-3xl mx-auto mb-6">
             All artists get FREE airplay! Plus earn from our Artist Pool — we share 80% of ad
             revenue with artists every month.
           </p>
@@ -142,19 +142,19 @@ export default function AirplayPage() {
                 )}
 
                 <div className="text-center mb-4">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{tier.name}</h3>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{tier.name}</h3>
                   <div className="text-3xl font-bold text-purple-600 mb-1">
                     {tier.price === 0 ? "FREE" : `$${tier.price}`}
                   </div>
                   {tier.price > 0 && (
-                    <div className="text-sm text-gray-500">/month</div>
+                    <div className="text-sm text-gray-500 dark:text-zinc-500">/month</div>
                   )}
                 </div>
 
                 <div className="mb-4">
                   <div className="flex items-center justify-center space-x-2 mb-2">
                     <TrendingUp className="w-4 h-4 text-green-600" />
-                    <span className="text-sm font-semibold text-gray-900">
+                    <span className="text-sm font-semibold text-gray-900 dark:text-white">
                       {tier.shares} shares
                     </span>
                   </div>
@@ -167,7 +167,7 @@ export default function AirplayPage() {
                   {tier.features.map((feature, idx) => (
                     <div key={idx} className="flex items-start space-x-2 text-sm">
                       <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-600 text-left">{feature}</span>
+                      <span className="text-gray-600 dark:text-zinc-400 text-left">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -179,7 +179,7 @@ export default function AirplayPage() {
                       ? "bg-gray-100 text-gray-700 cursor-default"
                       : isPopular
                       ? "bg-purple-600 text-white hover:bg-purple-700"
-                      : "bg-purple-100 text-purple-700 hover:bg-purple-200"
+                      : "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 hover:bg-purple-200"
                   }`}
                   disabled={tier.key === "FREE"}
                 >
@@ -191,8 +191,8 @@ export default function AirplayPage() {
         </div>
 
         {/* Earnings Breakdown */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
             Artist Pool Earnings Example
           </h2>
 
@@ -217,17 +217,17 @@ export default function AirplayPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-gray-200 dark:divide-zinc-800">
                 {tiers.map((tier) => {
                   const estimated = estimateMonthlyEarnings(tier.key as any);
                   const roi = tier.price > 0 ? ((estimated - tier.price) / tier.price) * 100 : 0;
 
                   return (
                     <tr key={tier.key}>
-                      <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
                         {tier.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
                         {tier.price === 0 ? "FREE" : `$${tier.price}`}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-purple-600 font-semibold">
@@ -253,7 +253,7 @@ export default function AirplayPage() {
             </table>
           </div>
 
-          <div className="mt-6 text-sm text-gray-500">
+          <div className="mt-6 text-sm text-gray-500 dark:text-zinc-500">
             * Based on $10,000 monthly ad revenue with 100 active artists. Actual earnings vary
             based on station performance and total artists.
           </div>
@@ -268,7 +268,7 @@ export default function AirplayPage() {
             <Radio className="w-5 h-5" />
             <span>Join & Get FREE Airplay</span>
           </Link>
-          <p className="mt-4 text-sm text-gray-600">
+          <p className="mt-4 text-sm text-gray-600 dark:text-zinc-400">
             Already a member?{" "}
             <Link href="/admin" className="text-purple-600 hover:text-purple-700 font-medium">
               View your dashboard
@@ -280,7 +280,7 @@ export default function AirplayPage() {
       {/* Checkout Modal */}
       {showCheckout && checkoutTier && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 relative">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 relative">
             <button
               onClick={() => setShowCheckout(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -289,10 +289,10 @@ export default function AirplayPage() {
             </button>
 
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Upgrade to {AIRPLAY_TIERS[checkoutTier as keyof typeof AIRPLAY_TIERS]?.name}
               </h2>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 mt-1">
                 ${AIRPLAY_TIERS[checkoutTier as keyof typeof AIRPLAY_TIERS]?.price}/month via Manifest Financial
               </p>
             </div>
@@ -305,7 +305,7 @@ export default function AirplayPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Artist ID</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Artist ID</label>
                 <input
                   type="text"
                   value={checkoutForm.artistId}
@@ -315,7 +315,7 @@ export default function AirplayPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Full Name</label>
                 <input
                   type="text"
                   value={checkoutForm.name}
@@ -325,7 +325,7 @@ export default function AirplayPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Email</label>
                 <input
                   type="email"
                   value={checkoutForm.email}

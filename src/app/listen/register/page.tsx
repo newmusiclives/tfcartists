@@ -92,7 +92,7 @@ export default function ListenerRegisterPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2 text-blue-700 hover:text-blue-800 transition-colors">
@@ -110,14 +110,14 @@ export default function ListenerRegisterPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
             <Headphones className="w-8 h-8 text-blue-600" />
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Discover Music That Moves You
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-6">
-            Real radio. Real DJs. Real community.
+            Real radio. Real music. Real community.
           </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            {currentStation.name} plays the best independent music, curated by passionate DJs who know their stuff. Join our listener community and be part of something real.
+          <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto mb-8">
+            {currentStation.name} plays the best independent music, curated with care by people who know their stuff. Join our listener community and be part of something real.
           </p>
           <button
             onClick={scrollToForm}
@@ -131,7 +131,7 @@ export default function ListenerRegisterPage() {
       {/* Benefits Grid */}
       <section className="py-16 px-4 bg-white/60">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             Why Listeners Love {currentStation.name}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -139,7 +139,7 @@ export default function ListenerRegisterPage() {
               {
                 icon: Music,
                 title: "Curated Music",
-                desc: "Hand-picked tracks from real DJs, not algorithms. Discover artists you won't find anywhere else.",
+                desc: "Hand-picked tracks curated with care, not algorithms. Discover artists you won't find anywhere else.",
               },
               {
                 icon: Trophy,
@@ -159,13 +159,13 @@ export default function ListenerRegisterPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="bg-white rounded-xl p-6 shadow-sm border border-blue-100 hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-blue-100 hover:shadow-md transition-shadow"
               >
                 <div className="inline-flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg mb-4">
                   <item.icon className="w-5 h-5 text-blue-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -175,7 +175,7 @@ export default function ListenerRegisterPage() {
       {/* How It Works */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             How It Works
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
@@ -189,8 +189,8 @@ export default function ListenerRegisterPage() {
                 <div className="inline-flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-bold mb-3">
                   {item.step}
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -199,21 +199,21 @@ export default function ListenerRegisterPage() {
 
       {/* Transition */}
       <section className="py-10 px-4 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Join the Community</h2>
-        <p className="text-gray-600">Free forever. No credit card needed.</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Join the Community</h2>
+        <p className="text-gray-600 dark:text-zinc-400">Free forever. No credit card needed.</p>
       </section>
 
       {/* Form */}
       <div ref={formRef} className="max-w-lg mx-auto px-4 pb-16">
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 space-y-6">
           {error && (
-            <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
               Name <span className="text-gray-400">(optional)</span>
             </label>
             <input
@@ -227,7 +227,7 @@ export default function ListenerRegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -242,7 +242,7 @@ export default function ListenerRegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="discoverySource" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="discoverySource" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
               How did you find us? <span className="text-gray-400">(optional)</span>
             </label>
             <select
@@ -275,7 +275,7 @@ export default function ListenerRegisterPage() {
             )}
           </button>
 
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-sm text-gray-500 dark:text-zinc-500">
             Already registered?{" "}
             <Link href="/player" className="text-blue-600 hover:text-blue-700 font-medium">
               Go to player

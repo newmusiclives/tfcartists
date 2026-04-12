@@ -22,8 +22,8 @@ export default function ElliotError({
         <div className="inline-flex items-center justify-center w-16 h-16 bg-cyan-100 rounded-full mb-6">
           <AlertCircle className="w-10 h-10 text-cyan-600" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Elliot Dashboard Error</h1>
-        <p className="text-gray-600 mb-6">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Elliot Dashboard Error</h1>
+        <p className="text-gray-600 dark:text-zinc-400 mb-6">
           Something went wrong loading the growth marketing dashboard. Please try again.
         </p>
 
@@ -33,7 +33,7 @@ export default function ElliotError({
               <strong>Error:</strong> {error.message}
             </p>
             {error.digest && (
-              <p className="text-xs font-mono text-gray-500 mt-1">Digest: {error.digest}</p>
+              <p className="text-xs font-mono text-gray-500 dark:text-zinc-500 mt-1">Digest: {error.digest}</p>
             )}
           </div>
         )}

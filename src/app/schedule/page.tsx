@@ -1,42 +1,26 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { Radio, Clock, Calendar, Loader2 } from "lucide-react";
+import { Clock, Calendar, Music, Headphones } from "lucide-react";
 import { StationName } from "@/components/station-name";
 import { prisma } from "@/lib/db";
 
 export const metadata: Metadata = {
-  title: "Schedule",
-  description: "View the full 24/7 programming schedule. Weekday and weekend DJ lineups, show times, and featured programming.",
+  title: "Schedule | North Country Radio",
+  description: "24/7 music programming schedule — great music around the clock.",
 };
 
-// Revalidate every 5 minutes so DJ changes appear without a redeploy
 export const revalidate = 300;
 
-interface HourDetail {
-  hour: number;
-  clockTemplateName: string | null;
+interface TimeBlock {
+  label: string;
+  timeRange: string;
+  clockName: string | null;
   clockType: string | null;
+  startHour: number;
+  endHour: number;
+  songsPerHour: number;
 }
-
-interface DJSlot {
-  name: string;
-  showName: string | null;
-  bio: string | null;
-  shiftStart: string;
-  shiftEnd: string;
-  dayType: string; // "weekday" | "saturday" | "sunday"
-  hours: HourDetail[];
-}
-
-// Color palette for time slots — cycles through these
-const WEEKDAY_COLORS = [
-  "bg-gradient-to-r from-amber-600 to-orange-600",
-  "bg-gradient-to-r from-orange-500 to-red-500",
-  "bg-gradient-to-r from-purple-600 to-indigo-600",
-  "bg-gradient-to-r from-rose-600 to-pink-600",
-  "bg-gradient-to-r from-indigo-700 to-slate-700",
-  "bg-gradient-to-r from-gray-600 to-slate-600",
-];
 
 function formatTime(hour: number): string {
   if (hour === 0 || hour === 24) return "12:00am";
@@ -45,160 +29,110 @@ function formatTime(hour: number): string {
   return `${hour - 12}:00pm`;
 }
 
-async function getScheduleData(): Promise<{
-  weekday: DJSlot[];
-  saturday: DJSlot[];
-  sunday: DJSlot[];
-}> {
+function countSongs(clockPattern: string | null): number {
+  if (!clockPattern) return 0;
   try {
-    // Fetch active DJs from the first active station
+    const slots = JSON.parse(clockPattern);
+    return slots.filter((s: { type: string }) => s.type === "song").length;
+  } catch {
+    return 0;
+  }
+}
+
+async function getScheduleBlocks(): Promise<TimeBlock[]> {
+  try {
     const station = await prisma.station.findFirst({
       where: { isActive: true, deletedAt: null },
       select: { id: true },
     });
+    if (!station) return [];
 
-    if (!station) return { weekday: [], saturday: [], sunday: [] };
-
-    // Fetch clock assignments with clock template details
     const assignments = await prisma.clockAssignment.findMany({
-      where: { stationId: station.id, isActive: true },
+      where: { stationId: station.id, isActive: true, dayType: { in: ["weekday", "all"] } },
       select: {
-        dayType: true,
         timeSlotStart: true,
         timeSlotEnd: true,
-        dj: {
-          select: { name: true, showFormat: true, tagline: true, vibe: true, isWeekend: true },
-        },
-        clockTemplate: {
-          select: { name: true, clockType: true },
-        },
+        clockTemplate: { select: { name: true, clockType: true, clockPattern: true } },
       },
       orderBy: { timeSlotStart: "asc" },
     });
 
-    // Group assignments by DJ + dayType, collecting per-hour clock info
-    const shiftMap = new Map<string, {
-      dj: typeof assignments[0]["dj"];
-      dayType: string;
-      start: string;
-      end: string;
-      hours: HourDetail[];
-    }>();
+    const blocks: TimeBlock[] = [];
 
     for (const a of assignments) {
-      const key = `${a.dj.name}-${a.dayType}`;
       const startHour = parseInt(a.timeSlotStart.split(":")[0], 10);
       const endHour = parseInt(a.timeSlotEnd.split(":")[0], 10);
+      const songs = countSongs(a.clockTemplate?.clockPattern || null);
 
-      // Build per-hour details for this assignment
-      const totalHours = endHour > startHour ? endHour - startHour : (24 - startHour) + endHour;
-      const hourDetails: HourDetail[] = [];
-      for (let i = 0; i < totalHours; i++) {
-        hourDetails.push({
-          hour: (startHour + i) % 24,
-          clockTemplateName: a.clockTemplate?.name || null,
-          clockType: a.clockTemplate?.clockType || null,
-        });
-      }
-
-      const existing = shiftMap.get(key);
-      if (!existing) {
-        shiftMap.set(key, {
-          dj: a.dj,
-          dayType: a.dayType,
-          start: a.timeSlotStart,
-          end: a.timeSlotEnd,
-          hours: hourDetails,
-        });
+      let label: string;
+      if (startHour >= 6 && endHour <= 18 && startHour < endHour) {
+        label = "Daytime Programming";
       } else {
-        if (a.timeSlotStart < existing.start) existing.start = a.timeSlotStart;
-        if (a.timeSlotEnd > existing.end) existing.end = a.timeSlotEnd;
-        existing.hours.push(...hourDetails);
+        label = "After Hours";
       }
+
+      blocks.push({
+        label,
+        timeRange: `${formatTime(startHour)} - ${formatTime(endHour)}`,
+        clockName: a.clockTemplate?.name || null,
+        clockType: a.clockTemplate?.clockType || null,
+        startHour,
+        endHour,
+        songsPerHour: songs,
+      });
     }
 
-    const weekday: DJSlot[] = [];
-    const saturday: DJSlot[] = [];
-    const sunday: DJSlot[] = [];
-
-    for (const shift of shiftMap.values()) {
-      const startHour = parseInt(shift.start.split(":")[0]);
-      const endHour = parseInt(shift.end.split(":")[0]);
-
-      // Sort hours
-      shift.hours.sort((a, b) => a.hour - b.hour);
-
-      const slot: DJSlot = {
-        name: shift.dj.name,
-        showName: shift.dj.showFormat || shift.dj.tagline,
-        bio: shift.dj.vibe,
-        shiftStart: String(startHour),
-        shiftEnd: String(endHour),
-        dayType: shift.dayType,
-        hours: shift.hours,
-      };
-
-      switch (shift.dayType) {
-        case "saturday":
-          saturday.push(slot);
-          break;
-        case "sunday":
-          sunday.push(slot);
-          break;
-        default:
-          weekday.push(slot);
-      }
-    }
-
-    // Sort by shift start time
-    const sortByStart = (a: DJSlot, b: DJSlot) => parseInt(a.shiftStart) - parseInt(b.shiftStart);
-    weekday.sort(sortByStart);
-    saturday.sort(sortByStart);
-    sunday.sort(sortByStart);
-
-    return { weekday, saturday, sunday };
+    return blocks;
   } catch {
-    return { weekday: [], saturday: [], sunday: [] };
+    return [];
   }
 }
 
 export default async function SchedulePage() {
-  const { weekday, saturday, sunday } = await getScheduleData();
-  const hasData = weekday.length > 0 || saturday.length > 0 || sunday.length > 0;
+  const blocks = await getScheduleBlocks();
+  const hasData = blocks.length > 0;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
+    <main className="min-h-screen bg-gray-950 text-gray-100">
       {/* Navigation */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b border-white/10 bg-gray-950/90 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <Radio className="w-6 h-6 text-amber-700" />
-              <StationName className="font-bold text-xl text-gray-900" />
+            <div className="flex items-center space-x-3">
+              <Image src="/logos/ncr-logo.png" alt="North Country Radio" width={32} height={32} className="h-8 w-auto object-contain" />
+              <StationName className="font-bold text-xl text-white" />
             </div>
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">Home</Link>
-              <Link href="/station" className="text-amber-700 hover:text-amber-800 font-medium transition-colors">Station</Link>
-              <Link href="/network" className="text-gray-600 hover:text-gray-900 transition-colors">Network</Link>
+            <div className="flex items-center space-x-6">
+              <Link href="/station" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">Station</Link>
+              <Link href="/network" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">Network</Link>
+              <Link
+                href="/player"
+                className="bg-amber-500 hover:bg-amber-400 text-gray-950 px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+              >
+                Listen Live
+              </Link>
             </div>
           </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <div className="inline-flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-          <Calendar className="w-4 h-4" />
-          <span>24/7 Programming Schedule</span>
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-900/15 via-gray-950 to-gray-950" />
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center">
+          <p className="text-amber-400 font-medium tracking-widest uppercase text-sm mb-6">
+            <Calendar className="w-4 h-4 inline-block mr-2 -mt-0.5" />
+            24/7 Music Programming
+          </p>
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-4">
+            All Music. All Day.
+          </h1>
+          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+            Non-stop Americana, country, and singer-songwriter music around the clock.
+            <br />
+            <span className="text-white font-medium">Just the music you love — no filler, no fluff.</span>
+          </p>
         </div>
-        <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900 mb-4">
-          Programming Schedule
-        </h1>
-        <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-          Every hour, every day — curated with care.
-          <br />
-          <strong>Find your favorite show and make it part of your routine.</strong>
-        </p>
       </section>
 
       {!hasData ? (
@@ -206,174 +140,101 @@ export default async function SchedulePage() {
           <p className="text-gray-500 text-lg">Schedule data is being set up. Check back soon!</p>
         </section>
       ) : (
-        <>
-          {/* Weekday Schedule */}
-          {weekday.length > 0 && (
-            <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-              <h2 className="text-4xl font-serif font-bold text-center mb-8 text-gray-900">
-                Weekday Schedule
-                <span className="block text-lg font-normal text-gray-600 mt-2">Monday - Friday</span>
-              </h2>
-              <div className="space-y-4">
-                {weekday.map((slot, i) => (
-                  <TimeSlot
-                    key={`weekday-${i}`}
-                    time={`${formatTime(parseInt(slot.shiftStart))} - ${formatTime(parseInt(slot.shiftEnd))}`}
-                    show={slot.showName || `${slot.name}'s Show`}
-                    dj={slot.name}
-                    mood={slot.bio || ""}
-                    color={WEEKDAY_COLORS[i % WEEKDAY_COLORS.length]}
-                    hours={slot.hours}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Weekend Schedule */}
-          {(saturday.length > 0 || sunday.length > 0) && (
-            <section className="bg-white py-16">
-              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-4xl font-serif font-bold text-center mb-8 text-gray-900">
-                  Weekend Schedule
-                  <span className="block text-lg font-normal text-gray-600 mt-2">Saturday & Sunday</span>
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {saturday.length > 0 && (
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                        <Calendar className="w-6 h-6 mr-2 text-amber-700" />
-                        Saturday
-                      </h3>
-                      <div className="space-y-3">
-                        {saturday.map((slot, i) => (
-                          <WeekendSlot
-                            key={`sat-${i}`}
-                            time={`${formatTime(parseInt(slot.shiftStart))} - ${formatTime(parseInt(slot.shiftEnd))}`}
-                            show={slot.showName || `${slot.name}'s Show`}
-                            dj={slot.name}
-                            focus={slot.bio || ""}
-                          />
-                        ))}
-                      </div>
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="space-y-6">
+            {blocks.map((block, i) => (
+              <div
+                key={i}
+                className={`rounded-xl p-6 border ${
+                  block.label === "Daytime Programming"
+                    ? "bg-gradient-to-r from-amber-600/90 to-orange-700/90 border-amber-500/30"
+                    : "bg-gradient-to-r from-indigo-800/80 to-slate-800/80 border-indigo-500/20"
+                }`}
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <Clock className="w-5 h-5" />
+                      <span className="text-lg font-semibold">{block.timeRange}</span>
                     </div>
-                  )}
-                  {sunday.length > 0 && (
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                        <Calendar className="w-6 h-6 mr-2 text-amber-700" />
-                        Sunday
-                      </h3>
-                      <div className="space-y-3">
-                        {sunday.map((slot, i) => (
-                          <WeekendSlot
-                            key={`sun-${i}`}
-                            time={`${formatTime(parseInt(slot.shiftStart))} - ${formatTime(parseInt(slot.shiftEnd))}`}
-                            show={slot.showName || `${slot.name}'s Show`}
-                            dj={slot.name}
-                            focus={slot.bio || ""}
-                          />
-                        ))}
-                      </div>
+                    <h3 className="text-2xl font-serif font-bold mb-1">{block.label}</h3>
+                    {block.clockName && (
+                      <p className="text-sm opacity-80">{block.clockName}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <div className="bg-white/10 border border-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-center">
+                      <div className="text-2xl font-bold">{block.songsPerHour}</div>
+                      <div className="text-xs opacity-80">tracks/hour</div>
                     </div>
-                  )}
+                    <div className="bg-white/10 border border-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-center">
+                      <Music className="w-5 h-5 mx-auto mb-1" />
+                      <div className="text-xs opacity-80">non-stop</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </section>
-          )}
-        </>
+            ))}
+          </div>
+
+          {/* Format highlights */}
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-gray-800/50 border border-white/10 rounded-xl p-6 text-center">
+              <div className="text-3xl font-bold text-amber-400 mb-2">16</div>
+              <div className="text-gray-400">Tracks per hour during the day</div>
+            </div>
+            <div className="bg-gray-800/50 border border-white/10 rounded-xl p-6 text-center">
+              <div className="text-3xl font-bold text-amber-400 mb-2">24/7</div>
+              <div className="text-gray-400">Music around the clock</div>
+            </div>
+            <div className="bg-gray-800/50 border border-white/10 rounded-xl p-6 text-center">
+              <div className="text-3xl font-bold text-amber-400 mb-2">0</div>
+              <div className="text-gray-400">Interruptions — just music</div>
+            </div>
+          </div>
+        </section>
       )}
 
       {/* CTA */}
-      <section className="bg-gradient-to-br from-amber-50 to-orange-100 py-16">
+      <section className="border-t border-white/5 bg-gradient-to-b from-gray-950 to-gray-900 py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-serif font-bold mb-6 text-gray-900">
-            Make It Part of Your Day
+          <h2 className="text-4xl font-serif font-bold mb-4 text-white">
+            Tune In Anytime
           </h2>
-          <p className="text-xl text-gray-700 mb-8">
-            Set your alarm. Bookmark your favorite show. Build a listening habit.
+          <p className="text-lg text-gray-400 mb-10">
+            Great music is always playing. No schedule to follow — just press play.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/station"
-              className="inline-flex items-center space-x-2 bg-amber-700 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-amber-800 transition-colors shadow-lg"
+              href="/player"
+              className="inline-flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-gray-950 px-8 py-4 rounded-lg text-lg font-bold transition-colors shadow-lg shadow-amber-500/20"
             >
-              <span>Back to Station</span>
+              <Headphones className="w-5 h-5" />
+              <span>Listen Now</span>
             </Link>
             <Link
-              href="/listen/register"
-              className="inline-flex items-center space-x-2 border-2 border-amber-700 text-amber-800 px-8 py-4 rounded-lg text-lg font-bold hover:bg-amber-50 transition-colors"
+              href="/station"
+              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-white/5 transition-colors"
             >
-              <span>Listen Now</span>
+              <span>Back to Station</span>
             </Link>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
+      <footer className="border-t border-white/5 bg-gray-950 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-4">
-            <StationName className="text-2xl font-serif font-bold text-white" />
-          </div>
-          <p className="text-sm">
-            Part of the <Link href="/network" className="text-amber-400 hover:text-amber-300">TrueFans RADIO Network</Link>
+          <StationName className="text-2xl font-serif font-bold text-white mb-2" />
+          <p className="text-amber-400/80 italic mb-6">Where the music finds you.</p>
+          <p className="text-sm text-gray-600 dark:text-zinc-400">
+            Part of the{" "}
+            <Link href="/network" className="text-amber-400/60 hover:text-amber-400">
+              TrueFans RADIO Network
+            </Link>
           </p>
         </div>
       </footer>
     </main>
-  );
-}
-
-function TimeSlot({ time, show, dj, mood, color, hours }: {
-  time: string; show: string; dj: string; mood: string; color: string; hours: HourDetail[];
-}) {
-  return (
-    <div className={`${color} text-white rounded-xl p-6 shadow-lg`}>
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-        <div className="flex-1">
-          <div className="flex items-center space-x-3 mb-2">
-            <Clock className="w-5 h-5" />
-            <span className="text-lg font-semibold">{time}</span>
-          </div>
-          <h3 className="text-2xl font-serif font-bold mb-1">{show}</h3>
-          <p className="text-sm opacity-90 mb-2">with {dj}</p>
-          {mood && <p className="text-sm italic opacity-80">{mood}</p>}
-        </div>
-        {hours.length > 0 && (
-          <div className="flex flex-wrap gap-2 md:max-w-xs">
-            {hours.map((h) => (
-              <div
-                key={h.hour}
-                className="bg-white/15 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs"
-              >
-                <div className="font-bold">{formatTime(h.hour)}</div>
-                {h.clockTemplateName && (
-                  <div className="opacity-80 truncate max-w-[120px]">{h.clockTemplateName}</div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function WeekendSlot({ time, show, dj, focus }: {
-  time: string; show: string; dj: string; focus: string;
-}) {
-  return (
-    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-5 shadow-md">
-      <div className="flex items-start space-x-3 mb-2">
-        <Clock className="w-5 h-5 text-amber-700 mt-1" />
-        <div className="flex-1">
-          <p className="text-sm font-semibold text-gray-600 mb-1">{time}</p>
-          <h4 className="text-xl font-bold text-gray-900 mb-1">{show}</h4>
-          <p className="text-sm text-gray-700 mb-2">with {dj}</p>
-          {focus && <p className="text-sm text-gray-600">{focus}</p>}
-        </div>
-      </div>
-    </div>
   );
 }

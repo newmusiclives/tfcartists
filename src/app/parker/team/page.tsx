@@ -184,7 +184,7 @@ export default function ParkerTeamPage() {
       orange: {
         bg: "bg-orange-50",
         text: "text-orange-600",
-        badge: "bg-orange-100 text-orange-700",
+        badge: "bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400",
         hover: "hover:border-orange-400",
       },
       teal: {
@@ -200,7 +200,7 @@ export default function ParkerTeamPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50">
       {/* Header */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-40">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -208,12 +208,12 @@ export default function ParkerTeamPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Parker&apos;s Team</h1>
-                <p className="text-sm text-gray-600">Station Management & Operations</p>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Parker&apos;s Team</h1>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Station Management & Operations</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <Link href="/parker" className="text-gray-600 hover:text-gray-900 text-sm">
+              <Link href="/parker" className="text-gray-600 hover:text-gray-900 dark:text-white text-sm">
                 Back to Dashboard
               </Link>
             </div>
@@ -254,12 +254,12 @@ export default function ParkerTeamPage() {
         </div>
 
         {/* Team Mission */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Our Mission</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Our Mission</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">What We Do</h4>
-              <ul className="space-y-2 text-gray-700">
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">What We Do</h4>
+              <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-2">
                   <span className="text-rose-600 mt-1">&#10003;</span>
                   <span>Oversee day-to-day station operations and programming</span>
@@ -279,17 +279,17 @@ export default function ParkerTeamPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Station Operations</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Station Operations</h4>
               <div className="space-y-3">
                 <div className="bg-rose-50 rounded-lg p-3">
-                  <div className="text-sm text-gray-600 mb-1">Live Programming</div>
+                  <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Live Programming</div>
                   <div className="text-2xl font-bold text-rose-600">6am - 6pm</div>
-                  <div className="text-xs text-gray-500">12 DJs across weekday & weekend shifts</div>
+                  <div className="text-xs text-gray-500 dark:text-zinc-500">12 DJs across weekday & weekend shifts</div>
                 </div>
                 <div className="bg-indigo-50 rounded-lg p-3">
-                  <div className="text-sm text-gray-600 mb-1">Automation</div>
+                  <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Automation</div>
                   <div className="text-2xl font-bold text-indigo-600">6pm - 6am</div>
-                  <div className="text-xs text-gray-500">AI-managed overnight programming</div>
+                  <div className="text-xs text-gray-500 dark:text-zinc-500">AI-managed overnight programming</div>
                 </div>
               </div>
             </div>
@@ -298,14 +298,14 @@ export default function ParkerTeamPage() {
 
         {/* Team Members */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">Team Members</h3>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Team Members</h3>
           <div className="space-y-6">
             {teamMembers.map((member) => {
               const colors = getColorClasses(member.color);
               return (
                 <div
                   key={member.id}
-                  className={`bg-white rounded-xl shadow-lg border-2 border-transparent ${colors.hover} transition-all overflow-hidden`}
+                  className={`bg-white dark:bg-zinc-900 rounded-xl shadow-lg border-2 border-transparent ${colors.hover} transition-all overflow-hidden`}
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
@@ -313,12 +313,12 @@ export default function ParkerTeamPage() {
                         <TeamAvatar src={member.photoUrl} alt={member.name} initials={member.avatar} color={member.color} />
                         <div>
                           <div className="flex items-center space-x-3 mb-1">
-                            <h4 className="text-xl font-bold text-gray-900">{member.name}</h4>
+                            <h4 className="text-xl font-bold text-gray-900 dark:text-white">{member.name}</h4>
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${colors.badge}`}>
                               {member.role}
                             </span>
                           </div>
-                          <p className="text-gray-600 mb-2">{member.title}</p>
+                          <p className="text-gray-600 dark:text-zinc-400 mb-2">{member.title}</p>
                           <div className="flex items-center space-x-4">
                             {member.dashboardLink && (
                               <Link
@@ -341,8 +341,8 @@ export default function ParkerTeamPage() {
                     <div className="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
                       {member.stats.map((stat, idx) => (
                         <div key={idx} className="text-center">
-                          <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                          <div className="text-xs text-gray-600">{stat.label}</div>
+                          <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                          <div className="text-xs text-gray-600 dark:text-zinc-400">{stat.label}</div>
                         </div>
                       ))}
                     </div>
@@ -350,7 +350,7 @@ export default function ParkerTeamPage() {
                     {/* Responsibilities & Tools */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 text-sm">Key Responsibilities</h5>
+                        <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Key Responsibilities</h5>
                         <ul className="space-y-1">
                           {member.responsibilities.map((resp, idx) => (
                             <li key={idx} className="text-sm text-gray-700 flex items-start space-x-2">
@@ -361,7 +361,7 @@ export default function ParkerTeamPage() {
                         </ul>
                       </div>
                       <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 text-sm">Tools & Systems</h5>
+                        <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Tools & Systems</h5>
                         <div className="flex flex-wrap gap-2">
                           {member.tools.map((tool, idx) => (
                             <span
@@ -382,8 +382,8 @@ export default function ParkerTeamPage() {
         </div>
 
         {/* Team Workflow */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Station Operations Workflow</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Station Operations Workflow</h3>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <WorkflowStep
               number="1"
@@ -424,8 +424,8 @@ export default function ParkerTeamPage() {
         </div>
 
         {/* Quick Links */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Team Dashboards</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Team Dashboards</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <QuickLink
               href="/parker"
@@ -495,9 +495,9 @@ function WorkflowStep({
       <div className={`inline-flex items-center justify-center w-12 h-12 ${colorClasses[color]} text-white rounded-full text-xl font-bold mb-3`}>
         {number}
       </div>
-      <div className="flex items-center justify-center mb-2 text-gray-600">{icon}</div>
-      <h4 className="font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-sm text-gray-600">{description}</p>
+      <div className="flex items-center justify-center mb-2 text-gray-600 dark:text-zinc-400">{icon}</div>
+      <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{title}</h4>
+      <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
     </div>
   );
 }

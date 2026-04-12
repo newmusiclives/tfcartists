@@ -164,12 +164,12 @@ export default function WhatsPlayingPage() {
 
       <main className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
         {/* Navigation */}
-        <nav className="border-b bg-white/80 backdrop-blur-sm">
+        <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center space-x-2">
                 <Radio className="w-6 h-6 text-amber-700" />
-                <span className="font-bold text-xl text-gray-900">
+                <span className="font-bold text-xl text-gray-900 dark:text-white">
                   {data?.stationName || "TrueFans RADIO"}
                 </span>
               </div>
@@ -246,19 +246,19 @@ export default function WhatsPlayingPage() {
 
                   {data.nowPlaying ? (
                     <>
-                      <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-2 leading-tight">
+                      <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-2 leading-tight">
                         {data.nowPlaying.title}
                       </h1>
-                      <p className="text-xl sm:text-2xl text-gray-600 mb-6">
+                      <p className="text-xl sm:text-2xl text-gray-600 dark:text-zinc-400 mb-6">
                         {data.nowPlaying.artistName}
                       </p>
                     </>
                   ) : (
                     <>
-                      <h1 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900 mb-2">
+                      <h1 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-2">
                         Music
                       </h1>
-                      <p className="text-xl text-gray-600 mb-6">
+                      <p className="text-xl text-gray-600 dark:text-zinc-400 mb-6">
                         {data.stationName}
                       </p>
                     </>
@@ -274,10 +274,10 @@ export default function WhatsPlayingPage() {
                           {formatHour(data.currentShow.shiftEnd)}
                         </span>
                       </div>
-                      <p className="font-bold text-gray-900">
+                      <p className="font-bold text-gray-900 dark:text-white">
                         {data.currentShow.showName}
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-zinc-400">
                         with {data.currentShow.djName}
                       </p>
                     </div>
@@ -291,7 +291,7 @@ export default function WhatsPlayingPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Recently Played */}
                 <div>
-                  <h2 className="text-2xl font-serif font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <h2 className="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                     <Clock className="w-5 h-5 text-amber-700" />
                     Recently Played
                   </h2>
@@ -310,7 +310,7 @@ export default function WhatsPlayingPage() {
 
                 {/* Up Next */}
                 <div>
-                  <h2 className="text-2xl font-serif font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <h2 className="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                     <Music className="w-5 h-5 text-amber-700" />
                     Up Next
                   </h2>

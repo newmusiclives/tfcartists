@@ -222,17 +222,17 @@ export default function ScheduleEditorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
               <CalendarDays className="w-8 h-8 text-indigo-600" />
               Schedule Editor
             </h1>
-            <p className="text-gray-500 mt-1">Assign DJs and clock templates to each hour of programming</p>
+            <p className="text-zinc-500 mt-1">Assign hosts and clock templates to each hour of programming</p>
           </div>
           <button
             onClick={saveSchedule}
@@ -253,11 +253,11 @@ export default function ScheduleEditorPage() {
               className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition-all ${
                 activeDay === dt.key
                   ? "bg-indigo-600 text-white shadow-lg"
-                  : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
+                  : "bg-zinc-900/80 text-zinc-400 hover:bg-zinc-800 border border-zinc-800"
               }`}
             >
               <div>{dt.label}</div>
-              <div className={`text-xs mt-0.5 ${activeDay === dt.key ? "text-indigo-200" : "text-gray-400"}`}>
+              <div className={`text-xs mt-0.5 ${activeDay === dt.key ? "text-indigo-200" : "text-zinc-500"}`}>
                 {dt.subtitle}
               </div>
             </button>
@@ -266,7 +266,7 @@ export default function ScheduleEditorPage() {
 
         {loading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+            <Loader2 className="w-8 h-8 animate-spin text-zinc-500" />
           </div>
         ) : (
           <div className="space-y-2">
@@ -299,10 +299,10 @@ export default function ScheduleEditorPage() {
                   )}
 
                   <div
-                    className={`bg-white rounded-xl p-4 border-2 transition-all ${
+                    className={`bg-zinc-900/80 rounded-xl p-4 border-2 transition-all ${
                       isCurrent
-                        ? "ring-2 ring-indigo-500 border-indigo-400 shadow-lg"
-                        : "border-gray-100 hover:border-gray-200 hover:shadow-sm"
+                        ? "ring-2 ring-indigo-500 border-indigo-400 shadow-lg shadow-black/20"
+                        : "border-zinc-800 hover:border-zinc-700"
                     }`}
                     style={selectedDj ? { borderLeftColor: djColor, borderLeftWidth: "4px" } : {}}
                   >
@@ -310,12 +310,12 @@ export default function ScheduleEditorPage() {
                       {/* Time */}
                       <div className="w-32 flex-shrink-0">
                         <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="font-bold text-gray-800">{formatHourRange(hour)}</span>
+                          <Clock className="w-4 h-4 text-zinc-500" />
+                          <span className="font-bold text-zinc-100">{formatHourRange(hour)}</span>
                         </div>
                         <div className="flex items-center gap-1.5 mt-1">
                           {isCurrent && (
-                            <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold animate-pulse">
+                            <span className="text-[10px] bg-green-500/15 text-green-400 px-2 py-0.5 rounded-full font-bold animate-pulse">
                               ON AIR
                             </span>
                           )}
@@ -330,44 +330,44 @@ export default function ScheduleEditorPage() {
 
                       {/* DJ Selector */}
                       <div className="flex-1">
-                        <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1 block">DJ</label>
+                        <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1 block">Host</label>
                         <div className="relative">
                           <select
                             value={slot?.djId || ""}
                             onChange={(e) => updateSlot(activeDay, hour, "djId", e.target.value)}
-                            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm font-medium bg-white appearance-none cursor-pointer hover:border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full border border-zinc-700 rounded-lg px-3 py-2.5 text-sm font-medium bg-zinc-800 text-white appearance-none cursor-pointer hover:border-zinc-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                           >
-                            <option value="">— No DJ —</option>
+                            <option value="">— No Host —</option>
                             {djs.map((d) => (
                               <option key={d.id} value={d.id}>{d.name}</option>
                             ))}
                           </select>
-                          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
                         </div>
                       </div>
 
                       {/* Clock Selector */}
                       <div className="flex-1">
-                        <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1 block">Clock Template</label>
+                        <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1 block">Clock Template</label>
                         <div className="relative">
                           <select
                             value={slot?.clockTemplateId || ""}
                             onChange={(e) => updateSlot(activeDay, hour, "clockTemplateId", e.target.value)}
-                            className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white appearance-none cursor-pointer hover:border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full border border-zinc-700 rounded-lg px-3 py-2.5 text-sm bg-zinc-800 text-white appearance-none cursor-pointer hover:border-zinc-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                           >
                             <option value="">— No Clock —</option>
                             {clocks.map((c) => (
                               <option key={c.id} value={c.id}>{c.name}</option>
                             ))}
                           </select>
-                          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
                         </div>
                       </div>
 
                       {/* Summary */}
                       <div className="w-24 flex-shrink-0 text-right">
                         {selectedClock && (
-                          <span className="text-[10px] bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
+                          <span className="text-[10px] bg-zinc-800 text-zinc-500 px-2 py-1 rounded-full">
                             {selectedClock.clockType}
                           </span>
                         )}

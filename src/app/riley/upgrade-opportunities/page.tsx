@@ -125,7 +125,7 @@ export default function UpgradeOpportunitiesPage() {
       <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading upgrade opportunities...</p>
+          <p className="text-gray-600 dark:text-zinc-400">Loading upgrade opportunities...</p>
         </div>
       </main>
     );
@@ -134,11 +134,11 @@ export default function UpgradeOpportunitiesPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/riley"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Riley Dashboard</span>
@@ -146,8 +146,8 @@ export default function UpgradeOpportunitiesPage() {
           <div className="flex items-center space-x-3">
             <TrendingUp className="w-8 h-8 text-blue-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Tier Upgrade Opportunities</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Tier Upgrade Opportunities</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Artists showing high engagement who might upgrade - Managed by Riley Carpenter
               </p>
             </div>
@@ -185,7 +185,7 @@ export default function UpgradeOpportunitiesPage() {
         </div>
 
         {/* Filter Tabs */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex space-x-2 mb-6">
             <FilterButton
               active={filter === "all"}
@@ -217,7 +217,7 @@ export default function UpgradeOpportunitiesPage() {
               />
             ))}
             {filteredOpportunities.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
                 No opportunities found
               </div>
             )}
@@ -227,10 +227,10 @@ export default function UpgradeOpportunitiesPage() {
         {/* Upgrade Strategy */}
         <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Upgrade Strategy</h2>
-          <div className="space-y-4 text-sm text-gray-700">
-            <div className="bg-white rounded-lg p-4">
-              <h3 className="font-semibold text-gray-900 mb-2">Identification Criteria</h3>
-              <ul className="list-disc list-inside space-y-1 text-gray-600">
+          <div className="space-y-4 text-sm text-gray-700 dark:text-zinc-300">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-4">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Identification Criteria</h3>
+              <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                 <li>Current plays exceeding tier allocation by 2x or more</li>
                 <li>High engagement scores from listener analytics</li>
                 <li>Multiple quality track submissions</li>
@@ -238,9 +238,9 @@ export default function UpgradeOpportunitiesPage() {
               </ul>
             </div>
 
-            <div className="bg-white rounded-lg p-4">
-              <h3 className="font-semibold text-gray-900 mb-2">Outreach Approach</h3>
-              <ul className="list-disc list-inside space-y-1 text-gray-600">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-4">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Outreach Approach</h3>
+              <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                 <li>Personalized email highlighting their strong performance</li>
                 <li>Show specific data: current vs potential plays</li>
                 <li>Emphasize pool share earnings potential</li>
@@ -249,9 +249,9 @@ export default function UpgradeOpportunitiesPage() {
               </ul>
             </div>
 
-            <div className="bg-white rounded-lg p-4">
-              <h3 className="font-semibold text-gray-900 mb-2">Conversion Goals</h3>
-              <ul className="list-disc list-inside space-y-1 text-gray-600">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-4">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Conversion Goals</h3>
+              <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                 <li>Target: 60% of FREE artists upgrade within 90 days</li>
                 <li>15% quarterly upgrade rate across all tiers</li>
                 <li>Average time to first upgrade: 45 days</li>
@@ -267,11 +267,11 @@ export default function UpgradeOpportunitiesPage() {
               <User className="w-8 h-8 text-purple-600" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Riley Carpenter</h3>
-              <p className="text-sm text-gray-600 mb-3">AI Sales Director</p>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Riley Carpenter</h3>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">AI Sales Director</p>
               <div className="text-sm text-gray-700 space-y-2">
                 <p><strong>Responsibilities:</strong></p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600">
+                <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                   <li>Identify artists ready for tier upgrades</li>
                   <li>Send personalized upgrade pitches</li>
                   <li>Track conversion rates and optimize messaging</li>
@@ -298,13 +298,13 @@ export default function UpgradeOpportunitiesPage() {
 
 function StatCard({ icon, label, value, subtitle }: { icon: React.ReactNode; label: string; value: string | number; subtitle: string }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -340,19 +340,19 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityIt
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
-            <div className="font-semibold text-gray-900 text-lg">{opportunity.artist}</div>
+            <div className="font-semibold text-gray-900 dark:text-white text-lg">{opportunity.artist}</div>
             <span className={`px-2 py-1 rounded text-xs font-semibold ${engagementColors[opportunity.engagement as keyof typeof engagementColors] || engagementColors.low}`}>
               {opportunity.engagement.toUpperCase()} ENGAGEMENT
             </span>
             {opportunity.contacted && (
-              <span className="px-2 py-1 rounded text-xs font-semibold bg-green-100 text-green-700 flex items-center space-x-1">
+              <span className="px-2 py-1 rounded text-xs font-semibold bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 flex items-center space-x-1">
                 <CheckCircle className="w-3 h-3" />
                 <span>Contacted</span>
               </span>
             )}
           </div>
-          <div className="text-sm text-gray-600 mb-2">{opportunity.email}</div>
-          <div className="flex items-center space-x-4 text-xs text-gray-500">
+          <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{opportunity.email}</div>
+          <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
             <span>{opportunity.tracksSubmitted} tracks submitted</span>
             <span>{opportunity.monthsSinceJoin} months on platform</span>
             <span>{opportunity.currentPlays} plays vs {opportunity.targetPlays} allocated</span>
@@ -361,9 +361,9 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityIt
 
         <div className="flex items-center space-x-6">
           <div className="text-center">
-            <div className="text-xs text-gray-500 mb-1">Current</div>
-            <div className="font-bold text-gray-700">{opportunity.currentTier}</div>
-            <div className="text-xs text-gray-500">${currentPrice}/mo</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Current</div>
+            <div className="font-bold text-gray-700 dark:text-zinc-300">{opportunity.currentTier}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">${currentPrice}/mo</div>
           </div>
           <div className="text-gray-400 text-2xl">→</div>
           <div className="text-center">
@@ -372,9 +372,9 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityIt
             <div className="text-xs text-blue-600">${suggestedPrice}/mo</div>
           </div>
           <div className="text-center bg-purple-50 rounded-lg p-3">
-            <div className="text-xs text-gray-600 mb-1">Revenue Gain</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Revenue Gain</div>
             <div className="text-lg font-bold text-purple-600">+${priceDiff}</div>
-            <div className="text-xs text-gray-500">per month</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">per month</div>
           </div>
           <button
             onClick={() => onSelect(opportunity)}
@@ -431,13 +431,13 @@ TrueFans RADIO™ Network`;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b sticky top-0 bg-white z-10">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">Upgrade Opportunity</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upgrade Opportunity</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-2xl"
+              className="text-gray-400 hover:text-gray-600 dark:text-zinc-400 text-2xl"
             >
               ×
             </button>
@@ -447,23 +447,23 @@ TrueFans RADIO™ Network`;
         <div className="p-6 space-y-6">
           {/* Artist Info */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Artist Details</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Artist Details</h3>
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-gray-600">Name:</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Name:</span>
                   <span className="font-semibold ml-2">{opportunity.artist}</span>
                 </div>
                 <div>
-                  <span className="text-gray-600">Email:</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Email:</span>
                   <span className="ml-2">{opportunity.email}</span>
                 </div>
                 <div>
-                  <span className="text-gray-600">Engagement:</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Engagement:</span>
                   <span className="font-semibold ml-2">{opportunity.engagement.toUpperCase()}</span>
                 </div>
                 <div>
-                  <span className="text-gray-600">Time on Platform:</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Time on Platform:</span>
                   <span className="ml-2">{opportunity.monthsSinceJoin} months</span>
                 </div>
               </div>
@@ -472,43 +472,43 @@ TrueFans RADIO™ Network`;
 
           {/* Performance Stats */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Performance Analysis</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Performance Analysis</h3>
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-blue-50 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-blue-600">{opportunity.currentPlays}</div>
-                <div className="text-xs text-gray-600">Actual Plays</div>
+                <div className="text-xs text-gray-600 dark:text-zinc-400">Actual Plays</div>
               </div>
               <div className="bg-gray-50 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold text-gray-600">{currentPlaysAllocation}</div>
-                <div className="text-xs text-gray-600">Current Allocation</div>
+                <div className="text-2xl font-bold text-gray-600 dark:text-zinc-400">{currentPlaysAllocation}</div>
+                <div className="text-xs text-gray-600 dark:text-zinc-400">Current Allocation</div>
               </div>
               <div className="bg-green-50 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-green-600">{opportunity.tracksSubmitted}</div>
-                <div className="text-xs text-gray-600">Tracks Submitted</div>
+                <div className="text-xs text-gray-600 dark:text-zinc-400">Tracks Submitted</div>
               </div>
             </div>
           </div>
 
           {/* Upgrade Comparison */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Upgrade Comparison</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Upgrade Comparison</h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="text-center mb-3">
-                  <div className="text-lg font-bold text-gray-700">{opportunity.currentTier}</div>
-                  <div className="text-sm text-gray-500">Current Tier</div>
+                  <div className="text-lg font-bold text-gray-700 dark:text-zinc-300">{opportunity.currentTier}</div>
+                  <div className="text-sm text-gray-500 dark:text-zinc-500">Current Tier</div>
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Price:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Price:</span>
                     <span className="font-semibold">${AIRPLAY_TIER_PRICING[opportunity.currentTier as keyof typeof AIRPLAY_TIER_PRICING]}/mo</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Plays:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Plays:</span>
                     <span className="font-semibold">{currentPlaysAllocation}/mo</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Shares:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Shares:</span>
                     <span className="font-semibold">{currentShares}</span>
                   </div>
                 </div>
@@ -521,15 +521,15 @@ TrueFans RADIO™ Network`;
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Price:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Price:</span>
                     <span className="font-semibold text-blue-600">${AIRPLAY_TIER_PRICING[opportunity.suggestedTier as keyof typeof AIRPLAY_TIER_PRICING]}/mo</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Plays:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Plays:</span>
                     <span className="font-semibold text-blue-600">{suggestedPlaysAllocation}/mo</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Shares:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Shares:</span>
                     <span className="font-semibold text-blue-600">{suggestedShares}</span>
                   </div>
                 </div>
@@ -539,18 +539,18 @@ TrueFans RADIO™ Network`;
 
           {/* Reason */}
           <div className="bg-purple-50 rounded-lg p-4">
-            <h3 className="font-semibold text-gray-900 mb-2">Why This Upgrade?</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Why This Upgrade?</h3>
             <p className="text-gray-700 text-sm">{opportunity.reason}</p>
             <p className="text-gray-700 text-sm mt-2"><strong>ROI:</strong> {opportunity.estimatedROI}</p>
           </div>
 
           {/* Email Template */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Outreach Email Template</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Outreach Email Template</h3>
             <textarea
               value={emailTemplate}
               readOnly
-              className="w-full p-4 border border-gray-300 rounded-lg font-mono text-sm bg-gray-50"
+              className="w-full p-4 border border-gray-300 dark:border-zinc-700 rounded-lg font-mono text-sm bg-gray-50"
               rows={15}
             />
           </div>

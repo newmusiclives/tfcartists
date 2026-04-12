@@ -135,7 +135,7 @@ export default function SponsorPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2 text-green-700 hover:text-green-800 transition-colors">
@@ -153,13 +153,13 @@ export default function SponsorPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
             <Building2 className="w-8 h-8 text-green-600" />
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Reach Music Lovers Who Support Local
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-6">
             Sponsor {currentStation.name} and grow with the community.
           </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto mb-8">
             Our listeners are engaged, loyal, and passionate about supporting local businesses. Put your brand in front of people who care about their community.
           </p>
           <button
@@ -174,7 +174,7 @@ export default function SponsorPage() {
       {/* Benefits Grid */}
       <section className="py-16 px-4 bg-white/60">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             Why Sponsors Choose {currentStation.name}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -202,13 +202,13 @@ export default function SponsorPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="bg-white rounded-xl p-6 shadow-sm border border-green-100 hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-green-100 hover:shadow-md transition-shadow"
               >
                 <div className="inline-flex items-center justify-center w-10 h-10 bg-green-100 rounded-lg mb-4">
                   <item.icon className="w-5 h-5 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -218,7 +218,7 @@ export default function SponsorPage() {
       {/* How It Works */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             How It Works
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
@@ -232,8 +232,8 @@ export default function SponsorPage() {
                 <div className="inline-flex items-center justify-center w-10 h-10 bg-green-600 text-white rounded-full font-bold mb-3">
                   {item.step}
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -244,7 +244,7 @@ export default function SponsorPage() {
       <div ref={tierRef} className="max-w-4xl mx-auto px-4 py-16">
         {/* Sponsorship Tiers */}
         <div className="mb-12">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">Choose Your Sponsorship Level</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 text-center">Choose Your Sponsorship Level</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {SPONSORSHIP_TIERS.map((tier) => {
               const colors = tierColorClasses[tier.color];
@@ -284,18 +284,18 @@ export default function SponsorPage() {
         </div>
 
         {/* Inquiry Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8 space-y-6">
-          <h2 className="text-xl font-semibold text-gray-900">Tell Us About Your Business</h2>
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 space-y-6">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Tell Us About Your Business</h2>
 
           {error && (
-            <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
               {error}
             </div>
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                 Business Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -310,7 +310,7 @@ export default function SponsorPage() {
             </div>
 
             <div>
-              <label htmlFor="contactName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="contactName" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                 Contact Name
               </label>
               <input
@@ -324,7 +324,7 @@ export default function SponsorPage() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                 Email <span className="text-red-500">*</span>
               </label>
               <input
@@ -339,7 +339,7 @@ export default function SponsorPage() {
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                 Phone
               </label>
               <input
@@ -353,7 +353,7 @@ export default function SponsorPage() {
             </div>
 
             <div>
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="city" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                 City
               </label>
               <input
@@ -367,7 +367,7 @@ export default function SponsorPage() {
             </div>
 
             <div>
-              <label htmlFor="businessType" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="businessType" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                 Business Type
               </label>
               <select

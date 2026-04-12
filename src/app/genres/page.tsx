@@ -12,9 +12,9 @@ export default function GenresPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
+      <header className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <Link href="/" className="font-bold text-lg text-amber-800">
+          <Link href="/" className="font-bold text-lg text-amber-800 dark:text-amber-400">
             TrueFans RADIO
           </Link>
           <Link
@@ -29,10 +29,10 @@ export default function GenresPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Page Title */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
             Station Genres
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto">
             Choose from 10 professionally designed radio station templates.
             Each comes with AI DJs, scheduling, and branding ready to go.
           </p>
@@ -53,7 +53,7 @@ export default function GenresPage() {
               />
 
               <div className="p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-amber-800 transition-colors">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-amber-800 transition-colors">
                   {tpl.name}
                 </h2>
                 <p
@@ -62,12 +62,12 @@ export default function GenresPage() {
                 >
                   {tpl.tagline}
                 </p>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                <p className="text-gray-600 dark:text-zinc-400 text-sm mb-4 line-clamp-2">
                   {tpl.description}
                 </p>
 
                 {/* Meta */}
-                <div className="flex items-center justify-between text-xs text-gray-500">
+                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-zinc-500">
                   <span className="flex items-center space-x-1">
                     <Mic className="w-3.5 h-3.5" />
                     <span>
@@ -90,7 +90,7 @@ export default function GenresPage() {
             <span>Launch Your Station</span>
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="mt-3 text-sm text-gray-500">
+          <p className="mt-3 text-sm text-gray-500 dark:text-zinc-500">
             No credit card required to get started
           </p>
         </div>

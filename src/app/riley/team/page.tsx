@@ -169,7 +169,7 @@ export default function RileyTeamPage() {
       purple: {
         bg: "bg-purple-50",
         text: "text-purple-600",
-        badge: "bg-purple-100 text-purple-700",
+        badge: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400",
         hover: "hover:border-purple-400",
       },
       indigo: {
@@ -181,13 +181,13 @@ export default function RileyTeamPage() {
       blue: {
         bg: "bg-blue-50",
         text: "text-blue-600",
-        badge: "bg-blue-100 text-blue-700",
+        badge: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400",
         hover: "hover:border-blue-400",
       },
       green: {
         bg: "bg-green-50",
         text: "text-green-600",
-        badge: "bg-green-100 text-green-700",
+        badge: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400",
         hover: "hover:border-green-400",
       },
       emerald: {
@@ -203,7 +203,7 @@ export default function RileyTeamPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-40">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -211,12 +211,12 @@ export default function RileyTeamPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Riley's Team</h1>
-                <p className="text-sm text-gray-600">Artist Airplay Management Team</p>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Riley's Team</h1>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Artist Airplay Management Team</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <Link href="/riley" className="text-gray-600 hover:text-gray-900 text-sm">
+              <Link href="/riley" className="text-gray-600 hover:text-gray-900 dark:text-white text-sm">
                 Back to Dashboard
               </Link>
             </div>
@@ -257,12 +257,12 @@ export default function RileyTeamPage() {
         </div>
 
         {/* Team Mission */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Our Mission</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Our Mission</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">What We Do</h4>
-              <ul className="space-y-2 text-gray-700">
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">What We Do</h4>
+              <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-2">
                   <span className="text-purple-600 mt-1">✓</span>
                   <span>Discover and onboard emerging artists to TrueFans RADIO</span>
@@ -282,17 +282,17 @@ export default function RileyTeamPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Revenue Model</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Revenue Model</h4>
               <div className="space-y-3">
                 <div className="bg-purple-50 rounded-lg p-3">
-                  <div className="text-sm text-gray-600 mb-1">Artist Subscriptions (Riley's Revenue)</div>
+                  <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Subscriptions (Riley's Revenue)</div>
                   <div className="text-2xl font-bold text-purple-600">$3,900/month</div>
-                  <div className="text-xs text-gray-500">100% retained by station for operations</div>
+                  <div className="text-xs text-gray-500 dark:text-zinc-500">100% retained by station for operations</div>
                 </div>
                 <div className="bg-green-50 rounded-lg p-3">
-                  <div className="text-sm text-gray-600 mb-1">Artist Pool (from Harper)</div>
+                  <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Pool (from Harper)</div>
                   <div className="text-2xl font-bold text-green-600">$6,240/month</div>
-                  <div className="text-xs text-gray-500">80% of sponsor revenue → distributed to artists</div>
+                  <div className="text-xs text-gray-500 dark:text-zinc-500">80% of sponsor revenue → distributed to artists</div>
                 </div>
               </div>
             </div>
@@ -301,14 +301,14 @@ export default function RileyTeamPage() {
 
         {/* Team Members */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">Team Members</h3>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Team Members</h3>
           <div className="space-y-6">
             {teamMembers.map((member) => {
               const colors = getColorClasses(member.color);
               return (
                 <div
                   key={member.id}
-                  className={`bg-white rounded-xl shadow-lg border-2 border-transparent ${colors.hover} transition-all overflow-hidden`}
+                  className={`bg-white dark:bg-zinc-900 rounded-xl shadow-lg border-2 border-transparent ${colors.hover} transition-all overflow-hidden`}
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
@@ -316,12 +316,12 @@ export default function RileyTeamPage() {
                         <Image src={member.photoUrl} alt={member.name} width={64} height={64} className="w-16 h-16 rounded-xl object-cover shadow-md" />
                         <div>
                           <div className="flex items-center space-x-3 mb-1">
-                            <h4 className="text-xl font-bold text-gray-900">{member.name}</h4>
+                            <h4 className="text-xl font-bold text-gray-900 dark:text-white">{member.name}</h4>
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${colors.badge}`}>
                               {member.role}
                             </span>
                           </div>
-                          <p className="text-gray-600 mb-2">{member.title}</p>
+                          <p className="text-gray-600 dark:text-zinc-400 mb-2">{member.title}</p>
                           <div className="flex items-center space-x-4">
                             {member.dashboardLink && (
                               <Link
@@ -344,8 +344,8 @@ export default function RileyTeamPage() {
                     <div className="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
                       {member.stats.map((stat, idx) => (
                         <div key={idx} className="text-center">
-                          <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                          <div className="text-xs text-gray-600">{stat.label}</div>
+                          <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                          <div className="text-xs text-gray-600 dark:text-zinc-400">{stat.label}</div>
                         </div>
                       ))}
                     </div>
@@ -353,7 +353,7 @@ export default function RileyTeamPage() {
                     {/* Responsibilities & Tools */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 text-sm">Key Responsibilities</h5>
+                        <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Key Responsibilities</h5>
                         <ul className="space-y-1">
                           {member.responsibilities.map((resp, idx) => (
                             <li key={idx} className="text-sm text-gray-700 flex items-start space-x-2">
@@ -364,7 +364,7 @@ export default function RileyTeamPage() {
                         </ul>
                       </div>
                       <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 text-sm">Tools & Systems</h5>
+                        <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Tools & Systems</h5>
                         <div className="flex flex-wrap gap-2">
                           {member.tools.map((tool, idx) => (
                             <span
@@ -385,8 +385,8 @@ export default function RileyTeamPage() {
         </div>
 
         {/* Team Workflow */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Complete Artist Journey</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Complete Artist Journey</h3>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <WorkflowStep
               number="1"
@@ -427,8 +427,8 @@ export default function RileyTeamPage() {
         </div>
 
         {/* Quick Links */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Team Dashboards</h3>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Team Dashboards</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <QuickLink
               href="/riley/upgrade-opportunities"
@@ -498,9 +498,9 @@ function WorkflowStep({
       <div className={`inline-flex items-center justify-center w-12 h-12 ${colorClasses[color]} text-white rounded-full text-xl font-bold mb-3`}>
         {number}
       </div>
-      <div className="flex items-center justify-center mb-2 text-gray-600">{icon}</div>
-      <h4 className="font-semibold text-gray-900 mb-2">{title}</h4>
-      <p className="text-sm text-gray-600">{description}</p>
+      <div className="flex items-center justify-center mb-2 text-gray-600 dark:text-zinc-400">{icon}</div>
+      <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{title}</h4>
+      <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
     </div>
   );
 }

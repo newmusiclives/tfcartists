@@ -67,7 +67,7 @@ const teamRow2: TeamMember[] = [
 
 function TeamCard({ member }: { member: TeamMember }) {
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg overflow-hidden">
       <div className="p-8 text-center">
         {member.photoUrl ? (
           <img
@@ -80,9 +80,9 @@ function TeamCard({ member }: { member: TeamMember }) {
             {member.initials}
           </div>
         )}
-        <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white">{member.name}</h3>
         <p className="text-amber-700 font-medium text-sm mt-1">{member.title}</p>
-        <p className="text-gray-600 text-sm mt-3 leading-relaxed">{member.bio}</p>
+        <p className="text-gray-600 dark:text-zinc-400 text-sm mt-3 leading-relaxed">{member.bio}</p>
       </div>
     </div>
   );
@@ -92,7 +92,7 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
       {/* Navigation */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
@@ -105,9 +105,6 @@ export default function AboutPage() {
               </Link>
               <Link href="/station" className="text-amber-700 hover:text-amber-800 font-medium transition-colors">
                 Station
-              </Link>
-              <Link href="/djs" className="text-amber-700 hover:text-amber-800 font-medium transition-colors">
-                DJs
               </Link>
               <Link href="/schedule" className="text-amber-700 hover:text-amber-800 font-medium transition-colors">
                 Schedule
@@ -122,15 +119,15 @@ export default function AboutPage() {
 
       {/* Hero */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h1 className="text-6xl font-serif font-bold text-gray-900 mb-4">About Us</h1>
-        <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+        <h1 className="text-6xl font-serif font-bold text-gray-900 dark:text-white mb-4">About Us</h1>
+        <p className="text-xl text-gray-700 dark:text-zinc-300 max-w-3xl mx-auto">
           Meet the people behind the TrueFans RADIO Network and North Country Radio.
         </p>
       </section>
 
       {/* Team Section */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <h2 className="text-4xl font-serif font-bold text-center mb-12 text-gray-900">
+        <h2 className="text-4xl font-serif font-bold text-center mb-12 text-gray-900 dark:text-white">
           The Team
         </h2>
 

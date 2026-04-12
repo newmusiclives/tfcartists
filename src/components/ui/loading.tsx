@@ -90,7 +90,7 @@ export function PageLoading({ message = "Loading..." }: { message?: string }) {
  */
 export function InlineLoading({ text = "Loading..." }: { text?: string }) {
   return (
-    <div className="flex items-center space-x-2 text-gray-600">
+    <div className="flex items-center space-x-2 text-gray-600 dark:text-zinc-400">
       <Spinner size="sm" />
       <span className="text-sm">{text}</span>
     </div>

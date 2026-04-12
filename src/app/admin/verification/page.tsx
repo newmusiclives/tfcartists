@@ -294,7 +294,7 @@ export default function VerificationPage() {
       <SharedNav />
 
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -302,8 +302,8 @@ export default function VerificationPage() {
                 <CheckCircle2 className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Process Verification Dashboard</h1>
-                <p className="text-gray-600">Test and verify all team processes, calculations, and commission structures</p>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Process Verification Dashboard</h1>
+                <p className="text-gray-600 dark:text-zinc-400">Test and verify all team processes, calculations, and commission structures</p>
               </div>
             </div>
 
@@ -337,7 +337,7 @@ export default function VerificationPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
         {/* Revenue Model Verification */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <Target className="w-6 h-6 mr-2 text-green-600" />
             Revenue Model Verification - {capacity}% Capacity
@@ -349,23 +349,23 @@ export default function VerificationPage() {
               <h3 className="font-bold text-lg mb-3 text-green-900">Revenue Sources</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Artist Subscriptions:</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Artist Subscriptions:</span>
                   <span className="font-semibold">${revenueVerification.model.revenue.artistSubs.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Sponsor Revenue:</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Sponsor Revenue:</span>
                   <span className="font-semibold">${revenueVerification.model.revenue.sponsors.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Premium Listeners:</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Premium Listeners:</span>
                   <span className="font-semibold">${revenueVerification.model.revenue.premium.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Platform Fees:</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Platform Fees:</span>
                   <span className="font-semibold">${revenueVerification.model.revenue.platformFees.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Sponsored Content:</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Sponsored Content:</span>
                   <span className="font-semibold">${revenueVerification.model.revenue.sponsored.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between pt-2 border-t-2 border-green-300">
@@ -380,19 +380,19 @@ export default function VerificationPage() {
               <h3 className="font-bold text-lg mb-3 text-red-900">Expenses</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Artist Pool (80%):</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Artist Pool (80%):</span>
                   <span className="font-semibold">${revenueVerification.model.expenses.artistPool.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Artist Referral Commissions:</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Artist Referral Commissions:</span>
                   <span className="font-semibold">${revenueVerification.model.expenses.artists.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Listener Promotion Commissions:</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Listener Promotion Commissions:</span>
                   <span className="font-semibold">${revenueVerification.model.expenses.gps.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-700">Operations:</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Operations:</span>
                   <span className="font-semibold">${revenueVerification.model.expenses.operations.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between pt-2 border-t-2 border-red-300">
@@ -475,7 +475,7 @@ export default function VerificationPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
           {/* Artist Referral Calculator */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h3 className="text-xl font-bold mb-4 flex items-center">
               <Award className="w-5 h-5 mr-2 text-orange-600" />
               Artist Referral Commission Calculator
@@ -483,7 +483,7 @@ export default function VerificationPage() {
 
             <div className="space-y-3 mb-4">
               <div>
-                <label className="text-sm font-medium text-gray-700">Artists Referred</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Artists Referred</label>
                 <input
                   type="number"
                   value={scoutTest.artistsReferred}
@@ -493,7 +493,7 @@ export default function VerificationPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">Avg Tier Price ($)</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Avg Tier Price ($)</label>
                 <select
                   value={scoutTest.tier}
                   onChange={(e) => setScoutTest({...scoutTest, tier: e.target.value})}
@@ -507,7 +507,7 @@ export default function VerificationPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">Active Months</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Active Months</label>
                 <input
                   type="number"
                   value={scoutTest.months}
@@ -517,7 +517,7 @@ export default function VerificationPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">Tier Upgrades</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Tier Upgrades</label>
                 <input
                   type="number"
                   value={scoutTest.upgrades}
@@ -527,7 +527,7 @@ export default function VerificationPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">Influenced Artists</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Influenced Artists</label>
                 <input
                   type="number"
                   value={scoutTest.influencedArtists}
@@ -554,7 +554,7 @@ export default function VerificationPage() {
           </div>
 
           {/* Listener Promotion Calculator */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h3 className="text-xl font-bold mb-4 flex items-center">
               <Zap className="w-5 h-5 mr-2 text-blue-600" />
               Listener Promotion Commission Calculator
@@ -562,7 +562,7 @@ export default function VerificationPage() {
 
             <div className="space-y-3 mb-4">
               <div>
-                <label className="text-sm font-medium text-gray-700">Active Listeners</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Active Listeners</label>
                 <input
                   type="number"
                   value={gpTest.listeners}
@@ -572,7 +572,7 @@ export default function VerificationPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">Artists Discovered</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Artists Discovered</label>
                 <input
                   type="number"
                   value={gpTest.artistsDiscovered}
@@ -582,7 +582,7 @@ export default function VerificationPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">Artists Helped (upgrades)</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Artists Helped (upgrades)</label>
                 <input
                   type="number"
                   value={gpTest.artistsHelped}
@@ -592,7 +592,7 @@ export default function VerificationPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">Sponsors Referred</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Sponsors Referred</label>
                 <input
                   type="number"
                   value={gpTest.sponsorsReferred}
@@ -602,7 +602,7 @@ export default function VerificationPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700">Premium Conversions</label>
+                <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Premium Conversions</label>
                 <input
                   type="number"
                   value={gpTest.premiumConversions}
@@ -632,7 +632,7 @@ export default function VerificationPage() {
           </div>
 
           {/* Sponsor Referral Calculator */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h3 className="text-xl font-bold mb-4 flex items-center">
               <Building2 className="w-5 h-5 mr-2 text-purple-600" />
               Sponsor Referral Calculator
@@ -641,7 +641,7 @@ export default function VerificationPage() {
             <div className="space-y-3 mb-4">
               {sponsorTest.referrals.map((ref, idx) => (
                 <div key={idx}>
-                  <label className="text-sm font-medium text-gray-700">{ref.tier} Referrals</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">{ref.tier} Referrals</label>
                   <input
                     type="number"
                     value={ref.count}

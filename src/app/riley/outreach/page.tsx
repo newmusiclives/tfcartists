@@ -139,11 +139,11 @@ export default function OutreachPage() {
 
   const getStatusColor = (status: ContactStatus) => {
     const colors = {
-      new: "bg-blue-100 text-blue-700",
-      contacted: "bg-yellow-100 text-yellow-700",
-      responded: "bg-purple-100 text-purple-700",
+      new: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400",
+      contacted: "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400",
+      responded: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400",
       invited: "bg-indigo-100 text-indigo-700",
-      submitted: "bg-green-100 text-green-700",
+      submitted: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400",
       upgraded: "bg-pink-100 text-pink-700",
       not_interested: "bg-gray-100 text-gray-600",
     };
@@ -192,7 +192,7 @@ export default function OutreachPage() {
       <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading artist leads...</p>
+          <p className="text-gray-600 dark:text-zinc-400">Loading artist leads...</p>
         </div>
       </main>
     );
@@ -201,7 +201,7 @@ export default function OutreachPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-40">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -209,8 +209,8 @@ export default function OutreachPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Artist Outreach</h1>
-                <p className="text-sm text-gray-600">Grace Holland's Discovery & Contact System</p>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Artist Outreach</h1>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Grace Holland's Discovery & Contact System</p>
               </div>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function OutreachPage() {
         </div>
 
         {/* View Tabs */}
-        <div className="bg-white rounded-t-xl border-b">
+        <div className="bg-white dark:bg-zinc-900 rounded-t-xl border-b">
           <div className="flex space-x-2 p-2">
             <TabButton active={view === "discovery"} onClick={() => setView("discovery")} label="Artist Discovery" icon={<Search className="w-4 h-4" />} />
             <TabButton active={view === "campaigns"} onClick={() => setView("campaigns")} label="Campaigns" icon={<Send className="w-4 h-4" />} />
@@ -238,9 +238,9 @@ export default function OutreachPage() {
 
         {/* Discovery View */}
         {view === "discovery" && (
-          <div className="bg-white rounded-b-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-zinc-900 rounded-b-xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Discover New Artists</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Discover New Artists</h2>
               <div className="flex items-center space-x-3">
                 <Link
                   href="/riley/workflows"
@@ -309,17 +309,17 @@ export default function OutreachPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">{lead.name}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{lead.name}</h3>
                         <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(lead.status)}`}>
                           {getStatusIcon(lead.status)}
                           <span>{getStatusLabel(lead.status)}</span>
                         </span>
-                        <span className="inline-flex items-center space-x-1 text-gray-600 text-sm">
+                        <span className="inline-flex items-center space-x-1 text-gray-600 dark:text-zinc-400 text-sm">
                           {getSourceIcon(lead.source)}
                           <span className="capitalize">{lead.source}</span>
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-gray-600">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-gray-600 dark:text-zinc-400">
                         <div>
                           <span className="font-medium">Genre:</span> {lead.genre}
                         </div>
@@ -377,7 +377,7 @@ export default function OutreachPage() {
             </div>
 
             {filteredLeads.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
                 <Users className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                 <p>No artists found matching your filters.</p>
               </div>
@@ -387,8 +387,8 @@ export default function OutreachPage() {
 
         {/* Campaigns View */}
         {view === "campaigns" && (
-          <div className="bg-white rounded-b-xl shadow-lg p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Outreach Campaigns</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-b-xl shadow-lg p-6">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Outreach Campaigns</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <CampaignCard
                 title="Initial Artist Outreach"
@@ -415,11 +415,11 @@ export default function OutreachPage() {
 
         {/* Contacts View */}
         {view === "contacts" && (
-          <div className="bg-white rounded-b-xl shadow-lg p-6">
+          <div className="bg-white dark:bg-zinc-900 rounded-b-xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900">Contact Management</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Contact Management</h2>
               <div className="flex items-center space-x-2">
-                <button className="inline-flex items-center space-x-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <button className="inline-flex items-center space-x-2 border border-gray-300 dark:border-zinc-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
                   <Filter className="w-4 h-4" />
                   <span>Export</span>
                 </button>
@@ -439,12 +439,12 @@ export default function OutreachPage() {
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-gray-200 dark:divide-zinc-800">
                   {filteredLeads.map((lead) => (
-                    <tr key={lead.id} className="hover:bg-gray-50">
+                    <tr key={lead.id} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{lead.name}</div>
-                        <div className="text-sm text-gray-500">{lead.genre}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">{lead.name}</div>
+                        <div className="text-sm text-gray-500 dark:text-zinc-500">{lead.genre}</div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(lead.status)}`}>
@@ -458,9 +458,9 @@ export default function OutreachPage() {
                           <span>{lead.source}</span>
                         </span>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{lead.firstContact || "-"}</td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{lead.lastContact || "-"}</td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{lead.nextFollowUp || "-"}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-500">{lead.firstContact || "-"}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-500">{lead.lastContact || "-"}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-500">{lead.nextFollowUp || "-"}</td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm">
                         <button onClick={() => setSelectedLead(lead)} className="text-purple-600 hover:text-purple-700 font-medium">
                           View Details
@@ -492,12 +492,12 @@ export default function OutreachPage() {
 
 function StatCard({ icon, value, label }: { icon: React.ReactNode; value: number; label: string }) {
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm border">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border">
       <div className="flex items-center space-x-3">
         <div>{icon}</div>
         <div>
-          <div className="text-2xl font-bold text-gray-900">{value}</div>
-          <div className="text-sm text-gray-600">{label}</div>
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">{value}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">{label}</div>
         </div>
       </div>
     </div>
@@ -509,7 +509,7 @@ function TabButton({ active, onClick, label, icon }: { active: boolean; onClick:
     <button
       onClick={onClick}
       className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-        active ? "bg-purple-100 text-purple-700" : "text-gray-600 hover:bg-gray-100"
+        active ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-600 hover:bg-gray-100"
       }`}
     >
       {icon}
@@ -523,23 +523,23 @@ function CampaignCard({ title, description, stats, type }: { title: string; desc
     <div className="border rounded-xl p-6 hover:border-purple-300 transition-colors">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">{title}</h3>
-          <p className="text-sm text-gray-600">{description}</p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{title}</h3>
+          <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
         </div>
         <Send className="w-6 h-6 text-purple-600" />
       </div>
       <div className="grid grid-cols-3 gap-4 mb-4">
         <div>
-          <div className="text-2xl font-bold text-gray-900">{stats.sent}</div>
-          <div className="text-xs text-gray-600">Sent</div>
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.sent}</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">Sent</div>
         </div>
         <div>
           <div className="text-2xl font-bold text-blue-600">{stats.opened}</div>
-          <div className="text-xs text-gray-600">Opened</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">Opened</div>
         </div>
         <div>
           <div className="text-2xl font-bold text-green-600">{stats.responded}</div>
-          <div className="text-xs text-gray-600">Responded</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">Responded</div>
         </div>
       </div>
       <button className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">View Campaign</button>
@@ -639,13 +639,13 @@ Grace`;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-white border-b p-6 z-10">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">{lead.name}</h2>
-              <p className="text-gray-600">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{lead.name}</h2>
+              <p className="text-gray-600 dark:text-zinc-400">
                 {lead.genre} • {lead.location}
               </p>
             </div>
@@ -668,7 +668,7 @@ Grace`;
             <div className="space-y-6">
               {/* Contact Information */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Contact Information</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Contact Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {lead.email && (
                     <div className="flex items-center space-x-2">
@@ -707,10 +707,10 @@ Grace`;
 
               {/* Status & Source */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Status & Tracking</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Status & Tracking</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Current Status</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Current Status</label>
                     <select value={status} onChange={(e) => setStatus(e.target.value as ContactStatus)} className="w-full px-4 py-2 border rounded-lg">
                       <option value="new">New Lead</option>
                       <option value="contacted">Contacted</option>
@@ -722,7 +722,7 @@ Grace`;
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Discovery Source</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Discovery Source</label>
                     <div className="px-4 py-2 border rounded-lg bg-gray-50 capitalize">{lead.source}</div>
                   </div>
                 </div>
@@ -731,16 +731,16 @@ Grace`;
               {/* Timeline */}
               {(lead.firstContact || lead.lastContact || lead.nextFollowUp) && (
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Timeline</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Timeline</h3>
                   <div className="space-y-2 text-sm">
                     {lead.firstContact && (
-                      <div className="flex items-center space-x-2 text-gray-600">
+                      <div className="flex items-center space-x-2 text-gray-600 dark:text-zinc-400">
                         <Calendar className="w-4 h-4" />
                         <span>First Contact: {lead.firstContact}</span>
                       </div>
                     )}
                     {lead.lastContact && (
-                      <div className="flex items-center space-x-2 text-gray-600">
+                      <div className="flex items-center space-x-2 text-gray-600 dark:text-zinc-400">
                         <Clock className="w-4 h-4" />
                         <span>Last Contact: {lead.lastContact}</span>
                       </div>
@@ -758,15 +758,15 @@ Grace`;
               {/* Additional Info */}
               {(lead.followers || lead.lastShow) && (
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Additional Information</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Additional Information</h3>
                   <div className="space-y-2 text-sm">
                     {lead.followers && (
-                      <div className="text-gray-600">
+                      <div className="text-gray-600 dark:text-zinc-400">
                         <span className="font-medium">Social Following:</span> {lead.followers.toLocaleString()} followers
                       </div>
                     )}
                     {lead.lastShow && (
-                      <div className="text-gray-600">
+                      <div className="text-gray-600 dark:text-zinc-400">
                         <span className="font-medium">Recent Performance:</span> {lead.lastShow}
                       </div>
                     )}
@@ -776,7 +776,7 @@ Grace`;
 
               {/* Notes */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Notes</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Notes</h3>
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
@@ -791,7 +791,7 @@ Grace`;
                 <button onClick={handleSave} className="flex-1 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors font-medium">
                   Save Changes
                 </button>
-                <button onClick={onClose} className="flex-1 border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                <button onClick={onClose} className="flex-1 border border-gray-300 dark:border-zinc-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">
                   Cancel
                 </button>
               </div>
@@ -836,7 +836,7 @@ Grace`;
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Communication History</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Communication History</h3>
                 <div className="space-y-3">
                   {lead.firstContact && (
                     <div className="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-r-lg">
@@ -905,8 +905,8 @@ function EmailTemplate({ title, description, content, email }: { title: string; 
     <div className="border rounded-lg p-4">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <h4 className="font-semibold text-gray-900">{title}</h4>
-          <p className="text-sm text-gray-600">{description}</p>
+          <h4 className="font-semibold text-gray-900 dark:text-white">{title}</h4>
+          <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
         </div>
         <div className="flex space-x-2">
           <button onClick={handleCopy} className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
@@ -965,12 +965,12 @@ function NewLeadModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b p-6 z-10">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Add New Artist Lead</h2>
-              <p className="text-gray-600">Manually add a discovered artist</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Add New Artist Lead</h2>
+              <p className="text-gray-600 dark:text-zinc-400">Manually add a discovered artist</p>
             </div>
             <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
               <XCircle className="w-6 h-6" />
@@ -981,7 +981,7 @@ function NewLeadModal({
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Artist Name *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Artist Name *</label>
               <input
                 type="text"
                 required
@@ -991,7 +991,7 @@ function NewLeadModal({
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Genre *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Genre *</label>
               <input
                 type="text"
                 required
@@ -1003,7 +1003,7 @@ function NewLeadModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Location *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Location *</label>
             <input
               type="text"
               required
@@ -1014,7 +1014,7 @@ function NewLeadModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Discovery Source *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Discovery Source *</label>
             <select
               value={formData.source}
               onChange={(e) => setFormData({ ...formData, source: e.target.value as DiscoverySource })}
@@ -1030,7 +1030,7 @@ function NewLeadModal({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Email</label>
               <input
                 type="email"
                 value={formData.email}
@@ -1039,7 +1039,7 @@ function NewLeadModal({
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Phone</label>
               <input
                 type="tel"
                 value={formData.phone}
@@ -1051,7 +1051,7 @@ function NewLeadModal({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Social Handle</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Social Handle</label>
               <input
                 type="text"
                 placeholder="@username"
@@ -1061,7 +1061,7 @@ function NewLeadModal({
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Website</label>
               <input
                 type="url"
                 value={formData.website}
@@ -1073,7 +1073,7 @@ function NewLeadModal({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Followers</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Followers</label>
               <input
                 type="number"
                 value={formData.followers || ""}
@@ -1082,7 +1082,7 @@ function NewLeadModal({
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Last Show</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Last Show</label>
               <input
                 type="text"
                 placeholder="Venue name - Date"
@@ -1094,7 +1094,7 @@ function NewLeadModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Notes</label>
             <textarea
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
@@ -1108,7 +1108,7 @@ function NewLeadModal({
             <button type="submit" className="flex-1 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors font-medium">
               Add Artist Lead
             </button>
-            <button type="button" onClick={onClose} className="flex-1 border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+            <button type="button" onClick={onClose} className="flex-1 border border-gray-300 dark:border-zinc-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">
               Cancel
             </button>
           </div>

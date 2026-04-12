@@ -308,12 +308,12 @@ const sourceLabels: Record<LeadSource, string> = {
 };
 
 const statusLabels: Record<LeadStatus, { label: string; color: string }> = {
-  new: { label: 'New', color: 'bg-blue-100 text-blue-700' },
-  contacted: { label: 'Contacted', color: 'bg-purple-100 text-purple-700' },
+  new: { label: 'New', color: 'bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400' },
+  contacted: { label: 'Contacted', color: 'bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400' },
   qualified: { label: 'Qualified', color: 'bg-indigo-100 text-indigo-700' },
-  proposal_sent: { label: 'Proposal Sent', color: 'bg-yellow-100 text-yellow-700' },
-  negotiating: { label: 'Negotiating', color: 'bg-orange-100 text-orange-700' },
-  converted: { label: 'Converted', color: 'bg-green-100 text-green-700' },
+  proposal_sent: { label: 'Proposal Sent', color: 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400' },
+  negotiating: { label: 'Negotiating', color: 'bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400' },
+  converted: { label: 'Converted', color: 'bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400' },
   lost: { label: 'Lost', color: 'bg-gray-100 text-gray-700' }
 };
 
@@ -350,20 +350,20 @@ export default function HarperOutreach() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-zinc-900 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700">
+                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
-                <h1 className="text-2xl font-bold text-gray-900">Sponsor Outreach</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Sponsor Outreach</h1>
               </div>
-              <p className="text-gray-600 mt-1">Blake Morrison - Business Development</p>
+              <p className="text-gray-600 dark:text-zinc-400 mt-1">Blake Morrison - Business Development</p>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -386,7 +386,7 @@ export default function HarperOutreach() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live outreach data will appear once the lead management API is connected.
         </div>
       </div>
@@ -394,37 +394,37 @@ export default function HarperOutreach() {
       {/* Stats */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Leads</p>
-                <p className="text-2xl font-bold text-gray-900">{totalLeads}</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Total Leads</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalLeads}</p>
               </div>
               <Target className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">New Leads</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">New Leads</p>
                 <p className="text-2xl font-bold text-blue-600">{newLeads}</p>
               </div>
               <Plus className="w-8 h-8 text-blue-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">In Progress</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">In Progress</p>
                 <p className="text-2xl font-bold text-yellow-600">{contactedLeads}</p>
               </div>
               <TrendingUp className="w-8 h-8 text-yellow-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Conversion Rate</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Conversion Rate</p>
                 <p className="text-2xl font-bold text-green-600">{conversionRate.toFixed(1)}%</p>
               </div>
               <Briefcase className="w-8 h-8 text-green-600" />
@@ -433,7 +433,7 @@ export default function HarperOutreach() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white border rounded-lg mb-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg mb-6">
           <div className="border-b">
             <div className="flex">
               <button
@@ -526,7 +526,7 @@ export default function HarperOutreach() {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
-                            <h3 className="font-semibold text-gray-900">{lead.businessName}</h3>
+                            <h3 className="font-semibold text-gray-900 dark:text-white">{lead.businessName}</h3>
                             <span className={`px-2 py-1 rounded text-xs font-medium ${statusLabels[lead.status].color}`}>
                               {statusLabels[lead.status].label}
                             </span>
@@ -536,24 +536,24 @@ export default function HarperOutreach() {
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                             <div>
-                              <p className="text-xs text-gray-500">Contact</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Contact</p>
                               <p className="text-sm font-medium">{lead.contactName}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Business Type</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Business Type</p>
                               <p className="text-sm font-medium">{lead.businessType}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Source</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Source</p>
                               <p className="text-sm font-medium">{sourceLabels[lead.source]}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Potential</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Potential</p>
                               <p className="text-sm font-medium text-green-600">${lead.potentialRevenue}/mo</p>
                             </div>
                           </div>
-                          <p className="text-sm text-gray-600 mb-3">{lead.notes}</p>
-                          <div className="flex items-center space-x-4 text-xs text-gray-500">
+                          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">{lead.notes}</p>
+                          <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
                             <span>Added: {lead.dateAdded}</span>
                             {lead.lastContact && <span>Last Contact: {lead.lastContact}</span>}
                           </div>
@@ -594,16 +594,16 @@ export default function HarperOutreach() {
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h3 className="font-semibold text-gray-900 mb-1">{campaign.name}</h3>
+                          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{campaign.name}</h3>
                           <div className="flex items-center space-x-2">
                             <span className={`px-2 py-1 rounded text-xs font-medium ${
-                              campaign.status === 'active' ? 'bg-green-100 text-green-700' :
-                              campaign.status === 'paused' ? 'bg-yellow-100 text-yellow-700' :
+                              campaign.status === 'active' ? 'bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400' :
+                              campaign.status === 'paused' ? 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400' :
                               'bg-gray-100 text-gray-700'
                             }`}>
                               {campaign.status}
                             </span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-zinc-500">
                               {campaign.type === 'email' ? <Mail className="w-3 h-3 inline mr-1" /> :
                                campaign.type === 'phone' ? <Phone className="w-3 h-3 inline mr-1" /> :
                                <Calendar className="w-3 h-3 inline mr-1" />}
@@ -612,25 +612,25 @@ export default function HarperOutreach() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-gray-600">Started: {campaign.startDate}</p>
-                          {campaign.endDate && <p className="text-sm text-gray-600">Ended: {campaign.endDate}</p>}
+                          <p className="text-sm text-gray-600 dark:text-zinc-400">Started: {campaign.startDate}</p>
+                          {campaign.endDate && <p className="text-sm text-gray-600 dark:text-zinc-400">Ended: {campaign.endDate}</p>}
                         </div>
                       </div>
                       <div className="grid grid-cols-4 gap-4">
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Total Leads</p>
-                          <p className="text-2xl font-bold text-gray-900">{campaign.leads}</p>
+                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Total Leads</p>
+                          <p className="text-2xl font-bold text-gray-900 dark:text-white">{campaign.leads}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Contacted</p>
+                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Contacted</p>
                           <p className="text-2xl font-bold text-blue-600">{campaign.contacted}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Converted</p>
+                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Converted</p>
                           <p className="text-2xl font-bold text-green-600">{campaign.converted}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Conv. Rate</p>
+                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Conv. Rate</p>
                           <p className="text-2xl font-bold text-purple-600">{convRate}%</p>
                         </div>
                       </div>

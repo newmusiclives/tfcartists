@@ -65,15 +65,15 @@ const actionCards = [
     color: "bg-green-500",
   },
   {
-    title: "DJ Editor",
-    description: "Create and configure AI DJ personalities",
+    title: "Host Editor",
+    description: "Create and configure host personalities",
     href: "/station-admin/dj-editor",
     icon: Users,
     color: "bg-purple-500",
   },
   {
     title: "Schedule Editor",
-    description: "Assign DJs to time slots across the week",
+    description: "Assign hosts to time slots across the week",
     href: "/station-admin/schedule-editor",
     icon: CalendarDays,
     color: "bg-indigo-500",
@@ -93,25 +93,11 @@ const actionCards = [
     color: "bg-amber-500",
   },
   {
-    title: "Show Features",
-    description: "34 AI-generated radio segments: trivia, weather, polls, and more",
-    href: "/station-admin/features",
-    icon: Sparkles,
-    color: "bg-yellow-500",
-  },
-  {
     title: "Stream Engineering",
     description: "Crossfade, normalization, compression, EQ, and ducking",
     href: "/station-admin/stream",
     icon: SlidersHorizontal,
     color: "bg-orange-500",
-  },
-  {
-    title: "Show Transitions",
-    description: "DJ handoffs, show intros, outros, and transition scripts",
-    href: "/station-admin/transitions",
-    icon: ArrowRightLeft,
-    color: "bg-cyan-500",
   },
   {
     title: "Sponsor Ads",
@@ -202,17 +188,17 @@ export default function StationAdminHub() {
   const primary = stations[0];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <SharedNav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
               <Radio className="w-8 h-8 text-amber-600" />
               Station Admin
             </h1>
-            <p className="text-gray-600 mt-1">
-              Manage station operations, clocks, music, DJs, and scheduling
+            <p className="text-zinc-400 mt-1">
+              Manage station operations, clocks, music, hosts, and scheduling
             </p>
           </div>
           <Link
@@ -226,62 +212,62 @@ export default function StationAdminHub() {
 
         {/* Station Info Card */}
         {loading ? (
-          <div className="bg-white rounded-xl p-8 shadow-sm border flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+          <div className="bg-zinc-900/80 rounded-xl p-8 border border-zinc-800 flex items-center justify-center">
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
           </div>
         ) : primary ? (
-          <div className="bg-white rounded-xl p-6 shadow-sm border mb-8">
+          <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 mb-8">
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-bold text-gray-900">{primary.name}</h2>
+                  <h2 className="text-xl font-bold text-white">{primary.name}</h2>
                   {primary.callSign && (
-                    <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                    <span className="bg-amber-500/15 text-amber-400 text-xs font-semibold px-2.5 py-0.5 rounded-full">
                       {primary.callSign}
                     </span>
                   )}
                   <span
                     className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
                       primary.isActive
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-100 text-gray-600"
+                        ? "bg-green-500/15 text-green-400"
+                        : "bg-zinc-800 text-zinc-400"
                     }`}
                   >
                     {primary.isActive ? "On Air" : "Off Air"}
                   </span>
                 </div>
                 {primary.tagline && (
-                  <p className="text-gray-500 mt-1 italic">{primary.tagline}</p>
+                  <p className="text-zinc-500 mt-1 italic">{primary.tagline}</p>
                 )}
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-zinc-400 mt-2">
                   {primary.genre}
                   {primary.formatType && ` / ${primary.formatType}`}
                 </p>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center">
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">{primary._count.songs}</div>
-                  <div className="text-xs text-gray-500">Songs</div>
+                  <div className="text-2xl font-bold text-white">{primary._count.songs}</div>
+                  <div className="text-xs text-zinc-500">Songs</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">{primary._count.stationDJs}</div>
-                  <div className="text-xs text-gray-500">DJs</div>
+                  <div className="text-2xl font-bold text-white">{primary._count.stationDJs}</div>
+                  <div className="text-xs text-zinc-500">Hosts</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">{primary._count.clockTemplates}</div>
-                  <div className="text-xs text-gray-500">Clocks</div>
+                  <div className="text-2xl font-bold text-white">{primary._count.clockTemplates}</div>
+                  <div className="text-xs text-zinc-500">Clocks</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">{primary._count.imagingVoices}</div>
-                  <div className="text-xs text-gray-500">Voices</div>
+                  <div className="text-2xl font-bold text-white">{primary._count.imagingVoices}</div>
+                  <div className="text-xs text-zinc-500">Voices</div>
                 </div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8 text-center">
-            <p className="text-amber-800 font-medium">No stations yet.</p>
-            <p className="text-amber-600 text-sm mt-1">
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-6 mb-8 text-center">
+            <p className="text-amber-400 font-medium">No stations yet.</p>
+            <p className="text-amber-400 text-sm mt-1">
               Use the wizard to create your first station, or run the seed script.
             </p>
           </div>
@@ -290,13 +276,13 @@ export default function StationAdminHub() {
         {/* Stream Health + Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           {/* Stream Health */}
-          <div className="bg-white rounded-xl p-5 shadow-sm border">
+          <div className="bg-zinc-900/80 rounded-xl p-5 border border-zinc-800">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Activity className={`w-5 h-5 ${streamHealth?.healthy ? "text-green-500" : "text-red-500"}`} />
                 <div>
-                  <h3 className="font-semibold text-gray-900 text-sm">Stream Status</h3>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <h3 className="font-semibold text-white text-sm">Stream Status</h3>
+                  <p className="text-xs text-zinc-500 mt-0.5">
                     {streamHealth === null
                       ? "Checking..."
                       : streamHealth.healthy
@@ -309,8 +295,8 @@ export default function StationAdminHub() {
                 <span
                   className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                     streamHealth.healthy
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
+                      ? "bg-green-500/15 text-green-400"
+                      : "bg-red-500/15 text-red-400"
                   }`}
                 >
                   {streamHealth.healthy ? "LIVE" : "DOWN"}
@@ -320,12 +306,12 @@ export default function StationAdminHub() {
           </div>
 
           {/* Regenerate Playlists */}
-          <div className="bg-white rounded-xl p-5 shadow-sm border">
+          <div className="bg-zinc-900/80 rounded-xl p-5 border border-zinc-800">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-gray-900 text-sm">Today&apos;s Playlists</h3>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  {regenResult || "Rebuild all DJ playlists for today"}
+                <h3 className="font-semibold text-white text-sm">Today&apos;s Playlists</h3>
+                <p className="text-xs text-zinc-500 mt-0.5">
+                  {regenResult || "Rebuild all host playlists for today"}
                 </p>
               </div>
               <button
@@ -346,7 +332,7 @@ export default function StationAdminHub() {
             <Link
               key={card.href}
               href={card.href}
-              className="bg-white rounded-xl p-6 shadow-sm border hover:shadow-md transition-shadow group"
+              className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 hover:border-zinc-700 transition-colors group"
             >
               <div className="flex items-start gap-4">
                 <div
@@ -355,8 +341,8 @@ export default function StationAdminHub() {
                   <card.icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{card.title}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{card.description}</p>
+                  <h3 className="font-semibold text-white">{card.title}</h3>
+                  <p className="text-sm text-zinc-500 mt-1">{card.description}</p>
                 </div>
               </div>
             </Link>

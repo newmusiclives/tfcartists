@@ -30,10 +30,10 @@ const OPERATOR_PLANS = [
     setup: 500,
     description: "Perfect for getting started with your first station",
     features: [
-      "1 AI-powered station",
-      "2 AI DJ personalities",
+      "1 automated station",
+      "2 host personalities",
       "12hr/day live programming",
-      "5 AI management teams",
+      "5 operations teams",
       "Basic imaging package",
       "Embeddable web player",
       "Sponsor ad management",
@@ -46,12 +46,12 @@ const OPERATOR_PLANS = [
     name: "Growth",
     price: 300,
     setup: 500,
-    description: "Most popular — full 24/7 station with more DJs",
+    description: "Most popular — full 24/7 station with more hosts",
     features: [
-      "1 AI-powered station",
-      "6 AI DJ personalities",
+      "1 automated station",
+      "6 host personalities",
       "24/7 live programming",
-      "5 AI management teams",
+      "5 operations teams",
       "Pro imaging package",
       "Embeddable web player",
       "Sponsor ad management",
@@ -68,9 +68,9 @@ const OPERATOR_PLANS = [
     description: "Multiple stations for networks and brands",
     features: [
       "Up to 3 stations",
-      "12 AI DJ personalities",
+      "12 host personalities",
       "24/7 live programming",
-      "5 AI management teams per station",
+      "5 operations teams per station",
       "Enterprise imaging package",
       "Custom branding & white-label",
       "Priority support",
@@ -86,9 +86,9 @@ const OPERATOR_PLANS = [
     description: "Enterprise — unlimited scale with dedicated support",
     features: [
       "Up to 10 stations",
-      "Unlimited AI DJs",
+      "Unlimited hosts",
       "24/7 live programming",
-      "Full AI team suite",
+      "Full operations team suite",
       "Enterprise imaging + custom voices",
       "White-label everything",
       "Dedicated account manager",
@@ -121,7 +121,7 @@ const ARTIST_PLANS = [
       "Everything in Starter",
       "Priority rotation placement",
       "Detailed listener demographics",
-      "DJ shoutouts for new releases",
+      "Host shoutouts for new releases",
       "Feature segment eligibility",
     ],
   },
@@ -133,7 +133,7 @@ const ARTIST_PLANS = [
     features: [
       "Everything in Pro",
       "Dedicated artist spotlight segments",
-      "Custom DJ intro for your songs",
+      "Custom host intro for your songs",
       "Cross-station promotion",
       "Monthly performance reports",
     ],
@@ -215,31 +215,31 @@ const SPONSOR_PLANS = [
 const FAQ_ITEMS = [
   {
     q: "How does TrueFans Radio work?",
-    a: "We pair your music library with AI-powered DJ personalities that host your station 24/7. They introduce songs, share artist stories, read listener dedications, and keep your station feeling live and personal — all fully automated.",
+    a: "We pair your music library with host personalities that run your station 24/7. They introduce songs, share artist stories, read listener dedications, and keep your station feeling live and personal — all fully automated.",
   },
   {
     q: "How long does it take to launch?",
-    a: "Most stations are live within 48 hours. Upload your music, pick your DJs, set your schedule, and we handle the rest — streaming infrastructure, DJ voice generation, and automated playout.",
+    a: "Most stations are live within 48 hours. Upload your music, pick your hosts, set your schedule, and we handle the rest — streaming infrastructure, voice generation, and automated playout.",
   },
   {
     q: "Do I need a broadcast license?",
     a: "No. TrueFans Radio stations stream online via Icecast, which doesn't require an FCC broadcast license. You can list your station on TuneIn, iHeart Radio, and embed it on any website.",
   },
   {
-    q: "Can I customize my DJ's voice and personality?",
-    a: "Absolutely. Choose from preset DJ personalities or create your own with custom names, voice styles, personality traits, and catchphrases. AI-powered voices from Google Gemini bring your DJs to life.",
+    q: "Can I customize my host's voice and personality?",
+    a: "Absolutely. Choose from preset host personalities or create your own with custom names, voice styles, personality traits, and catchphrases. Natural-sounding voices bring your hosts to life.",
   },
   {
-    q: "What are AI management teams?",
-    a: "Five AI agents that run your station business: Cassidy (station manager), Parker (content producer), Riley (artist discovery), Harper (sponsor sales), and Elliot (listener growth). They work autonomously to grow your station.",
+    q: "What are operations teams?",
+    a: "Five specialized teams that run your station business: Cassidy (station manager), Parker (content producer), Riley (artist discovery), Harper (sponsor sales), and Elliot (listener growth). They work autonomously to grow your station.",
   },
   {
     q: "How do I earn money?",
-    a: "Two revenue streams: artist subscription fees (100% yours) and sponsor advertising (you keep 80-95% depending on your plan). The AI teams actively find and onboard sponsors for you.",
+    a: "Two revenue streams: artist subscription fees (100% yours) and sponsor advertising (you keep 80-95% depending on your plan). The operations teams actively find and onboard sponsors for you.",
   },
   {
     q: "Can I try before I buy?",
-    a: "Yes! Use our free demo to hear what your station could sound like in 60 seconds. We'll generate a custom DJ intro with your station name and genre — no credit card required.",
+    a: "Yes! Use our free demo to hear what your station could sound like in 60 seconds. We'll generate a custom intro with your station name and genre — no credit card required.",
   },
   {
     q: "What if I want to cancel?",
@@ -260,7 +260,7 @@ export default function PricingPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       {/* Nav */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
@@ -269,7 +269,7 @@ export default function PricingPage() {
               <span className="font-bold">TrueFans Radio</span>
             </Link>
             <div className="flex items-center gap-4">
-              <Link href="/demo" className="text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors hidden sm:block">
+              <Link href="/demo" className="text-sm text-gray-600 hover:text-gray-900 dark:text-white font-medium transition-colors hidden sm:block">
                 Try Demo
               </Link>
               <Link
@@ -287,10 +287,10 @@ export default function PricingPage() {
       {/* Hero */}
       <section className="pt-16 pb-8 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Simple, Transparent Pricing
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-4">
+          <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto mb-4">
             Whether you&apos;re an artist, sponsor, or station operator — there&apos;s a plan for you.
             No hidden fees. Cancel anytime.
           </p>
@@ -300,7 +300,7 @@ export default function PricingPage() {
       {/* Audience Toggle */}
       <section className="px-4 pb-12">
         <div className="max-w-md mx-auto">
-          <div className="flex rounded-xl bg-white shadow-sm border border-gray-200 p-1">
+          <div className="flex rounded-xl bg-white shadow-sm border border-gray-200 dark:border-zinc-800 p-1">
             {audiences.map((a) => (
               <button
                 key={a.id}
@@ -339,7 +339,7 @@ export default function PricingPage() {
                   )}
                   <div className="text-amber-600 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
-                    <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
+                    <span className="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
                     <span className="text-sm text-gray-500 ml-1">/mo</span>
                   </div>
                   {plan.setup > 0 && (
@@ -348,10 +348,10 @@ export default function PricingPage() {
                   {plan.setup === 0 && (
                     <div className="text-xs text-green-600 font-medium mb-3">No setup fee</div>
                   )}
-                  <p className="text-sm text-gray-500 mb-5">{plan.description}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-gray-700">
+                      <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
                         <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
                         <span>{f}</span>
                       </li>
@@ -382,17 +382,17 @@ export default function PricingPage() {
               {ARTIST_PLANS.map((plan) => (
                 <div
                   key={plan.id}
-                  className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow"
+                  className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow"
                 >
                   <div className="text-purple-600 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
-                    <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
+                    <span className="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
                     <span className="text-sm text-gray-500 ml-1">/mo</span>
                   </div>
-                  <p className="text-sm text-gray-500 mb-5">{plan.description}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-gray-700">
+                      <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
                         <CheckCircle2 className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
                         <span>{f}</span>
                       </li>
@@ -430,13 +430,13 @@ export default function PricingPage() {
                   )}
                   <div className="text-green-600 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
-                    <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
+                    <span className="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
                     <span className="text-sm text-gray-500 ml-1">/mo</span>
                   </div>
-                  <p className="text-sm text-gray-500 mb-5">{plan.description}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-gray-700">
+                      <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
                         <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                         <span>{f}</span>
                       </li>
@@ -466,7 +466,7 @@ export default function PricingPage() {
             <Mic2 className="w-10 h-10 mx-auto mb-4 text-amber-200" />
             <h2 className="text-2xl sm:text-3xl font-bold mb-3">Hear It Before You Buy</h2>
             <p className="text-amber-100 max-w-lg mx-auto mb-6">
-              Enter your station name and genre. Our AI DJ will record a personalized
+              Enter your station name and genre. We'll generate a personalized
               demo of what your station sounds like — in 60 seconds, free.
             </p>
             <Link
@@ -483,7 +483,7 @@ export default function PricingPage() {
       {/* FAQ */}
       <section className="px-4 pb-16">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-10">
             Frequently Asked Questions
           </h2>
           <div className="space-y-3">
@@ -504,7 +504,7 @@ export default function PricingPage() {
                   />
                 </button>
                 {openFaq === i && (
-                  <div className="px-5 pb-5 text-sm text-gray-600 leading-relaxed">
+                  <div className="px-5 pb-5 text-sm text-gray-600 dark:text-zinc-400 leading-relaxed">
                     {item.a}
                   </div>
                 )}
@@ -518,11 +518,11 @@ export default function PricingPage() {
       <section className="px-4 pb-20">
         <div className="max-w-2xl mx-auto text-center">
           <Headphones className="w-12 h-12 text-amber-600 mx-auto mb-6" />
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Ready to Launch Your Station?
           </h2>
-          <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
-            Go from zero to live in 48 hours. AI-powered radio that sounds
+          <p className="text-gray-600 dark:text-zinc-400 text-lg mb-8 max-w-md mx-auto">
+            Go from zero to live in 48 hours. Automated radio that sounds
             human, runs itself, and pays for itself.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -546,7 +546,7 @@ export default function PricingPage() {
 
       {/* Footer */}
       <footer className="border-t border-gray-200 py-8 px-4 bg-white/60">
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm text-gray-500">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm text-gray-500 dark:text-zinc-500">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4" />
             <span>TrueFans Radio</span>

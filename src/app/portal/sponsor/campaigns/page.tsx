@@ -86,12 +86,12 @@ export default function SponsorCampaignsPage() {
 
   if (!sponsorId) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
         <SharedNav />
         <div className="max-w-xl mx-auto px-4 py-20 text-center">
           <Building2 className="w-12 h-12 text-blue-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Sponsor Campaigns</h1>
-          <p className="text-gray-600 mb-4">Please access this page from the sponsor dashboard.</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Sponsor Campaigns</h1>
+          <p className="text-gray-600 dark:text-zinc-400 mb-4">Please access this page from the sponsor dashboard.</p>
           <a
             href="/portal/sponsor"
             className="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-blue-600"
@@ -108,15 +108,15 @@ export default function SponsorCampaignsPage() {
   ) || [];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <SponsorPortalNav sponsorId={sponsorId} />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Campaigns</h1>
-            <p className="text-gray-500">View and manage your sponsorship campaigns</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Campaigns</h1>
+            <p className="text-gray-500 dark:text-zinc-500">View and manage your sponsorship campaigns</p>
           </div>
         </div>
 
@@ -127,7 +127,7 @@ export default function SponsorCampaignsPage() {
         )}
 
         {error && (
-          <div className="bg-red-50 text-red-700 rounded-lg p-4 mb-6 text-sm">{error}</div>
+          <div className="bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400 rounded-lg p-4 mb-6 text-sm">{error}</div>
         )}
 
         {data && !loading && (
@@ -149,7 +149,7 @@ export default function SponsorCampaignsPage() {
                   onClick={() => setFilter(f)}
                   className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
                     filter === f
-                      ? "bg-blue-100 text-blue-700"
+                      ? "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400"
                       : "text-gray-500 hover:bg-gray-100"
                   }`}
                 >
@@ -160,7 +160,7 @@ export default function SponsorCampaignsPage() {
 
             {/* Campaign List */}
             {filteredCampaigns.length === 0 ? (
-              <div className="bg-white rounded-xl p-8 shadow-sm border text-center text-gray-500">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-sm border text-center text-gray-500 dark:text-zinc-500">
                 No {filter === "all" ? "" : filter} campaigns found.
               </div>
             ) : (
@@ -172,7 +172,7 @@ export default function SponsorCampaignsPage() {
                   return (
                     <div
                       key={campaign.id}
-                      className="bg-white rounded-xl shadow-sm border overflow-hidden"
+                      className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden"
                     >
                       <button
                         onClick={() => setExpandedId(isExpanded ? null : campaign.id)}
@@ -184,14 +184,14 @@ export default function SponsorCampaignsPage() {
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <p className="text-sm font-semibold text-gray-900">
+                              <p className="text-sm font-semibold text-gray-900 dark:text-white">
                                 {campaign.tier.charAt(0).toUpperCase() + campaign.tier.slice(1)} Sponsorship
                               </p>
                               <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${style.bg} ${style.text}`}>
                                 {style.label}
                               </span>
                             </div>
-                            <p className="text-xs text-gray-500 mt-0.5">
+                            <p className="text-xs text-gray-500 dark:text-zinc-500 mt-0.5">
                               <Calendar className="w-3 h-3 inline mr-1" />
                               {new Date(campaign.startDate).toLocaleDateString()}
                               {campaign.endDate
@@ -202,10 +202,10 @@ export default function SponsorCampaignsPage() {
                         </div>
                         <div className="flex items-center gap-6">
                           <div className="text-right hidden sm:block">
-                            <p className="text-sm font-semibold text-gray-900">
+                            <p className="text-sm font-semibold text-gray-900 dark:text-white">
                               ${campaign.monthlyAmount}/mo
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-zinc-500">
                               {campaign.estimatedImpressions.toLocaleString()} impressions
                             </p>
                           </div>
@@ -275,8 +275,8 @@ function SummaryCard({ label, value, color }: { label: string; value: number; co
     purple: "text-purple-600",
   };
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm border">
-      <p className="text-xs text-gray-500">{label}</p>
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border">
+      <p className="text-xs text-gray-500 dark:text-zinc-500">{label}</p>
       <p className={`text-2xl font-bold ${colorMap[color] || "text-gray-900"}`}>{value}</p>
     </div>
   );
@@ -285,8 +285,8 @@ function SummaryCard({ label, value, color }: { label: string; value: number; co
 function DetailItem({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div>
-      <div className="flex items-center gap-1.5 mb-1">{icon}<span className="text-xs text-gray-500">{label}</span></div>
-      <p className="text-sm font-semibold text-gray-900">{value}</p>
+      <div className="flex items-center gap-1.5 mb-1">{icon}<span className="text-xs text-gray-500 dark:text-zinc-500">{label}</span></div>
+      <p className="text-sm font-semibold text-gray-900 dark:text-white">{value}</p>
     </div>
   );
 }

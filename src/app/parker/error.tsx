@@ -22,8 +22,8 @@ export default function ParkerError({
         <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-6">
           <AlertCircle className="w-10 h-10 text-red-600" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Parker Dashboard Error</h1>
-        <p className="text-gray-600 mb-6">Something went wrong loading this dashboard.</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Parker Dashboard Error</h1>
+        <p className="text-gray-600 dark:text-zinc-400 mb-6">Something went wrong loading this dashboard.</p>
         <div className="space-y-3">
           <button
             onClick={reset}

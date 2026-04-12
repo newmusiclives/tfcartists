@@ -34,7 +34,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://truefans-radio.net
 const THEME_COLOR = process.env.NEXT_PUBLIC_PRIMARY_COLOR || "#78350f";
 const SITE_DESCRIPTION =
   process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-  "24/7 AI-powered radio championing independent artists. 92% of every dollar goes directly to artists. Listen live, earn rewards, and discover new music.";
+  "24/7 independent radio championing independent artists. 92% of every dollar goes directly to artists. Listen live, earn rewards, and discover new music.";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -45,7 +45,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: `${NETWORK_NAME} | AI-Powered Independent Radio`,
+    default: `${NETWORK_NAME} | Independent Radio for Real Music`,
     template: `%s | ${NETWORK_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -124,8 +124,10 @@ export default async function RootLayout({
   const resolvedName = branding?.stationName || NETWORK_NAME;
 
   return (
-    <html lang="en">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        {/* Prevent flash of wrong theme */}
+        <script dangerouslySetInnerHTML={{ __html: `try{const t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}}catch(e){}` }} />
         {/* Dynamic favicon from white-label branding */}
         {branding?.favicon && (
           <link rel="icon" href={branding.favicon} />

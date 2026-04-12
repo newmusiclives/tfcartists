@@ -107,7 +107,7 @@ export default function ListenerDashboardPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/rewards" className="flex items-center space-x-2 text-blue-700 hover:text-blue-800 transition-colors">
@@ -126,8 +126,8 @@ export default function ListenerDashboardPage() {
             {profile.xpLevel}
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{profile.name}</h1>
-            <div className="flex items-center space-x-3 text-sm text-gray-500">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{profile.name}</h1>
+            <div className="flex items-center space-x-3 text-sm text-gray-500 dark:text-zinc-500">
               <span className="flex items-center space-x-1"><Trophy className="w-3.5 h-3.5" /><span>Rank #{profile.rank}</span></span>
               <span className="flex items-center space-x-1"><Star className="w-3.5 h-3.5" /><span>{profile.tier}</span></span>
             </div>
@@ -135,12 +135,12 @@ export default function ListenerDashboardPage() {
         </div>
 
         {/* XP Progress Bar */}
-        <div className="bg-white rounded-2xl shadow-sm border p-6 mb-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6 mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-semibold text-gray-700">Level {profile.xpLevel}</span>
-            <span className="text-sm text-gray-500">{profile.xpTotal.toLocaleString()} / {profile.nextLevelXp.toLocaleString()} XP</span>
+            <span className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Level {profile.xpLevel}</span>
+            <span className="text-sm text-gray-500 dark:text-zinc-500">{profile.xpTotal.toLocaleString()} / {profile.nextLevelXp.toLocaleString()} XP</span>
           </div>
-          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-full h-3 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-500"
               style={{ width: `${profile.levelProgress}%` }}
@@ -151,36 +151,36 @@ export default function ListenerDashboardPage() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-xl shadow-sm border p-4 text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Flame className="w-5 h-5 text-orange-500 mx-auto mb-1" />
-            <div className="text-2xl font-bold text-gray-900">{profile.listeningStreak}</div>
-            <div className="text-xs text-gray-500">Day Streak</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.listeningStreak}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Day Streak</div>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border p-4 text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Headphones className="w-5 h-5 text-blue-500 mx-auto mb-1" />
-            <div className="text-2xl font-bold text-gray-900">{profile.totalSessions}</div>
-            <div className="text-xs text-gray-500">Sessions</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.totalSessions}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Sessions</div>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border p-4 text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Clock className="w-5 h-5 text-purple-500 mx-auto mb-1" />
-            <div className="text-2xl font-bold text-gray-900">{profile.totalListeningHours}</div>
-            <div className="text-xs text-gray-500">Hours</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.totalListeningHours}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Hours</div>
           </div>
-          <div className="bg-white rounded-xl shadow-sm border p-4 text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <TrendingUp className="w-5 h-5 text-green-500 mx-auto mb-1" />
-            <div className="text-2xl font-bold text-gray-900">{profile.engagementScore}</div>
-            <div className="text-xs text-gray-500">Engagement</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.engagementScore}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Engagement</div>
           </div>
         </div>
 
         {/* Badges */}
-        <div className="bg-white rounded-2xl shadow-sm border p-6 mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center space-x-2">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6 mb-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
             <Gift className="w-5 h-5" />
             <span>Badges ({profile.badges.length})</span>
           </h2>
           {profile.badges.length === 0 ? (
-            <p className="text-sm text-gray-500">No badges yet. Keep listening to earn your first badge!</p>
+            <p className="text-sm text-gray-500 dark:text-zinc-500">No badges yet. Keep listening to earn your first badge!</p>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {profile.badges.map((badge) => (
@@ -193,8 +193,8 @@ export default function ListenerDashboardPage() {
                   }`}
                 >
                   <div className="text-2xl mb-1">{BADGE_ICONS[badge.icon] || "🏅"}</div>
-                  <div className="text-sm font-semibold text-gray-900">{badge.name}</div>
-                  <div className="text-xs text-gray-500">{badge.description}</div>
+                  <div className="text-sm font-semibold text-gray-900 dark:text-white">{badge.name}</div>
+                  <div className="text-xs text-gray-500 dark:text-zinc-500">{badge.description}</div>
                   {profile.newBadges.includes(badge.id) && (
                     <div className="text-xs font-bold text-yellow-600 mt-1">NEW!</div>
                   )}
@@ -219,16 +219,16 @@ export default function ListenerDashboardPage() {
         </Link>
 
         {/* Recent XP */}
-        <div className="bg-white rounded-2xl shadow-sm border p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Recent XP</h2>
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Recent XP</h2>
           {recentXP.length === 0 ? (
-            <p className="text-sm text-gray-500">No XP transactions yet.</p>
+            <p className="text-sm text-gray-500 dark:text-zinc-500">No XP transactions yet.</p>
           ) : (
             <div className="space-y-2">
               {recentXP.map((tx) => (
                 <div key={tx.id} className="flex items-center justify-between py-2 border-b last:border-0">
                   <div>
-                    <div className="text-sm text-gray-900">{ACTION_LABELS[tx.action] || tx.action}</div>
+                    <div className="text-sm text-gray-900 dark:text-white">{ACTION_LABELS[tx.action] || tx.action}</div>
                     <div className="text-xs text-gray-400">{new Date(tx.createdAt).toLocaleDateString()}</div>
                   </div>
                   <span className="text-sm font-bold text-green-600">+{tx.xpAmount} XP</span>

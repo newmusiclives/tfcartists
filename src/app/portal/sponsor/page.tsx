@@ -116,8 +116,8 @@ export default function SponsorPortalPage() {
         <SharedNav />
         <div className="max-w-xl mx-auto px-4 py-20 text-center">
           <Building2 className="w-12 h-12 text-blue-500 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Sponsor Portal</h1>
-          <p className="text-gray-600 mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Sponsor Portal</h1>
+          <p className="text-gray-600 dark:text-zinc-400 mb-8">
             View your sponsorship details, ad performance, campaigns, and billing.
           </p>
           <div className="flex gap-2 max-w-md mx-auto">
@@ -151,7 +151,7 @@ export default function SponsorPortalPage() {
 
   if (loading && !data) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
         <SharedNav />
         <div className="flex items-center justify-center py-24">
           <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
@@ -166,7 +166,7 @@ export default function SponsorPortalPage() {
   const tier = sponsor.sponsorshipTier ? TIER_INFO[sponsor.sponsorshipTier] || null : null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <SponsorPortalNav sponsorId={sponsor.id} />
 
@@ -174,8 +174,8 @@ export default function SponsorPortalPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{sponsor.businessName}</h1>
-            <p className="text-gray-500">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{sponsor.businessName}</h1>
+            <p className="text-gray-500 dark:text-zinc-500">
               {sponsor.contactName} &middot; {sponsor.city}, {sponsor.state}
             </p>
           </div>
@@ -188,19 +188,19 @@ export default function SponsorPortalPage() {
         </div>
 
         {/* Tier Card */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border-2 border-blue-200 mb-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border-2 border-blue-200 mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Sponsorship Tier</p>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-sm text-gray-500 dark:text-zinc-500">Sponsorship Tier</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {tier ? tier.name : "Not Active"}
               </p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
                 {tier ? `$${tier.cost}/month \u2022 ${tier.adSpots} ad spots/month` : "Contact us to activate"}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-500">Monthly Investment</p>
+              <p className="text-sm text-gray-500 dark:text-zinc-500">Monthly Investment</p>
               <p className="text-3xl font-bold text-blue-600">
                 ${sponsor.monthlyAmount || tier?.cost || 0}
               </p>
@@ -209,7 +209,7 @@ export default function SponsorPortalPage() {
         </div>
 
         {/* Campaign Overview Stats */}
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Campaign Overview</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Campaign Overview</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           <StatCard
             icon={<Megaphone className="w-5 h-5 text-blue-500" />}
@@ -244,18 +244,18 @@ export default function SponsorPortalPage() {
         </div>
 
         {/* Active Ad Spots */}
-        <div className="bg-white rounded-xl shadow-sm border mb-8">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border mb-8">
           <div className="flex items-center justify-between p-6 pb-4">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
               <Radio className="w-5 h-5 text-gray-400" />
               Active Ad Spots
             </h2>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 dark:text-zinc-500">
               {ads.filter((a) => a.isActive).length} active / {ads.length} total
             </span>
           </div>
           {ads.length === 0 ? (
-            <div className="px-6 pb-6 text-sm text-gray-500">
+            <div className="px-6 pb-6 text-sm text-gray-500 dark:text-zinc-500">
               No ad spots found. Contact the station team to set up your first ad.
             </div>
           ) : (
@@ -265,8 +265,8 @@ export default function SponsorPortalPage() {
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${ad.isActive ? "bg-green-500" : "bg-gray-300"}`} />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{ad.title}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">{ad.title}</p>
+                      <p className="text-xs text-gray-500 dark:text-zinc-500">
                         {ad.tier.charAt(0).toUpperCase() + ad.tier.slice(1)} tier
                         {ad.durationSeconds ? ` \u2022 ${Math.round(ad.durationSeconds)}s` : ""}
                         {ad.lastPlayedAt
@@ -276,8 +276,8 @@ export default function SponsorPortalPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold text-gray-900">{ad.playCount.toLocaleString()}</p>
-                    <p className="text-xs text-gray-500">plays</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{ad.playCount.toLocaleString()}</p>
+                    <p className="text-xs text-gray-500 dark:text-zinc-500">plays</p>
                   </div>
                 </div>
               ))}
@@ -286,7 +286,7 @@ export default function SponsorPortalPage() {
         </div>
 
         {/* Quick Actions */}
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Quick Actions</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Quick Actions</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <QuickAction
             icon={<RefreshCw className="w-5 h-5 text-blue-500" />}
@@ -337,10 +337,10 @@ export default function SponsorPortalPage() {
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm border">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border">
       <div className="mb-2">{icon}</div>
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="text-xl font-bold text-gray-900">{value}</p>
+      <p className="text-xs text-gray-500 dark:text-zinc-500">{label}</p>
+      <p className="text-xl font-bold text-gray-900 dark:text-white">{value}</p>
     </div>
   );
 }
@@ -362,11 +362,11 @@ function QuickAction({
   return (
     <a
       href={href}
-      className="bg-white rounded-xl p-4 shadow-sm border hover:border-blue-300 hover:shadow transition-all block"
+      className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border hover:border-blue-300 hover:shadow transition-all block"
     >
       <div className="mb-2">{icon}</div>
-      <p className="text-sm font-semibold text-gray-900">{title}</p>
-      <p className="text-xs text-gray-500 mt-1">{description}</p>
+      <p className="text-sm font-semibold text-gray-900 dark:text-white">{title}</p>
+      <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{description}</p>
     </a>
   );
 }

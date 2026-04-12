@@ -94,7 +94,7 @@ export default function HarperDashboardPage() {
       <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
-          <p className="text-gray-600 mb-4">Sign in as Harper to access this dashboard.</p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-4">Sign in as Harper to access this dashboard.</p>
           <Link href="/login?callbackUrl=/harper" className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Sign In</Link>
         </div>
       </main>
@@ -110,7 +110,7 @@ export default function HarperDashboardPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
@@ -131,8 +131,8 @@ export default function HarperDashboardPage() {
           <div className="flex items-center space-x-3">
             <DollarSign className="w-8 h-8 text-green-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Team Harper Dashboard</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Team Harper Dashboard</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Sponsor Acquisition & Revenue Management
               </p>
             </div>
@@ -175,27 +175,27 @@ export default function HarperDashboardPage() {
         </section>
 
         {/* Revenue by Tier */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Revenue by Tier</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="text-sm text-gray-600 mb-2">Active Sponsors</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Active Sponsors</div>
               <div className="text-3xl font-bold text-green-600 mb-1">{totalSponsors}</div>
-              <div className="text-xs text-gray-500">Across all tiers</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500">Across all tiers</div>
             </div>
             <div className="text-center">
-              <div className="text-sm text-gray-600 mb-2">Monthly Revenue</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Monthly Revenue</div>
               <div className="text-3xl font-bold text-blue-600 mb-1">
                 ${totalRevenue.toLocaleString()}
               </div>
-              <div className="text-xs text-gray-500">From sponsorships</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500">From sponsorships</div>
             </div>
             <div className="text-center">
-              <div className="text-sm text-gray-600 mb-2">Artist Pool (80%)</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Artist Pool (80%)</div>
               <div className="text-3xl font-bold text-purple-600 mb-1">
                 ${Math.round(totalRevenue * 0.8).toLocaleString()}
               </div>
-              <div className="text-xs text-gray-500">Distributed to artists</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500">Distributed to artists</div>
             </div>
           </div>
 
@@ -204,11 +204,11 @@ export default function HarperDashboardPage() {
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 {Object.entries(revenueByTier).map(([tier, data]) => (
                   <div key={tier} className="bg-gray-50 rounded-lg p-3 text-center">
-                    <div className="text-xs font-bold text-gray-500 mb-1">
+                    <div className="text-xs font-bold text-gray-500 dark:text-zinc-500 mb-1">
                       {TIER_NAMES[tier] || tier}
                     </div>
-                    <div className="text-lg font-bold text-gray-900">{data.count}</div>
-                    <div className="text-xs text-gray-500">${data.revenue.toLocaleString()}/mo</div>
+                    <div className="text-lg font-bold text-gray-900 dark:text-white">{data.count}</div>
+                    <div className="text-xs text-gray-500 dark:text-zinc-500">${data.revenue.toLocaleString()}/mo</div>
                   </div>
                 ))}
               </div>
@@ -218,12 +218,12 @@ export default function HarperDashboardPage() {
 
         {/* Pipeline Overview */}
         {stats?.byStage && (
-          <section className="bg-white rounded-xl shadow-lg p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Pipeline Overview</h2>
             <div className="grid grid-cols-3 md:grid-cols-7 gap-3">
               {Object.entries(stats.byStage).map(([stage, count]) => (
                 <div key={stage} className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">{count}</div>
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">{count}</div>
                   <div className="text-xs text-gray-500 capitalize">{stage}</div>
                 </div>
               ))}
@@ -232,11 +232,11 @@ export default function HarperDashboardPage() {
         )}
 
         {/* Recent Deals */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Recent Deals</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 Latest sponsorship activity
               </p>
             </div>
@@ -255,7 +255,7 @@ export default function HarperDashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
               <Building2 className="w-8 h-8 mx-auto mb-2 text-gray-300" />
               <p>No deals yet. Start reaching out to potential sponsors.</p>
             </div>
@@ -267,17 +267,17 @@ export default function HarperDashboardPage() {
           <section className="bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Recent Activity</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg p-4 border">
-                <div className="text-2xl font-bold text-gray-900">{stats.activity.recentActions}</div>
-                <div className="text-sm text-gray-600">Actions this month</div>
+              <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
+                <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.activity.recentActions}</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Actions this month</div>
               </div>
-              <div className="bg-white rounded-lg p-4 border">
-                <div className="text-2xl font-bold text-gray-900">{stats.activity.callsThisMonth}</div>
-                <div className="text-sm text-gray-600">Calls completed</div>
+              <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
+                <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.activity.callsThisMonth}</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Calls completed</div>
               </div>
-              <div className="bg-white rounded-lg p-4 border">
-                <div className="text-2xl font-bold text-gray-900">{stats.activity.messagesSent}</div>
-                <div className="text-sm text-gray-600">Messages sent</div>
+              <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
+                <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.activity.messagesSent}</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Messages sent</div>
               </div>
             </div>
           </section>
@@ -342,13 +342,13 @@ function MetricCard({
   color: string;
 }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -365,17 +365,17 @@ function DealRow({ deal }: { deal: Deal }) {
   const tierName = TIER_NAMES[deal.tier] || deal.tier;
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
       <div className="flex items-center space-x-4 flex-1">
         <Building2 className="w-10 h-10 text-gray-400" />
         <div>
-          <div className="font-semibold text-gray-900">{deal.sponsor.businessName}</div>
-          <div className="text-sm text-gray-600">{deal.sponsor.businessType?.replace(/_/g, " ")}</div>
+          <div className="font-semibold text-gray-900 dark:text-white">{deal.sponsor.businessName}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">{deal.sponsor.businessType?.replace(/_/g, " ")}</div>
         </div>
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-xs text-gray-500">{tierName} - ${deal.monthlyAmount}/mo</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">{tierName} - ${deal.monthlyAmount}/mo</div>
           <div className="text-xs text-gray-400">
             {deal.startDate ? new Date(deal.startDate).toLocaleDateString() : "—"}
           </div>
@@ -403,7 +403,7 @@ function QuickActionCard({
 }) {
   return (
     <Link href={href} className="block">
-      <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border-2 border-transparent hover:border-green-300">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border-2 border-transparent hover:border-green-300">
         <div className="flex items-center justify-between mb-3">
           {icon}
           {badge !== undefined && (
@@ -412,8 +412,8 @@ function QuickActionCard({
             </div>
           )}
         </div>
-        <h3 className="text-lg font-bold text-gray-900 mb-1">{title}</h3>
-        <p className="text-sm text-gray-600">{description}</p>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{title}</h3>
+        <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
       </div>
     </Link>
   );

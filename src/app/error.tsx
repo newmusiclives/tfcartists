@@ -25,9 +25,9 @@ export default function Error({
           <AlertCircle className="w-10 h-10 text-red-600" />
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Something went wrong</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Something went wrong</h1>
 
-        <p className="text-lg text-gray-600 mb-8">
+        <p className="text-lg text-gray-600 dark:text-zinc-400 mb-8">
           We encountered an unexpected error. Our team has been notified and is working on a fix.
         </p>
 
@@ -51,11 +51,11 @@ export default function Error({
 
         {process.env.NODE_ENV === "development" && (
           <div className="mt-6 p-4 bg-gray-100 rounded-lg text-left">
-            <p className="text-sm font-mono text-gray-700 mb-2">
+            <p className="text-sm font-mono text-gray-700 dark:text-zinc-300 mb-2">
               <strong>Error:</strong> {error.message}
             </p>
             {error.digest && (
-              <p className="text-xs font-mono text-gray-500">Digest: {error.digest}</p>
+              <p className="text-xs font-mono text-gray-500 dark:text-zinc-500">Digest: {error.digest}</p>
             )}
           </div>
         )}

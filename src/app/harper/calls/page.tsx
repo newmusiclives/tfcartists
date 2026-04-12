@@ -100,11 +100,11 @@ export default function CallSchedulePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/harper"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Harper Dashboard</span>
@@ -112,8 +112,8 @@ export default function CallSchedulePage() {
           <div className="flex items-center space-x-3">
             <Phone className="w-8 h-8 text-blue-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Call Schedule</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Call Schedule</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Manage discovery calls, pitches, and closings
               </p>
             </div>
@@ -122,7 +122,7 @@ export default function CallSchedulePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live call scheduling will appear once GoHighLevel calendar is connected.
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function CallSchedulePage() {
         </section>
 
         {/* Upcoming Calls */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold">Upcoming Calls</h2>
             <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
@@ -173,7 +173,7 @@ export default function CallSchedulePage() {
         </section>
 
         {/* Recent Completed Calls */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Recent Completed Calls</h2>
 
           <div className="space-y-3">
@@ -199,13 +199,13 @@ function StatCard({
   subtitle: string;
 }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -219,11 +219,11 @@ function CallCard({ call }: { call: any }) {
   const typeConfig = typeConfigs[call.type] || { color: "gray", label: call.type, icon: "📞" };
 
   return (
-    <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+    <div className="border-2 border-gray-200 dark:border-zinc-800 rounded-lg p-4 hover:border-blue-300 transition-colors">
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-1">
-            <h3 className="text-lg font-bold text-gray-900">{call.business}</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">{call.business}</h3>
             <span className={`text-xs px-2 py-1 rounded-full bg-${typeConfig.color}-100 text-${typeConfig.color}-700 font-medium`}>
               {typeConfig.icon} {typeConfig.label}
             </span>
@@ -250,7 +250,7 @@ function CallCard({ call }: { call: any }) {
       </div>
 
       {call.notes && (
-        <div className="bg-gray-50 rounded p-3 text-sm text-gray-700">
+        <div className="bg-gray-50 rounded p-3 text-sm text-gray-700 dark:text-zinc-300">
           <strong>Notes:</strong> {call.notes}
         </div>
       )}
@@ -271,16 +271,16 @@ function CompletedCallRow({ call }: { call: any }) {
       <div className="flex items-center space-x-4 flex-1">
         <CheckCircle className="w-8 h-8 text-green-600" />
         <div>
-          <div className="font-semibold text-gray-900">{call.business}</div>
-          <div className="text-sm text-gray-600">{call.contact}</div>
+          <div className="font-semibold text-gray-900 dark:text-white">{call.business}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">{call.contact}</div>
         </div>
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-sm text-gray-900">{call.date} at {call.time}</div>
+          <div className="text-sm text-gray-900 dark:text-white">{call.date} at {call.time}</div>
           <div className={`text-xs text-${typeConfig.color}-600 font-medium`}>{typeConfig.label}</div>
         </div>
-        <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+        <div className="bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-xs font-medium">
           {call.outcome}
         </div>
       </div>

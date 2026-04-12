@@ -304,7 +304,7 @@ export default function OperatorAnalyticsPage() {
   // ---------------------------------------------------------------------------
   if (status === "loading" || loading) {
     return (
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
         <Header session={session} onRefresh={() => {}} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           {/* Summary row skeleton */}
@@ -312,7 +312,7 @@ export default function OperatorAnalyticsPage() {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl shadow-sm border p-5 animate-pulse"
+                className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-5 animate-pulse"
               >
                 <div className="h-3 w-20 bg-gray-200 rounded mb-3" />
                 <div className="h-7 w-16 bg-gray-200 rounded mb-2" />
@@ -321,7 +321,7 @@ export default function OperatorAnalyticsPage() {
             ))}
           </div>
           {/* Chart skeleton */}
-          <div className="bg-white rounded-xl shadow-sm border p-6 animate-pulse">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse">
             <div className="h-5 w-48 bg-gray-200 rounded mb-4" />
             <div className="h-48 bg-gray-100 rounded" />
           </div>
@@ -330,7 +330,7 @@ export default function OperatorAnalyticsPage() {
             {[...Array(2)].map((_, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl shadow-sm border p-6 animate-pulse"
+                className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse"
               >
                 <div className="h-5 w-40 bg-gray-200 rounded mb-4" />
                 <div className="space-y-3">
@@ -345,7 +345,7 @@ export default function OperatorAnalyticsPage() {
             ))}
           </div>
           {/* Table skeleton */}
-          <div className="bg-white rounded-xl shadow-sm border p-6 animate-pulse">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse">
             <div className="h-5 w-36 bg-gray-200 rounded mb-4" />
             <div className="space-y-2">
               {[...Array(5)].map((_, i) => (
@@ -363,10 +363,10 @@ export default function OperatorAnalyticsPage() {
   // ---------------------------------------------------------------------------
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
         <Header session={session} onRefresh={fetchData} />
         <div className="flex items-center justify-center py-32">
-          <div className="bg-white rounded-xl shadow-sm border p-8 max-w-md text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-8 max-w-md text-center">
             <p className="text-red-600 font-medium mb-4">{error}</p>
             <button
               onClick={fetchData}
@@ -413,7 +413,7 @@ export default function OperatorAnalyticsPage() {
   // Render
   // ---------------------------------------------------------------------------
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <Header session={session} onRefresh={fetchData} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -462,12 +462,12 @@ export default function OperatorAnalyticsPage() {
         {/* ----------------------------------------------------------------- */}
         {/* 2. Listener Trend Chart (last 7 days) */}
         {/* ----------------------------------------------------------------- */}
-        <section className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-1 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center space-x-2">
             <TrendingUp className="w-5 h-5 text-amber-700" />
             <span>Listener Sessions (Last 7 Days)</span>
           </h2>
-          <p className="text-sm text-gray-500 mb-5">
+          <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">
             New listeners per day
           </p>
           {last7Days.length > 0 ? (
@@ -482,12 +482,12 @@ export default function OperatorAnalyticsPage() {
         {/* ----------------------------------------------------------------- */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Artist Pipeline */}
-          <section className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1 flex items-center space-x-2">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center space-x-2">
               <UserPlus className="w-5 h-5 text-amber-700" />
               <span>Artist Pipeline</span>
             </h2>
-            <p className="text-sm text-gray-500 mb-5">
+            <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">
               Funnel from discovery to active
             </p>
             {artistFunnel.length > 0 ? (
@@ -498,12 +498,12 @@ export default function OperatorAnalyticsPage() {
           </section>
 
           {/* Sponsor Pipeline */}
-          <section className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1 flex items-center space-x-2">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center space-x-2">
               <Target className="w-5 h-5 text-amber-700" />
               <span>Sponsor Pipeline</span>
             </h2>
-            <p className="text-sm text-gray-500 mb-5">
+            <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">
               Funnel from discovery to active
             </p>
             {sponsorFunnel.length > 0 ? (
@@ -517,8 +517,8 @@ export default function OperatorAnalyticsPage() {
         {/* ----------------------------------------------------------------- */}
         {/* 5. Top Songs */}
         {/* ----------------------------------------------------------------- */}
-        <section className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
             <Music className="w-5 h-5 text-amber-700" />
             <span>Top Songs This Month</span>
           </h2>
@@ -528,7 +528,7 @@ export default function OperatorAnalyticsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b text-left text-gray-500">
+                  <tr className="border-b text-left text-gray-500 dark:text-zinc-500">
                     <th className="pb-2 font-medium w-10">#</th>
                     <th className="pb-2 font-medium">Song</th>
                     <th className="pb-2 font-medium">Artist</th>
@@ -539,7 +539,7 @@ export default function OperatorAnalyticsPage() {
                   {topSongs.map((s, i) => (
                     <tr
                       key={`${s.trackTitle}-${s.artistName}`}
-                      className="border-b last:border-0 hover:bg-gray-50"
+                      className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-zinc-800"
                     >
                       <td className="py-2.5 text-gray-400 font-medium">
                         {i + 1}
@@ -547,7 +547,7 @@ export default function OperatorAnalyticsPage() {
                       <td className="py-2.5 font-medium text-gray-900 max-w-[240px] truncate">
                         {s.trackTitle}
                       </td>
-                      <td className="py-2.5 text-gray-600 max-w-[180px] truncate">
+                      <td className="py-2.5 text-gray-600 dark:text-zinc-400 max-w-[180px] truncate">
                         {s.artistName}
                       </td>
                       <td className="py-2.5 text-right text-gray-700 font-medium">
@@ -564,15 +564,15 @@ export default function OperatorAnalyticsPage() {
         {/* ----------------------------------------------------------------- */}
         {/* 6. Revenue Breakdown */}
         {/* ----------------------------------------------------------------- */}
-        <section className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-5 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-5 flex items-center space-x-2">
             <DollarSign className="w-5 h-5 text-amber-700" />
             <span>Revenue Breakdown</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Left: Tier detail */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-3">
                 Artist Subscriptions by Tier
               </h3>
               {tierBreakdown.every((t) => t.count === 0) ? (
@@ -586,21 +586,21 @@ export default function OperatorAnalyticsPage() {
                     >
                       <div className="flex items-center space-x-3 min-w-0">
                         <TierBadge tier={t.tier} />
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-gray-600 dark:text-zinc-400">
                           {t.count} artist{t.count !== 1 ? "s" : ""} x $
                           {t.rate}/mo
                         </span>
                       </div>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-gray-900 dark:text-white">
                         ${t.revenue.toLocaleString()}
                       </span>
                     </div>
                   ))}
                   <div className="flex items-center justify-between border-t pt-2">
-                    <span className="text-sm font-semibold text-gray-700">
+                    <span className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
                       Subtotal
                     </span>
-                    <span className="font-bold text-gray-900">
+                    <span className="font-bold text-gray-900 dark:text-white">
                       ${artistSubRevenue.toLocaleString()}
                     </span>
                   </div>
@@ -610,7 +610,7 @@ export default function OperatorAnalyticsPage() {
 
             {/* Right: Revenue summary cards */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-3">
                 Revenue Summary
               </h3>
               <RevenueLineItem
@@ -637,16 +637,16 @@ export default function OperatorAnalyticsPage() {
               />
               <div className="border-t my-2" />
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-gray-900">
+                <span className="text-sm font-bold text-gray-900 dark:text-white">
                   Net Operator Revenue
                 </span>
-                <span className="text-xl font-bold text-amber-700">
+                <span className="text-xl font-bold text-amber-700 dark:text-amber-400">
                   ${netRevenue.toLocaleString()}
                 </span>
               </div>
               {stats?.targets.revenue ? (
                 <div className="mt-3">
-                  <div className="flex justify-between text-xs text-gray-500 mb-1">
+                  <div className="flex justify-between text-xs text-gray-500 dark:text-zinc-500 mb-1">
                     <span>
                       Progress to ${stats.targets.revenue.toLocaleString()}{" "}
                       target
@@ -683,8 +683,8 @@ export default function OperatorAnalyticsPage() {
         {/* ----------------------------------------------------------------- */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Most-Played Artists */}
-          <section className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center space-x-2">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
               <Users className="w-5 h-5 text-amber-700" />
               <span>Top 10 Artists by Plays</span>
             </h2>
@@ -694,7 +694,7 @@ export default function OperatorAnalyticsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-left text-gray-500">
+                    <tr className="border-b text-left text-gray-500 dark:text-zinc-500">
                       <th className="pb-2 font-medium">#</th>
                       <th className="pb-2 font-medium">Artist</th>
                       <th className="pb-2 font-medium text-right">Plays</th>
@@ -705,13 +705,13 @@ export default function OperatorAnalyticsPage() {
                     {topArtists.map((a, i) => (
                       <tr
                         key={a.id}
-                        className="border-b last:border-0 hover:bg-gray-50"
+                        className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-zinc-800"
                       >
                         <td className="py-2 text-gray-400">{i + 1}</td>
-                        <td className="py-2 font-medium text-gray-900">
+                        <td className="py-2 font-medium text-gray-900 dark:text-white">
                           {a.name}
                         </td>
-                        <td className="py-2 text-right text-gray-700">
+                        <td className="py-2 text-right text-gray-700 dark:text-zinc-300">
                           {a.playCount.toLocaleString()}
                         </td>
                         <td className="py-2 text-right">
@@ -726,8 +726,8 @@ export default function OperatorAnalyticsPage() {
           </section>
 
           {/* Sponsor Ad Performance */}
-          <section className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center space-x-2">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
               <Megaphone className="w-5 h-5 text-amber-700" />
               <span>Sponsor Ad Performance</span>
             </h2>
@@ -737,7 +737,7 @@ export default function OperatorAnalyticsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-left text-gray-500">
+                    <tr className="border-b text-left text-gray-500 dark:text-zinc-500">
                       <th className="pb-2 font-medium">Ad</th>
                       <th className="pb-2 font-medium">Sponsor</th>
                       <th className="pb-2 font-medium text-right">Plays</th>
@@ -748,15 +748,15 @@ export default function OperatorAnalyticsPage() {
                     {sponsorAds.slice(0, 10).map((ad) => (
                       <tr
                         key={ad.id}
-                        className="border-b last:border-0 hover:bg-gray-50"
+                        className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-zinc-800"
                       >
                         <td className="py-2 font-medium text-gray-900 max-w-[160px] truncate">
                           {ad.adTitle}
                         </td>
-                        <td className="py-2 text-gray-600 max-w-[120px] truncate">
+                        <td className="py-2 text-gray-600 dark:text-zinc-400 max-w-[120px] truncate">
                           {ad.sponsorName}
                         </td>
-                        <td className="py-2 text-right text-gray-700">
+                        <td className="py-2 text-right text-gray-700 dark:text-zinc-300">
                           {ad.playCount.toLocaleString()}
                         </td>
                         <td className="py-2 text-right">
@@ -781,8 +781,8 @@ export default function OperatorAnalyticsPage() {
         {/* ----------------------------------------------------------------- */}
         {analytics?.retentionCohorts &&
           analytics.retentionCohorts.length > 0 && (
-            <section className="bg-white rounded-xl shadow-sm border p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">
+            <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
                 Weekly Retention Cohorts
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -791,8 +791,8 @@ export default function OperatorAnalyticsPage() {
                     key={c.week}
                     className="bg-gray-50 rounded-lg p-4 text-center"
                   >
-                    <p className="text-xs text-gray-500 mb-1">{c.week}</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">{c.week}</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       {c.rate}%
                     </p>
                     <p className="text-xs text-gray-400">
@@ -820,14 +820,14 @@ function Header({
   onRefresh: () => void;
 }) {
   return (
-    <header className="bg-white border-b">
+    <header className="bg-white dark:bg-zinc-900 border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
             <Building2 className="w-6 h-6 text-amber-700" />
             <div>
-              <h1 className="font-bold text-gray-900">Analytics</h1>
-              <p className="text-xs text-gray-500">
+              <h1 className="font-bold text-gray-900 dark:text-white">Analytics</h1>
+              <p className="text-xs text-gray-500 dark:text-zinc-500">
                 {session?.user?.name || "Operator"}
               </p>
             </div>
@@ -870,14 +870,14 @@ function KpiCard({
   icon: any;
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-5">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-5">
       <div className="flex items-center space-x-2 mb-2">
         <Icon className="w-4 h-4 text-amber-700" />
         <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
           {label}
         </span>
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
+      <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
       <p className="text-xs text-gray-400 mt-1">{sub}</p>
     </div>
   );
@@ -890,9 +890,9 @@ function KpiCard({
 function TierBadge({ tier }: { tier: string }) {
   const colors: Record<string, string> = {
     FREE: "bg-gray-100 text-gray-600",
-    TIER_5: "bg-blue-100 text-blue-700",
+    TIER_5: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400",
     TIER_20: "bg-indigo-100 text-indigo-700",
-    TIER_50: "bg-purple-100 text-purple-700",
+    TIER_50: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400",
     TIER_120: "bg-amber-100 text-amber-800",
   };
   const labels: Record<string, string> = {
@@ -1004,7 +1004,7 @@ function CSSBarChart({ data }: { data: { date: string; count: number }[] }) {
             />
             {/* Label */}
             <div className="mt-2 text-center">
-              <p className="text-[10px] font-medium text-gray-500">
+              <p className="text-[10px] font-medium text-gray-500 dark:text-zinc-500">
                 {dayLabel}
               </p>
               <p className="text-[9px] text-gray-400">{dateLabel}</p>
@@ -1054,10 +1054,10 @@ function PipelineFunnel({
         return (
           <div key={stage.label}>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">
                 {stage.label}
               </span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-zinc-500">
                 {stage.count.toLocaleString()}{" "}
                 <span className="text-gray-400">({shareOfTotal}%)</span>
               </span>

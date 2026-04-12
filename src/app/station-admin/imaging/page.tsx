@@ -297,26 +297,26 @@ export default function StationImagingPage() {
 
   const categoryColor = (cat: string) => {
     const colors: Record<string, string> = {
-      promo: "bg-purple-100 text-purple-700",
-      sweeper: "bg-blue-100 text-blue-700",
-      station_id: "bg-amber-100 text-amber-700",
-      toh: "bg-rose-100 text-rose-700",
-      positioning: "bg-teal-100 text-teal-700",
+      promo: "bg-purple-500/15 text-purple-400",
+      sweeper: "bg-blue-500/15 text-blue-400",
+      station_id: "bg-amber-500/15 text-amber-400",
+      toh: "bg-rose-500/15 text-rose-400",
+      positioning: "bg-teal-500/15 text-teal-400",
     };
-    return colors[cat] || "bg-gray-100 text-gray-600";
+    return colors[cat] || "bg-zinc-800 text-zinc-400";
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
               <Mic className="w-8 h-8 text-rose-600" />
               Station Imaging
             </h1>
-            <p className="text-gray-600 mt-1">Configure imaging voices for promos, IDs, and sweepers</p>
+            <p className="text-zinc-400 mt-1">Configure imaging voices for promos, IDs, and sweepers</p>
           </div>
           <button
             onClick={() => setShowAdd(!showAdd)}
@@ -329,23 +329,23 @@ export default function StationImagingPage() {
 
         {/* Add form */}
         {showAdd && (
-          <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+          <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 mb-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">New Imaging Voice</h3>
-              <button onClick={() => setShowAdd(false)}><X className="w-5 h-5 text-gray-400" /></button>
+              <h3 className="font-semibold text-white">New Imaging Voice</h3>
+              <button onClick={() => setShowAdd(false)}><X className="w-5 h-5 text-zinc-500" /></button>
             </div>
             <div className="grid grid-cols-3 gap-4 mb-4">
               <input
                 type="text"
                 value={newVoice.displayName}
                 onChange={(e) => setNewVoice({ ...newVoice, displayName: e.target.value })}
-                className="border rounded-lg px-3 py-2 text-sm"
+                className="bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 placeholder="Display name"
               />
               <select
                 value={newVoice.voiceType}
                 onChange={(e) => setNewVoice({ ...newVoice, voiceType: e.target.value, elevenlabsVoiceId: "" })}
-                className="border rounded-lg px-3 py-2 text-sm"
+                className="bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -353,7 +353,7 @@ export default function StationImagingPage() {
               <select
                 value={newVoice.elevenlabsVoiceId}
                 onChange={(e) => setNewVoice({ ...newVoice, elevenlabsVoiceId: e.target.value })}
-                className="border rounded-lg px-3 py-2 text-sm"
+                className="bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
               >
                 <option value="">Select Gemini voice...</option>
                 {(newVoice.voiceType === "female" ? GEMINI_VOICES_FEMALE : GEMINI_VOICES_MALE).map((v) => (
@@ -370,13 +370,13 @@ export default function StationImagingPage() {
         {/* Voice list */}
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
           </div>
         ) : voices.length === 0 ? (
-          <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
-            <Mic className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No imaging voices configured.</p>
-            <p className="text-sm text-gray-400 mt-1">Add voices for station promos, IDs, and sweepers.</p>
+          <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
+            <Mic className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
+            <p className="text-zinc-500">No imaging voices configured.</p>
+            <p className="text-sm text-zinc-500 mt-1">Add voices for station promos, IDs, and sweepers.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -385,7 +385,7 @@ export default function StationImagingPage() {
               const current = isEditing ? editing : voice;
 
               return (
-                <div key={voice.id} className="bg-white rounded-xl p-5 shadow-sm border">
+                <div key={voice.id} className="bg-zinc-900/80 rounded-xl p-5 border border-zinc-800">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${voice.voiceType === "female" ? "bg-pink-500" : "bg-blue-500"}`}>
@@ -397,19 +397,19 @@ export default function StationImagingPage() {
                             type="text"
                             value={current.displayName}
                             onChange={(e) => setEditing({ ...current, displayName: e.target.value })}
-                            className="border rounded px-2 py-1 text-sm font-semibold"
+                            className="bg-zinc-800 text-white border border-zinc-700 rounded px-2 py-1 text-sm font-semibold"
                           />
                         ) : (
-                          <h3 className="font-semibold text-gray-900">{voice.displayName}</h3>
+                          <h3 className="font-semibold text-white">{voice.displayName}</h3>
                         )}
                         <div className="flex items-center gap-2 mt-1">
-                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${voice.voiceType === "female" ? "bg-pink-100 text-pink-700" : "bg-blue-100 text-blue-700"}`}>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${voice.voiceType === "female" ? "bg-pink-500/15 text-pink-400" : "bg-blue-500/15 text-blue-400"}`}>
                             {voice.voiceType}
                           </span>
                           {voice.usageTypes.split(",").map((u) => (
-                            <span key={u} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">{u}</span>
+                            <span key={u} className="text-xs bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full">{u}</span>
                           ))}
-                          <span className={`text-xs px-2 py-0.5 rounded-full ${voice.isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${voice.isActive ? "bg-green-500/15 text-green-400" : "bg-zinc-800 text-zinc-500"}`}>
                             {voice.isActive ? "Active" : "Inactive"}
                           </span>
                         </div>
@@ -421,11 +421,11 @@ export default function StationImagingPage() {
                           <button onClick={() => saveVoice(current)} className="text-sm bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 flex items-center gap-1">
                             <Save className="w-3 h-3" /> Save
                           </button>
-                          <button onClick={() => setEditing(null)} className="text-sm bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg">Cancel</button>
+                          <button onClick={() => setEditing(null)} className="text-sm bg-zinc-800 text-zinc-400 px-3 py-1.5 rounded-lg">Cancel</button>
                         </>
                       ) : (
                         <>
-                          <button onClick={() => setEditing({ ...voice })} className="text-sm bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-gray-200">Edit</button>
+                          <button onClick={() => setEditing({ ...voice })} className="text-sm bg-zinc-800 text-zinc-400 px-3 py-1.5 rounded-lg hover:bg-zinc-700">Edit</button>
                           <button onClick={() => deleteVoice(voice.id)} className="text-sm text-red-500 px-3 py-1.5 rounded-lg hover:bg-red-50">
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -436,20 +436,20 @@ export default function StationImagingPage() {
 
                   {/* Voice character description */}
                   {voice.metadata?.voiceCharacter && (
-                    <p className="mt-3 text-sm text-gray-600 italic border-l-2 border-gray-200 pl-3">
+                    <p className="mt-3 text-sm text-zinc-400 italic border-l-2 border-zinc-700 pl-3">
                       {voice.metadata.voiceCharacter}
                     </p>
                   )}
 
                   {isEditing && (
-                    <div className="mt-4 pt-4 border-t space-y-4">
+                    <div className="mt-4 pt-4 border-t border-zinc-800 space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="text-xs text-gray-500 block mb-1">Gemini Voice</label>
+                          <label className="text-xs text-zinc-500 block mb-1">Gemini Voice</label>
                           <select
                             value={current.elevenlabsVoiceId || ""}
                             onChange={(e) => setEditing({ ...current, elevenlabsVoiceId: e.target.value })}
-                            className="w-full border rounded-lg px-3 py-2 text-sm"
+                            className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                           >
                             <option value="">Not set</option>
                             <optgroup label={current.voiceType === "female" ? "Female Voices" : "Male Voices"}>
@@ -460,11 +460,11 @@ export default function StationImagingPage() {
                           </select>
                         </div>
                         <div>
-                          <label className="text-xs text-gray-500 block mb-1">Voice Type</label>
+                          <label className="text-xs text-zinc-500 block mb-1">Voice Type</label>
                           <select
                             value={current.voiceType}
                             onChange={(e) => setEditing({ ...current, voiceType: e.target.value })}
-                            className="w-full border rounded-lg px-3 py-2 text-sm"
+                            className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                           >
                             <option value="male">Male</option>
                             <option value="female">Female</option>
@@ -472,32 +472,32 @@ export default function StationImagingPage() {
                         </div>
                       </div>
                       <div>
-                        <label className="text-xs text-gray-500 block mb-1">Voice Direction (Gemini prompt instructions)</label>
-                        <p className="text-xs text-gray-400 mb-1">Tone, accent, pacing, atmosphere — passed to Gemini before each script.</p>
+                        <label className="text-xs text-zinc-500 block mb-1">Voice Direction (Gemini prompt instructions)</label>
+                        <p className="text-xs text-zinc-500 mb-1">Tone, accent, pacing, atmosphere — passed to Gemini before each script.</p>
                         <textarea
                           value={current.metadata?.voiceDirection || ""}
                           onChange={(e) => setEditing({ ...current, metadata: { ...(current.metadata || {}), voiceDirection: e.target.value } })}
                           rows={6}
-                          className="w-full border rounded-lg px-3 py-2 text-sm"
+                          className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                           placeholder="Role: Authoritative station voice. Voice Texture: Deep, resonant. Atmosphere: Sound-treated room, close-mic. Personality: Confident, commanding. Delivery: Smooth, measured pacing."
                         />
                       </div>
                       <div className="grid grid-cols-3 gap-4">
                         <div>
-                          <label className="text-xs text-gray-500 block mb-1">Stability: {current.voiceStability}</label>
+                          <label className="text-xs text-zinc-500 block mb-1">Stability: {current.voiceStability}</label>
                           <input type="range" min="0" max="1" step="0.05" value={current.voiceStability} onChange={(e) => setEditing({ ...current, voiceStability: parseFloat(e.target.value) })} className="w-full" />
                         </div>
                         <div>
-                          <label className="text-xs text-gray-500 block mb-1">Similarity: {current.voiceSimilarityBoost}</label>
+                          <label className="text-xs text-zinc-500 block mb-1">Similarity: {current.voiceSimilarityBoost}</label>
                           <input type="range" min="0" max="1" step="0.05" value={current.voiceSimilarityBoost} onChange={(e) => setEditing({ ...current, voiceSimilarityBoost: parseFloat(e.target.value) })} className="w-full" />
                         </div>
                         <div>
-                          <label className="text-xs text-gray-500 block mb-1">Style: {current.voiceStyle}</label>
+                          <label className="text-xs text-zinc-500 block mb-1">Style: {current.voiceStyle}</label>
                           <input type="range" min="0" max="1" step="0.05" value={current.voiceStyle} onChange={(e) => setEditing({ ...current, voiceStyle: parseFloat(e.target.value) })} className="w-full" />
                         </div>
                       </div>
                       <div>
-                        <label className="text-xs text-gray-500 block mb-2">Usage Types</label>
+                        <label className="text-xs text-zinc-500 block mb-2">Usage Types</label>
                         <div className="flex gap-3">
                           {USAGE_OPTIONS.map((u) => (
                             <label key={u} className="flex items-center gap-1.5 cursor-pointer">
@@ -524,7 +524,7 @@ export default function StationImagingPage() {
                     <div className="mt-3">
                       <button
                         onClick={() => setExpanded(prev => ({ ...prev, [voice.id]: !prev[voice.id] }))}
-                        className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-gray-900"
+                        className="flex items-center gap-1.5 text-sm font-medium text-zinc-300 hover:text-white"
                       >
                         {expanded[voice.id] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                         <FileText className="w-4 h-4" />
@@ -536,8 +536,8 @@ export default function StationImagingPage() {
                             const scripts = voice.metadata?.scripts?.[scriptType];
                             if (!scripts || scripts.length === 0) return null;
                             const typeLabels: Record<string, string> = { station_id: "Station IDs", sweeper: "Sweepers", promo: "Promos", commercial: "Commercials" };
-                            const typeBg: Record<string, string> = { station_id: "bg-amber-50 border-amber-200", sweeper: "bg-blue-50 border-blue-200", promo: "bg-purple-50 border-purple-200", commercial: "bg-green-50 border-green-200" };
-                            const typeTag: Record<string, string> = { station_id: "bg-amber-100 text-amber-700", sweeper: "bg-blue-100 text-blue-700", promo: "bg-purple-100 text-purple-700", commercial: "bg-green-100 text-green-700" };
+                            const typeBg: Record<string, string> = { station_id: "bg-amber-500/10 border-amber-500/20", sweeper: "bg-blue-500/10 border-blue-500/20", promo: "bg-purple-500/10 border-purple-500/20", commercial: "bg-green-500/10 border-green-500/20" };
+                            const typeTag: Record<string, string> = { station_id: "bg-amber-500/15 text-amber-400", sweeper: "bg-blue-500/15 text-blue-400", promo: "bg-purple-500/15 text-purple-400", commercial: "bg-green-500/15 text-green-400" };
                             return (
                               <div key={scriptType}>
                                 <span className={`inline-block text-xs font-semibold px-2 py-0.5 rounded-full mb-2 ${typeTag[scriptType]}`}>
@@ -548,14 +548,14 @@ export default function StationImagingPage() {
                                     <div key={i} className={`rounded-lg border p-3 ${typeBg[scriptType]}`}>
                                       <div className="flex items-start justify-between gap-2">
                                         <div className="flex-1">
-                                          <span className="text-xs font-medium text-gray-500">{script.label}</span>
-                                          <p className="text-sm font-medium text-gray-900 mt-0.5">&ldquo;{script.text}&rdquo;</p>
+                                          <span className="text-xs font-medium text-zinc-500">{script.label}</span>
+                                          <p className="text-sm font-medium text-white mt-0.5">&ldquo;{script.text}&rdquo;</p>
                                         </div>
                                       </div>
                                       {script.musicBed && (
-                                        <div className="flex items-start gap-1.5 mt-2 pt-2 border-t border-gray-200/50">
-                                          <Music className="w-3.5 h-3.5 text-gray-400 mt-0.5 shrink-0" />
-                                          <p className="text-xs text-gray-500">{script.musicBed}</p>
+                                        <div className="flex items-start gap-1.5 mt-2 pt-2 border-t border-zinc-800/50">
+                                          <Music className="w-3.5 h-3.5 text-zinc-500 mt-0.5 shrink-0" />
+                                          <p className="text-xs text-zinc-500">{script.musicBed}</p>
                                         </div>
                                       )}
                                     </div>
@@ -578,34 +578,34 @@ export default function StationImagingPage() {
         <div className="mt-12">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <Mic className="w-7 h-7 text-indigo-600" />
                 Pre-Produced Imaging
               </h2>
-              <p className="text-gray-600 mt-1">Upload ready-to-air promos, sweepers, station IDs, and more</p>
+              <p className="text-zinc-400 mt-1">Upload ready-to-air promos, sweepers, station IDs, and more</p>
             </div>
           </div>
 
           {/* Upload form */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
-            <h3 className="font-semibold mb-4">Upload Imaging Element</h3>
+          <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 mb-6">
+            <h3 className="font-semibold text-white mb-4">Upload Imaging Element</h3>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Name</label>
+                <label className="text-xs text-zinc-500 block mb-1">Name</label>
                 <input
                   type="text"
                   value={prodUploadName}
                   onChange={(e) => setProdUploadName(e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                   placeholder="e.g. Morning Station ID"
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Category</label>
+                <label className="text-xs text-zinc-500 block mb-1">Category</label>
                 <select
                   value={prodUploadCategory}
                   onChange={(e) => setProdUploadCategory(e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 >
                   {PRODUCED_CATEGORIES.map((c) => (
                     <option key={c} value={c}>{categoryLabel(c)}</option>
@@ -613,12 +613,12 @@ export default function StationImagingPage() {
                 </select>
               </div>
               <div className="md:col-span-2">
-                <label className="text-xs text-gray-500 block mb-1">Audio File (MP3/WAV)</label>
+                <label className="text-xs text-zinc-500 block mb-1">Audio File (MP3/WAV)</label>
                 <input
                   type="file"
                   accept=".mp3,.wav,audio/mpeg,audio/wav"
                   onChange={(e) => setProdUploadFile(e.target.files?.[0] || null)}
-                  className="w-full border rounded-lg px-3 py-1.5 text-sm file:mr-2 file:rounded file:border-0 file:bg-indigo-50 file:text-indigo-700 file:px-2 file:py-1 file:text-xs"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-1.5 text-sm file:mr-2 file:rounded file:border-0 file:bg-indigo-500/15 file:text-indigo-400 file:px-2 file:py-1 file:text-xs"
                 />
               </div>
               <button
@@ -634,31 +634,31 @@ export default function StationImagingPage() {
 
           {/* Produced imaging list */}
           {producedImaging.length === 0 ? (
-            <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
-              <Mic className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500">No pre-produced imaging uploaded yet.</p>
-              <p className="text-sm text-gray-400 mt-1">Upload ready-to-air promos, sweepers, IDs, and more.</p>
+            <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
+              <Mic className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
+              <p className="text-zinc-500">No pre-produced imaging uploaded yet.</p>
+              <p className="text-sm text-zinc-500 mt-1">Upload ready-to-air promos, sweepers, IDs, and more.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-xl shadow-sm border divide-y">
+            <div className="bg-zinc-900/80 rounded-xl border border-zinc-800 divide-y divide-zinc-800">
               {producedImaging.map((item) => (
-                <div key={item.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
+                <div key={item.id} className="p-4 flex items-center justify-between hover:bg-zinc-800">
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => togglePlayProd(item)}
-                      className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center hover:bg-indigo-200"
+                      className="w-9 h-9 rounded-full bg-indigo-500/15 text-indigo-400 flex items-center justify-center hover:bg-indigo-500/25"
                     >
                       {playingProdId === item.id ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                     </button>
                     <div>
-                      <p className="font-medium text-gray-900 text-sm">{item.name}</p>
+                      <p className="font-medium text-white text-sm">{item.name}</p>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${categoryColor(item.category)}`}>
                           {categoryLabel(item.category)}
                         </span>
-                        <span className="text-xs text-gray-400">{item.fileName}</span>
+                        <span className="text-xs text-zinc-500">{item.fileName}</span>
                         {item.durationSeconds && (
-                          <span className="text-xs text-gray-400">{Math.round(item.durationSeconds)}s</span>
+                          <span className="text-xs text-zinc-500">{Math.round(item.durationSeconds)}s</span>
                         )}
                       </div>
                     </div>
@@ -679,34 +679,34 @@ export default function StationImagingPage() {
         <div className="mt-12">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <Music className="w-7 h-7 text-emerald-600" />
                 Music Beds
               </h2>
-              <p className="text-gray-600 mt-1">Instrumental audio files for ad and promo mixing</p>
+              <p className="text-zinc-400 mt-1">Instrumental audio files for ad and promo mixing</p>
             </div>
           </div>
 
           {/* Upload form */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
-            <h3 className="font-semibold mb-4">Upload Music Bed</h3>
+          <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 mb-6">
+            <h3 className="font-semibold text-white mb-4">Upload Music Bed</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Name</label>
+                <label className="text-xs text-zinc-500 block mb-1">Name</label>
                 <input
                   type="text"
                   value={bedUploadName}
                   onChange={(e) => setBedUploadName(e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                   placeholder="e.g. Upbeat Country"
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Category</label>
+                <label className="text-xs text-zinc-500 block mb-1">Category</label>
                 <select
                   value={bedUploadCategory}
                   onChange={(e) => setBedUploadCategory(e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 >
                   {BED_CATEGORIES.map((c) => (
                     <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
@@ -714,12 +714,12 @@ export default function StationImagingPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Audio File (MP3/WAV)</label>
+                <label className="text-xs text-zinc-500 block mb-1">Audio File (MP3/WAV)</label>
                 <input
                   type="file"
                   accept=".mp3,.wav,audio/mpeg,audio/wav"
                   onChange={(e) => setBedUploadFile(e.target.files?.[0] || null)}
-                  className="w-full border rounded-lg px-3 py-1.5 text-sm file:mr-2 file:rounded file:border-0 file:bg-emerald-50 file:text-emerald-700 file:px-2 file:py-1 file:text-xs"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-1.5 text-sm file:mr-2 file:rounded file:border-0 file:bg-emerald-500/15 file:text-emerald-400 file:px-2 file:py-1 file:text-xs"
                 />
               </div>
               <button
@@ -735,29 +735,29 @@ export default function StationImagingPage() {
 
           {/* Music beds list */}
           {musicBeds.length === 0 ? (
-            <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
-              <Music className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500">No music beds uploaded yet.</p>
-              <p className="text-sm text-gray-400 mt-1">Upload instrumental audio files for ad mixing.</p>
+            <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
+              <Music className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
+              <p className="text-zinc-500">No music beds uploaded yet.</p>
+              <p className="text-sm text-zinc-500 mt-1">Upload instrumental audio files for ad mixing.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-xl shadow-sm border divide-y">
+            <div className="bg-zinc-900/80 rounded-xl border border-zinc-800 divide-y divide-zinc-800">
               {musicBeds.map((bed) => (
-                <div key={bed.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
+                <div key={bed.id} className="p-4 flex items-center justify-between hover:bg-zinc-800">
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => togglePlayBed(bed)}
-                      className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center hover:bg-emerald-200"
+                      className="w-9 h-9 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center hover:bg-emerald-500/25"
                     >
                       {playingBedId === bed.id ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                     </button>
                     <div>
-                      <p className="font-medium text-gray-900 text-sm">{bed.name}</p>
+                      <p className="font-medium text-white text-sm">{bed.name}</p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full capitalize">{bed.category}</span>
-                        <span className="text-xs text-gray-400">{bed.fileName}</span>
+                        <span className="text-xs bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full capitalize">{bed.category}</span>
+                        <span className="text-xs text-zinc-500">{bed.fileName}</span>
                         {bed.durationSeconds && (
-                          <span className="text-xs text-gray-400">{Math.round(bed.durationSeconds)}s</span>
+                          <span className="text-xs text-zinc-500">{Math.round(bed.durationSeconds)}s</span>
                         )}
                       </div>
                     </div>

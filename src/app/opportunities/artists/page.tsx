@@ -80,7 +80,7 @@ export default function ArtistOpportunityPage() {
       <SharedNav />
 
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -88,8 +88,8 @@ export default function ArtistOpportunityPage() {
                 <Award className="w-10 h-10 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900">Artist Earning Opportunity</h1>
-                <p className="text-xl text-gray-600 mt-2">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Artist Earning Opportunity</h1>
+                <p className="text-xl text-gray-600 dark:text-zinc-400 mt-2">
                   Become an Artist Promoter - Earn up to {scoutModel.tiers.elite.cap} by referring artists
                 </p>
               </div>
@@ -125,10 +125,10 @@ export default function ArtistOpportunityPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
         {/* Artist Subscription Pricing */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">Artist Airplay Pricing</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">Artist Airplay Pricing</h2>
+            <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto">
               92 cents of every dollar goes back to artists through our 80/20 sponsor revenue split.
               At capacity, the artist pool is <strong>$17,800/month</strong> shared among all artists.
             </p>
@@ -137,10 +137,10 @@ export default function ArtistOpportunityPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
             {/* Free */}
             <div className="rounded-lg p-5 border-2 border-gray-200 bg-gray-50 flex flex-col">
-              <h3 className="font-bold text-lg text-gray-900 mb-1">Free</h3>
-              <div className="text-3xl font-bold text-gray-700 mb-1">$0</div>
-              <div className="text-sm text-gray-500 mb-3">forever</div>
-              <p className="text-sm text-gray-600 mb-3 flex-1">Get discovered — 1 play/month, station promotion</p>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">Free</h3>
+              <div className="text-3xl font-bold text-gray-700 dark:text-zinc-300 mb-1">$0</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-3">forever</div>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">Get discovered — 1 play/month, station promotion</p>
               <ul className="text-xs text-gray-500 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 1 play per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Artist Pool share</li>
@@ -153,7 +153,7 @@ export default function ArtistOpportunityPage() {
               <h3 className="font-bold text-lg text-orange-900 mb-1">Bronze</h3>
               <div className="text-3xl font-bold text-orange-600 mb-1">$5<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-orange-500 mb-3">Less than a coffee</div>
-              <p className="text-sm text-gray-600 mb-3 flex-1">Buy a coffee, get on the radio — 5 plays/month</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">Buy a coffee, get on the radio — 5 plays/month</p>
               <ul className="text-xs text-gray-500 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 5 plays per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Priority rotation</li>
@@ -166,7 +166,7 @@ export default function ArtistOpportunityPage() {
               <h3 className="font-bold text-lg text-blue-900 mb-1">Silver</h3>
               <div className="text-3xl font-bold text-blue-600 mb-1">$15<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-blue-500 mb-3">Less than a Spotify playlist push</div>
-              <p className="text-sm text-gray-600 mb-3 flex-1">20 plays/month with heavy rotation and social features</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">20 plays/month with heavy rotation and social features</p>
               <ul className="text-xs text-gray-500 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 20 plays per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Heavy rotation</li>
@@ -183,7 +183,7 @@ export default function ArtistOpportunityPage() {
               <h3 className="font-bold text-lg text-yellow-900 mb-1">Gold</h3>
               <div className="text-3xl font-bold text-yellow-600 mb-1">$40<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-yellow-600 font-semibold mb-3">Less than Netflix</div>
-              <p className="text-sm text-gray-600 mb-3 flex-1">65 plays/month, heavy rotation, dedicated show segment</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">65 plays/month, heavy rotation, dedicated show segment</p>
               <ul className="text-xs text-gray-500 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 65 plays per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Heavy rotation</li>
@@ -198,7 +198,7 @@ export default function ArtistOpportunityPage() {
               <h3 className="font-bold text-lg text-purple-900 mb-1">Platinum</h3>
               <div className="text-3xl font-bold text-purple-600 mb-1">$100<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-purple-500 mb-3">Power rotation</div>
-              <p className="text-sm text-gray-600 mb-3 flex-1">250 plays/month, VIP events — earn more from the pool than you pay</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">250 plays/month, VIP events — earn more from the pool than you pay</p>
               <ul className="text-xs text-gray-500 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 250 plays per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Power rotation</li>
@@ -247,7 +247,7 @@ export default function ArtistOpportunityPage() {
         </div>
 
         {/* Commission Structure */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <DollarSign className="w-6 h-6 mr-2 text-orange-600" />
             How You Earn Money
@@ -295,24 +295,24 @@ export default function ArtistOpportunityPage() {
             Milestone Bonuses
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white rounded-lg p-6 border-2 border-yellow-400">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 border-2 border-yellow-400">
               <div className="text-4xl mb-2">🎯</div>
-              <h3 className="font-bold text-xl text-gray-900 mb-2">5 Artists Milestone</h3>
+              <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-2">5 Artists Milestone</h3>
               <div className="text-3xl font-bold text-yellow-600 mb-2">{scoutModel.milestones.artists5}</div>
-              <p className="text-gray-600">One-time bonus when you successfully refer 5 active artists</p>
+              <p className="text-gray-600 dark:text-zinc-400">One-time bonus when you successfully refer 5 active artists</p>
             </div>
 
-            <div className="bg-white rounded-lg p-6 border-2 border-orange-400">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 border-2 border-orange-400">
               <div className="text-4xl mb-2">🏆</div>
-              <h3 className="font-bold text-xl text-gray-900 mb-2">10 Artists Milestone</h3>
+              <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-2">10 Artists Milestone</h3>
               <div className="text-3xl font-bold text-orange-600 mb-2">{scoutModel.milestones.artists10}</div>
-              <p className="text-gray-600">One-time bonus when you successfully refer 10 active artists</p>
+              <p className="text-gray-600 dark:text-zinc-400">One-time bonus when you successfully refer 10 active artists</p>
             </div>
           </div>
         </div>
 
         {/* Performance Tiers */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <Star className="w-6 h-6 mr-2 text-orange-600" />
             Performance Tiers - Quality Over Quantity
@@ -324,40 +324,40 @@ export default function ArtistOpportunityPage() {
                 TOP TIER
               </div>
               <div className="text-3xl mb-2">👑</div>
-              <h3 className="font-bold text-lg text-gray-900 mb-1">{scoutModel.tiers.elite.name}</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">{scoutModel.tiers.elite.name}</h3>
               <div className="text-2xl font-bold text-orange-600 mb-2">{scoutModel.tiers.elite.range}</div>
-              <p className="text-sm text-gray-600 mb-2">{scoutModel.tiers.elite.count} artist promoters</p>
-              <p className="text-xs text-gray-500">{scoutModel.tiers.elite.description}</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.elite.count} artist promoters</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-500">{scoutModel.tiers.elite.description}</p>
             </div>
 
             <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 border-2 border-orange-300">
               <div className="text-3xl mb-2">⭐</div>
-              <h3 className="font-bold text-lg text-gray-900 mb-1">{scoutModel.tiers.strong.name}</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">{scoutModel.tiers.strong.name}</h3>
               <div className="text-2xl font-bold text-orange-600 mb-2">{scoutModel.tiers.strong.range}</div>
-              <p className="text-sm text-gray-600 mb-2">{scoutModel.tiers.strong.count} artist promoters</p>
-              <p className="text-xs text-gray-500">{scoutModel.tiers.strong.description}</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.strong.count} artist promoters</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-500">{scoutModel.tiers.strong.description}</p>
             </div>
 
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border-2 border-purple-200">
               <div className="text-3xl mb-2">✨</div>
-              <h3 className="font-bold text-lg text-gray-900 mb-1">{scoutModel.tiers.active.name}</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">{scoutModel.tiers.active.name}</h3>
               <div className="text-2xl font-bold text-purple-600 mb-2">{scoutModel.tiers.active.range}</div>
-              <p className="text-sm text-gray-600 mb-2">{scoutModel.tiers.active.count} artist promoters</p>
-              <p className="text-xs text-gray-500">{scoutModel.tiers.active.description}</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.active.count} artist promoters</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-500">{scoutModel.tiers.active.description}</p>
             </div>
 
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 border-2 border-gray-200">
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 border-2 border-gray-200 dark:border-zinc-800">
               <div className="text-3xl mb-2">🌱</div>
-              <h3 className="font-bold text-lg text-gray-900 mb-1">{scoutModel.tiers.developing.name}</h3>
-              <div className="text-2xl font-bold text-gray-600 mb-2">{scoutModel.tiers.developing.range}</div>
-              <p className="text-sm text-gray-600 mb-2">{scoutModel.tiers.developing.count} artist promoters</p>
-              <p className="text-xs text-gray-500">{scoutModel.tiers.developing.description}</p>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">{scoutModel.tiers.developing.name}</h3>
+              <div className="text-2xl font-bold text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.developing.range}</div>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.developing.count} artist promoters</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-500">{scoutModel.tiers.developing.description}</p>
             </div>
           </div>
         </div>
 
         {/* Real Examples */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <Users className="w-6 h-6 mr-2 text-purple-600" />
             Real Artist Promoter Examples
@@ -366,26 +366,26 @@ export default function ArtistOpportunityPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {examples.map((example, idx) => (
               <div key={idx} className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6 border-2 border-purple-200">
-                <h3 className="font-bold text-xl text-gray-900 mb-2">{example.name}</h3>
+                <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-2">{example.name}</h3>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Artists Referred:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Artists Referred:</span>
                     <span className="font-semibold">{example.artists}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Performance Tier:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Performance Tier:</span>
                     <span className="font-semibold text-orange-600">{example.tier}</span>
                   </div>
                 </div>
-                <div className="bg-white rounded-lg p-4 mb-3">
-                  <div className="text-sm text-gray-600 mb-1">Monthly Earnings</div>
+                <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 mb-3">
+                  <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Monthly Earnings</div>
                   <div className="text-3xl font-bold text-green-600">{example.monthly}</div>
                 </div>
                 <div className="bg-green-50 rounded-lg p-3 mb-3">
                   <div className="text-xs text-green-700 mb-1">Annual Projection</div>
                   <div className="text-xl font-bold text-green-600">{example.annual}</div>
                 </div>
-                <p className="text-xs text-gray-600">{example.description}</p>
+                <p className="text-xs text-gray-600 dark:text-zinc-400">{example.description}</p>
               </div>
             ))}
           </div>
@@ -433,9 +433,9 @@ export default function ArtistOpportunityPage() {
         </div>
 
         {/* CTA */}
-        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to Start Earning?</h2>
-          <p className="text-xl text-gray-600 mb-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Ready to Start Earning?</h2>
+          <p className="text-xl text-gray-600 dark:text-zinc-400 mb-6">
             Join {scoutModel.totalScouts} artist promoters at {capacity}% capacity and start building passive income today!
           </p>
           <button className="bg-gradient-to-r from-orange-500 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-bold hover:from-orange-600 hover:to-purple-700 transition-all shadow-lg">

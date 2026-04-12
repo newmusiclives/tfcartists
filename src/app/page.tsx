@@ -26,9 +26,9 @@ const NETWORK_NAME = process.env.NEXT_PUBLIC_NETWORK_NAME || "TrueFans RADIO";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://truefans-radio.netlify.app";
 
 export const metadata: Metadata = {
-  title: `${NETWORK_NAME} | AI-Powered Radio for Independent Artists`,
+  title: `${NETWORK_NAME} | Independent Radio for Real Music`,
   description:
-    "Launch your own AI-powered radio station in minutes. 24/7 live radio with AI DJs, artist discovery, sponsor management, and listener growth — all automated.",
+    "Launch your own 24/7 radio station in minutes. Automated hosting, artist discovery, sponsor management, and listener growth — all built in.",
 };
 
 export const revalidate = 300;
@@ -38,7 +38,7 @@ const jsonLd = {
   "@type": "WebApplication",
   name: NETWORK_NAME,
   description:
-    "AI-powered radio platform for independent artists, businesses, and communities.",
+    "Independent radio platform for artists, businesses, and communities.",
   url: SITE_URL,
   applicationCategory: "MultimediaApplication",
   operatingSystem: "All",
@@ -72,7 +72,7 @@ const radioJsonLd = {
   broadcastDisplayName: process.env.NEXT_PUBLIC_STATION_NAME || "North Country Radio",
   broadcastTimezone: process.env.STATION_TIMEZONE || "America/Denver",
   genre: process.env.NEXT_PUBLIC_STATION_GENRE || "Americana",
-  description: "24/7 AI-powered independent radio station championing local and independent artists.",
+  description: "24/7 independent radio station championing local and independent artists.",
   parentOrganization: {
     "@type": "Organization",
     name: NETWORK_NAME,
@@ -85,9 +85,9 @@ async function getMetrics() {
       prisma.sponsor.count({ where: { deletedAt: null } }),
       prisma.song.count({ where: { isActive: true } }),
     ]);
-    return { artistCount: 535, sponsorCount, songCount };
+    return { artistCount: 500, sponsorCount, songCount: Math.floor(songCount / 100) * 100 };
   } catch {
-    return { artistCount: 535, sponsorCount: 25, songCount: 1200 };
+    return { artistCount: 500, sponsorCount: 25, songCount: 1200 };
   }
 }
 
@@ -95,7 +95,7 @@ export default async function MarketingPage() {
   const metrics = await getMetrics();
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-gray-950">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: sanitizeHtml(JSON.stringify(jsonLd)) }}
@@ -110,21 +110,21 @@ export default async function MarketingPage() {
       />
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b bg-white/90 backdrop-blur-md">
+      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-gray-950/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <Image src="/logos/ncr-logo.png" alt="TrueFans RADIO" width={32} height={32} className="h-8 w-auto object-contain" />
-              <span className="font-bold text-xl text-amber-700">{NETWORK_NAME}</span>
+            <div className="flex items-center space-x-3">
+              <Radio className="w-6 h-6 text-amber-400" />
+              <span className="font-bold text-xl text-white">{NETWORK_NAME}</span>
             </div>
             <div className="hidden md:flex items-center space-x-6">
-              <a href="#artists" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Artists</a>
-              <a href="#operators" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Operators</a>
-              <Link href="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Pricing</Link>
-              <Link href="/demo" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Demo</Link>
+              <a href="#artists" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">Artists</a>
+              <a href="#operators" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">Operators</a>
+              <Link href="/pricing" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">Pricing</Link>
+              <Link href="/station" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">Demo Station</Link>
               <Link
                 href="/player"
-                className="inline-flex items-center space-x-1 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors text-sm font-semibold"
+                className="inline-flex items-center space-x-1 bg-amber-500 hover:bg-amber-400 text-gray-950 px-4 py-2 rounded-lg transition-colors text-sm font-bold"
               >
                 <Play className="w-4 h-4" />
                 <span>Listen Live</span>
@@ -133,7 +133,7 @@ export default async function MarketingPage() {
             <div className="md:hidden">
               <Link
                 href="/player"
-                className="inline-flex items-center space-x-1 bg-amber-600 text-white px-3 py-1.5 rounded-lg text-sm font-semibold"
+                className="inline-flex items-center space-x-1 bg-amber-500 text-gray-950 px-3 py-1.5 rounded-lg text-sm font-bold"
               >
                 <Play className="w-3 h-3" />
                 <span>Listen</span>
@@ -144,32 +144,32 @@ export default async function MarketingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="pt-28 pb-20 sm:pt-36 sm:pb-28 bg-gradient-to-br from-amber-50 via-white to-orange-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-32 pb-24 sm:pt-40 sm:pb-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-900/15 via-gray-950 to-gray-950" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
-              <span>AI-Powered Radio Platform</span>
-            </div>
+            <p className="text-amber-400 font-medium tracking-widest uppercase text-sm mb-8">
+              Independent Radio Network
+            </p>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
-              <span className="text-gray-900">Your own radio station.</span>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-8">
+              <span className="text-white">Your own radio station.</span>
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-700 via-orange-600 to-amber-600">
-                Powered by AI.
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500">
+                Built for real music.
               </span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-              Launch a 24/7 radio station with AI DJs, automated artist discovery,
+            <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+              Launch a 24/7 radio station with automated hosting, artist discovery,
               sponsor management, and listener growth. No broadcast license.
               No expensive equipment. Live in 5 minutes.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               <Link
                 href="/onboard"
-                className="inline-flex items-center space-x-2 bg-amber-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-amber-700 transition-colors shadow-lg hover:shadow-xl w-full sm:w-auto justify-center"
+                className="inline-flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-gray-950 px-8 py-4 rounded-xl text-lg font-bold transition-colors shadow-lg shadow-amber-500/20 w-full sm:w-auto justify-center"
               >
                 <Music className="w-5 h-5" />
                 <span>Submit Your Music Free</span>
@@ -177,7 +177,7 @@ export default async function MarketingPage() {
               </Link>
               <Link
                 href="/operate"
-                className="inline-flex items-center space-x-2 border-2 border-amber-600 text-amber-700 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-amber-50 transition-colors w-full sm:w-auto justify-center"
+                className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-white/5 transition-colors w-full sm:w-auto justify-center"
               >
                 <Radio className="w-5 h-5" />
                 <span>Launch a Station</span>
@@ -185,19 +185,19 @@ export default async function MarketingPage() {
             </div>
 
             {/* Social proof metrics */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto">
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">{metrics.artistCount.toLocaleString()}+</div>
-                <div className="text-sm text-gray-500">Artists</div>
+                <div className="text-2xl sm:text-3xl font-bold text-amber-400">{metrics.artistCount.toLocaleString()}+</div>
+                <div className="text-sm text-gray-500 dark:text-zinc-500">Artists</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">{metrics.songCount.toLocaleString()}+</div>
-                <div className="text-sm text-gray-500">Songs in Rotation</div>
+                <div className="text-2xl sm:text-3xl font-bold text-amber-400">{metrics.songCount.toLocaleString()}+</div>
+                <div className="text-sm text-gray-500 dark:text-zinc-500">Songs in Rotation</div>
               </div>
               <RandomListenerCount />
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">24/7</div>
-                <div className="text-sm text-gray-500">Live Radio</div>
+                <div className="text-2xl sm:text-3xl font-bold text-amber-400">24/7</div>
+                <div className="text-sm text-gray-500 dark:text-zinc-500">Live Radio</div>
               </div>
             </div>
           </div>
@@ -205,43 +205,43 @@ export default async function MarketingPage() {
       </section>
 
       {/* Who It's For */}
-      <section className="py-20 bg-white">
+      <section className="py-20 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Built for Everyone in Music</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Built for Everyone in Music</h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
               Whether you make music, run a business, or want to build a community around sound.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Artists */}
-            <div id="artists" className="scroll-mt-20 bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-2xl p-8 border border-purple-200">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-xl mb-6">
-                <Music className="w-6 h-6 text-purple-600" />
+            <div id="artists" className="scroll-mt-20 bg-gray-900/80 rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-colors">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-500/10 border border-purple-500/20 rounded-xl mb-6">
+                <Music className="w-6 h-6 text-purple-400" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Independent Artists</h3>
-              <p className="text-gray-600 mb-6">
-                Get your music on real radio — for free. Our AI reviews every submission and places
-                you in rotation based on quality, not budget.
+              <h3 className="text-2xl font-bold text-white mb-3">Independent Artists</h3>
+              <p className="text-gray-400 mb-6">
+                Get your music on real radio — for free. Every submission is reviewed
+                and placed in rotation based on quality, not budget.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
                   "Free radio airplay on live stations",
-                  "AI-generated features and artist spotlights",
+                  "Artist features and spotlights on air",
                   "92% of sponsor revenue goes to artists",
                   "Real listener data and analytics",
                   "Upgrade for priority rotation",
                 ].map((item) => (
                   <li key={item} className="flex items-start space-x-2">
-                    <CheckCircle2 className="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">{item}</span>
+                    <CheckCircle2 className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-300">{item}</span>
                   </li>
                 ))}
               </ul>
               <Link
                 href="/onboard"
-                className="inline-flex items-center space-x-2 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+                className="inline-flex items-center space-x-2 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-500 transition-colors"
               >
                 <span>Submit Music Free</span>
                 <ArrowRight className="w-4 h-4" />
@@ -249,32 +249,32 @@ export default async function MarketingPage() {
             </div>
 
             {/* Businesses / Sponsors */}
-            <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-8 border border-green-200">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-xl mb-6">
-                <Building2 className="w-6 h-6 text-green-600" />
+            <div className="bg-gray-900/80 rounded-2xl p-8 border border-green-500/20 hover:border-green-500/40 transition-colors">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-green-500/10 border border-green-500/20 rounded-xl mb-6">
+                <Building2 className="w-6 h-6 text-green-400" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Businesses & Sponsors</h3>
-              <p className="text-gray-600 mb-6">
+              <h3 className="text-2xl font-bold text-white mb-3">Businesses & Sponsors</h3>
+              <p className="text-gray-400 mb-6">
                 Reach engaged music fans through authentic radio sponsorships.
-                AI-voiced ads that sound natural, not robotic.
+                Professional ads that sound natural, not robotic.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
                   "4 sponsorship tiers from $100/mo",
-                  "AI-produced radio ads with real voices",
+                  "Professionally produced radio ads",
                   "Targeted to music-loving audiences",
                   "Performance dashboard and analytics",
                   "Support independent artists with every dollar",
                 ].map((item) => (
                   <li key={item} className="flex items-start space-x-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">{item}</span>
+                    <CheckCircle2 className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-300">{item}</span>
                   </li>
                 ))}
               </ul>
               <Link
                 href="/sponsor"
-                className="inline-flex items-center space-x-2 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                className="inline-flex items-center space-x-2 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500 transition-colors"
               >
                 <span>Become a Sponsor</span>
                 <ArrowRight className="w-4 h-4" />
@@ -282,32 +282,32 @@ export default async function MarketingPage() {
             </div>
 
             {/* Station Operators */}
-            <div id="operators" className="scroll-mt-20 bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-2xl p-8 border border-amber-200">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-amber-100 rounded-xl mb-6">
-                <Radio className="w-6 h-6 text-amber-600" />
+            <div id="operators" className="scroll-mt-20 bg-gray-900/80 rounded-2xl p-8 border border-amber-500/20 hover:border-amber-500/40 transition-colors">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-amber-500/10 border border-amber-500/20 rounded-xl mb-6">
+                <Radio className="w-6 h-6 text-amber-400" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Station Operators</h3>
-              <p className="text-gray-600 mb-6">
-                Run your own AI radio station as a real business.
-                4 AI agents handle the work while you build the brand.
+              <h3 className="text-2xl font-bold text-white mb-3">Station Operators</h3>
+              <p className="text-gray-400 mb-6">
+                Run your own radio station as a real business.
+                Smart automation handles the work while you build the brand.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
                   "Launch in 5 minutes with genre templates",
-                  "4 AI agents: outreach, sales, growth, curation",
+                  "Automated outreach, sales, growth, curation",
                   "Keep 100% of artist subscriptions",
                   "20% commission on sponsor revenue",
                   "Earn up to $50K/year at capacity",
                 ].map((item) => (
                   <li key={item} className="flex items-start space-x-2">
-                    <CheckCircle2 className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">{item}</span>
+                    <CheckCircle2 className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-300">{item}</span>
                   </li>
                 ))}
               </ul>
               <Link
                 href="/operate"
-                className="inline-flex items-center space-x-2 bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors"
+                className="inline-flex items-center space-x-2 bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-500 transition-colors"
               >
                 <span>Launch a Station</span>
                 <ArrowRight className="w-4 h-4" />
@@ -318,12 +318,12 @@ export default async function MarketingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-20 border-t border-white/5 bg-gray-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Four AI teams run every station. Same playbook. Infinitely replicable.
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">How It Works</h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              Four operations teams run every station. Same playbook. Infinitely scalable.
             </p>
           </div>
 
@@ -331,28 +331,28 @@ export default async function MarketingPage() {
             {[
               {
                 icon: Users,
-                color: "purple",
+                accent: "purple",
                 name: "Riley",
                 role: "Artist Discovery",
                 desc: "Finds emerging artists on social platforms, runs automated outreach, and onboards new talent to the station.",
               },
               {
                 icon: Mic,
-                color: "teal",
+                accent: "amber",
                 name: "Cassidy",
                 role: "Music Curation",
-                desc: "Reviews every submission with a 6-person AI panel. Assigns rotation tiers. Builds playlists that flow.",
+                desc: "Reviews every submission with a panel approach. Assigns rotation tiers. Builds playlists that flow.",
               },
               {
                 icon: Headphones,
-                color: "blue",
+                accent: "blue",
                 name: "Elliot",
                 role: "Listener Growth",
-                desc: "Creates viral content, activates artist fans, builds community, and turns casual listeners into daily habit.",
+                desc: "Creates content, activates artist fans, builds community, and turns casual listeners into daily habit.",
               },
               {
                 icon: DollarSign,
-                color: "green",
+                accent: "green",
                 name: "Harper",
                 role: "Sponsor Revenue",
                 desc: "Identifies local businesses, pitches sponsorships, manages ad inventory, and maximizes station revenue.",
@@ -360,16 +360,16 @@ export default async function MarketingPage() {
             ].map((agent) => (
               <div
                 key={agent.name}
-                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow"
+                className="bg-gray-800/50 border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-colors"
               >
-                <div className={`inline-flex items-center justify-center w-12 h-12 bg-${agent.color}-100 rounded-xl mb-4`}>
-                  <agent.icon className={`w-6 h-6 text-${agent.color}-600`} />
+                <div className={`inline-flex items-center justify-center w-12 h-12 bg-${agent.accent}-500/10 border border-${agent.accent}-500/20 rounded-xl mb-4`}>
+                  <agent.icon className={`w-6 h-6 text-${agent.accent}-400`} />
                 </div>
                 <div className="mb-3">
-                  <h3 className="text-xl font-bold text-gray-900">{agent.name}</h3>
-                  <p className={`text-sm font-semibold text-${agent.color}-600`}>{agent.role}</p>
+                  <h3 className="text-xl font-bold text-white">{agent.name}</h3>
+                  <p className={`text-sm font-semibold text-${agent.accent}-400`}>{agent.role}</p>
                 </div>
-                <p className="text-sm text-gray-600">{agent.desc}</p>
+                <p className="text-sm text-gray-400">{agent.desc}</p>
               </div>
             ))}
           </div>
@@ -377,28 +377,28 @@ export default async function MarketingPage() {
       </section>
 
       {/* Key Features */}
-      <section className="py-20 bg-white">
+      <section className="py-20 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Everything You Need</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Everything You Need</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: Radio, title: "24/7 Live Streaming", desc: "AI DJs with unique personalities host every hour. Back-announces, show intros, and smooth transitions." },
-              { icon: Zap, title: "5-Minute Setup", desc: "Choose from genre templates. Customize branding, DJs, and schedule. Your station goes live immediately." },
+              { icon: Radio, title: "24/7 Live Streaming", desc: "Automated hosts with professional voices. Station imaging, smooth transitions, and non-stop music." },
+              { icon: Zap, title: "5-Minute Setup", desc: "Choose from genre templates. Customize branding, hosts, and schedule. Your station goes live immediately." },
               { icon: Shield, title: "Production Ready", desc: "Error monitoring, security headers, rate limiting, CSRF protection. Enterprise-grade from day one." },
               { icon: Globe, title: "Embeddable Player", desc: "Drop a player widget on any website. Customizable colors. Works on WordPress, Shopify, anywhere." },
               { icon: TrendingUp, title: "Analytics Dashboard", desc: "Track listeners, top songs, sponsor performance, and revenue in real-time." },
-              { icon: Sparkles, title: "AI Content Engine", desc: "Auto-generated voice tracks, artist features, show imaging, and newsletter content." },
+              { icon: Sparkles, title: "Automated Content", desc: "Voice tracks, station imaging, sponsor ads, and newsletter content — all produced automatically." },
             ].map((feature) => (
-              <div key={feature.title} className="flex items-start space-x-4 p-4">
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-amber-100 rounded-lg flex-shrink-0">
-                  <feature.icon className="w-5 h-5 text-amber-600" />
+              <div key={feature.title} className="flex items-start space-x-4 p-5">
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-amber-500/10 border border-amber-500/20 rounded-lg flex-shrink-0">
+                  <feature.icon className="w-5 h-5 text-amber-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{feature.title}</h3>
-                  <p className="text-sm text-gray-600">{feature.desc}</p>
+                  <h3 className="font-semibold text-white mb-1">{feature.title}</h3>
+                  <p className="text-sm text-gray-400">{feature.desc}</p>
                 </div>
               </div>
             ))}
@@ -407,125 +407,124 @@ export default async function MarketingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="scroll-mt-20 py-20 bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <section id="pricing" className="scroll-mt-20 py-20 border-t border-white/5 bg-gray-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Simple, Transparent Pricing</h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
               Different plans for different needs. Artists can always start free.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {/* Artists */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="text-purple-600 font-semibold text-sm mb-2">For Artists</div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">Free</div>
-              <div className="text-sm text-gray-500 mb-6">to get started</div>
+            <div className="bg-gray-800/50 border border-white/10 rounded-2xl p-6 hover:border-purple-500/30 transition-colors">
+              <div className="text-purple-400 font-semibold text-sm mb-2">For Artists</div>
+              <div className="text-3xl font-bold text-white mb-1">Free</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-6">to get started</div>
               <ul className="space-y-2 mb-6">
                 {["Radio airplay", "Artist profile", "Listener analytics", "Upgrade from $5/mo"].map((item) => (
-                  <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
-                    <CheckCircle2 className="w-4 h-4 text-purple-500 flex-shrink-0" />
+                  <li key={item} className="flex items-center space-x-2 text-sm text-gray-300">
+                    <CheckCircle2 className="w-4 h-4 text-purple-400 flex-shrink-0" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <Link href="/onboard" className="block text-center bg-purple-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-purple-700 transition-colors text-sm">
+              <Link href="/onboard" className="block text-center bg-purple-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-purple-500 transition-colors text-sm">
                 Submit Music
               </Link>
             </div>
 
             {/* Sponsors */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="text-green-600 font-semibold text-sm mb-2">For Sponsors</div>
+            <div className="bg-gray-800/50 border border-white/10 rounded-2xl p-6 hover:border-green-500/30 transition-colors">
+              <div className="text-green-400 font-semibold text-sm mb-2">For Sponsors</div>
               <div className="flex items-baseline">
-                <span className="text-3xl font-bold text-gray-900">$30</span>
+                <span className="text-3xl font-bold text-white">$30</span>
                 <span className="text-sm text-gray-500 ml-1">/mo</span>
               </div>
-              <div className="text-sm text-gray-500 mb-6">a dollar a day</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-6">a dollar a day</div>
               <ul className="space-y-2 mb-6">
-                {["30 ad spots/mo", "AI-produced audio ads", "Performance dashboard", "4 tiers up to $300/mo"].map((item) => (
-                  <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                {["30 ad spots/mo", "Professionally produced ads", "Performance dashboard", "4 tiers up to $300/mo"].map((item) => (
+                  <li key={item} className="flex items-center space-x-2 text-sm text-gray-300">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <Link href="/sponsor" className="block text-center bg-green-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-green-700 transition-colors text-sm">
+              <Link href="/sponsor" className="block text-center bg-green-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-green-500 transition-colors text-sm">
                 Get Started
               </Link>
             </div>
 
             {/* Operators */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-amber-400 relative hover:shadow-xl transition-shadow">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+            <div className="bg-gray-800/50 border-2 border-amber-500/40 rounded-2xl p-6 relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-gray-950 text-xs font-bold px-3 py-1 rounded-full">
                 POPULAR
               </div>
-              <div className="text-amber-600 font-semibold text-sm mb-2">For Operators</div>
+              <div className="text-amber-400 font-semibold text-sm mb-2">For Operators</div>
               <div className="flex items-baseline">
-                <span className="text-3xl font-bold text-gray-900">$200</span>
+                <span className="text-3xl font-bold text-white">$200</span>
                 <span className="text-sm text-gray-500 ml-1">/mo</span>
               </div>
-              <div className="text-sm text-gray-500 mb-6">launch your station</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-6">launch your station</div>
               <ul className="space-y-2 mb-6">
-                {["Full AI-powered station", "2 AI DJs, 12hr/day live", "5 AI teams included", "No broadcast license needed"].map((item) => (
-                  <li key={item} className="flex items-center space-x-2 text-sm text-gray-700">
-                    <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                {["Full automated station", "2 hosts, 24/7 live", "Full operations team included", "No broadcast license needed"].map((item) => (
+                  <li key={item} className="flex items-center space-x-2 text-sm text-gray-300">
+                    <CheckCircle2 className="w-4 h-4 text-amber-400 flex-shrink-0" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <Link href="/operate" className="block text-center bg-amber-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-amber-700 transition-colors text-sm">
+              <Link href="/operate" className="block text-center bg-amber-500 text-gray-950 px-4 py-2.5 rounded-lg font-bold hover:bg-amber-400 transition-colors text-sm">
                 Learn More
               </Link>
-              <p className="text-xs text-center text-gray-400 mt-2"><Link href="/pricing" className="text-amber-600 hover:underline">See all plans</Link></p>
+              <p className="text-xs text-center text-gray-500 dark:text-zinc-500 mt-2"><Link href="/pricing" className="text-amber-400/70 hover:text-amber-400">See all plans</Link></p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Demo Station */}
-      <section id="demo" className="scroll-mt-20 py-20 bg-gradient-to-r from-amber-800 via-amber-700 to-orange-700 text-white">
+      <section id="demo" className="scroll-mt-20 py-20 border-t border-white/5">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <Radio className="w-4 h-4" />
-                <span>Live Demo Station</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4">North Country Radio</h2>
-              <p className="text-lg text-amber-100 mb-2 italic">&ldquo;Where the Music Finds You&rdquo;</p>
-              <p className="text-amber-200 mb-8">
-                Our flagship Americana station. Live 24/7 with AI DJs, curated independent
+              <p className="text-amber-400 font-medium tracking-widest uppercase text-xs mb-4">
+                Live Demo Station
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">North Country Radio</h2>
+              <p className="text-lg text-amber-400/80 mb-2 italic font-serif">&ldquo;Where the Music Finds You&rdquo;</p>
+              <p className="text-gray-400 mb-8 leading-relaxed">
+                Our flagship Americana station. Live 24/7 with curated independent
                 music, real sponsors, and a growing listener community. This is what your
                 station could sound like.
               </p>
               <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold">{metrics.artistCount}</div>
-                  <div className="text-amber-200 text-sm">Artists</div>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-bold text-amber-400">{metrics.artistCount}</div>
+                  <div className="text-gray-500 text-sm">Artists</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold">{metrics.songCount.toLocaleString()}</div>
-                  <div className="text-amber-200 text-sm">Songs</div>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-bold text-amber-400">{metrics.songCount.toLocaleString()}</div>
+                  <div className="text-gray-500 text-sm">Songs</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold">{metrics.sponsorCount}</div>
-                  <div className="text-amber-200 text-sm">Sponsors</div>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-bold text-amber-400">{metrics.sponsorCount}</div>
+                  <div className="text-gray-500 text-sm">Sponsors</div>
                 </div>
                 <RandomListenerCount variant="demo" />
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/player"
-                  className="inline-flex items-center justify-center space-x-2 bg-white text-amber-800 px-6 py-3 rounded-lg font-semibold hover:bg-amber-50 transition-colors shadow-lg"
+                  className="inline-flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-400 text-gray-950 px-6 py-3 rounded-lg font-bold transition-colors shadow-lg shadow-amber-500/20"
                 >
                   <Play className="w-5 h-5" />
                   <span>Listen Live Now</span>
                 </Link>
                 <Link
                   href="/station"
-                  className="inline-flex items-center justify-center space-x-2 border-2 border-white/50 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
+                  className="inline-flex items-center justify-center space-x-2 border border-white/20 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/5 transition-colors"
                 >
                   <span>Explore Station</span>
                   <ArrowRight className="w-4 h-4" />
@@ -533,7 +532,7 @@ export default async function MarketingPage() {
               </div>
             </div>
             <div className="hidden lg:block">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
                 <Image
                   src="/logos/ncr-logo.png"
                   alt="North Country Radio"
@@ -546,7 +545,7 @@ export default async function MarketingPage() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <div
                         key={i}
-                        className="w-1 bg-amber-300 rounded-full animate-equalizer"
+                        className="w-1 bg-amber-400 rounded-full animate-equalizer"
                         style={{
                           height: `${12 + Math.random() * 20}px`,
                           animationDelay: `${i * 0.15}s`,
@@ -554,7 +553,7 @@ export default async function MarketingPage() {
                       />
                     ))}
                   </div>
-                  <span className="text-sm text-amber-200 font-medium">NOW PLAYING</span>
+                  <span className="text-sm text-amber-400/80 font-medium tracking-wider">NOW PLAYING</span>
                 </div>
               </div>
             </div>
@@ -563,61 +562,61 @@ export default async function MarketingPage() {
       </section>
 
       {/* The TrueFans Promise */}
-      <section className="py-20 bg-white">
+      <section className="py-20 border-t border-white/5 bg-gray-900/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-12">The TrueFans Promise</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-14">The TrueFans Promise</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div>
-              <div className="text-5xl font-bold text-amber-600 mb-2">92%</div>
-              <div className="text-lg font-semibold text-gray-900 mb-2">Goes to Artists</div>
-              <p className="text-sm text-gray-600">Industry-leading revenue share. Sponsor money funds the people who make the music.</p>
+              <div className="text-5xl font-bold text-amber-400 mb-3">92%</div>
+              <div className="text-lg font-semibold text-white mb-2">Goes to Artists</div>
+              <p className="text-sm text-gray-400">Industry-leading revenue share. Sponsor money funds the people who make the music.</p>
             </div>
             <div>
-              <div className="text-5xl font-bold text-amber-600 mb-2">100%</div>
-              <div className="text-lg font-semibold text-gray-900 mb-2">Transparent</div>
-              <p className="text-sm text-gray-600">Every dollar tracked, every play counted. Real-time dashboards for artists, sponsors, and operators.</p>
+              <div className="text-5xl font-bold text-amber-400 mb-3">100%</div>
+              <div className="text-lg font-semibold text-white mb-2">Transparent</div>
+              <p className="text-sm text-gray-400">Every dollar tracked, every play counted. Real-time dashboards for artists, sponsors, and operators.</p>
             </div>
             <div>
-              <div className="text-5xl font-bold text-amber-600 mb-2">0</div>
-              <div className="text-lg font-semibold text-gray-900 mb-2">Gatekeepers</div>
-              <p className="text-sm text-gray-600">AI reviews every submission on musical merit. No payola. No politics. Just good music.</p>
+              <div className="text-5xl font-bold text-amber-400 mb-3">0</div>
+              <div className="text-lg font-semibold text-white mb-2">Gatekeepers</div>
+              <p className="text-sm text-gray-400">Every submission reviewed on musical merit. No payola. No politics. Just good music.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+      <section className="py-20 border-t border-white/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Ready to Get Started?</h2>
+          <p className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto">
             Join the TrueFans RADIO Network today. Artists start free. Operators launch in 5 minutes.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/onboard"
-              className="inline-flex items-center space-x-2 bg-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-purple-700 transition-colors shadow-lg w-full sm:w-auto justify-center"
+              className="inline-flex items-center space-x-2 bg-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-purple-500 transition-colors w-full sm:w-auto justify-center"
             >
               <Music className="w-5 h-5" />
               <span>Submit Music Free</span>
             </Link>
             <Link
               href="/listen/register"
-              className="inline-flex items-center space-x-2 bg-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg w-full sm:w-auto justify-center"
+              className="inline-flex items-center space-x-2 bg-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-500 transition-colors w-full sm:w-auto justify-center"
             >
               <Headphones className="w-5 h-5" />
               <span>Start Listening</span>
             </Link>
             <Link
               href="/sponsor"
-              className="inline-flex items-center space-x-2 bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-green-700 transition-colors shadow-lg w-full sm:w-auto justify-center"
+              className="inline-flex items-center space-x-2 bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-green-500 transition-colors w-full sm:w-auto justify-center"
             >
               <Building2 className="w-5 h-5" />
               <span>Sponsor a Station</span>
             </Link>
             <Link
               href="/operate"
-              className="inline-flex items-center space-x-2 bg-amber-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-amber-700 transition-colors shadow-lg w-full sm:w-auto justify-center"
+              className="inline-flex items-center space-x-2 bg-amber-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-amber-500 transition-colors w-full sm:w-auto justify-center"
             >
               <Radio className="w-5 h-5" />
               <span>Launch a Station</span>
@@ -627,12 +626,12 @@ export default async function MarketingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 border-t border-gray-800">
+      <footer className="border-t border-white/5 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
               <h4 className="text-white font-semibold mb-3">For Artists</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm text-gray-500 dark:text-zinc-500">
                 <li><Link href="/onboard" className="hover:text-white transition-colors">Submit Music</Link></li>
                 <li><Link href="/station" className="hover:text-white transition-colors">Browse Station</Link></li>
                 <li><Link href="/community" className="hover:text-white transition-colors">Community</Link></li>
@@ -640,7 +639,7 @@ export default async function MarketingPage() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-3">For Business</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm text-gray-500 dark:text-zinc-500">
                 <li><Link href="/sponsor" className="hover:text-white transition-colors">Sponsor a Station</Link></li>
                 <li><Link href="/operate" className="hover:text-white transition-colors">Operate a Station</Link></li>
                 <li><Link href="/network" className="hover:text-white transition-colors">The Network</Link></li>
@@ -648,7 +647,7 @@ export default async function MarketingPage() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-3">Listen</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm text-gray-500 dark:text-zinc-500">
                 <li><Link href="/player" className="hover:text-white transition-colors">Web Player</Link></li>
                 <li><Link href="/schedule" className="hover:text-white transition-colors">Schedule</Link></li>
                 <li><Link href="/listen/register" className="hover:text-white transition-colors">Register</Link></li>
@@ -656,20 +655,20 @@ export default async function MarketingPage() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-3">Company</h4>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm text-gray-500 dark:text-zinc-500">
                 <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
                 <li><a href="mailto:support@truefans.radio" className="hover:text-white transition-colors">Contact</a></li>
                 <li><Link href="/newsletter" className="hover:text-white transition-colors">Newsletter</Link></li>
               </ul>
             </div>
           </div>
-          <div className="pt-8 border-t border-gray-800">
+          <div className="pt-8 border-t border-white/5">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center space-x-2">
-                <Image src="/logos/ncr-logo.png" alt="TrueFans RADIO" width={24} height={24} className="h-6 w-auto object-contain opacity-60" />
-                <span className="text-sm">&copy; {new Date().getFullYear()} {NETWORK_NAME} Network. All rights reserved.</span>
+            <div className="flex items-center space-x-2">
+                <Radio className="w-4 h-4 text-gray-600" />
+                <span className="text-sm text-gray-600 dark:text-zinc-400">&copy; {new Date().getFullYear()} {NETWORK_NAME} Network. All rights reserved.</span>
               </div>
-              <div className="flex items-center space-x-4 text-sm">
+              <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-zinc-400">
                 <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
                 <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
                 <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>

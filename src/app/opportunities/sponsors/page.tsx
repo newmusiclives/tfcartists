@@ -62,7 +62,7 @@ export default function SponsorOpportunityPage() {
       <SharedNav />
 
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -70,8 +70,8 @@ export default function SponsorOpportunityPage() {
                 <Building2 className="w-10 h-10 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900">Sponsor Referral Program</h1>
-                <p className="text-xl text-gray-600 mt-2">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Sponsor Referral Program</h1>
+                <p className="text-xl text-gray-600 dark:text-zinc-400 mt-2">
                   Earn up to $150 per referral by connecting other businesses with TrueFans RADIO
                 </p>
               </div>
@@ -142,7 +142,7 @@ export default function SponsorOpportunityPage() {
         </div>
 
         {/* Referral Bonuses */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <DollarSign className="w-6 h-6 mr-2 text-green-600" />
             Referral Bonus Structure
@@ -154,14 +154,14 @@ export default function SponsorOpportunityPage() {
                 <span className="text-2xl font-bold text-green-600">🌱</span>
                 <span className="text-xs font-semibold bg-green-200 text-green-700 px-2 py-1 rounded">LOCAL HERO</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Local Hero</h3>
-              <div className="text-sm text-gray-600 mb-1">${referralModel.tiers.localHero.price}/month sponsorship</div>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Local Hero</h3>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">${referralModel.tiers.localHero.price}/month sponsorship</div>
               <div className="text-xs text-green-700 mb-2">{referralModel.tiers.localHero.valueProp}</div>
-              <div className="bg-white rounded-lg p-3 mb-2">
-                <div className="text-xs text-gray-600">You Earn</div>
+              <div className="bg-white dark:bg-zinc-900 rounded-lg p-3 mb-2">
+                <div className="text-xs text-gray-600 dark:text-zinc-400">You Earn</div>
                 <div className="text-2xl font-bold text-green-600">${referralModel.tiers.localHero.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500">Per Local Hero sponsor referred</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-500">Per Local Hero sponsor referred</p>
             </div>
 
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-300">
@@ -169,14 +169,14 @@ export default function SponsorOpportunityPage() {
                 <span className="text-2xl font-bold text-blue-600">📻</span>
                 <span className="text-xs font-semibold bg-blue-200 text-blue-700 px-2 py-1 rounded">TIER 1</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Tier 1</h3>
-              <div className="text-sm text-gray-600 mb-1">${referralModel.tiers.tier1.price}/month sponsorship</div>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Tier 1</h3>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">${referralModel.tiers.tier1.price}/month sponsorship</div>
               <div className="text-xs text-blue-700 mb-2">{referralModel.tiers.tier1.valueProp}</div>
-              <div className="bg-white rounded-lg p-3 mb-2">
-                <div className="text-xs text-gray-600">You Earn</div>
+              <div className="bg-white dark:bg-zinc-900 rounded-lg p-3 mb-2">
+                <div className="text-xs text-gray-600 dark:text-zinc-400">You Earn</div>
                 <div className="text-2xl font-bold text-green-600">${referralModel.tiers.tier1.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500">Per Tier 1 sponsor referred</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-500">Per Tier 1 sponsor referred</p>
             </div>
 
             <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg p-6 border-2 border-yellow-400">
@@ -184,14 +184,14 @@ export default function SponsorOpportunityPage() {
                 <span className="text-2xl font-bold text-yellow-600">🎯</span>
                 <span className="text-xs font-semibold bg-yellow-300 text-yellow-800 px-2 py-1 rounded">TIER 2</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Tier 2</h3>
-              <div className="text-sm text-gray-600 mb-1">${referralModel.tiers.tier2.price}/month sponsorship</div>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Tier 2</h3>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">${referralModel.tiers.tier2.price}/month sponsorship</div>
               <div className="text-xs text-yellow-700 mb-2">{referralModel.tiers.tier2.valueProp}</div>
-              <div className="bg-white rounded-lg p-3 mb-2">
-                <div className="text-xs text-gray-600">You Earn</div>
+              <div className="bg-white dark:bg-zinc-900 rounded-lg p-3 mb-2">
+                <div className="text-xs text-gray-600 dark:text-zinc-400">You Earn</div>
                 <div className="text-2xl font-bold text-green-600">${referralModel.tiers.tier2.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500">Per Tier 2 sponsor referred</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-500">Per Tier 2 sponsor referred</p>
             </div>
 
             <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg p-6 border-4 border-purple-400 relative">
@@ -202,14 +202,14 @@ export default function SponsorOpportunityPage() {
                 <span className="text-2xl font-bold text-purple-600">🚀</span>
                 <span className="text-xs font-semibold bg-purple-300 text-purple-800 px-2 py-1 rounded">TIER 3</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Tier 3</h3>
-              <div className="text-sm text-gray-600 mb-1">${referralModel.tiers.tier3.price}/month sponsorship</div>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Tier 3</h3>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">${referralModel.tiers.tier3.price}/month sponsorship</div>
               <div className="text-xs text-purple-700 mb-2">{referralModel.tiers.tier3.valueProp}</div>
-              <div className="bg-white rounded-lg p-3 mb-2">
-                <div className="text-xs text-gray-600">You Earn</div>
+              <div className="bg-white dark:bg-zinc-900 rounded-lg p-3 mb-2">
+                <div className="text-xs text-gray-600 dark:text-zinc-400">You Earn</div>
                 <div className="text-2xl font-bold text-green-600">${referralModel.tiers.tier3.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500">Per Tier 3 sponsor referred</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-500">Per Tier 3 sponsor referred</p>
             </div>
           </div>
 
@@ -222,7 +222,7 @@ export default function SponsorOpportunityPage() {
         </div>
 
         {/* Real Examples */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <Users className="w-6 h-6 mr-2 text-blue-600" />
             Real Referrer Examples
@@ -231,22 +231,22 @@ export default function SponsorOpportunityPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {referralModel.examples.map((example, idx) => (
               <div key={idx} className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-6 border-2 border-blue-200">
-                <h3 className="font-bold text-xl text-gray-900 mb-4">{example.name}</h3>
+                <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-4">{example.name}</h3>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Total Referrals:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Total Referrals:</span>
                     <span className="font-semibold">{example.referrals}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Breakdown:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Breakdown:</span>
                     <span className="font-semibold text-blue-600">{example.tiers}</span>
                   </div>
                 </div>
-                <div className="bg-white rounded-lg p-4 mb-3">
-                  <div className="text-sm text-gray-600 mb-1">Total Earned</div>
+                <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 mb-3">
+                  <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Total Earned</div>
                   <div className="text-3xl font-bold text-green-600">{example.earnings}</div>
                 </div>
-                <p className="text-xs text-gray-600">{example.description}</p>
+                <p className="text-xs text-gray-600 dark:text-zinc-400">{example.description}</p>
               </div>
             ))}
           </div>
@@ -260,42 +260,42 @@ export default function SponsorOpportunityPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-lg p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 text-center">
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl font-bold text-purple-600">1</span>
               </div>
-              <h3 className="font-bold text-gray-900 mb-2">Share Your Link</h3>
-              <p className="text-sm text-gray-600">Get your unique referral link from your sponsor dashboard</p>
+              <h3 className="font-bold text-gray-900 dark:text-white mb-2">Share Your Link</h3>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Get your unique referral link from your sponsor dashboard</p>
             </div>
 
-            <div className="bg-white rounded-lg p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 text-center">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl font-bold text-blue-600">2</span>
               </div>
-              <h3 className="font-bold text-gray-900 mb-2">Connect Businesses</h3>
-              <p className="text-sm text-gray-600">Share TrueFans RADIO sponsorship opportunity with your network</p>
+              <h3 className="font-bold text-gray-900 dark:text-white mb-2">Connect Businesses</h3>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Share TrueFans RADIO sponsorship opportunity with your network</p>
             </div>
 
-            <div className="bg-white rounded-lg p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 text-center">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl font-bold text-green-600">3</span>
               </div>
-              <h3 className="font-bold text-gray-900 mb-2">They Sign Up</h3>
-              <p className="text-sm text-gray-600">Business signs up using your referral link and chooses their tier</p>
+              <h3 className="font-bold text-gray-900 dark:text-white mb-2">They Sign Up</h3>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Business signs up using your referral link and chooses their tier</p>
             </div>
 
-            <div className="bg-white rounded-lg p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 text-center">
               <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <span className="text-2xl font-bold text-yellow-600">4</span>
               </div>
-              <h3 className="font-bold text-gray-900 mb-2">You Get Paid!</h3>
-              <p className="text-sm text-gray-600">Receive 50% of their first month's payment as a one-time bonus</p>
+              <h3 className="font-bold text-gray-900 dark:text-white mb-2">You Get Paid!</h3>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Receive 50% of their first month's payment as a one-time bonus</p>
             </div>
           </div>
         </div>
 
         {/* Ideal Businesses */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <Building2 className="w-6 h-6 mr-2 text-orange-600" />
             Perfect Businesses to Refer
@@ -314,14 +314,14 @@ export default function SponsorOpportunityPage() {
             ].map((business, idx) => (
               <div key={idx} className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
                 <Check className="w-5 h-5 text-orange-600 mb-2" />
-                <p className="text-sm font-semibold text-gray-900">{business}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">{business}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Premium Opportunities */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <Radio className="w-6 h-6 mr-2 text-purple-600" />
             Premium Opportunities
@@ -330,9 +330,9 @@ export default function SponsorOpportunityPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {referralModel.premiums.map((premium, idx) => (
               <div key={idx} className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6 border-2 border-purple-200">
-                <h3 className="font-bold text-lg text-gray-900 mb-2">{premium.name}</h3>
-                <div className="text-3xl font-bold text-purple-600 mb-2">${premium.price}<span className="text-sm font-normal text-gray-500">/mo</span></div>
-                <p className="text-xs text-gray-500">AI-generated professional audio ads included</p>
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">{premium.name}</h3>
+                <div className="text-3xl font-bold text-purple-600 mb-2">${premium.price}<span className="text-sm font-normal text-gray-500 dark:text-zinc-500">/mo</span></div>
+                <p className="text-xs text-gray-500 dark:text-zinc-500">AI-generated professional audio ads included</p>
               </div>
             ))}
           </div>
@@ -363,15 +363,15 @@ export default function SponsorOpportunityPage() {
         </div>
 
         {/* CTA */}
-        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Start Earning Referral Bonuses Today</h2>
-          <p className="text-xl text-gray-600 mb-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Start Earning Referral Bonuses Today</h2>
+          <p className="text-xl text-gray-600 dark:text-zinc-400 mb-6">
             With {referralModel.totalSponsors} active sponsors at {capacity}% capacity, there's room for more!
           </p>
           <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-bold hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg">
             Get Your Referral Link →
           </button>
-          <p className="text-sm text-gray-500 mt-4">Already a sponsor? Access your referral dashboard to get started</p>
+          <p className="text-sm text-gray-500 dark:text-zinc-500 mt-4">Already a sponsor? Access your referral dashboard to get started</p>
         </div>
 
       </div>

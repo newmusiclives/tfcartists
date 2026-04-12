@@ -35,7 +35,7 @@ export default function OperatePage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       {/* Section 1: Nav Bar */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
@@ -53,13 +53,13 @@ export default function OperatePage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-6">
             <Settings className="w-8 h-8 text-amber-600" />
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Run Your Own AI-Powered Radio Station
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-6">
             Build a real business. Earn up to $75K/year. Launch in days.
           </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto mb-8">
             No broadcast license. No expensive equipment. No technical skills needed.
             Five AI teams handle artist outreach, sponsor sales, listener growth, music curation,
             and 24/7 station programming. You focus on your community — the AI does the rest.
@@ -76,7 +76,7 @@ export default function OperatePage() {
       {/* Section 3: Benefits Grid */}
       <section className="py-16 px-4 bg-white/60">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             Why Operate a Station?
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -94,7 +94,7 @@ export default function OperatePage() {
               {
                 icon: Zap,
                 title: "Launch in Days, Not Months",
-                desc: "No broadcast license. No equipment. Choose from 5 genre templates with pre-built DJ personalities, schedules, and station branding. Go live fast.",
+                desc: "No broadcast license. No equipment. Choose from 5 genre templates with pre-built host personalities, schedules, and station branding. Go live fast.",
               },
               {
                 icon: TrendingUp,
@@ -104,13 +104,13 @@ export default function OperatePage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="bg-white rounded-xl p-6 shadow-sm border border-amber-100 hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-amber-100 hover:shadow-md transition-shadow"
               >
                 <div className="inline-flex items-center justify-center w-10 h-10 bg-amber-100 rounded-lg mb-4">
                   <item.icon className="w-5 h-5 text-amber-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -120,23 +120,23 @@ export default function OperatePage() {
       {/* Section 4: How It Works */}
       <section className="py-16 px-4">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             How It Works
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
             {[
               { step: "1", title: "Choose a Template", desc: "Pick a genre that fits your vision." },
               { step: "2", title: "Brand Your Station", desc: "Name it, set colors, write a tagline." },
-              { step: "3", title: "Configure AI DJs", desc: "Customize personalities and voices." },
-              { step: "4", title: "Set Your Schedule", desc: "Assign DJ shifts and automation." },
+              { step: "3", title: "Configure Hosts", desc: "Customize personalities and voices." },
+              { step: "4", title: "Set Your Schedule", desc: "Define your programming grid." },
               { step: "5", title: "Launch & Earn", desc: "Go live and start building revenue." },
             ].map((item) => (
               <div key={item.step} className="text-center">
                 <div className="inline-flex items-center justify-center w-10 h-10 bg-amber-600 text-white rounded-full font-bold mb-3">
                   {item.step}
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -260,24 +260,24 @@ export default function OperatePage() {
       {/* Section 6: Station Templates Showcase */}
       <section className="py-16 px-4">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-3">
             5 Ready-Made Templates
           </h2>
-          <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
-            Each template comes with pre-built DJ personalities, schedules, and station branding. Choose one and customize it to make it yours.
+          <p className="text-gray-600 dark:text-zinc-400 text-center mb-10 max-w-2xl mx-auto">
+            Each template comes with pre-built host personalities, schedules, and station branding. Choose one and customize it to make it yours.
           </p>
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
             {STATION_TEMPLATES.map((template) => (
               <div
                 key={template.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
               >
                 <div className="h-2" style={{ backgroundColor: template.primaryColor }} />
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 text-sm mb-1">{template.name}</h3>
-                  <p className="text-xs text-gray-500 mb-2">{template.genre}</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{template.name}</h3>
+                  <p className="text-xs text-gray-500 dark:text-zinc-500 mb-2">{template.genre}</p>
                   <div className="text-xs text-gray-400">
-                    {template.djPresets.length} DJ{template.djPresets.length !== 1 ? "s" : ""} included
+                    {template.djPresets.length} host{template.djPresets.length !== 1 ? "s" : ""} included
                   </div>
                 </div>
               </div>
@@ -289,10 +289,10 @@ export default function OperatePage() {
       {/* Section 7: AI Agents Grid */}
       <section className="py-16 px-4 bg-white/60">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-3">
             Your AI Team
           </h2>
-          <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
+          <p className="text-gray-600 dark:text-zinc-400 text-center mb-10 max-w-2xl mx-auto">
             Five specialized AI agents work around the clock to grow your station. Each one handles a critical part of the business.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -335,23 +335,23 @@ export default function OperatePage() {
                 icon: Radio,
                 role: "Station Programming",
                 capacity: "24/7 automation",
-                desc: "Manages DJ schedules, generates voice tracks, handles station imaging, and keeps your stream running around the clock.",
+                desc: "Manages schedules, generates voice tracks, handles station imaging, and keeps your stream running around the clock.",
               },
             ].map((agent) => (
               <div
                 key={agent.name}
-                className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-center space-x-3 mb-3">
                   <div className={`inline-flex items-center justify-center w-10 h-10 bg-${agent.color}-100 rounded-lg`}>
                     <agent.icon className={`w-5 h-5 text-${agent.color}-600`} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{agent.name}</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{agent.name}</h3>
                     <p className={`text-xs text-${agent.color}-600 font-medium`}>{agent.role}</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-600 mb-3">{agent.desc}</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">{agent.desc}</p>
                 <div className={`text-xs font-medium text-${agent.color}-700 bg-${agent.color}-50 px-2 py-1 rounded inline-block`}>
                   Capacity: {agent.capacity}
                 </div>
@@ -364,10 +364,10 @@ export default function OperatePage() {
       {/* Section 8: Station Tools Grid */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-3">
             Station Management Tools
           </h2>
-          <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
+          <p className="text-gray-600 dark:text-zinc-400 text-center mb-10 max-w-2xl mx-auto">
             Everything you need to run your station, all in one place.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -375,7 +375,7 @@ export default function OperatePage() {
               { icon: Settings, title: "Admin Hub", desc: "Central command for your station" },
               { icon: Wand2, title: "Station Wizard", desc: "Guided setup and configuration" },
               { icon: Music, title: "Music Library", desc: "Manage tracks and submissions" },
-              { icon: Users, title: "DJ Editor", desc: "Create and customize AI DJs" },
+              { icon: Users, title: "Host Editor", desc: "Create and customize hosts" },
               { icon: CalendarDays, title: "Schedule Editor", desc: "Build your programming grid" },
               { icon: Mic, title: "Station Imaging", desc: "Jingles, sweepers, and IDs" },
               { icon: Clock, title: "Radio Clocks", desc: "Hour-by-hour format templates" },
@@ -384,11 +384,11 @@ export default function OperatePage() {
             ].map((tool) => (
               <div
                 key={tool.title}
-                className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-zinc-900 rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
               >
                 <tool.icon className="w-5 h-5 text-amber-600 mb-2" />
-                <h3 className="font-medium text-gray-900 text-sm">{tool.title}</h3>
-                <p className="text-xs text-gray-500 mt-1">{tool.desc}</p>
+                <h3 className="font-medium text-gray-900 dark:text-white text-sm">{tool.title}</h3>
+                <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{tool.desc}</p>
               </div>
             ))}
           </div>
@@ -398,10 +398,10 @@ export default function OperatePage() {
       {/* Section 9: Transition + CTA */}
       <section className="py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Ready to Build Your Station?
           </h2>
-          <p className="text-lg text-gray-600 mb-10">
+          <p className="text-lg text-gray-600 dark:text-zinc-400 mb-10">
             No broadcast license. No equipment. AI does the work. Launch in days, not months.
           </p>
           <div

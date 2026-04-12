@@ -129,7 +129,7 @@ const colorMap: Record<string, { bg: string; border: string; text: string }> = {
   red:    { bg: "bg-red-50",    border: "border-red-200",    text: "text-red-700" },
   orange: { bg: "bg-orange-50", border: "border-orange-200", text: "text-orange-700" },
   teal:   { bg: "bg-teal-50",   border: "border-teal-200",   text: "text-teal-700" },
-  gray:   { bg: "bg-gray-50",   border: "border-gray-200",   text: "text-gray-700" },
+  gray:   { bg: "bg-gray-50",   border: "border-gray-200 dark:border-zinc-800",   text: "text-gray-700" },
 };
 
 export default function AdminSettingsPage() {
@@ -209,16 +209,16 @@ export default function AdminSettingsPage() {
 
   const priorityLabel = (p: string) => {
     switch (p) {
-      case "critical": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">REQUIRED</span>;
-      case "high": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">RECOMMENDED</span>;
-      case "medium": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">HELPFUL</span>;
-      case "low": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">OPTIONAL</span>;
+      case "critical": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400">REQUIRED</span>;
+      case "high": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400">RECOMMENDED</span>;
+      case "medium": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400">HELPFUL</span>;
+      case "low": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 dark:text-zinc-400">OPTIONAL</span>;
       default: return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
 
       {/* Header */}
@@ -267,13 +267,13 @@ export default function AdminSettingsPage() {
                 const total = catSettings.length;
                 const allDone = total > 0 && configured === total;
                 return (
-                  <div key={priority} className={`rounded-xl p-4 border ${allDone ? "bg-green-50 border-green-200" : "bg-white border-gray-200"}`}>
+                  <div key={priority} className={`rounded-xl p-4 border ${allDone ? "bg-green-50 border-green-200" : "bg-white border-gray-200 dark:border-zinc-800"}`}>
                     <div className="flex items-center justify-between mb-1">
                       {priorityLabel(priority)}
                       {allDone ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <XCircle className="w-4 h-4 text-gray-300" />}
                     </div>
                     <div className="text-xl font-bold text-gray-900 mt-2">{configured}/{total}</div>
-                    <div className="text-xs text-gray-500">{cats.map((c) => c.name).join(", ")}</div>
+                    <div className="text-xs text-gray-500 dark:text-zinc-500">{cats.map((c) => c.name).join(", ")}</div>
                   </div>
                 );
               })}
@@ -295,18 +295,18 @@ export default function AdminSettingsPage() {
                         <div className={colors.text}>{cat.icon}</div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <h2 className="text-lg font-bold text-gray-900">{cat.name}</h2>
+                            <h2 className="text-lg font-bold text-gray-900 dark:text-white">{cat.name}</h2>
                             {priorityLabel(cat.priority)}
                             {status === "complete" && (
-                              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 flex items-center gap-1">
+                              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 flex items-center gap-1">
                                 <CheckCircle2 className="w-3 h-3" /> Connected
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600 mt-0.5">{cat.description}</p>
+                          <p className="text-sm text-gray-600 dark:text-zinc-400 mt-0.5">{cat.description}</p>
                         </div>
                       </div>
-                      <div className="text-sm font-bold text-gray-700">{configured}/{catSettings.length}</div>
+                      <div className="text-sm font-bold text-gray-700 dark:text-zinc-300">{configured}/{catSettings.length}</div>
                     </div>
                     {cat.signupUrl && status !== "complete" && (
                       <a
@@ -333,7 +333,7 @@ export default function AdminSettingsPage() {
                           <div className="flex items-center justify-between gap-4 flex-wrap">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="font-medium text-gray-900 text-sm">{setting.label}</span>
+                                <span className="font-medium text-gray-900 dark:text-white text-sm">{setting.label}</span>
                                 {setting.hasValue ? (
                                   <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                                 ) : (
@@ -389,7 +389,7 @@ export default function AdminSettingsPage() {
                                   </button>
                                   <button
                                     onClick={() => { setEditingKey(null); setEditValue(""); }}
-                                    className="text-gray-400 hover:text-gray-600 text-sm px-2 py-1.5"
+                                    className="text-gray-400 hover:text-gray-600 dark:text-zinc-400 text-sm px-2 py-1.5"
                                   >
                                     Cancel
                                   </button>
@@ -399,7 +399,7 @@ export default function AdminSettingsPage() {
                                   onClick={() => { setEditingKey(setting.key); setEditValue(""); }}
                                   className={`text-sm px-3 py-1.5 rounded-lg font-medium ${
                                     setting.hasValue
-                                      ? "text-gray-600 hover:bg-gray-100"
+                                      ? "text-gray-600 hover:bg-gray-100 dark:hover:bg-zinc-800"
                                       : `${colors.text} ${colors.bg} hover:opacity-80`
                                   }`}
                                 >

@@ -136,7 +136,7 @@ const CATEGORY_HEX: Record<string, string> = {
 
 const SLOT_LABELS: Record<string, string> = {
   toh: "TOH",
-  voice_track: "DJ",
+  voice_track: "Host",
   sponsor: "Ad",
   feature: "Feat",
   sweeper: "Swp",
@@ -155,13 +155,13 @@ const BREAK_PRESETS: Record<Exclude<BreakType, "custom">, {
     label: "TOH Break",
     slots: [
       { type: "toh", category: "TOH", duration: 2, notes: "Top of hour ID" },
-      { type: "voice_track", category: "DJ", duration: 0.2, notes: "DJ intro" },
+      { type: "voice_track", category: "DJ", duration: 0.2, notes: "Host intro" },
     ],
   },
   dj: {
-    label: "DJ Break",
+    label: "Host Break",
     slots: [
-      { type: "voice_track", category: "DJ", duration: 0.5, notes: "DJ voice track" },
+      { type: "voice_track", category: "DJ", duration: 0.5, notes: "Host voice track" },
     ],
   },
   sponsor: {
@@ -394,7 +394,7 @@ function matchBreakType(group: ClockSlot[]): BreakType {
 }
 
 const BREAK_TYPE_LABELS: Record<BreakType, string> = {
-  toh: "TOH Break", dj: "DJ Break", sponsor: "Sponsor Break",
+  toh: "TOH Break", dj: "Host Break", sponsor: "Sponsor Break",
   feature: "Feature Break", quick: "Quick Break", custom: "Custom Break",
 };
 
@@ -725,7 +725,7 @@ function SlotEditor({
   const infos = ruleViolations.filter((v) => v.severity === "info");
 
   return (
-    <div className="border-t bg-gray-50 p-5 space-y-5">
+    <div className="border-t border-zinc-800 bg-zinc-900/50 p-5 space-y-5">
       {/* Two-column layout: slot list + clock face */}
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Left column: summary, slots, add, save */}
@@ -734,11 +734,11 @@ function SlotEditor({
       {/* Summary */}
       <div className="flex flex-wrap gap-2 text-xs">
         {Object.entries(typeCounts).map(([type, count]) => (
-          <span key={type} className="bg-white border rounded px-2 py-0.5">
+          <span key={type} className="bg-zinc-900 border border-zinc-700 rounded px-2 py-0.5">
             {type}: {count}
           </span>
         ))}
-        <span className="bg-white border rounded px-2 py-0.5 font-semibold">
+        <span className="bg-zinc-900 border border-zinc-700 rounded px-2 py-0.5 font-semibold">
           Total: {slots.length} slots
         </span>
         {(() => {
@@ -746,7 +746,7 @@ function SlotEditor({
           if (breaks.length === 0) return null;
           const labels = breaks.map((r) => r.kind === "break" ? r.block.label.replace(" Break", "") : "").join(", ");
           return (
-            <span className="bg-purple-50 border border-purple-200 text-purple-700 rounded px-2 py-0.5">
+            <span className="bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded px-2 py-0.5">
               {breaks.length} break{breaks.length !== 1 ? "s" : ""} ({labels})
             </span>
           );
@@ -757,19 +757,19 @@ function SlotEditor({
       {ruleViolations.length > 0 && (
         <div className="space-y-1.5">
           {errors.map((v, i) => (
-            <div key={`err-${i}`} className="flex items-start gap-2 bg-red-50 border border-red-200 rounded px-3 py-1.5 text-xs text-red-700">
+            <div key={`err-${i}`} className="flex items-start gap-2 bg-red-500/10 border border-red-500/20 rounded px-3 py-1.5 text-xs text-red-400">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
               <span><strong>{v.rule}:</strong> {v.message}</span>
             </div>
           ))}
           {warnings.map((v, i) => (
-            <div key={`warn-${i}`} className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded px-3 py-1.5 text-xs text-amber-700">
+            <div key={`warn-${i}`} className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded px-3 py-1.5 text-xs text-amber-400">
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
               <span><strong>{v.rule}:</strong> {v.message}</span>
             </div>
           ))}
           {infos.map((v, i) => (
-            <div key={`info-${i}`} className="flex items-start gap-2 bg-blue-50 border border-blue-200 rounded px-3 py-1.5 text-xs text-blue-700">
+            <div key={`info-${i}`} className="flex items-start gap-2 bg-blue-500/10 border border-blue-500/20 rounded px-3 py-1.5 text-xs text-blue-400">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-blue-400" />
               <span><strong>{v.rule}:</strong> {v.message}</span>
             </div>
@@ -796,21 +796,21 @@ function SlotEditor({
                 onDragEnd={handleDragEnd}
                 className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-grab active:cursor-grabbing transition-all ${
                   dragOverIdx === sortedIdx
-                    ? "border-blue-500 border-2 bg-blue-50 scale-[1.02] shadow-md"
+                    ? "border-blue-500 border-2 bg-blue-500/10 scale-[1.02] shadow-md"
                     : dragIdx === sortedIdx
                     ? "opacity-40 border-dashed"
                     : selectedIdx === sortedIdx
-                    ? "bg-blue-50 border-blue-400 ring-2 ring-blue-300"
+                    ? "bg-blue-500/10 border-blue-500 ring-2 ring-blue-500/30"
                     : hasViolation
-                    ? "bg-red-50 border-red-300 ring-1 ring-red-200"
-                    : "bg-white hover:bg-gray-50"
+                    ? "bg-red-500/10 border-red-500/30 ring-1 ring-red-500/20"
+                    : "bg-zinc-900 hover:bg-zinc-800"
                 }`}
               >
                 <span className={`w-3 h-3 rounded-sm ${slotColor(slot.category)}`} />
                 <select
                   value={slot.type}
                   onChange={(e) => updateSlot(realIdx, "type", e.target.value)}
-                  className="border rounded px-1.5 py-0.5 text-xs w-28"
+                  className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-28"
                 >
                   {SLOT_TYPES.map((t) => (
                     <option key={t} value={t}>
@@ -821,7 +821,7 @@ function SlotEditor({
                 <select
                   value={slot.category}
                   onChange={(e) => updateSlot(realIdx, "category", e.target.value)}
-                  className="border rounded px-1.5 py-0.5 text-xs w-20"
+                  className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-20"
                 >
                   {SLOT_CATEGORIES.map((c) => (
                     <option key={c} value={c}>
@@ -829,21 +829,21 @@ function SlotEditor({
                     </option>
                   ))}
                 </select>
-                <label className="text-xs text-gray-500">min:</label>
+                <label className="text-xs text-zinc-500">min:</label>
                 <input
                   type="number"
                   value={slot.minute}
                   onChange={(e) => updateSlot(realIdx, "minute", parseInt(e.target.value) || 0)}
-                  className="border rounded px-1.5 py-0.5 text-xs w-14 text-center"
+                  className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-14 text-center"
                   min={0}
                   max={59}
                 />
-                <label className="text-xs text-gray-500">dur:</label>
+                <label className="text-xs text-zinc-500">dur:</label>
                 <input
                   type="number"
                   value={slot.duration}
                   onChange={(e) => updateSlot(realIdx, "duration", parseInt(e.target.value) || 0)}
-                  className="border rounded px-1.5 py-0.5 text-xs w-14 text-center"
+                  className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-14 text-center"
                   min={0}
                   max={10}
                 />
@@ -851,13 +851,13 @@ function SlotEditor({
                   type="text"
                   value={slot.notes}
                   onChange={(e) => updateSlot(realIdx, "notes", e.target.value)}
-                  className="border rounded px-1.5 py-0.5 text-xs flex-1"
+                  className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs flex-1"
                   placeholder="notes"
                 />
                 <button
                   onClick={() => moveSlot(sortedIdx, "up")}
                   disabled={sortedIdx === 0}
-                  className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="text-zinc-500 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Move up"
                 >
                   <ArrowUp className="w-4 h-4" />
@@ -865,7 +865,7 @@ function SlotEditor({
                 <button
                   onClick={() => moveSlot(sortedIdx, "down")}
                   disabled={sortedIdx === slots.length - 1}
-                  className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="text-zinc-500 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Move down"
                 >
                   <ArrowDown className="w-4 h-4" />
@@ -896,12 +896,12 @@ function SlotEditor({
                 onDragEnd={handleDragEnd}
                 className={`flex items-center gap-2 border rounded px-3 py-1.5 text-sm cursor-grab active:cursor-grabbing transition-all ${
                   dragOverIdx === firstSortedIdx
-                    ? "border-blue-500 border-2 bg-blue-50 scale-[1.02] shadow-md"
+                    ? "border-blue-500 border-2 bg-blue-500/10 scale-[1.02] shadow-md"
                     : dragIdx === firstSortedIdx
                     ? "opacity-40 border-dashed"
                     : selectedIdx === firstSortedIdx
-                    ? "bg-blue-50 border-blue-400 ring-2 ring-blue-300"
-                    : "bg-gray-50 hover:bg-gray-100"
+                    ? "bg-blue-500/10 border-blue-500 ring-2 ring-blue-500/30"
+                    : "bg-zinc-900/50 hover:bg-zinc-800"
                 }`}
                 style={{ borderLeftWidth: 3, borderLeftColor: BREAK_COLORS[block.breakType] }}
               >
@@ -909,21 +909,21 @@ function SlotEditor({
                   className="w-3 h-3 rounded-full shrink-0"
                   style={{ backgroundColor: BREAK_COLORS[block.breakType] }}
                 />
-                <Layers className="w-4 h-4 text-gray-500 shrink-0" />
+                <Layers className="w-4 h-4 text-zinc-500 shrink-0" />
                 <span
                   className="inline-flex items-center justify-center w-5 h-5 rounded-full text-white text-[10px] font-bold shrink-0"
                   style={{ backgroundColor: BREAK_COLORS[block.breakType] }}
                 >
                   {block.num}
                 </span>
-                <span className="font-medium text-gray-800">{block.label}</span>
-                <span className="text-xs text-gray-500">
+                <span className="font-medium text-zinc-100">{block.label}</span>
+                <span className="text-xs text-zinc-500">
                   {block.slots.length} slot{block.slots.length !== 1 ? "s" : ""}, {Math.round(block.totalDuration * 10) / 10}min at :{String(block.startMinute).padStart(2, "0")}
                 </span>
                 <span className="flex-1" />
                 <button
                   onClick={(e) => { e.stopPropagation(); toggleBreak(block.id); }}
-                  className="text-gray-400 hover:text-gray-700 p-0.5"
+                  className="text-zinc-500 hover:text-zinc-300 p-0.5"
                   title={isExpanded ? "Collapse" : "Expand"}
                 >
                   {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -943,13 +943,13 @@ function SlotEditor({
                   {block.slots.map((bSlot, bIdx) => (
                     <div
                       key={`${block.id}-${bIdx}`}
-                      className="flex items-center gap-2 border rounded px-3 py-1.5 text-sm bg-white hover:bg-gray-50"
+                      className="flex items-center gap-2 border rounded px-3 py-1.5 text-sm bg-zinc-900 hover:bg-zinc-800"
                     >
                       <span className={`w-3 h-3 rounded-sm ${slotColor(bSlot.category)}`} />
                       <select
                         value={bSlot.type}
                         onChange={(e) => updateBreakSlot(block, bIdx, "type", e.target.value)}
-                        className="border rounded px-1.5 py-0.5 text-xs w-28"
+                        className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-28"
                       >
                         {SLOT_TYPES.map((t) => (
                           <option key={t} value={t}>{t}</option>
@@ -958,27 +958,27 @@ function SlotEditor({
                       <select
                         value={bSlot.category}
                         onChange={(e) => updateBreakSlot(block, bIdx, "category", e.target.value)}
-                        className="border rounded px-1.5 py-0.5 text-xs w-20"
+                        className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-20"
                       >
                         {SLOT_CATEGORIES.map((c) => (
                           <option key={c} value={c}>{c}</option>
                         ))}
                       </select>
-                      <label className="text-xs text-gray-500">min:</label>
+                      <label className="text-xs text-zinc-500">min:</label>
                       <input
                         type="number"
                         value={bSlot.minute}
                         onChange={(e) => updateBreakSlot(block, bIdx, "minute", parseInt(e.target.value) || 0)}
-                        className="border rounded px-1.5 py-0.5 text-xs w-14 text-center"
+                        className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-14 text-center"
                         min={0}
                         max={59}
                       />
-                      <label className="text-xs text-gray-500">dur:</label>
+                      <label className="text-xs text-zinc-500">dur:</label>
                       <input
                         type="number"
                         value={bSlot.duration}
                         onChange={(e) => updateBreakSlot(block, bIdx, "duration", parseFloat(e.target.value) || 0)}
-                        className="border rounded px-1.5 py-0.5 text-xs w-14 text-center"
+                        className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-14 text-center"
                         min={0}
                         max={10}
                         step={0.1}
@@ -987,7 +987,7 @@ function SlotEditor({
                         type="text"
                         value={bSlot.notes}
                         onChange={(e) => updateBreakSlot(block, bIdx, "notes", e.target.value)}
-                        className="border rounded px-1.5 py-0.5 text-xs flex-1"
+                        className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs flex-1"
                         placeholder="notes"
                       />
                     </div>
@@ -1000,12 +1000,12 @@ function SlotEditor({
       </div>
 
       {/* Add Slot */}
-      <div className="flex items-center gap-2 bg-white border-2 border-dashed rounded px-3 py-2 text-sm">
-        <Plus className="w-4 h-4 text-gray-400" />
+      <div className="flex items-center gap-2 bg-zinc-900 border-2 border-dashed border-zinc-700 rounded px-3 py-2 text-sm">
+        <Plus className="w-4 h-4 text-zinc-500" />
         <select
           value={newSlot.type}
           onChange={(e) => setNewSlot({ ...newSlot, type: e.target.value })}
-          className="border rounded px-1.5 py-0.5 text-xs w-28"
+          className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-28"
         >
           {SLOT_TYPES.map((t) => (
             <option key={t} value={t}>
@@ -1016,7 +1016,7 @@ function SlotEditor({
         <select
           value={newSlot.category}
           onChange={(e) => setNewSlot({ ...newSlot, category: e.target.value })}
-          className="border rounded px-1.5 py-0.5 text-xs w-20"
+          className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-20"
         >
           {SLOT_CATEGORIES.map((c) => (
             <option key={c} value={c}>
@@ -1024,21 +1024,21 @@ function SlotEditor({
             </option>
           ))}
         </select>
-        <label className="text-xs text-gray-500">min:</label>
+        <label className="text-xs text-zinc-500">min:</label>
         <input
           type="number"
           value={newSlot.minute ?? 0}
           onChange={(e) => setNewSlot({ ...newSlot, minute: parseInt(e.target.value) || 0 })}
-          className="border rounded px-1.5 py-0.5 text-xs w-14 text-center"
+          className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-14 text-center"
           min={0}
           max={59}
         />
-        <label className="text-xs text-gray-500">dur:</label>
+        <label className="text-xs text-zinc-500">dur:</label>
         <input
           type="number"
           value={newSlot.duration ?? 0}
           onChange={(e) => setNewSlot({ ...newSlot, duration: parseInt(e.target.value) || 0 })}
-          className="border rounded px-1.5 py-0.5 text-xs w-14 text-center"
+          className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs w-14 text-center"
           min={0}
           max={10}
         />
@@ -1046,7 +1046,7 @@ function SlotEditor({
           type="text"
           value={newSlot.notes || ""}
           onChange={(e) => setNewSlot({ ...newSlot, notes: e.target.value })}
-          className="border rounded px-1.5 py-0.5 text-xs flex-1"
+          className="bg-zinc-800 text-white border border-zinc-700 rounded px-1.5 py-0.5 text-xs flex-1"
           placeholder="notes"
         />
         <button
@@ -1067,14 +1067,14 @@ function SlotEditor({
           Insert Break Block
         </button>
         {showInsertBreak && (
-          <div className="mt-2 bg-white border rounded-lg p-3 space-y-3">
+          <div className="mt-2 bg-zinc-900 border border-zinc-700 rounded-lg p-3 space-y-3">
             <div className="flex items-center gap-2">
-              <label className="text-xs text-gray-500">At minute:</label>
+              <label className="text-xs text-zinc-500">At minute:</label>
               <input
                 type="number"
                 value={insertBreakMinute}
                 onChange={(e) => setInsertBreakMinute(parseInt(e.target.value) || 0)}
-                className="border rounded px-2 py-1 text-xs w-16 text-center"
+                className="bg-zinc-800 text-white border border-zinc-700 rounded px-2 py-1 text-xs w-16 text-center"
                 min={0}
                 max={59}
               />
@@ -1109,7 +1109,7 @@ function SlotEditor({
         </button>
         <button
           onClick={onCancel}
-          className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-300"
+          className="bg-zinc-800 text-zinc-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-zinc-700"
         >
           Cancel
         </button>
@@ -1133,8 +1133,8 @@ function SlotEditor({
 
       {/* Timeline Bar (full width below columns) */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-700 mb-2">60-Minute Timeline</h4>
-        <div className="relative h-10 bg-gray-200 rounded-lg overflow-hidden">
+        <h4 className="text-sm font-semibold text-zinc-300 mb-2">60-Minute Timeline</h4>
+        <div className="relative h-10 bg-zinc-800 rounded-lg overflow-hidden">
           {slots.map((slot, i) => {
             const left = (slot.minute / 60) * 100;
             const width = Math.max((slot.duration / 60) * 100, 1.2);
@@ -1154,7 +1154,7 @@ function SlotEditor({
               className="absolute top-0 h-full border-l border-black/20"
               style={{ left: `${(m / 60) * 100}%` }}
             >
-              <span className="text-[9px] text-gray-600 ml-0.5">:{String(m).padStart(2, "0")}</span>
+              <span className="text-[9px] text-zinc-400 ml-0.5">:{String(m).padStart(2, "0")}</span>
             </div>
           ))}
         </div>
@@ -1273,8 +1273,8 @@ function ClockFace({
     <div className="flex flex-col items-center gap-3" style={{ maxWidth: size }}>
       <svg viewBox="0 0 220 220" className="w-full" style={{ maxWidth: size }}>
         {/* Background ring */}
-        <circle cx={cx} cy={cy} r={outerR} fill="#e5e7eb" />
-        <circle cx={cx} cy={cy} r={innerR} fill="white" />
+        <circle cx={cx} cy={cy} r={outerR} fill="#27272a" />
+        <circle cx={cx} cy={cy} r={innerR} fill="#18181b" />
 
         {/* All segments — songs and breaks in sequence */}
         {segments.map((seg, i) => {
@@ -1396,7 +1396,7 @@ function ClockFace({
           dominantBaseline="central"
           fontSize={16}
           fontWeight="bold"
-          fill="#374151"
+          fill="#e4e4e7"
         >
           {slots.length}
         </text>
@@ -1406,7 +1406,7 @@ function ClockFace({
           textAnchor="middle"
           dominantBaseline="central"
           fontSize={7}
-          fill="#6b7280"
+          fill="#71717a"
         >
           slots/hr
         </text>
@@ -1447,7 +1447,7 @@ function ClockFace({
           );
         })}
         {breaks && breaks.length > 0 && (
-          <span className="text-xs px-2 py-0.5 rounded font-medium bg-gray-200 text-gray-600">
+          <span className="text-xs px-2 py-0.5 rounded font-medium bg-zinc-800 text-zinc-400">
             {breaks.length} breaks
           </span>
         )}
@@ -1656,7 +1656,7 @@ export default function RadioClocksPage() {
   };
 
   const deleteAssignment = async (id: string) => {
-    if (!confirm("Delete this DJ assignment?")) return;
+    if (!confirm("Delete this host assignment?")) return;
     try {
       await fetch(`/api/clock-assignments/${id}`, { method: "DELETE" });
       showToast("Assignment deleted");
@@ -1834,7 +1834,7 @@ export default function RadioClocksPage() {
   const activeTemplates = templates.filter((t) => t.is_active);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <SharedNav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Toast */}
@@ -1847,12 +1847,12 @@ export default function RadioClocksPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
               <Clock className="w-8 h-8 text-blue-600" />
               Radio Clocks
             </h1>
-            <p className="text-gray-600 mt-1">
-              Edit clock templates, slot patterns, and DJ assignments
+            <p className="text-zinc-400 mt-1">
+              Edit clock templates, slot patterns, and host assignments
             </p>
           </div>
           <button
@@ -1866,11 +1866,11 @@ export default function RadioClocksPage() {
 
         {/* Create form */}
         {showCreate && (
-          <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+          <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 mb-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold">New Clock Template</h3>
               <button onClick={() => setShowCreate(false)}>
-                <X className="w-5 h-5 text-gray-400" />
+                <X className="w-5 h-5 text-zinc-500" />
               </button>
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -1878,13 +1878,13 @@ export default function RadioClocksPage() {
                 type="text"
                 value={newTemplate.name}
                 onChange={(e) => setNewTemplate({ ...newTemplate, name: e.target.value })}
-                className="border rounded-lg px-3 py-2 text-sm"
+                className="bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 placeholder="Template name"
               />
               <select
                 value={newTemplate.clock_type}
                 onChange={(e) => setNewTemplate({ ...newTemplate, clock_type: e.target.value })}
-                className="border rounded-lg px-3 py-2 text-sm"
+                className="bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
               >
                 {["morning_drive", "midday", "evening", "late_night", "weekend"].map((t) => (
                   <option key={t} value={t}>
@@ -1902,11 +1902,11 @@ export default function RadioClocksPage() {
             />
             <div className="flex gap-4 mb-4">
               <div>
-                <label className="text-xs text-gray-500">Tempo</label>
+                <label className="text-xs text-zinc-500">Tempo</label>
                 <select
                   value={newTemplate.tempo}
                   onChange={(e) => setNewTemplate({ ...newTemplate, tempo: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 >
                   <option value="upbeat">Upbeat</option>
                   <option value="moderate">Moderate</option>
@@ -1941,31 +1941,31 @@ export default function RadioClocksPage() {
         {/* ================================================================ */}
         {!loading && djShows.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-6">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-6">
               <Users className="w-7 h-7 text-amber-600" />
-              DJ Show Clocks
+              Host Show Clocks
             </h2>
-            <p className="text-sm text-gray-500 mb-4">
-              Assign different clock templates to each hour of a DJ&apos;s shift,
-              or generate 3 dedicated templates per DJ.
+            <p className="text-sm text-zinc-500 mb-4">
+              Assign different clock templates to each hour of a host&apos;s shift,
+              or generate 3 dedicated templates per host.
             </p>
             <div className="space-y-4">
               {djShows.map((show) => (
                 <div
                   key={show.djId}
-                  className="bg-white rounded-xl shadow-sm border overflow-hidden"
+                  className="bg-zinc-900/80 rounded-xl border border-zinc-800 overflow-hidden"
                 >
                   {/* DJ Header */}
-                  <div className="p-4 flex items-center justify-between border-b bg-gray-50">
+                  <div className="p-4 flex items-center justify-between border-b border-zinc-800 bg-zinc-900/50">
                     <div className="flex items-center gap-3">
-                      <div className="bg-amber-100 p-2 rounded-lg">
+                      <div className="bg-amber-500/15 p-2 rounded-lg">
                         <Users className="w-5 h-5 text-amber-600" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-white">
                           {show.djName}
                         </h3>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-zinc-500">
                           {formatTime12(show.hours[0].startTime)} –{" "}
                           {formatTime12(show.hours[show.hours.length - 1].endTime)}
                         </span>
@@ -1984,7 +1984,7 @@ export default function RadioClocksPage() {
                   </div>
 
                   {/* Hour rows */}
-                  <div className="divide-y">
+                  <div className="divide-y divide-zinc-800">
                     {show.hours.map((hour, idx) => {
                       const hourSlots = hour.template
                         ? parseSlots(hour.template.clock_pattern)
@@ -1997,10 +1997,10 @@ export default function RadioClocksPage() {
                         <div key={idx}>
                           <div className="px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                             <div className="sm:w-40 shrink-0">
-                              <span className="text-sm font-medium text-gray-700">
+                              <span className="text-sm font-medium text-zinc-300">
                                 Hour {hour.hour}
                               </span>
-                              <span className="text-xs text-gray-400 ml-1">
+                              <span className="text-xs text-zinc-500 ml-1">
                                 ({formatTime12(hour.startTime)}–
                                 {formatTime12(hour.endTime)})
                               </span>
@@ -2011,7 +2011,7 @@ export default function RadioClocksPage() {
                                 assignTemplateToHour(show, idx, e.target.value)
                               }
                               disabled={saving}
-                              className="border rounded-lg px-2 py-1.5 text-sm w-full sm:w-56"
+                              className="bg-zinc-800 text-white border border-zinc-700 rounded-lg px-2 py-1.5 text-sm w-full sm:w-56"
                             >
                               <option value="">No template</option>
                               {activeTemplates.map((t) => (
@@ -2029,9 +2029,9 @@ export default function RadioClocksPage() {
                                       : { djId: show.djId, hour: idx }
                                   )
                                 }
-                                className={`p-1.5 rounded hover:bg-blue-100 ${
+                                className={`p-1.5 rounded hover:bg-blue-500/15 ${
                                   isEditingThisHour
-                                    ? "bg-blue-100 text-blue-700"
+                                    ? "bg-blue-500/15 text-blue-400"
                                     : "text-blue-600"
                                 }`}
                                 title="Edit slots"
@@ -2040,7 +2040,7 @@ export default function RadioClocksPage() {
                               </button>
                             )}
                             {/* Mini timeline bar */}
-                            <div className="flex-1 relative h-6 bg-gray-200 rounded overflow-hidden">
+                            <div className="flex-1 relative h-6 bg-zinc-800 rounded overflow-hidden">
                               {hourSlots.map((slot, i) => (
                                 <div
                                   key={i}
@@ -2063,7 +2063,7 @@ export default function RadioClocksPage() {
                                 />
                               ))}
                               {hourSlots.length === 0 && (
-                                <span className="absolute inset-0 flex items-center justify-center text-xs text-gray-400">
+                                <span className="absolute inset-0 flex items-center justify-center text-xs text-zinc-500">
                                   No slots
                                 </span>
                               )}
@@ -2093,12 +2093,12 @@ export default function RadioClocksPage() {
         {/* Templates */}
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
           </div>
         ) : templates.length === 0 ? (
-          <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
-            <Clock className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No clock templates yet.</p>
+          <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
+            <Clock className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
+            <p className="text-zinc-500">No clock templates yet.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -2110,7 +2110,7 @@ export default function RadioClocksPage() {
               return (
                 <div
                   key={t.id}
-                  className={`bg-white rounded-xl shadow-sm border overflow-hidden ${
+                  className={`bg-zinc-900/80 rounded-xl border border-zinc-800 overflow-hidden ${
                     !t.is_active ? "opacity-60" : ""
                   }`}
                 >
@@ -2119,29 +2119,29 @@ export default function RadioClocksPage() {
                       if (isEditing) return;
                       setExpanded(isExpanded ? null : t.id);
                     }}
-                    className="w-full p-5 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    className="w-full p-5 flex items-center justify-between hover:bg-zinc-800 transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="bg-blue-100 p-2.5 rounded-lg">
+                      <div className="bg-blue-500/15 p-2.5 rounded-lg">
                         <Clock className="w-5 h-5 text-blue-600" />
                       </div>
                       <div className="text-left">
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-white">
                           {t.name}
                           {!t.is_active && (
-                            <span className="ml-2 text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded">
+                            <span className="ml-2 text-xs bg-red-500/15 text-red-400 px-2 py-0.5 rounded">
                               Inactive
                             </span>
                           )}
                         </h3>
-                        <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
-                          <span className="bg-gray-100 px-2 py-0.5 rounded">
+                        <div className="flex items-center gap-3 text-xs text-zinc-500 mt-1">
+                          <span className="bg-zinc-800 px-2 py-0.5 rounded">
                             {formatClockType(t.clock_type)}
                           </span>
                           {t.tempo && <span>Tempo: {t.tempo}</span>}
                           {t.energy_level && <span>Energy: {t.energy_level}</span>}
                           <span>{slots.length} slots</span>
-                          <span>{t.usage_count} DJ{t.usage_count !== 1 ? "s" : ""} assigned</span>
+                          <span>{t.usage_count} host{t.usage_count !== 1 ? "s" : ""} assigned</span>
                         </div>
                       </div>
                     </div>
@@ -2154,7 +2154,7 @@ export default function RadioClocksPage() {
                               setEditing(isEditing ? null : t.id);
                               setExpanded(t.id);
                             }}
-                            className="p-1.5 rounded hover:bg-blue-100 text-blue-600"
+                            className="p-1.5 rounded hover:bg-blue-500/15 text-blue-600"
                             title="Edit slots"
                           >
                             <Pencil className="w-4 h-4" />
@@ -2164,7 +2164,7 @@ export default function RadioClocksPage() {
                               e.stopPropagation();
                               duplicateTemplate(t);
                             }}
-                            className="p-1.5 rounded hover:bg-green-100 text-green-600"
+                            className="p-1.5 rounded hover:bg-green-500/15 text-green-600"
                             title="Duplicate template"
                           >
                             <Copy className="w-4 h-4" />
@@ -2174,7 +2174,7 @@ export default function RadioClocksPage() {
                               e.stopPropagation();
                               deleteTemplate(t.id);
                             }}
-                            className="p-1.5 rounded hover:bg-red-100 text-red-500"
+                            className="p-1.5 rounded hover:bg-red-500/15 text-red-500"
                             title="Deactivate"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -2182,9 +2182,9 @@ export default function RadioClocksPage() {
                         </>
                       )}
                       {isExpanded ? (
-                        <ChevronUp className="w-5 h-5 text-gray-400" />
+                        <ChevronUp className="w-5 h-5 text-zinc-500" />
                       ) : (
-                        <ChevronDown className="w-5 h-5 text-gray-400" />
+                        <ChevronDown className="w-5 h-5 text-zinc-500" />
                       )}
                     </div>
                   </button>
@@ -2192,12 +2192,12 @@ export default function RadioClocksPage() {
                   {isExpanded && !isEditing && (
                     <div className="border-t px-5 py-4">
                       {t.description && (
-                        <p className="text-sm text-gray-600 mb-4">{t.description}</p>
+                        <p className="text-sm text-zinc-400 mb-4">{t.description}</p>
                       )}
                       {slots.length > 0 ? (
                         <div className="flex flex-col lg:flex-row gap-6">
                           <div className="flex-1 min-w-0 order-2 lg:order-1">
-                            <h4 className="text-sm font-semibold text-gray-700 mb-2">Slot Summary</h4>
+                            <h4 className="text-sm font-semibold text-zinc-300 mb-2">Slot Summary</h4>
                             <div className="flex flex-wrap gap-1.5">
                               {[...slots].sort((a, b) => a.minute - b.minute).map((slot, i) => (
                                 <span
@@ -2215,7 +2215,7 @@ export default function RadioClocksPage() {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-sm text-gray-400 italic">
+                        <p className="text-sm text-zinc-500 italic">
                           No clock pattern defined. Click the edit button to add slots.
                         </p>
                       )}
@@ -2239,28 +2239,28 @@ export default function RadioClocksPage() {
         {/* DJ Assignment Manager */}
         {/* ================================================================ */}
         <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-6">
+          <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-6">
             <Users className="w-7 h-7 text-blue-600" />
-            DJ Clock Assignments
+            Host Clock Assignments
           </h2>
 
           {/* Assignment table */}
           {assignments.length > 0 && (
-            <div className="bg-white rounded-xl shadow-sm border overflow-x-auto mb-6">
+            <div className="bg-zinc-900/80 rounded-xl border border-zinc-800 overflow-x-auto mb-6">
               <table className="w-full text-sm min-w-[640px]">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-zinc-900/50 border-b border-zinc-800">
                   <tr>
-                    <th className="px-4 py-3 text-left font-medium text-gray-600">DJ</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-600">Template</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-600">Day</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-600">Start</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-600">End</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-600">Priority</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-600">Status</th>
+                    <th className="px-4 py-3 text-left font-medium text-zinc-400">Host</th>
+                    <th className="px-4 py-3 text-left font-medium text-zinc-400">Template</th>
+                    <th className="px-4 py-3 text-left font-medium text-zinc-400">Day</th>
+                    <th className="px-4 py-3 text-left font-medium text-zinc-400">Start</th>
+                    <th className="px-4 py-3 text-left font-medium text-zinc-400">End</th>
+                    <th className="px-4 py-3 text-left font-medium text-zinc-400">Priority</th>
+                    <th className="px-4 py-3 text-left font-medium text-zinc-400">Status</th>
                     <th className="px-4 py-3"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
+                <tbody className="divide-y divide-zinc-800">
                   {[...assignments].sort((a, b) => {
                     // DJ schedule order: Hank(6-9) → Loretta(9-12) → Doc(12-3) → Cody(3-6) → others
                     const DJ_ORDER: Record<string, number> = {
@@ -2292,8 +2292,8 @@ export default function RadioClocksPage() {
                         <span
                           className={`text-xs px-2 py-0.5 rounded ${
                             a.is_active
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-600"
+                              ? "bg-green-500/15 text-green-400"
+                              : "bg-red-500/15 text-red-400"
                           }`}
                         >
                           {a.is_active ? "Active" : "Inactive"}
@@ -2316,19 +2316,19 @@ export default function RadioClocksPage() {
           )}
 
           {/* Add assignment form */}
-          <div className="bg-white rounded-xl shadow-sm border p-5">
-            <h3 className="font-semibold text-gray-800 mb-4">Add Assignment</h3>
+          <div className="bg-zinc-900/80 rounded-xl border border-zinc-800 p-5">
+            <h3 className="font-semibold text-zinc-100 mb-4">Add Assignment</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 mb-4">
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">DJ</label>
+                <label className="text-xs text-zinc-500 mb-1 block">Host</label>
                 <select
                   value={newAssignment.dj_id}
                   onChange={(e) =>
                     setNewAssignment({ ...newAssignment, dj_id: e.target.value })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="">Select DJ...</option>
+                  <option value="">Select host...</option>
                   {djs
                     .filter((d) => d.is_active)
                     .map((d) => (
@@ -2339,7 +2339,7 @@ export default function RadioClocksPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">Template</label>
+                <label className="text-xs text-zinc-500 mb-1 block">Template</label>
                 <select
                   value={newAssignment.clock_template_id}
                   onChange={(e) =>
@@ -2348,7 +2348,7 @@ export default function RadioClocksPage() {
                       clock_template_id: e.target.value,
                     })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 >
                   <option value="">Select template...</option>
                   {activeTemplates.map((t) => (
@@ -2359,13 +2359,13 @@ export default function RadioClocksPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">Day</label>
+                <label className="text-xs text-zinc-500 mb-1 block">Day</label>
                 <select
                   value={newAssignment.day_of_week}
                   onChange={(e) =>
                     setNewAssignment({ ...newAssignment, day_of_week: e.target.value })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 >
                   <option value="">All days</option>
                   {DAY_NAMES.map((d, i) => (
@@ -2376,7 +2376,7 @@ export default function RadioClocksPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">Start</label>
+                <label className="text-xs text-zinc-500 mb-1 block">Start</label>
                 <input
                   type="time"
                   value={newAssignment.time_slot_start}
@@ -2386,11 +2386,11 @@ export default function RadioClocksPage() {
                       time_slot_start: e.target.value,
                     })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">End</label>
+                <label className="text-xs text-zinc-500 mb-1 block">End</label>
                 <input
                   type="time"
                   value={newAssignment.time_slot_end}
@@ -2400,7 +2400,7 @@ export default function RadioClocksPage() {
                       time_slot_end: e.target.value,
                     })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 />
               </div>
             </div>

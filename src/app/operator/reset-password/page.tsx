@@ -18,10 +18,10 @@ function ResetForm() {
 
   if (!token) {
     return (
-      <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <h2 className="text-lg font-bold text-gray-900 mb-2">Invalid Reset Link</h2>
-        <p className="text-gray-600 mb-4">This password reset link is invalid or has expired.</p>
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Invalid Reset Link</h2>
+        <p className="text-gray-600 dark:text-zinc-400 mb-4">This password reset link is invalid or has expired.</p>
         <Link href="/operator/forgot-password" className="text-amber-700 hover:text-amber-800 font-medium">
           Request a new link
         </Link>
@@ -62,16 +62,16 @@ function ResetForm() {
 
   if (success) {
     return (
-      <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 text-center">
         <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
-        <h2 className="text-lg font-bold text-gray-900 mb-2">Password Reset!</h2>
-        <p className="text-gray-600">Redirecting you to login...</p>
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Password Reset!</h2>
+        <p className="text-gray-600 dark:text-zinc-400">Redirecting you to login...</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8 space-y-5">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 space-y-5">
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
           {error}
@@ -79,7 +79,7 @@ function ResetForm() {
       )}
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
           New Password
         </label>
         <div className="relative">
@@ -98,7 +98,7 @@ function ResetForm() {
       </div>
 
       <div>
-        <label htmlFor="confirm" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="confirm" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
           Confirm Password
         </label>
         <input
@@ -130,9 +130,9 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Radio className="w-8 h-8 text-amber-700 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Set New Password</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Set New Password</h1>
         </div>
-        <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
+        <Suspense fallback={<div className="text-center text-gray-500 dark:text-zinc-500">Loading...</div>}>
           <ResetForm />
         </Suspense>
       </div>

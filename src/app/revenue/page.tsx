@@ -65,13 +65,13 @@ export default function RevenueBreakdownPage() {
       <SharedNav />
 
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center space-x-3">
             <DollarSign className="w-8 h-8 text-green-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Revenue Breakdown</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Revenue Breakdown</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Complete financial overview - Artist earnings, sponsor payments, and station revenue
               </p>
             </div>
@@ -81,7 +81,7 @@ export default function RevenueBreakdownPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Period Selector */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">Period</h2>
             <select
@@ -144,7 +144,7 @@ export default function RevenueBreakdownPage() {
         </div>
 
         {/* Revenue Flow Diagram */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-bold mb-6">Revenue Flow</h2>
           <div className="space-y-6">
             {/* Sponsor Revenue */}
@@ -229,10 +229,10 @@ export default function RevenueBreakdownPage() {
         </div>
 
         {/* Artist Earnings Breakdown */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold">Artist Earnings Breakdown</h2>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-zinc-400">
               Per-share value: <span className="font-bold text-green-600">${perShareValue.toFixed(2)}</span>
             </div>
           </div>
@@ -243,26 +243,26 @@ export default function RevenueBreakdownPage() {
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {Object.entries(artistTiers).map(([tier, data]) => (
                 <div key={tier} className="bg-gray-50 rounded-lg p-4 border">
-                  <div className="text-sm font-semibold text-gray-600 mb-2">{tier.replace('_', ' ')}</div>
-                  <div className="text-xs text-gray-500 mb-3">{data.count} artists</div>
+                  <div className="text-sm font-semibold text-gray-600 dark:text-zinc-400 mb-2">{tier.replace('_', ' ')}</div>
+                  <div className="text-xs text-gray-500 dark:text-zinc-500 mb-3">{data.count} artists</div>
 
                   <div className="space-y-2 text-xs">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Subscription:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Subscription:</span>
                       <span className="font-semibold">${data.subscription}/mo</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Shares:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Shares:</span>
                       <span className="font-semibold">{data.shares}</span>
                     </div>
                     <div className="flex justify-between pt-2 border-t">
-                      <span className="text-gray-600">Pool payout:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Pool payout:</span>
                       <span className="font-semibold text-green-600">
                         ${(data.shares * perShareValue).toFixed(2)}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Net:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Net:</span>
                       <span className="font-bold text-green-700">
                         ${(data.shares * perShareValue - data.subscription).toFixed(2)}
                       </span>
@@ -271,7 +271,7 @@ export default function RevenueBreakdownPage() {
 
                   <div className="mt-3 pt-3 border-t text-xs">
                     <div className="flex justify-between font-semibold">
-                      <span className="text-gray-600">Group total:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Group total:</span>
                       <span className="text-green-600">
                         ${((data.shares * perShareValue - data.subscription) * data.count).toLocaleString()}
                       </span>
@@ -288,22 +288,22 @@ export default function RevenueBreakdownPage() {
             <div className="overflow-x-auto">
               <table className="min-w-full">
                 <thead>
-                  <tr className="border-b-2 border-gray-200">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Artist</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Tier</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Subscription</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Shares</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Pool Earnings</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Live Shows</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Total</th>
+                  <tr className="border-b-2 border-gray-200 dark:border-zinc-800">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Artist</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Tier</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Subscription</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Shares</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Pool Earnings</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Live Shows</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {topArtists.map((artist, idx) => (
-                    <tr key={idx} className="border-b hover:bg-gray-50">
+                    <tr key={idx} className="border-b hover:bg-gray-50 dark:hover:bg-zinc-800">
                       <td className="py-3 px-4 font-medium">{artist.name}</td>
                       <td className="py-3 px-4">
-                        <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-semibold">
+                        <span className="bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 px-2 py-1 rounded text-xs font-semibold">
                           {artist.tier.replace('_', ' ')}
                         </span>
                       </td>
@@ -331,7 +331,7 @@ export default function RevenueBreakdownPage() {
         </div>
 
         {/* Sponsor Payments Breakdown */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Sponsor Payments Breakdown</h2>
 
           {/* Sponsor Tier Summary */}
@@ -368,24 +368,24 @@ export default function RevenueBreakdownPage() {
             <div className="overflow-x-auto">
               <table className="min-w-full">
                 <thead>
-                  <tr className="border-b-2 border-gray-200">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Business Name</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Tier</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Monthly Payment</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-700">Ad Spots</th>
-                    <th className="text-center py-3 px-4 font-semibold text-gray-700">Status</th>
+                  <tr className="border-b-2 border-gray-200 dark:border-zinc-800">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Business Name</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Tier</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Monthly Payment</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Ad Spots</th>
+                    <th className="text-center py-3 px-4 font-semibold text-gray-700 dark:text-zinc-300">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {topSponsors.map((sponsor, idx) => (
-                    <tr key={idx} className="border-b hover:bg-gray-50">
+                    <tr key={idx} className="border-b hover:bg-gray-50 dark:hover:bg-zinc-800">
                       <td className="py-3 px-4 font-medium">{sponsor.name}</td>
                       <td className="py-3 px-4">
                         <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                          sponsor.tier === 'PLATINUM' ? 'bg-purple-100 text-purple-700' :
-                          sponsor.tier === 'GOLD' ? 'bg-yellow-100 text-yellow-700' :
+                          sponsor.tier === 'PLATINUM' ? 'bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400' :
+                          sponsor.tier === 'GOLD' ? 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400' :
                           sponsor.tier === 'SILVER' ? 'bg-gray-200 text-gray-700' :
-                          'bg-orange-100 text-orange-700'
+                          'bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400'
                         }`}>
                           {sponsor.tier}
                         </span>
@@ -395,7 +395,7 @@ export default function RevenueBreakdownPage() {
                       </td>
                       <td className="py-3 px-4 text-right">{sponsor.adSpots}/mo</td>
                       <td className="py-3 px-4 text-center">
-                        <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold">
+                        <span className="bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 px-2 py-1 rounded text-xs font-semibold">
                           {sponsor.status}
                         </span>
                       </td>
@@ -416,11 +416,11 @@ export default function RevenueBreakdownPage() {
               <h3 className="text-lg font-semibold text-orange-800 mb-4">Revenue Sources</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                  <span className="text-gray-700">Sponsor Revenue (20%)</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Sponsor Revenue (20%)</span>
                   <span className="font-bold text-green-600">${stationRevenue.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                  <span className="text-gray-700">Artist Subscriptions (100%)</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Artist Subscriptions (100%)</span>
                   <span className="font-bold text-green-600">${totalArtistSubscriptions.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-orange-100 rounded-lg border-2 border-orange-300">
@@ -434,16 +434,16 @@ export default function RevenueBreakdownPage() {
               <h3 className="text-lg font-semibold text-orange-800 mb-4">Operating Expenses (Estimated)</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                  <span className="text-gray-700">Platform & Tools</span>
-                  <span className="font-semibold text-gray-900">$1,500</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Platform & Tools</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">$1,500</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                  <span className="text-gray-700">Team Salaries</span>
-                  <span className="font-semibold text-gray-900">$3,000</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Team Salaries</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">$3,000</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                  <span className="text-gray-700">Marketing</span>
-                  <span className="font-semibold text-gray-900">$500</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Marketing</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">$500</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-orange-100 rounded-lg border-2 border-orange-300">
                   <span className="font-semibold text-orange-900">Total Expenses</span>
@@ -470,7 +470,7 @@ export default function RevenueBreakdownPage() {
           </div>
 
           <div className="mt-6 bg-white rounded-lg p-4 border border-orange-200">
-            <div className="text-sm text-gray-700">
+            <div className="text-sm text-gray-700 dark:text-zinc-300">
               <strong className="text-orange-900">Revenue Model:</strong> Station keeps 20% of sponsor revenue
               (${stationRevenue.toLocaleString()}) plus 100% of artist subscription fees (${totalArtistSubscriptions.toLocaleString()}).
               The remaining 80% of sponsor revenue (${artistPoolContribution.toLocaleString()}) is distributed to artists
@@ -480,7 +480,7 @@ export default function RevenueBreakdownPage() {
         </div>
 
         {/* Key Metrics Summary */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Key Metrics Summary</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-4 bg-purple-50 rounded-lg">

@@ -130,16 +130,16 @@ export default function ArtistDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading artist...</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 flex items-center justify-center">
+        <div className="text-gray-600 dark:text-zinc-400">Loading artist...</div>
       </div>
     );
   }
 
   if (!artist) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Artist not found</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 flex items-center justify-center">
+        <div className="text-gray-600 dark:text-zinc-400">Artist not found</div>
       </div>
     );
   }
@@ -147,9 +147,9 @@ export default function ArtistDetailPage() {
   const mainConversation = artist.conversations[0];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Header */}
-      <header className="bg-white border-b">
+      <header className="bg-white dark:bg-zinc-900 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -174,13 +174,13 @@ export default function ArtistDetailPage() {
           {/* Left Column - Artist Info */}
           <div className="lg:col-span-1 space-y-6">
             {/* Basic Info */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
               <div className="flex items-center space-x-4 mb-6">
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
                   <User className="w-8 h-8 text-purple-600" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">{artist.name}</h1>
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{artist.name}</h1>
                   <span
                     className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
                       artist.status
@@ -195,19 +195,19 @@ export default function ArtistDetailPage() {
                 {artist.email && (
                   <div className="flex items-center space-x-3 text-sm">
                     <Mail className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-900">{artist.email}</span>
+                    <span className="text-gray-900 dark:text-white">{artist.email}</span>
                   </div>
                 )}
                 {artist.phone && (
                   <div className="flex items-center space-x-3 text-sm">
                     <Phone className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-900">{artist.phone}</span>
+                    <span className="text-gray-900 dark:text-white">{artist.phone}</span>
                   </div>
                 )}
                 {artist.genre && (
                   <div className="flex items-center space-x-3 text-sm">
                     <Music className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-900">{artist.genre}</span>
+                    <span className="text-gray-900 dark:text-white">{artist.genre}</span>
                   </div>
                 )}
               </div>
@@ -216,9 +216,9 @@ export default function ArtistDetailPage() {
                 <div className="mt-6 pt-6 border-t">
                   <div className="flex items-center space-x-2 mb-2">
                     <Calendar className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm font-semibold text-gray-900">Next Show</span>
+                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Next Show</span>
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-600 dark:text-zinc-400">
                     <div>{formatDateTime(artist.nextShowDate)}</div>
                     <div>{artist.nextShowVenue}</div>
                     <div>{artist.nextShowCity}</div>
@@ -237,21 +237,21 @@ export default function ArtistDetailPage() {
             </div>
 
             {/* Stats */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Activity</h3>
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Activity</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Shows</span>
-                  <span className="font-semibold text-gray-900">{artist.shows.length}</span>
+                  <span className="text-sm text-gray-600 dark:text-zinc-400">Shows</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">{artist.shows.length}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Donations</span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="text-sm text-gray-600 dark:text-zinc-400">Donations</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
                     {artist.donations.length}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Total Raised</span>
+                  <span className="text-sm text-gray-600 dark:text-zinc-400">Total Raised</span>
                   <span className="font-semibold text-green-600">
                     {formatCurrency(
                       artist.donations.reduce((sum, d) => sum + d.amount, 0)
@@ -265,7 +265,7 @@ export default function ArtistDetailPage() {
           {/* Right Column - Conversation & Activity */}
           <div className="lg:col-span-2 space-y-6">
             {/* Conversation */}
-            <div className="bg-white rounded-xl shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm">
               <div className="p-6 border-b">
                 <div className="flex items-center space-x-2">
                   <MessageCircle className="w-5 h-5 text-purple-600" />
@@ -294,7 +294,7 @@ export default function ArtistDetailPage() {
                           {message.role === "riley" ? "Riley" : artist.name}
                         </div>
                         <div className="text-sm">{message.content}</div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">
                           {formatDateTime(message.createdAt)}
                         </div>
                         {message.intent && (
@@ -320,7 +320,7 @@ export default function ArtistDetailPage() {
                     value={messageInput}
                     onChange={(e) => setMessageInput(e.target.value)}
                     placeholder="Simulate artist message..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                   <button
                     type="submit"
@@ -336,8 +336,8 @@ export default function ArtistDetailPage() {
 
             {/* Shows */}
             {artist.shows.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
                   <Calendar className="w-5 h-5 text-purple-600" />
                   <span>Shows</span>
                 </h3>
@@ -346,9 +346,9 @@ export default function ArtistDetailPage() {
                     <div key={show.id} className="border rounded-lg p-4">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <div className="font-semibold text-gray-900">{show.venue}</div>
-                          <div className="text-sm text-gray-600">{show.city}</div>
-                          <div className="text-xs text-gray-500">
+                          <div className="font-semibold text-gray-900 dark:text-white">{show.venue}</div>
+                          <div className="text-sm text-gray-600 dark:text-zinc-400">{show.city}</div>
+                          <div className="text-xs text-gray-500 dark:text-zinc-500">
                             {formatDateTime(show.date)}
                           </div>
                         </div>
@@ -357,7 +357,7 @@ export default function ArtistDetailPage() {
                         </span>
                       </div>
                       <div className="flex items-center space-x-4 text-sm">
-                        <span className="text-gray-600">
+                        <span className="text-gray-600 dark:text-zinc-400">
                           {show.donationCount} donations
                         </span>
                         <span className="text-green-600 font-semibold">
@@ -372,8 +372,8 @@ export default function ArtistDetailPage() {
 
             {/* Donations */}
             {artist.donations.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
                   <DollarSign className="w-5 h-5 text-green-600" />
                   <span>Donations</span>
                 </h3>
@@ -384,7 +384,7 @@ export default function ArtistDetailPage() {
                       className="flex justify-between items-center py-2 border-b last:border-0"
                     >
                       <div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {donation.fanName || "Anonymous"}
                           {donation.isFirstWin && (
                             <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">
@@ -392,7 +392,7 @@ export default function ArtistDetailPage() {
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-gray-500 dark:text-zinc-500">
                           {formatDateTime(donation.createdAt)}
                         </div>
                       </div>

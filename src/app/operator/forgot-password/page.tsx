@@ -41,15 +41,15 @@ export default function ForgotPasswordPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Radio className="w-8 h-8 text-amber-700 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Reset Password</h1>
-          <p className="text-gray-600">Enter your email and we'll send you a reset link.</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Reset Password</h1>
+          <p className="text-gray-600 dark:text-zinc-400">Enter your email and we'll send you a reset link.</p>
         </div>
 
         {sent ? (
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 text-center">
             <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
-            <h2 className="text-lg font-bold text-gray-900 mb-2">Check Your Email</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Check Your Email</h2>
+            <p className="text-gray-600 dark:text-zinc-400 mb-6">
               If an account exists for <strong>{email}</strong>, we've sent password reset instructions.
             </p>
             <Link href="/login" className="text-amber-700 hover:text-amber-800 font-medium">
@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
             </Link>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8 space-y-5">
+          <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 space-y-5">
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
                 {error}
@@ -65,7 +65,7 @@ export default function ForgotPasswordPage() {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                 Email Address
               </label>
               <div className="relative">
@@ -95,7 +95,7 @@ export default function ForgotPasswordPage() {
             </button>
 
             <div className="text-center">
-              <Link href="/login" className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900">
+              <Link href="/login" className="inline-flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 dark:text-white">
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Login</span>
               </Link>

@@ -39,7 +39,7 @@ export default function LeaderboardPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50">
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/rewards" className="flex items-center space-x-2 text-purple-700 hover:text-purple-800 transition-colors">
@@ -56,8 +56,8 @@ export default function LeaderboardPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-purple-100 rounded-full mb-3">
             <Trophy className="w-7 h-7 text-purple-700" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Leaderboard</h1>
-          <p className="text-gray-600 mt-1">Top listeners and artists by XP</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Leaderboard</h1>
+          <p className="text-gray-600 dark:text-zinc-400 mt-1">Top listeners and artists by XP</p>
         </div>
 
         {/* Tabs */}
@@ -83,11 +83,11 @@ export default function LeaderboardPage() {
         </div>
 
         {/* Leaderboard */}
-        <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border overflow-hidden">
           {loading ? (
             <div className="p-12 text-center text-gray-400 animate-pulse">Loading leaderboard...</div>
           ) : entries.length === 0 ? (
-            <div className="p-12 text-center text-gray-500">
+            <div className="p-12 text-center text-gray-500 dark:text-zinc-500">
               No entries yet. Start earning XP to appear on the leaderboard!
             </div>
           ) : (
@@ -116,7 +116,7 @@ export default function LeaderboardPage() {
                   {/* Name */}
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-gray-900 truncate">{entry.name || "Anonymous"}</div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-gray-500 dark:text-zinc-500">
                       Level {entry.xpLevel}
                       {entry.badges.length > 0 && ` · ${entry.badges.length} badges`}
                     </div>

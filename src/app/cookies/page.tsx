@@ -33,7 +33,7 @@ export default function CookiePolicyPage() {
           Last Updated: March 2026
         </p>
 
-        <div className="mt-10 space-y-10 text-gray-700 leading-relaxed">
+        <div className="mt-10 space-y-10 text-gray-700 dark:text-zinc-300 leading-relaxed">
           {/* 1. What Are Cookies */}
           <section>
             <h2 className="text-2xl font-semibold text-amber-800 mb-4">
@@ -98,7 +98,7 @@ export default function CookiePolicyPage() {
 
             {/* Essential Cookies */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 Essential Cookies
               </h3>
               <p className="mb-2">
@@ -108,22 +108,22 @@ export default function CookiePolicyPage() {
                 cookies cannot be disabled.
               </p>
               <div className="overflow-x-auto">
-                <table className="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
-                  <thead className="bg-amber-50">
+                <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
+                  <thead className="bg-amber-50 dark:bg-amber-500/10">
                     <tr>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
                         Cookie
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
                         Purpose
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
                         Duration
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-gray-100">
+                    <tr className="border-b border-gray-100 dark:border-zinc-800">
                       <td className="px-4 py-2 font-mono text-xs">
                         next-auth.session-token
                       </td>
@@ -132,7 +132,7 @@ export default function CookiePolicyPage() {
                       </td>
                       <td className="px-4 py-2">Session / 30 days</td>
                     </tr>
-                    <tr className="border-b border-gray-100">
+                    <tr className="border-b border-gray-100 dark:border-zinc-800">
                       <td className="px-4 py-2 font-mono text-xs">
                         next-auth.csrf-token
                       </td>
@@ -157,7 +157,7 @@ export default function CookiePolicyPage() {
 
             {/* Functional Cookies */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 Functional Cookies
               </h3>
               <p className="mb-2">
@@ -167,22 +167,22 @@ export default function CookiePolicyPage() {
                 may not work as expected.
               </p>
               <div className="overflow-x-auto">
-                <table className="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
-                  <thead className="bg-amber-50">
+                <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
+                  <thead className="bg-amber-50 dark:bg-amber-500/10">
                     <tr>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
                         Cookie
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
                         Purpose
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
                         Duration
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-gray-100">
+                    <tr className="border-b border-gray-100 dark:border-zinc-800">
                       <td className="px-4 py-2 font-mono text-xs">
                         station-preference
                       </td>
@@ -207,7 +207,7 @@ export default function CookiePolicyPage() {
 
             {/* Analytics Cookies */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 Analytics Cookies
               </h3>
               <p className="mb-2">
@@ -217,29 +217,29 @@ export default function CookiePolicyPage() {
                 audience.
               </p>
               <div className="overflow-x-auto">
-                <table className="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
-                  <thead className="bg-amber-50">
+                <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
+                  <thead className="bg-amber-50 dark:bg-amber-500/10">
                     <tr>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
                         Cookie
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
                         Purpose
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
                         Duration
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-gray-100">
+                    <tr className="border-b border-gray-100 dark:border-zinc-800">
                       <td className="px-4 py-2 font-mono text-xs">_ga</td>
                       <td className="px-4 py-2">
                         Google Analytics: distinguishes unique visitors
                       </td>
                       <td className="px-4 py-2">2 years</td>
                     </tr>
-                    <tr className="border-b border-gray-100">
+                    <tr className="border-b border-gray-100 dark:border-zinc-800">
                       <td className="px-4 py-2 font-mono text-xs">_ga_*</td>
                       <td className="px-4 py-2">
                         Google Analytics: maintains session state
@@ -361,7 +361,7 @@ export default function CookiePolicyPage() {
         </div>
 
         {/* Cross-links to other legal pages */}
-        <div className="mt-16 pt-8 border-t border-gray-200">
+        <div className="mt-16 pt-8 border-t border-gray-200 dark:border-zinc-800">
           <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
             Related Legal Pages
           </h3>

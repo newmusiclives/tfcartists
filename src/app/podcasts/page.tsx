@@ -107,12 +107,6 @@ export default async function PodcastsPage() {
               >
                 Schedule
               </Link>
-              <Link
-                href="/djs"
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                DJs
-              </Link>
             </div>
           </div>
         </div>
@@ -169,7 +163,7 @@ export default async function PodcastsPage() {
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-white">{djNames.length}</div>
-            <div className="text-xs text-gray-500 uppercase tracking-wider">DJs</div>
+            <div className="text-xs text-gray-500 uppercase tracking-wider">Hosts</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-white">

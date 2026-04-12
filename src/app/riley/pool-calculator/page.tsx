@@ -82,7 +82,7 @@ export default function PoolCalculatorPage() {
       <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading pool calculator data...</p>
+          <p className="text-gray-600 dark:text-zinc-400">Loading pool calculator data...</p>
         </div>
       </main>
     );
@@ -94,13 +94,13 @@ export default function PoolCalculatorPage() {
       <SharedNav />
 
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center space-x-3">
             <Calculator className="w-8 h-8 text-green-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Artist Pool Share Calculator</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Artist Pool Share Calculator</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Calculate monthly earnings distribution - Managed by Jordan Cross
               </p>
             </div>
@@ -110,46 +110,46 @@ export default function PoolCalculatorPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Revenue Input */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Monthly Revenue Input</h2>
 
           <div className="bg-blue-50 rounded-lg p-6 mb-6">
-            <div className="text-sm text-gray-600 mb-2">Harper's Team Total Revenue</div>
+            <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Harper's Team Total Revenue</div>
             <div className="flex items-center space-x-4">
               <input
                 type="number"
                 value={harperRevenue}
                 onChange={(e) => setHarperRevenue(Number(e.target.value))}
-                className="flex-1 px-4 py-3 text-2xl font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="flex-1 px-4 py-3 text-2xl font-bold border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
-              <span className="text-2xl font-bold text-gray-900">/ month</span>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">/ month</span>
             </div>
-            <div className="mt-3 text-sm text-gray-600">
+            <div className="mt-3 text-sm text-gray-600 dark:text-zinc-400">
               Master Overview target: $7,800/month ($5,200 base + $2,600 premium)
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-purple-50 rounded-lg p-4">
-              <div className="text-sm text-gray-600 mb-1">Artist Pool (80%)</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Pool (80%)</div>
               <div className="text-3xl font-bold text-purple-600">${artistPoolAmount.toLocaleString()}</div>
-              <div className="text-xs text-gray-500 mt-1">Distributed to artists</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Distributed to artists</div>
             </div>
             <div className="bg-green-50 rounded-lg p-4">
-              <div className="text-sm text-gray-600 mb-1">Station Revenue (20%)</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Station Revenue (20%)</div>
               <div className="text-3xl font-bold text-green-600">${(harperRevenue * 0.20).toLocaleString()}</div>
-              <div className="text-xs text-gray-500 mt-1">Station operations</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Station operations</div>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-sm text-gray-600 mb-1">Per Share Value</div>
-              <div className="text-3xl font-bold text-gray-900">${perShareValue.toFixed(4)}</div>
-              <div className="text-xs text-gray-500 mt-1">Based on {totalShares.toLocaleString()} shares</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Per Share Value</div>
+              <div className="text-3xl font-bold text-gray-900 dark:text-white">${perShareValue.toFixed(4)}</div>
+              <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Based on {totalShares.toLocaleString()} shares</div>
             </div>
           </div>
         </div>
 
         {/* Artist Distribution */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Artist Distribution</h2>
 
           <div className="space-y-4">
@@ -198,15 +198,15 @@ export default function PoolCalculatorPage() {
           <div className="mt-6 pt-6 border-t">
             <div className="grid grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-sm text-gray-600 mb-1">Total Artists</div>
-                <div className="text-3xl font-bold text-gray-900">{totalArtists}</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Total Artists</div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">{totalArtists}</div>
               </div>
               <div className="text-center">
-                <div className="text-sm text-gray-600 mb-1">Total Shares</div>
-                <div className="text-3xl font-bold text-gray-900">{totalShares.toLocaleString()}</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Total Shares</div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">{totalShares.toLocaleString()}</div>
               </div>
               <div className="text-center">
-                <div className="text-sm text-gray-600 mb-1">Total Distribution</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Total Distribution</div>
                 <div className="text-3xl font-bold text-purple-600">${artistPoolAmount.toLocaleString()}</div>
               </div>
             </div>
@@ -214,7 +214,7 @@ export default function PoolCalculatorPage() {
         </div>
 
         {/* Earnings Comparison */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Monthly Earnings by Tier</h2>
 
           <div className="space-y-3">
@@ -266,28 +266,28 @@ export default function PoolCalculatorPage() {
           <h2 className="text-2xl font-bold mb-4">Payout Verification</h2>
 
           <div className="space-y-3 text-sm">
-            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-              <span className="text-gray-600">FREE Tier Total:</span>
+            <div className="flex justify-between items-center p-3 bg-white dark:bg-zinc-900 rounded-lg">
+              <span className="text-gray-600 dark:text-zinc-400">FREE Tier Total:</span>
               <span className="font-semibold">${totalPayoutByTier.FREE.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-              <span className="text-gray-600">BRONZE Tier Total:</span>
+            <div className="flex justify-between items-center p-3 bg-white dark:bg-zinc-900 rounded-lg">
+              <span className="text-gray-600 dark:text-zinc-400">BRONZE Tier Total:</span>
               <span className="font-semibold">${totalPayoutByTier.BRONZE.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-              <span className="text-gray-600">SILVER Tier Total:</span>
+            <div className="flex justify-between items-center p-3 bg-white dark:bg-zinc-900 rounded-lg">
+              <span className="text-gray-600 dark:text-zinc-400">SILVER Tier Total:</span>
               <span className="font-semibold">${totalPayoutByTier.SILVER.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-              <span className="text-gray-600">GOLD Tier Total:</span>
+            <div className="flex justify-between items-center p-3 bg-white dark:bg-zinc-900 rounded-lg">
+              <span className="text-gray-600 dark:text-zinc-400">GOLD Tier Total:</span>
               <span className="font-semibold">${totalPayoutByTier.GOLD.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-              <span className="text-gray-600">PLATINUM Tier Total:</span>
+            <div className="flex justify-between items-center p-3 bg-white dark:bg-zinc-900 rounded-lg">
+              <span className="text-gray-600 dark:text-zinc-400">PLATINUM Tier Total:</span>
               <span className="font-semibold">${totalPayoutByTier.PLATINUM.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center p-3 bg-green-100 rounded-lg font-bold text-lg">
-              <span className="text-gray-900">TOTAL DISTRIBUTED:</span>
+              <span className="text-gray-900 dark:text-white">TOTAL DISTRIBUTED:</span>
               <span className="text-green-600">${artistPoolAmount.toLocaleString()}</span>
             </div>
             <div className="text-xs text-gray-500 text-center mt-2">
@@ -303,11 +303,11 @@ export default function PoolCalculatorPage() {
               <User className="w-8 h-8 text-purple-600" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Jordan Cross</h3>
-              <p className="text-sm text-gray-600 mb-3">Payment Processing & Artist Support</p>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Jordan Cross</h3>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">Payment Processing & Artist Support</p>
               <div className="text-sm text-gray-700 space-y-2">
                 <p><strong>Responsibilities:</strong></p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600">
+                <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                   <li>Calculate monthly pool share distributions</li>
                   <li>Process payments to artists</li>
                   <li>Handle payment-related questions</li>
@@ -339,7 +339,7 @@ function TierRow({
   color: string;
 }) {
   const colorClasses = {
-    gray: "bg-gray-50 border-gray-200",
+    gray: "bg-gray-50 border-gray-200 dark:border-zinc-800",
     orange: "bg-orange-50 border-orange-200",
     yellow: "bg-yellow-50 border-yellow-200",
     purple: "bg-purple-50 border-purple-200",
@@ -349,24 +349,24 @@ function TierRow({
     <div className={`${colorClasses} border-2 rounded-lg p-4`}>
       <div className="grid grid-cols-5 gap-4 items-center">
         <div>
-          <div className="font-bold text-gray-900">{tier}</div>
-          <div className="text-xs text-gray-500">{shares} share{shares !== 1 && 's'}</div>
+          <div className="font-bold text-gray-900 dark:text-white">{tier}</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">{shares} share{shares !== 1 && 's'}</div>
         </div>
         <div className="text-center">
-          <div className="text-sm text-gray-600">Artists</div>
-          <div className="text-xl font-bold text-gray-900">{count}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">Artists</div>
+          <div className="text-xl font-bold text-gray-900 dark:text-white">{count}</div>
         </div>
         <div className="text-center">
-          <div className="text-sm text-gray-600">Per Artist</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">Per Artist</div>
           <div className="text-xl font-bold text-green-600">${perArtist.toFixed(2)}</div>
         </div>
         <div className="text-center">
-          <div className="text-sm text-gray-600">Total Payout</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">Total Payout</div>
           <div className="text-xl font-bold text-purple-600">${totalPayout.toLocaleString()}</div>
         </div>
         <div className="text-center">
-          <div className="text-sm text-gray-600">Total Shares</div>
-          <div className="text-xl font-bold text-gray-900">{(count * shares).toLocaleString()}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">Total Shares</div>
+          <div className="text-xl font-bold text-gray-900 dark:text-white">{(count * shares).toLocaleString()}</div>
         </div>
       </div>
     </div>
@@ -394,9 +394,9 @@ function EarningsCard({
 
   const colorClasses = {
     gray: "bg-gray-100 text-gray-700",
-    orange: "bg-orange-100 text-orange-700",
-    yellow: "bg-yellow-100 text-yellow-700",
-    purple: "bg-purple-100 text-purple-700",
+    orange: "bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400",
+    yellow: "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400",
+    purple: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400",
   }[color];
 
   return (
@@ -406,25 +406,25 @@ function EarningsCard({
           <div className={`px-3 py-1 rounded font-bold text-sm ${colorClasses}`}>
             {tier}
           </div>
-          <div className="text-sm text-gray-600">{shares} share{shares !== 1 && 's'}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">{shares} share{shares !== 1 && 's'}</div>
         </div>
         <div className="flex items-center space-x-6">
           <div className="text-right">
-            <div className="text-xs text-gray-500">Monthly Pool Share</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Monthly Pool Share</div>
             <div className="text-lg font-bold text-green-600">${perMonth.toFixed(2)}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500">Subscription Cost</div>
-            <div className="text-lg font-bold text-gray-900">${subscription.toFixed(2)}</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Subscription Cost</div>
+            <div className="text-lg font-bold text-gray-900 dark:text-white">${subscription.toFixed(2)}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500">Net Monthly</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Net Monthly</div>
             <div className={`text-lg font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
               {isProfit ? '+' : ''}${netMonthly.toFixed(2)}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500">Net Yearly</div>
+            <div className="text-xs text-gray-500 dark:text-zinc-500">Net Yearly</div>
             <div className={`text-lg font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
               {isProfit ? '+' : ''}${netYearly.toFixed(2)}
             </div>

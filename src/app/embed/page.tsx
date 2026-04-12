@@ -58,7 +58,7 @@ export default function EmbedCodeGeneratorPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <a href="/" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
@@ -77,8 +77,8 @@ export default function EmbedCodeGeneratorPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-amber-100 rounded-full mb-4">
             <Code className="w-7 h-7 text-amber-700" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Embed Player Widget</h1>
-          <p className="mt-2 text-gray-600 max-w-lg mx-auto">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Embed Player Widget</h1>
+          <p className="mt-2 text-gray-600 dark:text-zinc-400 max-w-lg mx-auto">
             Add a TrueFans RADIO player to your website. It shows live cover art, track details,
             DJ info, and listener count — just like the real player.
           </p>
@@ -89,7 +89,7 @@ export default function EmbedCodeGeneratorPage() {
           <div className="space-y-6">
             {/* Size selector */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-3">Player Size</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-3">Player Size</label>
               <div className="space-y-2">
                 {(Object.entries(SIZE_CONFIG) as [Size, typeof config][]).map(([key, val]) => (
                   <button
@@ -101,8 +101,8 @@ export default function EmbedCodeGeneratorPage() {
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
-                    <div className="font-semibold text-sm text-gray-900">{val.label} ({val.width} x {val.height})</div>
-                    <div className="text-xs text-gray-500">{val.description}</div>
+                    <div className="font-semibold text-sm text-gray-900 dark:text-white">{val.label} ({val.width} x {val.height})</div>
+                    <div className="text-xs text-gray-500 dark:text-zinc-500">{val.description}</div>
                   </button>
                 ))}
               </div>
@@ -110,7 +110,7 @@ export default function EmbedCodeGeneratorPage() {
 
             {/* Accent Color */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Accent Color</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-2">Accent Color</label>
               <div className="flex items-center gap-2 flex-wrap">
                 {COLOR_PRESETS.map((c) => (
                   <button
@@ -133,13 +133,13 @@ export default function EmbedCodeGeneratorPage() {
 
             {/* Platform */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Platform</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-2">Platform</label>
               <div className="flex gap-2">
                 {([["html", "HTML"], ["wordpress", "WordPress"], ["shopify", "Shopify"]] as const).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => setPlatform(key)}
-                    className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${platform === key ? "border-amber-500 bg-amber-50 text-amber-700 font-medium" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
+                    className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${platform === key ? "border-amber-500 bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 font-medium" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
                   >
                     {label}
                   </button>
@@ -149,10 +149,10 @@ export default function EmbedCodeGeneratorPage() {
 
             {/* Referral code */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-1">
                 Referral Code <span className="text-gray-400 font-normal">(optional)</span>
               </label>
-              <p className="text-xs text-gray-500 mb-2">
+              <p className="text-xs text-gray-500 dark:text-zinc-500 mb-2">
                 Include your scout/artist/sponsor referral code to earn rewards when people listen through your embed.
               </p>
               <input
@@ -166,7 +166,7 @@ export default function EmbedCodeGeneratorPage() {
 
             {/* Embed code */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Embed Code</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-2">Embed Code</label>
               <div className="relative">
                 <pre className="bg-gray-900 text-gray-300 p-4 rounded-xl text-xs overflow-x-auto whitespace-pre-wrap break-all">
                   {snippet}
@@ -187,7 +187,7 @@ export default function EmbedCodeGeneratorPage() {
 
           {/* Preview */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Live Preview</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-3">Live Preview</label>
             <div className="bg-gray-800 rounded-2xl p-6 flex items-center justify-center" style={{ minHeight: Math.max(config.height + 48, 280) }}>
               <iframe
                 key={size}
@@ -200,7 +200,7 @@ export default function EmbedCodeGeneratorPage() {
                 title="Player preview"
               />
             </div>
-            <p className="text-xs text-gray-500 mt-3 text-center">
+            <p className="text-xs text-gray-500 dark:text-zinc-500 mt-3 text-center">
               Live preview — click play to test the audio stream with real cover art and track info.
             </p>
           </div>

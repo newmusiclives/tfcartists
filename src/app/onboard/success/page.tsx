@@ -12,16 +12,16 @@ function OnboardSuccessContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center px-4">
       <div className="max-w-lg w-full">
-        <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-8 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
             <CheckCircle className="w-10 h-10 text-green-600" />
           </div>
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Welcome to TrueFans RADIO, {name}!
           </h1>
 
-          <p className="text-lg text-gray-600 mb-8">
+          <p className="text-lg text-gray-600 dark:text-zinc-400 mb-8">
             You're all set! Riley will reach out to you shortly to help you get ready for your
             next show.
           </p>
@@ -51,7 +51,7 @@ function OnboardSuccessContent() {
             </Link>
             <Link
               href="/admin"
-              className="text-gray-600 hover:text-gray-900 font-medium"
+              className="text-gray-600 hover:text-gray-900 dark:text-white font-medium"
             >
               View Admin Dashboard
             </Link>
@@ -66,7 +66,7 @@ export default function OnboardSuccessPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading...</div>
       </div>
     }>
       <OnboardSuccessContent />

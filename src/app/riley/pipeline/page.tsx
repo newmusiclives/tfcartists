@@ -174,12 +174,12 @@ export default function PipelinePage() {
 
   const getStageColor = (stage: PipelineStage) => {
     const colors = {
-      discovered: "bg-gray-100 text-gray-700 border-gray-300",
-      contacted: "bg-blue-100 text-blue-700 border-blue-300",
+      discovered: "bg-gray-100 text-gray-700 border-gray-300 dark:border-zinc-700",
+      contacted: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-300",
       responded: "bg-indigo-100 text-indigo-700 border-indigo-300",
-      invited: "bg-purple-100 text-purple-700 border-purple-300",
-      submitted: "bg-yellow-100 text-yellow-700 border-yellow-300",
-      approved: "bg-green-100 text-green-700 border-green-300",
+      invited: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-300",
+      submitted: "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-300",
+      approved: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 border-green-300",
       activated: "bg-emerald-100 text-emerald-700 border-emerald-300",
     };
     return colors[stage];
@@ -200,9 +200,9 @@ export default function PipelinePage() {
 
   const getPriorityColor = (priority: "high" | "medium" | "low") => {
     const colors = {
-      high: "bg-red-100 text-red-700 border-red-300",
-      medium: "bg-orange-100 text-orange-700 border-orange-300",
-      low: "bg-gray-100 text-gray-600 border-gray-300",
+      high: "bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400 border-red-300",
+      medium: "bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-300",
+      low: "bg-gray-100 text-gray-600 border-gray-300 dark:border-zinc-700",
     };
     return colors[priority];
   };
@@ -213,12 +213,12 @@ export default function PipelinePage() {
       <SharedNav />
 
       {/* Page Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Artist Pipeline</h1>
-              <p className="text-sm text-gray-600">Complete journey from discovery to activation</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Artist Pipeline</h1>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Complete journey from discovery to activation</p>
             </div>
             <div className="flex items-center space-x-3">
               <Link
@@ -270,8 +270,8 @@ export default function PipelinePage() {
         </div>
 
         {/* Pipeline Stages */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Pipeline Overview</h2>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Pipeline Overview</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
             {pipelineStages.map((stage, idx) => (
               <button
@@ -281,13 +281,13 @@ export default function PipelinePage() {
                 className={`relative p-4 rounded-lg border-2 transition-all cursor-pointer ${
                   selectedStage === stage.key
                     ? "border-purple-500 bg-purple-100 shadow-lg ring-2 ring-purple-200"
-                    : "border-gray-200 hover:border-purple-300 hover:shadow-md hover:bg-purple-50"
+                    : "border-gray-200 dark:border-zinc-800 hover:border-purple-300 hover:shadow-md hover:bg-purple-50"
                 }`}
               >
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900 mb-1">{stage.count}</div>
-                  <div className="text-xs font-medium text-gray-600 mb-2">{stage.label}</div>
-                  <div className="text-xs text-gray-500">{stage.assignedTo}</div>
+                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stage.count}</div>
+                  <div className="text-xs font-medium text-gray-600 dark:text-zinc-400 mb-2">{stage.label}</div>
+                  <div className="text-xs text-gray-500 dark:text-zinc-500">{stage.assignedTo}</div>
                 </div>
                 {idx < pipelineStages.length - 1 && (
                   <ChevronRight className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-4 text-gray-400 hidden lg:block" />
@@ -302,7 +302,7 @@ export default function PipelinePage() {
               className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer hover:scale-105 ${
                 selectedStage === "all"
                   ? "bg-purple-600 text-white shadow-lg ring-2 ring-purple-300"
-                  : "bg-purple-100 text-purple-700 hover:bg-purple-200 hover:shadow-md"
+                  : "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 hover:bg-purple-200 hover:shadow-md"
               }`}
             >
               {selectedStage === "all" ? "✓ Viewing All Stages" : "View All Stages"} ({artists.length} artists)
@@ -311,10 +311,10 @@ export default function PipelinePage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-gray-900 dark:text-white">
                 {selectedStage === "all" ? "All Artists" : `${selectedStage.charAt(0).toUpperCase() + selectedStage.slice(1)} Stage`}
                 {" "}({filteredArtists.length})
               </h3>
@@ -345,7 +345,7 @@ export default function PipelinePage() {
           {/* Artist Cards */}
           <div className="space-y-4">
             {filteredArtists.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
                 <Users className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                 <p>No artists found in this stage.</p>
               </div>
@@ -359,7 +359,7 @@ export default function PipelinePage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
-                        <h4 className="text-lg font-semibold text-gray-900">{artist.name}</h4>
+                        <h4 className="text-lg font-semibold text-gray-900 dark:text-white">{artist.name}</h4>
                         <span className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium border ${getStageColor(artist.stage)}`}>
                           {getStageIcon(artist.stage)}
                           <span>{artist.stage.charAt(0).toUpperCase() + artist.stage.slice(1)}</span>
@@ -369,7 +369,7 @@ export default function PipelinePage() {
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 dark:text-zinc-400 mb-3">
                         <div>
                           <span className="font-medium">Genre:</span> {artist.genre}
                         </div>
@@ -500,14 +500,14 @@ export default function PipelinePage() {
       {/* Artist Detail Modal */}
       {selectedArtist && !showActionModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedArtist(null)}>
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="sticky top-0 bg-white border-b p-6 z-10">
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-1">{selectedArtist.name}</h2>
-                  <p className="text-gray-600">{selectedArtist.genre} • {selectedArtist.location}</p>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{selectedArtist.name}</h2>
+                  <p className="text-gray-600 dark:text-zinc-400">{selectedArtist.genre} • {selectedArtist.location}</p>
                 </div>
-                <button onClick={() => setSelectedArtist(null)} className="text-gray-400 hover:text-gray-600">
+                <button onClick={() => setSelectedArtist(null)} className="text-gray-400 hover:text-gray-600 dark:text-zinc-400">
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -516,7 +516,7 @@ export default function PipelinePage() {
             <div className="p-6 space-y-6">
               {/* Status */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Current Status</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Current Status</h3>
                 <div className="flex items-center space-x-3">
                   <span className={`inline-flex items-center space-x-2 px-4 py-2 rounded-lg border-2 ${getStageColor(selectedArtist.stage)}`}>
                     {getStageIcon(selectedArtist.stage)}
@@ -530,7 +530,7 @@ export default function PipelinePage() {
 
               {/* Contact Info */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Contact Information</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Contact Information</h3>
                 <div className="space-y-2">
                   {selectedArtist.email && (
                     <a href={`mailto:${selectedArtist.email}`} className="flex items-center space-x-3 text-blue-600 hover:underline">
@@ -571,23 +571,23 @@ export default function PipelinePage() {
 
               {/* Discovery Info */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Discovery Details</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Discovery Details</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-gray-600">Source:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Source:</span>
                     <div className="font-medium">{selectedArtist.discoverySource}</div>
                   </div>
                   <div>
-                    <span className="text-gray-600">Days in Stage:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Days in Stage:</span>
                     <div className="font-medium">{selectedArtist.daysInStage} days</div>
                   </div>
                   <div>
-                    <span className="text-gray-600">Assigned To:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Assigned To:</span>
                     <div className="font-medium">{selectedArtist.assignedTo}</div>
                   </div>
                   {selectedArtist.submittedDate && (
                     <div>
-                      <span className="text-gray-600">Submitted:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Submitted:</span>
                       <div className="font-medium">{selectedArtist.submittedDate}</div>
                     </div>
                   )}
@@ -597,7 +597,7 @@ export default function PipelinePage() {
               {/* Track Info */}
               {selectedArtist.trackName && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Track Information</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Track Information</h3>
                   <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                     <div className="font-medium text-purple-900">{selectedArtist.trackName}</div>
                     {selectedArtist.submittedDate && (
@@ -609,7 +609,7 @@ export default function PipelinePage() {
 
               {/* Next Action */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Next Action</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Next Action</h3>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <div className="flex items-start space-x-3">
                     <Target className="w-5 h-5 text-blue-600 mt-0.5" />
@@ -624,8 +624,8 @@ export default function PipelinePage() {
               {/* Notes */}
               {selectedArtist.notes && (
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Notes</h3>
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Notes</h3>
+                  <div className="bg-gray-50 border border-gray-200 dark:border-zinc-800 rounded-lg p-4 text-sm text-gray-700 dark:text-zinc-300">
                     {selectedArtist.notes}
                   </div>
                 </div>
@@ -641,7 +641,7 @@ export default function PipelinePage() {
                 </button>
                 <button
                   onClick={() => setSelectedArtist(null)}
-                  className="flex-1 border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                  className="flex-1 border border-gray-300 dark:border-zinc-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                 >
                   Close
                 </button>
@@ -654,10 +654,10 @@ export default function PipelinePage() {
       {/* Move Stage Modal */}
       {selectedArtist && showActionModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowActionModal(false)}>
-          <div className="bg-white rounded-xl max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
             <div className="border-b p-6">
-              <h2 className="text-xl font-bold text-gray-900">Move Artist to Next Stage</h2>
-              <p className="text-sm text-gray-600 mt-1">Choose the next pipeline stage for {selectedArtist.name}</p>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Move Artist to Next Stage</h2>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">Choose the next pipeline stage for {selectedArtist.name}</p>
             </div>
 
             <div className="p-6 space-y-3">
@@ -668,8 +668,8 @@ export default function PipelinePage() {
                   disabled={stage.key === selectedArtist.stage}
                   className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
                     stage.key === selectedArtist.stage
-                      ? "border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed"
-                      : "border-gray-200 hover:border-purple-400 hover:bg-purple-50"
+                      ? "border-gray-200 dark:border-zinc-800 bg-gray-50 opacity-50 cursor-not-allowed"
+                      : "border-gray-200 dark:border-zinc-800 hover:border-purple-400 hover:bg-purple-50"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -678,8 +678,8 @@ export default function PipelinePage() {
                         {getStageIcon(stage.key)}
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900">{stage.label}</div>
-                        <div className="text-sm text-gray-600">{stage.assignedTo}</div>
+                        <div className="font-semibold text-gray-900 dark:text-white">{stage.label}</div>
+                        <div className="text-sm text-gray-600 dark:text-zinc-400">{stage.assignedTo}</div>
                       </div>
                     </div>
                     {stage.key === selectedArtist.stage && (
@@ -693,7 +693,7 @@ export default function PipelinePage() {
             <div className="border-t p-6">
               <button
                 onClick={() => setShowActionModal(false)}
-                className="w-full border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                className="w-full border border-gray-300 dark:border-zinc-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 Cancel
               </button>
@@ -727,9 +727,9 @@ function StatCard({
     <div className={`${colorClasses[color]} rounded-xl p-6 border-2 border-transparent hover:border-purple-300 transition-all`}>
       <div className="flex items-center space-x-3 mb-2">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900">{value}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white">{value}</div>
     </div>
   );
 }
@@ -749,8 +749,8 @@ function ActionCard({
 }) {
   const colorClasses: Record<string, string> = {
     indigo: "bg-indigo-100 text-indigo-700 border-indigo-300 hover:bg-indigo-200",
-    green: "bg-green-100 text-green-700 border-green-300 hover:bg-green-200",
-    blue: "bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200",
+    green: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 border-green-300 hover:bg-green-200",
+    blue: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-300 hover:bg-blue-200",
     emerald: "bg-emerald-100 text-emerald-700 border-emerald-300 hover:bg-emerald-200",
   };
 

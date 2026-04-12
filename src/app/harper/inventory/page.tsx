@@ -76,11 +76,11 @@ export default function AdInventoryPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/harper"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Harper Dashboard</span>
@@ -88,8 +88,8 @@ export default function AdInventoryPage() {
           <div className="flex items-center space-x-3">
             <Calendar className="w-8 h-8 text-purple-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Ad Inventory Management</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Ad Inventory Management</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Monitor and manage monthly ad spot allocation
               </p>
             </div>
@@ -98,7 +98,7 @@ export default function AdInventoryPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live inventory data will appear once ad scheduling is connected.
         </div>
       </div>
@@ -133,10 +133,10 @@ export default function AdInventoryPage() {
         </section>
 
         {/* Utilization Bar */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold mb-4">Overall Inventory Status</h2>
           <div className="relative">
-            <div className="bg-gray-200 rounded-full h-8 overflow-hidden">
+            <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-8 overflow-hidden">
               <div
                 className="bg-gradient-to-r from-green-500 to-blue-600 h-full flex items-center justify-center text-white font-bold text-sm transition-all"
                 style={{ width: `${utilizationRate}%` }}
@@ -144,7 +144,7 @@ export default function AdInventoryPage() {
                 {utilizationRate.toFixed(1)}% Utilized
               </div>
             </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-2">
+            <div className="flex justify-between text-xs text-gray-500 dark:text-zinc-500 mt-2">
               <span>0 spots</span>
               <span>{totalMonthlySpots.toLocaleString()} spots</span>
             </div>
@@ -164,7 +164,7 @@ export default function AdInventoryPage() {
         </section>
 
         {/* Allocation by Tier */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Allocation by Sponsor Tier</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -180,11 +180,11 @@ export default function AdInventoryPage() {
                 const revenuePerSpot = tier.price / tier.spotsPerSponsor;
                 return (
                   <div key={tier.tier} className="bg-gray-50 rounded-lg p-3 text-center">
-                    <div className="text-xs text-gray-600">{tier.tier}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">{tier.tier}</div>
                     <div className="text-lg font-bold text-green-600">
                       ${revenuePerSpot.toFixed(2)}
                     </div>
-                    <div className="text-xs text-gray-500">per spot</div>
+                    <div className="text-xs text-gray-500 dark:text-zinc-500">per spot</div>
                   </div>
                 );
               })}
@@ -193,9 +193,9 @@ export default function AdInventoryPage() {
         </section>
 
         {/* Time Slot Distribution */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Distribution by Time Slot</h2>
-          <p className="text-sm text-gray-600 mb-6">
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-6">
             Ad spots allocated across different dayparts (4-hour blocks)
           </p>
 
@@ -206,7 +206,7 @@ export default function AdInventoryPage() {
           </div>
 
           <div className="mt-6 pt-6 border-t">
-            <div className="flex items-start space-x-2 text-sm text-gray-600">
+            <div className="flex items-start space-x-2 text-sm text-gray-600 dark:text-zinc-400">
               <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div>
                 <strong>Note:</strong> Subprime hours (6pm-6am) show high utilization.
@@ -250,13 +250,13 @@ function MetricCard({
   subtitle: string;
 }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -280,43 +280,43 @@ function TierAllocationCard({
   const percentage = (totalSpots / maxSpots) * 100;
   const colorMap: Record<string, string> = {
     teal: "bg-teal-100 text-teal-700",
-    blue: "bg-blue-100 text-blue-700",
-    green: "bg-green-100 text-green-700",
-    purple: "bg-purple-100 text-purple-700",
+    blue: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400",
+    green: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400",
+    purple: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400",
   };
   const colorClasses = colorMap[color];
 
   return (
-    <div className="border-2 border-gray-200 rounded-lg p-4">
+    <div className="border-2 border-gray-200 dark:border-zinc-800 rounded-lg p-4">
       <div className="flex items-center justify-between mb-3">
         <div className={`text-sm font-bold px-3 py-1 rounded ${colorClasses}`}>
           {tier}
         </div>
-        <div className="text-sm font-semibold text-gray-700">${price}/mo</div>
+        <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">${price}/mo</div>
       </div>
 
       <div className="space-y-2 text-sm mb-4">
         <div className="flex justify-between">
-          <span className="text-gray-600">Sponsors:</span>
+          <span className="text-gray-600 dark:text-zinc-400">Sponsors:</span>
           <span className="font-semibold">{sponsors}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">Spots/sponsor:</span>
+          <span className="text-gray-600 dark:text-zinc-400">Spots/sponsor:</span>
           <span className="font-semibold">{spotsPerSponsor}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600">Total spots:</span>
+          <span className="text-gray-600 dark:text-zinc-400">Total spots:</span>
           <span className="font-semibold">{totalSpots.toLocaleString()}</span>
         </div>
       </div>
 
-      <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
+      <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-3 overflow-hidden">
         <div
           className={`h-full ${color === 'teal' ? 'bg-teal-600' : color === 'blue' ? 'bg-blue-600' : color === 'green' ? 'bg-green-600' : 'bg-purple-600'}`}
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="text-xs text-gray-500 mt-1 text-center">
+      <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1 text-center">
         {percentage.toFixed(1)}% of total inventory
       </div>
     </div>
@@ -345,19 +345,19 @@ function TimeSlotRow({
   return (
     <div className="bg-gray-50 rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
-        <div className="font-semibold text-gray-900">{slot}</div>
+        <div className="font-semibold text-gray-900 dark:text-white">{slot}</div>
         <div className={`${status.label} ${status.text} px-3 py-1 rounded-full text-xs font-medium`}>
           {percentage}% Full
         </div>
       </div>
 
       <div className="flex items-center space-x-3 mb-2">
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 dark:text-zinc-400">
           {allocated.toLocaleString()} / {capacity.toLocaleString()} spots
         </div>
       </div>
 
-      <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
+      <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
         <div
           className={`h-full ${status.bg} transition-all`}
           style={{ width: `${percentage}%` }}
@@ -383,9 +383,9 @@ function ActionCard({
   const colorClass = buttonColor === "green" ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700";
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6">
-      <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600 mb-4">{description}</p>
+    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
+      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{title}</h3>
+      <p className="text-gray-600 dark:text-zinc-400 mb-4">{description}</p>
       <Link
         href={href}
         className={`inline-block ${colorClass} text-white px-6 py-2 rounded-lg transition-colors font-medium`}

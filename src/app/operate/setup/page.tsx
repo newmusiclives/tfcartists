@@ -124,9 +124,9 @@ export default function OperatorSetupWizard() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
-      <nav className="border-b bg-white/80 backdrop-blur-sm">
+      <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/operate" className="flex items-center gap-2 text-amber-700 hover:text-amber-800">
+          <Link href="/operate" className="flex items-center gap-2 text-amber-700 hover:text-amber-800 dark:text-amber-400">
             <ArrowLeft className="w-4 h-4" />
             <Radio className="w-5 h-5" />
             <span className="font-bold">Station Setup</span>
@@ -165,22 +165,22 @@ export default function OperatorSetupWizard() {
 
         {/* Step: Basics */}
         {step === "basics" && (
-          <div className="bg-white rounded-2xl border p-8 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Station Basics</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border p-8 shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Station Basics</h2>
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Station Name *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Station Name *</label>
                 <input type="text" value={stationName} onChange={(e) => setStationName(e.target.value)}
                   placeholder="e.g., North Country Radio" className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Call Sign</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Call Sign</label>
                   <input type="text" value={callSign} onChange={(e) => setCallSign(e.target.value.toUpperCase())}
                     placeholder="e.g., KNCR" className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Primary Genre *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Primary Genre *</label>
                   <select value={genre} onChange={(e) => setGenre(e.target.value)}
                     className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none">
                     <option value="">Select genre...</option>
@@ -189,19 +189,19 @@ export default function OperatorSetupWizard() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Tagline</label>
                 <input type="text" value={tagline} onChange={(e) => setTagline(e.target.value)}
                   placeholder="e.g., Where the Music Finds You" className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Timezone *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Timezone *</label>
                 <select value={timezone} onChange={(e) => setTimezone(e.target.value)}
                   className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none">
                   {TIMEZONE_OPTIONS.map((tz) => <option key={tz} value={tz}>{tz}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Description</label>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)}
                   rows={3} placeholder="Tell listeners what makes your station special..."
                   className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" />
@@ -212,12 +212,12 @@ export default function OperatorSetupWizard() {
 
         {/* Step: Branding */}
         {step === "branding" && (
-          <div className="bg-white rounded-2xl border p-8 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Station Branding</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border p-8 shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Station Branding</h2>
             <div className="space-y-5">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Primary Color</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Primary Color</label>
                   <div className="flex items-center gap-3">
                     <input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)}
                       className="w-12 h-10 rounded cursor-pointer border" />
@@ -226,7 +226,7 @@ export default function OperatorSetupWizard() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Secondary Color</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Secondary Color</label>
                   <div className="flex items-center gap-3">
                     <input type="color" value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)}
                       className="w-12 h-10 rounded cursor-pointer border" />
@@ -238,7 +238,7 @@ export default function OperatorSetupWizard() {
 
               {/* Preview */}
               <div className="border rounded-xl p-4">
-                <p className="text-xs text-gray-500 mb-2">Preview</p>
+                <p className="text-xs text-gray-500 dark:text-zinc-500 mb-2">Preview</p>
                 <div className="rounded-lg overflow-hidden" style={{ background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})` }}>
                   <div className="p-6 text-white">
                     <p className="font-bold text-lg">{stationName || "Your Station Name"}</p>
@@ -248,11 +248,11 @@ export default function OperatorSetupWizard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Custom Domain (optional)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Custom Domain (optional)</label>
                 <input type="text" value={customDomain} onChange={(e) => setCustomDomain(e.target.value)}
                   placeholder="e.g., radio.yourbrand.com"
                   className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">
                   Point a CNAME record to truefans-radio.netlify.app. Configure in White Label settings after setup.
                 </p>
               </div>
@@ -262,8 +262,8 @@ export default function OperatorSetupWizard() {
 
         {/* Step: Programming */}
         {step === "programming" && (
-          <div className="bg-white rounded-2xl border p-8 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Programming Format</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border p-8 shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Programming Format</h2>
             <div className="space-y-5">
               <div className="grid sm:grid-cols-2 gap-3">
                 {FORMAT_TEMPLATES.map((f) => (
@@ -274,15 +274,15 @@ export default function OperatorSetupWizard() {
                       format === f.id ? "border-amber-500 bg-amber-50" : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
-                    <p className="font-semibold text-sm text-gray-900">{f.name}</p>
-                    <p className="text-xs text-gray-500 mt-1">{f.desc}</p>
+                    <p className="font-semibold text-sm text-gray-900 dark:text-white">{f.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{f.desc}</p>
                   </button>
                 ))}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                     <Clock className="w-4 h-4 inline mr-1" /> Hours Per Day
                   </label>
                   <select value={hoursPerDay} onChange={(e) => setHoursPerDay(e.target.value)}
@@ -293,7 +293,7 @@ export default function OperatorSetupWizard() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                     <Mic className="w-4 h-4 inline mr-1" /> AI DJ Personalities
                   </label>
                   <select value={djCount} onChange={(e) => setDjCount(e.target.value)}
@@ -311,27 +311,27 @@ export default function OperatorSetupWizard() {
 
         {/* Step: Stream */}
         {step === "stream" && (
-          <div className="bg-white rounded-2xl border p-8 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Stream Configuration</h2>
-            <p className="text-sm text-gray-600 mb-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border p-8 shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Stream Configuration</h2>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-4">
               If you already have a Liquidsoap/Icecast server, enter the details below.
               Otherwise, we can provision one for you after setup.
             </p>
             <div className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Stream Server URL</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Stream Server URL</label>
                 <input type="text" value={streamUrl} onChange={(e) => setStreamUrl(e.target.value)}
                   placeholder="e.g., your-server.example.com"
                   className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Port</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Port</label>
                   <input type="text" value={streamPort} onChange={(e) => setStreamPort(e.target.value)}
                     placeholder="8000" className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Mount Point</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Mount Point</label>
                   <input type="text" value={mountPoint} onChange={(e) => setMountPoint(e.target.value)}
                     placeholder="/stream" className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none" />
                 </div>
@@ -346,15 +346,15 @@ export default function OperatorSetupWizard() {
 
         {/* Step: Review */}
         {step === "review" && (
-          <div className="bg-white rounded-2xl border p-8 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Review & Launch</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border p-8 shadow-sm">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Review & Launch</h2>
             <div className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="border rounded-lg p-4">
                   <p className="text-xs text-gray-500 uppercase font-medium mb-2">Station</p>
                   <p className="font-semibold">{stationName || "(not set)"}</p>
-                  <p className="text-sm text-gray-500">{callSign} | {genre} | {timezone}</p>
-                  <p className="text-sm text-gray-500 mt-1">{tagline}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">{callSign} | {genre} | {timezone}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">{tagline}</p>
                 </div>
                 <div className="border rounded-lg p-4">
                   <p className="text-xs text-gray-500 uppercase font-medium mb-2">Branding</p>
@@ -367,7 +367,7 @@ export default function OperatorSetupWizard() {
                 <div className="border rounded-lg p-4">
                   <p className="text-xs text-gray-500 uppercase font-medium mb-2">Programming</p>
                   <p className="font-semibold text-sm">{FORMAT_TEMPLATES.find((f) => f.id === format)?.name}</p>
-                  <p className="text-sm text-gray-500">{hoursPerDay}h/day, {djCount} AI DJs</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">{hoursPerDay}h/day, {djCount} AI DJs</p>
                 </div>
                 <div className="border rounded-lg p-4">
                   <p className="text-xs text-gray-500 uppercase font-medium mb-2">Stream</p>

@@ -2,14 +2,14 @@ import { StatsSkeleton, CardSkeleton } from "@/components/loading-skeleton";
 
 export default function StationAdminLoading() {
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Page title */}
         <div className="h-8 w-48 bg-gray-200 rounded animate-pulse" />
         <div className="h-4 w-72 bg-gray-200 rounded animate-pulse" />
 
         {/* Station info card */}
-        <div className="bg-white rounded-xl shadow-sm border p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
           <div className="flex items-center space-x-3 mb-4">
             <div className="w-10 h-10 bg-gray-200 rounded-lg animate-pulse" />
             <div>

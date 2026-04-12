@@ -90,7 +90,7 @@ export default function OnboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b">
+      <header className="bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm border-b">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link
@@ -114,13 +114,13 @@ export default function OnboardPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-6">
             <Radio className="w-8 h-8 text-purple-600" />
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Get Your Music on Real Radio
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
             Join {currentStation.name} and reach thousands of real listeners every day.
           </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto mb-8">
             We connect independent artists with passionate fans through live radio, curated playlists, and a community that actually supports your music career.
           </p>
           <button
@@ -135,7 +135,7 @@ export default function OnboardPage() {
       {/* Benefits Grid */}
       <section className="py-16 px-4 bg-white/60">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             Why Artists Choose {currentStation.name}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -163,13 +163,13 @@ export default function OnboardPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="bg-white rounded-xl p-6 shadow-sm border border-purple-100 hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-purple-100 hover:shadow-md transition-shadow"
               >
                 <div className="inline-flex items-center justify-center w-10 h-10 bg-purple-100 rounded-lg mb-4">
                   <item.icon className="w-5 h-5 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -179,7 +179,7 @@ export default function OnboardPage() {
       {/* How It Works */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             How It Works
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
@@ -193,8 +193,8 @@ export default function OnboardPage() {
                 <div className="inline-flex items-center justify-center w-10 h-10 bg-purple-600 text-white rounded-full font-bold mb-3">
                   {item.step}
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -203,8 +203,8 @@ export default function OnboardPage() {
 
       {/* Transition */}
       <section className="py-10 px-4 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Ready to Get Started?</h2>
-        <p className="text-gray-600">It takes about 2 minutes.</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Ready to Get Started?</h2>
+        <p className="text-gray-600 dark:text-zinc-400">It takes about 2 minutes.</p>
       </section>
 
       {/* Form */}
@@ -219,7 +219,7 @@ export default function OnboardPage() {
             <StepIndicator number={3} active={step === 3} completed={false} />
           </div>
           <div className="text-center">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-zinc-400">
               Step {step} of 3:{" "}
               {step === 1 ? "About You" : step === 2 ? "Your Music" : "Your Next Show"}
             </div>
@@ -227,16 +227,16 @@ export default function OnboardPage() {
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit}>
             {step === 1 && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   Let&apos;s Get You Started
                 </h2>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                     Your Name *
                   </label>
                   <input
@@ -250,7 +250,7 @@ export default function OnboardPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                     Email
                   </label>
                   <input
@@ -263,7 +263,7 @@ export default function OnboardPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                     Phone Number
                   </label>
                   <input
@@ -279,12 +279,12 @@ export default function OnboardPage() {
 
             {step === 2 && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   Tell Us About Your Music
                 </h2>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                     Genre *
                   </label>
                   <select
@@ -308,11 +308,11 @@ export default function OnboardPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                     Instagram Handle (optional)
                   </label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-zinc-500">
                       @
                     </span>
                     <input
@@ -338,7 +338,7 @@ export default function OnboardPage() {
 
             {step === 3 && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   When&apos;s Your Next Show?
                 </h2>
 
@@ -350,7 +350,7 @@ export default function OnboardPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                     <Calendar className="inline w-4 h-4 mr-1" />
                     Show Date
                   </label>
@@ -365,7 +365,7 @@ export default function OnboardPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                     Venue Name
                   </label>
                   <input
@@ -380,7 +380,7 @@ export default function OnboardPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                     <MapPin className="inline w-4 h-4 mr-1" />
                     City
                   </label>
@@ -396,7 +396,7 @@ export default function OnboardPage() {
                 </div>
 
                 <div className="bg-gray-50 rounded-lg p-4">
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-600 dark:text-zinc-400">
                     Don&apos;t have a show scheduled? No problem! You can skip this and add it
                     later.
                   </div>
@@ -410,7 +410,7 @@ export default function OnboardPage() {
                 <button
                   type="button"
                   onClick={() => setStep(step - 1)}
-                  className="text-gray-600 hover:text-gray-900 font-medium"
+                  className="text-gray-600 hover:text-gray-900 dark:text-white font-medium"
                 >
                   Back
                 </button>

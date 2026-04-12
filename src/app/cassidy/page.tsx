@@ -63,7 +63,7 @@ export default function CassidyDashboardPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading dashboard...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading dashboard...</div>
       </main>
     );
   }
@@ -73,7 +73,7 @@ export default function CassidyDashboardPage() {
       <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
-          <p className="text-gray-600 mb-4">Sign in as Cassidy to access this dashboard.</p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-4">Sign in as Cassidy to access this dashboard.</p>
           <Link href="/login?callbackUrl=/cassidy" className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700">Sign In</Link>
         </div>
       </main>
@@ -92,7 +92,7 @@ export default function CassidyDashboardPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
@@ -113,8 +113,8 @@ export default function CassidyDashboardPage() {
           <div className="flex items-center space-x-3">
             <Award className="w-8 h-8 text-teal-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Team Cassidy Dashboard</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Team Cassidy Dashboard</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Submission Review Panel & Rotation Curation
               </p>
             </div>
@@ -156,7 +156,7 @@ export default function CassidyDashboardPage() {
         </section>
 
         {/* Team Members */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
             <Users className="w-6 h-6 text-teal-600" />
             <span>Team Members</span>
@@ -170,13 +170,13 @@ export default function CassidyDashboardPage() {
               { name: "Dr. Sam Chen", role: "Musicologist", avatar: "SC", color: "bg-purple-100 text-purple-600", status: "Cultural analysis", kpi: "Genre context" },
               { name: "Whitley Cross", role: "Audience Development", avatar: "WC", color: "bg-emerald-100 text-emerald-600", status: "Growth analysis", kpi: "Market positioning" },
             ].map((member, idx) => (
-              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 hover:border-teal-300 transition-colors">
+              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800 hover:border-teal-300 transition-colors">
                 <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>
-                <div className="font-semibold text-gray-900 text-sm">{member.name}</div>
-                <div className="text-xs text-gray-600 mb-2">{member.role}</div>
+                <div className="font-semibold text-gray-900 dark:text-white text-sm">{member.name}</div>
+                <div className="text-xs text-gray-600 dark:text-zinc-400 mb-2">{member.role}</div>
                 <div className="text-xs text-teal-600 mb-2 truncate">{member.status}</div>
-                <div className="mt-2 pt-2 border-t border-gray-200">
-                  <div className="text-xs font-semibold text-gray-700">{member.kpi}</div>
+                <div className="mt-2 pt-2 border-t border-gray-200 dark:border-zinc-800">
+                  <div className="text-xs font-semibold text-gray-700 dark:text-zinc-300">{member.kpi}</div>
                 </div>
               </div>
             ))}
@@ -184,9 +184,9 @@ export default function CassidyDashboardPage() {
         </section>
 
         {/* Tier Distribution */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Artist Distribution by Tier</h2>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Total in rotation: {stats.totalArtistsInRotation} artists (Target: 60/25/12/3 distribution)
           </p>
 
@@ -228,15 +228,15 @@ export default function CassidyDashboardPage() {
           <div className="mt-6 pt-6 border-t">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center">
-                <div className="text-sm text-gray-600">Submissions This Month</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Submissions This Month</div>
                 <div className="text-2xl font-bold text-teal-600">{stats.submissionsThisMonth}</div>
               </div>
               <div className="text-center">
-                <div className="text-sm text-gray-600">Placement Success</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Placement Success</div>
                 <div className="text-2xl font-bold text-green-600">{stats.placementRate}%</div>
               </div>
               <div className="text-center">
-                <div className="text-sm text-gray-600">Avg Review Cycle</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Avg Review Cycle</div>
                 <div className="text-2xl font-bold text-blue-600">{stats.avgReviewTime} days</div>
               </div>
             </div>
@@ -244,11 +244,11 @@ export default function CassidyDashboardPage() {
         </section>
 
         {/* 80/20 Transformation Progress */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">80/20 Rotation Transformation</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 Replacing mainstream tracks with curated indie artists
               </p>
             </div>
@@ -258,10 +258,10 @@ export default function CassidyDashboardPage() {
           <div className="space-y-4">
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-600">Indie Artists</span>
+                <span className="text-gray-600 dark:text-zinc-400">Indie Artists</span>
                 <span className="font-semibold text-teal-600">{stats.rotationTransformation.indie}%</span>
               </div>
-              <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-4 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-teal-500 to-cyan-500"
                   style={{ width: `${stats.rotationTransformation.indie}%` }}
@@ -271,10 +271,10 @@ export default function CassidyDashboardPage() {
 
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-600">Mainstream</span>
-                <span className="font-semibold text-gray-500">{stats.rotationTransformation.mainstream}%</span>
+                <span className="text-gray-600 dark:text-zinc-400">Mainstream</span>
+                <span className="font-semibold text-gray-500 dark:text-zinc-500">{stats.rotationTransformation.mainstream}%</span>
               </div>
-              <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-4 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gray-400"
                   style={{ width: `${stats.rotationTransformation.mainstream}%` }}
@@ -285,7 +285,7 @@ export default function CassidyDashboardPage() {
             <div className="pt-4 border-t">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-sm text-gray-600">Progress toward goal</div>
+                  <div className="text-sm text-gray-600 dark:text-zinc-400">Progress toward goal</div>
                   <div className="text-xl font-bold text-teal-600">
                     {Math.round(
                       ((stats.rotationTransformation.indie - 20) / (stats.rotationTransformation.target - 20)) * 100
@@ -294,8 +294,8 @@ export default function CassidyDashboardPage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-gray-600">Slots remaining</div>
-                  <div className="text-xl font-bold text-gray-900">280</div>
+                  <div className="text-sm text-gray-600 dark:text-zinc-400">Slots remaining</div>
+                  <div className="text-xl font-bold text-gray-900 dark:text-white">280</div>
                 </div>
               </div>
             </div>
@@ -303,11 +303,11 @@ export default function CassidyDashboardPage() {
         </section>
 
         {/* Recent Submissions */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Recent Submissions</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 {stats.pendingSubmissions} pending, {stats.inReview} in review, {stats.judgedThisWeek} judged this week
               </p>
             </div>
@@ -330,11 +330,11 @@ export default function CassidyDashboardPage() {
         </section>
 
         {/* Progression Requests */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Progression Requests</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 Artists requesting tier upgrades
               </p>
             </div>
@@ -343,7 +343,7 @@ export default function CassidyDashboardPage() {
 
           <div className="space-y-3">
             {progressionRequests.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
                 <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50" />
                 <p>No progression requests yet</p>
                 <p className="text-sm mt-1">Artists can request tier upgrades after time in their current tier</p>
@@ -421,9 +421,9 @@ function MetricCard({
       <div className="flex items-center justify-between mb-4">
         {icon}
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-sm font-semibold text-gray-700 mb-1">{label}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-1">{label}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -445,7 +445,7 @@ function TierCard({
 }) {
   const colorClasses: Record<string, { bg: string; border: string; text: string }> = {
     amber: { bg: "bg-amber-50", border: "border-amber-200", text: "text-amber-900" },
-    gray: { bg: "bg-gray-50", border: "border-gray-300", text: "text-gray-900" },
+    gray: { bg: "bg-gray-50", border: "border-gray-300 dark:border-zinc-700", text: "text-gray-900" },
     yellow: { bg: "bg-yellow-50", border: "border-yellow-300", text: "text-yellow-900" },
     purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-900" },
   };
@@ -459,8 +459,8 @@ function TierCard({
         <span className={`text-sm font-semibold ${classes.text}`}>{percentage}%</span>
       </div>
       <div className={`text-lg font-bold ${classes.text} mb-1`}>{tier}</div>
-      <div className="text-2xl font-bold text-gray-900 mb-1">{count}</div>
-      <div className="text-xs text-gray-600">{spinsPerWeek} spins/week</div>
+      <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{count}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400">{spinsPerWeek} spins/week</div>
     </div>
   );
 }
@@ -523,28 +523,28 @@ function SubmissionRow({
   };
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-teal-300 transition-colors">
+    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-teal-300 transition-colors">
       <div className="flex-1">
         <div className="flex items-center space-x-3">
           <Music className="w-5 h-5 text-gray-400" />
           <div>
-            <div className="font-semibold text-gray-900">{artistName}</div>
-            <div className="text-sm text-gray-600">{trackTitle}</div>
+            <div className="font-semibold text-gray-900 dark:text-white">{artistName}</div>
+            <div className="text-sm text-gray-600 dark:text-zinc-400">{trackTitle}</div>
           </div>
         </div>
       </div>
 
       <div className="flex items-center space-x-6">
         <div className="text-right">
-          <div className="text-sm text-gray-600">Judges</div>
-          <div className="text-sm font-semibold text-gray-900">
+          <div className="text-sm text-gray-600 dark:text-zinc-400">Judges</div>
+          <div className="text-sm font-semibold text-gray-900 dark:text-white">
             {judgesCompleted}/{totalJudges}
           </div>
         </div>
 
         <div className="text-right">
-          <div className="text-sm text-gray-600">Submitted</div>
-          <div className="text-sm font-semibold text-gray-900">{submittedAt}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">Submitted</div>
+          <div className="text-sm font-semibold text-gray-900 dark:text-white">{submittedAt}</div>
         </div>
 
         <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-full ${config.bg} ${config.text}`}>
@@ -578,19 +578,19 @@ function ProgressionRequestRow({
   const config = statusConfig[status];
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-purple-300 transition-colors">
+    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-purple-300 transition-colors">
       <div className="flex items-center space-x-4">
         <TrendingUp className="w-5 h-5 text-purple-600" />
         <div>
-          <div className="font-semibold text-gray-900">{artistName}</div>
-          <div className="text-sm text-gray-600">
+          <div className="font-semibold text-gray-900 dark:text-white">{artistName}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">
             {currentTier} → {requestedTier}
           </div>
         </div>
       </div>
 
       <div className="flex items-center space-x-6">
-        <div className="text-sm text-gray-600">{submittedDaysAgo} days ago</div>
+        <div className="text-sm text-gray-600 dark:text-zinc-400">{submittedDaysAgo} days ago</div>
         <div className={`px-3 py-1.5 rounded-full ${config.bg} ${config.text} text-sm font-medium`}>
           {config.label}
         </div>
@@ -626,7 +626,7 @@ function QuickLink({
   return (
     <Link href={href} className={`relative block p-6 rounded-lg ${colorClasses[color]} transition-colors`}>
       {badge && (
-        <div className="absolute top-3 right-3 bg-white text-gray-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+        <div className="absolute top-3 right-3 bg-white text-gray-900 dark:text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
           {badge}
         </div>
       )}

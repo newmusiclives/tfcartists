@@ -80,7 +80,7 @@ export default function GrowthCampaignsPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading campaigns...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading campaigns...</div>
       </main>
     );
   }
@@ -94,11 +94,11 @@ export default function GrowthCampaignsPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/elliot"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Elliot Dashboard</span>
@@ -106,8 +106,8 @@ export default function GrowthCampaignsPage() {
           <div className="flex items-center space-x-3">
             <Megaphone className="w-8 h-8 text-purple-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Growth Campaigns</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Growth Campaigns</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Plan, launch, and optimize listener acquisition campaigns
               </p>
             </div>
@@ -146,11 +146,11 @@ export default function GrowthCampaignsPage() {
 
         {/* Campaign Launch Form */}
         {showForm && (
-          <section className="bg-white rounded-xl shadow-lg p-6">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-6">Launch New Campaign</h2>
             <form onSubmit={handleLaunchCampaign} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Campaign Name</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -162,7 +162,7 @@ export default function GrowthCampaignsPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Type</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Campaign Type</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
@@ -175,7 +175,7 @@ export default function GrowthCampaignsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Target Audience</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Target Audience</label>
                   <select
                     value={formData.targetAudience}
                     onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
@@ -190,7 +190,7 @@ export default function GrowthCampaignsPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Goal Type</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Goal Type</label>
                   <select
                     value={formData.goalType}
                     onChange={(e) => setFormData({ ...formData, goalType: e.target.value })}
@@ -203,7 +203,7 @@ export default function GrowthCampaignsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Goal Target</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Goal Target</label>
                   <input
                     type="number"
                     value={formData.goalTarget}
@@ -235,11 +235,11 @@ export default function GrowthCampaignsPage() {
         )}
 
         {/* Active Campaigns */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Active Campaigns</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 Currently running growth initiatives
               </p>
             </div>
@@ -259,7 +259,7 @@ export default function GrowthCampaignsPage() {
                 <CampaignCard key={campaign.id} campaign={campaign} />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
                 No active campaigns. Launch your first campaign to get started.
               </div>
             )}
@@ -316,13 +316,13 @@ function MetricCard({
   subtitle: string;
 }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-xs text-gray-500">{subtitle}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
     </div>
   );
 }
@@ -331,7 +331,7 @@ function CampaignCard({ campaign }: { campaign: CampaignData }) {
   const statusConfig: Record<string, { bg: string; text: string; label: string; border: string }> = {
     active: { bg: "bg-green-100", text: "text-green-700", label: "Active", border: "border-green-300" },
     paused: { bg: "bg-yellow-100", text: "text-yellow-700", label: "Paused", border: "border-yellow-300" },
-    completed: { bg: "bg-gray-100", text: "text-gray-700", label: "Completed", border: "border-gray-300" },
+    completed: { bg: "bg-gray-100", text: "text-gray-700", label: "Completed", border: "border-gray-300 dark:border-zinc-700" },
   };
   const config = statusConfig[campaign.status] || statusConfig.active;
   const progress = campaign.metrics?.progress || 0;
@@ -341,12 +341,12 @@ function CampaignCard({ campaign }: { campaign: CampaignData }) {
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-1">
-            <h3 className="text-lg font-bold text-gray-900">{campaign.name}</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">{campaign.name}</h3>
             <span className={`text-xs px-2 py-1 rounded-full ${config.bg} ${config.text} font-medium`}>
               {config.label}
             </span>
           </div>
-          <div className="flex items-center space-x-4 text-xs text-gray-500">
+          <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
             <span>{campaign.type}</span>
             <span>•</span>
             <span>Managed by {campaign.managedBy}</span>
@@ -358,29 +358,29 @@ function CampaignCard({ campaign }: { campaign: CampaignData }) {
 
       <div className="grid grid-cols-4 gap-4 mb-4">
         <div className="text-center">
-          <div className="text-xs text-gray-600 mb-1">Responses</div>
-          <div className="text-lg font-bold text-gray-900">{campaign.metrics?.totalResponses || 0}</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Responses</div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white">{campaign.metrics?.totalResponses || 0}</div>
         </div>
         <div className="text-center">
-          <div className="text-xs text-gray-600 mb-1">Conversions</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Conversions</div>
           <div className="text-lg font-bold text-green-600">{campaign.metrics?.conversions || 0}</div>
         </div>
         <div className="text-center">
-          <div className="text-xs text-gray-600 mb-1">Conv. Rate</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Conv. Rate</div>
           <div className="text-lg font-bold text-purple-600">{(campaign.metrics?.conversionRate || 0).toFixed(1)}%</div>
         </div>
         <div className="text-center">
-          <div className="text-xs text-gray-600 mb-1">Goal</div>
-          <div className="text-lg font-bold text-gray-900">{campaign.goalReached}/{campaign.goalTarget}</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Goal</div>
+          <div className="text-lg font-bold text-gray-900 dark:text-white">{campaign.goalReached}/{campaign.goalTarget}</div>
         </div>
       </div>
 
       <div>
         <div className="flex items-center justify-between text-sm mb-2">
-          <span className="text-gray-600">Goal Progress: {campaign.goalType}</span>
-          <span className="font-semibold text-gray-900">{Math.round(progress)}%</span>
+          <span className="text-gray-600 dark:text-zinc-400">Goal Progress: {campaign.goalType}</span>
+          <span className="font-semibold text-gray-900 dark:text-white">{Math.round(progress)}%</span>
         </div>
-        <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
+        <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-3 overflow-hidden">
           <div
             className="bg-gradient-to-r from-purple-500 to-pink-600 h-full transition-all"
             style={{ width: `${Math.min(100, progress)}%` }}
@@ -393,10 +393,10 @@ function CampaignCard({ campaign }: { campaign: CampaignData }) {
 
 function ActionCard({ icon, title, description, buttonText }: { icon: React.ReactNode; title: string; description: string; buttonText: string }) {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 text-center">
       <div className="flex justify-center mb-4">{icon}</div>
-      <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-      <p className="text-sm text-gray-600 mb-4">{description}</p>
+      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{title}</h3>
+      <p className="text-sm text-gray-600 dark:text-zinc-400 mb-4">{description}</p>
       <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full font-medium">
         {buttonText}
       </button>

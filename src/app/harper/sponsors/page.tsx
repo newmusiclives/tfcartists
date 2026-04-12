@@ -373,17 +373,17 @@ const sponsors: Sponsor[] = [
 ];
 
 const tierConfig: Record<SponsorTier, { label: string; color: string; monthlyRate: number; spots: number }> = {
-  bronze: { label: 'Bronze', color: 'bg-orange-100 text-orange-700 border-orange-300', monthlyRate: 100, spots: 30 },
+  bronze: { label: 'Bronze', color: 'bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-300', monthlyRate: 100, spots: 30 },
   silver: { label: 'Silver', color: 'bg-gray-100 text-gray-700 border-gray-400', monthlyRate: 200, spots: 60 },
-  gold: { label: 'Gold', color: 'bg-yellow-100 text-yellow-700 border-yellow-400', monthlyRate: 400, spots: 120 },
-  platinum: { label: 'Platinum', color: 'bg-purple-100 text-purple-700 border-purple-400', monthlyRate: 500, spots: 180 }
+  gold: { label: 'Gold', color: 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-400', monthlyRate: 400, spots: 120 },
+  platinum: { label: 'Platinum', color: 'bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-400', monthlyRate: 500, spots: 180 }
 };
 
 const statusConfig: Record<SponsorStatus, { label: string; color: string; icon: any }> = {
-  active: { label: 'Active', color: 'bg-green-100 text-green-700', icon: CheckCircle },
-  paused: { label: 'Paused', color: 'bg-yellow-100 text-yellow-700', icon: Clock },
-  ending_soon: { label: 'Ending Soon', color: 'bg-orange-100 text-orange-700', icon: AlertCircle },
-  cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-700', icon: X }
+  active: { label: 'Active', color: 'bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400', icon: CheckCircle },
+  paused: { label: 'Paused', color: 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400', icon: Clock },
+  ending_soon: { label: 'Ending Soon', color: 'bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400', icon: AlertCircle },
+  cancelled: { label: 'Cancelled', color: 'bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400', icon: X }
 };
 
 export default function SponsorManagement() {
@@ -416,20 +416,20 @@ export default function SponsorManagement() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Shared Navigation */}
       <SharedNav />
 
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-zinc-900 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
                 <ChevronRight className="w-4 h-4 text-gray-400" />
-                <h1 className="text-2xl font-bold text-gray-900">Sponsor Management</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Sponsor Management</h1>
               </div>
-              <p className="text-gray-600 mt-1">Cameron Wells - Account Management & Analytics</p>
+              <p className="text-gray-600 dark:text-zinc-400 mt-1">Cameron Wells - Account Management & Analytics</p>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -445,7 +445,7 @@ export default function SponsorManagement() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live sponsor data will appear once the sponsor management API is connected.
         </div>
       </div>
@@ -453,46 +453,46 @@ export default function SponsorManagement() {
       {/* Stats */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Sponsors</p>
-                <p className="text-2xl font-bold text-gray-900">{totalSponsors}</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Total Sponsors</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalSponsors}</p>
               </div>
               <Building2 className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Active</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Active</p>
                 <p className="text-2xl font-bold text-green-600">{activeSponsors}</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Monthly Revenue</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Monthly Revenue</p>
                 <p className="text-2xl font-bold text-green-600">${totalMRR.toLocaleString()}</p>
               </div>
               <DollarSign className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Avg Satisfaction</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Avg Satisfaction</p>
                 <p className="text-2xl font-bold text-blue-600">{avgSatisfaction.toFixed(0)}%</p>
               </div>
               <TrendingUp className="w-8 h-8 text-blue-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Ending Soon</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Ending Soon</p>
                 <p className="text-2xl font-bold text-orange-600">{endingSoon}</p>
               </div>
               <AlertCircle className="w-8 h-8 text-orange-600" />
@@ -501,7 +501,7 @@ export default function SponsorManagement() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white p-4 rounded-lg border mb-6">
+        <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg border mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
@@ -554,12 +554,12 @@ export default function SponsorManagement() {
               <div
                 key={sponsor.id}
                 onClick={() => setSelectedSponsor(sponsor)}
-                className="bg-white border rounded-lg p-6 hover:border-green-500 hover:shadow-lg transition-all cursor-pointer"
+                className="bg-white dark:bg-zinc-900 border rounded-lg p-6 hover:border-green-500 hover:shadow-lg transition-all cursor-pointer"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className="font-bold text-gray-900 mb-1">{sponsor.businessName}</h3>
-                    <p className="text-sm text-gray-600">{sponsor.businessType}</p>
+                    <h3 className="font-bold text-gray-900 dark:text-white mb-1">{sponsor.businessName}</h3>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400">{sponsor.businessType}</p>
                   </div>
                   <StatusIcon className={`w-5 h-5 ${sponsor.status === 'active' ? 'text-green-600' : sponsor.status === 'ending_soon' ? 'text-orange-600' : 'text-yellow-600'}`} />
                 </div>
@@ -575,19 +575,19 @@ export default function SponsorManagement() {
 
                 <div className="space-y-3 mb-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Monthly Rate:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Monthly Rate:</span>
                     <span className="font-semibold text-green-600">${sponsor.monthlyRate}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Satisfaction:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Satisfaction:</span>
                     <span className="font-semibold">{sponsor.performance.satisfaction}%</span>
                   </div>
                   <div>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">Ads This Month:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Ads This Month:</span>
                       <span className="font-semibold">{sponsor.adsPlayedThisMonth}/{sponsor.adsSpotsPerMonth}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2">
                       <div
                         className="bg-green-600 h-2 rounded-full transition-all"
                         style={{ width: `${Math.min(adProgress, 100)}%` }}
@@ -596,7 +596,7 @@ export default function SponsorManagement() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t text-xs text-gray-500">
+                <div className="pt-3 border-t text-xs text-gray-500 dark:text-zinc-500">
                   {sponsor.status === 'ending_soon' && (
                     <p className="text-orange-600 font-medium mb-1">
                       Contract ends in {daysUntilEnd} days
@@ -613,12 +613,12 @@ export default function SponsorManagement() {
       {/* Sponsor Detail Modal */}
       {selectedSponsor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-zinc-900 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b sticky top-0 bg-white">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-gray-900">{selectedSponsor.businessName}</h2>
-                  <p className="text-gray-600">{selectedSponsor.businessType}</p>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedSponsor.businessName}</h2>
+                  <p className="text-gray-600 dark:text-zinc-400">{selectedSponsor.businessType}</p>
                   <div className="flex items-center space-x-2 mt-2">
                     <span className={`px-3 py-1 rounded-full text-sm font-medium border ${tierConfig[selectedSponsor.tier].color}`}>
                       {tierConfig[selectedSponsor.tier].label} - ${selectedSponsor.monthlyRate}/mo
@@ -640,7 +640,7 @@ export default function SponsorManagement() {
             <div className="p-6 space-y-6">
               {/* Contact Info */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Contact Information</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Contact Information</h3>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2 text-sm">
                     <Users className="w-4 h-4 text-gray-400" />
@@ -671,26 +671,26 @@ export default function SponsorManagement() {
 
               {/* Contract Details */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Contract Details</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Contract Details</h3>
                 <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Start Date:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Start Date:</span>
                     <span className="font-medium">{selectedSponsor.contractStart}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">End Date:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">End Date:</span>
                     <span className="font-medium">{selectedSponsor.contractEnd}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Days Until End:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Days Until End:</span>
                     <span className="font-medium">{getDaysUntilEnd(selectedSponsor.contractEnd)} days</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Monthly Rate:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Monthly Rate:</span>
                     <span className="font-medium text-green-600">${selectedSponsor.monthlyRate}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Ad Spots/Month:</span>
+                    <span className="text-gray-600 dark:text-zinc-400">Ad Spots/Month:</span>
                     <span className="font-medium">{selectedSponsor.adsSpotsPerMonth}</span>
                   </div>
                 </div>
@@ -698,18 +698,18 @@ export default function SponsorManagement() {
 
               {/* Performance */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Performance Metrics</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Performance Metrics</h3>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-blue-50 p-4 rounded-lg text-center">
-                    <p className="text-sm text-gray-600 mb-1">Impressions</p>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Impressions</p>
                     <p className="text-2xl font-bold text-blue-600">{selectedSponsor.performance.impressions.toLocaleString()}</p>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg text-center">
-                    <p className="text-sm text-gray-600 mb-1">Est. Reach</p>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Est. Reach</p>
                     <p className="text-2xl font-bold text-green-600">{selectedSponsor.performance.estimatedReach.toLocaleString()}</p>
                   </div>
                   <div className="bg-purple-50 p-4 rounded-lg text-center">
-                    <p className="text-sm text-gray-600 mb-1">Satisfaction</p>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Satisfaction</p>
                     <p className="text-2xl font-bold text-purple-600">{selectedSponsor.performance.satisfaction}%</p>
                   </div>
                 </div>
@@ -717,7 +717,7 @@ export default function SponsorManagement() {
 
               {/* Notes */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Account Notes</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Account Notes</h3>
                 <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{selectedSponsor.notes}</p>
               </div>
 

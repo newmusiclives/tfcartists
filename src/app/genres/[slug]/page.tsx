@@ -55,9 +55,9 @@ export default async function GenreDetailPage({
   return (
     <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm">
+      <header className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <Link href="/" className="font-bold text-lg text-amber-800">
+          <Link href="/" className="font-bold text-lg text-amber-800 dark:text-amber-400">
             TrueFans RADIO
           </Link>
           <Link
@@ -79,7 +79,7 @@ export default async function GenreDetailPage({
           >
             {tpl.genre}
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-2">
             {tpl.name}
           </h1>
           <p
@@ -88,7 +88,7 @@ export default async function GenreDetailPage({
           >
             {tpl.tagline}
           </p>
-          <p className="text-gray-600 text-lg max-w-3xl">{tpl.description}</p>
+          <p className="text-gray-600 dark:text-zinc-400 text-lg max-w-3xl">{tpl.description}</p>
         </div>
 
         {/* Details row */}
@@ -104,7 +104,7 @@ export default async function GenreDetailPage({
 
         {/* DJ Presets */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center space-x-2">
             <Mic className="w-6 h-6" style={{ color: tpl.primaryColor }} />
             <span>AI DJ Lineup</span>
           </h2>
@@ -112,11 +112,11 @@ export default async function GenreDetailPage({
             {tpl.djPresets.map((dj) => (
               <div
                 key={dj.name}
-                className="bg-white rounded-xl border shadow-sm p-6"
+                className="bg-white dark:bg-zinc-900 rounded-xl border shadow-sm p-6"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                       {dj.name}
                     </h3>
                     <p
@@ -130,7 +130,7 @@ export default async function GenreDetailPage({
                     {dj.age}
                   </span>
                 </div>
-                <p className="text-gray-600 text-sm mb-3">{dj.bio}</p>
+                <p className="text-gray-600 dark:text-zinc-400 text-sm mb-3">{dj.bio}</p>
                 <div className="flex flex-wrap gap-2">
                   {dj.traits.split(",").map((trait) => (
                     <span
@@ -155,11 +155,11 @@ export default async function GenreDetailPage({
 
         {/* Sample Schedule */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center space-x-2">
             <Clock className="w-6 h-6" style={{ color: tpl.primaryColor }} />
             <span>Sample Schedule</span>
           </h2>
-          <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl border shadow-sm overflow-hidden">
             {schedule.map(({ dj, time }, i) => (
               <div
                 key={i}
@@ -172,10 +172,10 @@ export default async function GenreDetailPage({
                   style={{ backgroundColor: dj.colorPrimary }}
                 />
                 <div className="flex-1">
-                  <p className="font-semibold text-gray-900">{dj.name}</p>
-                  <p className="text-sm text-gray-500">{dj.tagline}</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{dj.name}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">{dj.tagline}</p>
                 </div>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">
                   {time}
                 </span>
               </div>
@@ -194,7 +194,7 @@ export default async function GenreDetailPage({
             <span>Launch Your {tpl.name.replace(" Station", "")} Station</span>
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="mt-3 text-sm text-gray-500">
+          <p className="mt-3 text-sm text-gray-500 dark:text-zinc-500">
             Pre-configured with {tpl.djPresets.length} AI DJs, scheduling, and
             branding
           </p>
@@ -206,8 +206,8 @@ export default async function GenreDetailPage({
 
 function DetailCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-white rounded-lg border p-4">
-      <p className="text-xs text-gray-500 mb-1">{label}</p>
+    <div className="bg-white dark:bg-zinc-900 rounded-lg border p-4">
+      <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">{label}</p>
       <p className="font-semibold text-gray-900 capitalize">{value}</p>
     </div>
   );

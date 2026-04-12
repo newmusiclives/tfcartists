@@ -415,8 +415,8 @@ export default function ArtistPortalPage() {
         <SharedNav />
         <div className="max-w-xl mx-auto px-4 py-20 text-center">
           <Radio className="w-12 h-12 text-amber-500 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Artist Portal</h1>
-          <p className="text-gray-600 mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Artist Portal</h1>
+          <p className="text-gray-600 dark:text-zinc-400 mb-8">
             Manage your tracks, view earnings, download invoices, and track your airplay performance.
           </p>
           <div className="flex gap-2 max-w-md mx-auto">
@@ -458,14 +458,14 @@ export default function ArtistPortalPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{artist?.name}</h1>
-            <p className="text-gray-500">{artist?.genre} &middot; {artist?.email}</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{artist?.name}</h1>
+            <p className="text-gray-500 dark:text-zinc-500">{artist?.genre} &middot; {artist?.email}</p>
           </div>
           <button
             onClick={() => { setView("lookup"); setArtist(null); setActiveTab("dashboard"); }}
@@ -476,7 +476,7 @@ export default function ArtistPortalPage() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex gap-1 mb-6 overflow-x-auto bg-white rounded-lg p-1 shadow-sm border">
+        <div className="flex gap-1 mb-6 overflow-x-auto bg-white dark:bg-zinc-900 rounded-lg p-1 shadow-sm border">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -508,18 +508,18 @@ export default function ArtistPortalPage() {
         {activeTab === "dashboard" && (
           <div className="space-y-6">
             {/* Tier Card */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border-2 border-amber-200">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border-2 border-amber-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-500">Current Tier</p>
-                  <p className="text-2xl font-bold text-gray-900">{tier.name}</p>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">Current Tier</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{tier.name}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
                     {tier.shares} shares &middot; ${tier.cost}/month
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-500">Level</p>
-                  <p className="text-3xl font-bold text-amber-600">{artist?.xpLevel || 1}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">Level</p>
+                  <p className="text-3xl font-bold text-amber-600 dark:text-amber-400">{artist?.xpLevel || 1}</p>
                   <p className="text-xs text-gray-400">{artist?.xpTotal || 0} XP</p>
                 </div>
               </div>
@@ -574,7 +574,7 @@ export default function ArtistPortalPage() {
                 />
               </div>
             ) : (
-              <div className="bg-white rounded-xl p-8 text-center text-gray-500 shadow-sm border">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 text-center text-gray-500 shadow-sm border">
                 <p>No stats available yet. Keep submitting tracks and building your audience!</p>
               </div>
             )}
@@ -593,11 +593,11 @@ export default function ArtistPortalPage() {
                       <Link
                         key={key}
                         href="/airplay"
-                        className="bg-white rounded-lg p-3 border text-center hover:border-amber-400 hover:shadow-md transition-all"
+                        className="bg-white dark:bg-zinc-900 rounded-lg p-3 border text-center hover:border-amber-400 hover:shadow-md transition-all"
                       >
                         <p className="font-semibold text-sm">{info.name}</p>
-                        <p className="text-lg font-bold text-amber-600">${info.cost}/mo</p>
-                        <p className="text-xs text-gray-500">{info.shares} shares</p>
+                        <p className="text-lg font-bold text-amber-600 dark:text-amber-400">${info.cost}/mo</p>
+                        <p className="text-xs text-gray-500 dark:text-zinc-500">{info.shares} shares</p>
                       </Link>
                     ))}
                 </div>
@@ -608,27 +608,27 @@ export default function ArtistPortalPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <button
                 onClick={() => { setActiveTab("tracks"); setShowUploadForm(true); }}
-                className="bg-white rounded-xl p-5 shadow-sm border hover:border-purple-300 hover:shadow-md transition-all text-left"
+                className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border hover:border-purple-300 hover:shadow-md transition-all text-left"
               >
                 <Upload className="w-5 h-5 text-purple-500 mb-2" />
-                <p className="font-semibold text-gray-900">Submit a Track</p>
-                <p className="text-sm text-gray-500 mt-1">Upload music for curator review</p>
+                <p className="font-semibold text-gray-900 dark:text-white">Submit a Track</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">Upload music for curator review</p>
               </button>
               <button
                 onClick={() => setActiveTab("earnings")}
-                className="bg-white rounded-xl p-5 shadow-sm border hover:border-green-300 hover:shadow-md transition-all text-left"
+                className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border hover:border-green-300 hover:shadow-md transition-all text-left"
               >
                 <DollarSign className="w-5 h-5 text-green-500 mb-2" />
-                <p className="font-semibold text-gray-900">View Earnings</p>
-                <p className="text-sm text-gray-500 mt-1">Monthly revenue breakdown</p>
+                <p className="font-semibold text-gray-900 dark:text-white">View Earnings</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">Monthly revenue breakdown</p>
               </button>
               <button
                 onClick={() => setActiveTab("analytics")}
-                className="bg-white rounded-xl p-5 shadow-sm border hover:border-blue-300 hover:shadow-md transition-all text-left"
+                className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border hover:border-blue-300 hover:shadow-md transition-all text-left"
               >
                 <BarChart3 className="w-5 h-5 text-blue-500 mb-2" />
-                <p className="font-semibold text-gray-900">Analytics</p>
-                <p className="text-sm text-gray-500 mt-1">Plays, reach, peak hours</p>
+                <p className="font-semibold text-gray-900 dark:text-white">Analytics</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">Plays, reach, peak hours</p>
               </button>
             </div>
           </div>
@@ -638,7 +638,7 @@ export default function ArtistPortalPage() {
         {activeTab === "tracks" && (
           <div className="space-y-6">
             {/* Upload form */}
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
               <div className="px-6 py-4 border-b flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Upload className="w-5 h-5 text-purple-500" />
@@ -662,7 +662,7 @@ export default function ArtistPortalPage() {
                   )}
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                       Track Title <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -676,7 +676,7 @@ export default function ArtistPortalPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Genre</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Genre</label>
                       <input
                         type="text"
                         value={uploadGenre}
@@ -686,7 +686,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                         Audio File (MP3, WAV, OGG &mdash; max 50MB)
                       </label>
                       <input
@@ -700,7 +700,7 @@ export default function ArtistPortalPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                       Notes for Curators
                     </label>
                     <textarea
@@ -732,7 +732,7 @@ export default function ArtistPortalPage() {
             </div>
 
             {/* Track List */}
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
               <div className="px-6 py-4 border-b flex items-center gap-2">
                 <Music className="w-5 h-5 text-gray-400" />
                 <h2 className="font-semibold">Your Tracks</h2>
@@ -744,7 +744,7 @@ export default function ArtistPortalPage() {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400 mx-auto" />
                 </div>
               ) : tracks.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">
+                <div className="p-8 text-center text-gray-500 dark:text-zinc-500">
                   <Music className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <p>No tracks submitted yet.</p>
                   <button
@@ -759,28 +759,28 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500">Title</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Genre</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Status</th>
+                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Title</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Genre</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Status</th>
                         <th className="px-4 py-3 font-medium text-gray-500 text-right">Total Plays</th>
                         <th className="px-4 py-3 font-medium text-gray-500 text-right">This Month</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Submitted</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Submitted</th>
                       </tr>
                     </thead>
                     <tbody>
                       {tracks.map((track) => (
-                        <tr key={track.id} className="border-t hover:bg-gray-50">
-                          <td className="px-6 py-3 font-medium text-gray-900">
+                        <tr key={track.id} className="border-t hover:bg-gray-50 dark:hover:bg-zinc-800">
+                          <td className="px-6 py-3 font-medium text-gray-900 dark:text-white">
                             {track.trackTitle}
                             {track.addedToRotation && (
                               <span className="ml-2 inline-block w-2 h-2 rounded-full bg-green-400" title="In rotation" />
                             )}
                           </td>
-                          <td className="px-4 py-3 text-gray-600">{track.genre || "-"}</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{track.genre || "-"}</td>
                           <td className="px-4 py-3">{statusBadge(track.status)}</td>
                           <td className="px-4 py-3 text-right font-medium">{track.playCount.toLocaleString()}</td>
-                          <td className="px-4 py-3 text-right text-gray-600">{track.playsThisMonth.toLocaleString()}</td>
-                          <td className="px-4 py-3 text-gray-500">
+                          <td className="px-4 py-3 text-right text-gray-600 dark:text-zinc-400">{track.playsThisMonth.toLocaleString()}</td>
+                          <td className="px-4 py-3 text-gray-500 dark:text-zinc-500">
                             {new Date(track.submittedAt).toLocaleDateString()}
                           </td>
                         </tr>
@@ -799,24 +799,24 @@ export default function ArtistPortalPage() {
             {/* Summary cards */}
             {earningsSummary && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500">Total Earned</p>
-                  <p className="text-2xl font-bold text-gray-900">${earningsSummary.totalEarned.toFixed(2)}</p>
+                <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">Total Earned</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">${earningsSummary.totalEarned.toFixed(2)}</p>
                 </div>
-                <div className="bg-white rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500">Paid Out</p>
+                <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">Paid Out</p>
                   <p className="text-2xl font-bold text-green-600">${earningsSummary.totalPaid.toFixed(2)}</p>
                 </div>
-                <div className="bg-white rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500">Pending</p>
-                  <p className="text-2xl font-bold text-amber-600">${earningsSummary.totalPending.toFixed(2)}</p>
+                <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">Pending</p>
+                  <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">${earningsSummary.totalPending.toFixed(2)}</p>
                 </div>
               </div>
             )}
 
             {/* Earnings chart (simple bar representation) */}
             {earnings.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
                 <div className="px-6 py-4 border-b">
                   <h2 className="font-semibold">Monthly Earnings</h2>
                 </div>
@@ -848,7 +848,7 @@ export default function ArtistPortalPage() {
                       );
                     })}
                   </div>
-                  <div className="flex items-center gap-4 mt-4 text-xs text-gray-500">
+                  <div className="flex items-center gap-4 mt-4 text-xs text-gray-500 dark:text-zinc-500">
                     <span className="flex items-center gap-1">
                       <span className="w-3 h-3 rounded-full bg-green-400" /> Paid
                     </span>
@@ -861,7 +861,7 @@ export default function ArtistPortalPage() {
             )}
 
             {/* Earnings table */}
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
               <div className="px-6 py-4 border-b flex items-center gap-2">
                 <DollarSign className="w-5 h-5 text-gray-400" />
                 <h2 className="font-semibold">Earnings History</h2>
@@ -872,7 +872,7 @@ export default function ArtistPortalPage() {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400 mx-auto" />
                 </div>
               ) : earnings.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">
+                <div className="p-8 text-center text-gray-500 dark:text-zinc-500">
                   <Clock className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <p>No earnings yet. Earnings are distributed monthly via Manifest Financial.</p>
                 </div>
@@ -881,19 +881,19 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Tier</th>
+                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Tier</th>
                         <th className="px-4 py-3 font-medium text-gray-500 text-right">Shares</th>
                         <th className="px-4 py-3 font-medium text-gray-500 text-right">Earnings</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Status</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Invoice</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Status</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Invoice</th>
                       </tr>
                     </thead>
                     <tbody>
                       {earnings.map((e) => (
-                        <tr key={e.id} className="border-t hover:bg-gray-50">
+                        <tr key={e.id} className="border-t hover:bg-gray-50 dark:hover:bg-zinc-800">
                           <td className="px-6 py-3 font-medium">{formatPeriod(e.period)}</td>
-                          <td className="px-4 py-3 text-gray-600">{e.tier}</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{e.tier}</td>
                           <td className="px-4 py-3 text-right">{e.shares}</td>
                           <td className="px-4 py-3 text-right font-medium">${e.earnings.toFixed(2)}</td>
                           <td className="px-4 py-3">
@@ -931,17 +931,17 @@ export default function ArtistPortalPage() {
             {/* Summary */}
             {paymentSummary && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500">Total Subscription Payments</p>
-                  <p className="text-2xl font-bold text-gray-900">${paymentSummary.totalPayments.toFixed(2)}</p>
+                <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">Total Subscription Payments</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">${paymentSummary.totalPayments.toFixed(2)}</p>
                 </div>
-                <div className="bg-white rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500">Total Earnings Paid Out</p>
+                <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">Total Earnings Paid Out</p>
                   <p className="text-2xl font-bold text-green-600">${paymentSummary.totalPayouts.toFixed(2)}</p>
                 </div>
-                <div className="bg-white rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500">Pending Payout</p>
-                  <p className="text-2xl font-bold text-amber-600">${paymentSummary.pendingAmount.toFixed(2)}</p>
+                <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500">Pending Payout</p>
+                  <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">${paymentSummary.pendingAmount.toFixed(2)}</p>
                 </div>
               </div>
             )}
@@ -956,7 +956,7 @@ export default function ArtistPortalPage() {
 
             {/* Pending payouts */}
             {pendingPayouts.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
                 <div className="px-6 py-4 border-b flex items-center gap-2">
                   <Clock className="w-5 h-5 text-amber-500" />
                   <h2 className="font-semibold">Pending Payouts</h2>
@@ -965,8 +965,8 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Tier</th>
+                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Tier</th>
                         <th className="px-4 py-3 font-medium text-gray-500 text-right">Shares</th>
                         <th className="px-4 py-3 font-medium text-gray-500 text-right">Amount</th>
                       </tr>
@@ -975,9 +975,9 @@ export default function ArtistPortalPage() {
                       {pendingPayouts.map((p) => (
                         <tr key={p.id} className="border-t">
                           <td className="px-6 py-3 font-medium">{formatPeriod(p.period)}</td>
-                          <td className="px-4 py-3 text-gray-600">{p.tier}</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{p.tier}</td>
                           <td className="px-4 py-3 text-right">{p.shares}</td>
-                          <td className="px-4 py-3 text-right font-medium text-amber-600">${p.earnings.toFixed(2)}</td>
+                          <td className="px-4 py-3 text-right font-medium text-amber-600 dark:text-amber-400">${p.earnings.toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -987,7 +987,7 @@ export default function ArtistPortalPage() {
             )}
 
             {/* Subscription payments */}
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
               <div className="px-6 py-4 border-b flex items-center gap-2">
                 <FileText className="w-5 h-5 text-gray-400" />
                 <h2 className="font-semibold">Subscription Payments</h2>
@@ -998,7 +998,7 @@ export default function ArtistPortalPage() {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400 mx-auto" />
                 </div>
               ) : payments.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">
+                <div className="p-8 text-center text-gray-500 dark:text-zinc-500">
                   <FileText className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <p>No subscription payments recorded.</p>
                 </div>
@@ -1007,20 +1007,20 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500">Date</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Tier</th>
+                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Date</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Tier</th>
                         <th className="px-4 py-3 font-medium text-gray-500 text-right">Amount</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Status</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Method</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Status</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Method</th>
                       </tr>
                     </thead>
                     <tbody>
                       {payments.map((p) => (
-                        <tr key={p.id} className="border-t hover:bg-gray-50">
-                          <td className="px-6 py-3 text-gray-600">{new Date(p.date).toLocaleDateString()}</td>
+                        <tr key={p.id} className="border-t hover:bg-gray-50 dark:hover:bg-zinc-800">
+                          <td className="px-6 py-3 text-gray-600 dark:text-zinc-400">{new Date(p.date).toLocaleDateString()}</td>
                           <td className="px-4 py-3 font-medium">{formatPeriod(p.period)}</td>
-                          <td className="px-4 py-3 text-gray-600">{p.tier}</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{p.tier}</td>
                           <td className="px-4 py-3 text-right font-medium">${p.amount.toFixed(2)}</td>
                           <td className="px-4 py-3">{statusBadge(p.status)}</td>
                           <td className="px-4 py-3 text-gray-500 text-xs">{p.paymentMethod}</td>
@@ -1034,7 +1034,7 @@ export default function ArtistPortalPage() {
 
             {/* Paid earnings */}
             {payouts.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
                 <div className="px-6 py-4 border-b flex items-center gap-2">
                   <CheckCircle className="w-5 h-5 text-green-500" />
                   <h2 className="font-semibold">Completed Payouts</h2>
@@ -1043,21 +1043,21 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Tier</th>
+                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Tier</th>
                         <th className="px-4 py-3 font-medium text-gray-500 text-right">Shares</th>
                         <th className="px-4 py-3 font-medium text-gray-500 text-right">Amount</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Paid On</th>
+                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Paid On</th>
                       </tr>
                     </thead>
                     <tbody>
                       {payouts.map((p) => (
-                        <tr key={p.id} className="border-t hover:bg-gray-50">
+                        <tr key={p.id} className="border-t hover:bg-gray-50 dark:hover:bg-zinc-800">
                           <td className="px-6 py-3 font-medium">{formatPeriod(p.period)}</td>
-                          <td className="px-4 py-3 text-gray-600">{p.tier}</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{p.tier}</td>
                           <td className="px-4 py-3 text-right">{p.shares}</td>
                           <td className="px-4 py-3 text-right font-medium text-green-600">${p.earnings.toFixed(2)}</td>
-                          <td className="px-4 py-3 text-gray-500">
+                          <td className="px-4 py-3 text-gray-500 dark:text-zinc-500">
                             {p.paidAt ? new Date(p.paidAt).toLocaleDateString() : "-"}
                           </td>
                         </tr>
@@ -1105,10 +1105,10 @@ export default function ArtistPortalPage() {
 
                 {/* Plays over time chart (from earnings) */}
                 {earnings.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                  <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
                     <div className="px-6 py-4 border-b">
                       <h2 className="font-semibold">Earnings Trend</h2>
-                      <p className="text-xs text-gray-500 mt-1">Monthly earnings over the last 12 months</p>
+                      <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Monthly earnings over the last 12 months</p>
                     </div>
                     <div className="p-6">
                       <div className="flex items-end gap-2 h-40">
@@ -1117,7 +1117,7 @@ export default function ArtistPortalPage() {
                           const heightPct = (e.earnings / maxEarning) * 100;
                           return (
                             <div key={e.id} className="flex-1 flex flex-col items-center gap-1">
-                              <span className="text-[10px] text-gray-500">${e.earnings.toFixed(0)}</span>
+                              <span className="text-[10px] text-gray-500 dark:text-zinc-500">${e.earnings.toFixed(0)}</span>
                               <div
                                 className={`w-full rounded-t ${e.paid ? "bg-green-400" : "bg-amber-400"}`}
                                 style={{ height: `${Math.max(heightPct, 4)}%` }}
@@ -1134,7 +1134,7 @@ export default function ArtistPortalPage() {
 
                 {/* Track performance */}
                 {tracks.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                  <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
                     <div className="px-6 py-4 border-b">
                       <h2 className="font-semibold">Track Performance</h2>
                     </div>
@@ -1167,7 +1167,7 @@ export default function ArtistPortalPage() {
                 )}
 
                 {/* Peak hours insight */}
-                <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
                   <div className="px-6 py-4 border-b">
                     <h2 className="font-semibold">Listening Insights</h2>
                   </div>
@@ -1175,22 +1175,22 @@ export default function ArtistPortalPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="text-center p-4 bg-blue-50 rounded-lg">
                         <p className="text-2xl font-bold text-blue-600">Morning</p>
-                        <p className="text-xs text-gray-500 mt-1">6am - 12pm</p>
+                        <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">6am - 12pm</p>
                         <p className="text-sm font-medium text-gray-700 mt-2">Peak Discovery</p>
                       </div>
                       <div className="text-center p-4 bg-amber-50 rounded-lg">
-                        <p className="text-2xl font-bold text-amber-600">Midday</p>
-                        <p className="text-xs text-gray-500 mt-1">12pm - 5pm</p>
+                        <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">Midday</p>
+                        <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">12pm - 5pm</p>
                         <p className="text-sm font-medium text-gray-700 mt-2">Steady Listening</p>
                       </div>
                       <div className="text-center p-4 bg-purple-50 rounded-lg">
                         <p className="text-2xl font-bold text-purple-600">Evening</p>
-                        <p className="text-xs text-gray-500 mt-1">5pm - 10pm</p>
+                        <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">5pm - 10pm</p>
                         <p className="text-sm font-medium text-gray-700 mt-2">Peak Engagement</p>
                       </div>
                       <div className="text-center p-4 bg-gray-50 rounded-lg">
-                        <p className="text-2xl font-bold text-gray-600">Late Night</p>
-                        <p className="text-xs text-gray-500 mt-1">10pm - 6am</p>
+                        <p className="text-2xl font-bold text-gray-600 dark:text-zinc-400">Late Night</p>
+                        <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">10pm - 6am</p>
                         <p className="text-sm font-medium text-gray-700 mt-2">Niche Audience</p>
                       </div>
                     </div>
@@ -1207,7 +1207,7 @@ export default function ArtistPortalPage() {
         {/* ========== SETTINGS TAB ========== */}
         {activeTab === "settings" && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
               <div className="px-6 py-4 border-b flex items-center gap-2">
                 <Settings className="w-5 h-5 text-gray-400" />
                 <h2 className="font-semibold">Profile Settings</h2>
@@ -1223,13 +1223,13 @@ export default function ArtistPortalPage() {
 
                 {/* Profile image */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Profile Image</label>
                   <div className="flex items-center gap-4">
                     {artist?.metadata?.profileImage ? (
                       <img
                         src={artist.metadata.profileImage}
                         alt={artist.name}
-                        className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                        className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-zinc-800"
                       />
                     ) : (
                       <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
@@ -1248,7 +1248,7 @@ export default function ArtistPortalPage() {
 
                 {/* Bio */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Bio</label>
                   <textarea
                     value={editBio}
                     onChange={(e) => setEditBio(e.target.value)}
@@ -1260,7 +1260,7 @@ export default function ArtistPortalPage() {
 
                 {/* Genre */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Genre</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">Genre</label>
                   <input
                     type="text"
                     value={editGenre}
@@ -1272,10 +1272,10 @@ export default function ArtistPortalPage() {
 
                 {/* Social Links */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Social Links</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Social Links</label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Instagram</label>
+                      <label className="block text-xs text-gray-500 dark:text-zinc-500 mb-1">Instagram</label>
                       <input
                         type="text"
                         value={editSocials.instagram}
@@ -1285,7 +1285,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Twitter / X</label>
+                      <label className="block text-xs text-gray-500 dark:text-zinc-500 mb-1">Twitter / X</label>
                       <input
                         type="text"
                         value={editSocials.twitter}
@@ -1295,7 +1295,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Spotify</label>
+                      <label className="block text-xs text-gray-500 dark:text-zinc-500 mb-1">Spotify</label>
                       <input
                         type="text"
                         value={editSocials.spotify}
@@ -1305,7 +1305,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 mb-1">Website</label>
+                      <label className="block text-xs text-gray-500 dark:text-zinc-500 mb-1">Website</label>
                       <input
                         type="text"
                         value={editSocials.website}
@@ -1335,32 +1335,32 @@ export default function ArtistPortalPage() {
             </div>
 
             {/* Account info (read-only) */}
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
               <div className="px-6 py-4 border-b">
                 <h2 className="font-semibold">Account Information</h2>
               </div>
               <div className="px-6 py-4 space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Artist ID</span>
-                  <span className="font-mono text-gray-700">{artist?.id}</span>
+                  <span className="text-gray-500 dark:text-zinc-500">Artist ID</span>
+                  <span className="font-mono text-gray-700 dark:text-zinc-300">{artist?.id}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Email</span>
-                  <span className="text-gray-700">{artist?.email}</span>
+                  <span className="text-gray-500 dark:text-zinc-500">Email</span>
+                  <span className="text-gray-700 dark:text-zinc-300">{artist?.email}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Tier</span>
-                  <span className="text-gray-700">{tier.name} ({artist?.airplayTier})</span>
+                  <span className="text-gray-500 dark:text-zinc-500">Tier</span>
+                  <span className="text-gray-700 dark:text-zinc-300">{tier.name} ({artist?.airplayTier})</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Member Since</span>
-                  <span className="text-gray-700">
+                  <span className="text-gray-500 dark:text-zinc-500">Member Since</span>
+                  <span className="text-gray-700 dark:text-zinc-300">
                     {artist?.createdAt ? new Date(artist.createdAt).toLocaleDateString() : "-"}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Payment Processor</span>
-                  <span className="text-gray-700">Manifest Financial</span>
+                  <span className="text-gray-500 dark:text-zinc-500">Payment Processor</span>
+                  <span className="text-gray-700 dark:text-zinc-300">Manifest Financial</span>
                 </div>
               </div>
             </div>
@@ -1375,10 +1375,10 @@ export default function ArtistPortalPage() {
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm border">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border">
       <div className="mb-2">{icon}</div>
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-xl font-bold text-gray-900">{value}</p>
+      <p className="text-sm text-gray-500 dark:text-zinc-500">{label}</p>
+      <p className="text-xl font-bold text-gray-900 dark:text-white">{value}</p>
     </div>
   );
 }

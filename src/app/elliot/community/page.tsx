@@ -62,7 +62,7 @@ export default function CommunityPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading community...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading community...</div>
       </main>
     );
   }
@@ -111,11 +111,11 @@ export default function CommunityPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/elliot"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Elliot Dashboard</span>
@@ -123,8 +123,8 @@ export default function CommunityPage() {
           <div className="flex items-center space-x-3">
             <Users className="w-8 h-8 text-purple-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Community Hub</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Community Hub</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Engage with your most passionate listeners and build culture
               </p>
             </div>
@@ -166,11 +166,11 @@ export default function CommunityPage() {
         </section>
 
         {/* Top Members Leaderboard */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Top Community Members</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 Most engaged Super Fans and Evangelists
               </p>
             </div>
@@ -194,7 +194,7 @@ export default function CommunityPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
                 No super fans or evangelists yet. Build your community to see top members here.
               </div>
             )}
@@ -202,7 +202,7 @@ export default function CommunityPage() {
         </section>
 
         {/* Recent Activity */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Recent Community Activity</h2>
 
           <div className="space-y-3">
@@ -211,7 +211,7 @@ export default function CommunityPage() {
                 <ActivityRow key={activity.id} {...activity} />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
                 No community activity yet. Engagements will appear here as listeners interact.
               </div>
             )}
@@ -221,7 +221,7 @@ export default function CommunityPage() {
         {/* Upcoming Events */}
         <section className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Upcoming Community Events</h2>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Virtual and in-person events for the community
           </p>
 
@@ -239,9 +239,9 @@ export default function CommunityPage() {
         </section>
 
         {/* Discussion Topics */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Popular Discussion Topics</h2>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Most active conversations in the community
           </p>
 
@@ -292,12 +292,12 @@ function MetricCard({
   positive: boolean;
 }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
       <div className={`text-xs font-semibold ${positive ? 'text-green-600' : 'text-gray-600'}`}>
         {change}
       </div>
@@ -337,13 +337,13 @@ function MemberCard({ rank, name, avatar, tier, points, sessions, hours, joinDat
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <div className="font-bold text-gray-900">{name}</div>
+              <div className="font-bold text-gray-900 dark:text-white">{name}</div>
               <span className="text-lg">{badge}</span>
               <span className={`text-xs px-2 py-1 rounded-full ${config.bg} ${config.text} font-medium`}>
                 {tier}
               </span>
             </div>
-            <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
+            <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-zinc-400 mt-1">
               <span>Score: {points}</span>
               <span>•</span>
               <span>{sessions} sessions</span>
@@ -353,7 +353,7 @@ function MemberCard({ rank, name, avatar, tier, points, sessions, hours, joinDat
           </div>
         </div>
         <div className="text-right text-sm">
-          <div className="text-gray-600">Joined {joinDate}</div>
+          <div className="text-gray-600 dark:text-zinc-400">Joined {joinDate}</div>
           <div className="text-green-600 font-medium">{lastActive}</div>
         </div>
       </div>
@@ -368,20 +368,20 @@ function ActivityRow({ user, action, topic, time, engagement }: { user: string; 
         <MessageCircle className="w-8 h-8 text-purple-600" />
         <div>
           <div className="text-sm">
-            <span className="font-semibold text-gray-900">{user}</span>
-            <span className="text-gray-600"> {action}</span>
+            <span className="font-semibold text-gray-900 dark:text-white">{user}</span>
+            <span className="text-gray-600 dark:text-zinc-400"> {action}</span>
           </div>
           <div className="text-sm font-medium text-gray-900 mt-1">{topic}</div>
         </div>
       </div>
       <div className="flex items-center space-x-4">
         {engagement > 0 && (
-          <div className="flex items-center space-x-1 text-sm text-gray-600">
+          <div className="flex items-center space-x-1 text-sm text-gray-600 dark:text-zinc-400">
             <Heart className="w-4 h-4" />
             <span>{engagement}</span>
           </div>
         )}
-        <div className="text-sm text-gray-500">{time}</div>
+        <div className="text-sm text-gray-500 dark:text-zinc-500">{time}</div>
       </div>
     </div>
   );
@@ -403,22 +403,22 @@ function EventRow({ name, date, time, host, attendees, type }: {
   const eventConfig = typeConfig[type];
 
   return (
-    <div className="flex items-center justify-between p-4 bg-white rounded-lg border-2 border-purple-200">
+    <div className="flex items-center justify-between p-4 bg-white dark:bg-zinc-900 rounded-lg border-2 border-purple-200">
       <div className="flex-1">
         <div className="flex items-center space-x-2 mb-1">
-          <div className="font-semibold text-gray-900">{name}</div>
+          <div className="font-semibold text-gray-900 dark:text-white">{name}</div>
           <span className={`text-xs px-2 py-1 rounded-full ${eventConfig.bg} ${eventConfig.text} font-medium`}>
             {type}
           </span>
         </div>
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 dark:text-zinc-400">
           <Calendar className="w-4 h-4 inline mr-1" />
           {date} at {time} - Host: {host}
         </div>
       </div>
       {attendees > 0 && (
         <div className="text-sm">
-          <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">
+          <div className="bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 px-3 py-1 rounded-full font-medium">
             {attendees} attending
           </div>
         </div>
@@ -429,23 +429,23 @@ function EventRow({ name, date, time, host, attendees, type }: {
 
 function TopicCard({ topic, posts, members, lastActive }: { topic: string; posts: number; members: number; lastActive: string }) {
   return (
-    <div className="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-300 transition-colors">
+    <div className="border-2 border-gray-200 dark:border-zinc-800 rounded-lg p-4 hover:border-purple-300 transition-colors">
       <div className="flex items-center space-x-2 mb-3">
         <MessageCircle className="w-5 h-5 text-purple-600" />
-        <h3 className="font-bold text-gray-900">{topic}</h3>
+        <h3 className="font-bold text-gray-900 dark:text-white">{topic}</h3>
       </div>
       <div className="grid grid-cols-3 gap-2 text-center text-sm">
         <div>
-          <div className="font-bold text-gray-900">{posts}</div>
-          <div className="text-xs text-gray-500">posts</div>
+          <div className="font-bold text-gray-900 dark:text-white">{posts}</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">posts</div>
         </div>
         <div>
-          <div className="font-bold text-gray-900">{members}</div>
-          <div className="text-xs text-gray-500">members</div>
+          <div className="font-bold text-gray-900 dark:text-white">{members}</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">members</div>
         </div>
         <div>
           <div className="text-xs text-green-600 font-medium">{lastActive}</div>
-          <div className="text-xs text-gray-500">last active</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500">last active</div>
         </div>
       </div>
     </div>
@@ -454,10 +454,10 @@ function TopicCard({ topic, posts, members, lastActive }: { topic: string; posts
 
 function ProgramCard({ icon, title, description, buttonText }: { icon: React.ReactNode; title: string; description: string; buttonText: string }) {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 text-center">
       <div className="flex justify-center mb-4">{icon}</div>
-      <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-      <p className="text-sm text-gray-600 mb-4">{description}</p>
+      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{title}</h3>
+      <p className="text-sm text-gray-600 dark:text-zinc-400 mb-4">{description}</p>
       <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors w-full font-medium">
         {buttonText}
       </button>

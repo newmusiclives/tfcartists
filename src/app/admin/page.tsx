@@ -230,25 +230,25 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 flex items-center justify-center">
+        <div className="text-gray-600 dark:text-zinc-400">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
 
       {/* Page Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-zinc-900 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Radio className="w-8 h-8 text-purple-600" />
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Admin Command Center</h1>
-                <p className="text-gray-600">All teams, financials, and analytics in one place</p>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Command Center</h1>
+                <p className="text-gray-600 dark:text-zinc-400">All teams, financials, and analytics in one place</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -268,7 +268,7 @@ export default function AdminDashboard() {
               </Link>
               <Link
                 href="/admin/settings"
-                className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 text-sm"
+                className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white text-sm"
               >
                 <Settings className="w-4 h-4" />
                 <span>Settings</span>
@@ -328,7 +328,7 @@ export default function AdminDashboard() {
 
         {/* Team Dashboard Cards */}
         <section>
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Team Dashboards</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Team Dashboards</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {teamSummaries && Object.entries(teamSummaries).map(([key, team]) => {
               const colorMap: Record<string, { border: string; iconBg: string; iconText: string; badge: string; hover: string }> = {
@@ -343,15 +343,15 @@ export default function AdminDashboard() {
 
               return (
                 <Link key={key} href={team.href} className="block group">
-                  <div className={`bg-white rounded-xl shadow-sm border-2 ${c.border} ${c.hover} p-6 transition-all group-hover:shadow-md`}>
+                  <div className={`bg-white dark:bg-zinc-900 rounded-xl shadow-sm border-2 ${c.border} ${c.hover} p-6 transition-all group-hover:shadow-md`}>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
                         <div className={`p-2.5 rounded-lg ${c.iconBg}`}>
                           <Icon className={`w-6 h-6 ${c.iconText}`} />
                         </div>
                         <div>
-                          <h3 className="text-lg font-bold text-gray-900">{team.name}</h3>
-                          <p className="text-sm text-gray-500">{team.role}</p>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white">{team.name}</h3>
+                          <p className="text-sm text-gray-500 dark:text-zinc-500">{team.role}</p>
                         </div>
                       </div>
                       <ArrowRight className="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform" />
@@ -359,8 +359,8 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-2 gap-3">
                       {team.stats.map((stat) => (
                         <div key={stat.label} className="bg-gray-50 rounded-lg p-3">
-                          <div className="text-lg font-bold text-gray-900">{stat.value}</div>
-                          <div className="text-xs text-gray-500">{stat.label}</div>
+                          <div className="text-lg font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                          <div className="text-xs text-gray-500 dark:text-zinc-500">{stat.label}</div>
                         </div>
                       ))}
                     </div>
@@ -372,9 +372,9 @@ export default function AdminDashboard() {
         </section>
 
         {/* Revenue Flow Summary */}
-        <section className="bg-white rounded-xl shadow-sm p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Revenue Flow</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Revenue Flow</h2>
             <Link
               href="/revenue"
               className="text-purple-600 hover:text-purple-700 text-sm font-medium inline-flex items-center space-x-1"
@@ -453,9 +453,9 @@ export default function AdminDashboard() {
         {/* Cross-Team Analytics */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Artist Pipeline (from live data) */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900">Artist Pipeline (Live)</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Artist Pipeline (Live)</h2>
               <Link
                 href="/riley/pipeline"
                 className="text-purple-600 hover:text-purple-700 text-sm font-medium inline-flex items-center space-x-1"
@@ -474,14 +474,14 @@ export default function AdminDashboard() {
               <PipelineStage label="Active" count={stats?.artists.active || 0} color="teal" />
             </div>
             <div className="mt-4 pt-4 border-t flex items-center justify-between text-sm">
-              <span className="text-gray-600">Total in database</span>
-              <span className="font-bold text-gray-900">{stats?.artists.total || 0} artists</span>
+              <span className="text-gray-600 dark:text-zinc-400">Total in database</span>
+              <span className="font-bold text-gray-900 dark:text-white">{stats?.artists.total || 0} artists</span>
             </div>
           </div>
 
           {/* System Health */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">System Health</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">System Health</h2>
             <div className="space-y-4">
               <HealthMetric
                 label="Riley: Artist Acquisition"
@@ -530,9 +530,9 @@ export default function AdminDashboard() {
         </section>
 
         {/* Recent Artists Table */}
-        <section className="bg-white rounded-xl shadow-sm">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm">
           <div className="p-6 border-b flex justify-between items-center">
-            <h2 className="text-lg font-bold text-gray-900">Recent Artists</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Recent Artists</h2>
             <Link
               href="/admin/artists"
               className="text-purple-600 hover:text-purple-700 text-sm font-medium inline-flex items-center space-x-1"
@@ -565,14 +565,14 @@ export default function AdminDashboard() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-zinc-900 divide-y divide-gray-200 dark:divide-zinc-800">
                 {artists.map((artist) => (
-                  <tr key={artist.id} className="hover:bg-gray-50">
+                  <tr key={artist.id} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {artist.name}
                       </div>
-                      <div className="text-sm text-gray-500">{artist.genre || "—"}</div>
+                      <div className="text-sm text-gray-500 dark:text-zinc-500">{artist.genre || "—"}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
@@ -583,13 +583,13 @@ export default function AdminDashboard() {
                         {artist.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       {artist._count.conversations}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       {artist._count.shows}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                       {artist._count.donations}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -671,10 +671,10 @@ function HealthMetric({
     <div className="flex items-center justify-between py-2">
       <div className="flex items-center space-x-3">
         <div className={`w-2.5 h-2.5 rounded-full ${dotColors[color]} animate-pulse`} />
-        <span className="text-sm text-gray-700">{label}</span>
+        <span className="text-sm text-gray-700 dark:text-zinc-300">{label}</span>
       </div>
       <div className="text-right">
-        <span className="text-sm font-bold text-gray-900">{value}</span>
+        <span className="text-sm font-bold text-gray-900 dark:text-white">{value}</span>
         <span className="text-xs text-gray-500 ml-1">{unit}</span>
       </div>
     </div>

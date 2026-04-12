@@ -21,11 +21,11 @@ interface FileEntry {
 }
 
 const CATEGORIES = [
-  { value: "A", label: "A — Hits", color: "bg-red-100 text-red-700 border-red-200" },
-  { value: "B", label: "B — Fast", color: "bg-blue-100 text-blue-700 border-blue-200" },
-  { value: "C", label: "C — Medium", color: "bg-green-100 text-green-700 border-green-200" },
-  { value: "D", label: "D — Slow", color: "bg-purple-100 text-purple-700 border-purple-200" },
-  { value: "E", label: "E — Independent", color: "bg-orange-100 text-orange-700 border-orange-200" },
+  { value: "A", label: "A — Hits", color: "bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400 border-red-200" },
+  { value: "B", label: "B — Fast", color: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-200" },
+  { value: "C", label: "C — Medium", color: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 border-green-200" },
+  { value: "D", label: "D — Slow", color: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-200" },
+  { value: "E", label: "E — Independent", color: "bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-200" },
 ];
 
 const GENDERS = [
@@ -333,7 +333,7 @@ export default function MusicImportPage() {
   };
 
   return (
-    <div ref={rootRef} className="min-h-screen bg-gray-50">
+    <div ref={rootRef} className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link href="/station-admin/music" className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-4">
@@ -343,13 +343,13 @@ export default function MusicImportPage() {
           <Upload className="w-8 h-8 text-green-600" />
           Import Songs
         </h1>
-        <p className="text-gray-600 mb-4">Add songs to your music library via file upload or CSV/JSON import</p>
+        <p className="text-gray-600 dark:text-zinc-400 mb-4">Add songs to your music library via file upload or CSV/JSON import</p>
 
         {/* Railway Sync Warning */}
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
           <div>
-            <h3 className="text-sm font-semibold text-amber-800">Two-Step Import Process</h3>
+            <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-400">Two-Step Import Process</h3>
             <p className="text-xs text-amber-700 mt-1">
               This page saves song <strong>metadata</strong> (title, artist, category) to the database.
               The actual <strong>audio files</strong> must be uploaded separately to the Railway streaming backend.
@@ -359,10 +359,10 @@ export default function MusicImportPage() {
         </div>
 
         {result ? (
-          <div className="bg-white rounded-xl p-8 shadow-sm border text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-sm border text-center">
             <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-3" />
             <h2 className="text-xl font-semibold mb-2">Import Complete</h2>
-            <p className="text-gray-600 mb-4">{result.imported} imported, {result.skipped} skipped</p>
+            <p className="text-gray-600 dark:text-zinc-400 mb-4">{result.imported} imported, {result.skipped} skipped</p>
             {result.errors.length > 0 && (
               <div className="text-left bg-red-50 rounded-lg p-4 mb-4 max-h-40 overflow-y-auto">
                 {result.errors.map((e, i) => (
@@ -382,15 +382,15 @@ export default function MusicImportPage() {
             {/* Mode selector */}
             <div className="flex gap-2 mb-6">
               <button onClick={() => setMode("files")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 ${mode === "files" ? "bg-green-600 text-white" : "bg-white border text-gray-700 hover:bg-gray-50"}`}>
+                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 ${mode === "files" ? "bg-green-600 text-white" : "bg-white border text-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
                 <FolderUp className="w-4 h-4" /> Drop Files
               </button>
               <button onClick={() => setMode("csv")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 ${mode === "csv" ? "bg-gray-900 text-white" : "bg-white border text-gray-700 hover:bg-gray-50"}`}>
+                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 ${mode === "csv" ? "bg-gray-900 text-white" : "bg-white border text-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
                 <FileText className="w-4 h-4" /> CSV
               </button>
               <button onClick={() => setMode("json")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 ${mode === "json" ? "bg-gray-900 text-white" : "bg-white border text-gray-700 hover:bg-gray-50"}`}>
+                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 ${mode === "json" ? "bg-gray-900 text-white" : "bg-white border text-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
                 {"{ }"} JSON
               </button>
             </div>
@@ -400,10 +400,10 @@ export default function MusicImportPage() {
                 {/* Full-page drop overlay — appears when dragging over the page */}
                 {isDragging && (
                   <div className="fixed inset-0 z-[100] bg-green-500/10 border-4 border-dashed border-green-500 flex items-center justify-center pointer-events-none">
-                    <div className="bg-white rounded-2xl p-8 shadow-2xl text-center">
+                    <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-2xl text-center">
                       <FolderUp className="w-16 h-16 text-green-500 mx-auto mb-3" />
-                      <p className="text-xl font-bold text-gray-900">Drop audio files to import</p>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-xl font-bold text-gray-900 dark:text-white">Drop audio files to import</p>
+                      <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
                         Adding to category:{" "}
                         <span className={`inline-block px-2 py-0.5 rounded font-black ${CATEGORIES.find(c => c.value === defaultCategory)?.color || ""}`}>
                           {defaultCategory}
@@ -414,9 +414,9 @@ export default function MusicImportPage() {
                 )}
 
                 {/* Step 1: Select category */}
-                <div className="bg-white rounded-xl p-6 shadow-sm border mb-4">
-                  <h3 className="text-base font-bold text-gray-900 mb-1">Step 1: Select Rotation Category</h3>
-                  <p className="text-sm text-gray-500 mb-4">Choose which category these songs should be added to</p>
+                <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-4">
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">Step 1: Select Rotation Category</h3>
+                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-4">Choose which category these songs should be added to</p>
                   <div className="grid grid-cols-5 gap-2 mb-4">
                     {CATEGORIES.map((cat) => (
                       <button
@@ -425,7 +425,7 @@ export default function MusicImportPage() {
                         className={`p-3 rounded-lg border-2 text-center transition-all ${
                           defaultCategory === cat.value
                             ? cat.color + " border-current ring-2 ring-offset-1 ring-gray-300 shadow-sm"
-                            : "bg-gray-50 text-gray-400 border-gray-200 hover:border-gray-300"
+                            : "bg-gray-50 text-gray-400 border-gray-200 dark:border-zinc-800 hover:border-gray-300 dark:border-zinc-700"
                         }`}
                       >
                         <span className="text-2xl font-black block">{cat.value}</span>
@@ -453,11 +453,11 @@ export default function MusicImportPage() {
                 </div>
 
                 {/* Step 2: Drop files or click to browse */}
-                <h3 className="text-base font-bold text-gray-900 mb-2 mt-6">Step 2: Add Your Music Files</h3>
+                <h3 className="text-base font-bold text-gray-900 dark:text-white mb-2 mt-6">Step 2: Add Your Music Files</h3>
                 <div
                   ref={dropZoneRef}
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-colors mb-6 border-gray-300 bg-white hover:border-green-400 hover:bg-green-50/30"
+                  className="border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-colors mb-6 border-gray-300 dark:border-zinc-700 bg-white hover:border-green-400 hover:bg-green-50/30"
                 >
                   <input
                     ref={fileInputRef}
@@ -468,10 +468,10 @@ export default function MusicImportPage() {
                     className="hidden"
                   />
                   <FolderUp className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                  <p className="text-lg font-medium text-gray-700 mb-1">
+                  <p className="text-lg font-medium text-gray-700 dark:text-zinc-300 mb-1">
                     Drag & drop audio files anywhere on the page
                   </p>
-                  <p className="text-sm text-gray-500 mb-3">
+                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-3">
                     or click here to browse. Supports MP3, WAV, M4A, FLAC, OGG
                   </p>
                   <p className="text-sm font-medium">
@@ -487,9 +487,9 @@ export default function MusicImportPage() {
 
                 {/* File list */}
                 {files.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm border overflow-hidden mb-6">
+                  <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden mb-6">
                     <div className="px-4 py-3 border-b bg-gray-50 flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-700">{files.length} file{files.length !== 1 ? "s" : ""} queued</span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">{files.length} file{files.length !== 1 ? "s" : ""} queued</span>
                       <button onClick={() => setFiles([])} className="text-xs text-red-600 hover:text-red-700">Clear all</button>
                     </div>
                     <div className="divide-y max-h-[500px] overflow-y-auto">
@@ -505,7 +505,7 @@ export default function MusicImportPage() {
                                 value={entry.artistName}
                                 onChange={(e) => updateFile(i, { artistName: e.target.value })}
                                 placeholder="Artist"
-                                className="text-sm font-medium border-b border-transparent hover:border-gray-300 focus:border-green-500 outline-none w-36 bg-transparent"
+                                className="text-sm font-medium border-b border-transparent hover:border-gray-300 dark:border-zinc-700 focus:border-green-500 outline-none w-36 bg-transparent"
                               />
                               <span className="text-gray-400">—</span>
                               <input
@@ -513,7 +513,7 @@ export default function MusicImportPage() {
                                 value={entry.title}
                                 onChange={(e) => updateFile(i, { title: e.target.value })}
                                 placeholder="Title"
-                                className="text-sm border-b border-transparent hover:border-gray-300 focus:border-green-500 outline-none flex-1 bg-transparent"
+                                className="text-sm border-b border-transparent hover:border-gray-300 dark:border-zinc-700 focus:border-green-500 outline-none flex-1 bg-transparent"
                               />
                             </div>
                             <div className="text-xs text-gray-400">{entry.file.name} ({(entry.file.size / 1024 / 1024).toFixed(1)} MB)</div>
@@ -557,14 +557,14 @@ export default function MusicImportPage() {
                         <div className="flex items-center gap-3">
                           <Loader2 className="w-5 h-5 animate-spin text-green-600" />
                           <div className="flex-1">
-                            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-2 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-green-500 rounded-full transition-all"
                                 style={{ width: `${(uploadProgress.done / uploadProgress.total) * 100}%` }}
                               />
                             </div>
                           </div>
-                          <span className="text-sm text-gray-600">{uploadProgress.done}/{uploadProgress.total}</span>
+                          <span className="text-sm text-gray-600 dark:text-zinc-400">{uploadProgress.done}/{uploadProgress.total}</span>
                         </div>
                       ) : (
                         <button
@@ -583,7 +583,7 @@ export default function MusicImportPage() {
             ) : (
               /* CSV/JSON mode (legacy) */
               <>
-                <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+                <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-6">
                   <label className="text-sm font-medium text-gray-700 block mb-2">
                     {mode === "csv" ? "Paste CSV data (first row = headers)" : "Paste JSON array"}
                   </label>
@@ -599,15 +599,15 @@ export default function MusicImportPage() {
                   <button onClick={parseInput} className="mt-3 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium">Preview</button>
                 </div>
                 {preview.length > 0 && (
-                  <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+                  <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-6">
                     <h3 className="font-semibold mb-3">Preview ({preview.length} rows)</h3>
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Title</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Artist</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Category</th>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">Title</th>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">Artist</th>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">Category</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y">

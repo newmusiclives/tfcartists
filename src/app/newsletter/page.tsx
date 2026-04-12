@@ -53,7 +53,7 @@ export default async function NewsletterPage() {
   ]);
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Hero */}
       <section className="bg-gradient-to-br from-amber-700 via-amber-800 to-orange-900 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -84,11 +84,11 @@ export default async function NewsletterPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-12">
         {/* Signup Form */}
-        <section className="bg-white rounded-xl shadow-lg p-8 -mt-8 relative z-10">
-          <h2 className="text-xl font-bold text-gray-900 mb-1">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 -mt-8 relative z-10">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
             Subscribe to the Newsletter
           </h2>
-          <p className="text-gray-500 mb-6">
+          <p className="text-gray-500 dark:text-zinc-500 mb-6">
             Join {subscriberCount > 0 ? `${subscriberCount}+` : "our"}{" "}
             subscribers and never miss a beat.
           </p>
@@ -96,12 +96,12 @@ export default async function NewsletterPage() {
         </section>
 
         {/* RSS Feeds */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
           <div className="flex items-center gap-3 mb-4">
             <Rss className="w-5 h-5 text-orange-500" />
-            <h2 className="text-xl font-bold text-gray-900">RSS Feeds</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">RSS Feeds</h2>
           </div>
-          <p className="text-gray-500 mb-4">
+          <p className="text-gray-500 dark:text-zinc-500 mb-4">
             Follow what&apos;s playing via RSS. Works with any feed reader or
             WordPress widget.
           </p>
@@ -110,14 +110,14 @@ export default async function NewsletterPage() {
               href="/api/feed/rss"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:border-amber-300 hover:bg-amber-50 transition-colors"
+              className="flex items-center gap-3 p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:border-amber-300 hover:bg-amber-50 transition-colors"
             >
               <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
                 <Music className="w-5 h-5 text-orange-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Recently Played</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-medium text-gray-900 dark:text-white">Recently Played</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Last 50 tracks with timestamps
                 </p>
               </div>
@@ -126,14 +126,14 @@ export default async function NewsletterPage() {
               href="/api/feed/now-playing.xml"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:border-amber-300 hover:bg-amber-50 transition-colors"
+              className="flex items-center gap-3 p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:border-amber-300 hover:bg-amber-50 transition-colors"
             >
               <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
                 <Radio className="w-5 h-5 text-amber-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Now Playing</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-medium text-gray-900 dark:text-white">Now Playing</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   Live single-item feed, updates every request
                 </p>
               </div>
@@ -143,12 +143,12 @@ export default async function NewsletterPage() {
 
         {/* Latest Digest */}
         {latestDigest && (
-          <section className="bg-white rounded-xl shadow-lg p-8">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                 Latest Digest
               </h2>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-zinc-500">
                 {new Date(latestDigest.createdAt).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -168,8 +168,8 @@ export default async function NewsletterPage() {
 
         {/* Archive */}
         {archive.length > 1 && (
-          <section className="bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
               Past Editions
             </h2>
             <div className="divide-y divide-gray-100">
@@ -180,10 +180,10 @@ export default async function NewsletterPage() {
                   className="flex items-center justify-between py-3 hover:bg-gray-50 -mx-2 px-2 rounded-lg transition-colors"
                 >
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-gray-900 dark:text-white">
                       {edition.subject}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-zinc-500">
                       {new Date(edition.createdAt).toLocaleDateString("en-US", {
                         month: "long",
                         day: "numeric",

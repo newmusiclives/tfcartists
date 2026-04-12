@@ -36,7 +36,7 @@ export default function NativeAppGuidePage() {
           Capacitor.
         </p>
 
-        <div className="mt-10 space-y-12 text-gray-700 leading-relaxed">
+        <div className="mt-10 space-y-12 text-gray-700 dark:text-zinc-300 leading-relaxed">
           {/* ---- Prerequisites ---- */}
           <section>
             <h2 className="text-2xl font-semibold text-amber-800 mb-4">
@@ -81,7 +81,7 @@ export default function NativeAppGuidePage() {
               2. Initialise Capacitor (already done &mdash; config checked in)
             </h3>
             <CodeBlock>{`npx cap init "TrueFans RADIO" com.truefans.radio --web-dir out`}</CodeBlock>
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-sm text-gray-500 dark:text-zinc-500">
               Skip this step &mdash; <code>capacitor.config.ts</code> is already
               in the repo.
             </p>
@@ -95,7 +95,7 @@ export default function NativeAppGuidePage() {
               4. Build the web app &amp; export
             </h3>
             <CodeBlock>{`npm run build\nnpx next export`}</CodeBlock>
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-sm text-gray-500 dark:text-zinc-500">
               This produces the <code>out/</code> directory that Capacitor
               bundles into the native shell. In production the app live-loads
               from the deployed URL instead.

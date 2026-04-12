@@ -243,10 +243,10 @@ const revenueHistory: RevenueDistribution[] = [
 ];
 
 const statusConfig: Record<InvoiceStatus, { label: string; color: string; icon: any }> = {
-  paid: { label: 'Paid', color: 'bg-green-100 text-green-700', icon: CheckCircle },
-  pending: { label: 'Pending', color: 'bg-yellow-100 text-yellow-700', icon: Clock },
-  overdue: { label: 'Overdue', color: 'bg-red-100 text-red-700', icon: AlertCircle },
-  scheduled: { label: 'Scheduled', color: 'bg-blue-100 text-blue-700', icon: Calendar }
+  paid: { label: 'Paid', color: 'bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400', icon: CheckCircle },
+  pending: { label: 'Pending', color: 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400', icon: Clock },
+  overdue: { label: 'Overdue', color: 'bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400', icon: AlertCircle },
+  scheduled: { label: 'Scheduled', color: 'bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400', icon: Calendar }
 };
 
 export default function BillingDashboard() {
@@ -271,20 +271,20 @@ export default function BillingDashboard() {
   const stationOpsAmount = thisMonthRevenue * 0.20;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-zinc-900 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700">
+                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
-                <h1 className="text-2xl font-bold text-gray-900">Billing & Revenue</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Billing & Revenue</h1>
               </div>
-              <p className="text-gray-600 mt-1">Riley Nguyen - Billing & Revenue Operations</p>
+              <p className="text-gray-600 dark:text-zinc-400 mt-1">Riley Nguyen - Billing & Revenue Operations</p>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -300,7 +300,7 @@ export default function BillingDashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live billing data will appear once Manifest Financial is connected.
         </div>
       </div>
@@ -308,37 +308,37 @@ export default function BillingDashboard() {
       {/* Stats */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Invoiced</p>
-                <p className="text-2xl font-bold text-gray-900">${totalInvoiced.toLocaleString()}</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Total Invoiced</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">${totalInvoiced.toLocaleString()}</p>
               </div>
               <FileText className="w-8 h-8 text-blue-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Paid</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Paid</p>
                 <p className="text-2xl font-bold text-green-600">${totalPaid.toLocaleString()}</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Pending</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Pending</p>
                 <p className="text-2xl font-bold text-yellow-600">${totalPending.toLocaleString()}</p>
               </div>
               <Clock className="w-8 h-8 text-yellow-600" />
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg border">
+          <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Collection Rate</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Collection Rate</p>
                 <p className="text-2xl font-bold text-purple-600">{collectionRate}%</p>
               </div>
               <TrendingUp className="w-8 h-8 text-purple-600" />
@@ -347,7 +347,7 @@ export default function BillingDashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white border rounded-lg mb-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg mb-6">
           <div className="border-b">
             <div className="flex">
               <button
@@ -396,7 +396,7 @@ export default function BillingDashboard() {
                 {filteredInvoices.map((invoice) => {
                   const StatusIcon = statusConfig[invoice.status].icon;
                   return (
-                    <div key={invoice.id} className="p-4 hover:bg-gray-50 transition-colors">
+                    <div key={invoice.id} className="p-4 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
@@ -407,32 +407,32 @@ export default function BillingDashboard() {
                               'text-blue-600'
                             }`} />
                             <div>
-                              <h4 className="font-semibold text-gray-900">{invoice.invoiceNumber}</h4>
-                              <p className="text-sm text-gray-600">{invoice.sponsorName} • {invoice.sponsorTier} Tier</p>
+                              <h4 className="font-semibold text-gray-900 dark:text-white">{invoice.invoiceNumber}</h4>
+                              <p className="text-sm text-gray-600 dark:text-zinc-400">{invoice.sponsorName} • {invoice.sponsorTier} Tier</p>
                             </div>
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ml-8">
                             <div>
-                              <p className="text-xs text-gray-500">Amount</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Amount</p>
                               <p className="text-sm font-semibold text-green-600">${invoice.amount}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Billing Period</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Billing Period</p>
                               <p className="text-sm font-medium">{invoice.billingPeriod}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Due Date</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Due Date</p>
                               <p className="text-sm font-medium">{invoice.dueDate}</p>
                             </div>
                             {invoice.paidDate && (
                               <div>
-                                <p className="text-xs text-gray-500">Paid Date</p>
+                                <p className="text-xs text-gray-500 dark:text-zinc-500">Paid Date</p>
                                 <p className="text-sm font-medium text-green-600">{invoice.paidDate}</p>
                               </div>
                             )}
                             {invoice.paymentMethod && (
                               <div>
-                                <p className="text-xs text-gray-500">Payment Method</p>
+                                <p className="text-xs text-gray-500 dark:text-zinc-500">Payment Method</p>
                                 <p className="text-sm font-medium capitalize">{invoice.paymentMethod.replace('_', ' ')}</p>
                               </div>
                             )}
@@ -446,10 +446,10 @@ export default function BillingDashboard() {
                             {statusConfig[invoice.status].label}
                           </span>
                           <div className="flex space-x-2">
-                            <button className="p-2 text-gray-600 hover:text-gray-900 border rounded-lg hover:bg-gray-50">
+                            <button className="p-2 text-gray-600 hover:text-gray-900 border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800">
                               <Download className="w-4 h-4" />
                             </button>
-                            <button className="p-2 text-gray-600 hover:text-gray-900 border rounded-lg hover:bg-gray-50">
+                            <button className="p-2 text-gray-600 hover:text-gray-900 border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800">
                               <Mail className="w-4 h-4" />
                             </button>
                           </div>
@@ -466,7 +466,7 @@ export default function BillingDashboard() {
             <div className="p-6">
               {/* Current Month Distribution */}
               <div className="mb-8">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                   <PieChart className="w-5 h-5 mr-2" />
                   February 2024 Revenue Distribution
                 </h3>
@@ -500,26 +500,26 @@ export default function BillingDashboard() {
 
               {/* Historical Revenue */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-4">Revenue History</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Revenue History</h3>
                 <div className="space-y-3">
                   {revenueHistory.map((record, index) => (
                     <div key={index} className="border rounded-lg p-4 hover:border-green-500 transition-colors">
                       <div className="flex items-center justify-between mb-3">
-                        <h4 className="font-semibold text-gray-900">{record.month}</h4>
+                        <h4 className="font-semibold text-gray-900 dark:text-white">{record.month}</h4>
                         <span className="text-lg font-bold text-green-600">${record.sponsorRevenue.toLocaleString()}</span>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Artist Pool (80%)</p>
+                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Artist Pool (80%)</p>
                           <p className="text-sm font-semibold text-purple-600">${record.artistPool.toLocaleString()}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Station Operations (20%)</p>
+                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Station Operations (20%)</p>
                           <p className="text-sm font-semibold text-blue-600">${record.stationOperations.toLocaleString()}</p>
                         </div>
                       </div>
                       <div className="mt-3">
-                        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-3 overflow-hidden">
                           <div className="flex h-full">
                             <div className="bg-purple-600 h-full" style={{ width: '80%' }}></div>
                             <div className="bg-blue-600 h-full" style={{ width: '20%' }}></div>

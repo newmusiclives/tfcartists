@@ -39,11 +39,11 @@ const CATEGORY_LABELS: Record<string, string> = {
   A: "Hits", B: "Fast", C: "Medium", D: "Slow", E: "Independent",
 };
 const CATEGORY_BADGES: Record<string, string> = {
-  A: "bg-red-100 text-red-700",
-  B: "bg-blue-100 text-blue-700",
-  C: "bg-green-100 text-green-700",
-  D: "bg-purple-100 text-purple-700",
-  E: "bg-orange-100 text-orange-700",
+  A: "bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400",
+  B: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400",
+  C: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400",
+  D: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400",
+  E: "bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400",
 };
 
 const GENDERS = ["All", "male", "female", "mixed", "instrumental", "unknown"];
@@ -154,7 +154,7 @@ export default function MusicLibraryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
@@ -163,7 +163,7 @@ export default function MusicLibraryPage() {
               <Music className="w-8 h-8 text-green-600" />
               Music Library
             </h1>
-            <p className="text-gray-600 mt-1">Browse and manage your station&apos;s song catalog</p>
+            <p className="text-gray-600 dark:text-zinc-400 mt-1">Browse and manage your station&apos;s song catalog</p>
           </div>
           <Link
             href="/station-admin/music/import"
@@ -175,7 +175,7 @@ export default function MusicLibraryPage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl p-4 shadow-sm border mb-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border mb-6">
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-1">
               {CATEGORIES.map((c) => (
@@ -201,13 +201,13 @@ export default function MusicLibraryPage() {
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                     featuredOnly
                       ? "bg-amber-500 text-white"
-                      : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"
+                      : "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 hover:bg-amber-100"
                   }`}
                 >
                   <Star className={`w-3.5 h-3.5 ${featuredOnly ? "fill-white" : ""}`} />
                   Featured Only
                 </button>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-zinc-500">
                   {featuredCount}/{MAX_FEATURED} featured
                 </span>
               </>
@@ -249,16 +249,16 @@ export default function MusicLibraryPage() {
             <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
           </div>
         ) : songs.length === 0 ? (
-          <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-12 shadow-sm border text-center">
             <Music className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No songs in the library yet.</p>
+            <p className="text-gray-500 dark:text-zinc-500">No songs in the library yet.</p>
             <Link href="/station-admin/music/import" className="text-green-600 text-sm hover:underline mt-2 inline-block">
               Import songs to get started
             </Link>
           </div>
         ) : (
           <>
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
               <table className="w-full">
                 <thead className="bg-gray-50 border-b">
                   <tr>
@@ -278,7 +278,7 @@ export default function MusicLibraryPage() {
                   {songs.map((song) => (
                     <tr
                       key={song.id}
-                      className="hover:bg-gray-50 transition-colors"
+                      className="hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
                     >
                       <td className="pl-2 pr-0 py-3 w-10">
                         {song.rotationCategory === "E" && (
@@ -302,10 +302,10 @@ export default function MusicLibraryPage() {
                           </button>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                      <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">
                         {song.title}
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-600">{song.artistName}</td>
+                      <td className="px-4 py-3 text-sm text-gray-600 dark:text-zinc-400">{song.artistName}</td>
                       <td className="px-4 py-3 text-sm text-gray-500 text-center">{formatDuration(song.duration)}</td>
                       <td className="px-4 py-3 text-center">
                         <span className={`text-xs font-semibold px-2 py-0.5 rounded ${CATEGORY_BADGES[song.rotationCategory] || "bg-gray-100 text-gray-600"}`}>
@@ -316,7 +316,7 @@ export default function MusicLibraryPage() {
                       <td className="px-4 py-3 text-sm text-gray-500 text-center">{song.bpm || "--"}</td>
                       <td className="px-4 py-3 text-center">
                         {(song.introEnd || song.outroStart || song.crossfadeStart || song.hookStart) ? (
-                          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">CUE</span>
+                          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 dark:text-amber-400">CUE</span>
                         ) : (
                           <span className="text-gray-300 text-xs">--</span>
                         )}
@@ -326,7 +326,7 @@ export default function MusicLibraryPage() {
                         <button
                           onClick={() => setEditing(song)}
                           title="Edit song"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all"
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all"
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
@@ -342,14 +342,14 @@ export default function MusicLibraryPage() {
                 <button
                   onClick={() => setPage(1)}
                   disabled={page === 1}
-                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   First
                 </button>
                 <button
                   onClick={() => setPage(page - 1)}
                   disabled={page === 1}
-                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   Prev
                 </button>
@@ -367,7 +367,7 @@ export default function MusicLibraryPage() {
                         <button
                           key={p}
                           onClick={() => setPage(p)}
-                          className={`px-3 py-1 rounded text-sm ${p === page ? "bg-gray-900 text-white" : "bg-white border hover:bg-gray-50"}`}
+                          className={`px-3 py-1 rounded text-sm ${p === page ? "bg-gray-900 text-white" : "bg-white border hover:bg-gray-50 dark:hover:bg-zinc-800"}`}
                         >
                           {p}
                         </button>
@@ -379,18 +379,18 @@ export default function MusicLibraryPage() {
                 <button
                   onClick={() => setPage(page + 1)}
                   disabled={page === totalPages}
-                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   Next
                 </button>
                 <button
                   onClick={() => setPage(totalPages)}
                   disabled={page === totalPages}
-                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="px-2.5 py-1 rounded text-sm bg-white border hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   Last
                 </button>
-                <span className="ml-3 text-xs text-gray-500">Page {page} of {totalPages}</span>
+                <span className="ml-3 text-xs text-gray-500 dark:text-zinc-500">Page {page} of {totalPages}</span>
               </div>
             )}
           </>
@@ -399,18 +399,18 @@ export default function MusicLibraryPage() {
         {/* Edit modal */}
         {editing && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl p-6 w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold">Edit Song</h3>
                 <button onClick={() => setEditing(null)}><X className="w-5 h-5 text-gray-400" /></button>
               </div>
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs text-gray-500">Title</label>
+                  <label className="text-xs text-gray-500 dark:text-zinc-500">Title</label>
                   <p className="text-sm font-medium">{editing.title}</p>
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500">Artist</label>
+                  <label className="text-xs text-gray-500 dark:text-zinc-500">Artist</label>
                   <p className="text-sm">{editing.artistName}</p>
                 </div>
                 <div>
@@ -439,14 +439,14 @@ export default function MusicLibraryPage() {
                   <div className="border-t pt-3 mt-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-700">Featured Track</h4>
-                        <p className="text-xs text-gray-500">Featured tracks get 1-in-4 E rotation slots</p>
+                        <h4 className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Featured Track</h4>
+                        <p className="text-xs text-gray-500 dark:text-zinc-500">Featured tracks get 1-in-4 E rotation slots</p>
                       </div>
                       <button
                         onClick={() => toggleFeatured(editing)}
                         className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 ${
                           editing.isFeatured
-                            ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
+                            ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 hover:bg-amber-200"
                             : "bg-gray-100 text-gray-700 hover:bg-amber-100 hover:text-amber-700"
                         }`}
                       >
@@ -459,7 +459,7 @@ export default function MusicLibraryPage() {
 
                 {/* Cue Points */}
                 <div className="border-t pt-3 mt-3">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Cue Points (seconds)</h4>
+                  <h4 className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-2">Cue Points (seconds)</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-xs text-gray-500 block mb-1">Intro End</label>

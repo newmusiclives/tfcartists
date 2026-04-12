@@ -84,7 +84,7 @@ export default function InvoicePage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <p className="text-gray-500">Loading invoice...</p>
+        <p className="text-gray-500 dark:text-zinc-500">Loading invoice...</p>
       </div>
     );
   }
@@ -93,7 +93,7 @@ export default function InvoicePage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <p className="text-gray-500 mb-4">Invoice not found.</p>
+          <p className="text-gray-500 dark:text-zinc-500 mb-4">Invoice not found.</p>
           <Link href="/portal/artist" className="text-amber-600 hover:underline">
             Back to Portal
           </Link>
@@ -125,11 +125,11 @@ export default function InvoicePage() {
         {/* Header */}
         <div className="flex justify-between items-start mb-10">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">EARNINGS STATEMENT</h1>
-            <p className="text-sm text-gray-500 mt-1">TrueFans Radio</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">EARNINGS STATEMENT</h1>
+            <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">TrueFans Radio</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-500">Statement Period</p>
+            <p className="text-sm text-gray-500 dark:text-zinc-500">Statement Period</p>
             <p className="text-lg font-semibold">{formatPeriod(invoice.period)}</p>
           </div>
         </div>
@@ -139,9 +139,9 @@ export default function InvoicePage() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wider">Payee</p>
-              <p className="font-medium text-gray-900">{invoice.artistName}</p>
+              <p className="font-medium text-gray-900 dark:text-white">{invoice.artistName}</p>
               {invoice.artistEmail && (
-                <p className="text-sm text-gray-600">{invoice.artistEmail}</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">{invoice.artistEmail}</p>
               )}
             </div>
             <div className="text-right">
@@ -156,7 +156,7 @@ export default function InvoicePage() {
                 {invoice.paid ? "PAID" : "PENDING"}
               </span>
               {invoice.paidAt && (
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">
                   Paid {new Date(invoice.paidAt).toLocaleDateString()}
                 </p>
               )}
@@ -177,11 +177,11 @@ export default function InvoicePage() {
             <tr className="border-b">
               <td className="py-3">
                 <p className="font-medium">Radio Airplay Earnings</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-500">
                   {formatPeriod(invoice.period)} revenue share
                 </p>
               </td>
-              <td className="py-3 text-right text-sm text-gray-600">
+              <td className="py-3 text-right text-sm text-gray-600 dark:text-zinc-400">
                 {invoice.shares} shares ({invoice.tier})
               </td>
               <td className="py-3 text-right font-medium">
@@ -202,8 +202,8 @@ export default function InvoicePage() {
         {/* Payment method */}
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
           <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Payment Method</p>
-          <p className="text-sm font-medium text-gray-900">Manifest Financial</p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-sm font-medium text-gray-900 dark:text-white">Manifest Financial</p>
+          <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">
             Payments are processed through Manifest Financial and deposited to your registered account.
           </p>
         </div>

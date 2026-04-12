@@ -194,16 +194,16 @@ export default function ArtistStationLandingPage() {
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
-              <span className="text-gray-900">Your Music.</span>
+              <span className="text-gray-900 dark:text-white">Your Music.</span>
               <br />
-              <span className="text-gray-900">Your Station.</span>
+              <span className="text-gray-900 dark:text-white">Your Station.</span>
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-700 via-purple-600 to-violet-600">
                 Your Fans.
               </span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
               Launch a 24/7 radio station that plays your catalog alongside similar artists.
               AI handles the DJ work. You focus on making music.
             </p>
@@ -229,16 +229,16 @@ export default function ArtistStationLandingPage() {
             {/* Social proof */}
             <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">24/7</div>
-                <div className="text-sm text-gray-500">Live Radio</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">24/7</div>
+                <div className="text-sm text-gray-500 dark:text-zinc-500">Live Radio</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">AI</div>
-                <div className="text-sm text-gray-500">Powered DJ</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">AI</div>
+                <div className="text-sm text-gray-500 dark:text-zinc-500">Powered DJ</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">Free</div>
-                <div className="text-sm text-gray-500">To Start</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Free</div>
+                <div className="text-sm text-gray-500 dark:text-zinc-500">To Start</div>
               </div>
             </div>
           </div>
@@ -249,10 +249,10 @@ export default function ArtistStationLandingPage() {
       <section id="how-it-works" className="scroll-mt-20 py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Three Steps to Your Own Station
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto">
               From upload to live radio in minutes. No technical skills required.
             </p>
           </div>
@@ -272,8 +272,8 @@ export default function ArtistStationLandingPage() {
                     {index + 1}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{step.title}</h3>
+                <p className="text-gray-600 dark:text-zinc-400 leading-relaxed">{step.description}</p>
               </div>
             ))}
           </div>
@@ -284,10 +284,10 @@ export default function ArtistStationLandingPage() {
       <section id="features" className="scroll-mt-20 py-20 bg-gradient-to-br from-gray-50 to-violet-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Everything You Need
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto">
               A complete radio experience for your fans, powered by AI.
             </p>
           </div>
@@ -296,13 +296,13 @@ export default function ArtistStationLandingPage() {
             {FEATURES.map((feature) => (
               <div
                 key={feature.title}
-                className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="inline-flex items-center justify-center w-10 h-10 bg-violet-100 rounded-xl mb-4">
                   <feature.icon className="w-5 h-5 text-violet-600" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{feature.title}</h3>
+                <p className="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -313,10 +313,10 @@ export default function ArtistStationLandingPage() {
       <section id="pricing" className="scroll-mt-20 py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Simple, Artist-Friendly Pricing
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-2xl mx-auto">
               Start free. Upgrade when you are ready.
             </p>
           </div>
@@ -337,16 +337,16 @@ export default function ArtistStationLandingPage() {
                     <span>Most Popular</span>
                   </div>
                 )}
-                <h3 className="text-xl font-bold text-gray-900">{tier.name}</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{tier.name}</h3>
                 <div className="flex items-baseline gap-1 mt-2 mb-2">
-                  <span className="text-4xl font-bold text-gray-900">{tier.price}</span>
-                  <span className="text-gray-500">{tier.period}</span>
+                  <span className="text-4xl font-bold text-gray-900 dark:text-white">{tier.price}</span>
+                  <span className="text-gray-500 dark:text-zinc-500">{tier.period}</span>
                 </div>
-                <p className="text-gray-600 text-sm mb-6">{tier.description}</p>
+                <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">{tier.description}</p>
 
                 <ul className="space-y-3 mb-8">
                   {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-sm text-gray-700">
+                    <li key={feature} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
                       <CheckCircle2 className="w-4 h-4 text-violet-500 mt-0.5 flex-shrink-0" />
                       <span>{feature}</span>
                     </li>
@@ -405,7 +405,7 @@ export default function ArtistStationLandingPage() {
                 {NETWORK_NAME} Artist Stations
               </span>
             </div>
-            <div className="flex items-center space-x-6 text-sm text-gray-500">
+            <div className="flex items-center space-x-6 text-sm text-gray-500 dark:text-zinc-500">
               <Link href="/" className="hover:text-gray-300 transition-colors">Home</Link>
               <Link href="/about" className="hover:text-gray-300 transition-colors">About</Link>
               <Link href="/contact" className="hover:text-gray-300 transition-colors">Contact</Link>

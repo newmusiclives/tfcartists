@@ -14,25 +14,25 @@ export default function SponsorThankYouPage() {
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Thank You!</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Thank You!</h1>
 
-        <p className="text-lg text-gray-600 mb-8">
+        <p className="text-lg text-gray-600 dark:text-zinc-400 mb-8">
           Your sponsorship inquiry has been received. Our team at {currentStation.name} will review your application and reach out within 2-3 business days.
         </p>
 
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8 text-left">
-          <h2 className="font-semibold text-gray-900 mb-3">What happens next?</h2>
-          <ol className="space-y-3 text-sm text-gray-600">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8 text-left">
+          <h2 className="font-semibold text-gray-900 dark:text-white mb-3">What happens next?</h2>
+          <ol className="space-y-3 text-sm text-gray-600 dark:text-zinc-400">
             <li className="flex items-start space-x-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 rounded-full flex items-center justify-center text-xs font-bold">1</span>
               <span>Our sponsorship team reviews your inquiry</span>
             </li>
             <li className="flex items-start space-x-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 rounded-full flex items-center justify-center text-xs font-bold">2</span>
               <span>We&apos;ll schedule a call to discuss your goals and the best sponsorship fit</span>
             </li>
             <li className="flex items-start space-x-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 rounded-full flex items-center justify-center text-xs font-bold">3</span>
               <span>Customize your sponsorship package and go live on-air</span>
             </li>
           </ol>

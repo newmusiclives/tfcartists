@@ -91,7 +91,7 @@ export default function RileySubmissionsPage() {
       <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading submissions...</p>
+          <p className="text-gray-600 dark:text-zinc-400">Loading submissions...</p>
         </div>
       </main>
     );
@@ -100,11 +100,11 @@ export default function RileySubmissionsPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/riley"
-            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-white mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Riley Dashboard</span>
@@ -112,8 +112,8 @@ export default function RileySubmissionsPage() {
           <div className="flex items-center space-x-3">
             <Music className="w-8 h-8 text-purple-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Track Submissions</h1>
-              <p className="text-gray-600">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Track Submissions</h1>
+              <p className="text-gray-600 dark:text-zinc-400">
                 Review and approve tracks for rotation - Managed by Sienna Park
               </p>
             </div>
@@ -145,7 +145,7 @@ export default function RileySubmissionsPage() {
         </div>
 
         {/* Filter Tabs */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-8">
           <div className="flex space-x-2 mb-6">
             <FilterButton
               active={filter === "all"}
@@ -183,7 +183,7 @@ export default function RileySubmissionsPage() {
               />
             ))}
             {filteredSubmissions.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
                 No {filter !== "all" && filter} submissions found
               </div>
             )}
@@ -197,11 +197,11 @@ export default function RileySubmissionsPage() {
               <User className="w-8 h-8 text-purple-600" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900">Sienna Park</h3>
-              <p className="text-sm text-gray-600 mb-3">Content Vetting & Quality Control</p>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Sienna Park</h3>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">Content Vetting & Quality Control</p>
               <div className="text-sm text-gray-700 space-y-2">
                 <p><strong>Responsibilities:</strong></p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600">
+                <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                   <li>Review submitted tracks for audio quality</li>
                   <li>Ensure format fit (Americana/Roots/Folk/Singer-Songwriter)</li>
                   <li>Check for profanity and content standards</li>
@@ -229,12 +229,12 @@ export default function RileySubmissionsPage() {
 
 function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: number; color: string }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-lg">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
       <div className="flex items-center space-x-3 mb-3">
         {icon}
-        <div className="text-sm font-medium text-gray-600">{label}</div>
+        <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
-      <div className="text-3xl font-bold text-gray-900">{value}</div>
+      <div className="text-3xl font-bold text-gray-900 dark:text-white">{value}</div>
     </div>
   );
 }
@@ -281,7 +281,7 @@ function SubmissionCard({ submission, onSelect }: { submission: SubmissionItem; 
     icon: <Clock className="w-4 h-4 text-gray-600" />,
     bg: "bg-gray-50",
     text: "text-gray-700",
-    border: "border-gray-200",
+    border: "border-gray-200 dark:border-zinc-800",
     label: submission.status,
   };
 
@@ -292,9 +292,9 @@ function SubmissionCard({ submission, onSelect }: { submission: SubmissionItem; 
           <Music className="w-8 h-8 text-purple-600" />
         </div>
         <div>
-          <div className="font-semibold text-gray-900">{submission.track}</div>
-          <div className="text-sm text-gray-600">{submission.artist}</div>
-          <div className="flex items-center space-x-3 mt-1 text-xs text-gray-500">
+          <div className="font-semibold text-gray-900 dark:text-white">{submission.track}</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">{submission.artist}</div>
+          <div className="flex items-center space-x-3 mt-1 text-xs text-gray-500 dark:text-zinc-500">
             <span className="flex items-center space-x-1">
               <Tag className="w-3 h-3" />
               <span>{submission.genre}</span>
@@ -355,13 +355,13 @@ function ReviewModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b sticky top-0 bg-white z-10">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">Review Submission</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Review Submission</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-2xl"
+              className="text-gray-400 hover:text-gray-600 dark:text-zinc-400 text-2xl"
             >
               ×
             </button>
@@ -371,40 +371,40 @@ function ReviewModal({
         <div className="p-6 space-y-6">
           {/* Track Info */}
           <div>
-            <div className="text-sm text-gray-500 mb-1">Track Title</div>
-            <div className="text-2xl font-bold text-gray-900">{submission.track}</div>
+            <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Track Title</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">{submission.track}</div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-sm text-gray-500 mb-1">Artist</div>
-              <div className="font-semibold text-gray-900">{submission.artist}</div>
-              <div className="text-sm text-gray-600">{submission.artistEmail}</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Artist</div>
+              <div className="font-semibold text-gray-900 dark:text-white">{submission.artist}</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400">{submission.artistEmail}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-500 mb-1">Tier</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Tier</div>
               <div className="font-semibold text-purple-600">{submission.tier}</div>
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <div className="text-sm text-gray-500 mb-1">Genre</div>
-              <div className="font-semibold text-gray-900">{submission.genre}</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Genre</div>
+              <div className="font-semibold text-gray-900 dark:text-white">{submission.genre}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-500 mb-1">Duration</div>
-              <div className="font-semibold text-gray-900">{submission.duration}</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Duration</div>
+              <div className="font-semibold text-gray-900 dark:text-white">{submission.duration}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-500 mb-1">Submitted</div>
-              <div className="font-semibold text-gray-900">{submission.submittedAt}</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Submitted</div>
+              <div className="font-semibold text-gray-900 dark:text-white">{submission.submittedAt}</div>
             </div>
           </div>
 
           {/* Audio Player */}
           <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-sm text-gray-600 mb-2">Audio Preview</div>
+            <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Audio Preview</div>
             <div className="flex items-center space-x-3">
               <button className="bg-purple-600 text-white p-3 rounded-full hover:bg-purple-700 transition-colors">
                 <Play className="w-5 h-5" />
@@ -412,13 +412,13 @@ function ReviewModal({
               <div className="flex-1 bg-gray-300 h-2 rounded-full">
                 <div className="bg-purple-600 h-2 rounded-full w-0"></div>
               </div>
-              <div className="text-sm text-gray-600">0:00 / {submission.duration}</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400">0:00 / {submission.duration}</div>
             </div>
           </div>
 
           {/* Quality Checklist */}
           <div className="bg-purple-50 rounded-lg p-4">
-            <div className="font-semibold text-gray-900 mb-3">Quality Checklist</div>
+            <div className="font-semibold text-gray-900 dark:text-white mb-3">Quality Checklist</div>
             <div className="space-y-2 text-sm">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" className="rounded" />
@@ -442,15 +442,15 @@ function ReviewModal({
           {/* Notes */}
           {submission.notes && (
             <div>
-              <div className="text-sm text-gray-500 mb-1">Notes</div>
-              <div className="bg-gray-50 rounded-lg p-3 text-gray-700">{submission.notes}</div>
+              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Notes</div>
+              <div className="bg-gray-50 rounded-lg p-3 text-gray-700 dark:text-zinc-300">{submission.notes}</div>
             </div>
           )}
 
           {/* Rejection Form */}
           {showRejectForm && (
             <div className="bg-red-50 rounded-lg p-4">
-              <div className="font-semibold text-gray-900 mb-2">Rejection Reason</div>
+              <div className="font-semibold text-gray-900 dark:text-white mb-2">Rejection Reason</div>
               <textarea
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}

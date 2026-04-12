@@ -160,7 +160,7 @@ export default function CassidySubmissionsPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
@@ -174,10 +174,10 @@ export default function CassidySubmissionsPage() {
           <div className="flex items-center space-x-3">
             <Music className="w-8 h-8 text-teal-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Review Queue
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-zinc-400">
                 Submission review and tier assignment
               </p>
             </div>
@@ -189,26 +189,26 @@ export default function CassidySubmissionsPage() {
         {/* Stats Bar */}
         {stats && (
           <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-              <div className="text-sm text-gray-600">Pending</div>
-              <div className="text-2xl font-bold text-gray-900">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-gray-200 dark:border-zinc-800 shadow-sm">
+              <div className="text-sm text-gray-600 dark:text-zinc-400">Pending</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
                 {stats.pendingSubmissions}
               </div>
             </div>
-            <div className="bg-white rounded-xl p-4 border border-blue-200 shadow-sm">
-              <div className="text-sm text-gray-600">In Review</div>
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-blue-200 shadow-sm">
+              <div className="text-sm text-gray-600 dark:text-zinc-400">In Review</div>
               <div className="text-2xl font-bold text-blue-600">
                 {stats.inReview}
               </div>
             </div>
-            <div className="bg-white rounded-xl p-4 border border-green-200 shadow-sm">
-              <div className="text-sm text-gray-600">Judged This Week</div>
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-green-200 shadow-sm">
+              <div className="text-sm text-gray-600 dark:text-zinc-400">Judged This Week</div>
               <div className="text-2xl font-bold text-green-600">
                 {stats.judgedThisWeek}
               </div>
             </div>
-            <div className="bg-white rounded-xl p-4 border border-teal-200 shadow-sm">
-              <div className="text-sm text-gray-600">Placement Rate</div>
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-teal-200 shadow-sm">
+              <div className="text-sm text-gray-600 dark:text-zinc-400">Placement Rate</div>
               <div className="text-2xl font-bold text-teal-600">
                 {stats.placementRate}%
               </div>
@@ -217,7 +217,7 @@ export default function CassidySubmissionsPage() {
         )}
 
         {/* Filter Tabs */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center space-x-2 mb-6 overflow-x-auto">
             <Filter className="w-5 h-5 text-gray-400 flex-shrink-0" />
             {FILTER_TABS.map((tab) => (
@@ -237,11 +237,11 @@ export default function CassidySubmissionsPage() {
 
           {/* Submission List */}
           {loading ? (
-            <div className="text-center py-12 text-gray-600">
+            <div className="text-center py-12 text-gray-600 dark:text-zinc-400">
               Loading submissions...
             </div>
           ) : submissions.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
               No submissions found for this filter.
             </div>
           ) : (
@@ -251,15 +251,15 @@ export default function CassidySubmissionsPage() {
                   statusConfig.PENDING;
                 return (
                   <div key={submission.id}>
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-teal-300 transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-teal-300 transition-colors">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3">
                           <Music className="w-5 h-5 text-gray-400" />
                           <div>
-                            <div className="font-semibold text-gray-900">
+                            <div className="font-semibold text-gray-900 dark:text-white">
                               {submission.artistName}
                             </div>
-                            <div className="text-sm text-gray-600">
+                            <div className="text-sm text-gray-600 dark:text-zinc-400">
                               {submission.trackTitle}
                             </div>
                           </div>
@@ -268,16 +268,16 @@ export default function CassidySubmissionsPage() {
 
                       <div className="flex items-center space-x-6">
                         <div className="text-right">
-                          <div className="text-sm text-gray-600">Judges</div>
-                          <div className="text-sm font-semibold text-gray-900">
+                          <div className="text-sm text-gray-600 dark:text-zinc-400">Judges</div>
+                          <div className="text-sm font-semibold text-gray-900 dark:text-white">
                             {submission.judgesCompleted}/
                             {submission.totalJudges}
                           </div>
                         </div>
 
                         <div className="text-right">
-                          <div className="text-sm text-gray-600">Submitted</div>
-                          <div className="text-sm font-semibold text-gray-900">
+                          <div className="text-sm text-gray-600 dark:text-zinc-400">Submitted</div>
+                          <div className="text-sm font-semibold text-gray-900 dark:text-white">
                             {submission.submittedAt}
                           </div>
                         </div>
@@ -311,12 +311,12 @@ export default function CassidySubmissionsPage() {
                     {/* Tier Assignment Form */}
                     {assigningId === submission.id && (
                       <div className="mt-2 p-4 bg-teal-50 rounded-lg border border-teal-200">
-                        <h4 className="font-semibold text-gray-900 mb-3">
+                        <h4 className="font-semibold text-gray-900 dark:text-white mb-3">
                           Assign Tier for {submission.artistName} &mdash; &ldquo;{submission.trackTitle}&rdquo;
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                               Tier
                             </label>
                             <select
@@ -329,7 +329,7 @@ export default function CassidySubmissionsPage() {
                                   spinsWeekly: tierSpins[tier] || 5,
                                 });
                               }}
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                              className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm"
                             >
                               <option value="BRONZE">Bronze (4-6 spins/wk)</option>
                               <option value="SILVER">Silver (10-14 spins/wk)</option>
@@ -338,7 +338,7 @@ export default function CassidySubmissionsPage() {
                             </select>
                           </div>
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                               Spins/Week
                             </label>
                             <input
@@ -352,11 +352,11 @@ export default function CassidySubmissionsPage() {
                                   spinsWeekly: parseInt(e.target.value) || 1,
                                 })
                               }
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                              className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm"
                             />
                           </div>
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                               Rationale
                             </label>
                             <input
@@ -369,7 +369,7 @@ export default function CassidySubmissionsPage() {
                                 })
                               }
                               placeholder="Decision rationale..."
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                              className="w-full border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm"
                             />
                           </div>
                         </div>

@@ -79,7 +79,7 @@ export function PWAInstallPrompt() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 text-sm">Install TrueFans RADIO</h3>
-                <p className="text-xs text-gray-500">Listen anywhere, get notifications</p>
+                <p className="text-xs text-gray-500 dark:text-zinc-500">Listen anywhere, get notifications</p>
               </div>
             </div>
             <button
@@ -104,7 +104,7 @@ export function PWAInstallPrompt() {
         <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm mx-0 sm:mx-4 p-6 animate-slide-in">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-gray-900">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                 {isIOS ? "Install on iOS" : "Install TrueFans RADIO"}
               </h3>
               <button
@@ -116,7 +116,7 @@ export function PWAInstallPrompt() {
               </button>
             </div>
             {isIOS ? (
-              <ol className="space-y-4 text-sm text-gray-700">
+              <ol className="space-y-4 text-sm text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-3">
                   <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 text-amber-700 rounded-full text-xs font-bold flex-shrink-0">1</span>
                   <span>Tap the <strong>Share</strong> button in Safari (the square with an arrow pointing up)</span>
@@ -131,7 +131,7 @@ export function PWAInstallPrompt() {
                 </li>
               </ol>
             ) : (
-              <ol className="space-y-4 text-sm text-gray-700">
+              <ol className="space-y-4 text-sm text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-3">
                   <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 text-amber-700 rounded-full text-xs font-bold flex-shrink-0">1</span>
                   <span>Click the <strong>install icon</strong> in the address bar (monitor with a down arrow), or open Chrome&apos;s menu (<strong>three dots</strong> at top right)</span>

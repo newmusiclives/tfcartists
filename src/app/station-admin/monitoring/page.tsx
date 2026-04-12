@@ -137,7 +137,7 @@ export default function MonitoringDashboard() {
   const timerDetails = health?.components?.apiResponseTimes?.details as Record<string, { totalRequests: number; avgMs: number; maxMs: number; slowCount: number; lastUpdated: string }> | undefined;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
@@ -153,7 +153,7 @@ export default function MonitoringDashboard() {
           <button
             onClick={fetchData}
             disabled={loading}
-            className="flex items-center gap-2 px-3 py-2 text-sm bg-white border rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            className="flex items-center gap-2 px-3 py-2 text-sm bg-white border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
@@ -161,7 +161,7 @@ export default function MonitoringDashboard() {
         </div>
 
         {loading && !health ? (
-          <div className="bg-white rounded-xl p-12 border flex items-center justify-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-12 border flex items-center justify-center">
             <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
           </div>
         ) : health ? (
@@ -191,15 +191,15 @@ export default function MonitoringDashboard() {
                 };
 
                 return (
-                  <div key={name} className="bg-white rounded-xl border p-4">
+                  <div key={name} className="bg-white dark:bg-zinc-900 rounded-xl border p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Icon className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm font-medium text-gray-900">{labels[name] || name}</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">{labels[name] || name}</span>
                       </div>
                       <StatusIndicator status={comp.status} />
                     </div>
-                    <p className="text-sm text-gray-500">{comp.message}</p>
+                    <p className="text-sm text-gray-500 dark:text-zinc-500">{comp.message}</p>
                   </div>
                 );
               })}
@@ -207,15 +207,15 @@ export default function MonitoringDashboard() {
 
             {/* AI Spend Detail */}
             {aiDetails && (
-              <div className="bg-white rounded-xl border p-6">
-                <h2 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl border p-6">
+                <h2 className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-4 flex items-center gap-2">
                   <DollarSign className="w-4 h-4" />
                   AI Spend Today
                 </h2>
                 <div className="flex items-center gap-4">
                   <div className="flex-1">
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">${aiDetails.todaySpend.toFixed(2)} spent</span>
+                      <span className="text-gray-600 dark:text-zinc-400">${aiDetails.todaySpend.toFixed(2)} spent</span>
                       <span className="text-gray-400">${aiDetails.dailyLimit.toFixed(2)} limit</span>
                     </div>
                     <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
@@ -231,7 +231,7 @@ export default function MonitoringDashboard() {
                       />
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
                     {aiDetails.percentUsed.toFixed(0)}%
                   </div>
                 </div>
@@ -240,7 +240,7 @@ export default function MonitoringDashboard() {
 
             {/* Cron Job Status Detail */}
             {cronDetails && (
-              <div className="bg-white rounded-xl border overflow-hidden">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden">
                 <div className="px-6 py-4 border-b">
                   <h2 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <Clock className="w-4 h-4" />
@@ -250,20 +250,20 @@ export default function MonitoringDashboard() {
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50 border-b">
                     <tr>
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">Job</th>
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">Status</th>
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">Last Run</th>
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">Result</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Job</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Status</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Last Run</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Result</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
                     {Object.entries(cronDetails).map(([job, detail]) => (
-                      <tr key={job} className="hover:bg-gray-50">
-                        <td className="px-6 py-3 font-medium text-gray-900">{job}</td>
+                      <tr key={job} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
+                        <td className="px-6 py-3 font-medium text-gray-900 dark:text-white">{job}</td>
                         <td className="px-6 py-3">
                           <StatusIndicator status={detail.status} />
                         </td>
-                        <td className="px-6 py-3 text-gray-500">
+                        <td className="px-6 py-3 text-gray-500 dark:text-zinc-500">
                           {detail.lastRun ? formatTime(detail.lastRun) : "Never"}
                         </td>
                         <td className="px-6 py-3 text-gray-500 capitalize">
@@ -278,8 +278,8 @@ export default function MonitoringDashboard() {
 
             {/* Circuit Breaker Detail */}
             {circuitDetails && (
-              <div className="bg-white rounded-xl border p-6">
-                <h2 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl border p-6">
+                <h2 className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-4 flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4" />
                   Circuit Breakers
                 </h2>
@@ -295,14 +295,14 @@ export default function MonitoringDashboard() {
                             : "bg-green-50 border-green-200"
                       }`}
                     >
-                      <div className="text-xs font-medium text-gray-700 mb-1">{service}</div>
+                      <div className="text-xs font-medium text-gray-700 dark:text-zinc-300 mb-1">{service}</div>
                       <div className={`text-sm font-bold ${
                         state.isOpen ? "text-red-700" : state.failures > 0 ? "text-yellow-700" : "text-green-700"
                       }`}>
                         {state.isOpen ? "OPEN" : "CLOSED"}
                       </div>
                       {state.failures > 0 && (
-                        <div className="text-xs text-gray-500 mt-1">{state.failures} failures</div>
+                        <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{state.failures} failures</div>
                       )}
                     </div>
                   ))}
@@ -312,7 +312,7 @@ export default function MonitoringDashboard() {
 
             {/* API Response Times */}
             {timerDetails && Object.keys(timerDetails).length > 0 && (
-              <div className="bg-white rounded-xl border overflow-hidden">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden">
                 <div className="px-6 py-4 border-b">
                   <h2 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <Timer className="w-4 h-4" />
@@ -322,27 +322,27 @@ export default function MonitoringDashboard() {
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50 border-b">
                     <tr>
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">Endpoint</th>
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">Requests</th>
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">Avg</th>
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">Max</th>
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">Slow</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Endpoint</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Requests</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Avg</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Max</th>
+                      <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Slow</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
                     {Object.entries(timerDetails)
                       .sort(([, a], [, b]) => b.avgMs - a.avgMs)
                       .map(([endpoint, stats]) => (
-                        <tr key={endpoint} className="hover:bg-gray-50">
-                          <td className="px-6 py-3 font-mono text-xs text-gray-900">{endpoint}</td>
-                          <td className="px-6 py-3 text-gray-600">{stats.totalRequests}</td>
+                        <tr key={endpoint} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
+                          <td className="px-6 py-3 font-mono text-xs text-gray-900 dark:text-white">{endpoint}</td>
+                          <td className="px-6 py-3 text-gray-600 dark:text-zinc-400">{stats.totalRequests}</td>
                           <td className={`px-6 py-3 ${stats.avgMs > 5000 ? "text-red-600 font-medium" : "text-gray-600"}`}>
                             {stats.avgMs}ms
                           </td>
                           <td className={`px-6 py-3 ${stats.maxMs > 5000 ? "text-red-600 font-medium" : "text-gray-600"}`}>
                             {stats.maxMs}ms
                           </td>
-                          <td className="px-6 py-3 text-gray-500">{stats.slowCount}</td>
+                          <td className="px-6 py-3 text-gray-500 dark:text-zinc-500">{stats.slowCount}</td>
                         </tr>
                       ))}
                   </tbody>
@@ -352,7 +352,7 @@ export default function MonitoringDashboard() {
 
             {/* Recent Errors */}
             {errors.length > 0 && (
-              <div className="bg-white rounded-xl border overflow-hidden">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden">
                 <div className="px-6 py-4 border-b">
                   <h2 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-red-500" />
@@ -363,7 +363,7 @@ export default function MonitoringDashboard() {
                   {errors.slice(0, 20).map((err) => (
                     <div
                       key={err.key}
-                      className="px-6 py-3 hover:bg-gray-50 cursor-pointer"
+                      className="px-6 py-3 hover:bg-gray-50 dark:hover:bg-zinc-800 cursor-pointer"
                       onClick={() => setExpandedError(expandedError === err.key ? null : err.key)}
                     >
                       <div className="flex items-center justify-between">
@@ -385,9 +385,9 @@ export default function MonitoringDashboard() {
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-xl p-12 border text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-12 border text-center">
             <Activity className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">Could not load health data.</p>
+            <p className="text-gray-500 dark:text-zinc-500">Could not load health data.</p>
             <p className="text-gray-400 text-sm mt-1">
               Check your database connection and try again.
             </p>

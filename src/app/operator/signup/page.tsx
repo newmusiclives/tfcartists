@@ -100,10 +100,10 @@ export default function OperatorSignupPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center space-x-2 mb-4">
             <Radio className="w-8 h-8 text-amber-700" />
-            <span className="text-2xl font-bold text-gray-900">TrueFans RADIO</span>
+            <span className="text-2xl font-bold text-gray-900 dark:text-white">TrueFans RADIO</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Start Your Station</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Start Your Station</h1>
+          <p className="text-gray-600 dark:text-zinc-400">
             {step === 1
               ? "Choose the plan that fits your station."
               : "Create your operator account to get started."}
@@ -125,7 +125,7 @@ export default function OperatorSignupPage() {
                   key={plan.id}
                   type="button"
                   onClick={() => setSelectedPlan(plan.id)}
-                  className={`relative bg-white rounded-xl shadow-md p-6 text-left transition-all border-2 hover:shadow-lg ${
+                  className={`relative bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6 text-left transition-all border-2 hover:shadow-lg ${
                     selectedPlan === plan.id
                       ? "border-amber-700 ring-2 ring-amber-200"
                       : "border-transparent"
@@ -136,12 +136,12 @@ export default function OperatorSignupPage() {
                       <Star className="w-3 h-3" /> RECOMMENDED
                     </span>
                   )}
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">{plan.name}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{plan.name}</h3>
                   <div className="mb-3">
-                    <span className="text-3xl font-bold text-gray-900">${plan.price}</span>
-                    <span className="text-gray-500">/mo</span>
+                    <span className="text-3xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
+                    <span className="text-gray-500 dark:text-zinc-500">/mo</span>
                   </div>
-                  <ul className="space-y-2 text-sm text-gray-600">
+                  <ul className="space-y-2 text-sm text-gray-600 dark:text-zinc-400">
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
                       {plan.fee} platform fee
@@ -190,7 +190,7 @@ export default function OperatorSignupPage() {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8 space-y-5">
+            <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 space-y-5">
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
                   {error}
@@ -198,7 +198,7 @@ export default function OperatorSignupPage() {
               )}
 
               <div>
-                <label htmlFor="orgName" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="orgName" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                   Station / Organization Name
                 </label>
                 <div className="relative">
@@ -216,7 +216,7 @@ export default function OperatorSignupPage() {
               </div>
 
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                   Your Name
                 </label>
                 <input
@@ -231,7 +231,7 @@ export default function OperatorSignupPage() {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                   Email
                 </label>
                 <input
@@ -246,7 +246,7 @@ export default function OperatorSignupPage() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                   Password
                 </label>
                 <input
@@ -265,7 +265,7 @@ export default function OperatorSignupPage() {
                 <button
                   type="button"
                   onClick={() => { setStep(1); setError(null); }}
-                  className="flex items-center space-x-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                  className="flex items-center space-x-1 px-4 py-3 border border-gray-300 dark:border-zinc-700 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span>Back</span>
@@ -286,7 +286,7 @@ export default function OperatorSignupPage() {
                 </button>
               </div>
 
-              <p className="text-center text-sm text-gray-600">
+              <p className="text-center text-sm text-gray-600 dark:text-zinc-400">
                 Already have an account?{" "}
                 <Link href="/login" className="text-amber-700 hover:text-amber-800 font-medium">
                   Log in

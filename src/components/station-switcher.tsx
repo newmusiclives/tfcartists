@@ -22,7 +22,7 @@ export function StationSwitcher() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center space-x-2 font-bold text-xl text-amber-700">
+      <div className="flex items-center space-x-2 font-bold text-xl text-amber-700 dark:text-amber-400">
         <Radio className="w-6 h-6" />
         <span className="bg-amber-100 animate-pulse rounded h-6 w-40" />
       </div>
@@ -32,7 +32,7 @@ export function StationSwitcher() {
   // Single station mode - just show station name
   if (allStations.length <= 1) {
     return (
-      <div className="flex items-center space-x-2 font-bold text-amber-700">
+      <div className="flex items-center space-x-2 font-bold text-amber-700 dark:text-amber-400">
         <Radio className="w-6 h-6 flex-shrink-0" />
         {/* Show call sign on small screens, full name on lg+ */}
         {currentStation.callSign ? (
@@ -52,7 +52,7 @@ export function StationSwitcher() {
     <div className="relative" ref={ref}>
       <button
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(!open); }}
-        className="flex items-center space-x-2 font-bold text-amber-700 hover:text-amber-800 transition-colors"
+        className="flex items-center space-x-2 font-bold text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors"
         aria-label="Select radio station"
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -68,7 +68,7 @@ export function StationSwitcher() {
           <span className="text-xl truncate max-w-[160px] lg:max-w-none">{currentStation.name}</span>
         )}
         {currentStation.callSign && (
-          <span className="text-xs font-mono bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded hidden lg:inline">
+          <span className="text-xs font-mono bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded hidden lg:inline">
             {currentStation.callSign}
           </span>
         )}
@@ -77,7 +77,7 @@ export function StationSwitcher() {
 
       {open && (
         <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border py-1 z-50" role="listbox" aria-label="Select radio station">
-          <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b">
+          <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-zinc-500 uppercase tracking-wider border-b">
             Switch Station
           </div>
           {allStations.map((station) => {
@@ -103,8 +103,8 @@ export function StationSwitcher() {
                     style={{ backgroundColor: station.primaryColor || "#78350f" }}
                   />
                   <div>
-                    <div className="font-semibold text-gray-900 text-sm">{station.name}</div>
-                    <div className="text-xs text-gray-500">
+                    <div className="font-semibold text-gray-900 dark:text-white text-sm">{station.name}</div>
+                    <div className="text-xs text-gray-500 dark:text-zinc-500">
                       {station.callSign && `${station.callSign} · `}{station.genre}
                     </div>
                   </div>

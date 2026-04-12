@@ -110,7 +110,7 @@ export function ListenerCount({ mode = "compact", className = "" }: ListenerCoun
         >
           {count.toLocaleString()}
         </span>
-        <span className="text-sm text-gray-500">listening now</span>
+        <span className="text-sm text-gray-500 dark:text-zinc-500">listening now</span>
       </div>
       {peak != null && peak > 0 && (
         <div className="flex items-center gap-1 text-xs text-gray-400">

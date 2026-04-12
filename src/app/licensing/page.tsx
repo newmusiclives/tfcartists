@@ -27,7 +27,7 @@ export default function LicensingPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-6">
             <Shield className="w-8 h-8 text-amber-600" />
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Music Licensing for Internet Radio
           </h1>
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-6">
@@ -43,8 +43,8 @@ export default function LicensingPage() {
 
       <div className="max-w-4xl mx-auto px-4 pb-20 space-y-10">
         {/* Do You Need a License? */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
             <AlertTriangle className="w-6 h-6 text-amber-600" />
             <span>Do You Need a License?</span>
           </h2>
@@ -52,7 +52,7 @@ export default function LicensingPage() {
             <p className="text-lg font-semibold text-amber-800 mb-3">
               Yes — if you stream music publicly, you need performance rights licenses.
             </p>
-            <p className="text-gray-700">
+            <p className="text-gray-700 dark:text-zinc-300">
               TrueFans RADIO is a technology platform that provides the tools to run an internet
               radio station. Station operators are responsible for obtaining their own music
               licenses before streaming copyrighted content. This applies to any publicly
@@ -62,18 +62,18 @@ export default function LicensingPage() {
         </section>
 
         {/* The Three PROs */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 flex items-center space-x-2">
             <FileText className="w-6 h-6 text-amber-600" />
             <span>The Three PROs</span>
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 mb-6">
             Performance Rights Organizations collect royalties on behalf of songwriters and
             publishers for the public performance of their compositions.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-amber-50 rounded-lg p-6 border border-amber-100">
-              <h3 className="text-lg font-bold text-gray-900 mb-1">ASCAP</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">ASCAP</h3>
               <p className="text-sm text-amber-700 font-medium mb-3">ascap.com</p>
               <p className="text-gray-700 text-sm">
                 Covers approximately 900,000 songwriters, composers, and music publishers.
@@ -81,7 +81,7 @@ export default function LicensingPage() {
               </p>
             </div>
             <div className="bg-amber-50 rounded-lg p-6 border border-amber-100">
-              <h3 className="text-lg font-bold text-gray-900 mb-1">BMI</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">BMI</h3>
               <p className="text-sm text-amber-700 font-medium mb-3">bmi.com</p>
               <p className="text-gray-700 text-sm">
                 Covers approximately 1.2 million songwriters and publishers. Digital streaming
@@ -89,7 +89,7 @@ export default function LicensingPage() {
               </p>
             </div>
             <div className="bg-amber-50 rounded-lg p-6 border border-amber-100">
-              <h3 className="text-lg font-bold text-gray-900 mb-1">SESAC</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">SESAC</h3>
               <p className="text-sm text-amber-700 font-medium mb-3">sesac.com</p>
               <p className="text-gray-700 text-sm">
                 Invitation-only PRO covering approximately 30,000 songwriters. Contact SESAC
@@ -100,30 +100,30 @@ export default function LicensingPage() {
         </section>
 
         {/* SoundExchange */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
             <Radio className="w-6 h-6 text-amber-600" />
             <span>SoundExchange</span>
           </h2>
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
-            <p className="text-gray-700 mb-3">
+            <p className="text-gray-700 dark:text-zinc-300 mb-3">
               SoundExchange is <span className="font-semibold">separate from the PROs</span>.
               While PROs cover the underlying musical composition (the song itself),
               SoundExchange covers the{" "}
               <span className="font-semibold">digital performance of sound recordings</span>{" "}
               (the specific recording you play).
             </p>
-            <p className="text-gray-700">
+            <p className="text-gray-700 dark:text-zinc-300">
               Any internet radio station that streams recorded music needs a SoundExchange
               license in addition to PRO licenses. Register at{" "}
-              <span className="font-medium text-amber-700">soundexchange.com</span>.
+              <span className="font-medium text-amber-700 dark:text-amber-400">soundexchange.com</span>.
             </p>
           </div>
         </section>
 
         {/* Estimated Costs */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center space-x-2">
             <FileText className="w-6 h-6 text-amber-600" />
             <span>Estimated Costs</span>
           </h2>
@@ -131,40 +131,40 @@ export default function LicensingPage() {
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b-2 border-amber-200">
-                  <th className="py-3 pr-4 text-sm font-semibold text-gray-900">Organization</th>
-                  <th className="py-3 pr-4 text-sm font-semibold text-gray-900">
+                  <th className="py-3 pr-4 text-sm font-semibold text-gray-900 dark:text-white">Organization</th>
+                  <th className="py-3 pr-4 text-sm font-semibold text-gray-900 dark:text-white">
                     Estimated Annual Cost
                   </th>
-                  <th className="py-3 text-sm font-semibold text-gray-900">Notes</th>
+                  <th className="py-3 text-sm font-semibold text-gray-900 dark:text-white">Notes</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 <tr>
-                  <td className="py-3 pr-4 font-medium text-gray-900">ASCAP</td>
-                  <td className="py-3 pr-4 text-gray-700">~$600 – $1,000/year</td>
-                  <td className="py-3 text-sm text-gray-600">Small webcaster rate</td>
+                  <td className="py-3 pr-4 font-medium text-gray-900 dark:text-white">ASCAP</td>
+                  <td className="py-3 pr-4 text-gray-700 dark:text-zinc-300">~$600 – $1,000/year</td>
+                  <td className="py-3 text-sm text-gray-600 dark:text-zinc-400">Small webcaster rate</td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-medium text-gray-900">BMI</td>
-                  <td className="py-3 pr-4 text-gray-700">~$600 – $1,000/year</td>
-                  <td className="py-3 text-sm text-gray-600">Small webcaster rate</td>
+                  <td className="py-3 pr-4 font-medium text-gray-900 dark:text-white">BMI</td>
+                  <td className="py-3 pr-4 text-gray-700 dark:text-zinc-300">~$600 – $1,000/year</td>
+                  <td className="py-3 text-sm text-gray-600 dark:text-zinc-400">Small webcaster rate</td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-medium text-gray-900">SESAC</td>
-                  <td className="py-3 pr-4 text-gray-700">Varies</td>
-                  <td className="py-3 text-sm text-gray-600">Contact for quote</td>
+                  <td className="py-3 pr-4 font-medium text-gray-900 dark:text-white">SESAC</td>
+                  <td className="py-3 pr-4 text-gray-700 dark:text-zinc-300">Varies</td>
+                  <td className="py-3 text-sm text-gray-600 dark:text-zinc-400">Contact for quote</td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-medium text-gray-900">SoundExchange</td>
-                  <td className="py-3 pr-4 text-gray-700">Revenue-based</td>
-                  <td className="py-3 text-sm text-gray-600">
+                  <td className="py-3 pr-4 font-medium text-gray-900 dark:text-white">SoundExchange</td>
+                  <td className="py-3 pr-4 text-gray-700 dark:text-zinc-300">Revenue-based</td>
+                  <td className="py-3 text-sm text-gray-600 dark:text-zinc-400">
                     Typically 15–25% of revenue or minimum fee
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-gray-500 dark:text-zinc-500 mt-4">
             &ldquo;Small webcaster&rdquo; rates generally apply to stations under certain revenue
             and listener thresholds. Rates are subject to change — verify current pricing
             directly with each organization.
@@ -172,8 +172,8 @@ export default function LicensingPage() {
         </section>
 
         {/* What TrueFans RADIO Provides */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
             <Shield className="w-6 h-6 text-amber-600" />
             <span>What TrueFans RADIO Provides</span>
           </h2>
@@ -186,20 +186,20 @@ export default function LicensingPage() {
             ].map((item) => (
               <li key={item} className="flex items-start space-x-3">
                 <CheckCircle2 className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-700">{item}</span>
+                <span className="text-gray-700 dark:text-zinc-300">{item}</span>
               </li>
             ))}
           </ul>
         </section>
 
         {/* Alternative: Original/Licensed Music Only */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
             <CheckCircle2 className="w-6 h-6 text-green-600" />
             <span>Alternative: Original / Licensed Music Only</span>
           </h2>
           <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-            <p className="text-gray-700">
+            <p className="text-gray-700 dark:text-zinc-300">
               If you <span className="font-semibold">only</span> play music from artists who
               have directly submitted their work and granted you permission to stream it — like
               the artists on your TrueFans station — you may have different licensing
@@ -212,8 +212,8 @@ export default function LicensingPage() {
         </section>
 
         {/* Resources */}
-        <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center space-x-2">
             <ExternalLink className="w-6 h-6 text-amber-600" />
             <span>Resources</span>
           </h2>

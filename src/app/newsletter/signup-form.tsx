@@ -62,7 +62,7 @@ export function NewsletterSignupForm() {
         <Mail className="w-5 h-5 text-amber-600 flex-shrink-0" />
         <div>
           <p className="font-medium text-amber-900">Already subscribed!</p>
-          <p className="text-sm text-amber-700">
+          <p className="text-sm text-amber-700 dark:text-amber-400">
             You&apos;re already on the list. No action needed.
           </p>
         </div>

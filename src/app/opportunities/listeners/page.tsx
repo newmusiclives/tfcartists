@@ -74,7 +74,7 @@ export default function ListenerOpportunityPage() {
       <SharedNav />
 
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -82,8 +82,8 @@ export default function ListenerOpportunityPage() {
                 <Zap className="w-10 h-10 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900">Listener Earning Opportunity</h1>
-                <p className="text-xl text-gray-600 mt-2">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Listener Earning Opportunity</h1>
+                <p className="text-xl text-gray-600 dark:text-zinc-400 mt-2">
                   Become a Listener Promoter - Earn passive income by growing the TrueFans community
                 </p>
               </div>
@@ -147,7 +147,7 @@ export default function ListenerOpportunityPage() {
         </div>
 
         {/* Revenue Streams */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <DollarSign className="w-6 h-6 mr-2 text-blue-600" />
             5 Ways to Earn Money as a Listener Promoter
@@ -159,9 +159,9 @@ export default function ListenerOpportunityPage() {
                 <Users className="w-8 h-8 text-blue-600" />
                 <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded">RECURRING</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Listener Bounties</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Listener Bounties</h3>
               <div className="text-2xl font-bold text-blue-600 mb-2">{gpModel.commissions.listenerBounties}</div>
-              <p className="text-sm text-gray-600">Bring in listeners who tune in regularly. Paid monthly!</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Bring in listeners who tune in regularly. Paid monthly!</p>
             </div>
 
             <div className="bg-purple-50 rounded-lg p-5 border-2 border-purple-300">
@@ -169,9 +169,9 @@ export default function ListenerOpportunityPage() {
                 <Music className="w-8 h-8 text-purple-600" />
                 <span className="text-xs font-semibold text-purple-600 bg-purple-100 px-2 py-1 rounded">CAPPED</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Artist Discovery</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Artist Discovery</h3>
               <div className="text-2xl font-bold text-purple-600 mb-2">{gpModel.commissions.artistDiscovery}</div>
-              <p className="text-sm text-gray-600">Find and refer talented artists to the station</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Find and refer talented artists to the station</p>
             </div>
 
             <div className="bg-green-50 rounded-lg p-5 border-2 border-green-300">
@@ -179,9 +179,9 @@ export default function ListenerOpportunityPage() {
                 <TrendingUp className="w-8 h-8 text-green-600" />
                 <span className="text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded">CAPPED</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Artist Development</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Artist Development</h3>
               <div className="text-2xl font-bold text-green-600 mb-2">{gpModel.commissions.artistDevelopment}</div>
-              <p className="text-sm text-gray-600">Help artists grow and upgrade their tiers</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Help artists grow and upgrade their tiers</p>
             </div>
 
             <div className="bg-orange-50 rounded-lg p-5 border-2 border-orange-300">
@@ -189,9 +189,9 @@ export default function ListenerOpportunityPage() {
                 <Building2 className="w-8 h-8 text-orange-600" />
                 <span className="text-xs font-semibold text-orange-600 bg-orange-100 px-2 py-1 rounded">HIGH VALUE</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Sponsor Referrals</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Sponsor Referrals</h3>
               <div className="text-2xl font-bold text-orange-600 mb-2">{gpModel.commissions.sponsorReferral}</div>
-              <p className="text-sm text-gray-600">Connect local businesses with advertising opportunities</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Connect local businesses with advertising opportunities</p>
             </div>
 
             <div className="bg-yellow-50 rounded-lg p-5 border-2 border-yellow-300">
@@ -199,9 +199,9 @@ export default function ListenerOpportunityPage() {
                 <Star className="w-8 h-8 text-yellow-600" />
                 <span className="text-xs font-semibold text-yellow-600 bg-yellow-100 px-2 py-1 rounded">BONUS</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Premium Conversions</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Premium Conversions</h3>
               <div className="text-2xl font-bold text-yellow-600 mb-2">{gpModel.commissions.premiumBonus}</div>
-              <p className="text-sm text-gray-600">For each listener you convert to premium subscription</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">For each listener you convert to premium subscription</p>
             </div>
 
             <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg p-5 border-4 border-pink-300 relative">
@@ -212,15 +212,15 @@ export default function ListenerOpportunityPage() {
                 <Sparkles className="w-8 h-8 text-pink-600" />
                 <span className="text-xs font-semibold text-pink-600 bg-pink-100 px-2 py-1 rounded">COMBINED</span>
               </div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Stack All Streams</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Stack All Streams</h3>
               <div className="text-2xl font-bold text-pink-600 mb-2">~$44/mo avg</div>
-              <p className="text-sm text-gray-600">Combine income sources (per-stream caps apply)</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Combine income sources (per-stream caps apply)</p>
             </div>
           </div>
         </div>
 
         {/* Earning Pathways */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <Target className="w-6 h-6 mr-2 text-green-600" />
             Choose Your Path (Or Mix Them!)
@@ -229,40 +229,40 @@ export default function ListenerOpportunityPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-200">
               <div className="text-3xl mb-3">👥</div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Listener-Focused</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Listener-Focused</h3>
               <div className="text-2xl font-bold text-blue-600 mb-2">{gpModel.earnings.listenerFocused.monthly}</div>
-              <p className="text-xs text-gray-600 mb-3">{gpModel.earnings.listenerFocused.listeners} listeners</p>
-              <p className="text-sm text-gray-700">{gpModel.earnings.listenerFocused.description}</p>
+              <p className="text-xs text-gray-600 dark:text-zinc-400 mb-3">{gpModel.earnings.listenerFocused.listeners} listeners</p>
+              <p className="text-sm text-gray-700 dark:text-zinc-300">{gpModel.earnings.listenerFocused.description}</p>
             </div>
 
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border-2 border-purple-200">
               <div className="text-3xl mb-3">🎵</div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Artist Helper</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Artist Helper</h3>
               <div className="text-2xl font-bold text-purple-600 mb-2">{gpModel.earnings.artistHelper.monthly}</div>
-              <p className="text-xs text-gray-600 mb-3">{gpModel.earnings.artistHelper.artists} artists</p>
-              <p className="text-sm text-gray-700">{gpModel.earnings.artistHelper.description}</p>
+              <p className="text-xs text-gray-600 dark:text-zinc-400 mb-3">{gpModel.earnings.artistHelper.artists} artists</p>
+              <p className="text-sm text-gray-700 dark:text-zinc-300">{gpModel.earnings.artistHelper.description}</p>
             </div>
 
             <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 border-2 border-orange-200">
               <div className="text-3xl mb-3">🏢</div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">Sponsor Connector</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Sponsor Connector</h3>
               <div className="text-2xl font-bold text-orange-600 mb-2">{gpModel.earnings.sponsorConnector.monthly}</div>
-              <p className="text-xs text-gray-600 mb-3">{gpModel.earnings.sponsorConnector.sponsors} sponsor(s)</p>
-              <p className="text-sm text-gray-700">{gpModel.earnings.sponsorConnector.description}</p>
+              <p className="text-xs text-gray-600 dark:text-zinc-400 mb-3">{gpModel.earnings.sponsorConnector.sponsors} sponsor(s)</p>
+              <p className="text-sm text-gray-700 dark:text-zinc-300">{gpModel.earnings.sponsorConnector.description}</p>
             </div>
 
             <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border-4 border-green-400">
               <div className="text-3xl mb-3">⭐</div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">All-Rounder</h3>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">All-Rounder</h3>
               <div className="text-2xl font-bold text-green-600 mb-2">{gpModel.earnings.allRounder.monthly}</div>
-              <p className="text-xs text-gray-600 mb-3">Mix of everything</p>
-              <p className="text-sm text-gray-700">{gpModel.earnings.allRounder.description}</p>
+              <p className="text-xs text-gray-600 dark:text-zinc-400 mb-3">Mix of everything</p>
+              <p className="text-sm text-gray-700 dark:text-zinc-300">{gpModel.earnings.allRounder.description}</p>
             </div>
           </div>
         </div>
 
         {/* Real Examples */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
             <Award className="w-6 h-6 mr-2 text-purple-600" />
             Real Listener Promoter Examples
@@ -271,29 +271,29 @@ export default function ListenerOpportunityPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {Object.values(gpModel.examples).map((example, idx) => (
               <div key={idx} className="bg-gradient-to-br from-blue-50 to-green-50 rounded-lg p-6 border-2 border-blue-200">
-                <h3 className="font-bold text-xl text-gray-900 mb-4">{example.name}</h3>
+                <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-4">{example.name}</h3>
                 <div className="space-y-2 mb-4">
                   {example.listeners && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Listeners:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Listeners:</span>
                       <span className="font-semibold">{example.listeners}</span>
                     </div>
                   )}
                   {'artists' in example && example.artists && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Artists Helped:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Artists Helped:</span>
                       <span className="font-semibold">{example.artists}</span>
                     </div>
                   )}
                   {'sponsors' in example && example.sponsors && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Sponsors:</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Sponsors:</span>
                       <span className="font-semibold">{example.sponsors}</span>
                     </div>
                   )}
                 </div>
-                <div className="bg-white rounded-lg p-4 mb-3">
-                  <div className="text-sm text-gray-600 mb-1">Monthly Earnings</div>
+                <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 mb-3">
+                  <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Monthly Earnings</div>
                   <div className="text-3xl font-bold text-green-600">{example.monthly}</div>
                 </div>
                 <div className="bg-green-50 rounded-lg p-3">
@@ -348,15 +348,15 @@ export default function ListenerOpportunityPage() {
 
         {/* Key Advantages */}
         <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl shadow-lg p-8 border-2 border-blue-200">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900">🚀 Why Listener Promoters Win</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">🚀 Why Listener Promoters Win</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-start space-x-3">
               <div className="bg-green-500 rounded-full p-1 flex-shrink-0">
                 <Check className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 mb-1">Per-Stream Caps</h3>
-                <p className="text-sm text-gray-600">Each income stream has a monthly cap to ensure sustainable payouts for all promoters.</p>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-1">Per-Stream Caps</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Each income stream has a monthly cap to ensure sustainable payouts for all promoters.</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
@@ -364,8 +364,8 @@ export default function ListenerOpportunityPage() {
                 <Check className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 mb-1">5 Income Streams</h3>
-                <p className="text-sm text-gray-600">More ways to earn than any other role!</p>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-1">5 Income Streams</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">More ways to earn than any other role!</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
@@ -373,8 +373,8 @@ export default function ListenerOpportunityPage() {
                 <Check className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 mb-1">Recurring Revenue</h3>
-                <p className="text-sm text-gray-600">Listener bounties paid every single month!</p>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-1">Recurring Revenue</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Listener bounties paid every single month!</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
@@ -382,17 +382,17 @@ export default function ListenerOpportunityPage() {
                 <Check className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 mb-1">Flexible Commitment</h3>
-                <p className="text-sm text-gray-600">Work at your own pace, no quotas required!</p>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-1">Flexible Commitment</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Work at your own pace, no quotas required!</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* CTA */}
-        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to Grow TrueFans?</h2>
-          <p className="text-xl text-gray-600 mb-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Ready to Grow TrueFans?</h2>
+          <p className="text-xl text-gray-600 dark:text-zinc-400 mb-6">
             Join {gpModel.totallisteners} Listener Promoters at {capacity}% capacity and start earning today!
           </p>
           <button className="bg-gradient-to-r from-blue-500 to-green-600 text-white px-8 py-4 rounded-lg text-lg font-bold hover:from-blue-600 hover:to-green-700 transition-all shadow-lg">

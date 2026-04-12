@@ -229,33 +229,33 @@ export default function SponsorAdsPage() {
   };
 
   const tierColor: Record<string, string> = {
-    bronze: "bg-orange-100 text-orange-700",
-    silver: "bg-gray-100 text-gray-700",
-    gold: "bg-yellow-100 text-yellow-700",
-    platinum: "bg-purple-100 text-purple-700",
+    bronze: "bg-orange-500/15 text-orange-400",
+    silver: "bg-zinc-700 text-zinc-300",
+    gold: "bg-yellow-500/15 text-yellow-400",
+    platinum: "bg-purple-500/15 text-purple-400",
   };
 
   const activeAds = ads.filter((a) => a.isActive).length;
   const totalPlays = ads.reduce((s, a) => s + a.playCount, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
               <Megaphone className="w-8 h-8 text-green-600" />
               Sponsor Ads
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-zinc-400 mt-1">
               Manage sponsor ads and rotation scheduling
             </p>
           </div>
           <div className="flex gap-2">
             <button
               onClick={generateAudio}
-              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 flex items-center gap-2 text-sm"
+              className="bg-zinc-800 text-zinc-300 px-4 py-2 rounded-lg font-medium hover:bg-zinc-700 flex items-center gap-2 text-sm"
             >
               <Music className="w-4 h-4" />
               Generate Audio
@@ -275,34 +275,34 @@ export default function SponsorAdsPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-white rounded-xl p-4 shadow-sm border">
-            <p className="text-sm text-gray-500">Total Ads</p>
-            <p className="text-2xl font-bold text-gray-900">{ads.length}</p>
+          <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800">
+            <p className="text-sm text-zinc-500">Total Ads</p>
+            <p className="text-2xl font-bold text-white">{ads.length}</p>
           </div>
-          <div className="bg-white rounded-xl p-4 shadow-sm border">
-            <p className="text-sm text-gray-500">Active</p>
-            <p className="text-2xl font-bold text-green-600">{activeAds}</p>
+          <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800">
+            <p className="text-sm text-zinc-500">Active</p>
+            <p className="text-2xl font-bold text-green-500">{activeAds}</p>
           </div>
-          <div className="bg-white rounded-xl p-4 shadow-sm border">
-            <p className="text-sm text-gray-500">Total Plays</p>
-            <p className="text-2xl font-bold text-blue-600">{totalPlays}</p>
+          <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800">
+            <p className="text-sm text-zinc-500">Total Plays</p>
+            <p className="text-2xl font-bold text-blue-500">{totalPlays}</p>
           </div>
         </div>
 
         {/* Create / Edit form */}
         {showCreate && (
-          <div id="ad-form" className="bg-white rounded-xl p-6 shadow-sm border mb-6">
+          <div id="ad-form" className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 mb-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">
+              <h3 className="font-semibold text-white">
                 {editingId ? "Edit Ad" : "New Sponsor Ad"}
               </h3>
               <button onClick={resetForm}>
-                <X className="w-5 h-5 text-gray-400" />
+                <X className="w-5 h-5 text-zinc-500" />
               </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="text-xs text-gray-500 block mb-1">
+                <label className="text-xs text-zinc-500 block mb-1">
                   Sponsor Name
                 </label>
                 <input
@@ -311,12 +311,12 @@ export default function SponsorAdsPage() {
                   onChange={(e) =>
                     setForm({ ...form, sponsorName: e.target.value })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                   placeholder="Mountain Brew Coffee"
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">
+                <label className="text-xs text-zinc-500 block mb-1">
                   Ad Title
                 </label>
                 <input
@@ -325,13 +325,13 @@ export default function SponsorAdsPage() {
                   onChange={(e) =>
                     setForm({ ...form, adTitle: e.target.value })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                   placeholder="Morning Coffee Special"
                 />
               </div>
             </div>
             <div className="mb-4">
-              <label className="text-xs text-gray-500 block mb-1">
+              <label className="text-xs text-zinc-500 block mb-1">
                 Script Text
               </label>
               <textarea
@@ -340,13 +340,13 @@ export default function SponsorAdsPage() {
                   setForm({ ...form, scriptText: e.target.value })
                 }
                 rows={3}
-                className="w-full border rounded-lg px-3 py-2 text-sm"
+                className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 placeholder="Start your morning with Mountain Brew Coffee..."
               />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div>
-                <label className="text-xs text-gray-500 block mb-1">
+                <label className="text-xs text-zinc-500 block mb-1">
                   Music Bed
                 </label>
                 <select
@@ -354,7 +354,7 @@ export default function SponsorAdsPage() {
                   onChange={(e) =>
                     setForm({ ...form, musicBedId: e.target.value })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 >
                   <option value="">None</option>
                   {musicBeds.map((b) => (
@@ -365,7 +365,7 @@ export default function SponsorAdsPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">
+                <label className="text-xs text-zinc-500 block mb-1">
                   Duration (seconds)
                 </label>
                 <input
@@ -374,16 +374,16 @@ export default function SponsorAdsPage() {
                   onChange={(e) =>
                     setForm({ ...form, durationSeconds: e.target.value })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                   placeholder="15"
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Tier</label>
+                <label className="text-xs text-zinc-500 block mb-1">Tier</label>
                 <select
                   value={form.tier}
                   onChange={(e) => setForm({ ...form, tier: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 >
                   {TIERS.map((t) => (
                     <option key={t} value={t}>
@@ -393,7 +393,7 @@ export default function SponsorAdsPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">
+                <label className="text-xs text-zinc-500 block mb-1">
                   Weight
                 </label>
                 <input
@@ -403,7 +403,7 @@ export default function SponsorAdsPage() {
                   onChange={(e) =>
                     setForm({ ...form, weight: e.target.value })
                   }
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
                 />
               </div>
             </div>
@@ -421,7 +421,7 @@ export default function SponsorAdsPage() {
                 return editAd?.audioFilePath ? (
                   <button
                     onClick={() => togglePlayAd(editAd)}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
                   >
                     {playingId === editingId ? (
                       <><Pause className="w-4 h-4" /> Stop</>
@@ -438,13 +438,13 @@ export default function SponsorAdsPage() {
         {/* Ads list */}
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
           </div>
         ) : ads.length === 0 ? (
-          <div className="bg-white rounded-xl p-12 shadow-sm border text-center">
-            <Megaphone className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No sponsor ads yet.</p>
-            <p className="text-sm text-gray-400 mt-1">
+          <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
+            <Megaphone className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
+            <p className="text-zinc-500">No sponsor ads yet.</p>
+            <p className="text-sm text-zinc-500 mt-1">
               Create ads to start rotating them on air.
             </p>
           </div>
@@ -453,19 +453,19 @@ export default function SponsorAdsPage() {
             {ads.map((ad) => (
               <div
                 key={ad.id}
-                className={`bg-white rounded-xl p-5 shadow-sm border ${
+                className={`bg-zinc-900/80 rounded-xl p-5 border border-zinc-800 ${
                   !ad.isActive ? "opacity-60" : ""
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-gray-900">
+                      <h3 className="font-semibold text-white">
                         {ad.adTitle}
                       </h3>
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${
-                          tierColor[ad.tier] || "bg-gray-100 text-gray-700"
+                          tierColor[ad.tier] || "bg-zinc-700 text-zinc-300"
                         }`}
                       >
                         {ad.tier}
@@ -473,20 +473,20 @@ export default function SponsorAdsPage() {
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full ${
                           ad.isActive
-                            ? "bg-green-100 text-green-700"
-                            : "bg-gray-100 text-gray-500"
+                            ? "bg-green-500/15 text-green-400"
+                            : "bg-zinc-800 text-zinc-500"
                         }`}
                       >
                         {ad.isActive ? "Active" : "Inactive"}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600">{ad.sponsorName}</p>
+                    <p className="text-sm text-zinc-400">{ad.sponsorName}</p>
                     {ad.scriptText && (
-                      <p className="text-sm text-gray-500 mt-1 italic line-clamp-2">
+                      <p className="text-sm text-zinc-500 mt-1 italic line-clamp-2">
                         {ad.scriptText}
                       </p>
                     )}
-                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                    <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500">
                       {ad.musicBed && (
                         <span className="flex items-center gap-1">
                           <Music className="w-3 h-3" />
@@ -516,7 +516,7 @@ export default function SponsorAdsPage() {
                       <button
                         onClick={() => generateAdAudio(ad)}
                         disabled={generatingAudioId === ad.id}
-                        className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center hover:bg-blue-200 disabled:opacity-50"
+                        className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400 flex items-center justify-center hover:bg-blue-200 disabled:opacity-50"
                         title={ad.audioFilePath ? "Regenerate audio" : "Generate audio"}
                       >
                         {generatingAudioId === ad.id ? (
@@ -529,7 +529,7 @@ export default function SponsorAdsPage() {
                     {ad.audioFilePath && (
                       <button
                         onClick={() => togglePlayAd(ad)}
-                        className="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center hover:bg-green-200"
+                        className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 flex items-center justify-center hover:bg-green-200"
                       >
                         {playingId === ad.id ? (
                           <Pause className="w-3.5 h-3.5" />
@@ -540,18 +540,18 @@ export default function SponsorAdsPage() {
                     )}
                     <button
                       onClick={() => toggleActive(ad)}
-                      className="p-1.5 rounded-lg hover:bg-gray-100"
+                      className="p-1.5 rounded-lg hover:bg-zinc-800"
                       title={ad.isActive ? "Deactivate" : "Activate"}
                     >
                       {ad.isActive ? (
                         <ToggleRight className="w-5 h-5 text-green-600" />
                       ) : (
-                        <ToggleLeft className="w-5 h-5 text-gray-400" />
+                        <ToggleLeft className="w-5 h-5 text-zinc-500" />
                       )}
                     </button>
                     <button
                       onClick={() => startEdit(ad)}
-                      className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1.5 rounded-lg hover:bg-gray-200"
+                      className="text-xs bg-zinc-800 text-zinc-400 px-2.5 py-1.5 rounded-lg hover:bg-zinc-700"
                     >
                       Edit
                     </button>

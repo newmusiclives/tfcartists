@@ -14,19 +14,19 @@ export default function DocsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">TrueFans RADIO™ Documentation</h1>
-          <p className="text-gray-600 text-lg">Complete guides for understanding and completing the system</p>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">TrueFans RADIO™ Documentation</h1>
+          <p className="text-gray-600 dark:text-zinc-400 text-lg">Complete guides for understanding and completing the system</p>
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl shadow-lg mb-8">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg mb-8">
           <div className="border-b">
             <div className="flex space-x-1 p-2">
               <button
                 onClick={() => setActiveTab("localhost")}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
                   activeTab === "localhost"
-                    ? "bg-purple-100 text-purple-700"
+                    ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
@@ -37,7 +37,7 @@ export default function DocsPage() {
                 onClick={() => setActiveTab("demo")}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
                   activeTab === "demo"
-                    ? "bg-purple-100 text-purple-700"
+                    ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
@@ -48,7 +48,7 @@ export default function DocsPage() {
                 onClick={() => setActiveTab("roadmap")}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
                   activeTab === "roadmap"
-                    ? "bg-purple-100 text-purple-700"
+                    ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
@@ -59,7 +59,7 @@ export default function DocsPage() {
                 onClick={() => setActiveTab("api")}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
                   activeTab === "api"
-                    ? "bg-purple-100 text-purple-700"
+                    ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
@@ -97,19 +97,19 @@ function LocalhostGuide() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-purple-50 rounded-lg p-4 border-2 border-purple-200">
           <h4 className="font-bold text-purple-900 mb-2">Riley (Artist Team)</h4>
-          <p className="text-sm text-gray-700 mb-2">Artist acquisition and pipeline management</p>
+          <p className="text-sm text-gray-700 dark:text-zinc-300 mb-2">Artist acquisition and pipeline management</p>
           <a href="/riley" className="text-purple-600 hover:text-purple-700 text-sm font-medium">→ Go to Riley Dashboard</a>
         </div>
 
         <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
           <h4 className="font-bold text-green-900 mb-2">Harper (Sponsor Team)</h4>
-          <p className="text-sm text-gray-700 mb-2">Sponsor outreach and deal management</p>
+          <p className="text-sm text-gray-700 dark:text-zinc-300 mb-2">Sponsor outreach and deal management</p>
           <a href="/harper" className="text-green-600 hover:text-green-700 text-sm font-medium">→ Go to Harper Dashboard</a>
         </div>
 
         <div className="bg-orange-50 rounded-lg p-4 border-2 border-orange-200">
           <h4 className="font-bold text-orange-900 mb-2">Admin Dashboard</h4>
-          <p className="text-sm text-gray-700 mb-2">System-wide overview and settings</p>
+          <p className="text-sm text-gray-700 dark:text-zinc-300 mb-2">System-wide overview and settings</p>
           <a href="/admin" className="text-orange-600 hover:text-orange-700 text-sm font-medium">→ Go to Admin Dashboard</a>
         </div>
       </div>
@@ -117,9 +117,9 @@ function LocalhostGuide() {
       <h3 className="text-2xl font-bold mt-8 mb-4">Riley's Team Demo (Artist Acquisition)</h3>
 
       <div className="space-y-6">
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-xl font-bold mb-3">1. Riley Dashboard</h4>
-          <p className="text-gray-600 mb-3"><strong>URL:</strong> <a href="/riley" className="text-purple-600 hover:underline">/riley</a></p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>URL:</strong> <a href="/riley" className="text-purple-600 hover:underline">/riley</a></p>
           <div className="bg-gray-50 rounded p-4 mb-3">
             <p className="font-semibold mb-2">What You'll See:</p>
             <ul className="list-disc ml-6 space-y-1 text-sm">
@@ -132,9 +132,9 @@ function LocalhostGuide() {
           <p className="text-sm text-gray-600 italic">"This is Riley's command center for managing hundreds of artists."</p>
         </div>
 
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-xl font-bold mb-3">2. Artist Pipeline</h4>
-          <p className="text-gray-600 mb-3"><strong>URL:</strong> <a href="/riley/pipeline" className="text-purple-600 hover:underline">/riley/pipeline</a></p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>URL:</strong> <a href="/riley/pipeline" className="text-purple-600 hover:underline">/riley/pipeline</a></p>
           <div className="bg-gray-50 rounded p-4 mb-3">
             <p className="font-semibold mb-2">7-Stage Kanban Board:</p>
             <ul className="list-disc ml-6 space-y-1 text-sm">
@@ -147,9 +147,9 @@ function LocalhostGuide() {
           <p className="text-sm text-gray-600 italic">"Riley can see at a glance who needs follow-up and who's crushing it."</p>
         </div>
 
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-xl font-bold mb-3">3. Pool Calculator</h4>
-          <p className="text-gray-600 mb-3"><strong>URL:</strong> <a href="/riley/pool-calculator" className="text-purple-600 hover:underline">/riley/pool-calculator</a></p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>URL:</strong> <a href="/riley/pool-calculator" className="text-purple-600 hover:underline">/riley/pool-calculator</a></p>
           <div className="bg-gray-50 rounded p-4 mb-3">
             <p className="font-semibold mb-2">The Magic Formula:</p>
             <ul className="list-disc ml-6 space-y-1 text-sm">
@@ -166,9 +166,9 @@ function LocalhostGuide() {
       <h3 className="text-2xl font-bold mt-8 mb-4">Harper's Team Demo (Sponsor Acquisition)</h3>
 
       <div className="space-y-6">
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-xl font-bold mb-3">1. Harper Dashboard</h4>
-          <p className="text-gray-600 mb-3"><strong>URL:</strong> <a href="/harper" className="text-purple-600 hover:underline">/harper</a></p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>URL:</strong> <a href="/harper" className="text-purple-600 hover:underline">/harper</a></p>
           <div className="bg-gray-50 rounded p-4 mb-3">
             <p className="font-semibold mb-2">Key Metrics:</p>
             <ul className="list-disc ml-6 space-y-1 text-sm">
@@ -181,9 +181,9 @@ function LocalhostGuide() {
           <p className="text-sm text-gray-600 italic">"Harper funds the artist pool through local business sponsorships."</p>
         </div>
 
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-xl font-bold mb-3">2. Sponsor List</h4>
-          <p className="text-gray-600 mb-3"><strong>URL:</strong> <a href="/harper/sponsors" className="text-purple-600 hover:underline">/harper/sponsors</a></p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>URL:</strong> <a href="/harper/sponsors" className="text-purple-600 hover:underline">/harper/sponsors</a></p>
           <div className="bg-gray-50 rounded p-4 mb-3">
             <p className="font-semibold mb-2">Sponsorship Tiers:</p>
             <ul className="list-disc ml-6 space-y-1 text-sm">
@@ -196,9 +196,9 @@ function LocalhostGuide() {
           <p className="text-sm text-gray-600 italic">"Track 1,000+ local businesses and their contracts."</p>
         </div>
 
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-xl font-bold mb-3">3. Billing Dashboard</h4>
-          <p className="text-gray-600 mb-3"><strong>URL:</strong> <a href="/harper/billing" className="text-purple-600 hover:underline">/harper/billing</a></p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>URL:</strong> <a href="/harper/billing" className="text-purple-600 hover:underline">/harper/billing</a></p>
           <div className="bg-gray-50 rounded p-4 mb-3">
             <p className="font-semibold mb-2">Revenue Tracking:</p>
             <ul className="list-disc ml-6 space-y-1 text-sm">
@@ -215,9 +215,9 @@ function LocalhostGuide() {
       <h3 className="text-2xl font-bold mt-8 mb-4">Station & Network Pages</h3>
 
       <div className="space-y-6">
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-xl font-bold mb-3">Capacity Calculator</h4>
-          <p className="text-gray-600 mb-3"><strong>URL:</strong> <a href="/capacity" className="text-purple-600 hover:underline">/capacity</a></p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>URL:</strong> <a href="/capacity" className="text-purple-600 hover:underline">/capacity</a></p>
           <div className="bg-gray-50 rounded p-4 mb-3">
             <p className="font-semibold mb-2">Physical Constraints:</p>
             <ul className="list-disc ml-6 space-y-1 text-sm">
@@ -230,10 +230,10 @@ function LocalhostGuide() {
           <p className="text-sm text-gray-600 italic">"The math behind why we can only support ~850 artists."</p>
         </div>
 
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-xl font-bold mb-3">DJ Schedule</h4>
-          <p className="text-gray-600 mb-3"><strong>URL:</strong> <a href="/schedule" className="text-purple-600 hover:underline">/schedule</a></p>
-          <p className="text-sm text-gray-600">Weekly programming with AI DJ personalities: Hank Westwood (morning), Loretta Merrick (midday), Doc Holloway (afternoon), Cody Rampart (drive time).</p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>URL:</strong> <a href="/schedule" className="text-purple-600 hover:underline">/schedule</a></p>
+          <p className="text-sm text-gray-600 dark:text-zinc-400">Weekly programming with AI DJ personalities: Hank Westwood (morning), Loretta Merrick (midday), Doc Holloway (afternoon), Cody Rampart (drive time).</p>
         </div>
       </div>
 
@@ -257,7 +257,7 @@ function CompleteDemo() {
     <div className="prose prose-lg max-w-none">
       <h2 className="text-3xl font-bold mb-6">Complete System Demo</h2>
 
-      <p className="text-xl text-gray-600 mb-8">
+      <p className="text-xl text-gray-600 dark:text-zinc-400 mb-8">
         Deep dive into how Riley's team and Harper's team work, with examples, workflows, and technical details.
       </p>
 
@@ -293,9 +293,9 @@ function CompleteDemo() {
 
       <h3 className="text-2xl font-bold mt-8 mb-4">Riley's Team - Artist Acquisition</h3>
 
-      <div className="bg-white border rounded-lg p-6 mb-6">
+      <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6 mb-6">
         <h4 className="text-xl font-bold mb-3">Mission</h4>
-        <p className="text-gray-700 mb-4">
+        <p className="text-gray-700 dark:text-zinc-300 mb-4">
           Build a network of 800+ performing artists who use the TrueFans 9-word line at live shows
           to drive listener donations.
         </p>
@@ -320,41 +320,41 @@ function CompleteDemo() {
         </div>
       </div>
 
-      <div className="bg-white border rounded-lg p-6 mb-6">
+      <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6 mb-6">
         <h4 className="text-xl font-bold mb-3">Example: Riley's AI Conversation</h4>
         <div className="space-y-4">
           <div className="bg-purple-50 rounded-lg p-4">
             <p className="text-sm text-purple-600 font-semibold mb-1">RILEY (Initial Outreach)</p>
-            <p className="text-gray-800">"Hey Sarah! 👋 Saw your set at The Echo last week — loved your vibe. Quick q: do you play live shows regularly?"</p>
+            <p className="text-gray-800 dark:text-zinc-200">"Hey Sarah! 👋 Saw your set at The Echo last week — loved your vibe. Quick q: do you play live shows regularly?"</p>
           </div>
 
           <div className="bg-gray-100 rounded-lg p-4">
             <p className="text-sm text-gray-600 font-semibold mb-1">ARTIST</p>
-            <p className="text-gray-800">"Yeah I play 2-3 shows a month!"</p>
+            <p className="text-gray-800 dark:text-zinc-200">"Yeah I play 2-3 shows a month!"</p>
           </div>
 
           <div className="bg-purple-50 rounded-lg p-4">
             <p className="text-sm text-purple-600 font-semibold mb-1">RILEY (Educate Product)</p>
-            <p className="text-gray-800">"Perfect! Quick intro: TrueFans gets you played on our radio station AND helps you make money at shows. Your fans text to donate during your set. Would a 5-min call make sense?"</p>
+            <p className="text-gray-800 dark:text-zinc-200">"Perfect! Quick intro: TrueFans gets you played on our radio station AND helps you make money at shows. Your fans text to donate during your set. Would a 5-min call make sense?"</p>
           </div>
 
           <div className="bg-gray-100 rounded-lg p-4">
             <p className="text-sm text-gray-600 font-semibold mb-1">ARTIST</p>
-            <p className="text-gray-800">"Sure, how does the donation thing work?"</p>
+            <p className="text-gray-800 dark:text-zinc-200">"Sure, how does the donation thing work?"</p>
           </div>
 
           <div className="bg-purple-50 rounded-lg p-4">
             <p className="text-sm text-purple-600 font-semibold mb-1">RILEY (Book Show)</p>
-            <p className="text-gray-800">"You say 9 words on stage: 'Go To True Fans CONNECT dot com Right Now!' Boom — fans donate $5-$100, you get 80% same night. Want to try it at your next show?"</p>
+            <p className="text-gray-800 dark:text-zinc-200">"You say 9 words on stage: 'Go To True Fans CONNECT dot com Right Now!' Boom — fans donate $5-$100, you get 80% same night. Want to try it at your next show?"</p>
           </div>
         </div>
       </div>
 
       <h3 className="text-2xl font-bold mt-8 mb-4">Harper's Team - Sponsor Acquisition</h3>
 
-      <div className="bg-white border rounded-lg p-6 mb-6">
+      <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6 mb-6">
         <h4 className="text-xl font-bold mb-3">Mission</h4>
-        <p className="text-gray-700 mb-4">
+        <p className="text-gray-700 dark:text-zinc-300 mb-4">
           Build a network of 1,000+ local business sponsors funding the artist revenue pool through radio advertising.
         </p>
 
@@ -370,8 +370,8 @@ function CompleteDemo() {
             </ul>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-4 border-2 border-gray-300">
-            <h6 className="font-bold text-gray-900 mb-2">Silver - $250/month</h6>
+          <div className="bg-gray-50 rounded-lg p-4 border-2 border-gray-300 dark:border-zinc-700">
+            <h6 className="font-bold text-gray-900 dark:text-white mb-2">Silver - $250/month</h6>
             <ul className="text-sm text-gray-800 space-y-1">
               <li>✅ Everything in Bronze</li>
               <li>✅ 20 ad spots (2x)</li>
@@ -433,22 +433,22 @@ function CompleteDemo() {
       <h3 className="text-2xl font-bold mt-8 mb-4">Monthly Revenue at Scale</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white border rounded-lg p-4">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-4">
           <div className="text-3xl font-bold text-green-600 mb-2">$186,000</div>
-          <div className="text-sm text-gray-600">Sponsor Revenue</div>
-          <div className="text-xs text-gray-500 mt-1">1,093 sponsors</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">Sponsor Revenue</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">1,093 sponsors</div>
         </div>
 
-        <div className="bg-white border rounded-lg p-4">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-4">
           <div className="text-3xl font-bold text-purple-600 mb-2">$148,800</div>
-          <div className="text-sm text-gray-600">To Artist Pool (80%)</div>
-          <div className="text-xs text-gray-500 mt-1">861 artists</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">To Artist Pool (80%)</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">861 artists</div>
         </div>
 
-        <div className="bg-white border rounded-lg p-4">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-4">
           <div className="text-3xl font-bold text-blue-600 mb-2">$37,200</div>
-          <div className="text-sm text-gray-600">Station Operations (20%)</div>
-          <div className="text-xs text-gray-500 mt-1">Profit margin</div>
+          <div className="text-sm text-gray-600 dark:text-zinc-400">Station Operations (20%)</div>
+          <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Profit margin</div>
         </div>
       </div>
 
@@ -468,7 +468,7 @@ function Roadmap() {
     <div className="prose prose-lg max-w-none">
       <h2 className="text-3xl font-bold mb-6">Implementation Roadmap</h2>
 
-      <p className="text-xl text-gray-600 mb-8">
+      <p className="text-xl text-gray-600 dark:text-zinc-400 mb-8">
         Remaining work to reach full production readiness.
       </p>
 
@@ -488,13 +488,13 @@ function Roadmap() {
       <h3 className="text-2xl font-bold mt-8 mb-4">Phase 1: Make It Work (4 Weeks)</h3>
 
       <div className="space-y-4 mb-8">
-        <div className="bg-white border-l-4 border-red-500 rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border-l-4 border-red-500 rounded-lg p-6">
           <div className="flex items-start justify-between mb-2">
-            <h4 className="text-xl font-bold text-gray-900">Week 1: Infrastructure</h4>
-            <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">CRITICAL</span>
+            <h4 className="text-xl font-bold text-gray-900 dark:text-white">Week 1: Infrastructure</h4>
+            <span className="bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400 px-3 py-1 rounded-full text-xs font-bold">CRITICAL</span>
           </div>
-          <p className="text-gray-600 mb-3"><strong>Time:</strong> 8-10 hours</p>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>Time:</strong> 8-10 hours</p>
+          <ul className="space-y-2 text-sm text-gray-700 dark:text-zinc-300">
             <li>□ Configure PostgreSQL database (Neon free tier)</li>
             <li>□ Deploy to Netlify</li>
             <li>□ Generate NEXTAUTH_SECRET: <code className="bg-gray-100 px-2 py-1 rounded">openssl rand -base64 32</code></li>
@@ -503,13 +503,13 @@ function Roadmap() {
           <div className="mt-3 text-sm font-semibold text-green-600">Success: Site live at https://yourdomain.com ✅</div>
         </div>
 
-        <div className="bg-white border-l-4 border-red-500 rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border-l-4 border-red-500 rounded-lg p-6">
           <div className="flex items-start justify-between mb-2">
-            <h4 className="text-xl font-bold text-gray-900">Week 2: Harper Backend APIs</h4>
-            <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">CRITICAL</span>
+            <h4 className="text-xl font-bold text-gray-900 dark:text-white">Week 2: Harper Backend APIs</h4>
+            <span className="bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400 px-3 py-1 rounded-full text-xs font-bold">CRITICAL</span>
           </div>
-          <p className="text-gray-600 mb-3"><strong>Time:</strong> 12-15 hours</p>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>Time:</strong> 12-15 hours</p>
+          <ul className="space-y-2 text-sm text-gray-700 dark:text-zinc-300">
             <li>□ Create /api/harper/outreach (copy Riley's structure)</li>
             <li>□ Create /api/harper/message</li>
             <li>□ Create HarperAgent class (mirror RileyAgent)</li>
@@ -518,12 +518,12 @@ function Roadmap() {
           <div className="mt-3 text-sm font-semibold text-green-600">Success: Can send Harper outreach via API ✅</div>
         </div>
 
-        <div className="bg-white border-l-4 border-red-500 rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border-l-4 border-red-500 rounded-lg p-6">
           <div className="flex items-start justify-between mb-2">
-            <h4 className="text-xl font-bold text-gray-900">Week 3: Message Delivery (SMS + Email)</h4>
-            <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">CRITICAL</span>
+            <h4 className="text-xl font-bold text-gray-900 dark:text-white">Week 3: Message Delivery (SMS + Email)</h4>
+            <span className="bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400 px-3 py-1 rounded-full text-xs font-bold">CRITICAL</span>
           </div>
-          <p className="text-gray-600 mb-3"><strong>Time:</strong> 10-12 hours</p>
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>Time:</strong> 10-12 hours</p>
           <div className="bg-blue-50 rounded p-4 mb-3">
             <p className="font-semibold text-blue-900 mb-2">External Services Needed:</p>
             <ul className="space-y-2 text-sm text-blue-800">
@@ -534,13 +534,13 @@ function Roadmap() {
           <div className="mt-3 text-sm font-semibold text-green-600">Success: Riley can send SMS + Email ✅</div>
         </div>
 
-        <div className="bg-white border-l-4 border-red-500 rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border-l-4 border-red-500 rounded-lg p-6">
           <div className="flex items-start justify-between mb-2">
-            <h4 className="text-xl font-bold text-gray-900">Week 4: AI Message Generation</h4>
-            <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">CRITICAL</span>
+            <h4 className="text-xl font-bold text-gray-900 dark:text-white">Week 4: AI Message Generation</h4>
+            <span className="bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400 px-3 py-1 rounded-full text-xs font-bold">CRITICAL</span>
           </div>
-          <p className="text-gray-600 mb-3"><strong>Time:</strong> 6-8 hours | <strong>Cost:</strong> ~$0.01 per conversation</p>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>Time:</strong> 6-8 hours | <strong>Cost:</strong> ~$0.01 per conversation</p>
+          <ul className="space-y-2 text-sm text-gray-700 dark:text-zinc-300">
             <li>□ Get Anthropic API key (console.anthropic.com)</li>
             <li>□ Enable actual Claude API calls in riley-agent.ts</li>
             <li>□ Test end-to-end flow</li>
@@ -552,13 +552,13 @@ function Roadmap() {
       <h3 className="text-2xl font-bold mt-8 mb-4">Phase 2: Discovery Automation (4 Weeks)</h3>
 
       <div className="space-y-4 mb-8">
-        <div className="bg-white border-l-4 border-orange-500 rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border-l-4 border-orange-500 rounded-lg p-6">
           <div className="flex items-start justify-between mb-2">
-            <h4 className="text-xl font-bold text-gray-900">Week 5: Instagram Artist Discovery</h4>
-            <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">HIGH</span>
+            <h4 className="text-xl font-bold text-gray-900 dark:text-white">Week 5: Instagram Artist Discovery</h4>
+            <span className="bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400 px-3 py-1 rounded-full text-xs font-bold">HIGH</span>
           </div>
-          <p className="text-gray-600 mb-3"><strong>Time:</strong> 10-12 hours</p>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>Time:</strong> 10-12 hours</p>
+          <ul className="space-y-2 text-sm text-gray-700 dark:text-zinc-300">
             <li>□ Get Instagram Graph API access</li>
             <li>□ Implement discoverFromInstagram()</li>
             <li>□ Create cron job (run daily at 9am)</li>
@@ -566,13 +566,13 @@ function Roadmap() {
           <div className="mt-3 text-sm font-semibold text-green-600">Success: 10+ new artists discovered daily ✅</div>
         </div>
 
-        <div className="bg-white border-l-4 border-orange-500 rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border-l-4 border-orange-500 rounded-lg p-6">
           <div className="flex items-start justify-between mb-2">
-            <h4 className="text-xl font-bold text-gray-900">Week 6: Google Maps Sponsor Discovery</h4>
-            <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">HIGH</span>
+            <h4 className="text-xl font-bold text-gray-900 dark:text-white">Week 6: Google Maps Sponsor Discovery</h4>
+            <span className="bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400 px-3 py-1 rounded-full text-xs font-bold">HIGH</span>
           </div>
-          <p className="text-gray-600 mb-3"><strong>Time:</strong> 10-12 hours</p>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>Time:</strong> 10-12 hours</p>
+          <ul className="space-y-2 text-sm text-gray-700 dark:text-zinc-300">
             <li>□ Get Google Places API key</li>
             <li>□ Create sponsor-discovery.ts</li>
             <li>□ Search: coffee shops, fitness studios, boutiques</li>
@@ -584,13 +584,13 @@ function Roadmap() {
       <h3 className="text-2xl font-bold mt-8 mb-4">Phase 3: Revenue & Payments (3 Weeks)</h3>
 
       <div className="space-y-4 mb-8">
-        <div className="bg-white border-l-4 border-orange-500 rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border-l-4 border-orange-500 rounded-lg p-6">
           <div className="flex items-start justify-between mb-2">
-            <h4 className="text-xl font-bold text-gray-900">Week 9: Manifest Financial Integration</h4>
-            <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">HIGH</span>
+            <h4 className="text-xl font-bold text-gray-900 dark:text-white">Week 9: Manifest Financial Integration</h4>
+            <span className="bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400 px-3 py-1 rounded-full text-xs font-bold">HIGH</span>
           </div>
-          <p className="text-gray-600 mb-3"><strong>Time:</strong> 12-15 hours</p>
-          <ul className="space-y-2 text-sm text-gray-700">
+          <p className="text-gray-600 dark:text-zinc-400 mb-3"><strong>Time:</strong> 12-15 hours</p>
+          <ul className="space-y-2 text-sm text-gray-700 dark:text-zinc-300">
             <li>□ Create Manifest Financial account</li>
             <li>□ Set up Manifest API client</li>
             <li>□ Create artist subscription products (FREE, TIER_5, TIER_20, etc.)</li>
@@ -604,27 +604,27 @@ function Roadmap() {
       <h3 className="text-2xl font-bold mt-8 mb-4">Cost Breakdown</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-lg font-bold mb-4">Development Phase (Months 1-3)</h4>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Neon PostgreSQL</span>
+              <span className="text-gray-600 dark:text-zinc-400">Neon PostgreSQL</span>
               <span className="font-semibold">$0</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Netlify hosting</span>
+              <span className="text-gray-600 dark:text-zinc-400">Netlify hosting</span>
               <span className="font-semibold">$0</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Twilio SMS</span>
+              <span className="text-gray-600 dark:text-zinc-400">Twilio SMS</span>
               <span className="font-semibold">~$20</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">GoHighLevel Email</span>
+              <span className="text-gray-600 dark:text-zinc-400">GoHighLevel Email</span>
               <span className="font-semibold">$0</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Anthropic API</span>
+              <span className="text-gray-600 dark:text-zinc-400">Anthropic API</span>
               <span className="font-semibold">~$50</span>
             </div>
             <div className="flex justify-between border-t pt-2">
@@ -634,15 +634,15 @@ function Roadmap() {
           </div>
         </div>
 
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6">
           <h4 className="text-lg font-bold mb-4">Production (At Scale)</h4>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">All infrastructure</span>
+              <span className="text-gray-600 dark:text-zinc-400">All infrastructure</span>
               <span className="font-semibold">~$1,240</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Monthly revenue</span>
+              <span className="text-gray-600 dark:text-zinc-400">Monthly revenue</span>
               <span className="font-semibold text-green-600">~$200,000</span>
             </div>
             <div className="flex justify-between border-t pt-2">
@@ -650,7 +650,7 @@ function Roadmap() {
               <span className="font-bold text-green-600">0.6%</span>
             </div>
           </div>
-          <p className="text-xs text-gray-500 mt-3 italic">Excellent profit margins!</p>
+          <p className="text-xs text-gray-500 dark:text-zinc-500 mt-3 italic">Excellent profit margins!</p>
         </div>
       </div>
 
@@ -766,7 +766,7 @@ function ApiReference() {
   return (
     <div className="prose prose-lg max-w-none">
       <h2 className="text-3xl font-bold mb-2">{docs.name}</h2>
-      <p className="text-gray-500 mb-6">Version {docs.version} &middot; Base URL: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{docs.baseUrl}</code></p>
+      <p className="text-gray-500 dark:text-zinc-500 mb-6">Version {docs.version} &middot; Base URL: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{docs.baseUrl}</code></p>
 
       {/* Authentication */}
       <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
@@ -774,7 +774,7 @@ function ApiReference() {
         <p className="text-blue-800 mb-3">
           Include your API key as a Bearer token in the <code className="bg-blue-100 px-1 rounded">Authorization</code> header:
         </p>
-        <div className="bg-white rounded-lg p-4 border border-blue-200 font-mono text-sm">
+        <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-blue-200 font-mono text-sm">
           Authorization: Bearer YOUR_API_KEY
         </div>
         <p className="text-blue-700 text-sm mt-3">
@@ -787,7 +787,7 @@ function ApiReference() {
       <h3 className="text-2xl font-bold mb-4">Endpoints</h3>
       <div className="space-y-6 mb-8">
         {Object.entries(docs.endpoints).map(([category, routes]) => (
-          <div key={category} className="bg-white border rounded-lg overflow-hidden">
+          <div key={category} className="bg-white dark:bg-zinc-900 border rounded-lg overflow-hidden">
             <div className="bg-gray-50 px-6 py-3 border-b">
               <h4 className="text-lg font-bold text-gray-900 m-0">{category}</h4>
             </div>
@@ -800,7 +800,7 @@ function ApiReference() {
                   <div key={key} className="px-6 py-3 flex items-start gap-3">
                     <div className="pt-0.5">{methodBadge(method)}</div>
                     <div>
-                      <code className="text-sm font-semibold text-gray-900">{path}</code>
+                      <code className="text-sm font-semibold text-gray-900 dark:text-white">{path}</code>
                       <p className="text-sm text-gray-600 m-0 mt-0.5">{description}</p>
                     </div>
                   </div>
@@ -813,12 +813,12 @@ function ApiReference() {
 
       {/* Rate Limits */}
       <h3 className="text-2xl font-bold mb-4">Rate Limits</h3>
-      <div className="bg-white border rounded-lg p-6 mb-8">
+      <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {Object.entries(docs.rateLimits).map(([category, limit]) => (
             <div key={category} className="bg-gray-50 rounded-lg p-4 text-center">
               <div className="text-sm text-gray-500 capitalize mb-1">{category}</div>
-              <div className="text-lg font-bold text-gray-900">{limit}</div>
+              <div className="text-lg font-bold text-gray-900 dark:text-white">{limit}</div>
             </div>
           ))}
         </div>
@@ -826,8 +826,8 @@ function ApiReference() {
 
       {/* Webhook Events */}
       <h3 className="text-2xl font-bold mb-4">Webhook Events</h3>
-      <div className="bg-white border rounded-lg p-6 mb-8">
-        <p className="text-gray-600 mb-4">
+      <div className="bg-white dark:bg-zinc-900 border rounded-lg p-6 mb-8">
+        <p className="text-gray-600 dark:text-zinc-400 mb-4">
           Register a webhook URL in your organization settings to receive real-time notifications for these events:
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">

@@ -21,7 +21,7 @@ const TIER_CONFIG = [
 
 const tierColorClasses: Record<string, { bg: string; border: string; text: string }> = {
   amber: { bg: "bg-amber-50", border: "border-amber-200", text: "text-amber-900" },
-  gray: { bg: "bg-gray-50", border: "border-gray-300", text: "text-gray-900" },
+  gray: { bg: "bg-gray-50", border: "border-gray-300 dark:border-zinc-700", text: "text-gray-900" },
   yellow: { bg: "bg-yellow-50", border: "border-yellow-300", text: "text-yellow-900" },
   purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-900" },
 };
@@ -63,7 +63,7 @@ export default function CassidyTierManagementPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading tier management...</div>
+        <div className="text-gray-600 dark:text-zinc-400">Loading tier management...</div>
       </main>
     );
   }
@@ -85,7 +85,7 @@ export default function CassidyTierManagementPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
       {/* Header */}
-      <div className="border-b bg-white/80 backdrop-blur-sm">
+      <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
@@ -99,10 +99,10 @@ export default function CassidyTierManagementPage() {
           <div className="flex items-center space-x-3">
             <BarChart3 className="w-8 h-8 text-teal-600" />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Tier Management
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-zinc-400">
                 Artist tier distribution and rotation curation
               </p>
             </div>
@@ -113,8 +113,8 @@ export default function CassidyTierManagementPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Stats Bar */}
         <section className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="bg-white rounded-xl p-4 border border-teal-200 shadow-sm">
-            <div className="text-sm text-gray-600">Total in Rotation</div>
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-teal-200 shadow-sm">
+            <div className="text-sm text-gray-600 dark:text-zinc-400">Total in Rotation</div>
             <div className="text-2xl font-bold text-teal-600">
               {stats.totalArtistsInRotation}
             </div>
@@ -124,7 +124,7 @@ export default function CassidyTierManagementPage() {
               key={t.tier}
               className={`${tierColorClasses[t.color].bg} rounded-xl p-4 border ${tierColorClasses[t.color].border} shadow-sm`}
             >
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-zinc-400">
                 {t.emoji} {t.tier}
               </div>
               <div className={`text-2xl font-bold ${tierColorClasses[t.color].text}`}>
@@ -135,11 +135,11 @@ export default function CassidyTierManagementPage() {
         </section>
 
         {/* Tier Distribution Cards */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">
             Tier Distribution
           </h2>
-          <p className="text-gray-600 text-sm mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Target distribution: 60% Bronze / 25% Silver / 12% Gold / 3%
             Platinum
           </p>
@@ -172,14 +172,14 @@ export default function CassidyTierManagementPage() {
                   <div className={`text-lg font-bold ${classes.text} mb-1`}>
                     {t.tier}
                   </div>
-                  <div className="text-2xl font-bold text-gray-900 mb-1">
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                     {count}
                   </div>
-                  <div className="text-xs text-gray-600 mb-3">
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mb-3">
                     {t.spins} spins/week
                   </div>
                   {/* Actual vs target bar */}
-                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-2 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full ${
                         actualPct > t.targetPct
@@ -194,7 +194,7 @@ export default function CassidyTierManagementPage() {
                       }}
                     />
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">
                     {actualPct}% actual
                   </div>
                 </div>
@@ -204,13 +204,13 @@ export default function CassidyTierManagementPage() {
         </section>
 
         {/* 80/20 Progress */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">
                 80/20 Transformation Progress
               </h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 Indie vs mainstream rotation balance
               </p>
             </div>
@@ -220,12 +220,12 @@ export default function CassidyTierManagementPage() {
           <div className="space-y-4">
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-600">Indie Artists</span>
+                <span className="text-gray-600 dark:text-zinc-400">Indie Artists</span>
                 <span className="font-semibold text-teal-600">
                   {stats.rotationTransformation.indie}%
                 </span>
               </div>
-              <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-4 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-teal-500 to-cyan-500"
                   style={{
@@ -236,12 +236,12 @@ export default function CassidyTierManagementPage() {
             </div>
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-600">Mainstream</span>
-                <span className="font-semibold text-gray-500">
+                <span className="text-gray-600 dark:text-zinc-400">Mainstream</span>
+                <span className="font-semibold text-gray-500 dark:text-zinc-500">
                   {stats.rotationTransformation.mainstream}%
                 </span>
               </div>
-              <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-4 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gray-400"
                   style={{
@@ -251,7 +251,7 @@ export default function CassidyTierManagementPage() {
               </div>
             </div>
             <div className="pt-4 border-t text-center">
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-zinc-400">
                 Progress toward {stats.rotationTransformation.target}% indie
                 target
               </div>
@@ -263,11 +263,11 @@ export default function CassidyTierManagementPage() {
         </section>
 
         {/* Placed Artists List */}
-        <section className="bg-white rounded-xl shadow-lg p-6">
+        <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Placed Artists</h2>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
                 {placedArtists.length} artists currently placed in rotation
               </p>
             </div>
@@ -275,7 +275,7 @@ export default function CassidyTierManagementPage() {
           </div>
 
           {placedArtists.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
               No placed artists yet.
             </div>
           ) : (
@@ -283,23 +283,23 @@ export default function CassidyTierManagementPage() {
               {placedArtists.map((artist) => (
                 <div
                   key={artist.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-teal-300 transition-colors"
+                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-teal-300 transition-colors"
                 >
                   <div className="flex items-center space-x-3">
                     <Music className="w-5 h-5 text-gray-400" />
                     <div>
-                      <div className="font-semibold text-gray-900">
+                      <div className="font-semibold text-gray-900 dark:text-white">
                         {artist.artistName}
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-gray-600 dark:text-zinc-400">
                         {artist.trackTitle}
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
-                      <div className="text-sm text-gray-600">Placed</div>
-                      <div className="text-sm font-semibold text-gray-900">
+                      <div className="text-sm text-gray-600 dark:text-zinc-400">Placed</div>
+                      <div className="text-sm font-semibold text-gray-900 dark:text-white">
                         {artist.submittedAt}
                       </div>
                     </div>

@@ -36,6 +36,7 @@ import {
   AudioLines,
 } from "lucide-react";
 import { StationSwitcher } from "@/components/station-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type MenuId = "teams" | "station" | "opportunities" | null;
 type MobileSection = "teams" | "riley" | "harper" | "cassidy" | "elliot" | "parker" | "station" | "stationOps" | "opportunities" | null;
@@ -116,14 +117,14 @@ export function SharedNav() {
   );
 
   const linkClass = (path: string, color = "purple") =>
-    `block px-4 py-2 text-sm text-gray-700 hover:bg-${color}-50 transition-colors`;
+    `block px-4 py-2 text-sm text-gray-700 dark:text-zinc-300 hover:bg-${color}-50 dark:hover:bg-zinc-800 transition-colors`;
 
   const activeLinkClass = (path: string, color = "purple") =>
-    `${linkClass(path, color)} ${isActive(path) ? `bg-${color}-50 font-semibold text-${color}-700` : ""}`;
+    `${linkClass(path, color)} ${isActive(path) ? `bg-${color}-50 dark:bg-zinc-800 font-semibold text-${color}-700 dark:text-${color}-400` : ""}`;
 
   return (
     <>
-      <nav ref={navRef} role="navigation" aria-label="Main navigation" className="bg-white border-b sticky top-0 z-50 shadow-sm">
+      <nav ref={navRef} role="navigation" aria-label="Main navigation" className="bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-800 sticky top-0 z-50 shadow-sm dark:shadow-none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -142,8 +143,8 @@ export function SharedNav() {
                   aria-haspopup="true"
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
                     isActive("/riley") || isActive("/harper") || isActive("/cassidy") || isActive("/elliot") || isActive("/parker")
-                      ? "bg-purple-100 text-purple-700"
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400"
+                      : "text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
                   }`}
                 >
                   <Users className="w-4 h-4" />
@@ -155,7 +156,7 @@ export function SharedNav() {
                     <div className="grid grid-cols-5 gap-2">
                       {/* Parker */}
                       <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-rose-600 uppercase tracking-wider flex items-center space-x-1">
+                        <div className="px-3 py-1.5 text-xs font-bold text-rose-400 uppercase tracking-wider flex items-center space-x-1">
                           <Radio className="w-3 h-3" />
                           <span>Parker Team</span>
                         </div>
@@ -169,7 +170,7 @@ export function SharedNav() {
 
                       {/* Riley */}
                       <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-purple-600 uppercase tracking-wider flex items-center space-x-1">
+                        <div className="px-3 py-1.5 text-xs font-bold text-purple-400 uppercase tracking-wider flex items-center space-x-1">
                           <Users className="w-3 h-3" />
                           <span>Riley Team</span>
                         </div>
@@ -185,7 +186,7 @@ export function SharedNav() {
 
                       {/* Cassidy */}
                       <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-teal-600 uppercase tracking-wider flex items-center space-x-1">
+                        <div className="px-3 py-1.5 text-xs font-bold text-teal-400 uppercase tracking-wider flex items-center space-x-1">
                           <Award className="w-3 h-3" />
                           <span>Cassidy Team</span>
                         </div>
@@ -198,7 +199,7 @@ export function SharedNav() {
 
                       {/* Elliot */}
                       <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-green-600 uppercase tracking-wider flex items-center space-x-1">
+                        <div className="px-3 py-1.5 text-xs font-bold text-green-400 uppercase tracking-wider flex items-center space-x-1">
                           <TrendingUp className="w-3 h-3" />
                           <span>Elliot Team</span>
                         </div>
@@ -212,7 +213,7 @@ export function SharedNav() {
 
                       {/* Harper */}
                       <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center space-x-1">
+                        <div className="px-3 py-1.5 text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center space-x-1">
                           <Building2 className="w-3 h-3" />
                           <span>Harper Team</span>
                         </div>
@@ -235,9 +236,9 @@ export function SharedNav() {
                 <button
                   onClick={() => toggleMenu("station")}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
-                    isActive("/station") || isActive("/station-admin") || isActive("/schedule") || isActive("/djs") || isActive("/capacity") || isActive("/revenue") || isActive("/whats-playing")
-                      ? "bg-amber-100 text-amber-700"
-                      : "text-gray-700 hover:bg-gray-100"
+                    isActive("/station") || isActive("/station-admin") || isActive("/schedule") || isActive("/capacity") || isActive("/revenue") || isActive("/whats-playing")
+                      ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400"
+                      : "text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
                   }`}
                 >
                   <Radio className="w-4 h-4" />
@@ -245,9 +246,9 @@ export function SharedNav() {
                   <ChevronDown className={`w-3 h-3 transition-transform ${openMenu === "station" ? "rotate-180" : ""}`} />
                 </button>
                 {openMenu === "station" && (
-                  <div className="absolute left-0 mt-1 w-72 bg-white rounded-xl shadow-xl border py-2 z-50">
+                  <div className="absolute left-0 mt-1 w-72 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-200 dark:border-zinc-800 py-2 z-50">
                     {/* Station Info section */}
-                    <div className="px-3 py-1.5 text-xs font-bold text-gray-500 uppercase tracking-wider">Station Info</div>
+                    <div className="px-3 py-1.5 text-xs font-bold text-gray-500 dark:text-zinc-500 uppercase tracking-wider">Station Info</div>
                     <Link href="/revenue/projections" className="block px-4 py-2 text-sm font-semibold bg-gradient-to-r from-green-50 to-blue-50 text-green-700 hover:from-green-100 hover:to-blue-100 flex items-center space-x-2">
                       <Target className="w-4 h-4" />
                       <span>Revenue Model</span>
@@ -259,10 +260,7 @@ export function SharedNav() {
                       <span className="flex items-center space-x-2"><AudioLines className="w-4 h-4" /><span>What&apos;s Playing</span></span>
                     </Link>
                     <Link href="/schedule" className={activeLinkClass("/schedule", "amber")}>
-                      <span className="flex items-center space-x-2"><CalendarDays className="w-4 h-4" /><span>DJ Schedule</span></span>
-                    </Link>
-                    <Link href="/djs" className={activeLinkClass("/djs", "amber")}>
-                      <span className="flex items-center space-x-2"><Music className="w-4 h-4" /><span>DJ Profiles</span></span>
+                      <span className="flex items-center space-x-2"><CalendarDays className="w-4 h-4" /><span>Schedule</span></span>
                     </Link>
                     <Link href="/station" className={activeLinkClass("/station", "amber")}>
                       <span className="flex items-center space-x-2"><Radio className="w-4 h-4" /><span>Station Info</span></span>
@@ -272,7 +270,7 @@ export function SharedNav() {
                     <div className="border-t my-2" />
 
                     {/* Station Ops section */}
-                    <div className="px-3 py-1.5 text-xs font-bold text-amber-600 uppercase tracking-wider">Station Ops</div>
+                    <div className="px-3 py-1.5 text-xs font-bold text-amber-400 uppercase tracking-wider">Station Ops</div>
                     <Link href="/station-admin" className={activeLinkClass("/station-admin", "amber")}>
                       <span className="flex items-center space-x-2"><Settings className="w-4 h-4 text-amber-600" /><span>Admin Hub</span></span>
                     </Link>
@@ -286,10 +284,7 @@ export function SharedNav() {
                       <span className="flex items-center space-x-2"><Music className="w-4 h-4 text-amber-600" /><span>Music Library</span></span>
                     </Link>
                     <Link href="/station-admin/dj-editor" className={activeLinkClass("/station-admin/dj-editor", "amber")}>
-                      <span className="flex items-center space-x-2"><Users className="w-4 h-4 text-amber-600" /><span>DJ Editor</span></span>
-                    </Link>
-                    <Link href="/station-admin/voice-clone" className={activeLinkClass("/station-admin/voice-clone", "amber")}>
-                      <span className="flex items-center space-x-2"><AudioLines className="w-4 h-4 text-amber-600" /><span>Voice Cloning</span></span>
+                      <span className="flex items-center space-x-2"><Users className="w-4 h-4 text-amber-600" /><span>Host Editor</span></span>
                     </Link>
                     <Link href="/station-admin/schedule-editor" className={activeLinkClass("/station-admin/schedule-editor", "amber")}>
                       <span className="flex items-center space-x-2"><CalendarDays className="w-4 h-4 text-amber-600" /><span>Schedule Editor</span></span>
@@ -300,14 +295,8 @@ export function SharedNav() {
                     <Link href="/station-admin/branding" className={activeLinkClass("/station-admin/branding", "amber")}>
                       <span className="flex items-center space-x-2"><Paintbrush className="w-4 h-4 text-amber-600" /><span>Station Branding</span></span>
                     </Link>
-                    <Link href="/station-admin/features" className={activeLinkClass("/station-admin/features", "amber")}>
-                      <span className="flex items-center space-x-2"><Sparkles className="w-4 h-4 text-amber-600" /><span>Show Features</span></span>
-                    </Link>
                     <Link href="/station-admin/stream" className={activeLinkClass("/station-admin/stream", "amber")}>
                       <span className="flex items-center space-x-2"><SlidersHorizontal className="w-4 h-4 text-amber-600" /><span>Stream Engineering</span></span>
-                    </Link>
-                    <Link href="/station-admin/transitions" className={activeLinkClass("/station-admin/transitions", "amber")}>
-                      <span className="flex items-center space-x-2"><ArrowRightLeft className="w-4 h-4 text-amber-600" /><span>Show Transitions</span></span>
                     </Link>
                     <Link href="/station-admin/embed" className={activeLinkClass("/station-admin/embed", "amber")}>
                       <span className="flex items-center space-x-2"><Code className="w-4 h-4 text-amber-600" /><span>Embed Widget</span></span>
@@ -328,8 +317,8 @@ export function SharedNav() {
                   onClick={() => toggleMenu("opportunities")}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
                     isActive("/opportunities")
-                      ? "bg-purple-100 text-purple-700"
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400"
+                      : "text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
                   }`}
                 >
                   <DollarSign className="w-4 h-4" />
@@ -342,21 +331,21 @@ export function SharedNav() {
                       <Users className="w-4 h-4 text-orange-600" />
                       <div>
                         <div className="font-semibold">For Artists</div>
-                        <div className="text-xs text-gray-500">Artist Referrals - Earn $30-100/mo</div>
+                        <div className="text-xs text-gray-500 dark:text-zinc-500">Artist Referrals - Earn $30-100/mo</div>
                       </div>
                     </Link>
                     <Link href="/opportunities/listeners" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 flex items-center space-x-2">
                       <Radio className="w-4 h-4 text-blue-600" />
                       <div>
                         <div className="font-semibold">For Listeners</div>
-                        <div className="text-xs text-gray-500">Listener Promotions - Earn $44+/mo</div>
+                        <div className="text-xs text-gray-500 dark:text-zinc-500">Listener Promotions - Earn $44+/mo</div>
                       </div>
                     </Link>
                     <Link href="/opportunities/sponsors" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 flex items-center space-x-2">
                       <Building2 className="w-4 h-4 text-purple-600" />
                       <div>
                         <div className="font-semibold">For Sponsors</div>
-                        <div className="text-xs text-gray-500">Referral Bonuses - Earn $50-250</div>
+                        <div className="text-xs text-gray-500 dark:text-zinc-500">Referral Bonuses - Earn $50-250</div>
                       </div>
                     </Link>
                   </div>
@@ -364,11 +353,12 @@ export function SharedNav() {
               </div>
 
               {/* Quick Links: icon-only with tooltips */}
-              <div className="flex items-center space-x-0.5 ml-2 pl-2 border-l">
+              <div className="flex items-center space-x-0.5 ml-2 pl-2 border-l border-gray-200 dark:border-zinc-700">
+                <ThemeToggle />
                 <Link
                   href="/admin"
                   className={`p-2 rounded-lg transition-colors group relative ${
-                    pathname === "/admin" ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                    pathname === "/admin" ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-700 dark:hover:text-white"
                   }`}
                   title="Admin"
                   aria-current={pathname === "/admin" ? "page" : undefined}
@@ -381,7 +371,7 @@ export function SharedNav() {
                 <Link
                   href="/admin/station-costs"
                   className={`p-2 rounded-lg transition-colors group relative ${
-                    isActive("/admin/station-costs") ? "bg-indigo-100 text-indigo-700" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                    isActive("/admin/station-costs") ? "bg-indigo-100 text-indigo-700" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-700 dark:hover:text-white"
                   }`}
                   title="Station Costs"
                   aria-current={isActive("/admin/station-costs") ? "page" : undefined}
@@ -394,7 +384,7 @@ export function SharedNav() {
                 <Link
                   href="/management"
                   className={`p-2 rounded-lg transition-colors group relative ${
-                    isActive("/management") ? "bg-amber-100 text-amber-700" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                    isActive("/management") ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-700 dark:hover:text-white"
                   }`}
                   title="Management"
                   aria-current={isActive("/management") ? "page" : undefined}
@@ -407,7 +397,7 @@ export function SharedNav() {
                 <Link
                   href="/network"
                   className={`p-2 rounded-lg transition-colors group relative ${
-                    isActive("/network") ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                    isActive("/network") ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-700 dark:hover:text-white"
                   }`}
                   title="Network"
                   aria-current={isActive("/network") ? "page" : undefined}
@@ -427,8 +417,8 @@ export function SharedNav() {
                   onClick={() => toggleMenu("teams")}
                   className={`px-2.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1 ${
                     isActive("/riley") || isActive("/harper") || isActive("/cassidy") || isActive("/elliot") || isActive("/parker")
-                      ? "bg-purple-100 text-purple-700"
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400"
+                      : "text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
                   }`}
                 >
                   <Users className="w-4 h-4" />
@@ -440,7 +430,7 @@ export function SharedNav() {
                     <div className="grid grid-cols-2 gap-1">
                       {/* Parker */}
                       <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-rose-600 uppercase tracking-wider">Parker Team</div>
+                        <div className="px-3 py-1.5 text-xs font-bold text-rose-400 uppercase tracking-wider">Parker Team</div>
                         <Link href="/parker" className={activeLinkClass("/parker", "rose")}>Dashboard</Link>
                         <Link href="/parker/programming" className={activeLinkClass("/parker/programming", "rose")}>Programming</Link>
                         <Link href="/parker/music" className={activeLinkClass("/parker/music", "rose")}>Music</Link>
@@ -450,7 +440,7 @@ export function SharedNav() {
                       </div>
                       {/* Riley */}
                       <div>
-                        <div className="px-3 py-1.5 text-xs font-bold text-purple-600 uppercase tracking-wider">Riley Team</div>
+                        <div className="px-3 py-1.5 text-xs font-bold text-purple-400 uppercase tracking-wider">Riley Team</div>
                         <Link href="/riley" className={activeLinkClass("/riley")}>Dashboard</Link>
                         <Link href="/riley/pipeline" className={activeLinkClass("/riley/pipeline")}>Artist Pipeline</Link>
                         <Link href="/riley/artists" className={activeLinkClass("/riley/artists")}>Artist List</Link>
@@ -460,7 +450,7 @@ export function SharedNav() {
                       </div>
                       {/* Cassidy */}
                       <div className="mt-2">
-                        <div className="px-3 py-1.5 text-xs font-bold text-teal-600 uppercase tracking-wider">Cassidy Team</div>
+                        <div className="px-3 py-1.5 text-xs font-bold text-teal-400 uppercase tracking-wider">Cassidy Team</div>
                         <Link href="/cassidy" className={activeLinkClass("/cassidy", "teal")}>Dashboard</Link>
                         <Link href="/cassidy/submissions" className={activeLinkClass("/cassidy/submissions", "teal")}>Review Queue</Link>
                         <Link href="/cassidy/rotation" className={activeLinkClass("/cassidy/rotation", "teal")}>Rotation</Link>
@@ -468,7 +458,7 @@ export function SharedNav() {
                       </div>
                       {/* Elliot */}
                       <div className="mt-2">
-                        <div className="px-3 py-1.5 text-xs font-bold text-green-600 uppercase tracking-wider">Elliot Team</div>
+                        <div className="px-3 py-1.5 text-xs font-bold text-green-400 uppercase tracking-wider">Elliot Team</div>
                         <Link href="/elliot" className={activeLinkClass("/elliot", "green")}>Dashboard</Link>
                         <Link href="/elliot/analytics" className={activeLinkClass("/elliot/analytics", "green")}>Analytics</Link>
                         <Link href="/elliot/campaigns" className={activeLinkClass("/elliot/campaigns", "green")}>Campaigns</Link>
@@ -476,7 +466,7 @@ export function SharedNav() {
                       </div>
                       {/* Harper */}
                       <div className="mt-2">
-                        <div className="px-3 py-1.5 text-xs font-bold text-blue-600 uppercase tracking-wider">Harper Team</div>
+                        <div className="px-3 py-1.5 text-xs font-bold text-blue-400 uppercase tracking-wider">Harper Team</div>
                         <Link href="/harper" className={activeLinkClass("/harper", "blue")}>Dashboard</Link>
                         <Link href="/harper/pipeline" className={activeLinkClass("/harper/pipeline", "blue")}>Sponsor Pipeline</Link>
                         <Link href="/harper/sponsors" className={activeLinkClass("/harper/sponsors", "blue")}>Sponsor List</Link>
@@ -489,16 +479,16 @@ export function SharedNav() {
                 )}
               </div>
 
-              <Link href="/station" className={`p-2 rounded-lg text-sm font-medium transition-colors ${isActive("/station") || isActive("/station-admin") ? "bg-amber-100 text-amber-700" : "text-gray-500 hover:bg-gray-100"}`} title="Station" aria-current={isActive("/station") ? "page" : undefined}>
+              <Link href="/station" className={`p-2 rounded-lg text-sm font-medium transition-colors ${isActive("/station") || isActive("/station-admin") ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400" : "text-gray-500 hover:bg-gray-100"}`} title="Station" aria-current={isActive("/station") ? "page" : undefined}>
                 <Radio className="w-4 h-4" />
               </Link>
-              <Link href="/admin" className={`p-2 rounded-lg transition-colors ${pathname === "/admin" ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100"}`} title="Admin" aria-current={pathname === "/admin" ? "page" : undefined}>
+              <Link href="/admin" className={`p-2 rounded-lg transition-colors ${pathname === "/admin" ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-500 hover:bg-gray-100"}`} title="Admin" aria-current={pathname === "/admin" ? "page" : undefined}>
                 <Home className="w-4 h-4" />
               </Link>
-              <Link href="/management" className={`p-2 rounded-lg transition-colors ${isActive("/management") ? "bg-amber-100 text-amber-700" : "text-gray-500 hover:bg-gray-100"}`} title="Management" aria-current={isActive("/management") ? "page" : undefined}>
+              <Link href="/management" className={`p-2 rounded-lg transition-colors ${isActive("/management") ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400" : "text-gray-500 hover:bg-gray-100"}`} title="Management" aria-current={isActive("/management") ? "page" : undefined}>
                 <Shield className="w-4 h-4" />
               </Link>
-              <Link href="/network" className={`p-2 rounded-lg transition-colors ${isActive("/network") ? "bg-purple-100 text-purple-700" : "text-gray-500 hover:bg-gray-100"}`} title="Network" aria-current={isActive("/network") ? "page" : undefined}>
+              <Link href="/network" className={`p-2 rounded-lg transition-colors ${isActive("/network") ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-500 hover:bg-gray-100"}`} title="Network" aria-current={isActive("/network") ? "page" : undefined}>
                 <Globe className="w-4 h-4" />
               </Link>
             </div>
@@ -587,12 +577,12 @@ export function SharedNav() {
                   </button>
                   {mobileSection === "parker" && (
                     <div className="pl-4 pb-2 space-y-0.5">
-                      <Link href="/parker" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Dashboard</Link>
-                      <Link href="/parker/programming" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Programming</Link>
-                      <Link href="/parker/music" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Music</Link>
-                      <Link href="/parker/traffic" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Traffic</Link>
-                      <Link href="/parker/listeners" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Listeners</Link>
-                      <Link href="/parker/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-700">Team Members</Link>
+                      <Link href="/parker" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-rose-700">Dashboard</Link>
+                      <Link href="/parker/programming" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-rose-700">Programming</Link>
+                      <Link href="/parker/music" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-rose-700">Music</Link>
+                      <Link href="/parker/traffic" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-rose-700">Traffic</Link>
+                      <Link href="/parker/listeners" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-rose-700">Listeners</Link>
+                      <Link href="/parker/team" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-rose-700">Team Members</Link>
                     </div>
                   )}
 
@@ -606,14 +596,14 @@ export function SharedNav() {
                   </button>
                   {mobileSection === "riley" && (
                     <div className="pl-4 pb-2 space-y-0.5">
-                      <Link href="/riley" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Dashboard</Link>
-                      <Link href="/riley/pipeline" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Artist Pipeline</Link>
-                      <Link href="/riley/artists" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Artist List</Link>
-                      <Link href="/riley/outreach" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Outreach Center</Link>
-                      <Link href="/riley/submissions" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Track Submissions</Link>
-                      <Link href="/riley/pool-calculator" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Pool Calculator</Link>
-                      <Link href="/riley/upgrade-opportunities" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Upgrades</Link>
-                      <Link href="/riley/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-purple-700">Team Members</Link>
+                      <Link href="/riley" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-purple-700">Dashboard</Link>
+                      <Link href="/riley/pipeline" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-purple-700">Artist Pipeline</Link>
+                      <Link href="/riley/artists" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-purple-700">Artist List</Link>
+                      <Link href="/riley/outreach" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-purple-700">Outreach Center</Link>
+                      <Link href="/riley/submissions" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-purple-700">Track Submissions</Link>
+                      <Link href="/riley/pool-calculator" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-purple-700">Pool Calculator</Link>
+                      <Link href="/riley/upgrade-opportunities" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-purple-700">Upgrades</Link>
+                      <Link href="/riley/team" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-purple-700">Team Members</Link>
                     </div>
                   )}
 
@@ -627,11 +617,11 @@ export function SharedNav() {
                   </button>
                   {mobileSection === "cassidy" && (
                     <div className="pl-4 pb-2 space-y-0.5">
-                      <Link href="/cassidy" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Dashboard</Link>
-                      <Link href="/cassidy/submissions" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Review Queue</Link>
-                      <Link href="/cassidy/tier-management" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Tier Management</Link>
-                      <Link href="/cassidy/rotation" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Rotation Planner</Link>
-                      <Link href="/cassidy/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-teal-700">Team Members</Link>
+                      <Link href="/cassidy" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-teal-700">Dashboard</Link>
+                      <Link href="/cassidy/submissions" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-teal-700">Review Queue</Link>
+                      <Link href="/cassidy/tier-management" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-teal-700">Tier Management</Link>
+                      <Link href="/cassidy/rotation" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-teal-700">Rotation Planner</Link>
+                      <Link href="/cassidy/team" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-teal-700">Team Members</Link>
                     </div>
                   )}
 
@@ -645,12 +635,12 @@ export function SharedNav() {
                   </button>
                   {mobileSection === "elliot" && (
                     <div className="pl-4 pb-2 space-y-0.5">
-                      <Link href="/elliot" className="block px-4 py-2 text-sm text-gray-600 hover:text-green-700">Dashboard</Link>
-                      <Link href="/elliot/analytics" className="block px-4 py-2 text-sm text-gray-600 hover:text-green-700">Listener Analytics</Link>
-                      <Link href="/elliot/campaigns" className="block px-4 py-2 text-sm text-gray-600 hover:text-green-700">Growth Campaigns</Link>
-                      <Link href="/elliot/content" className="block px-4 py-2 text-sm text-gray-600 hover:text-green-700">Viral Content</Link>
-                      <Link href="/elliot/community" className="block px-4 py-2 text-sm text-gray-600 hover:text-green-700">Community Hub</Link>
-                      <Link href="/elliot/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-green-700">Team Members</Link>
+                      <Link href="/elliot" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-green-700">Dashboard</Link>
+                      <Link href="/elliot/analytics" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-green-700">Listener Analytics</Link>
+                      <Link href="/elliot/campaigns" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-green-700">Growth Campaigns</Link>
+                      <Link href="/elliot/content" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-green-700">Viral Content</Link>
+                      <Link href="/elliot/community" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-green-700">Community Hub</Link>
+                      <Link href="/elliot/team" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-green-700">Team Members</Link>
                     </div>
                   )}
 
@@ -664,14 +654,14 @@ export function SharedNav() {
                   </button>
                   {mobileSection === "harper" && (
                     <div className="pl-4 pb-2 space-y-0.5">
-                      <Link href="/harper" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Dashboard</Link>
-                      <Link href="/harper/pipeline" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Sponsor Pipeline</Link>
-                      <Link href="/harper/sponsors" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Sponsor List</Link>
-                      <Link href="/harper/outreach" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Outreach Center</Link>
-                      <Link href="/harper/calls" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Call Tracking</Link>
-                      <Link href="/harper/billing" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Billing</Link>
-                      <Link href="/harper/inventory" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Ad Inventory</Link>
-                      <Link href="/harper/team" className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-700">Team Members</Link>
+                      <Link href="/harper" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-blue-700">Dashboard</Link>
+                      <Link href="/harper/pipeline" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-blue-700">Sponsor Pipeline</Link>
+                      <Link href="/harper/sponsors" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-blue-700">Sponsor List</Link>
+                      <Link href="/harper/outreach" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-blue-700">Outreach Center</Link>
+                      <Link href="/harper/calls" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-blue-700">Call Tracking</Link>
+                      <Link href="/harper/billing" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-blue-700">Billing</Link>
+                      <Link href="/harper/inventory" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-blue-700">Ad Inventory</Link>
+                      <Link href="/harper/team" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 hover:text-blue-700">Team Members</Link>
                     </div>
                   )}
                 </div>
@@ -694,29 +684,25 @@ export function SharedNav() {
               {(mobileSection === "station" || mobileSection === "stationOps") && (
                 <div className="pl-4 pb-2 space-y-0.5">
                   <Link href="/revenue/projections" className="block px-4 py-2 text-sm font-semibold text-green-700">Revenue Model</Link>
-                  <Link href="/capacity" className="block px-4 py-2 text-sm text-gray-600">Capacity Calculator</Link>
-                  <Link href="/whats-playing" className="block px-4 py-2 text-sm text-gray-600">What&apos;s Playing</Link>
-                  <Link href="/schedule" className="block px-4 py-2 text-sm text-gray-600">DJ Schedule</Link>
-                  <Link href="/djs" className="block px-4 py-2 text-sm text-gray-600">DJ Profiles</Link>
-                  <Link href="/station" className="block px-4 py-2 text-sm text-gray-600">Station Info</Link>
+                  <Link href="/capacity" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Capacity Calculator</Link>
+                  <Link href="/whats-playing" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">What&apos;s Playing</Link>
+                  <Link href="/schedule" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Schedule</Link>
+                  <Link href="/station" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Station Info</Link>
 
                   <div className="border-t my-1 mx-4" />
-                  <div className="px-4 py-1.5 text-xs font-bold text-amber-600 uppercase">Station Ops</div>
-                  <Link href="/station-admin" className="block px-4 py-2 text-sm text-gray-600">Admin Hub</Link>
-                  <Link href="/operate" className="block px-4 py-2 text-sm text-gray-600">Create Station</Link>
-                  <Link href="/station-admin/clocks" className="block px-4 py-2 text-sm text-gray-600">Radio Clocks</Link>
-                  <Link href="/station-admin/music" className="block px-4 py-2 text-sm text-gray-600">Music Library</Link>
-                  <Link href="/station-admin/dj-editor" className="block px-4 py-2 text-sm text-gray-600">DJ Editor</Link>
-                  <Link href="/station-admin/voice-clone" className="block px-4 py-2 text-sm text-gray-600">Voice Cloning</Link>
-                  <Link href="/station-admin/schedule-editor" className="block px-4 py-2 text-sm text-gray-600">Schedule Editor</Link>
-                  <Link href="/station-admin/imaging" className="block px-4 py-2 text-sm text-gray-600">Station Imaging</Link>
-                  <Link href="/station-admin/branding" className="block px-4 py-2 text-sm text-gray-600">Station Branding</Link>
-                  <Link href="/station-admin/features" className="block px-4 py-2 text-sm text-gray-600">Show Features</Link>
-                  <Link href="/station-admin/stream" className="block px-4 py-2 text-sm text-gray-600">Stream Engineering</Link>
-                  <Link href="/station-admin/transitions" className="block px-4 py-2 text-sm text-gray-600">Show Transitions</Link>
-                  <Link href="/station-admin/embed" className="block px-4 py-2 text-sm text-gray-600">Embed Widget</Link>
-                  <Link href="/station-admin/social" className="block px-4 py-2 text-sm text-gray-600">Social Posting</Link>
-                  <Link href="/station-admin/webhooks" className="block px-4 py-2 text-sm text-gray-600">Webhooks</Link>
+                  <div className="px-4 py-1.5 text-xs font-bold text-amber-400 uppercase">Station Ops</div>
+                  <Link href="/station-admin" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Admin Hub</Link>
+                  <Link href="/operate" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Create Station</Link>
+                  <Link href="/station-admin/clocks" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Radio Clocks</Link>
+                  <Link href="/station-admin/music" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Music Library</Link>
+                  <Link href="/station-admin/dj-editor" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Host Editor</Link>
+                  <Link href="/station-admin/schedule-editor" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Schedule Editor</Link>
+                  <Link href="/station-admin/imaging" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Station Imaging</Link>
+                  <Link href="/station-admin/branding" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Station Branding</Link>
+                  <Link href="/station-admin/stream" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Stream Engineering</Link>
+                  <Link href="/station-admin/embed" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Embed Widget</Link>
+                  <Link href="/station-admin/social" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Social Posting</Link>
+                  <Link href="/station-admin/webhooks" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Webhooks</Link>
                 </div>
               )}
 
@@ -736,9 +722,9 @@ export function SharedNav() {
 
               {mobileSection === "opportunities" && (
                 <div className="pl-4 pb-2 space-y-0.5">
-                  <Link href="/opportunities/artists" className="block px-4 py-2 text-sm text-gray-600">For Artists</Link>
-                  <Link href="/opportunities/listeners" className="block px-4 py-2 text-sm text-gray-600">For Listeners</Link>
-                  <Link href="/opportunities/sponsors" className="block px-4 py-2 text-sm text-gray-600">For Sponsors</Link>
+                  <Link href="/opportunities/artists" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">For Artists</Link>
+                  <Link href="/opportunities/listeners" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">For Listeners</Link>
+                  <Link href="/opportunities/sponsors" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">For Sponsors</Link>
                 </div>
               )}
 

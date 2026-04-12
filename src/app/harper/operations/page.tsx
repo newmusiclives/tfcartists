@@ -53,27 +53,27 @@ export default function AdOperations() {
   const withAudio = ads.filter(a => a.audioFilePath).length;
 
   const tierColor: Record<string, string> = {
-    bronze: 'bg-orange-100 text-orange-700',
+    bronze: 'bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400',
     silver: 'bg-gray-100 text-gray-700',
-    gold: 'bg-yellow-100 text-yellow-700',
-    platinum: 'bg-purple-100 text-purple-700',
+    gold: 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400',
+    platinum: 'bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400',
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-zinc-900 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700">
+                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
-                <h1 className="text-2xl font-bold text-gray-900">Ad Operations</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Ad Operations</h1>
               </div>
-              <p className="text-gray-600 mt-1">Dakota Chen - Scheduling & Quality Control</p>
+              <p className="text-gray-600 dark:text-zinc-400 mt-1">Dakota Chen - Scheduling & Quality Control</p>
             </div>
             <div className="flex items-center space-x-4">
               <Link
@@ -97,37 +97,37 @@ export default function AdOperations() {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-              <div className="bg-white p-6 rounded-lg border">
+              <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Total Ads</p>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400">Total Ads</p>
                     <p className="text-2xl font-bold text-blue-600">{ads.length}</p>
                   </div>
                   <Calendar className="w-8 h-8 text-blue-600" />
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-lg border">
+              <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Active in Rotation</p>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400">Active in Rotation</p>
                     <p className="text-2xl font-bold text-green-600">{activeCount}</p>
                   </div>
                   <Play className="w-8 h-8 text-green-600" />
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-lg border">
+              <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">With Audio</p>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400">With Audio</p>
                     <p className="text-2xl font-bold text-yellow-600">{withAudio}</p>
                   </div>
                   <Clock className="w-8 h-8 text-yellow-600" />
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-lg border">
+              <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Total Plays</p>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400">Total Plays</p>
                     <p className="text-2xl font-bold text-purple-600">{totalPlays.toLocaleString()}</p>
                   </div>
                   <TrendingUp className="w-8 h-8 text-purple-600" />
@@ -136,7 +136,7 @@ export default function AdOperations() {
             </div>
 
             {/* Filters */}
-            <div className="bg-white p-4 rounded-lg border mb-6">
+            <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg border mb-6">
               <div className="flex items-center space-x-4">
                 <Filter className="w-5 h-5 text-gray-400" />
                 <div className="flex gap-3 flex-1">
@@ -161,14 +161,14 @@ export default function AdOperations() {
                     <option value="inactive">Inactive</option>
                   </select>
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-600 dark:text-zinc-400">
                   {filteredAds.length} of {ads.length} ads
                 </div>
               </div>
             </div>
 
             {/* Ad Spots List */}
-            <div className="bg-white border rounded-lg">
+            <div className="bg-white dark:bg-zinc-900 border rounded-lg">
               <div className="p-4 border-b bg-gray-50">
                 <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                   <BarChart3 className="w-5 h-5" />
@@ -180,7 +180,7 @@ export default function AdOperations() {
                   <p className="text-gray-500 text-center py-12">No ads match the selected filters</p>
                 ) : (
                   filteredAds.map((ad) => (
-                    <div key={ad.id} className="p-4 hover:bg-gray-50 transition-colors">
+                    <div key={ad.id} className="p-4 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
@@ -190,31 +190,31 @@ export default function AdOperations() {
                               <AlertCircle className="w-5 h-5 text-gray-400" />
                             )}
                             <div>
-                              <h4 className="font-semibold text-gray-900">{ad.adTitle}</h4>
-                              <p className="text-sm text-gray-600">{ad.sponsorName}</p>
+                              <h4 className="font-semibold text-gray-900 dark:text-white">{ad.adTitle}</h4>
+                              <p className="text-sm text-gray-600 dark:text-zinc-400">{ad.sponsorName}</p>
                             </div>
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ml-8">
                             <div>
-                              <p className="text-xs text-gray-500">Duration</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Duration</p>
                               <p className="text-sm font-medium">{ad.durationSeconds ? `${ad.durationSeconds}s` : '—'}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Play Count</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Play Count</p>
                               <p className="text-sm font-medium text-blue-600">{ad.playCount}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Last Played</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Last Played</p>
                               <p className="text-sm font-medium">
                                 {ad.lastPlayedAt ? new Date(ad.lastPlayedAt).toLocaleString() : 'Never'}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Audio</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Audio</p>
                               <p className="text-sm font-medium">{ad.audioFilePath ? 'Ready' : 'Pending'}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500">Weight</p>
+                              <p className="text-xs text-gray-500 dark:text-zinc-500">Weight</p>
                               <p className="text-sm font-medium">1x</p>
                             </div>
                           </div>

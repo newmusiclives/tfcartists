@@ -280,7 +280,7 @@ function CheckoutContent() {
       <div className="min-h-screen bg-stone-50">
         <SharedNav />
         <div className="max-w-lg mx-auto px-4 py-16 text-center">
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
             <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
@@ -370,7 +370,7 @@ function CheckoutContent() {
       <div className="min-h-screen bg-stone-50">
         <SharedNav />
         <div className="flex items-center justify-center p-4 mt-16">
-          <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 max-w-md w-full text-center">
             <h1 className="text-2xl font-bold text-stone-900 mb-4">
               Plan Not Found
             </h1>
@@ -429,7 +429,7 @@ function CheckoutContent() {
         <div className="grid md:grid-cols-5 gap-8">
           {/* Order Summary — right on desktop, top on mobile */}
           <div className="md:col-span-2 md:order-2">
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-8">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6 sticky top-8">
               <h3 className="text-xs uppercase tracking-wider text-stone-400 font-semibold mb-4">
                 Order Summary
               </h3>
@@ -488,7 +488,7 @@ function CheckoutContent() {
 
           {/* Checkout Form */}
           <div className="md:col-span-3 md:order-1 space-y-6">
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6">
               <div className="flex items-center gap-2 mb-6">
                 <CreditCard className="w-5 h-5 text-amber-700" />
                 <h2 className="text-xl font-bold text-stone-900">

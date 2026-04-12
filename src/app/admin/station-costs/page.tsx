@@ -114,8 +114,8 @@ function Slider({
   return (
     <div className="mb-4">
       <div className="flex justify-between text-sm mb-1">
-        <span className="font-medium text-gray-700">{label}</span>
-        <span className="text-gray-900 font-semibold">
+        <span className="font-medium text-gray-700 dark:text-zinc-300">{label}</span>
+        <span className="text-gray-900 dark:text-white font-semibold">
           {value}{unit && ` ${unit}`}
         </span>
       </div>
@@ -150,7 +150,7 @@ function Toggle({
   return (
     <button
       onClick={onToggle}
-      className="flex items-center justify-between w-full p-3 rounded-lg border hover:bg-gray-50 transition-colors"
+      className="flex items-center justify-between w-full p-3 rounded-lg border hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
     >
       <div className="flex items-center gap-3">
         {enabled ? (
@@ -164,7 +164,7 @@ function Toggle({
       </div>
       {savings && (
         <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-          enabled ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+          enabled ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-gray-100 text-gray-500"
         }`}>
           {savings}
         </span>
@@ -178,7 +178,7 @@ function CostRow({ label, amount, icon, highlight }: { label: string; amount: nu
     <div className={`flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0 ${highlight ? "bg-amber-50 -mx-2 px-2 rounded" : ""}`}>
       <div className="flex items-center gap-2">
         {icon}
-        <span className="text-sm text-gray-700">{label}</span>
+        <span className="text-sm text-gray-700 dark:text-zinc-300">{label}</span>
       </div>
       <span className={`text-sm font-semibold ${highlight ? "text-amber-700" : "text-gray-900"}`}>${fmt(amount)}</span>
     </div>
@@ -318,14 +318,14 @@ export default function StationCostsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
+        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-zinc-500 mb-6">
           <Link href="/admin" className="hover:text-indigo-600">Admin</Link>
           <ChevronRight className="w-4 h-4" />
-          <span className="text-gray-900 font-medium">Station Costs</span>
+          <span className="text-gray-900 dark:text-white font-medium">Station Costs</span>
         </div>
 
         {/* Header */}
@@ -334,14 +334,14 @@ export default function StationCostsPage() {
             <Calculator className="w-6 h-6 text-indigo-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Station Cost Calculator</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Station Cost Calculator</h1>
             <p className="text-gray-500 text-sm">Interactive per-station operating cost estimator</p>
           </div>
         </div>
 
         {/* TTS Provider Selector */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <Mic className="w-5 h-5 text-gray-400" />
             TTS Provider
           </h2>
@@ -357,16 +357,16 @@ export default function StationCostsPage() {
                 className={`p-3 rounded-xl border-2 text-left transition-colors ${
                   ttsProvider === p.id
                     ? "border-indigo-400 bg-indigo-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    : "border-gray-200 dark:border-zinc-800 hover:border-gray-300 dark:border-zinc-700"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <p className="text-sm font-bold text-gray-900">{p.label}</p>
+                  <p className="text-sm font-bold text-gray-900 dark:text-white">{p.label}</p>
                   {p.badge && ttsProvider === p.id && (
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">{p.badge}</span>
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400">{p.badge}</span>
                   )}
                 </div>
-                <p className="text-xs text-gray-500 mt-0.5">{p.sub}</p>
+                <p className="text-xs text-gray-500 dark:text-zinc-500 mt-0.5">{p.sub}</p>
               </button>
             ))}
           </div>
@@ -374,7 +374,7 @@ export default function StationCostsPage() {
           {/* Gemini flat rate info */}
           {ttsProvider === "gemini" && (
             <div className="mt-2 p-3 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-700">Gemini TTS charges a flat <strong>$0.004 per generation</strong>, regardless of text length. No subscription or character quota required.</p>
+              <p className="text-sm text-gray-700 dark:text-zinc-300">Gemini TTS charges a flat <strong>$0.004 per generation</strong>, regardless of text length. No subscription or character quota required.</p>
             </div>
           )}
         </div>
@@ -382,8 +382,8 @@ export default function StationCostsPage() {
         {/* Main Grid: Inputs + Costs */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Left: Adjustable Inputs */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <Settings className="w-5 h-5 text-gray-400" />
               Station Configuration
             </h2>
@@ -397,19 +397,19 @@ export default function StationCostsPage() {
             {/* Quick stats */}
             <div className="mt-4 pt-4 border-t grid grid-cols-2 gap-3">
               <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-xs text-gray-500">Daily voice tracks</p>
-                <p className="text-lg font-bold text-gray-900">{numDJs * (optReduceTracks ? Math.min(tracksPerHour, 2) : tracksPerHour) * liveHours}</p>
+                <p className="text-xs text-gray-500 dark:text-zinc-500">Daily voice tracks</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">{numDJs * (optReduceTracks ? Math.min(tracksPerHour, 2) : tracksPerHour) * liveHours}</p>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-xs text-gray-500">Monthly chars (TTS)</p>
-                <p className="text-lg font-bold text-gray-900">{fmtK(costs.totalCharsMonth)}</p>
+                <p className="text-xs text-gray-500 dark:text-zinc-500">Monthly chars (TTS)</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">{fmtK(costs.totalCharsMonth)}</p>
               </div>
             </div>
           </div>
 
           {/* Right: Cost Breakdown */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <DollarSign className="w-5 h-5 text-gray-400" />
               Monthly Cost Breakdown
             </h2>
@@ -472,8 +472,8 @@ export default function StationCostsPage() {
         </div>
 
         {/* Breakeven Analysis */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-gray-400" />
             Breakeven Analysis
           </h2>
@@ -481,7 +481,7 @@ export default function StationCostsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Artist Subscriptions */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-3 flex items-center gap-2">
                 <Users className="w-4 h-4" /> Artist Subscriptions to Cover Costs
               </h3>
               <div className="space-y-2">
@@ -489,8 +489,8 @@ export default function StationCostsPage() {
                   const needed = Math.ceil(costs.total / tier.price);
                   return (
                     <div key={tier.name} className="flex items-center justify-between p-2 rounded bg-gray-50">
-                      <span className="text-sm text-gray-600">{tier.name} (${tier.price}/mo)</span>
-                      <span className="text-sm font-semibold text-gray-900">{needed} artists</span>
+                      <span className="text-sm text-gray-600 dark:text-zinc-400">{tier.name} (${tier.price}/mo)</span>
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">{needed} artists</span>
                     </div>
                   );
                 })}
@@ -499,7 +499,7 @@ export default function StationCostsPage() {
 
             {/* Sponsor Deals */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-3 flex items-center gap-2">
                 <Building2 className="w-4 h-4" /> Sponsor Deals to Cover Costs
               </h3>
               <div className="space-y-2">
@@ -507,8 +507,8 @@ export default function StationCostsPage() {
                   const needed = Math.ceil(costs.total / tier.price);
                   return (
                     <div key={tier.name} className="flex items-center justify-between p-2 rounded bg-gray-50">
-                      <span className="text-sm text-gray-600">{tier.name} (${tier.price}/mo)</span>
-                      <span className="text-sm font-semibold text-gray-900">{needed} sponsor{needed !== 1 ? "s" : ""}</span>
+                      <span className="text-sm text-gray-600 dark:text-zinc-400">{tier.name} (${tier.price}/mo)</span>
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">{needed} sponsor{needed !== 1 ? "s" : ""}</span>
                     </div>
                   );
                 })}
@@ -518,7 +518,7 @@ export default function StationCostsPage() {
 
           {/* Mixed Scenarios */}
           <div className="mt-6">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Mixed Revenue Scenarios</h3>
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-3">Mixed Revenue Scenarios</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {[
                 { desc: "3 Gold artists + 2 Tier 1 sponsors", rev: 3 * 40 + 2 * 80 },
@@ -532,17 +532,17 @@ export default function StationCostsPage() {
                 const positive = surplus >= 0;
                 return (
                   <div key={scenario.desc} className="p-3 rounded-lg border bg-gray-50">
-                    <p className="text-xs text-gray-600 mb-1">{scenario.desc}</p>
+                    <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">{scenario.desc}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold">${scenario.rev}/mo</span>
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                        positive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                        positive ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400"
                       }`}>
                         {positive ? "+" : ""}{fmt(surplus)}
                       </span>
                     </div>
                     {/* Mini bar */}
-                    <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                    <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-1.5 mt-2">
                       <div
                         className={`h-1.5 rounded-full ${positive ? "bg-green-500" : "bg-red-400"}`}
                         style={{ width: `${Math.min((scenario.rev / costs.total) * 100, 100)}%` }}
@@ -556,8 +556,8 @@ export default function StationCostsPage() {
         </div>
 
         {/* Cost Optimization Toggles */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <Zap className="w-5 h-5 text-gray-400" />
             Cost Optimizations
           </h2>
@@ -595,13 +595,13 @@ export default function StationCostsPage() {
         </div>
 
         {/* Pricing for Operators */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-gray-400" />
             Operator Pricing & Margins
           </h2>
 
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-gray-500 dark:text-zinc-500 mb-4">
             Pricing reflects Gemini TTS at $0.004/generation flat rate, with no subscription overhead.
           </p>
 
@@ -619,21 +619,21 @@ export default function StationCostsPage() {
                   className={`p-5 rounded-xl border-2 text-center ${
                     plan.recommended
                       ? "border-indigo-400 bg-indigo-50"
-                      : "border-gray-200 bg-gray-50"
+                      : "border-gray-200 dark:border-zinc-800 bg-gray-50"
                   }`}
                 >
                   {plan.recommended && (
                     <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">Recommended</span>
                   )}
                   <p className="text-xl font-bold text-gray-900 mt-1">{plan.name}</p>
-                  <p className="text-3xl font-bold text-gray-900">${plan.price}</p>
-                  <p className="text-xs text-gray-500 mb-2">per station / month</p>
-                  <p className="text-xs text-gray-500">+ {plan.fee}% platform fee</p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white">${plan.price}</p>
+                  <p className="text-xs text-gray-500 dark:text-zinc-500 mb-2">per station / month</p>
+                  <p className="text-xs text-gray-500 dark:text-zinc-500">+ {plan.fee}% platform fee</p>
                   {plan.setup > 0 && (
                     <p className="text-xs text-gray-400">${plan.setup} one-time setup</p>
                   )}
-                  <div className="mt-3 pt-3 border-t border-gray-200">
-                    <p className="text-xs text-gray-500">TrueFans revenue at capacity</p>
+                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-zinc-800">
+                    <p className="text-xs text-gray-500 dark:text-zinc-500">TrueFans revenue at capacity</p>
                     <div className="text-lg font-bold text-green-600">
                       ${fmt(totalTfRevenue)}/mo
                     </div>
@@ -653,7 +653,7 @@ export default function StationCostsPage() {
           <div className="mt-6 overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200">
+                <tr className="border-b border-gray-200 dark:border-zinc-800">
                   <th className="text-left py-2 text-gray-500 font-medium">Plan</th>
                   <th className="text-right py-2 text-gray-500 font-medium">Price</th>
                   <th className="text-right py-2 text-gray-500 font-medium">Op. Cost</th>
@@ -668,17 +668,17 @@ export default function StationCostsPage() {
                   const marginPct = (margin / plan.price) * 100;
                   const exFee = 8000 * (plan.fee / 100);
                   return (
-                    <tr key={plan.name} className="border-b border-gray-100">
-                      <td className="py-2 font-medium text-gray-900">{plan.name}</td>
-                      <td className="py-2 text-right text-gray-700">${plan.price}</td>
-                      <td className="py-2 text-right text-gray-700">${fmt(costs.total)}</td>
+                    <tr key={plan.name} className="border-b border-gray-100 dark:border-zinc-800">
+                      <td className="py-2 font-medium text-gray-900 dark:text-white">{plan.name}</td>
+                      <td className="py-2 text-right text-gray-700 dark:text-zinc-300">${plan.price}</td>
+                      <td className="py-2 text-right text-gray-700 dark:text-zinc-300">${fmt(costs.total)}</td>
                       <td className={`py-2 text-right font-semibold ${margin >= 0 ? "text-green-600" : "text-red-600"}`}>
                         {margin >= 0 ? "+" : ""}${fmt(margin)}
                       </td>
                       <td className={`py-2 text-right ${marginPct >= 0 ? "text-green-600" : "text-red-600"}`}>
                         {marginPct.toFixed(0)}%
                       </td>
-                      <td className="py-2 text-right text-gray-500">${fmt(exFee)}</td>
+                      <td className="py-2 text-right text-gray-500 dark:text-zinc-500">${fmt(exFee)}</td>
                     </tr>
                   );
                 })}
@@ -699,10 +699,10 @@ export default function StationCostsPage() {
             <Link
               key={link.href}
               href={link.href}
-              className="flex items-center gap-2 p-4 bg-white rounded-xl shadow-sm border hover:border-indigo-300 transition-colors"
+              className="flex items-center gap-2 p-4 bg-white dark:bg-zinc-900 rounded-xl shadow-sm border hover:border-indigo-300 transition-colors"
             >
               <span className="text-gray-400">{link.icon}</span>
-              <span className="text-sm font-medium text-gray-700">{link.label}</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">{link.label}</span>
             </Link>
           ))}
         </div>
