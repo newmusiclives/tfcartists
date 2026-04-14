@@ -221,7 +221,7 @@ export default function SocialMediaPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <div className="min-h-screen bg-zinc-950">
         <SharedNav />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center justify-center py-20">
@@ -233,17 +233,17 @@ export default function SocialMediaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen bg-zinc-950">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-zinc-900 flex items-center gap-2">
-              <Share2 className="w-6 h-6 text-blue-600" />
+            <h1 className="text-2xl font-bold text-zinc-100 flex items-center gap-2">
+              <Share2 className="w-6 h-6 text-blue-400" />
               Auto Social Media Posting
             </h1>
-            <p className="text-zinc-600 text-sm mt-1">
+            <p className="text-zinc-500 text-sm mt-1">
               Automatically share now-playing tracks to social platforms
             </p>
           </div>

@@ -166,7 +166,7 @@ export default function DedicationsPage() {
   return (
     <>
       <SharedNav />
-      <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-white px-4 py-8">
+      <main className="min-h-screen bg-zinc-950 text-white px-4 py-8">
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Header */}
           <div className="flex items-center gap-3">

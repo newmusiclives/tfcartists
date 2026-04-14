@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SharedNav } from "@/components/shared-nav";
-import { Mic, Plus, X, Loader2, Save, Trash2, ChevronDown, ChevronRight, Music, FileText, Upload, Play, Pause } from "lucide-react";
+import { Mic, Plus, X, Loader2, Save, Trash2, ChevronDown, ChevronRight, FileText, Upload, Play, Pause, Square, Volume2 } from "lucide-react";
+import { csrfFetch } from "@/lib/csrf-client";
 
 interface ImagingScript {
   label: string;
   text: string;
-  musicBed: string;
 }
 
 interface ImagingMetadata {
@@ -71,16 +71,6 @@ const GEMINI_VOICES_MALE = [
   { name: "Zubenelgenubi", desc: "Inventive" },
 ];
 
-interface MusicBedItem {
-  id: string;
-  name: string;
-  fileName: string;
-  filePath: string;
-  durationSeconds: number | null;
-  category: string;
-  isActive: boolean;
-}
-
 interface ProducedImagingItem {
   id: string;
   name: string;
@@ -92,7 +82,6 @@ interface ProducedImagingItem {
 }
 
 const USAGE_OPTIONS = ["promo", "id", "sweeper", "sponsor"];
-const BED_CATEGORIES = ["general", "upbeat", "soft", "corporate", "country"];
 const PRODUCED_CATEGORIES = ["promo", "sweeper", "station_id", "toh", "positioning"];
 
 export default function StationImagingPage() {
@@ -109,15 +98,12 @@ export default function StationImagingPage() {
     usageTypes: "id",
   });
 
-  // Music Beds state
-  const [musicBeds, setMusicBeds] = useState<MusicBedItem[]>([]);
-  const [bedsLoading, setBedsLoading] = useState(false);
-  const [bedUploadName, setBedUploadName] = useState("");
-  const [bedUploadCategory, setBedUploadCategory] = useState("general");
-  const [bedUploadFile, setBedUploadFile] = useState<File | null>(null);
-  const [bedUploading, setBedUploading] = useState(false);
-  const [playingBedId, setPlayingBedId] = useState<string | null>(null);
   const [audioEl] = useState(() => typeof Audio !== "undefined" ? new Audio() : null);
+
+  // Voice preview state
+  const [previewingVoiceId, setPreviewingVoiceId] = useState<string | null>(null);
+  const [previewLoadingVoiceId, setPreviewLoadingVoiceId] = useState<string | null>(null);
+  const previewAudioRef = useRef<HTMLAudioElement | null>(null);
 
   // Produced Imaging state
   const [producedImaging, setProducedImaging] = useState<ProducedImagingItem[]>([]);
@@ -135,14 +121,11 @@ export default function StationImagingPage() {
         if (stations.length > 0) {
           const sid = stations[0].id;
           setStationId(sid);
-          // Fetch voices, music beds, and produced imaging in parallel
           Promise.all([
             fetch(`/api/station-imaging?stationId=${sid}`).then((r) => r.json()),
-            fetch(`/api/music-beds?stationId=${sid}`).then((r) => r.json()),
             fetch(`/api/produced-imaging?stationId=${sid}`).then((r) => r.json()),
-          ]).then(([voiceData, bedData, prodData]) => {
+          ]).then(([voiceData, prodData]) => {
             setVoices(voiceData.voices || []);
-            setMusicBeds(bedData.musicBeds || []);
             setProducedImaging(prodData.producedImaging || []);
           });
         }
@@ -192,49 +175,53 @@ export default function StationImagingPage() {
     return { ...voice, usageTypes: types.join(",") || "id" };
   };
 
-  // Music Bed functions
-  const uploadMusicBed = async () => {
-    if (!stationId || !bedUploadName || !bedUploadFile) return;
-    setBedUploading(true);
-    const formData = new FormData();
-    formData.append("stationId", stationId);
-    formData.append("name", bedUploadName);
-    formData.append("category", bedUploadCategory);
-    formData.append("file", bedUploadFile);
-    try {
-      const res = await fetch("/api/music-beds", { method: "POST", body: formData });
-      const data = await res.json();
-      if (data.musicBed) {
-        setMusicBeds([data.musicBed, ...musicBeds]);
-        setBedUploadName("");
-        setBedUploadCategory("general");
-        setBedUploadFile(null);
-      }
-    } catch {}
-    setBedUploading(false);
-  };
-
-  const deleteMusicBed = async (id: string) => {
-    if (!confirm("Delete this music bed?")) return;
-    await fetch(`/api/music-beds/${id}`, { method: "DELETE" });
-    setMusicBeds(musicBeds.filter((b) => b.id !== id));
-    if (playingBedId === id) {
-      audioEl?.pause();
-      setPlayingBedId(null);
+  // Voice preview — generate a TTS sample for this voice using its configured
+  // Gemini voice + voiceDirection metadata.
+  const playVoicePreview = async (voice: ImagingVoice) => {
+    if (previewingVoiceId === voice.id) {
+      previewAudioRef.current?.pause();
+      previewAudioRef.current = null;
+      setPreviewingVoiceId(null);
+      return;
     }
-  };
-
-  const togglePlayBed = (bed: MusicBedItem) => {
-    if (!audioEl) return;
-    if (playingBedId === bed.id) {
-      audioEl.pause();
-      setPlayingBedId(null);
-    } else {
-      audioEl.src = bed.filePath;
-      audioEl.play();
-      setPlayingBedId(bed.id);
-      setPlayingProdId(null);
-      audioEl.onended = () => setPlayingBedId(null);
+    if (previewAudioRef.current) {
+      previewAudioRef.current.pause();
+      previewAudioRef.current = null;
+      setPreviewingVoiceId(null);
+    }
+    if (!voice.elevenlabsVoiceId) {
+      alert("Assign a Gemini voice before previewing.");
+      return;
+    }
+    setPreviewLoadingVoiceId(voice.id);
+    try {
+      const res = await csrfFetch("/api/voice-preview", {
+        method: "POST",
+        body: JSON.stringify({
+          voice: voice.elevenlabsVoiceId,
+          provider: "gemini",
+          voiceDirection: voice.metadata?.voiceDirection || voice.metadata?.voiceCharacter,
+          text: `You're listening to North Country Radio. The best new Americana and indie, all day long.`,
+        }),
+      });
+      const data = await res.json();
+      if (data.audio) {
+        const audio = new Audio(data.audio);
+        previewAudioRef.current = audio;
+        audio.onended = () => {
+          setPreviewingVoiceId(null);
+          previewAudioRef.current = null;
+        };
+        await audio.play();
+        setPreviewingVoiceId(voice.id);
+      } else if (data.error) {
+        const msg = typeof data.error === "string" ? data.error : (data.error.message || JSON.stringify(data.error));
+        alert(`Voice preview failed: ${msg}`);
+      }
+    } catch (err) {
+      console.error("Voice preview error", err);
+    } finally {
+      setPreviewLoadingVoiceId(null);
     }
   };
 
@@ -279,7 +266,6 @@ export default function StationImagingPage() {
       audioEl.src = item.filePath;
       audioEl.play();
       setPlayingProdId(item.id);
-      setPlayingBedId(null);
       audioEl.onended = () => setPlayingProdId(null);
     }
   };
@@ -307,7 +293,7 @@ export default function StationImagingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-zinc-100">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
@@ -416,6 +402,31 @@ export default function StationImagingPage() {
                       </div>
                     </div>
                     <div className="flex gap-2">
+                      {!isEditing && (
+                        <button
+                          onClick={() => playVoicePreview(voice)}
+                          disabled={previewLoadingVoiceId === voice.id}
+                          className={`text-sm px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-medium transition-colors ${
+                            previewingVoiceId === voice.id
+                              ? "bg-rose-500/20 text-rose-300"
+                              : "bg-zinc-800 text-zinc-300 hover:bg-rose-500/15 hover:text-rose-300"
+                          } disabled:opacity-50`}
+                          title="Play a voice sample"
+                        >
+                          {previewLoadingVoiceId === voice.id ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : previewingVoiceId === voice.id ? (
+                            <Square className="w-3.5 h-3.5" />
+                          ) : (
+                            <Volume2 className="w-3.5 h-3.5" />
+                          )}
+                          {previewLoadingVoiceId === voice.id
+                            ? "Generating..."
+                            : previewingVoiceId === voice.id
+                            ? "Stop"
+                            : "Play Sample"}
+                        </button>
+                      )}
                       {isEditing ? (
                         <>
                           <button onClick={() => saveVoice(current)} className="text-sm bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 flex items-center gap-1">
@@ -552,12 +563,6 @@ export default function StationImagingPage() {
                                           <p className="text-sm font-medium text-white mt-0.5">&ldquo;{script.text}&rdquo;</p>
                                         </div>
                                       </div>
-                                      {script.musicBed && (
-                                        <div className="flex items-start gap-1.5 mt-2 pt-2 border-t border-zinc-800/50">
-                                          <Music className="w-3.5 h-3.5 text-zinc-500 mt-0.5 shrink-0" />
-                                          <p className="text-xs text-zinc-500">{script.musicBed}</p>
-                                        </div>
-                                      )}
                                     </div>
                                   ))}
                                 </div>
@@ -675,104 +680,6 @@ export default function StationImagingPage() {
           )}
         </div>
 
-        {/* ===== Music Beds Section ===== */}
-        <div className="mt-12">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <Music className="w-7 h-7 text-emerald-600" />
-                Music Beds
-              </h2>
-              <p className="text-zinc-400 mt-1">Instrumental audio files for ad and promo mixing</p>
-            </div>
-          </div>
-
-          {/* Upload form */}
-          <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 mb-6">
-            <h3 className="font-semibold text-white mb-4">Upload Music Bed</h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-              <div>
-                <label className="text-xs text-zinc-500 block mb-1">Name</label>
-                <input
-                  type="text"
-                  value={bedUploadName}
-                  onChange={(e) => setBedUploadName(e.target.value)}
-                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
-                  placeholder="e.g. Upbeat Country"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-zinc-500 block mb-1">Category</label>
-                <select
-                  value={bedUploadCategory}
-                  onChange={(e) => setBedUploadCategory(e.target.value)}
-                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm"
-                >
-                  {BED_CATEGORIES.map((c) => (
-                    <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="text-xs text-zinc-500 block mb-1">Audio File (MP3/WAV)</label>
-                <input
-                  type="file"
-                  accept=".mp3,.wav,audio/mpeg,audio/wav"
-                  onChange={(e) => setBedUploadFile(e.target.files?.[0] || null)}
-                  className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-1.5 text-sm file:mr-2 file:rounded file:border-0 file:bg-emerald-500/15 file:text-emerald-400 file:px-2 file:py-1 file:text-xs"
-                />
-              </div>
-              <button
-                onClick={uploadMusicBed}
-                disabled={bedUploading || !bedUploadName || !bedUploadFile}
-                className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-2 justify-center"
-              >
-                {bedUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                Upload
-              </button>
-            </div>
-          </div>
-
-          {/* Music beds list */}
-          {musicBeds.length === 0 ? (
-            <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
-              <Music className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-              <p className="text-zinc-500">No music beds uploaded yet.</p>
-              <p className="text-sm text-zinc-500 mt-1">Upload instrumental audio files for ad mixing.</p>
-            </div>
-          ) : (
-            <div className="bg-zinc-900/80 rounded-xl border border-zinc-800 divide-y divide-zinc-800">
-              {musicBeds.map((bed) => (
-                <div key={bed.id} className="p-4 flex items-center justify-between hover:bg-zinc-800">
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => togglePlayBed(bed)}
-                      className="w-9 h-9 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center hover:bg-emerald-500/25"
-                    >
-                      {playingBedId === bed.id ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                    </button>
-                    <div>
-                      <p className="font-medium text-white text-sm">{bed.name}</p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-xs bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full capitalize">{bed.category}</span>
-                        <span className="text-xs text-zinc-500">{bed.fileName}</span>
-                        {bed.durationSeconds && (
-                          <span className="text-xs text-zinc-500">{Math.round(bed.durationSeconds)}s</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => deleteMusicBed(bed.id)}
-                    className="text-sm text-red-500 px-3 py-1.5 rounded-lg hover:bg-red-50"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

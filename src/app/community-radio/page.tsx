@@ -23,7 +23,7 @@ export const metadata = {
 
 export default function CommunityRadioPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-white">
+    <main className="min-h-screen bg-zinc-950 text-white">
       {/* Nav */}
       <nav className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

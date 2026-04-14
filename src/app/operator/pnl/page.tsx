@@ -146,7 +146,7 @@ export default function OperatorPnlPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 flex items-center justify-center">
+      <main className="min-h-screen bg-zinc-950 flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-zinc-400 animate-spin" />
       </main>
     );
@@ -154,7 +154,7 @@ export default function OperatorPnlPage() {
 
   if (error || !data) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 flex items-center justify-center">
+      <main className="min-h-screen bg-zinc-950 flex items-center justify-center">
         <div className="text-center space-y-3">
           <AlertCircle className="w-10 h-10 text-red-400 mx-auto" />
           <p className="text-zinc-300">{error || "No data available"}</p>
@@ -190,7 +190,7 @@ export default function OperatorPnlPage() {
   const streamingPct = (costs.streaming / costTotal) * 100;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-zinc-100">
+    <main className="min-h-screen bg-zinc-950 text-zinc-100">
       {/* Header */}
       <div className="border-b border-zinc-800 bg-zinc-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

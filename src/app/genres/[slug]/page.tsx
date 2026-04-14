@@ -53,7 +53,7 @@ export default async function GenreDetailPage({
   const schedule = buildSchedule(tpl.djPresets);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <main className="min-h-screen bg-zinc-950">
       {/* Header */}
       <header className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">

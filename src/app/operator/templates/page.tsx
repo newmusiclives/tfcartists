@@ -7,7 +7,7 @@ import { STATION_TEMPLATES, type StationTemplate } from "@/lib/station-templates
 
 export default function TemplatePickerPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50" />}>
+    <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
       <TemplatePickerInner />
     </Suspense>
   );

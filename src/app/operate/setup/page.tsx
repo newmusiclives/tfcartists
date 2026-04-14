@@ -123,7 +123,7 @@ export default function OperatorSetupWizard() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <main className="min-h-screen bg-zinc-950">
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/operate" className="flex items-center gap-2 text-amber-700 hover:text-amber-800 dark:text-amber-400">

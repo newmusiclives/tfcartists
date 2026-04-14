@@ -90,7 +90,7 @@ export default function ShoutoutsPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-zinc-100">
+      <div className="min-h-screen bg-zinc-950 text-zinc-100">
         <SharedNav />
         <div className="max-w-lg mx-auto px-4 py-20 text-center">
           <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
@@ -115,7 +115,7 @@ export default function ShoutoutsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-zinc-100">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <SharedNav />
       <div className="max-w-2xl mx-auto px-4 py-12">
         {/* Hero */}

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function LicensingPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <main className="min-h-screen bg-zinc-950">
       <SharedNav />
 
       {/* Hero */}

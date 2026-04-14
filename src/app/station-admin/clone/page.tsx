@@ -115,7 +115,7 @@ export default function StationClonePage() {
   // Success state
   if (result) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <div className="min-h-screen bg-zinc-950">
         <SharedNav />
         <div className="max-w-2xl mx-auto px-6 py-16">
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-8 text-center">
@@ -157,7 +157,7 @@ export default function StationClonePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen bg-zinc-950">
       <SharedNav />
       <div className="max-w-2xl mx-auto px-6 py-12">
         {/* Header */}

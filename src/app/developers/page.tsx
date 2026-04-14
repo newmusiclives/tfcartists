@@ -139,7 +139,7 @@ const endpoints = [
 
 export default function DeveloperPortalPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-zinc-100">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
       {/* Hero */}
       <section className="border-b border-zinc-800 bg-gradient-to-b from-zinc-900 to-zinc-950">
         <div className="mx-auto max-w-5xl px-6 py-20 text-center">

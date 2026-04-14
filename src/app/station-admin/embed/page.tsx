@@ -144,7 +144,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
   return (
     <>
       <SharedNav />
-      <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 pt-20">
+      <main className="min-h-screen bg-zinc-950 pt-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-8">
@@ -153,8 +153,8 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                 <Code className="w-5 h-5 text-amber-700" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Embed Widget</h1>
-                <p className="text-sm text-gray-500">Add your radio player to any website</p>
+                <h1 className="text-2xl font-bold text-zinc-100">Embed Widget</h1>
+                <p className="text-sm text-zinc-500">Add your radio player to any website</p>
               </div>
             </div>
           </div>
@@ -164,21 +164,21 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
             <div className="lg:col-span-2 space-y-6">
 
               {/* Widget Type */}
-              <div className="bg-white rounded-2xl border border-gray-200 p-6">
-                <h2 className="text-sm font-semibold text-gray-700 mb-4">Widget Type</h2>
+              <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+                <h2 className="text-sm font-semibold text-zinc-300 mb-4">Widget Type</h2>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setWidgetType("player")}
                     className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left ${
                       widgetType === "player"
                         ? "border-amber-500 bg-amber-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        : "border-zinc-800 hover:border-zinc-700"
                     }`}
                   >
-                    <Radio className={`w-5 h-5 ${widgetType === "player" ? "text-amber-600" : "text-gray-400"}`} />
+                    <Radio className={`w-5 h-5 ${widgetType === "player" ? "text-amber-600" : "text-zinc-400"}`} />
                     <div>
-                      <div className="font-semibold text-sm text-gray-900">Player</div>
-                      <div className="text-xs text-gray-500">Play/pause, volume, now-playing</div>
+                      <div className="font-semibold text-sm text-zinc-100">Player</div>
+                      <div className="text-xs text-zinc-500">Play/pause, volume, now-playing</div>
                     </div>
                   </button>
                   <button
@@ -186,28 +186,28 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                     className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left ${
                       widgetType === "now-playing"
                         ? "border-amber-500 bg-amber-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        : "border-zinc-800 hover:border-zinc-700"
                     }`}
                   >
-                    <Music className={`w-5 h-5 ${widgetType === "now-playing" ? "text-amber-600" : "text-gray-400"}`} />
+                    <Music className={`w-5 h-5 ${widgetType === "now-playing" ? "text-amber-600" : "text-zinc-400"}`} />
                     <div>
-                      <div className="font-semibold text-sm text-gray-900">Now Playing</div>
-                      <div className="text-xs text-gray-500">Song info only, no controls</div>
+                      <div className="font-semibold text-sm text-zinc-100">Now Playing</div>
+                      <div className="text-xs text-zinc-500">Song info only, no controls</div>
                     </div>
                   </button>
                 </div>
               </div>
 
               {/* Theme */}
-              <div className="bg-white rounded-2xl border border-gray-200 p-6">
-                <h2 className="text-sm font-semibold text-gray-700 mb-4">Theme</h2>
+              <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+                <h2 className="text-sm font-semibold text-zinc-300 mb-4">Theme</h2>
                 <div className="flex gap-3 mb-5">
                   <button
                     onClick={() => setTheme("dark")}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 transition-all ${
                       theme === "dark"
                         ? "border-amber-500 bg-gray-900 text-white"
-                        : "border-gray-200 text-gray-600 hover:border-gray-300"
+                        : "border-zinc-800 text-gray-600 hover:border-zinc-700"
                     }`}
                   >
                     <Moon className="w-4 h-4" />
@@ -218,7 +218,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 transition-all ${
                       theme === "light"
                         ? "border-amber-500 bg-amber-50 text-amber-700"
-                        : "border-gray-200 text-gray-600 hover:border-gray-300"
+                        : "border-zinc-800 text-gray-600 hover:border-zinc-700"
                     }`}
                   >
                     <Sun className="w-4 h-4" />
@@ -228,7 +228,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
 
                 {/* Accent Color */}
                 <div className="mb-5">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
                     Accent Color
                   </label>
                   <div className="flex items-center gap-2 flex-wrap">
@@ -237,7 +237,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                         key={c.value}
                         onClick={() => setAccentColor(c.value)}
                         className={`w-8 h-8 rounded-full border-2 transition-all ${
-                          accentColor === c.value ? "border-gray-900 scale-110 ring-2 ring-offset-2 ring-gray-300" : "border-gray-200"
+                          accentColor === c.value ? "border-gray-900 scale-110 ring-2 ring-offset-2 ring-gray-300" : "border-zinc-800"
                         }`}
                         style={{ backgroundColor: c.value }}
                         title={c.name}
@@ -247,7 +247,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                       type="color"
                       value={accentColor}
                       onChange={(e) => setAccentColor(e.target.value)}
-                      className="w-8 h-8 rounded-full cursor-pointer border border-gray-200"
+                      className="w-8 h-8 rounded-full cursor-pointer border border-zinc-800"
                       title="Custom color"
                     />
                   </div>
@@ -255,7 +255,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
 
                 {/* Background Color */}
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
                     Background Color
                   </label>
                   <div className="flex items-center gap-2 flex-wrap">
@@ -264,7 +264,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                         key={c.value}
                         onClick={() => setBgColor(c.value)}
                         className={`w-8 h-8 rounded-full border-2 transition-all ${
-                          bgColor === c.value ? "border-gray-900 scale-110 ring-2 ring-offset-2 ring-gray-300" : "border-gray-300"
+                          bgColor === c.value ? "border-gray-900 scale-110 ring-2 ring-offset-2 ring-gray-300" : "border-zinc-700"
                         }`}
                         style={{ backgroundColor: c.value }}
                         title={c.name}
@@ -274,7 +274,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                       type="color"
                       value={bgColor}
                       onChange={(e) => setBgColor(e.target.value)}
-                      className="w-8 h-8 rounded-full cursor-pointer border border-gray-200"
+                      className="w-8 h-8 rounded-full cursor-pointer border border-zinc-800"
                       title="Custom background"
                     />
                   </div>
@@ -282,9 +282,9 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
               </div>
 
               {/* Embed Code */}
-              <div className="bg-white rounded-2xl border border-gray-200 p-6">
+              <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-sm font-semibold text-gray-700">Embed Code</h2>
+                  <h2 className="text-sm font-semibold text-zinc-300">Embed Code</h2>
                   <div className="flex gap-1">
                     {([["html", "HTML"], ["wordpress", "WordPress"], ["react", "React"]] as const).map(([key, label]) => (
                       <button
@@ -293,7 +293,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                         className={`px-3 py-1 text-xs rounded-lg border transition-all ${
                           snippetFormat === key
                             ? "border-amber-500 bg-amber-50 text-amber-700 font-medium"
-                            : "border-gray-200 text-gray-500 hover:border-gray-300"
+                            : "border-zinc-800 text-zinc-500 hover:border-zinc-700"
                         }`}
                       >
                         {label}
@@ -334,17 +334,17 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
             <div className="lg:col-span-3">
               <div className="sticky top-24 space-y-6">
                 {/* Player Preview */}
-                <div className="bg-white rounded-2xl border border-gray-200 p-6">
+                <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
                   <div className="flex items-center gap-2 mb-4">
-                    <Eye className="w-4 h-4 text-gray-400" />
-                    <h2 className="text-sm font-semibold text-gray-700">
+                    <Eye className="w-4 h-4 text-zinc-400" />
+                    <h2 className="text-sm font-semibold text-zinc-300">
                       {widgetType === "player" ? "Player" : "Now Playing"} Preview
                     </h2>
                   </div>
                   <div
                     className="rounded-xl p-4 flex items-center justify-center"
                     style={{
-                      background: "repeating-conic-gradient(#f5f5f5 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px",
+                      background: theme === "dark" ? "repeating-conic-gradient(#1a1a1a 0% 25%, #222 0% 50%) 0 0 / 16px 16px" : "repeating-conic-gradient(#f3f3f3 0% 25%, #fff 0% 50%) 0 0 / 16px 16px",
                       minHeight: iframeHeight + 40,
                     }}
                   >
@@ -359,24 +359,24 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                       title="Widget preview"
                     />
                   </div>
-                  <p className="text-xs text-gray-400 mt-3 text-center">
+                  <p className="text-xs text-zinc-400 mt-3 text-center">
                     Live preview — {widgetType === "player" ? "click play to test audio" : "updates every 10 seconds"}
                   </p>
                 </div>
 
                 {/* Other widget preview */}
-                <div className="bg-white rounded-2xl border border-gray-200 p-6">
+                <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
                   <div className="flex items-center gap-2 mb-4">
-                    <Eye className="w-4 h-4 text-gray-400" />
-                    <h2 className="text-sm font-semibold text-gray-700">
+                    <Eye className="w-4 h-4 text-zinc-400" />
+                    <h2 className="text-sm font-semibold text-zinc-300">
                       {widgetType === "player" ? "Now Playing" : "Player"} Widget
                     </h2>
-                    <span className="text-xs text-gray-400">(alternate)</span>
+                    <span className="text-xs text-zinc-400">(alternate)</span>
                   </div>
                   <div
                     className="rounded-xl p-4 flex items-center justify-center"
                     style={{
-                      background: "repeating-conic-gradient(#f5f5f5 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px",
+                      background: theme === "dark" ? "repeating-conic-gradient(#1a1a1a 0% 25%, #222 0% 50%) 0 0 / 16px 16px" : "repeating-conic-gradient(#f3f3f3 0% 25%, #fff 0% 50%) 0 0 / 16px 16px",
                       minHeight: (widgetType === "player" ? NOW_PLAYING_HEIGHT : PLAYER_HEIGHT) + 40,
                     }}
                   >
@@ -391,7 +391,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                       title="Alternate widget preview"
                     />
                   </div>
-                  <p className="text-xs text-gray-400 mt-3 text-center">
+                  <p className="text-xs text-zinc-400 mt-3 text-center">
                     Switch widget type above to get this embed code
                   </p>
                 </div>

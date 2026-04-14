@@ -95,7 +95,7 @@ export default function OperatorSignupPage() {
   const activePlan = OPERATOR_PLANS.find((p) => p.id === selectedPlan);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 flex items-center justify-center px-4 py-12">
+    <main className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 py-12">
       <div className={step === 1 ? "w-full max-w-4xl" : "w-full max-w-md"}>
         <div className="text-center mb-8">
           <div className="inline-flex items-center space-x-2 mb-4">

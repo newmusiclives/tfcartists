@@ -312,7 +312,7 @@ export default function RecommendationsPage() {
 
   if (!stationId) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <div className="min-h-screen bg-zinc-950">
         <SharedNav />
         <div className="max-w-6xl mx-auto px-4 py-12 text-center">
           <Sparkles className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
@@ -328,7 +328,7 @@ export default function RecommendationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen bg-zinc-950">
       <SharedNav />
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}

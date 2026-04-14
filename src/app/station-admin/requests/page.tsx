@@ -197,7 +197,7 @@ export default function AdminRequestsPage() {
   return (
     <>
       <SharedNav />
-      <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-white pt-4 px-4 pb-12">
+      <main className="min-h-screen bg-zinc-950 text-white pt-4 px-4 pb-12">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">

@@ -190,7 +190,7 @@ export default function SponsorRoiPage() {
   // Lookup view
   if (view === "lookup") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+      <div className="min-h-screen bg-zinc-950">
         <SharedNav />
         <div className="max-w-xl mx-auto px-4 py-20 text-center">
           <div className="w-14 h-14 rounded-2xl bg-blue-600/20 flex items-center justify-center mx-auto mb-6">
@@ -261,7 +261,7 @@ export default function SponsorRoiPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+    <div className="min-h-screen bg-zinc-950">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
