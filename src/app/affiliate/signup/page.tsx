@@ -48,7 +48,7 @@ export default function AffiliateSignupPage() {
   // Success state
   if (success) {
     return (
-      <main className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 py-12">
+      <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-lg text-center">
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-10">
             <div className="w-16 h-16 bg-emerald-950 border border-emerald-800 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -88,7 +88,7 @@ export default function AffiliateSignupPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 py-12">
+    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
         {/* Header */}
         <div className="text-center mb-8">

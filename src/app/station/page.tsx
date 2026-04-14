@@ -34,7 +34,7 @@ export default async function StationPage() {
   const stats = await getStationStats();
 
   return (
-    <main className="min-h-screen bg-gray-950 text-gray-100">
+    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-gray-100">
       {/* Navigation — dark, minimal */}
       <nav className="border-b border-white/10 bg-gray-950/90 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -197,7 +197,7 @@ export default function DJEditorDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-zinc-100">
         <SharedNav />
         <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-zinc-500" /></div>
       </div>
@@ -206,7 +206,7 @@ export default function DJEditorDetailPage() {
 
   if (!dj) {
     return (
-      <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-zinc-100">
         <SharedNav />
         <div className="max-w-4xl mx-auto px-4 py-12 text-center">
           <p className="text-zinc-500">Host not found.</p>
@@ -217,7 +217,7 @@ export default function DJEditorDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-zinc-100">
       <SharedNav />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link href="/station-admin/dj-editor" className="text-sm text-zinc-500 hover:text-zinc-300 flex items-center gap-1 mb-4">

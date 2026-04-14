@@ -148,7 +148,7 @@ export default function WidgetBuilderPage() {
   const iframeKey = embedUrl;
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-white">
       {/* Header */}
       <nav className="border-b border-gray-800 bg-gray-950/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -122,7 +122,7 @@ export default function AffiliateDashboardPage() {
   // Login screen
   if (!authenticated) {
     return (
-      <main className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
+      <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="inline-flex items-center space-x-2 mb-4">
@@ -181,7 +181,7 @@ export default function AffiliateDashboardPage() {
   const referralLink = `${typeof window !== "undefined" ? window.location.origin : ""}/api/affiliates/track?ref=${data.referralCode}`;
 
   return (
-    <main className="min-h-screen bg-zinc-950">
+    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       {/* Header */}
       <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">

@@ -139,7 +139,7 @@ export default function ApiKeyManagementPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-zinc-100">
       <div className="mx-auto max-w-3xl px-6 py-12">
         {/* Header */}
         <div className="mb-8">

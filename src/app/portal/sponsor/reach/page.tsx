@@ -79,7 +79,7 @@ export default function SponsorReachPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       <SharedNav />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back link */}

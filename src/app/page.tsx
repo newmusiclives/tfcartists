@@ -95,7 +95,7 @@ export default async function MarketingPage() {
   const metrics = await getMetrics();
 
   return (
-    <main className="min-h-screen bg-gray-950">
+    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: sanitizeHtml(JSON.stringify(jsonLd)) }}

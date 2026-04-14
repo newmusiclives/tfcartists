@@ -147,7 +147,7 @@ export default function NetworkPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-950 text-gray-100">
+    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 text-gray-100">
       {/* Navigation */}
       <nav className="border-b border-white/10 bg-gray-950/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
