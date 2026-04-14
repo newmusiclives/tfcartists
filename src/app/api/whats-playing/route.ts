@@ -106,15 +106,19 @@ export async function GET() {
       take: 11, // grab 11 so we can skip the first if it matches nowPlaying
     });
 
+    const trackKey = (title: string, artist: string) =>
+      `${artist.trim().toLowerCase()}::${title.trim().toLowerCase()}`;
+    const seenTracks = new Set<string>();
+    if (nowPlaying) {
+      seenTracks.add(trackKey(nowPlaying.title, nowPlaying.artistName));
+    }
+
     const recentlyPlayed = recentRows
       .filter((r) => {
-        if (!nowPlaying) return true;
-        // skip the row that matches the current now-playing track
-        return !(
-          r.trackTitle === nowPlaying.title &&
-          r.artistName === nowPlaying.artistName &&
-          r.playedAt.toISOString() === nowPlaying.playedAt
-        );
+        const key = trackKey(r.trackTitle, r.artistName);
+        if (seenTracks.has(key)) return false;
+        seenTracks.add(key);
+        return true;
       })
       .slice(0, 10);
 
@@ -163,21 +167,31 @@ export async function GET() {
       try {
         const slots = JSON.parse(playlist.slots) as Array<{
           position: number;
+          minute?: number;
           type: string;
           songTitle?: string;
           artistName?: string;
           songId?: string;
         }>;
 
-        // Find upcoming song slots — those that haven't played yet
-        // Estimate current position by minutes into the hour
+        // Find upcoming song slots that haven't aired yet, skipping any
+        // songs already in nowPlaying or recentlyPlayed (prevents the
+        // "Up Next" list repeating tracks that just played).
         const now = new Date();
         const minuteOfHour = now.getMinutes();
 
-        const songSlots = slots
-          .filter((s) => s.type === "song" && s.songTitle && s.artistName)
-          .filter((s) => (s.position ?? 0) > minuteOfHour / 4) // rough heuristic: 4 slots ~= 1 minute each
-          .slice(0, 5);
+        const upNextSeen = new Set(seenTracks);
+        const songSlots: typeof slots = [];
+        for (const s of slots) {
+          if (s.type !== "song" || !s.songTitle || !s.artistName) continue;
+          const slotMinute = typeof s.minute === "number" ? s.minute : null;
+          if (slotMinute !== null && slotMinute <= minuteOfHour) continue;
+          const key = trackKey(s.songTitle, s.artistName);
+          if (upNextSeen.has(key)) continue;
+          upNextSeen.add(key);
+          songSlots.push(s);
+          if (songSlots.length >= 5) break;
+        }
 
         // Fetch artwork for upcoming songs
         const upcomingSongs = await prisma.song.findMany({

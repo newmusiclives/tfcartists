@@ -262,17 +262,17 @@ export default function WebhooksPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
       <SharedNav />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-zinc-100 flex items-center gap-2">
-              <Webhook className="w-6 h-6 text-amber-500" />
+            <h1 className="text-2xl font-bold text-zinc-900 flex items-center gap-2">
+              <Webhook className="w-6 h-6 text-amber-600" />
               Webhook Integrations
             </h1>
-            <p className="text-zinc-400 text-sm mt-1">
+            <p className="text-zinc-600 text-sm mt-1">
               Connect TrueFans Radio events to Zapier, Make, or any HTTP endpoint
             </p>
           </div>

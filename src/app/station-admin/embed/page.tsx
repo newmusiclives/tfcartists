@@ -17,8 +17,8 @@ type WidgetType = "player" | "now-playing";
 type Theme = "dark" | "light";
 type SnippetFormat = "html" | "wordpress" | "react";
 
-const PLAYER_HEIGHT = 94;
-const NOW_PLAYING_HEIGHT = 74;
+const PLAYER_HEIGHT = 180;
+const NOW_PLAYING_HEIGHT = 110;
 
 const COLOR_PRESETS = [
   { name: "Amber", value: "#f59e0b" },
