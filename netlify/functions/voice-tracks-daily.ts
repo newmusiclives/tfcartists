@@ -2,6 +2,10 @@ import { schedule } from "@netlify/functions";
 import { runVoiceTracksDaily } from "../../src/lib/cron/voice-tracks-daily-runner";
 
 const handler = schedule("0 12 * * *", async () => {
+  if (process.env.STATION_PAUSED === "true") {
+    console.log("[kill-switch] STATION_PAUSED=true, skipping");
+    return { statusCode: 200, body: JSON.stringify({ paused: true }) };
+  }
   try {
     console.log("Voice Tracks Daily Cron starting (direct runner)");
 

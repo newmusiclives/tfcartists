@@ -5,6 +5,10 @@ import { Handler, schedule } from "@netlify/functions";
  * Generates and sends the weekly playlist digest and artist spotlights.
  */
 const handler: Handler = schedule("0 22 * * 1", async () => {
+  if (process.env.STATION_PAUSED === "true") {
+    console.log("[kill-switch] STATION_PAUSED=true, skipping");
+    return { statusCode: 200, body: JSON.stringify({ paused: true }) };
+  }
   try {
     const baseUrl = process.env.URL || process.env.NEXTAUTH_URL || "http://localhost:3000";
     const cronSecret = process.env.CRON_SECRET || "development-secret";
