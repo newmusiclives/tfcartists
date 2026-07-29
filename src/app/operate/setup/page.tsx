@@ -403,7 +403,7 @@ export default function OperatorSetupWizard() {
             <button
               onClick={handleLaunch}
               disabled={saving || !stationName || !genre}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 font-medium"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-green-700 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 font-medium"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
               Launch Station
@@ -412,7 +412,7 @@ export default function OperatorSetupWizard() {
             <button
               onClick={nextStep}
               disabled={!canNext}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-30"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-700 text-white rounded-lg hover:bg-amber-700 disabled:opacity-30"
             >
               Next <ArrowRight className="w-4 h-4" />
             </button>

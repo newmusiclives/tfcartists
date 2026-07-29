@@ -202,7 +202,7 @@ function OnAirBanner({ data }: { data: NowPlaying | null }) {
                 ON AIR
               </span>
             ) : (
-              <span className="inline-flex items-center gap-2 bg-zinc-800 border border-zinc-700 text-zinc-500 text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full">
+              <span className="inline-flex items-center gap-2 bg-zinc-800 border border-zinc-700 text-zinc-400 text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full">
                 <WifiOff className="w-3 h-3" />
                 OFF AIR
               </span>

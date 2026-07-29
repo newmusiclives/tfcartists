@@ -203,7 +203,7 @@ export default function StationAdminHub() {
           </div>
           <Link
             href="/station-admin/wizard"
-            className="bg-amber-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-amber-700 transition-colors flex items-center gap-2"
+            className="bg-amber-700 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-amber-700 transition-colors flex items-center gap-2"
           >
             <Wand2 className="w-4 h-4" />
             New Station
@@ -317,7 +317,7 @@ export default function StationAdminHub() {
               <button
                 onClick={handleRegenerate}
                 disabled={regenerating}
-                className="bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                className="bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 <RefreshCw className={`w-4 h-4 ${regenerating ? "animate-spin" : ""}`} />
                 {regenerating ? "Building..." : "Regenerate"}

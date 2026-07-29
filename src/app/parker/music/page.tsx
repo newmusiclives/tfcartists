@@ -215,7 +215,7 @@ export default function MusicPage() {
             <ListMusic className="w-4 h-4" />
             <span>Full Music Library</span>
           </Link>
-          <Link href="/cassidy/rotation" className="inline-flex items-center space-x-2 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors">
+          <Link href="/cassidy/rotation" className="inline-flex items-center space-x-2 bg-amber-700 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors">
             <RefreshCw className="w-4 h-4" />
             <span>Rotation Planner</span>
           </Link>

@@ -114,7 +114,7 @@ export default function InvoicePage() {
         </Link>
         <button
           onClick={() => window.print()}
-          className="bg-amber-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-600 flex items-center gap-2"
+          className="bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-600 flex items-center gap-2"
         >
           <Printer className="w-4 h-4" /> Print / Download PDF
         </button>

@@ -159,7 +159,7 @@ export default function AffiliateDashboardPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-amber-600 text-white py-2.5 rounded-lg font-semibold hover:bg-amber-500 transition-colors disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 bg-amber-700 text-white py-2.5 rounded-lg font-semibold hover:bg-amber-500 transition-colors disabled:opacity-50"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Access Dashboard"}
             </button>
@@ -255,7 +255,7 @@ export default function AffiliateDashboardPage() {
             </div>
             <button
               onClick={copyLink}
-              className="flex items-center gap-2 px-4 py-2.5 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-500 transition-colors whitespace-nowrap"
+              className="flex items-center gap-2 px-4 py-2.5 bg-amber-700 text-white rounded-lg font-medium hover:bg-amber-500 transition-colors whitespace-nowrap"
             >
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               {copied ? "Copied" : "Copy"}

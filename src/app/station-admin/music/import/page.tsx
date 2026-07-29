@@ -373,7 +373,7 @@ export default function MusicImportPage() {
               </div>
             )}
             <div className="flex gap-3 justify-center">
-              <Link href="/station-admin/music" className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700">View Library</Link>
+              <Link href="/station-admin/music" className="bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700">View Library</Link>
               <button onClick={() => { setResult(null); setFiles([]); setRawInput(""); setPreview([]); }} className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm">Import More</button>
             </div>
           </div>
@@ -382,7 +382,7 @@ export default function MusicImportPage() {
             {/* Mode selector */}
             <div className="flex gap-2 mb-6">
               <button onClick={() => setMode("files")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 ${mode === "files" ? "bg-green-600 text-white" : "bg-white border text-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
+                className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 ${mode === "files" ? "bg-green-700 text-white" : "bg-white border text-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
                 <FolderUp className="w-4 h-4" /> Drop Files
               </button>
               <button onClick={() => setMode("csv")}
@@ -425,7 +425,7 @@ export default function MusicImportPage() {
                         className={`p-3 rounded-lg border-2 text-center transition-all ${
                           defaultCategory === cat.value
                             ? cat.color + " border-current ring-2 ring-offset-1 ring-gray-300 shadow-sm"
-                            : "bg-gray-50 text-gray-400 border-gray-200 dark:border-zinc-800 hover:border-gray-300 dark:border-zinc-700"
+                            : "bg-gray-50 text-gray-500 border-gray-200 dark:border-zinc-800 hover:border-gray-300 dark:border-zinc-700"
                         }`}
                       >
                         <span className="text-2xl font-black block">{cat.value}</span>
@@ -529,7 +529,7 @@ export default function MusicImportPage() {
                                 className={`w-9 h-9 rounded-lg text-sm font-black transition-all ${
                                   entry.category === cat.value
                                     ? cat.color + " ring-2 ring-offset-1 ring-gray-300 shadow-sm scale-110"
-                                    : "bg-gray-100 text-gray-400 hover:bg-gray-200"
+                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                 }`}
                               >
                                 {cat.value}
@@ -570,7 +570,7 @@ export default function MusicImportPage() {
                         <button
                           onClick={uploadFiles}
                           disabled={files.length === 0 || !stationId}
-                          className="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                          className="w-full bg-green-700 text-white py-3 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 flex items-center justify-center gap-2"
                         >
                           <Upload className="w-5 h-5" />
                           Add {files.length} Song{files.length !== 1 ? "s" : ""} to Library
@@ -622,7 +622,7 @@ export default function MusicImportPage() {
                       </table>
                     </div>
                     <button onClick={doImport} disabled={importing}
-                      className="mt-4 bg-green-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-2">
+                      className="mt-4 bg-green-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-2">
                       {importing && <Loader2 className="w-4 h-4 animate-spin" />}
                       Import All Songs
                     </button>

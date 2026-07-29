@@ -94,7 +94,7 @@ export default function SponsorCampaignsPage() {
           <p className="text-gray-600 dark:text-zinc-400 mb-4">Please access this page from the sponsor dashboard.</p>
           <a
             href="/portal/sponsor"
-            className="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-blue-600"
+            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-blue-600"
           >
             Go to Dashboard
           </a>
@@ -248,7 +248,7 @@ export default function SponsorCampaignsPage() {
                               </span>
                             )}
                             {campaign.eventPromotion && (
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-600">
+                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
                                 Event promotion included
                               </span>
                             )}

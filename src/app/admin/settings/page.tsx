@@ -382,7 +382,7 @@ export default function AdminSettingsPage() {
                                   <button
                                     onClick={() => handleSave(setting.key)}
                                     disabled={saving}
-                                    className="bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
+                                    className="bg-green-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
                                   >
                                     {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
                                     Save

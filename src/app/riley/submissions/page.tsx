@@ -477,7 +477,7 @@ function ReviewModal({
                   </button>
                   <button
                     onClick={() => onApprove(submission.id)}
-                    className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center space-x-2"
+                    className="bg-green-700 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center space-x-2"
                   >
                     <CheckCircle className="w-5 h-5" />
                     <span>Approve & Add to Rotation</span>

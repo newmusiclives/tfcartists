@@ -132,7 +132,7 @@ export default function OperatePage() {
               { step: "5", title: "Launch & Earn", desc: "Go live and start building revenue." },
             ].map((item) => (
               <div key={item.step} className="text-center">
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-amber-600 text-white rounded-full font-bold mb-3">
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-amber-700 text-white rounded-full font-bold mb-3">
                   {item.step}
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{item.title}</h3>

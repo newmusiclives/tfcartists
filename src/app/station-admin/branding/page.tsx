@@ -540,7 +540,7 @@ export default function StationBrandingPage() {
             disabled={saving}
             className={`px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-all text-sm ${
               saved
-                ? "bg-green-600 text-white"
+                ? "bg-green-700 text-white"
                 : "bg-amber-500 text-zinc-950 hover:bg-amber-400"
             }`}
           >
@@ -1055,7 +1055,7 @@ export default function StationBrandingPage() {
                                                   placeholder="Music bed description"
                                                 />
                                                 <div className="flex gap-2">
-                                                  <button onClick={saveEdit} className="text-xs bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700">Save</button>
+                                                  <button onClick={saveEdit} className="text-xs bg-green-700 text-white px-3 py-1 rounded-lg hover:bg-green-700">Save</button>
                                                   <button onClick={() => setEditingScript(null)} className="text-xs bg-zinc-800 text-zinc-400 px-3 py-1 rounded-lg border border-zinc-700">Cancel</button>
                                                 </div>
                                               </div>

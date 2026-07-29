@@ -374,7 +374,7 @@ export default function StationImagingPage() {
                 <div key={voice.id} className="bg-zinc-900/80 rounded-xl p-5 border border-zinc-800">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${voice.voiceType === "female" ? "bg-pink-500" : "bg-blue-500"}`}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${voice.voiceType === "female" ? "bg-pink-500" : "bg-blue-600"}`}>
                         <Mic className="w-5 h-5" />
                       </div>
                       <div>
@@ -429,7 +429,7 @@ export default function StationImagingPage() {
                       )}
                       {isEditing ? (
                         <>
-                          <button onClick={() => saveVoice(current)} className="text-sm bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 flex items-center gap-1">
+                          <button onClick={() => saveVoice(current)} className="text-sm bg-green-700 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 flex items-center gap-1">
                             <Save className="w-3 h-3" /> Save
                           </button>
                           <button onClick={() => setEditing(null)} className="text-sm bg-zinc-800 text-zinc-400 px-3 py-1.5 rounded-lg">Cancel</button>

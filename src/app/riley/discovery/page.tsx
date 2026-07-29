@@ -175,7 +175,7 @@ export default function RileyDiscoveryPage() {
             <button
               onClick={() => search()}
               disabled={loading || (!query && !genre)}
-              className="bg-green-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+              className="bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -277,7 +277,7 @@ export default function RileyDiscoveryPage() {
                             </a>
                           )}
                           {imported.has(artist.id) ? (
-                            <span className="text-xs text-green-600 font-medium px-2 py-1 bg-green-50 rounded">
+                            <span className="text-xs text-green-700 font-medium px-2 py-1 bg-green-50 rounded">
                               Added
                             </span>
                           ) : (

@@ -365,7 +365,7 @@ export default function SponsorPipeline() {
               onClick={handleViewAllStages}
               className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all cursor-pointer hover:scale-105 ${
                 selectedStage === "all"
-                  ? "bg-green-600 text-white shadow-lg ring-2 ring-green-300"
+                  ? "bg-green-700 text-white shadow-lg ring-2 ring-green-300"
                   : "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 hover:bg-green-200 hover:shadow-md"
               }`}
             >
@@ -580,7 +580,7 @@ export default function SponsorPipeline() {
               <div className="grid grid-cols-2 gap-3">
                 <a
                   href={`mailto:${selectedSponsor.email}?subject=TrueFans RADIO - Sponsorship Opportunity&body=Hi ${selectedSponsor.contact},%0D%0A%0D%0AI hope this email finds you well. I wanted to reach out about an exciting sponsorship opportunity with TrueFans RADIO Network.%0D%0A%0D%0AWe believe ${selectedSponsor.name} would be a perfect fit for our engaged audience of music lovers and local supporters.%0D%0A%0D%0ABest regards,%0D%0ABlake Morrison%0D%0ATrueFans RADIO`}
-                  className="flex-1 bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors text-center font-medium"
+                  className="flex-1 bg-green-700 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors text-center font-medium"
                 >
                   Contact Sponsor
                 </a>

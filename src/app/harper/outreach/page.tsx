@@ -561,7 +561,7 @@ export default function HarperOutreach() {
                         <div className="flex flex-col space-y-2 ml-4">
                           <a
                             href={`mailto:${lead.email}?subject=TrueFans RADIO - Sponsorship Opportunity&body=Hi ${lead.contactName},%0D%0A%0D%0AI hope this email finds you well. I wanted to reach out about an exciting sponsorship opportunity with TrueFans RADIO Network.%0D%0A%0D%0AWe believe ${lead.businessName} would be a perfect fit for our engaged audience.%0D%0A%0D%0ABest regards,%0D%0ABlake Morrison`}
-                            className="inline-flex items-center space-x-1 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm"
+                            className="inline-flex items-center space-x-1 bg-green-700 text-white px-3 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm"
                           >
                             <Mail className="w-4 h-4" />
                             <span>Email</span>

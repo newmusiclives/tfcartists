@@ -90,7 +90,7 @@ export default function SponsorBillingPage() {
           <Building2 className="w-12 h-12 text-blue-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Sponsor Billing</h1>
           <p className="text-gray-600 dark:text-zinc-400 mb-4">Please access this page from the sponsor dashboard.</p>
-          <a href="/portal/sponsor" className="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-blue-600">
+          <a href="/portal/sponsor" className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-blue-600">
             Go to Dashboard
           </a>
         </div>

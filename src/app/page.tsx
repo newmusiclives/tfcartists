@@ -274,7 +274,7 @@ export default async function MarketingPage() {
               </ul>
               <Link
                 href="/sponsor"
-                className="inline-flex items-center space-x-2 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500 transition-colors"
+                className="inline-flex items-center space-x-2 bg-green-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-500 transition-colors"
               >
                 <span>Become a Sponsor</span>
                 <ArrowRight className="w-4 h-4" />
@@ -307,7 +307,7 @@ export default async function MarketingPage() {
               </ul>
               <Link
                 href="/operate"
-                className="inline-flex items-center space-x-2 bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-500 transition-colors"
+                className="inline-flex items-center space-x-2 bg-amber-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-500 transition-colors"
               >
                 <span>Launch a Station</span>
                 <ArrowRight className="w-4 h-4" />
@@ -451,7 +451,7 @@ export default async function MarketingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/sponsor" className="block text-center bg-green-600 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-green-500 transition-colors text-sm">
+              <Link href="/sponsor" className="block text-center bg-green-700 text-white px-4 py-2.5 rounded-lg font-semibold hover:bg-green-500 transition-colors text-sm">
                 Get Started
               </Link>
             </div>

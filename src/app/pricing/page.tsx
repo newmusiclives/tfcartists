@@ -274,7 +274,7 @@ export default function PricingPage() {
               </Link>
               <Link
                 href="/operator/signup"
-                className="inline-flex items-center space-x-1 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors text-sm font-semibold"
+                className="inline-flex items-center space-x-1 bg-amber-700 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors text-sm font-semibold"
               >
                 <span>Get Started</span>
                 <ArrowRight className="w-4 h-4" />
@@ -307,7 +307,7 @@ export default function PricingPage() {
                 onClick={() => setAudience(a.id)}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   audience === a.id
-                    ? "bg-amber-600 text-white shadow-sm"
+                    ? "bg-amber-700 text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-700"
                 }`}
               >
@@ -333,7 +333,7 @@ export default function PricingPage() {
                   }`}
                 >
                   {plan.recommended && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-700 text-white text-xs font-bold px-3 py-1 rounded-full">
                       MOST POPULAR
                     </div>
                   )}
@@ -361,7 +361,7 @@ export default function PricingPage() {
                     href={`/operator/signup?plan=${plan.id}`}
                     className={`block text-center px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
                       plan.recommended
-                        ? "bg-amber-600 text-white hover:bg-amber-700"
+                        ? "bg-amber-700 text-white hover:bg-amber-700"
                         : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                     }`}
                   >
@@ -424,7 +424,7 @@ export default function PricingPage() {
                   }`}
                 >
                   {"recommended" in plan && plan.recommended && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-700 text-white text-xs font-bold px-3 py-1 rounded-full">
                       BEST VALUE
                     </div>
                   )}
@@ -446,7 +446,7 @@ export default function PricingPage() {
                     href="/sponsor"
                     className={`block text-center px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
                       "recommended" in plan && plan.recommended
-                        ? "bg-green-600 text-white hover:bg-green-700"
+                        ? "bg-green-700 text-white hover:bg-green-700"
                         : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                     }`}
                   >

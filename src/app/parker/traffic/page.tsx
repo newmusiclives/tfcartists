@@ -79,7 +79,7 @@ export default function TrafficPage() {
             </Link>
             <Link
               href="/harper/inventory"
-              className="inline-flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+              className="inline-flex items-center space-x-2 bg-orange-700 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
             >
               <Megaphone className="w-4 h-4" />
               <span>Ad Inventory</span>
@@ -226,7 +226,7 @@ export default function TrafficPage() {
 
         {/* Quick Links */}
         <section className="flex flex-wrap gap-4">
-          <Link href="/harper/inventory" className="inline-flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors">
+          <Link href="/harper/inventory" className="inline-flex items-center space-x-2 bg-orange-700 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors">
             <Megaphone className="w-4 h-4" />
             <span>Full Ad Inventory</span>
           </Link>

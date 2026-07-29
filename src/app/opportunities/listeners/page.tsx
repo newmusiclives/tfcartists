@@ -157,7 +157,7 @@ export default function ListenerOpportunityPage() {
             <div className="bg-blue-50 rounded-lg p-5 border-2 border-blue-300">
               <div className="flex items-center justify-between mb-3">
                 <Users className="w-8 h-8 text-blue-600" />
-                <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded">RECURRING</span>
+                <span className="text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded">RECURRING</span>
               </div>
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Listener Bounties</h3>
               <div className="text-2xl font-bold text-blue-600 mb-2">{gpModel.commissions.listenerBounties}</div>
@@ -177,7 +177,7 @@ export default function ListenerOpportunityPage() {
             <div className="bg-green-50 rounded-lg p-5 border-2 border-green-300">
               <div className="flex items-center justify-between mb-3">
                 <TrendingUp className="w-8 h-8 text-green-600" />
-                <span className="text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded">CAPPED</span>
+                <span className="text-xs font-semibold text-green-700 bg-green-100 px-2 py-1 rounded">CAPPED</span>
               </div>
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Artist Development</h3>
               <div className="text-2xl font-bold text-green-600 mb-2">{gpModel.commissions.artistDevelopment}</div>
@@ -187,7 +187,7 @@ export default function ListenerOpportunityPage() {
             <div className="bg-orange-50 rounded-lg p-5 border-2 border-orange-300">
               <div className="flex items-center justify-between mb-3">
                 <Building2 className="w-8 h-8 text-orange-600" />
-                <span className="text-xs font-semibold text-orange-600 bg-orange-100 px-2 py-1 rounded">HIGH VALUE</span>
+                <span className="text-xs font-semibold text-orange-700 bg-orange-100 px-2 py-1 rounded">HIGH VALUE</span>
               </div>
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Sponsor Referrals</h3>
               <div className="text-2xl font-bold text-orange-600 mb-2">{gpModel.commissions.sponsorReferral}</div>

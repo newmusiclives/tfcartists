@@ -95,7 +95,7 @@ export default function HarperDashboardPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
           <p className="text-gray-600 dark:text-zinc-400 mb-4">Sign in as Harper to access this dashboard.</p>
-          <Link href="/login?callbackUrl=/harper" className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Sign In</Link>
+          <Link href="/login?callbackUrl=/harper" className="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-700">Sign In</Link>
         </div>
       </main>
     );
@@ -122,7 +122,7 @@ export default function HarperDashboardPage() {
             </Link>
             <Link
               href="/harper/team"
-              className="inline-flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              className="inline-flex items-center space-x-2 bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
               <UserCircle className="w-4 h-4" />
               <span>View Team</span>
@@ -242,7 +242,7 @@ export default function HarperDashboardPage() {
             </div>
             <Link
               href="/harper/sponsors"
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
               View All Sponsors
             </Link>
@@ -407,7 +407,7 @@ function QuickActionCard({
         <div className="flex items-center justify-between mb-3">
           {icon}
           {badge !== undefined && (
-            <div className="bg-green-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+            <div className="bg-green-700 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
               {badge}
             </div>
           )}

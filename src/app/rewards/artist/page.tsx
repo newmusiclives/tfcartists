@@ -149,7 +149,7 @@ export default function ArtistDashboardPage() {
           </pre>
           <button
             onClick={handleCopy}
-            className="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors"
+            className="px-4 py-2 bg-amber-700 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition-colors"
           >
             {copied ? "Copied!" : "Copy Embed Code"}
           </button>

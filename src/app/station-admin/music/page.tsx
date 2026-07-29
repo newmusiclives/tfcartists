@@ -167,7 +167,7 @@ export default function MusicLibraryPage() {
           </div>
           <Link
             href="/station-admin/music/import"
-            className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 flex items-center gap-2"
+            className="bg-green-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 flex items-center gap-2"
           >
             <Upload className="w-4 h-4" />
             Import Songs
@@ -200,7 +200,7 @@ export default function MusicLibraryPage() {
                   onClick={() => { setFeaturedOnly(!featuredOnly); setPage(1); }}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                     featuredOnly
-                      ? "bg-amber-500 text-white"
+                      ? "bg-amber-700 text-white"
                       : "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 hover:bg-amber-100"
                   }`}
                 >
@@ -515,7 +515,7 @@ export default function MusicLibraryPage() {
                     hookEnd: editing.hookEnd,
                     cueNotes: editing.cueNotes,
                   })}
-                  className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700"
+                  className="flex-1 bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700"
                 >
                   Save
                 </button>

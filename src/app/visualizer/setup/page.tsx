@@ -238,7 +238,7 @@ Refresh when scene becomes active: ON`;
         <div className="pt-4 pb-10">
           <Link
             href="/visualizer"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-amber-700 hover:bg-amber-500 text-white font-semibold rounded-lg transition-colors"
           >
             Open Visualizer
             <ExternalLink className="w-4 h-4" />

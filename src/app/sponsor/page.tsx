@@ -229,7 +229,7 @@ export default function SponsorPage() {
               { step: "4", title: "Go Live", desc: "Your brand hits the airwaves and reaches our audience." },
             ].map((item) => (
               <div key={item.step} className="text-center">
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-green-600 text-white rounded-full font-bold mb-3">
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-green-700 text-white rounded-full font-bold mb-3">
                   {item.step}
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{item.title}</h3>
@@ -389,7 +389,7 @@ export default function SponsorPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full flex items-center justify-center space-x-2 bg-green-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg"
+            className="w-full flex items-center justify-center space-x-2 bg-green-700 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg"
           >
             {submitting ? (
               <span>Submitting...</span>

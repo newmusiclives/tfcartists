@@ -196,7 +196,7 @@ export function EpisodeList({ episodes, djNames }: EpisodeListProps) {
                           }}
                           className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
                             isPlaying
-                              ? "bg-amber-500 text-white"
+                              ? "bg-amber-700 text-white"
                               : "bg-zinc-700 text-white hover:bg-amber-600"
                           }`}
                           aria-label={isPlaying ? "Pause" : "Play"}

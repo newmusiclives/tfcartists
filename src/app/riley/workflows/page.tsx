@@ -397,7 +397,7 @@ export default function WorkflowsPage() {
                     className={`p-2 rounded-lg transition-colors ${
                       workflow.status === "active"
                         ? "bg-yellow-100 text-yellow-600 hover:bg-yellow-200"
-                        : "bg-green-100 text-green-600 hover:bg-green-200"
+                        : "bg-green-100 text-green-700 hover:bg-green-200"
                     }`}
                   >
                     {workflow.status === "active" ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
@@ -466,7 +466,7 @@ export default function WorkflowsPage() {
               <p className="text-sm text-gray-600 dark:text-zinc-400">Workflow starts automatically when condition is met</p>
             </div>
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-full mb-3">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-700 rounded-full mb-3">
                 <Mail className="w-6 h-6" />
               </div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Send Emails</h4>
@@ -480,7 +480,7 @@ export default function WorkflowsPage() {
               <p className="text-sm text-gray-600 dark:text-zinc-400">Smart delays and condition checks</p>
             </div>
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 text-green-600 rounded-full mb-3">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 text-green-700 rounded-full mb-3">
                 <CheckCircle className="w-6 h-6" />
               </div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Convert</h4>
@@ -536,7 +536,7 @@ export default function WorkflowsPage() {
                         <div className="font-semibold text-gray-900 dark:text-white">{step.title}</div>
                         <div className="text-sm text-gray-600 dark:text-zinc-400">{step.description}</div>
                         {step.delay && (
-                          <div className="inline-flex items-center space-x-1 text-xs text-gray-500 dark:text-zinc-500 mt-1 bg-gray-100 px-2 py-1 rounded">
+                          <div className="inline-flex items-center space-x-1 text-xs text-gray-600 dark:text-zinc-500 mt-1 bg-gray-100 px-2 py-1 rounded">
                             <Clock className="w-3 h-3" />
                             <span>Delay: {step.delay}</span>
                           </div>

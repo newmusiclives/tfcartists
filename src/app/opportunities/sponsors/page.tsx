@@ -152,7 +152,7 @@ export default function SponsorOpportunityPage() {
             <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border-2 border-green-300">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-2xl font-bold text-green-600">🌱</span>
-                <span className="text-xs font-semibold bg-green-200 text-green-700 px-2 py-1 rounded">LOCAL HERO</span>
+                <span className="text-xs font-semibold bg-green-200 text-green-800 px-2 py-1 rounded">LOCAL HERO</span>
               </div>
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">Local Hero</h3>
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">${referralModel.tiers.localHero.price}/month sponsorship</div>
@@ -195,7 +195,7 @@ export default function SponsorOpportunityPage() {
             </div>
 
             <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg p-6 border-4 border-purple-400 relative">
-              <div className="absolute -top-3 -right-3 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+              <div className="absolute -top-3 -right-3 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">
                 MAX
               </div>
               <div className="flex items-center justify-between mb-3">

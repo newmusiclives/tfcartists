@@ -186,7 +186,7 @@ export default function ApiKeyManagementPage() {
               </code>
               <button
                 onClick={handleCopy}
-                className="rounded-lg bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-500 transition flex items-center gap-1.5"
+                className="rounded-lg bg-amber-700 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-500 transition flex items-center gap-1.5"
               >
                 {copied ? (
                   <>
@@ -208,7 +208,7 @@ export default function ApiKeyManagementPage() {
         {!showForm ? (
           <button
             onClick={() => setShowForm(true)}
-            className="mb-8 inline-flex items-center gap-2 rounded-lg bg-amber-600 px-5 py-2.5 font-semibold text-white hover:bg-amber-500 transition"
+            className="mb-8 inline-flex items-center gap-2 rounded-lg bg-amber-700 px-5 py-2.5 font-semibold text-white hover:bg-amber-500 transition"
           >
             <Plus className="h-4 w-4" />
             Create New API Key
@@ -262,7 +262,7 @@ export default function ApiKeyManagementPage() {
               <button
                 onClick={handleCreate}
                 disabled={creating || !newName.trim() || !newStationId.trim()}
-                className="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-5 py-2 font-semibold text-white hover:bg-amber-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 rounded-lg bg-amber-700 px-5 py-2 font-semibold text-white hover:bg-amber-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {creating ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -313,7 +313,7 @@ export default function ApiKeyManagementPage() {
                     <span className="font-semibold text-white truncate">
                       {k.name}
                     </span>
-                    <code className="text-xs text-zinc-500 font-mono bg-zinc-800 px-2 py-0.5 rounded">
+                    <code className="text-xs text-zinc-400 font-mono bg-zinc-800 px-2 py-0.5 rounded">
                       {k.keyPreview}
                     </code>
                   </div>

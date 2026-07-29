@@ -132,7 +132,7 @@ export default function SponsorPortalPage() {
             <button
               onClick={() => fetchDashboard(sponsorId)}
               disabled={loading}
-              className="bg-blue-500 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ChevronRight className="w-4 h-4" />}
               Go

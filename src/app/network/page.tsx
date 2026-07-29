@@ -257,7 +257,7 @@ export default function NetworkPage() {
                   style={{ borderColor: station.primaryColor || "#d97706" }}
                 >
                   <div className="absolute top-4 right-4">
-                    <span className="inline-flex items-center space-x-1.5 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    <span className="inline-flex items-center space-x-1.5 bg-green-700 text-white text-xs font-bold px-3 py-1 rounded-full">
                       <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                       <span>LIVE</span>
                     </span>
@@ -330,7 +330,7 @@ export default function NetworkPage() {
                   </div>
                 </div>
                 <p className="text-gray-500 text-sm mb-4">{station.genre}</p>
-                <span className="inline-flex items-center space-x-1 bg-white/5 text-gray-500 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/10">
+                <span className="inline-flex items-center space-x-1 bg-white/5 text-gray-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/10">
                   <Clock className="w-3 h-3" />
                   <span>Coming Soon</span>
                 </span>
@@ -444,7 +444,7 @@ export default function NetworkPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-950 border-t border-white/5 text-gray-500 py-12">
+      <footer className="bg-gray-950 border-t border-white/5 text-gray-400 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-4">
             <span className="text-2xl font-bold text-white">

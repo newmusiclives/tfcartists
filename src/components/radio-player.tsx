@@ -283,7 +283,7 @@ export function RadioPlayer() {
       {/* XP Toast Notification */}
       {xpToast.visible && (
         <div className="fixed bottom-28 left-1/2 -translate-x-1/2 z-[60] animate-bounce">
-          <div className="bg-green-500 text-white px-4 py-2 rounded-full shadow-lg text-sm font-bold">
+          <div className="bg-green-700 text-white px-4 py-2 rounded-full shadow-lg text-sm font-bold">
             +{xpToast.amount} XP
           </div>
         </div>

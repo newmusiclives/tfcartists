@@ -261,7 +261,7 @@ export default function LocalHeroSignup() {
             <span
               className={`inline-flex items-center justify-center w-9 h-9 rounded-full text-sm font-bold transition-colors ${
                 s.num < step
-                  ? "bg-green-500 text-white"
+                  ? "bg-green-700 text-white"
                   : s.num === step
                     ? "bg-green-500/20 text-green-400 ring-2 ring-green-500"
                     : "bg-zinc-800 text-zinc-500"

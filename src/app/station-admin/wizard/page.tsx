@@ -452,7 +452,7 @@ export default function StationWizard() {
                   <div
                     className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold text-sm transition-all ${
                       i < step
-                        ? "bg-green-500 text-white"
+                        ? "bg-green-700 text-white"
                         : i === step
                         ? "bg-amber-600 text-white ring-4 ring-amber-100"
                         : "bg-gray-200 text-gray-500"
@@ -686,7 +686,7 @@ export default function StationWizard() {
                     <p className="text-xs text-gray-400 mb-4">
                       Required columns: title, artist, album, genre, duration
                     </p>
-                    <label className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 cursor-pointer transition-colors">
+                    <label className="inline-flex items-center gap-2 px-4 py-2 bg-amber-700 text-white text-sm font-medium rounded-lg hover:bg-amber-700 cursor-pointer transition-colors">
                       <Upload className="w-4 h-4" />
                       Choose File
                       <input
@@ -1394,7 +1394,7 @@ export default function StationWizard() {
             disabled={saving || !canContinue()}
             className={`flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all ${
               step === 4
-                ? "bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200"
+                ? "bg-green-700 hover:bg-green-700 shadow-lg shadow-green-200"
                 : "bg-amber-600 hover:bg-amber-700"
             }`}
           >

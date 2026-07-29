@@ -92,7 +92,7 @@ export function PWAInstallPrompt() {
           </div>
           <button
             onClick={handleInstall}
-            className="w-full bg-amber-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-amber-700 transition-colors"
+            className="w-full bg-amber-700 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-amber-700 transition-colors"
           >
             {isIOS ? "How to Install" : "Install App"}
           </button>
@@ -148,7 +148,7 @@ export function PWAInstallPrompt() {
             )}
             <button
               onClick={handleDismiss}
-              className="w-full mt-6 bg-amber-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-amber-700 transition-colors"
+              className="w-full mt-6 bg-amber-700 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-amber-700 transition-colors"
             >
               Got It
             </button>

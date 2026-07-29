@@ -188,7 +188,7 @@ export default function RedeemRewardsPage() {
           <button
             onClick={() => setFilter("all")}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              filter === "all" ? "bg-amber-600 text-white" : "bg-white border text-gray-600 hover:bg-gray-50"
+              filter === "all" ? "bg-amber-700 text-white" : "bg-white border text-gray-600 hover:bg-gray-50"
             }`}
           >
             All
@@ -200,7 +200,7 @@ export default function RedeemRewardsPage() {
                 key={cat}
                 onClick={() => setFilter(cat)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center space-x-1.5 ${
-                  filter === cat ? "bg-amber-600 text-white" : "bg-white border text-gray-600 hover:bg-gray-50"
+                  filter === cat ? "bg-amber-700 text-white" : "bg-white border text-gray-600 hover:bg-gray-50"
                 }`}
               >
                 {config?.icon}
@@ -290,7 +290,7 @@ export default function RedeemRewardsPage() {
                         disabled={!canRedeem || isRedeeming}
                         className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                           canRedeem
-                            ? "bg-amber-600 text-white hover:bg-amber-700"
+                            ? "bg-amber-700 text-white hover:bg-amber-700"
                             : "bg-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
                       >

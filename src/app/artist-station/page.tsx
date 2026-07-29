@@ -357,7 +357,7 @@ export default function ArtistStationLandingPage() {
                   href="/onboard"
                   className={`block text-center py-3 px-6 rounded-xl font-semibold transition-colors ${
                     tier.highlight
-                      ? "bg-violet-600 text-white hover:bg-violet-700"
+                      ? "bg-violet-600 text-gray-600 hover:bg-violet-700"
                       : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                   }`}
                 >

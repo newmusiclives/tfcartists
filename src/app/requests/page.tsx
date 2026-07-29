@@ -514,7 +514,7 @@ export default function SongRequestPage() {
                             </span>
                           )}
                           {req.status === "pending" && (
-                            <span className="text-[10px] font-semibold uppercase tracking-wider bg-zinc-700 text-zinc-400 px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] font-semibold uppercase tracking-wider bg-zinc-700 text-zinc-300 px-2 py-0.5 rounded-full">
                               Pending
                             </span>
                           )}

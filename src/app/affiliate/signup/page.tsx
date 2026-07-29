@@ -75,7 +75,7 @@ export default function AffiliateSignupPage() {
             <div className="space-y-3">
               <a
                 href="/affiliate"
-                className="flex items-center justify-center gap-2 w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-500 transition-colors"
+                className="flex items-center justify-center gap-2 w-full bg-amber-700 text-white py-3 rounded-lg font-semibold hover:bg-amber-500 transition-colors"
               >
                 Go to Dashboard
                 <ArrowRight className="w-4 h-4" />
@@ -218,7 +218,7 @@ export default function AffiliateSignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-500 transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 bg-amber-700 text-white py-3 rounded-lg font-semibold hover:bg-amber-500 transition-colors disabled:opacity-50"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />

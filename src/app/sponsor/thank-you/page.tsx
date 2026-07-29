@@ -48,7 +48,7 @@ export default function SponsorThankYouPage() {
           </Link>
           <Link
             href="/player"
-            className="inline-flex items-center space-x-2 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+            className="inline-flex items-center space-x-2 bg-green-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
           >
             <span>Listen Now</span>
             <ArrowRight className="w-4 h-4" />

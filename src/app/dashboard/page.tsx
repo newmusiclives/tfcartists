@@ -118,14 +118,14 @@ export default async function HomePage() {
               </Link>
               <Link
                 href="/sponsor"
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-1"
+                className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-1"
               >
                 <Building2 className="w-4 h-4" />
                 <span>Sponsors</span>
               </Link>
               <Link
                 href="/operate"
-                className="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors flex items-center space-x-1"
+                className="bg-amber-700 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors flex items-center space-x-1"
               >
                 <Settings className="w-4 h-4" />
                 <span>Operators</span>

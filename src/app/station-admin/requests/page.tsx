@@ -382,7 +382,7 @@ export default function AdminRequestsPage() {
                     <div>
                       <span
                         className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                          STATUS_COLORS[req.status] || "bg-zinc-700 text-zinc-400"
+                          STATUS_COLORS[req.status] || "bg-zinc-700 text-zinc-300"
                         }`}
                       >
                         {req.status}

@@ -200,7 +200,7 @@ export default async function PodcastsPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/station"
-              className="inline-flex items-center gap-2 bg-amber-600 text-white px-8 py-3 rounded-lg text-base font-bold hover:bg-amber-500 transition-colors shadow-lg shadow-amber-900/30"
+              className="inline-flex items-center gap-2 bg-amber-700 text-white px-8 py-3 rounded-lg text-base font-bold hover:bg-amber-500 transition-colors shadow-lg shadow-amber-900/30"
             >
               <Radio className="w-5 h-5" />
               Listen Live
@@ -216,7 +216,7 @@ export default async function PodcastsPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black/50 text-gray-500 py-12 border-t border-zinc-800">
+      <footer className="bg-black/50 text-gray-400 py-12 border-t border-zinc-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-4">
             <StationName className="text-2xl font-serif font-bold text-white" />

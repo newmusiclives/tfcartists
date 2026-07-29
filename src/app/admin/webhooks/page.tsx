@@ -169,7 +169,7 @@ export default function WebhooksAdminPage() {
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-700 transition-colors"
           >
             <Plus className="w-4 h-4" /> Add Endpoint
           </button>
@@ -256,7 +256,7 @@ export default function WebhooksAdminPage() {
               <button
                 onClick={handleCreate}
                 disabled={saving || !formName || !formUrl || formEvents.length === 0}
-                className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50 text-sm font-medium"
+                className="px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50 text-sm font-medium"
               >
                 {saving ? "Creating..." : "Create Endpoint"}
               </button>

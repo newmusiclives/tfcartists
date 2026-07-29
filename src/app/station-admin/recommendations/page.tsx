@@ -714,7 +714,7 @@ export default function RecommendationsPage() {
                         </td>
                         <td className="py-2.5 px-2">
                           {song.genre && (
-                            <span className="text-xs text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded">
+                            <span className="text-xs text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">
                               {song.genre}
                             </span>
                           )}

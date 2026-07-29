@@ -101,7 +101,7 @@ export default function ArtistOpportunityPage() {
                 onClick={() => setCapacity("60")}
                 className={`px-4 py-2 rounded-md font-semibold transition-all ${
                   capacity === "60"
-                    ? "bg-white text-orange-600 shadow"
+                    ? "bg-white text-orange-700 shadow"
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
@@ -111,7 +111,7 @@ export default function ArtistOpportunityPage() {
                 onClick={() => setCapacity("100")}
                 className={`px-4 py-2 rounded-md font-semibold transition-all ${
                   capacity === "100"
-                    ? "bg-white text-orange-600 shadow"
+                    ? "bg-white text-orange-700 shadow"
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >

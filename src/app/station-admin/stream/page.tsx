@@ -221,7 +221,7 @@ export default function StreamEngineeringPage() {
             disabled={saving}
             className={`px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors ${
               saved
-                ? "bg-green-600 text-white"
+                ? "bg-green-700 text-white"
                 : "bg-amber-600 text-white hover:bg-amber-700"
             }`}
           >

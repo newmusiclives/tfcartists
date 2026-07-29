@@ -265,7 +265,7 @@ export default function SponsorAdsPage() {
                 resetForm();
                 setShowCreate(true);
               }}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 flex items-center gap-2"
+              className="bg-green-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               New Ad
@@ -411,7 +411,7 @@ export default function SponsorAdsPage() {
               <button
                 onClick={editingId ? saveEdit : createAd}
                 disabled={creating || !form.sponsorName || !form.adTitle}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+                className="bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
               >
                 {creating && <Loader2 className="w-4 h-4 animate-spin" />}
                 {editingId ? "Save Changes" : "Create Ad"}

@@ -226,7 +226,7 @@ export default function CassidySubmissionsPage() {
                 onClick={() => setActiveTab(tab.key)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                   activeTab === tab.key
-                    ? "bg-teal-600 text-white"
+                    ? "bg-teal-600 text-gray-600"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >

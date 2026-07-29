@@ -158,7 +158,7 @@ export default function DeveloperPortalPage() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/developers/keys"
-              className="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-6 py-3 font-semibold text-white hover:bg-amber-500 transition"
+              className="inline-flex items-center gap-2 rounded-lg bg-amber-700 px-6 py-3 font-semibold text-white hover:bg-amber-500 transition"
             >
               <Key className="h-4 w-4" />
               Get Your API Key
@@ -343,7 +343,7 @@ export default function DeveloperPortalPage() {
             </p>
             <Link
               href="/developers/keys"
-              className="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-8 py-3 font-semibold text-white hover:bg-amber-500 transition"
+              className="inline-flex items-center gap-2 rounded-lg bg-amber-700 px-8 py-3 font-semibold text-white hover:bg-amber-500 transition"
             >
               <Key className="h-4 w-4" />
               Get Your API Key

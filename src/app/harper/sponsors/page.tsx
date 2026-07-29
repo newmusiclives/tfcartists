@@ -725,7 +725,7 @@ export default function SponsorManagement() {
               <div className="grid grid-cols-2 gap-3">
                 <a
                   href={`mailto:${selectedSponsor.email}?subject=TrueFans RADIO - Account Update&body=Hi ${selectedSponsor.contactName},%0D%0A%0D%0AI wanted to check in regarding ${selectedSponsor.businessName}'s sponsorship with TrueFans RADIO.%0D%0A%0D%0ABest regards,%0D%0ACameron Wells`}
-                  className="flex-1 bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors text-center font-medium"
+                  className="flex-1 bg-green-700 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors text-center font-medium"
                 >
                   Send Email
                 </a>

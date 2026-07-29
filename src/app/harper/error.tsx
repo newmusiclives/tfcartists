@@ -41,7 +41,7 @@ export default function HarperError({
         <div className="space-y-3">
           <button
             onClick={reset}
-            className="w-full inline-flex items-center justify-center space-x-2 bg-amber-600 text-white px-6 py-3 rounded-lg hover:bg-amber-700 transition-colors font-medium"
+            className="w-full inline-flex items-center justify-center space-x-2 bg-amber-700 text-white px-6 py-3 rounded-lg hover:bg-amber-700 transition-colors font-medium"
           >
             <RefreshCcw className="w-5 h-5" />
             <span>Try Again</span>

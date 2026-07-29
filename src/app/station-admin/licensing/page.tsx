@@ -259,7 +259,7 @@ export default function LicensingDashboard() {
                       className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
                         activeTab === "songs"
                           ? "text-emerald-400 border-b-2 border-emerald-400 bg-zinc-900"
-                          : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
+                          : "text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800/50"
                       }`}
                     >
                       <span className="flex items-center justify-center gap-2">
@@ -272,7 +272,7 @@ export default function LicensingDashboard() {
                       className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
                         activeTab === "artists"
                           ? "text-emerald-400 border-b-2 border-emerald-400 bg-zinc-900"
-                          : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
+                          : "text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800/50"
                       }`}
                     >
                       <span className="flex items-center justify-center gap-2">

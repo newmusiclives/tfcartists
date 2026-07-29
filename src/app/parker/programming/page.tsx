@@ -126,7 +126,7 @@ export default function ProgrammingPage() {
                   onClick={() => setActiveDay(day)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeDay === day
-                      ? "bg-indigo-600 text-white"
+                      ? "bg-indigo-600 text-gray-600"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >

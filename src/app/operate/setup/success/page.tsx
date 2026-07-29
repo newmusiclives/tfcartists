@@ -95,7 +95,7 @@ export default function SetupSuccessPage() {
 
         <Link
           href="/admin"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition-colors font-medium"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-amber-700 text-white rounded-xl hover:bg-amber-700 transition-colors font-medium"
         >
           <Users className="w-5 h-5" /> Go to Admin Dashboard
         </Link>

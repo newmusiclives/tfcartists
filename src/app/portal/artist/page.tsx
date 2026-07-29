@@ -431,7 +431,7 @@ export default function ArtistPortalPage() {
             <button
               onClick={lookupArtist}
               disabled={loading}
-              className="bg-amber-500 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-amber-600 disabled:opacity-50 flex items-center gap-2"
+              className="bg-amber-700 text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-amber-600 disabled:opacity-50 flex items-center gap-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ChevronRight className="w-4 h-4" />}
               Go
@@ -1321,7 +1321,7 @@ export default function ArtistPortalPage() {
                 <button
                   onClick={handleProfileSave}
                   disabled={savingProfile}
-                  className="bg-amber-500 text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-amber-600 disabled:opacity-50 flex items-center gap-2"
+                  className="bg-amber-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-amber-600 disabled:opacity-50 flex items-center gap-2"
                 >
                   {savingProfile ? (
                     <>

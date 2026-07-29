@@ -287,7 +287,7 @@ export default function WebhooksPage() {
             </button>
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="flex items-center gap-2 px-3 py-2 text-sm bg-amber-600 text-white rounded-lg hover:bg-amber-500 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-sm bg-amber-700 text-white rounded-lg hover:bg-amber-500 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add Endpoint
@@ -351,7 +351,7 @@ export default function WebhooksPage() {
               <button
                 onClick={handleAdd}
                 disabled={saving || !formName || !formUrl || formEvents.size === 0}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-amber-600 text-white rounded-lg hover:bg-amber-500 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-amber-700 text-white rounded-lg hover:bg-amber-500 disabled:opacity-50 transition-colors"
               >
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                 Create Endpoint

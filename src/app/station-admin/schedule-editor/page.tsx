@@ -367,7 +367,7 @@ export default function ScheduleEditorPage() {
                       {/* Summary */}
                       <div className="w-24 flex-shrink-0 text-right">
                         {selectedClock && (
-                          <span className="text-[10px] bg-zinc-800 text-zinc-500 px-2 py-1 rounded-full">
+                          <span className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded-full">
                             {selectedClock.clockType}
                           </span>
                         )}
