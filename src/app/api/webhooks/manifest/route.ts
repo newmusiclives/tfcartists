@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { manifest } from "@/lib/payments/manifest";
+import { manifest, InvalidWebhookSignatureError } from "@/lib/payments/manifest";
 import { logger } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
@@ -37,14 +37,20 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error) {
-    logger.error("Manifest webhook processing failed", { error });
+    // A bad signature is the caller's problem, not ours. Returning 500 told
+    // Manifest to retry a request that can never succeed, and echoed internal
+    // error text back to an unauthenticated caller.
+    if (error instanceof InvalidWebhookSignatureError) {
+      logger.warn("Rejected Manifest webhook with invalid signature");
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+    }
 
-    return NextResponse.json(
-      {
-        error: "Webhook processing failed",
-        details: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 }
-    );
+    if (error instanceof SyntaxError) {
+      logger.warn("Rejected malformed Manifest webhook payload");
+      return NextResponse.json({ error: "Malformed payload" }, { status: 400 });
+    }
+
+    logger.error("Manifest webhook processing failed", { error });
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
   }
 }

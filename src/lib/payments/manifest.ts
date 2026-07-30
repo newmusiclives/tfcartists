@@ -2,6 +2,14 @@ import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { notifySubscriptionActivated, notifyEarningsAvailable } from "@/lib/messaging/notifications";
 
+/** Thrown when a webhook signature fails verification, so callers can answer 401. */
+export class InvalidWebhookSignatureError extends Error {
+  constructor() {
+    super("Invalid webhook signature");
+    this.name = "InvalidWebhookSignatureError";
+  }
+}
+
 /**
  * Manifest Financial Integration
  * Handles payment processing, subscriptions, and payouts for TrueFans RADIO
@@ -404,14 +412,19 @@ class ManifestFinancial {
       ? signature.slice(sigPrefix.length)
       : signature;
 
+    // timingSafeEqual throws RangeError when the buffers differ in length, and
+    // Buffer.from(x, "hex") silently truncates invalid hex. Without these
+    // checks a malformed signature produces an unhandled crash rather than a
+    // clean rejection.
+    const expectedBuf = Buffer.from(expectedSignature, "hex");
+    const providedBuf = Buffer.from(providedSig, "hex");
+
     if (
       !providedSig ||
-      !crypto.timingSafeEqual(
-        Buffer.from(expectedSignature, "hex"),
-        Buffer.from(providedSig, "hex")
-      )
+      providedBuf.length !== expectedBuf.length ||
+      !crypto.timingSafeEqual(expectedBuf, providedBuf)
     ) {
-      throw new Error("Invalid webhook signature");
+      throw new InvalidWebhookSignatureError();
     }
 
     const event = JSON.parse(payload);

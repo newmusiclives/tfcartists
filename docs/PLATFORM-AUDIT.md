@@ -92,18 +92,31 @@ All respect the `STATION_PAUSED` kill switch (commit `70d672f`).
 
 ## 3. Started but not complete
 
-### 3.1 Payments — the biggest gap 🔴
-There is **no payment processor**. No Stripe, no PayPal, no GHL payments call.
+### 3.1 Payments — built, not switched on 🟡
 
-What exists: billing pages, invoice generation, payout calculation, subscription
-models, commission maths, `AirplayPayment`, `RadioRevenuePool`, `RadioEarnings`,
-scout monthly payouts, sponsor contracts and ROI reports.
+**Correction.** An earlier version of this audit said there was no payment
+processor. That was wrong: I grepped for Stripe/PayPal and missed the provider.
 
-What happens: `/api/payments/subscribe` and `/api/payments/payouts` **record rows
-in the database**. Nothing charges a card or moves money.
+`src/lib/payments/manifest.ts` is a 533-line **Manifest Financial** integration
+with 31 tests, covering customers, airplay/sponsorship/station subscriptions,
+cancellation, artist payouts, and webhooks with HMAC-SHA256 signature
+verification. It is wired into six call sites including the promoter-payouts
+cron and operator provisioning.
 
-So the entire revenue model is modelled and reported but not transacted.
-Everything is effectively an invoice you settle by hand.
+What was actually wrong:
+
+- **Not configured.** `MANIFEST_API_KEY` is unset, so `isConfigured()` is false and every charge is skipped. That is the "money doesn't move" symptom.
+- **Two routes had no guard.** `/api/payments/subscribe` and `/api/payments/payouts` called Manifest directly, so with no key they threw and returned 500 while the other four call sites degraded cleanly. Both now return 503 with a clear reason.
+- **The webhook answered 500 on a bad signature**, telling Manifest to retry a request that can never succeed, and echoed internal error text to an unauthenticated caller. Now 401 for a bad signature, 400 for a malformed payload, no detail leaked.
+- **A malformed signature could crash the handler.** `timingSafeEqual` throws when buffers differ in length, and `Buffer.from(x, "hex")` silently truncates invalid hex. Now length-checked first.
+
+Payments are now gated by `station_payments` (flag) **and** `isConfigured()`
+(deployment fact), via `src/lib/payments/gate.ts`. Both must hold before money
+moves; the flag on with no provider is logged as a misconfiguration rather than
+silently charging nobody.
+
+**Remaining for you:** add `MANIFEST_API_KEY` and `MANIFEST_WEBHOOK_SECRET` in
+admin settings, then turn on the `station_payments` flag.
 
 ### 3.2 Social posting — partially wired 🟡
 Twitter/X is genuinely implemented (OAuth 1.0a request signing, media upload).
@@ -213,7 +226,7 @@ signing. This is not a prototype.
 
 **What's genuinely missing** is narrower than the page count suggests:
 
-1. **Money doesn't move** — everything is modelled, nothing is charged
+1. **Money doesn't move** — the integration is built and tested; it is unconfigured and was ungated (now fixed; needs an API key)
 2. **Rights aren't represented** in the platform database, only in the playout one
 3. **No feature-flag system**, so nothing can ship dark or per-tier
 4. **Two databases drift** with no reconciliation — this already caused a four-month outage

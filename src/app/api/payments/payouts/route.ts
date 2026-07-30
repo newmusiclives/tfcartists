@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { manifest } from "@/lib/payments/manifest";
+import { paymentsStatus } from "@/lib/payments/gate";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { auth } from "@/lib/auth/config";
@@ -32,6 +33,14 @@ export async function POST(req: NextRequest) {
     }
 
     // Get earnings record
+    const payments = await paymentsStatus();
+    if (!payments.enabled) {
+      return NextResponse.json(
+        { error: payments.message, reason: payments.reason, paid: false },
+        { status: 503 }
+      );
+    }
+
     const earnings = await prisma.radioEarnings.findUnique({
       where: {
         artistId_period: {

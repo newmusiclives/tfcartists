@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { manifest } from "@/lib/payments/manifest";
+import { paymentsStatus } from "@/lib/payments/gate";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { auth } from "@/lib/auth/config";
@@ -25,6 +26,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Missing required fields: type, entityId, tier, email, name" },
         { status: 400 }
+      );
+    }
+
+    // Unlike the other four Manifest call sites, this route had no guard: with
+    // no API key it threw and returned a 500. Answer honestly instead.
+    const payments = await paymentsStatus();
+    if (!payments.enabled) {
+      return NextResponse.json(
+        { error: payments.message, reason: payments.reason, charged: false },
+        { status: 503 }
       );
     }
 
