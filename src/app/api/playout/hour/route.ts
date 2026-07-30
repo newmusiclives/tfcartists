@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { playableSongFilter } from "@/lib/rights";
 import { handleApiError } from "@/lib/api/errors";
 import { stationDayType } from "@/lib/timezone";
 
@@ -264,7 +265,9 @@ export async function GET(request: NextRequest) {
       .map((s: { songId: string }) => s.songId);
     const songs = songIds.length > 0
       ? await prisma.song.findMany({
-          where: { id: { in: songIds } },
+          // Rights gate applied at the last mile: an hour playlist built before
+          // the catalogue was reviewed must not be able to serve uncleared audio.
+          where: { id: { in: songIds }, ...(await playableSongFilter()) },
           select: { id: true, title: true, artistName: true, fileUrl: true, duration: true },
         })
       : [];

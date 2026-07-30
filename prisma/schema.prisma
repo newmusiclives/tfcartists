@@ -193,6 +193,7 @@ model Artist {
   @@index([discoverySource])
   @@index([deletedAt])
   @@index([organizationId])
+  permissions        ArtistPermission[]
 }
 
 enum ArtistStatus {
@@ -1935,12 +1936,73 @@ model Song {
   isFeatured      Boolean  @default(false)
   featuredAt      DateTime?
 
+  // --- Music rights -------------------------------------------------------
+  // The network runs only music it owns commercial rights to (AI-generated) or
+  // holds written permission for. That claim has to be enforceable rather than
+  // asserted, so every song carries a status and a pointer to its evidence.
+  //
+  // Default is "unclear": the fail-safe for unreviewed content is silence, not
+  // infringement. Mirrors migration 021 in the playout database.
+  //
+  // owned_ai       AI-generated, we hold commercial rights (evidence = provider terms)
+  // direct_licence artist granted written permission (evidence = agreement ref)
+  // public_domain  verified out of copyright in every territory served
+  // unclear        not yet reviewed - NOT playable
+  // rejected       reviewed and unusable (e.g. major label) - NOT playable
+  rightsStatus    String    @default("unclear")
+  rightsEvidence  String?   // agreement reference, provider terms, or licence id
+  rightsClearedAt DateTime?
+  rightsClearedBy String?
+  rightsNotes     String?
+  retiredAt       DateTime?
+  retiredReason   String?
+
   metadata        Json?
 
   @@index([stationId])
   @@index([rotationCategory])
   @@index([isActive])
   @@index([isFeatured])
+  @@index([rightsStatus])
+  // Supports the "what may go to air" query without a full scan
+  @@index([stationId, rightsStatus, isActive])
+}
+
+// Written permission from an artist to broadcast their work.
+//
+// Recording and composition rights are tracked SEPARATELY and deliberately: an
+// independent artist can licence you their recording but often cannot waive the
+// composition royalty if they are affiliated to a PRO (ASCAP/BMI/SESAC/PRS).
+// Conflating the two is the most common way a direct-licence model quietly fails.
+model ArtistPermission {
+  id                 String    @id @default(cuid())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  artistId           String
+  artist             Artist    @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  // What was actually granted. BOTH must be true for a clean direct licence.
+  grantsRecording    Boolean   @default(false)
+  grantsComposition  Boolean   @default(false)
+
+  // A PRO-affiliated artist generally cannot waive composition royalties,
+  // whatever the agreement says.
+  proAffiliation     String?   // ASCAP / BMI / SESAC / PRS / none / unknown
+  publisher          String?
+
+  // Evidence
+  agreementReference String    // file name, envelope id, contract reference
+  agreementSignedAt  DateTime?
+  territory          String    @default("worldwide")
+  expiresAt          DateTime? // null = perpetual
+
+  grantedBy          String?   // who signed on the artist's side
+  recordedBy         String?   // who filed it on ours
+  notes              String?
+
+  @@index([artistId])
+  @@index([expiresAt])
 }
 
 // Clock template for scheduling music rotation

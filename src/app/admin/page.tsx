@@ -20,6 +20,7 @@ import {
   Wallet,
   Calculator,
   Flag,
+  Scale,
 } from "lucide-react";
 import { SharedNav } from "@/components/shared-nav";
 import { formatCurrency, getStatusColor } from "@/lib/utils";
@@ -618,6 +619,7 @@ export default function AdminDashboard() {
           <QuickLink href="/portal/sponsor" label="Sponsor Portal" icon={<Building2 className="w-5 h-5" />} color="teal" />
           <QuickLink href="/admin/station-costs" label="Station Costs" icon={<Calculator className="w-5 h-5" />} color="indigo" />
           <QuickLink href="/admin/flags" label="Feature Flags" icon={<Flag className="w-5 h-5" />} color="amber" />
+          <QuickLink href="/admin/rights" label="Music Rights" icon={<Scale className="w-5 h-5" />} color="rose" />
         </section>
       </main>
     </div>
@@ -703,6 +705,7 @@ function QuickLink({
     teal: "bg-teal-50 text-teal-600 hover:bg-teal-100",
     indigo: "bg-indigo-50 text-indigo-600 hover:bg-indigo-100",
     amber: "bg-amber-50 text-amber-700 hover:bg-amber-100",
+    rose: "bg-rose-50 text-rose-700 hover:bg-rose-100",
   };
 
   return (
