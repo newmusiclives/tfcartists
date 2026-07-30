@@ -86,14 +86,21 @@ async function reconcileStations(playout: PlayoutStation[]) {
 
   // A station the playout engine can serve but the platform does not know about
   for (const [code, p] of playoutByCode) {
-    if (!platformByCode.has(code)) {
-      add(
-        "error",
-        "stations",
-        `"${code}" exists in the playout database but not in the platform`,
-        `playout id ${p.id}. Anything the platform records for this station has nowhere to land.`
-      );
-    }
+    if (platformByCode.has(code)) continue;
+
+    // An inactive station with no songs is scaffolding, not drift. Reporting it
+    // as an error trains people to ignore the report, which defeats the point.
+    const isDormant = !p.is_active && (p.total_songs ?? 0) === 0;
+    add(
+      isDormant ? "info" : "error",
+      "stations",
+      isDormant
+        ? `"${code}" exists only in the playout database (inactive, no songs - ignoring)`
+        : `"${code}" exists in the playout database but not in the platform`,
+      isDormant
+        ? undefined
+        : `playout id ${p.id}. Anything the platform records for this station has nowhere to land.`
+    );
   }
 
   // A station the platform sells but playout cannot serve
