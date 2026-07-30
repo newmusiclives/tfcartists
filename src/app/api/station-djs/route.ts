@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { handleApiError, unauthorized } from "@/lib/api/errors";
 import { requireRole } from "@/lib/api/auth";
 import { verifyStationAccess } from "@/lib/db-scoped";
+import { canAddDj } from "@/lib/tiers";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +43,24 @@ export async function POST(request: NextRequest) {
     if (stationId) {
       const station = await verifyStationAccess(session, stationId);
       if (!station) return NextResponse.json({ error: "Station not found or access denied" }, { status: 404 });
+    }
+
+    // Enforce the tier's DJ limit at the point of creation, so an operator on
+    // Basic is told why now rather than discovering later that a fifth DJ
+    // silently never went on air.
+    if (stationId) {
+      const check = await canAddDj(stationId);
+      if (!check.allowed) {
+        return NextResponse.json(
+          {
+            error: check.message,
+            limit: check.limit,
+            current: check.current,
+            upgrade: "/admin/flags",
+          },
+          { status: 402 }
+        );
+      }
     }
 
     const djSlug = slug || name.toLowerCase().replace(/[^a-z0-9]+/g, "-");

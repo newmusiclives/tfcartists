@@ -95,6 +95,39 @@ export async function flag(key: FlagKey, stationId?: string | null): Promise<boo
   return value;
 }
 
+/**
+ * The EXPLICIT value set for a flag, or null when none is configured.
+ *
+ * flag() deliberately collapses "unset" into the registry default, which is the
+ * right answer for a yes/no question. Tiers need the distinction: a tier default
+ * must apply when nothing is set, but must lose to an explicit override in
+ * either direction.
+ */
+export async function flagOverride(
+  key: FlagKey,
+  stationId?: string | null
+): Promise<boolean | null> {
+  const env = envOverride(key);
+  if (env !== undefined) return env;
+
+  const def = FLAGS[key];
+  try {
+    const keys = [flagConfigKey(key)];
+    if (stationId && def.scope === "station") keys.unshift(flagConfigKey(key, stationId));
+
+    const rows = await prisma.config.findMany({ where: { key: { in: keys } } });
+    const byKey = new Map(rows.map((r) => [r.key, r.value]));
+    for (const k of keys) {
+      const parsed = parseBool(byKey.get(k));
+      if (parsed !== undefined) return parsed;
+    }
+  } catch {
+    // Unknown is not the same as off; the caller falls back to its own default
+    return null;
+  }
+  return null;
+}
+
 /** Resolve several flags at once. One query instead of N. */
 export async function flags(
   keys: FlagKey[],

@@ -1206,6 +1206,11 @@ model Station {
 
   metadata    Json?
   @@index([organizationId])
+  // Commercial tier: a named bundle of feature-flag defaults plus hard limits
+  // (DJ count, station count, bitrate). A per-station flag override beats the
+  // tier in both directions, so a one-off addon sale does not require a bespoke
+  // tier. See src/lib/tiers.
+  tier        String    @default("basic")
 }
 
 // =============================================================================
