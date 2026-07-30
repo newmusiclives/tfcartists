@@ -1957,6 +1957,19 @@ model Song {
   retiredAt       DateTime?
   retiredReason   String?
 
+  // --- Provenance and de-duplication --------------------------------------
+  // Imported catalogue needs a stable identity so the same track uploaded twice
+  // updates rather than duplicates. Three keys, strongest first:
+  //   1. isrc                        globally unique where it exists
+  //   2. sourceSystem+sourceTrackId  stable across re-imports from one system
+  //   3. dedupeKey                   normalised "artist|title", the last resort
+  // dedupeKey is stored rather than computed at query time so it can be indexed.
+  sourceSystem    String?   // e.g. "label_music_factory"
+  sourceTrackId   String?   // the id in that system
+  isrc            String?
+  dedupeKey       String?   // lowercased, punctuation-stripped "artist|title"
+  importedAt      DateTime?
+
   metadata        Json?
 
   @@index([stationId])
@@ -1966,6 +1979,10 @@ model Song {
   @@index([rightsStatus])
   // Supports the "what may go to air" query without a full scan
   @@index([stationId, rightsStatus, isActive])
+  // Re-importing the same export must update, never duplicate
+  @@unique([sourceSystem, sourceTrackId])
+  @@index([isrc])
+  @@index([stationId, dedupeKey])
 }
 
 // Written permission from an artist to broadcast their work.
