@@ -194,7 +194,7 @@ export default function CassidyTierManagementPage() {
                       }}
                     />
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">
                     {actualPct}% actual
                   </div>
                 </div>
@@ -237,7 +237,7 @@ export default function CassidyTierManagementPage() {
             <div>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-gray-600 dark:text-zinc-400">Mainstream</span>
-                <span className="font-semibold text-gray-500 dark:text-zinc-500">
+                <span className="font-semibold text-gray-400 dark:text-zinc-400">
                   {stats.rotationTransformation.mainstream}%
                 </span>
               </div>
@@ -275,7 +275,7 @@ export default function CassidyTierManagementPage() {
           </div>
 
           {placedArtists.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+            <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
               No placed artists yet.
             </div>
           ) : (

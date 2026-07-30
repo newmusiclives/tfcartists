@@ -125,7 +125,7 @@ export default function StationCapacityPage() {
               <div className="text-3xl font-bold text-purple-600">
                 340 artists
               </div>
-              <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">Target capacity per station</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">Target capacity per station</p>
             </div>
 
             {/* Artist Distribution - Master Overview */}
@@ -139,27 +139,27 @@ export default function StationCapacityPage() {
                 <div className="text-sm">
                   <span className="text-gray-600 dark:text-zinc-400">FREE:</span>
                   <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.FREE}</span>
-                  <span className="text-xs text-gray-500 ml-1">(1 share)</span>
+                  <span className="text-xs text-gray-400 ml-1">(1 share)</span>
                 </div>
                 <div className="text-sm">
                   <span className="text-gray-600 dark:text-zinc-400">Bronze ($5):</span>
                   <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.BRONZE}</span>
-                  <span className="text-xs text-gray-500 ml-1">(5 shares)</span>
+                  <span className="text-xs text-gray-400 ml-1">(5 shares)</span>
                 </div>
                 <div className="text-sm">
                   <span className="text-gray-600 dark:text-zinc-400">Silver ($20):</span>
                   <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.SILVER}</span>
-                  <span className="text-xs text-gray-500 ml-1">(25 shares)</span>
+                  <span className="text-xs text-gray-400 ml-1">(25 shares)</span>
                 </div>
                 <div className="text-sm">
                   <span className="text-gray-600 dark:text-zinc-400">Gold ($50):</span>
                   <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.GOLD}</span>
-                  <span className="text-xs text-gray-500 ml-1">(75 shares)</span>
+                  <span className="text-xs text-gray-400 ml-1">(75 shares)</span>
                 </div>
                 <div className="text-sm col-span-2">
                   <span className="text-gray-600 dark:text-zinc-400">Platinum ($120):</span>
                   <span className="font-semibold ml-1">{artistCapacity.scenarios.masterOverview.PLATINUM}</span>
-                  <span className="text-xs text-gray-500 ml-1">(200 shares)</span>
+                  <span className="text-xs text-gray-400 ml-1">(200 shares)</span>
                 </div>
               </div>
 
@@ -233,28 +233,28 @@ export default function StationCapacityPage() {
                   <div className="text-2xl font-bold text-teal-600">
                     {sponsorCapacity.optimal.LOCAL_HERO}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">1 spot/day</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">1 spot/day</div>
                 </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-600 dark:text-zinc-400">Tier 1 ($100)</div>
                   <div className="text-2xl font-bold text-green-600">
                     {sponsorCapacity.optimal.TIER_1}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">2 spots/day</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">2 spots/day</div>
                 </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-600 dark:text-zinc-400">Tier 2 ($200)</div>
                   <div className="text-2xl font-bold text-green-600">
                     {sponsorCapacity.optimal.TIER_2}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">5 spots/day</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">5 spots/day</div>
                 </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-600 dark:text-zinc-400">Tier 3 ($400)</div>
                   <div className="text-2xl font-bold text-green-600">
                     {sponsorCapacity.optimal.TIER_3}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">10 spots/day</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">10 spots/day</div>
                 </div>
               </div>
               <div className="pt-4 border-t space-y-2">
@@ -400,7 +400,7 @@ function ConstraintCard({
     <div className="bg-gray-50 rounded-lg p-4">
       <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">{label}</div>
       <div className="text-2xl font-bold text-gray-900 dark:text-white">{value}</div>
-      {subtitle && <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{subtitle}</div>}
+      {subtitle && <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{subtitle}</div>}
     </div>
   );
 }
@@ -425,7 +425,7 @@ function StatCard({
     <div className="bg-gray-50 rounded-lg p-4">
       <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">{label}</div>
       <div className={`text-3xl font-bold ${colorClasses[color]}`}>{value}</div>
-      {subtitle && <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{subtitle}</div>}
+      {subtitle && <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{subtitle}</div>}
     </div>
   );
 }
@@ -492,7 +492,7 @@ function TierMaxCard({
       <div className="text-2xl font-bold text-green-600 mb-1">
         {sponsors.toLocaleString()}
       </div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500 mb-2">{spots} spots/month</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400 mb-2">{spots} spots/month</div>
       <div className="text-sm font-semibold">${(revenue / 1000).toFixed(0)}k/mo</div>
     </div>
   );

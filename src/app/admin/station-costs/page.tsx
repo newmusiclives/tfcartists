@@ -158,7 +158,7 @@ function Toggle({
         ) : (
           <ToggleLeft className="w-6 h-6 text-gray-400" />
         )}
-        <span className={`text-sm font-medium ${enabled ? "text-gray-900" : "text-gray-500"}`}>
+        <span className={`text-sm font-medium ${enabled ? "text-gray-900" : "text-gray-400"}`}>
           {label}
         </span>
       </div>
@@ -322,7 +322,7 @@ export default function StationCostsPage() {
       <SharedNav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-zinc-500 mb-6">
+        <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-6">
           <Link href="/admin" className="hover:text-indigo-600">Admin</Link>
           <ChevronRight className="w-4 h-4" />
           <span className="text-gray-900 dark:text-white font-medium">Station Costs</span>
@@ -335,7 +335,7 @@ export default function StationCostsPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Station Cost Calculator</h1>
-            <p className="text-gray-500 text-sm">Interactive per-station operating cost estimator</p>
+            <p className="text-gray-400 text-sm">Interactive per-station operating cost estimator</p>
           </div>
         </div>
 
@@ -366,7 +366,7 @@ export default function StationCostsPage() {
                     <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400">{p.badge}</span>
                   )}
                 </div>
-                <p className="text-xs text-gray-500 dark:text-zinc-500 mt-0.5">{p.sub}</p>
+                <p className="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">{p.sub}</p>
               </button>
             ))}
           </div>
@@ -397,11 +397,11 @@ export default function StationCostsPage() {
             {/* Quick stats */}
             <div className="mt-4 pt-4 border-t grid grid-cols-2 gap-3">
               <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-xs text-gray-500 dark:text-zinc-500">Daily voice tracks</p>
+                <p className="text-xs text-gray-400 dark:text-zinc-400">Daily voice tracks</p>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">{numDJs * (optReduceTracks ? Math.min(tracksPerHour, 2) : tracksPerHour) * liveHours}</p>
               </div>
               <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-xs text-gray-500 dark:text-zinc-500">Monthly chars (TTS)</p>
+                <p className="text-xs text-gray-400 dark:text-zinc-400">Monthly chars (TTS)</p>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">{fmtK(costs.totalCharsMonth)}</p>
               </div>
             </div>
@@ -601,7 +601,7 @@ export default function StationCostsPage() {
             Operator Pricing & Margins
           </h2>
 
-          <p className="text-sm text-gray-500 dark:text-zinc-500 mb-4">
+          <p className="text-sm text-gray-400 dark:text-zinc-400 mb-4">
             Pricing reflects Gemini TTS at $0.004/generation flat rate, with no subscription overhead.
           </p>
 
@@ -627,13 +627,13 @@ export default function StationCostsPage() {
                   )}
                   <p className="text-xl font-bold text-gray-900 mt-1">{plan.name}</p>
                   <p className="text-3xl font-bold text-gray-900 dark:text-white">${plan.price}</p>
-                  <p className="text-xs text-gray-500 dark:text-zinc-500 mb-2">per station / month</p>
-                  <p className="text-xs text-gray-500 dark:text-zinc-500">+ {plan.fee}% platform fee</p>
+                  <p className="text-xs text-gray-400 dark:text-zinc-400 mb-2">per station / month</p>
+                  <p className="text-xs text-gray-400 dark:text-zinc-400">+ {plan.fee}% platform fee</p>
                   {plan.setup > 0 && (
                     <p className="text-xs text-gray-400">${plan.setup} one-time setup</p>
                   )}
                   <div className="mt-3 pt-3 border-t border-gray-200 dark:border-zinc-800">
-                    <p className="text-xs text-gray-500 dark:text-zinc-500">TrueFans revenue at capacity</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400">TrueFans revenue at capacity</p>
                     <div className="text-lg font-bold text-green-600">
                       ${fmt(totalTfRevenue)}/mo
                     </div>
@@ -654,12 +654,12 @@ export default function StationCostsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-zinc-800">
-                  <th className="text-left py-2 text-gray-500 font-medium">Plan</th>
-                  <th className="text-right py-2 text-gray-500 font-medium">Price</th>
-                  <th className="text-right py-2 text-gray-500 font-medium">Op. Cost</th>
-                  <th className="text-right py-2 text-gray-500 font-medium">SaaS Margin</th>
-                  <th className="text-right py-2 text-gray-500 font-medium">Margin %</th>
-                  <th className="text-right py-2 text-gray-500 font-medium">+ Platform Fee</th>
+                  <th className="text-left py-2 text-gray-400 font-medium">Plan</th>
+                  <th className="text-right py-2 text-gray-400 font-medium">Price</th>
+                  <th className="text-right py-2 text-gray-400 font-medium">Op. Cost</th>
+                  <th className="text-right py-2 text-gray-400 font-medium">SaaS Margin</th>
+                  <th className="text-right py-2 text-gray-400 font-medium">Margin %</th>
+                  <th className="text-right py-2 text-gray-400 font-medium">+ Platform Fee</th>
                 </tr>
               </thead>
               <tbody>
@@ -678,7 +678,7 @@ export default function StationCostsPage() {
                       <td className={`py-2 text-right ${marginPct >= 0 ? "text-green-600" : "text-red-600"}`}>
                         {marginPct.toFixed(0)}%
                       </td>
-                      <td className="py-2 text-right text-gray-500 dark:text-zinc-500">${fmt(exFee)}</td>
+                      <td className="py-2 text-right text-gray-400 dark:text-zinc-400">${fmt(exFee)}</td>
                     </tr>
                   );
                 })}

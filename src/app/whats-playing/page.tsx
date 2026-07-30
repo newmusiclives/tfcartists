@@ -198,7 +198,7 @@ export default function WhatsPlayingPage() {
         {/* Error state */}
         {error && !data && (
           <div className="max-w-2xl mx-auto px-4 py-32 text-center">
-            <p className="text-gray-500 text-lg mb-4">
+            <p className="text-gray-400 text-lg mb-4">
               Unable to load what&apos;s playing right now.
             </p>
             <button

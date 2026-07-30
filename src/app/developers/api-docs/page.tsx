@@ -101,13 +101,13 @@ export default function ApiDocsPage() {
     <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <nav className="border-b bg-white">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center gap-4">
-          <Link href="/developers" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
+          <Link href="/developers" className="text-gray-400 hover:text-gray-700 dark:text-zinc-300">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <Code className="w-6 h-6 text-amber-600" />
           <div>
             <h1 className="font-bold text-gray-900 dark:text-white">API Reference</h1>
-            <p className="text-xs text-gray-500 dark:text-zinc-500">REST API documentation for TrueFans Radio</p>
+            <p className="text-xs text-gray-400 dark:text-zinc-400">REST API documentation for TrueFans Radio</p>
           </div>
         </div>
       </nav>
@@ -164,7 +164,7 @@ export default function ApiDocsPage() {
                       {AUTH_LABELS[ep.auth].label}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1 ml-14">{ep.description}</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1 ml-14">{ep.description}</p>
                   {ep.params && (
                     <p className="text-xs text-gray-400 mt-1 ml-14">
                       Params: {ep.params.join(", ")}

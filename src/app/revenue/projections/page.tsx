@@ -392,19 +392,19 @@ export default function RevenueProjectionsPage() {
                   <div className="text-xs text-green-600 mt-1">
                     {current.metadata.premiumListeners} @ $3/mo
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Ad-free, downloads, early access</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Ad-free, downloads, early access</div>
                 </div>
                 <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
                   <div className="text-sm font-semibold text-green-700">Platform Fees</div>
                   <div className="text-lg font-bold text-green-900">${current.revenue.platformFees.toLocaleString()}</div>
                   <div className="text-xs text-green-600 mt-1">2% transaction fee</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Donations, tips, direct support</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Donations, tips, direct support</div>
                 </div>
                 <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
                   <div className="text-sm font-semibold text-green-700">Sponsored Content</div>
                   <div className="text-lg font-bold text-green-900">${current.revenue.sponsoredContent.toLocaleString()}</div>
                   <div className="text-xs text-green-600 mt-1">Featured placements</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Sponsored playlists, artist features</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Sponsored playlists, artist features</div>
                 </div>
               </div>
               <div className="mt-3 bg-blue-50 border border-blue-200 rounded p-3 text-sm text-blue-800">
@@ -542,7 +542,7 @@ export default function RevenueProjectionsPage() {
                   <div className="text-blue-600 font-semibold">Listener Bounties</div>
                   <div className="text-blue-900 font-bold">{gpCommissionBreakdown.listenerBounties.rate}/active</div>
                   <div className="text-blue-700">${gpCommissionBreakdown.listenerBounties.amount.toFixed(2)}</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">{gpCommissionBreakdown.listenerBounties.listeners} listeners</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">{gpCommissionBreakdown.listenerBounties.listeners} listeners</div>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-blue-300">
                   <div className="text-blue-600 font-semibold">Artist Discovery</div>
@@ -564,13 +564,13 @@ export default function RevenueProjectionsPage() {
                   <div className="text-green-800 font-semibold">Sponsor Referral</div>
                   <div className="text-green-900 font-bold">{gpCommissionBreakdown.sponsorReferral.rate} commission</div>
                   <div className="text-green-700">${gpCommissionBreakdown.sponsorReferral.amount}</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">Cap: {gpCommissionBreakdown.sponsorReferral.cap}</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">Cap: {gpCommissionBreakdown.sponsorReferral.cap}</div>
                 </div>
                 <div className="bg-gradient-to-r from-green-100 to-green-200 rounded p-2 border-2 border-green-400">
                   <div className="text-green-800 font-semibold">Premium Listener Bonus</div>
                   <div className="text-green-900 font-bold">{gpCommissionBreakdown.premiumListenerBonus.rate} per conversion</div>
                   <div className="text-green-700">${gpCommissionBreakdown.premiumListenerBonus.amount}</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">Cap: {gpCommissionBreakdown.premiumListenerBonus.cap}</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">Cap: {gpCommissionBreakdown.premiumListenerBonus.cap}</div>
                 </div>
                 <div className="bg-gradient-to-r from-purple-100 to-purple-200 rounded p-2 border-2 border-purple-400">
                   <div className="text-purple-800 font-semibold">Dual-Role Bonus</div>
@@ -686,7 +686,7 @@ export default function RevenueProjectionsPage() {
                 ${avgEarnings.artistFromPool.toFixed(2)}
               </div>
               <div className="text-xs text-purple-600 mt-1 font-semibold">From artist pool (80% PROTECTED)</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Unchanged - core value maintained</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Unchanged - core value maintained</div>
             </div>
 
             <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 border-2 border-orange-300 ring-2 ring-orange-400">
@@ -701,7 +701,7 @@ export default function RevenueProjectionsPage() {
                 ${avgEarnings.scoutMonthly.toFixed(2)}
               </div>
               <div className="text-xs text-orange-600 mt-1">Elite avg: ${avgEarnings.scoutTop20}/mo</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Per-tier caps apply</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Per-tier caps apply</div>
             </div>
 
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-300 ring-2 ring-blue-400">
@@ -716,7 +716,7 @@ export default function RevenueProjectionsPage() {
                 ${avgEarnings.gpMonthly.toFixed(2)}
               </div>
               <div className="text-xs text-blue-600 mt-1">Multi-stream, per-stream caps</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">5 income streams available</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">5 income streams available</div>
             </div>
 
             <div className="bg-gradient-to-br from-green-50 via-yellow-50 to-pink-50 rounded-lg p-6 border-4 border-green-400 shadow-xl">

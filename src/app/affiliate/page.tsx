@@ -164,7 +164,7 @@ export default function AffiliateDashboardPage() {
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Access Dashboard"}
             </button>
 
-            <p className="text-center text-sm text-zinc-500">
+            <p className="text-center text-sm text-zinc-400">
               Not an affiliate yet?{" "}
               <a href="/affiliate/signup" className="text-amber-500 hover:text-amber-400 font-medium">
                 Apply here
@@ -188,14 +188,14 @@ export default function AffiliateDashboardPage() {
           <div className="flex items-center gap-3">
             <Radio className="w-6 h-6 text-amber-500" />
             <span className="text-lg font-bold text-white">TrueFans RADIO</span>
-            <span className="text-zinc-600">|</span>
+            <span className="text-zinc-400">|</span>
             <span className="text-sm text-zinc-400">Affiliate Portal</span>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-zinc-400">{data.company}</span>
             <button
               onClick={handleLogout}
-              className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
             >
               Sign out
             </button>
@@ -261,7 +261,7 @@ export default function AffiliateDashboardPage() {
               {copied ? "Copied" : "Copy"}
             </button>
           </div>
-          <p className="text-xs text-zinc-500 mt-2">
+          <p className="text-xs text-zinc-400 mt-2">
             Direct signup link: <span className="font-mono">{typeof window !== "undefined" ? window.location.origin : ""}/operator/signup?ref={data.referralCode}</span>
           </p>
         </div>
@@ -276,17 +276,17 @@ export default function AffiliateDashboardPage() {
             <div className="bg-zinc-900/60 rounded-lg p-4 border border-zinc-800">
               <div className="text-2xl font-bold text-amber-500 mb-1">20%</div>
               <div className="text-sm text-zinc-300 font-medium">Recurring Commission</div>
-              <div className="text-xs text-zinc-500 mt-1">On all subscription revenue for 12 months</div>
+              <div className="text-xs text-zinc-400 mt-1">On all subscription revenue for 12 months</div>
             </div>
             <div className="bg-zinc-900/60 rounded-lg p-4 border border-zinc-800">
               <div className="text-2xl font-bold text-amber-500 mb-1">$50</div>
               <div className="text-sm text-zinc-300 font-medium">Activation Bonus</div>
-              <div className="text-xs text-zinc-500 mt-1">Per station that goes live and starts streaming</div>
+              <div className="text-xs text-zinc-400 mt-1">Per station that goes live and starts streaming</div>
             </div>
             <div className="bg-zinc-900/60 rounded-lg p-4 border border-zinc-800">
               <div className="text-2xl font-bold text-amber-500 mb-1">Monthly</div>
               <div className="text-sm text-zinc-300 font-medium">Payout Schedule</div>
-              <div className="text-xs text-zinc-500 mt-1">Paid on active subscriptions each month</div>
+              <div className="text-xs text-zinc-400 mt-1">Paid on active subscriptions each month</div>
             </div>
           </div>
         </div>
@@ -298,13 +298,13 @@ export default function AffiliateDashboardPage() {
               <BarChart3 className="w-5 h-5 text-amber-500" />
               Referral History
             </h2>
-            <span className="text-sm text-zinc-500">{data.referrals.length} referrals</span>
+            <span className="text-sm text-zinc-400">{data.referrals.length} referrals</span>
           </div>
           {data.referrals.length === 0 ? (
             <div className="px-6 py-12 text-center">
-              <Users className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
+              <Users className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
               <p className="text-zinc-400 font-medium">No referrals yet</p>
-              <p className="text-sm text-zinc-600 mt-1">Share your referral link to get started.</p>
+              <p className="text-sm text-zinc-400 mt-1">Share your referral link to get started.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -352,9 +352,9 @@ export default function AffiliateDashboardPage() {
           </div>
           {data.payouts.length === 0 ? (
             <div className="px-6 py-12 text-center">
-              <DollarSign className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
+              <DollarSign className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
               <p className="text-zinc-400 font-medium">No payouts yet</p>
-              <p className="text-sm text-zinc-600 mt-1">Payouts appear here once you have active referred stations.</p>
+              <p className="text-sm text-zinc-400 mt-1">Payouts appear here once you have active referred stations.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -408,7 +408,7 @@ function StatCard({
         <span className="text-sm font-medium">{label}</span>
       </div>
       <div className="text-2xl font-bold text-white">{value}</div>
-      <div className="text-xs text-zinc-500 mt-1">{sub}</div>
+      <div className="text-xs text-zinc-400 mt-1">{sub}</div>
     </div>
   );
 }

@@ -287,12 +287,12 @@ export default function RileyTeamPage() {
                 <div className="bg-purple-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Subscriptions (Riley's Revenue)</div>
                   <div className="text-2xl font-bold text-purple-600">$3,900/month</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">100% retained by station for operations</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">100% retained by station for operations</div>
                 </div>
                 <div className="bg-green-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Pool (from Harper)</div>
                   <div className="text-2xl font-bold text-green-600">$6,240/month</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">80% of sponsor revenue → distributed to artists</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">80% of sponsor revenue → distributed to artists</div>
                 </div>
               </div>
             </div>

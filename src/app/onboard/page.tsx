@@ -312,7 +312,7 @@ export default function OnboardPage() {
                     Instagram Handle (optional)
                   </label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-zinc-500">
+                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-zinc-400">
                       @
                     </span>
                     <input

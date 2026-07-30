@@ -242,7 +242,7 @@ export default function DeveloperPortalPage() {
                 timestamp when the window resets
               </li>
             </ul>
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-zinc-400">
               If you exceed the limit you will receive a{" "}
               <code className="text-zinc-400">429 Too Many Requests</code>{" "}
               response.
@@ -310,7 +310,7 @@ export default function DeveloperPortalPage() {
                     <h4 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-1">
                       Parameters
                     </h4>
-                    <p className="text-sm text-zinc-500">{ep.params}</p>
+                    <p className="text-sm text-zinc-400">{ep.params}</p>
                   </div>
 
                   <div>

@@ -260,7 +260,7 @@ export default function SponsorPipeline() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
+                <Link href="/harper" className="text-gray-400 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
@@ -348,7 +348,7 @@ export default function SponsorPipeline() {
                   <div className="text-center">
                     <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stageSponsors.length}</div>
                     <div className="text-xs font-medium text-gray-600 dark:text-zinc-400 mb-2">{config.label}</div>
-                    <div className="text-xs text-gray-500 dark:text-zinc-500">
+                    <div className="text-xs text-gray-400 dark:text-zinc-400">
                       {getAssignedTo(stageKey as PipelineStage).split(' ')[0]}
                     </div>
                   </div>
@@ -425,7 +425,7 @@ export default function SponsorPipeline() {
           </div>
 
           {filteredSponsors.length === 0 ? (
-            <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
+            <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
               <Building2 className="w-12 h-12 mx-auto mb-4 text-gray-400" />
               <p>No sponsors found matching your filters.</p>
             </div>
@@ -458,10 +458,10 @@ export default function SponsorPipeline() {
                             </p>
                           </div>
                           <div className="flex items-center justify-between pt-3 border-t">
-                            <span className="text-xs text-gray-500 dark:text-zinc-500">
+                            <span className="text-xs text-gray-400 dark:text-zinc-400">
                               {sponsor.daysInStage} days in stage
                             </span>
-                            <span className="text-xs text-gray-500 dark:text-zinc-500">
+                            <span className="text-xs text-gray-400 dark:text-zinc-400">
                               {sponsor.assignedTo.split(' ')[0]}
                             </span>
                           </div>

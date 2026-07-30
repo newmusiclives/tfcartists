@@ -183,7 +183,7 @@ export default function RileySubmissionsPage() {
               />
             ))}
             {filteredSubmissions.length === 0 && (
-              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
                 No {filter !== "all" && filter} submissions found
               </div>
             )}
@@ -294,7 +294,7 @@ function SubmissionCard({ submission, onSelect }: { submission: SubmissionItem; 
         <div>
           <div className="font-semibold text-gray-900 dark:text-white">{submission.track}</div>
           <div className="text-sm text-gray-600 dark:text-zinc-400">{submission.artist}</div>
-          <div className="flex items-center space-x-3 mt-1 text-xs text-gray-500 dark:text-zinc-500">
+          <div className="flex items-center space-x-3 mt-1 text-xs text-gray-400 dark:text-zinc-400">
             <span className="flex items-center space-x-1">
               <Tag className="w-3 h-3" />
               <span>{submission.genre}</span>
@@ -371,33 +371,33 @@ function ReviewModal({
         <div className="p-6 space-y-6">
           {/* Track Info */}
           <div>
-            <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Track Title</div>
+            <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Track Title</div>
             <div className="text-2xl font-bold text-gray-900 dark:text-white">{submission.track}</div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Artist</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Artist</div>
               <div className="font-semibold text-gray-900 dark:text-white">{submission.artist}</div>
               <div className="text-sm text-gray-600 dark:text-zinc-400">{submission.artistEmail}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Tier</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Tier</div>
               <div className="font-semibold text-purple-600">{submission.tier}</div>
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Genre</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Genre</div>
               <div className="font-semibold text-gray-900 dark:text-white">{submission.genre}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Duration</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Duration</div>
               <div className="font-semibold text-gray-900 dark:text-white">{submission.duration}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Submitted</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Submitted</div>
               <div className="font-semibold text-gray-900 dark:text-white">{submission.submittedAt}</div>
             </div>
           </div>
@@ -442,7 +442,7 @@ function ReviewModal({
           {/* Notes */}
           {submission.notes && (
             <div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Notes</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Notes</div>
               <div className="bg-gray-50 rounded-lg p-3 text-gray-700 dark:text-zinc-300">{submission.notes}</div>
             </div>
           )}

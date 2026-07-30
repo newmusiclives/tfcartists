@@ -139,7 +139,7 @@ export default function OperatorSignupPage() {
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{plan.name}</h3>
                   <div className="mb-3">
                     <span className="text-3xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
-                    <span className="text-gray-500 dark:text-zinc-500">/mo</span>
+                    <span className="text-gray-400 dark:text-zinc-400">/mo</span>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-600 dark:text-zinc-400">
                     <li className="flex items-start gap-2">

@@ -72,14 +72,14 @@ function LoginForm() {
         {/* Login Form */}
         <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl p-8">
           {/* Mode Toggle */}
-          <div className="flex rounded-lg bg-gray-100 p-1 mb-6">
+          <div className="flex rounded-lg bg-gray-100 dark:bg-zinc-800 p-1 mb-6">
             <button
               type="button"
               onClick={() => { setMode("team"); setUsername(""); setError(""); }}
               className={`flex-1 flex items-center justify-center space-x-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
                 mode === "team"
                   ? "bg-white text-purple-700 shadow-sm"
-                  : "text-gray-500 hover:text-gray-700"
+                  : "text-gray-600 hover:text-gray-800 dark:text-zinc-300 dark:hover:text-zinc-100"
               }`}
             >
               <Users className="w-4 h-4" />
@@ -91,7 +91,7 @@ function LoginForm() {
               className={`flex-1 flex items-center justify-center space-x-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
                 mode === "operator"
                   ? "bg-white text-amber-700 shadow-sm"
-                  : "text-gray-500 hover:text-gray-700"
+                  : "text-gray-600 hover:text-gray-800 dark:text-zinc-300 dark:hover:text-zinc-100"
               }`}
             >
               <Building2 className="w-4 h-4" />
@@ -117,7 +117,7 @@ function LoginForm() {
                   type={effectiveMode === "operator" ? "email" : "text"}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 dark:border-zinc-500 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                   placeholder={mode === "team" ? "e.g. admin, riley, or you@email.com" : "you@example.com"}
                   required
                   disabled={isLoading}
@@ -144,7 +144,7 @@ function LoginForm() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 dark:border-zinc-500 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 placeholder="Enter your password"
                 required
                 disabled={isLoading}
@@ -183,7 +183,7 @@ function LoginForm() {
           )}
 
           <div className="mt-6 pt-5 border-t border-gray-200 dark:border-zinc-800">
-            <p className="text-xs text-gray-500 text-center">
+            <p className="text-xs text-gray-600 dark:text-zinc-400 text-center">
               {effectiveMode === "team"
                 ? "Contact your administrator for credentials. You can also sign in with your email."
                 : "Organization accounts manage station programming and settings."}

@@ -520,7 +520,7 @@ export default function StationWizard() {
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                   Station Setup
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Give your station an identity
                 </p>
               </div>
@@ -611,7 +611,7 @@ export default function StationWizard() {
                         {station.name}
                       </h3>
                       {station.tagline && (
-                        <p className="text-sm text-gray-500 dark:text-zinc-500">
+                        <p className="text-sm text-gray-400 dark:text-zinc-400">
                           {station.tagline}
                         </p>
                       )}
@@ -643,7 +643,7 @@ export default function StationWizard() {
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                   Import Music
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Upload a CSV with your music catalog, or skip and add music
                   later
                 </p>
@@ -733,19 +733,19 @@ export default function StationWizard() {
                         <table className="w-full text-sm">
                           <thead className="bg-gray-50 sticky top-0">
                             <tr>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
                                 Title
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
                                 Artist
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
                                 Album
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
                                 Genre
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
                                 Duration
                               </th>
                             </tr>
@@ -759,13 +759,13 @@ export default function StationWizard() {
                                 <td className="px-4 py-2 text-gray-600 dark:text-zinc-400">
                                   {song.artist}
                                 </td>
-                                <td className="px-4 py-2 text-gray-500 dark:text-zinc-500">
+                                <td className="px-4 py-2 text-gray-400 dark:text-zinc-400">
                                   {song.album || "--"}
                                 </td>
-                                <td className="px-4 py-2 text-gray-500 dark:text-zinc-500">
+                                <td className="px-4 py-2 text-gray-400 dark:text-zinc-400">
                                   {song.genre || "--"}
                                 </td>
-                                <td className="px-4 py-2 text-gray-500 dark:text-zinc-500">
+                                <td className="px-4 py-2 text-gray-400 dark:text-zinc-400">
                                   {song.duration || "--"}
                                 </td>
                               </tr>
@@ -803,7 +803,7 @@ export default function StationWizard() {
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                     Configure DJs
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">
                     Add AI DJ personalities for your station
                   </p>
                 </div>
@@ -844,7 +844,7 @@ export default function StationWizard() {
                         </div>
                         <div className="min-w-0">
                           <p className="font-medium text-sm">{dj.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-zinc-500">
+                          <p className="text-xs text-gray-400 dark:text-zinc-400">
                             Voice: {dj.ttsVoice}
                           </p>
                         </div>
@@ -870,7 +870,7 @@ export default function StationWizard() {
                         <span className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
                           DJ #{i + 1}
                           {dj.name && (
-                            <span className="font-normal text-gray-500 dark:text-zinc-500">
+                            <span className="font-normal text-gray-400 dark:text-zinc-400">
                               {" "}
                               -- {dj.name}
                             </span>
@@ -892,7 +892,7 @@ export default function StationWizard() {
                         {/* Row 1: Name & Voice */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
+                            <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
                               Name <span className="text-red-400">*</span>
                             </label>
                             <input
@@ -908,7 +908,7 @@ export default function StationWizard() {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
+                            <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
                               Voice
                             </label>
                             <select
@@ -943,7 +943,7 @@ export default function StationWizard() {
 
                         {/* Row 2: Bio */}
                         <div>
-                          <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
+                          <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
                             Bio
                           </label>
                           <textarea
@@ -962,7 +962,7 @@ export default function StationWizard() {
                         {/* Row 3: Schedule */}
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
+                            <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
                               <Clock className="w-3 h-3 inline mr-1" />
                               Start Hour
                             </label>
@@ -986,7 +986,7 @@ export default function StationWizard() {
                             </select>
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-500 dark:text-zinc-500 mb-1">
+                            <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
                               <Clock className="w-3 h-3 inline mr-1" />
                               End Hour
                             </label>
@@ -1027,7 +1027,7 @@ export default function StationWizard() {
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                   Set Schedule
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Click cells to assign DJs to time slots. Select a DJ below,
                   then click hours on the grid.
                 </p>
@@ -1156,7 +1156,7 @@ export default function StationWizard() {
                   </div>
 
                   {/* Schedule summary */}
-                  <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-zinc-500">
+                  <div className="flex items-center gap-4 text-xs text-gray-400 dark:text-zinc-400">
                     <span className="bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 px-2.5 py-1 rounded-full font-medium">
                       {schedule.length} slots assigned
                     </span>
@@ -1181,7 +1181,7 @@ export default function StationWizard() {
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                   Ready to Go Live
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Review your station setup before launching
                 </p>
               </div>
@@ -1204,21 +1204,21 @@ export default function StationWizard() {
                   </div>
                   <div className="space-y-1.5 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-500 dark:text-zinc-500">Name</span>
+                      <span className="text-gray-400 dark:text-zinc-400">Name</span>
                       <span className="font-medium">{station.name}</span>
                     </div>
                     {station.tagline && (
                       <div className="flex justify-between">
-                        <span className="text-gray-500 dark:text-zinc-500">Tagline</span>
+                        <span className="text-gray-400 dark:text-zinc-400">Tagline</span>
                         <span className="text-gray-700 dark:text-zinc-300">{station.tagline}</span>
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span className="text-gray-500 dark:text-zinc-500">Genre</span>
+                      <span className="text-gray-400 dark:text-zinc-400">Genre</span>
                       <span className="font-medium">{station.genre}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500 dark:text-zinc-500">Timezone</span>
+                      <span className="text-gray-400 dark:text-zinc-400">Timezone</span>
                       <span className="text-gray-700 dark:text-zinc-300">
                         {TIMEZONE_OPTIONS.find(
                           (t) => t.value === station.timezone

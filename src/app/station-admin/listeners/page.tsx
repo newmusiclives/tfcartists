@@ -70,7 +70,7 @@ function StatCard({
         </span>
       </div>
       <div className="text-2xl font-bold text-white">{value}</div>
-      {sub && <div className="text-xs text-zinc-500 mt-1">{sub}</div>}
+      {sub && <div className="text-xs text-zinc-400 mt-1">{sub}</div>}
     </div>
   );
 }
@@ -87,7 +87,7 @@ function LocationBar({
   const pct = maxCount > 0 ? (entry.count / maxCount) * 100 : 0;
   return (
     <div className="flex items-center gap-3 py-2.5 px-1 group hover:bg-zinc-800/50 rounded-lg transition-colors">
-      <span className="text-xs font-mono text-zinc-500 w-6 text-right">
+      <span className="text-xs font-mono text-zinc-400 w-6 text-right">
         {rank}
       </span>
       <div className="flex-1 min-w-0">
@@ -95,7 +95,7 @@ function LocationBar({
           <span className="text-sm font-medium text-zinc-200 truncate">
             {entry.city}
             {entry.region !== "Unknown" && (
-              <span className="text-zinc-500">, {entry.region}</span>
+              <span className="text-zinc-400">, {entry.region}</span>
             )}
           </span>
           <span className="text-xs font-mono text-zinc-400 ml-2 shrink-0">
@@ -142,11 +142,11 @@ function RegionRow({
 function EmptyState() {
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-12 text-center">
-      <MapPin className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+      <MapPin className="w-12 h-12 text-zinc-400 mx-auto mb-4" />
       <h3 className="text-lg font-semibold text-zinc-300 mb-2">
         No Location Data Yet
       </h3>
-      <p className="text-sm text-zinc-500 max-w-md mx-auto mb-6">
+      <p className="text-sm text-zinc-400 max-w-md mx-auto mb-6">
         Listener locations are tracked automatically when sessions include
         geolocation. As listeners tune in and location data is recorded, their
         geographic distribution will appear here.
@@ -306,7 +306,7 @@ export default function ListenerGeoPage() {
 
         {loading && !data ? (
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-12 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : !hasData ? (
           <EmptyState />
@@ -370,7 +370,7 @@ export default function ListenerGeoPage() {
                   {showAllLocations && data!.locations.length > 10 && (
                     <button
                       onClick={() => setShowAllLocations(false)}
-                      className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-400 mt-2 px-1 transition-colors"
+                      className="flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-400 mt-2 px-1 transition-colors"
                     >
                       Show less
                     </button>
@@ -406,7 +406,7 @@ export default function ListenerGeoPage() {
                   {showAllRegions && data!.regions.length > 8 && (
                     <button
                       onClick={() => setShowAllRegions(false)}
-                      className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-400 mt-2 px-1 transition-colors"
+                      className="flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-400 mt-2 px-1 transition-colors"
                     >
                       Show less
                     </button>

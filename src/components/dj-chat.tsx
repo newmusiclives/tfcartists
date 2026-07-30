@@ -280,7 +280,7 @@ export default function DJChat() {
             placeholder="Say something..."
             maxLength={500}
             disabled={sending}
-            className="flex-1 rounded-xl border border-zinc-700/50 bg-zinc-900/60 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600/50 disabled:opacity-50"
+            className="flex-1 rounded-xl border border-zinc-700/50 bg-zinc-900/60 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-400 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600/50 disabled:opacity-50"
           />
           <button
             onClick={sendMessage}

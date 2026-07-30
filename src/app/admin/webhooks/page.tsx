@@ -156,7 +156,7 @@ export default function WebhooksAdminPage() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-3">
-            <Link href="/admin" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
+            <Link href="/admin" className="text-gray-400 hover:text-gray-700 dark:text-zinc-300">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <Webhook className="w-7 h-7 text-amber-600" />
@@ -190,7 +190,7 @@ export default function WebhooksAdminPage() {
           <button
             onClick={() => setTab("endpoints")}
             className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
-              tab === "endpoints" ? "border-amber-600 text-amber-700" : "border-transparent text-gray-500 hover:text-gray-700"
+              tab === "endpoints" ? "border-amber-600 text-amber-700" : "border-transparent text-gray-400 hover:text-gray-700"
             }`}
           >
             Endpoints ({endpoints.length})
@@ -198,7 +198,7 @@ export default function WebhooksAdminPage() {
           <button
             onClick={() => setTab("deliveries")}
             className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
-              tab === "deliveries" ? "border-amber-600 text-amber-700" : "border-transparent text-gray-500 hover:text-gray-700"
+              tab === "deliveries" ? "border-amber-600 text-amber-700" : "border-transparent text-gray-400 hover:text-gray-700"
             }`}
           >
             Delivery History ({deliveries.length})
@@ -236,7 +236,7 @@ export default function WebhooksAdminPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               {Object.entries(WEBHOOK_EVENT_CATEGORIES).map(([key, cat]) => (
                 <div key={key} className="border rounded-lg p-3">
-                  <p className="text-xs font-semibold text-gray-500 uppercase mb-2">{cat.label}</p>
+                  <p className="text-xs font-semibold text-gray-400 uppercase mb-2">{cat.label}</p>
                   {cat.events.map((evt) => (
                     <label key={evt} className="flex items-center gap-2 text-sm py-1 cursor-pointer">
                       <input
@@ -274,7 +274,7 @@ export default function WebhooksAdminPage() {
         {tab === "endpoints" && (
           <div className="space-y-4">
             {endpoints.length === 0 && !showForm && (
-              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
                 <Webhook className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                 <p className="font-medium">No webhook endpoints yet</p>
                 <p className="text-sm mt-1">Add an endpoint to start receiving real-time events</p>
@@ -288,8 +288,8 @@ export default function WebhooksAdminPage() {
                       <span className={`w-2 h-2 rounded-full ${ep.enabled ? "bg-green-500" : "bg-gray-300"}`} />
                       <h3 className="font-semibold text-gray-900 dark:text-white">{ep.name}</h3>
                     </div>
-                    <p className="text-sm text-gray-500 font-mono truncate max-w-md">{ep.url}</p>
-                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-zinc-500">
+                    <p className="text-sm text-gray-400 font-mono truncate max-w-md">{ep.url}</p>
+                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-400 dark:text-zinc-400">
                       <span>{ep.events.length} events</span>
                       <span>|</span>
                       <span>Created {new Date(ep.createdAt).toLocaleDateString()}</span>
@@ -367,13 +367,13 @@ export default function WebhooksAdminPage() {
             <div className="flex justify-end mb-3">
               <button
                 onClick={fetchData}
-                className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
+                className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700"
               >
                 <RefreshCw className="w-3 h-3" /> Refresh
               </button>
             </div>
             {deliveries.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
                 <p>No deliveries yet. Send a test ping to see results here.</p>
               </div>
             ) : (
@@ -401,9 +401,9 @@ export default function WebhooksAdminPage() {
                         </td>
                         <td className="px-4 py-3 font-mono text-xs">{d.event}</td>
                         <td className="px-4 py-3 text-gray-700 dark:text-zinc-300">{d.endpointName}</td>
-                        <td className="px-4 py-3 text-gray-500 dark:text-zinc-500">{d.statusCode || "-"}</td>
-                        <td className="px-4 py-3 text-gray-500 dark:text-zinc-500">{d.duration ? `${d.duration}ms` : "-"}</td>
-                        <td className="px-4 py-3 text-gray-500 text-xs">
+                        <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">{d.statusCode || "-"}</td>
+                        <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">{d.duration ? `${d.duration}ms` : "-"}</td>
+                        <td className="px-4 py-3 text-gray-400 text-xs">
                           {new Date(d.timestamp).toLocaleString()}
                         </td>
                       </tr>

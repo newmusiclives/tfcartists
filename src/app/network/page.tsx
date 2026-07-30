@@ -206,27 +206,27 @@ export default function NetworkPage() {
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <Radio className="w-6 h-6 text-amber-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">{networkStats.totalStations}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Active Stations</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Active Stations</div>
             </div>
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <Users className="w-6 h-6 text-purple-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">{networkStats.totalArtists}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Artists</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Artists</div>
             </div>
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <Headphones className="w-6 h-6 text-blue-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">{networkStats.totalListeners}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Listeners</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Listeners</div>
             </div>
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <Music className="w-6 h-6 text-teal-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">{networkStats.totalSongs.toLocaleString()}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Songs</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Songs</div>
             </div>
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
               <DollarSign className="w-6 h-6 text-green-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">${networkStats.totalRevenue.toLocaleString()}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Monthly Revenue</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Monthly Revenue</div>
             </div>
           </div>
         </section>
@@ -284,15 +284,15 @@ export default function NetworkPage() {
                       <div className="grid grid-cols-3 gap-2 mb-4">
                         <div className="bg-white/10 rounded-lg p-2 text-center">
                           <div className="text-lg font-bold text-amber-400">{kpi.kpis.artistCount}</div>
-                          <div className="text-[10px] text-gray-500 dark:text-zinc-500">Artists</div>
+                          <div className="text-[10px] text-gray-400 dark:text-zinc-400">Artists</div>
                         </div>
                         <div className="bg-white/10 rounded-lg p-2 text-center">
                           <div className="text-lg font-bold text-amber-400">{kpi.kpis.listenerCount}</div>
-                          <div className="text-[10px] text-gray-500 dark:text-zinc-500">Listeners</div>
+                          <div className="text-[10px] text-gray-400 dark:text-zinc-400">Listeners</div>
                         </div>
                         <div className="bg-white/10 rounded-lg p-2 text-center">
                           <div className="text-lg font-bold text-amber-400">{kpi.kpis.songCount.toLocaleString()}</div>
-                          <div className="text-[10px] text-gray-500 dark:text-zinc-500">Songs</div>
+                          <div className="text-[10px] text-gray-400 dark:text-zinc-400">Songs</div>
                         </div>
                       </div>
                     )}
@@ -329,7 +329,7 @@ export default function NetworkPage() {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-500 text-sm mb-4">{station.genre}</p>
+                <p className="text-gray-400 text-sm mb-4">{station.genre}</p>
                 <span className="inline-flex items-center space-x-1 bg-white/5 text-gray-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/10">
                   <Clock className="w-3 h-3" />
                   <span>Coming Soon</span>

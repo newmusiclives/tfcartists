@@ -192,7 +192,7 @@ function SectionCard({ title, icon: Icon, children, collapsible = false, default
         </div>
         <h2 className="text-base font-semibold text-zinc-100 flex-1 text-left">{title}</h2>
         {collapsible && (
-          open ? <ChevronDown className="w-4 h-4 text-zinc-500" /> : <ChevronRight className="w-4 h-4 text-zinc-500" />
+          open ? <ChevronDown className="w-4 h-4 text-zinc-400" /> : <ChevronRight className="w-4 h-4 text-zinc-400" />
         )}
       </button>
       {open && <div className="px-6 pb-6 border-t border-zinc-800/50">{children}</div>}
@@ -493,7 +493,7 @@ export default function StationBrandingPage() {
       <div className="min-h-screen bg-zinc-950">
         <SharedNav />
         <div className="flex justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-zinc-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-zinc-400" />
         </div>
       </div>
     );
@@ -504,7 +504,7 @@ export default function StationBrandingPage() {
       <div className="min-h-screen bg-zinc-950">
         <SharedNav />
         <div className="max-w-4xl mx-auto px-4 py-12 text-center">
-          <p className="text-zinc-500">No station found. Create a station first.</p>
+          <p className="text-zinc-400">No station found. Create a station first.</p>
         </div>
       </div>
     );
@@ -533,7 +533,7 @@ export default function StationBrandingPage() {
               </div>
               White-Label Branding
             </h1>
-            <p className="text-zinc-500 mt-1 ml-[52px]">Customize your station&apos;s look, feel, and identity</p>
+            <p className="text-zinc-400 mt-1 ml-[52px]">Customize your station&apos;s look, feel, and identity</p>
           </div>
           <button
             onClick={save}
@@ -741,7 +741,7 @@ export default function StationBrandingPage() {
                               unoptimized
                             />
                           ) : (
-                            <Upload className="w-6 h-6 text-zinc-600" />
+                            <Upload className="w-6 h-6 text-zinc-400" />
                           )}
                         </div>
                         <div className="flex-1">
@@ -752,7 +752,7 @@ export default function StationBrandingPage() {
                             className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
                             placeholder="https://example.com/logo.png"
                           />
-                          <p className="text-xs text-zinc-500 mt-1">Recommended: 512x512 PNG with transparency</p>
+                          <p className="text-xs text-zinc-400 mt-1">Recommended: 512x512 PNG with transparency</p>
                         </div>
                       </div>
                     </div>
@@ -770,7 +770,7 @@ export default function StationBrandingPage() {
                               unoptimized
                             />
                           ) : (
-                            <Globe className="w-6 h-6 text-zinc-600" />
+                            <Globe className="w-6 h-6 text-zinc-400" />
                           )}
                         </div>
                         <div className="flex-1">
@@ -781,7 +781,7 @@ export default function StationBrandingPage() {
                             className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
                             placeholder="https://example.com/favicon.ico"
                           />
-                          <p className="text-xs text-zinc-500 mt-1">Recommended: 32x32 or 64x64 ICO/PNG</p>
+                          <p className="text-xs text-zinc-400 mt-1">Recommended: 32x32 or 64x64 ICO/PNG</p>
                         </div>
                       </div>
                     </div>
@@ -802,7 +802,7 @@ export default function StationBrandingPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <code className="text-sm text-amber-400 font-mono">truefans-radio.netlify.app</code>
-                      <a href="https://truefans-radio.netlify.app" target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-zinc-300">
+                      <a href="https://truefans-radio.netlify.app" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-300">
                         <ExternalLink className="w-3.5 h-3.5" />
                       </a>
                     </div>
@@ -842,7 +842,7 @@ export default function StationBrandingPage() {
                     <h3 className="text-sm font-semibold text-zinc-200 mb-3">DNS Configuration</h3>
                     <p className="text-xs text-zinc-400 mb-4">Add a CNAME record in your domain&apos;s DNS settings:</p>
                     <div className="bg-zinc-950 rounded-lg p-4 font-mono text-xs border border-zinc-800">
-                      <div className="grid grid-cols-3 gap-4 text-zinc-500 mb-2">
+                      <div className="grid grid-cols-3 gap-4 text-zinc-400 mb-2">
                         <span>Type</span>
                         <span>Name</span>
                         <span>Value</span>
@@ -854,19 +854,19 @@ export default function StationBrandingPage() {
                       </div>
                     </div>
                     <div className="mt-4 space-y-2">
-                      <p className="text-xs text-zinc-500 flex items-start gap-2">
+                      <p className="text-xs text-zinc-400 flex items-start gap-2">
                         <span className="text-amber-400 font-bold shrink-0">1.</span>
                         Log in to your domain registrar (GoDaddy, Namecheap, Cloudflare, etc.)
                       </p>
-                      <p className="text-xs text-zinc-500 flex items-start gap-2">
+                      <p className="text-xs text-zinc-400 flex items-start gap-2">
                         <span className="text-amber-400 font-bold shrink-0">2.</span>
                         Navigate to DNS settings for your domain
                       </p>
-                      <p className="text-xs text-zinc-500 flex items-start gap-2">
+                      <p className="text-xs text-zinc-400 flex items-start gap-2">
                         <span className="text-amber-400 font-bold shrink-0">3.</span>
                         Add the CNAME record shown above
                       </p>
-                      <p className="text-xs text-zinc-500 flex items-start gap-2">
+                      <p className="text-xs text-zinc-400 flex items-start gap-2">
                         <span className="text-amber-400 font-bold shrink-0">4.</span>
                         Wait 5-30 minutes for DNS propagation, then save here
                       </p>
@@ -904,7 +904,7 @@ export default function StationBrandingPage() {
                           >
                             <size.icon className="w-5 h-5" />
                             <span className="text-xs font-medium">{size.label}</span>
-                            <span className="text-[10px] text-zinc-500">{size.width}x{size.height}</span>
+                            <span className="text-[10px] text-zinc-400">{size.width}x{size.height}</span>
                           </button>
                         ))}
                       </div>
@@ -955,7 +955,7 @@ export default function StationBrandingPage() {
               <SectionCard title="Imaging Script Library" icon={Music}>
                 <div className="mt-4">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs text-zinc-500">
+                    <span className="text-xs text-zinc-400">
                       {SCRIPT_CATEGORIES.reduce((sum, cat) => sum + getScripts(cat.key).length, 0)} scripts total
                     </span>
                   </div>
@@ -1000,7 +1000,7 @@ export default function StationBrandingPage() {
                                     <div className="flex items-center justify-between mb-3">
                                       <div className="flex items-center gap-2">
                                         <span className="font-medium text-sm text-zinc-200">{cat.label}</span>
-                                        <span className="text-xs text-zinc-500">({scripts.length})</span>
+                                        <span className="text-xs text-zinc-400">({scripts.length})</span>
                                       </div>
                                       <div className="flex items-center gap-2">
                                         <button
@@ -1022,7 +1022,7 @@ export default function StationBrandingPage() {
                                     </div>
 
                                     {scripts.length === 0 ? (
-                                      <p className="text-xs text-zinc-500 italic">
+                                      <p className="text-xs text-zinc-400 italic">
                                         No scripts yet. Click &ldquo;Generate All&rdquo; or &ldquo;Add&rdquo; to get started.
                                       </p>
                                     ) : (
@@ -1066,22 +1066,22 @@ export default function StationBrandingPage() {
                                             <div key={i} className="bg-zinc-900/50 rounded-lg border border-zinc-800 p-3">
                                               <div className="flex items-start justify-between gap-2">
                                                 <div className="flex-1 min-w-0">
-                                                  <span className="text-xs font-medium text-zinc-500">{script.label}</span>
+                                                  <span className="text-xs font-medium text-zinc-400">{script.label}</span>
                                                   <p className="text-sm text-zinc-200 mt-0.5">&ldquo;{script.text}&rdquo;</p>
                                                 </div>
                                                 <div className="flex gap-1 shrink-0">
-                                                  <button onClick={() => startEdit(cat.key, i)} className="p-1 text-zinc-500 hover:text-zinc-300">
+                                                  <button onClick={() => startEdit(cat.key, i)} className="p-1 text-zinc-400 hover:text-zinc-300">
                                                     <Pencil className="w-3.5 h-3.5" />
                                                   </button>
-                                                  <button onClick={() => deleteScript(cat.key, i)} className="p-1 text-zinc-500 hover:text-red-400">
+                                                  <button onClick={() => deleteScript(cat.key, i)} className="p-1 text-zinc-400 hover:text-red-400">
                                                     <Trash2 className="w-3.5 h-3.5" />
                                                   </button>
                                                 </div>
                                               </div>
                                               {script.musicBed && (
                                                 <div className="flex items-start gap-1.5 mt-2 pt-2 border-t border-zinc-800">
-                                                  <Music className="w-3.5 h-3.5 text-zinc-600 mt-0.5 shrink-0" />
-                                                  <p className="text-xs text-zinc-500">{script.musicBed}</p>
+                                                  <Music className="w-3.5 h-3.5 text-zinc-400 mt-0.5 shrink-0" />
+                                                  <p className="text-xs text-zinc-400">{script.musicBed}</p>
                                                 </div>
                                               )}
                                             </div>
@@ -1215,7 +1215,7 @@ export default function StationBrandingPage() {
                   </div>
                 </div>
 
-                <p className="text-[10px] text-zinc-500 mt-2 text-center">Updates in real-time as you edit</p>
+                <p className="text-[10px] text-zinc-400 mt-2 text-center">Updates in real-time as you edit</p>
               </div>
 
               {/* Embed Player Preview */}
@@ -1256,7 +1256,7 @@ export default function StationBrandingPage() {
                     <div key={item.label} className="flex items-center gap-2">
                       <div className="w-5 h-5 rounded border border-zinc-700" style={{ background: item.color }} />
                       <span className="text-xs text-zinc-400 flex-1">{item.label}</span>
-                      <code className="text-[10px] text-zinc-500 font-mono">{item.color}</code>
+                      <code className="text-[10px] text-zinc-400 font-mono">{item.color}</code>
                     </div>
                   ))}
                 </div>

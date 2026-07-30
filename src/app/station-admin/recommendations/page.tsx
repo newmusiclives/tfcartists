@@ -315,11 +315,11 @@ export default function RecommendationsPage() {
       <div className="min-h-screen bg-zinc-950">
         <SharedNav />
         <div className="max-w-6xl mx-auto px-4 py-12 text-center">
-          <Sparkles className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+          <Sparkles className="w-12 h-12 text-zinc-400 mx-auto mb-4" />
           <h1 className="text-xl font-bold text-zinc-200 mb-2">
             No Station Selected
           </h1>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-zinc-400">
             Select a station to view AI music recommendations.
           </p>
         </div>
@@ -384,7 +384,7 @@ export default function RecommendationsPage() {
                             {g.name}
                           </span>
                         </div>
-                        <span className="text-zinc-500 font-mono">
+                        <span className="text-zinc-400 font-mono">
                           {g.pct}%
                         </span>
                       </div>
@@ -400,7 +400,7 @@ export default function RecommendationsPage() {
                   {profile.avgEnergy !== null && (
                     <div className="text-2xl font-bold text-white mb-3">
                       {profile.avgEnergy.toFixed(2)}{" "}
-                      <span className="text-xs text-zinc-500 font-normal">
+                      <span className="text-xs text-zinc-400 font-normal">
                         avg
                       </span>
                     </div>
@@ -416,7 +416,7 @@ export default function RecommendationsPage() {
                         <div key={b.label}>
                           <div className="flex justify-between text-xs mb-0.5">
                             <span className="text-zinc-400">{b.label}</span>
-                            <span className="text-zinc-500 font-mono">
+                            <span className="text-zinc-400 font-mono">
                               {b.count}
                             </span>
                           </div>
@@ -440,7 +440,7 @@ export default function RecommendationsPage() {
                   {profile.avgBpm !== null && (
                     <div className="text-2xl font-bold text-white mb-3">
                       {profile.avgBpm}{" "}
-                      <span className="text-xs text-zinc-500 font-normal">
+                      <span className="text-xs text-zinc-400 font-normal">
                         avg BPM
                       </span>
                     </div>
@@ -456,7 +456,7 @@ export default function RecommendationsPage() {
                         <div key={r.label}>
                           <div className="flex justify-between text-xs mb-0.5">
                             <span className="text-zinc-400">{r.label}</span>
-                            <span className="text-zinc-500 font-mono">
+                            <span className="text-zinc-400 font-mono">
                               {r.count}
                             </span>
                           </div>
@@ -500,7 +500,7 @@ export default function RecommendationsPage() {
                             {v.name}
                           </span>
                         </div>
-                        <span className="text-zinc-500 font-mono">
+                        <span className="text-zinc-400 font-mono">
                           {v.pct}%
                         </span>
                       </div>
@@ -540,17 +540,17 @@ export default function RecommendationsPage() {
                         <div className="text-sm font-medium text-zinc-200 truncate">
                           {song.title}
                         </div>
-                        <div className="text-xs text-zinc-500 truncate">
+                        <div className="text-xs text-zinc-400 truncate">
                           {song.artistName}
                           {song.genre && (
-                            <span className="ml-2 text-zinc-600">
+                            <span className="ml-2 text-zinc-400">
                               {song.genre}
                             </span>
                           )}
                         </div>
                       </div>
                       <div className="flex items-center gap-3 shrink-0 ml-3">
-                        <span className="text-xs font-mono text-zinc-500">
+                        <span className="text-xs font-mono text-zinc-400">
                           {song.playCount} plays
                         </span>
                         <div className="flex items-center gap-1">
@@ -596,8 +596,8 @@ export default function RecommendationsPage() {
                 </div>
               ) : suggestions.length === 0 ? (
                 <div className="text-center py-6">
-                  <Lightbulb className="w-8 h-8 text-zinc-600 mx-auto mb-3" />
-                  <p className="text-sm text-zinc-500 mb-3">
+                  <Lightbulb className="w-8 h-8 text-zinc-400 mx-auto mb-3" />
+                  <p className="text-sm text-zinc-400 mb-3">
                     Get AI-powered suggestions for artists and genres to add to
                     your station.
                   </p>
@@ -642,7 +642,7 @@ export default function RecommendationsPage() {
                           Import
                         </a>
                       </div>
-                      <div className="text-xs text-zinc-500 mb-1">
+                      <div className="text-xs text-zinc-400 mb-1">
                         {s.genre}
                       </div>
                       <p className="text-xs text-zinc-400 leading-relaxed">
@@ -675,7 +675,7 @@ export default function RecommendationsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="text-xs text-zinc-500 uppercase tracking-wide border-b border-zinc-800">
+                    <tr className="text-xs text-zinc-400 uppercase tracking-wide border-b border-zinc-800">
                       <th className="text-left py-2 px-2 font-medium">#</th>
                       <th className="text-left py-2 px-2 font-medium">Song</th>
                       <th className="text-left py-2 px-2 font-medium">
@@ -701,7 +701,7 @@ export default function RecommendationsPage() {
                         key={song.id}
                         className="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition-colors"
                       >
-                        <td className="py-2.5 px-2 text-xs font-mono text-zinc-500">
+                        <td className="py-2.5 px-2 text-xs font-mono text-zinc-400">
                           {i + 1}
                         </td>
                         <td className="py-2.5 px-2">
@@ -722,7 +722,7 @@ export default function RecommendationsPage() {
                         <td className="py-2.5 px-2 text-right text-sm font-mono text-zinc-300">
                           {song.recentPlays}
                         </td>
-                        <td className="py-2.5 px-2 text-right text-sm font-mono text-zinc-500">
+                        <td className="py-2.5 px-2 text-right text-sm font-mono text-zinc-400">
                           {song.priorPlays}
                         </td>
                         <td className="py-2.5 px-2 text-right">
@@ -790,14 +790,14 @@ export default function RecommendationsPage() {
                         <div className="text-xs font-medium text-zinc-300">
                           {cat.label}
                         </div>
-                        <div className="text-[10px] text-zinc-500">
+                        <div className="text-[10px] text-zinc-400">
                           Ideal: {cat.idealRange}
                         </div>
                       </div>
                     </div>
                     <div className="text-xl font-bold text-white mb-0.5">
                       {cat.count}{" "}
-                      <span className="text-xs text-zinc-500 font-normal">
+                      <span className="text-xs text-zinc-400 font-normal">
                         songs
                       </span>
                     </div>
@@ -813,7 +813,7 @@ export default function RecommendationsPage() {
                       >
                         {cat.pct}%
                       </span>
-                      <span className="text-[10px] text-zinc-500">
+                      <span className="text-[10px] text-zinc-400">
                         ~{cat.avgPlays} avg plays
                       </span>
                     </div>
@@ -882,7 +882,7 @@ function VelocityBadge({
 function EmptyMessage({ text }: { text: string }) {
   return (
     <div className="text-center py-8">
-      <p className="text-sm text-zinc-500">{text}</p>
+      <p className="text-sm text-zinc-400">{text}</p>
     </div>
   );
 }

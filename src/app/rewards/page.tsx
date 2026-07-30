@@ -45,7 +45,7 @@ export default function RewardsHubPage() {
               Track your XP, listening streaks, badges earned, and see where you rank on the leaderboard.
               Earn XP by listening, referring friends, and maintaining streaks.
             </p>
-            <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
+            <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
               <span className="flex items-center space-x-1"><Gift className="w-3 h-3" /><span>10 XP per 30-min session</span></span>
               <span className="flex items-center space-x-1"><TrendingUp className="w-3 h-3" /><span>Streak bonuses</span></span>
             </div>
@@ -70,7 +70,7 @@ export default function RewardsHubPage() {
               See how your embeddable player is performing. Track listeners gained through your embed,
               XP earned, and your level progression.
             </p>
-            <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
+            <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
               <span className="flex items-center space-x-1"><Code className="w-3 h-3" /><span>Embed code + ref link</span></span>
               <span className="flex items-center space-x-1"><Gift className="w-3 h-3" /><span>50 XP per new listener</span></span>
             </div>

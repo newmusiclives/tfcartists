@@ -316,7 +316,7 @@ export default function ManagementDashboard() {
                           style={{ width: `${phase.progress}%` }}
                         />
                       </div>
-                      <div className="text-xs text-zinc-500 text-right">{phase.done}/{phase.total} done</div>
+                      <div className="text-xs text-zinc-400 text-right">{phase.done}/{phase.total} done</div>
                     </div>
                   </Link>
                 );
@@ -359,7 +359,7 @@ export default function ManagementDashboard() {
                       <div className="flex items-center space-x-4 ml-4">
                         <div className="text-right">
                           <div className={`text-xs font-bold ${colors.text}`}>Team {action.team}</div>
-                          <div className="text-xs text-gray-500 dark:text-zinc-500">{action.dueLabel}</div>
+                          <div className="text-xs text-gray-400 dark:text-zinc-400">{action.dueLabel}</div>
                         </div>
                         <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -429,7 +429,7 @@ export default function ManagementDashboard() {
                               style={{ width: `${phase.progress}%` }}
                             />
                           </div>
-                          <div className="text-xs text-zinc-500 text-right mt-0.5">{phase.progress}%</div>
+                          <div className="text-xs text-zinc-400 text-right mt-0.5">{phase.progress}%</div>
                         </div>
                         {isExpanded ? (
                           <ChevronDown className="w-5 h-5 text-gray-400" />
@@ -472,7 +472,7 @@ export default function ManagementDashboard() {
                       {item.team}
                     </span>
                     <span className="text-sm text-gray-900 dark:text-zinc-100 flex-1">{item.details}</span>
-                    <span className="text-xs text-gray-500 dark:text-zinc-500">
+                    <span className="text-xs text-gray-400 dark:text-zinc-400">
                       {new Date(item.timestamp).toLocaleDateString()}
                     </span>
                   </div>
@@ -534,7 +534,7 @@ function DependencyCard({
     <div className="border border-zinc-800 rounded-lg p-4 hover:border-amber-500/30 transition-colors">
       <div className="flex items-center space-x-2 mb-2">
         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colorMap[fromColor]}`}>{from}</span>
-        <ArrowRight className="w-4 h-4 text-zinc-500" />
+        <ArrowRight className="w-4 h-4 text-zinc-400" />
         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colorMap[toColor]}`}>{to}</span>
       </div>
       <p className="text-sm text-zinc-300">{description}</p>
@@ -578,7 +578,7 @@ function KPICard({
       <div className="text-sm text-zinc-400 mb-1">{label}</div>
       <div className="flex items-baseline space-x-2 mb-2">
         <span className="text-2xl font-bold text-gray-900 dark:text-white">{current}</span>
-        <span className="text-sm text-gray-500 dark:text-zinc-500">/ {target}</span>
+        <span className="text-sm text-gray-400 dark:text-zinc-400">/ {target}</span>
       </div>
       <div className="bg-zinc-700 rounded-full h-2 overflow-hidden mb-2">
         <div
@@ -587,7 +587,7 @@ function KPICard({
         />
       </div>
       <div className="flex items-center justify-between text-xs">
-        <span className="text-gray-500 dark:text-zinc-500">{progress}% of target</span>
+        <span className="text-gray-400 dark:text-zinc-400">{progress}% of target</span>
         <span className="font-medium text-gray-600 dark:text-zinc-400">{team}</span>
       </div>
     </div>

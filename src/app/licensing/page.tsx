@@ -33,7 +33,7 @@ export default function LicensingPage() {
           <p className="text-xl sm:text-2xl font-medium bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-6">
             Understanding your obligations as a station operator
           </p>
-          <p className="text-sm text-gray-500 max-w-2xl mx-auto">
+          <p className="text-sm text-gray-400 max-w-2xl mx-auto">
             <AlertTriangle className="w-4 h-4 inline-block mr-1 -mt-0.5" />
             This page is for informational purposes only and does not constitute legal advice.
             Consult a qualified music licensing attorney for guidance specific to your situation.
@@ -164,7 +164,7 @@ export default function LicensingPage() {
               </tbody>
             </table>
           </div>
-          <p className="text-sm text-gray-500 dark:text-zinc-500 mt-4">
+          <p className="text-sm text-gray-400 dark:text-zinc-400 mt-4">
             &ldquo;Small webcaster&rdquo; rates generally apply to stations under certain revenue
             and listener thresholds. Rates are subject to change — verify current pricing
             directly with each organization.
@@ -249,7 +249,7 @@ export default function LicensingPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-6 text-sm text-gray-500 italic">
+          <p className="mt-6 text-sm text-gray-400 italic">
             We recommend consulting a music licensing attorney in your jurisdiction before
             launching your station.
           </p>

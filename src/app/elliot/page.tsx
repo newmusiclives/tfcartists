@@ -295,7 +295,7 @@ export default function ElliotDashboardPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
                 No content yet. Create your first viral content piece.
               </div>
             )}
@@ -334,7 +334,7 @@ export default function ElliotDashboardPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
                 No active campaigns. Launch your first growth campaign.
               </div>
             )}
@@ -432,7 +432,7 @@ function MetricCard({
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
       <div className="flex items-center justify-between">
-        <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+        <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
         {change && (
           <div className="text-xs font-semibold text-green-600">{change}</div>
         )}
@@ -496,14 +496,14 @@ function ListenerTierCard({
         {tier}
       </div>
       <div className="text-3xl font-bold mb-1">{count}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500 mb-3">{description}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400 mb-3">{description}</div>
       <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
         <div
           className={`h-full rounded-full transition-all ${color === 'blue' ? 'bg-blue-600' : color === 'green' ? 'bg-green-600' : color === 'purple' ? 'bg-purple-600' : 'bg-pink-600'}`}
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{percentage}% of total</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{percentage}% of total</div>
     </div>
   );
 }
@@ -533,15 +533,15 @@ function ViralContentRow({
       <div className="flex items-center space-x-6 text-sm">
         <div className="text-center">
           <div className="font-semibold text-gray-900 dark:text-white">{views >= 1000 ? `${(views / 1000).toFixed(0)}k` : views}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">views</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">views</div>
         </div>
         <div className="text-center">
           <div className="font-semibold text-purple-600">{shares >= 1000 ? `${(shares / 1000).toFixed(1)}k` : shares}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">shares</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">shares</div>
         </div>
         <div className="text-center">
           <div className="font-semibold text-green-600">{conversions}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">listeners</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">listeners</div>
         </div>
       </div>
     </div>
@@ -570,7 +570,7 @@ function CampaignCard({
         </div>
         <div className="text-right">
           <div className="text-sm font-semibold text-gray-900 dark:text-white">{Math.round(progress)}%</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">complete</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">complete</div>
         </div>
       </div>
       <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden mb-2">
@@ -605,7 +605,7 @@ function BehaviorStat({
       </div>
       <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
       <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">{label}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }

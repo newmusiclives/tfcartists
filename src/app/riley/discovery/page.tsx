@@ -135,7 +135,7 @@ export default function RileyDiscoveryPage() {
               <Sparkles className="w-6 h-6 text-green-600" />
               Artist Discovery
             </h1>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-400 text-sm">
               Search Spotify for indie artists to add to the pipeline
             </p>
           </div>
@@ -223,7 +223,7 @@ export default function RileyDiscoveryPage() {
         {/* Results */}
         {artists.length > 0 && (
           <>
-            <div className="text-sm text-gray-500 dark:text-zinc-500 mb-4">
+            <div className="text-sm text-gray-400 dark:text-zinc-400 mb-4">
               Showing {artists.length} of {total.toLocaleString()} results
             </div>
 
@@ -256,7 +256,7 @@ export default function RileyDiscoveryPage() {
                           <h3 className="font-semibold text-gray-900 truncate">
                             {artist.name}
                           </h3>
-                          <div className="flex items-center gap-3 mt-1 text-xs text-gray-500 dark:text-zinc-500">
+                          <div className="flex items-center gap-3 mt-1 text-xs text-gray-400 dark:text-zinc-400">
                             <span className="flex items-center gap-1">
                               <Users className="w-3 h-3" />
                               {formatFollowers(artist.followers)}
@@ -364,7 +364,7 @@ export default function RileyDiscoveryPage() {
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
               Discover Indie Artists
             </h3>
-            <p className="text-gray-500 text-sm max-w-md mx-auto">
+            <p className="text-gray-400 text-sm max-w-md mx-auto">
               Search by artist name or select a genre to find emerging indie
               artists on Spotify. Import them to Riley&apos;s outreach pipeline
               with one click.

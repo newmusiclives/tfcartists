@@ -55,7 +55,7 @@ export default function Error({
               <strong>Error:</strong> {error.message}
             </p>
             {error.digest && (
-              <p className="text-xs font-mono text-gray-500 dark:text-zinc-500">Digest: {error.digest}</p>
+              <p className="text-xs font-mono text-gray-400 dark:text-zinc-400">Digest: {error.digest}</p>
             )}
           </div>
         )}

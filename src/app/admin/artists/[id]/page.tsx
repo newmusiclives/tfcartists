@@ -294,7 +294,7 @@ export default function ArtistDetailPage() {
                           {message.role === "riley" ? "Riley" : artist.name}
                         </div>
                         <div className="text-sm">{message.content}</div>
-                        <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">
+                        <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">
                           {formatDateTime(message.createdAt)}
                         </div>
                         {message.intent && (
@@ -306,7 +306,7 @@ export default function ArtistDetailPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center text-gray-500 py-8">
+                  <div className="text-center text-gray-400 py-8">
                     No conversation yet. Trigger Riley outreach to start!
                   </div>
                 )}
@@ -348,7 +348,7 @@ export default function ArtistDetailPage() {
                         <div>
                           <div className="font-semibold text-gray-900 dark:text-white">{show.venue}</div>
                           <div className="text-sm text-gray-600 dark:text-zinc-400">{show.city}</div>
-                          <div className="text-xs text-gray-500 dark:text-zinc-500">
+                          <div className="text-xs text-gray-400 dark:text-zinc-400">
                             {formatDateTime(show.date)}
                           </div>
                         </div>
@@ -392,7 +392,7 @@ export default function ArtistDetailPage() {
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-zinc-500">
+                        <div className="text-xs text-gray-400 dark:text-zinc-400">
                           {formatDateTime(donation.createdAt)}
                         </div>
                       </div>

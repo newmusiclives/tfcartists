@@ -147,7 +147,7 @@ export default function AirplayPage() {
                     {tier.price === 0 ? "FREE" : `$${tier.price}`}
                   </div>
                   {tier.price > 0 && (
-                    <div className="text-sm text-gray-500 dark:text-zinc-500">/month</div>
+                    <div className="text-sm text-gray-400 dark:text-zinc-400">/month</div>
                   )}
                 </div>
 
@@ -200,19 +200,19 @@ export default function AirplayPage() {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                     Tier
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                     Price/Month
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                     Shares
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                     Est. Monthly Earnings*
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                     ROI
                   </th>
                 </tr>
@@ -253,7 +253,7 @@ export default function AirplayPage() {
             </table>
           </div>
 
-          <div className="mt-6 text-sm text-gray-500 dark:text-zinc-500">
+          <div className="mt-6 text-sm text-gray-400 dark:text-zinc-400">
             * Based on $10,000 monthly ad revenue with 100 active artists. Actual earnings vary
             based on station performance and total artists.
           </div>
@@ -351,7 +351,7 @@ export default function AirplayPage() {
               )}
             </button>
 
-            <p className="text-xs text-gray-500 text-center mt-4">
+            <p className="text-xs text-gray-400 text-center mt-4">
               Secure payment processing by Manifest Financial
             </p>
           </div>

@@ -248,12 +248,12 @@ export default function ManagementTeamPage() {
                 <div className="bg-amber-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Revenue Target</div>
                   <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">$10,000/month</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">Operator gross revenue at capacity: ~$9,950/mo</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">Operator gross revenue at capacity: ~$9,950/mo</div>
                 </div>
                 <div className="bg-blue-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Audience Target</div>
                   <div className="text-2xl font-bold text-blue-600">5,000 DAU</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">Currently at 1,250 (25%)</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">Currently at 1,250 (25%)</div>
                 </div>
               </div>
             </div>
@@ -286,7 +286,7 @@ export default function ManagementTeamPage() {
                           </div>
                           <p className="text-gray-600 dark:text-zinc-400 mb-2">{member.title}</p>
                           <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-                            <span className="text-xs text-gray-500 mr-1">Oversees:</span>
+                            <span className="text-xs text-gray-400 mr-1">Oversees:</span>
                             {member.teamsManaged.map((team, idx) => (
                               <Link
                                 key={idx}
@@ -419,27 +419,27 @@ export default function ManagementTeamPage() {
             <Link href="/station-admin" className="block bg-amber-50 border-2 border-amber-200 rounded-lg p-3 text-center hover:border-amber-400 transition-colors">
               <Settings className="w-5 h-5 text-amber-600 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Station Ops</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Infrastructure</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Infrastructure</div>
             </Link>
             <Link href="/riley" className="block bg-purple-50 border-2 border-purple-200 rounded-lg p-3 text-center hover:border-purple-400 transition-colors">
               <Users className="w-5 h-5 text-purple-600 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Team Riley</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Artist Acquisition</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Artist Acquisition</div>
             </Link>
             <Link href="/cassidy" className="block bg-teal-50 border-2 border-teal-200 rounded-lg p-3 text-center hover:border-teal-400 transition-colors">
               <Award className="w-5 h-5 text-teal-600 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Team Cassidy</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Content & Curation</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Content & Curation</div>
             </Link>
             <Link href="/harper" className="block bg-green-50 border-2 border-green-200 rounded-lg p-3 text-center hover:border-green-400 transition-colors">
               <Building2 className="w-5 h-5 text-green-600 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Team Harper</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Revenue Generation</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Revenue Generation</div>
             </Link>
             <Link href="/elliot" className="block bg-blue-50 border-2 border-blue-200 rounded-lg p-3 text-center hover:border-blue-400 transition-colors">
               <TrendingUp className="w-5 h-5 text-blue-600 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Team Elliot</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Audience Growth</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Audience Growth</div>
             </Link>
           </div>
         </div>

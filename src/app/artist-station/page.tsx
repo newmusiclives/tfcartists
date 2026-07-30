@@ -230,15 +230,15 @@ export default function ArtistStationLandingPage() {
             <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">24/7</div>
-                <div className="text-sm text-gray-500 dark:text-zinc-500">Live Radio</div>
+                <div className="text-sm text-gray-400 dark:text-zinc-400">Live Radio</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">AI</div>
-                <div className="text-sm text-gray-500 dark:text-zinc-500">Powered DJ</div>
+                <div className="text-sm text-gray-400 dark:text-zinc-400">Powered DJ</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Free</div>
-                <div className="text-sm text-gray-500 dark:text-zinc-500">To Start</div>
+                <div className="text-sm text-gray-400 dark:text-zinc-400">To Start</div>
               </div>
             </div>
           </div>
@@ -340,7 +340,7 @@ export default function ArtistStationLandingPage() {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">{tier.name}</h3>
                 <div className="flex items-baseline gap-1 mt-2 mb-2">
                   <span className="text-4xl font-bold text-gray-900 dark:text-white">{tier.price}</span>
-                  <span className="text-gray-500 dark:text-zinc-500">{tier.period}</span>
+                  <span className="text-gray-400 dark:text-zinc-400">{tier.period}</span>
                 </div>
                 <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">{tier.description}</p>
 
@@ -405,7 +405,7 @@ export default function ArtistStationLandingPage() {
                 {NETWORK_NAME} Artist Stations
               </span>
             </div>
-            <div className="flex items-center space-x-6 text-sm text-gray-500 dark:text-zinc-500">
+            <div className="flex items-center space-x-6 text-sm text-gray-400 dark:text-zinc-400">
               <Link href="/" className="hover:text-gray-300 transition-colors">Home</Link>
               <Link href="/about" className="hover:text-gray-300 transition-colors">About</Link>
               <Link href="/contact" className="hover:text-gray-300 transition-colors">Contact</Link>

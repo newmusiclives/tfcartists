@@ -223,7 +223,7 @@ export default function RileyArtistsPage() {
               </tbody>
             </table>
             {filteredArtists.length === 0 && (
-              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
                 No artists found matching your criteria
               </div>
             )}
@@ -273,7 +273,7 @@ function StatCard({ icon, label, value, subtitle }: { icon: React.ReactNode; lab
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -282,9 +282,9 @@ function TierSummaryCard({ tier, count, capacity }: { tier: string; count: numbe
   const percentage = (count / capacity) * 100;
   return (
     <div className="text-center">
-      <div className="text-xs text-gray-500 dark:text-zinc-500 mb-1">{tier}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400 mb-1">{tier}</div>
       <div className="text-2xl font-bold text-purple-600">{count}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">of {capacity}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">of {capacity}</div>
       <div className="mt-2 bg-gray-200 dark:bg-zinc-700 rounded-full h-2">
         <div
           className="bg-purple-600 h-2 rounded-full"
@@ -329,7 +329,7 @@ function ArtistRow({ artist, onSelect }: { artist: ReturnType<typeof mapArtist>;
     <tr className="hover:bg-gray-50 dark:hover:bg-zinc-800">
       <td className="px-4 py-4">
         <div className="font-semibold text-gray-900 dark:text-white">{artist.name}</div>
-        <div className="text-sm text-gray-500 dark:text-zinc-500">{artist.email}</div>
+        <div className="text-sm text-gray-400 dark:text-zinc-400">{artist.email}</div>
       </td>
       <td className="px-4 py-4">
         <span className={`px-2 py-1 rounded text-xs font-semibold ${tierColors[artist.tier as keyof typeof tierColors] || tierColors.FREE}`}>
@@ -338,7 +338,7 @@ function ArtistRow({ artist, onSelect }: { artist: ReturnType<typeof mapArtist>;
       </td>
       <td className="px-4 py-4">
         <div className="text-sm font-medium text-gray-900 dark:text-white">{artist.playsThisMonth}</div>
-        <div className="text-xs text-gray-500 dark:text-zinc-500">of {AIRPLAY_TIER_PLAYS_PER_MONTH[artist.tier as keyof typeof AIRPLAY_TIER_PLAYS_PER_MONTH]}</div>
+        <div className="text-xs text-gray-400 dark:text-zinc-400">of {AIRPLAY_TIER_PLAYS_PER_MONTH[artist.tier as keyof typeof AIRPLAY_TIER_PLAYS_PER_MONTH]}</div>
       </td>
       <td className="px-4 py-4">
         <div className="text-sm font-medium text-gray-900 dark:text-white">{artist.poolShares}</div>
@@ -515,7 +515,7 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
             <div className="text-center py-8">
               <Music className="w-10 h-10 text-gray-300 mx-auto mb-3" />
               <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Track Submission History</h3>
-              <p className="text-sm text-gray-500 dark:text-zinc-500">Track history will be available once streaming data is connected.</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">Track history will be available once streaming data is connected.</p>
             </div>
           )}
 
@@ -524,7 +524,7 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
             <div className="text-center py-8">
               <BarChart3 className="w-10 h-10 text-gray-300 mx-auto mb-3" />
               <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Monthly Play History</h3>
-              <p className="text-sm text-gray-500 dark:text-zinc-500">Play history will be available once the Railway streaming backend reports play data.</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">Play history will be available once the Railway streaming backend reports play data.</p>
             </div>
           )}
 
@@ -533,7 +533,7 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
             <div className="text-center py-8">
               <DollarSign className="w-10 h-10 text-gray-300 mx-auto mb-3" />
               <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Monthly Revenue History</h3>
-              <p className="text-sm text-gray-500 dark:text-zinc-500">Revenue tracking will be available once Manifest Financial payments are connected.</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">Revenue tracking will be available once Manifest Financial payments are connected.</p>
             </div>
           )}
 
@@ -545,7 +545,7 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-white">Current Tier</div>
-                    <div className="text-sm text-gray-500 dark:text-zinc-500">Since joining</div>
+                    <div className="text-sm text-gray-400 dark:text-zinc-400">Since joining</div>
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold text-purple-600">{artist.tier}</div>
@@ -553,7 +553,7 @@ function ArtistDetailModal({ artist, onClose }: { artist: ReturnType<typeof mapA
                   </div>
                 </div>
               </div>
-              <p className="text-sm text-gray-500 dark:text-zinc-500 mt-3">Full tier progression history will be available in a future update.</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400 mt-3">Full tier progression history will be available in a future update.</p>
             </div>
           )}
         </div>

@@ -225,7 +225,7 @@ export default function SocialMediaPage() {
         <SharedNav />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         </div>
       </div>
@@ -243,7 +243,7 @@ export default function SocialMediaPage() {
               <Share2 className="w-6 h-6 text-blue-400" />
               Auto Social Media Posting
             </h1>
-            <p className="text-zinc-500 text-sm mt-1">
+            <p className="text-zinc-400 text-sm mt-1">
               Automatically share now-playing tracks to social platforms
             </p>
           </div>
@@ -313,7 +313,7 @@ export default function SocialMediaPage() {
                 <FileText className="w-4 h-4 text-amber-400" />
                 API Credentials
               </h2>
-              <p className="text-xs text-zinc-500 mb-4">
+              <p className="text-xs text-zinc-400 mb-4">
                 API keys will be used when platform OAuth is connected. For now, posts are logged locally.
               </p>
               <div className="space-y-4">
@@ -333,7 +333,7 @@ export default function SocialMediaPage() {
                           }))
                         }
                         placeholder="Enter API key..."
-                        className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-600 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
                     <div>
@@ -350,7 +350,7 @@ export default function SocialMediaPage() {
                           }))
                         }
                         placeholder="Enter API secret..."
-                        className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-600 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
                   </div>
@@ -370,7 +370,7 @@ export default function SocialMediaPage() {
                         }))
                       }
                       placeholder="Enter page access token..."
-                      className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-600 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 )}
@@ -389,7 +389,7 @@ export default function SocialMediaPage() {
                         }))
                       }
                       placeholder="Enter access token..."
-                      className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-600 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 )}
@@ -413,7 +413,7 @@ export default function SocialMediaPage() {
                   className={`px-3 py-2 text-sm rounded-lg border transition-colors ${
                     settings.postFrequency === opt.value
                       ? "border-green-500/50 bg-green-950/30 text-green-300"
-                      : "border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-700 hover:text-zinc-400"
+                      : "border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700 hover:text-zinc-400"
                   }`}
                 >
                   {opt.label}
@@ -431,7 +431,7 @@ export default function SocialMediaPage() {
               </h2>
               <button
                 onClick={() => setShowPreview(!showPreview)}
-                className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                className="flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
               >
                 <Eye className="w-3 h-3" />
                 {showPreview ? "Hide Preview" : "Show Preview"}
@@ -443,7 +443,7 @@ export default function SocialMediaPage() {
                 setSettings((s) => ({ ...s, postTemplate: e.target.value }))
               }
               rows={3}
-              className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-600 focus:ring-1 focus:ring-purple-500 focus:border-purple-500 font-mono"
+              className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-400 focus:ring-1 focus:ring-purple-500 focus:border-purple-500 font-mono"
             />
             <div className="mt-2 flex flex-wrap gap-2">
               {["{title}", "{artist}", "{station}", "{url}", "{dj}", "{stationHashtag}"].map(
@@ -462,7 +462,7 @@ export default function SocialMediaPage() {
               onClick={() =>
                 setSettings((s) => ({ ...s, postTemplate: DEFAULT_TEMPLATE }))
               }
-              className="mt-2 text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
+              className="mt-2 text-xs text-zinc-400 hover:text-zinc-400 transition-colors"
             >
               Reset to default template
             </button>
@@ -470,11 +470,11 @@ export default function SocialMediaPage() {
             {/* Preview */}
             {showPreview && (
               <div className="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg p-4">
-                <div className="text-xs text-zinc-500 mb-2">Preview:</div>
+                <div className="text-xs text-zinc-400 mb-2">Preview:</div>
                 <p className="text-sm text-zinc-300 whitespace-pre-wrap">
                   {previewText()}
                 </p>
-                <div className="mt-2 text-xs text-zinc-600">
+                <div className="mt-2 text-xs text-zinc-400">
                   {previewText().length} characters
                   {previewText().length > 280 && (
                     <span className="text-red-400 ml-2">
@@ -492,7 +492,7 @@ export default function SocialMediaPage() {
               <Hash className="w-4 h-4 text-cyan-400" />
               Hashtags
             </h2>
-            <p className="text-xs text-zinc-500 mb-3">
+            <p className="text-xs text-zinc-400 mb-3">
               First hashtag is used for {"{stationHashtag}"} in the template. All others are appended to every post.
             </p>
             <div className="flex gap-2 mb-3">
@@ -501,7 +501,7 @@ export default function SocialMediaPage() {
                 onChange={(e) => setHashtagInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && addHashtag()}
                 placeholder="Add hashtag..."
-                className="flex-1 px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-600 focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
+                className="flex-1 px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-400 focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
               />
               <button
                 onClick={addHashtag}
@@ -523,14 +523,14 @@ export default function SocialMediaPage() {
                   #{tag}
                   <button
                     onClick={() => removeHashtag(tag)}
-                    className="ml-1 text-zinc-600 hover:text-red-400 transition-colors"
+                    className="ml-1 text-zinc-400 hover:text-red-400 transition-colors"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
                 </span>
               ))}
               {settings.hashtags.length === 0 && (
-                <span className="text-xs text-zinc-600">
+                <span className="text-xs text-zinc-400">
                   No hashtags configured. Station name will be used as default.
                 </span>
               )}
@@ -548,9 +548,9 @@ export default function SocialMediaPage() {
                 setSettings((s) => ({ ...s, siteUrl: e.target.value }))
               }
               placeholder="https://your-station.com"
-              className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-600 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 text-sm bg-zinc-950 border border-zinc-800 rounded-lg text-zinc-300 placeholder:text-zinc-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             />
-            <p className="text-xs text-zinc-600 mt-1">
+            <p className="text-xs text-zinc-400 mt-1">
               This URL is used for the {"{url}"} variable in post templates.
             </p>
           </div>
@@ -559,12 +559,12 @@ export default function SocialMediaPage() {
           <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
             <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-zinc-300 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-zinc-500" />
+                <Clock className="w-4 h-4 text-zinc-400" />
                 Recent Posts
               </h2>
               <button
                 onClick={loadSettings}
-                className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                className="flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
               >
                 <RefreshCw className="w-3 h-3" />
                 Refresh
@@ -572,9 +572,9 @@ export default function SocialMediaPage() {
             </div>
             {posts.length === 0 ? (
               <div className="px-6 py-8 text-center">
-                <Share2 className="w-8 h-8 text-zinc-700 mx-auto mb-2" />
-                <p className="text-sm text-zinc-600">No posts yet.</p>
-                <p className="text-xs text-zinc-700 mt-1">
+                <Share2 className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                <p className="text-sm text-zinc-400">No posts yet.</p>
+                <p className="text-xs text-zinc-400 mt-1">
                   Posts will appear here once the cron job runs with enabled platforms.
                 </p>
               </div>
@@ -592,13 +592,13 @@ export default function SocialMediaPage() {
                           className={`text-xs px-1.5 py-0.5 rounded ${
                             post.status === "sent"
                               ? "bg-green-900/30 text-green-400"
-                              : "bg-zinc-800 text-zinc-500"
+                              : "bg-zinc-800 text-zinc-400"
                           }`}
                         >
                           {post.status}
                         </span>
                       </div>
-                      <span className="text-xs text-zinc-600">
+                      <span className="text-xs text-zinc-400">
                         {formatTime(post.createdAt)}
                       </span>
                     </div>

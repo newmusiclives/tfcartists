@@ -154,7 +154,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-zinc-100">Embed Widget</h1>
-                <p className="text-sm text-zinc-500">Add your radio player to any website</p>
+                <p className="text-sm text-zinc-400">Add your radio player to any website</p>
               </div>
             </div>
           </div>
@@ -178,7 +178,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                     <Radio className={`w-5 h-5 ${widgetType === "player" ? "text-amber-600" : "text-zinc-400"}`} />
                     <div>
                       <div className="font-semibold text-sm text-zinc-100">Player</div>
-                      <div className="text-xs text-zinc-500">Play/pause, volume, now-playing</div>
+                      <div className="text-xs text-zinc-400">Play/pause, volume, now-playing</div>
                     </div>
                   </button>
                   <button
@@ -192,7 +192,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                     <Music className={`w-5 h-5 ${widgetType === "now-playing" ? "text-amber-600" : "text-zinc-400"}`} />
                     <div>
                       <div className="font-semibold text-sm text-zinc-100">Now Playing</div>
-                      <div className="text-xs text-zinc-500">Song info only, no controls</div>
+                      <div className="text-xs text-zinc-400">Song info only, no controls</div>
                     </div>
                   </button>
                 </div>
@@ -228,7 +228,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
 
                 {/* Accent Color */}
                 <div className="mb-5">
-                  <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
                     Accent Color
                   </label>
                   <div className="flex items-center gap-2 flex-wrap">
@@ -255,7 +255,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
 
                 {/* Background Color */}
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
                     Background Color
                   </label>
                   <div className="flex items-center gap-2 flex-wrap">

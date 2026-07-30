@@ -140,7 +140,7 @@ export default function CassidyRotationPage() {
                 <span className="font-semibold text-gray-600 dark:text-zinc-400">
                   Mainstream
                 </span>
-                <span className="font-bold text-gray-500 text-lg">
+                <span className="font-bold text-gray-400 text-lg">
                   {mainstream}%
                 </span>
               </div>
@@ -188,7 +188,7 @@ export default function CassidyRotationPage() {
             <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Slots Remaining
             </div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">
+            <div className="text-xs text-gray-400 dark:text-zinc-400">
               To reach {target}% indie
             </div>
           </div>
@@ -203,14 +203,14 @@ export default function CassidyRotationPage() {
             <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Current Indie %
             </div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">
+            <div className="text-xs text-gray-400 dark:text-zinc-400">
               Up from 20% baseline
             </div>
           </div>
 
           <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 dark:border-zinc-800 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <Radio className="w-6 h-6 text-gray-500" />
+              <Radio className="w-6 h-6 text-gray-400" />
             </div>
             <div className="text-3xl font-bold text-gray-700 dark:text-zinc-300 mb-1">
               {mainstream}%
@@ -218,7 +218,7 @@ export default function CassidyRotationPage() {
             <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Mainstream %
             </div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">
+            <div className="text-xs text-gray-400 dark:text-zinc-400">
               Target: {100 - target}%
             </div>
           </div>
@@ -233,7 +233,7 @@ export default function CassidyRotationPage() {
             <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Indie Target
             </div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">
+            <div className="text-xs text-gray-400 dark:text-zinc-400">
               {progressPct}% complete
             </div>
           </div>
@@ -252,7 +252,7 @@ export default function CassidyRotationPage() {
           </div>
 
           {recentlyPlaced.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+            <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
               No recently placed artists.
             </div>
           ) : (

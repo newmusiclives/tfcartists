@@ -102,7 +102,7 @@ export default function NetworkDashboard() {
 
         {loading && !data ? (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : data ? (
           <div className="space-y-8">
@@ -114,7 +114,7 @@ export default function NetworkDashboard() {
                   Total Stations
                 </div>
                 <div className="text-3xl font-bold">{data.summary.totalStations}</div>
-                <div className="text-xs text-zinc-500 mt-1">
+                <div className="text-xs text-zinc-400 mt-1">
                   {data.summary.activeStations} active
                 </div>
               </div>
@@ -126,7 +126,7 @@ export default function NetworkDashboard() {
                 <div className="text-3xl font-bold text-green-400">
                   ${data.summary.totalRevenue.toLocaleString()}
                 </div>
-                <div className="text-xs text-zinc-500 mt-1">from active sponsorships</div>
+                <div className="text-xs text-zinc-400 mt-1">from active sponsorships</div>
               </div>
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
                 <div className="flex items-center gap-2 text-zinc-400 text-sm mb-1">
@@ -134,7 +134,7 @@ export default function NetworkDashboard() {
                   Total DJs
                 </div>
                 <div className="text-3xl font-bold">{data.summary.totalDJs}</div>
-                <div className="text-xs text-zinc-500 mt-1">across all stations</div>
+                <div className="text-xs text-zinc-400 mt-1">across all stations</div>
               </div>
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
                 <div className="flex items-center gap-2 text-zinc-400 text-sm mb-1">
@@ -144,7 +144,7 @@ export default function NetworkDashboard() {
                 <div className="text-3xl font-bold">
                   {data.summary.totalSongs.toLocaleString()}
                 </div>
-                <div className="text-xs text-zinc-500 mt-1">in all libraries</div>
+                <div className="text-xs text-zinc-400 mt-1">in all libraries</div>
               </div>
             </div>
 
@@ -196,7 +196,7 @@ export default function NetworkDashboard() {
                       <div>
                         <h3 className="font-semibold text-zinc-100">{station.name}</h3>
                         {station.callSign && (
-                          <span className="text-xs text-zinc-500 font-mono">
+                          <span className="text-xs text-zinc-400 font-mono">
                             {station.callSign}
                           </span>
                         )}
@@ -211,7 +211,7 @@ export default function NetworkDashboard() {
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-zinc-500 mb-3">
+                    <p className="text-xs text-zinc-400 mb-3">
                       {station.genre}
                       {station.tagline && ` — ${station.tagline}`}
                     </p>
@@ -220,19 +220,19 @@ export default function NetworkDashboard() {
                         <div className="text-lg font-bold text-zinc-200">
                           {station.djCount}
                         </div>
-                        <div className="text-xs text-zinc-500">DJs</div>
+                        <div className="text-xs text-zinc-400">DJs</div>
                       </div>
                       <div className="bg-zinc-800 rounded-lg py-2">
                         <div className="text-lg font-bold text-zinc-200">
                           {station.songCount}
                         </div>
-                        <div className="text-xs text-zinc-500">Songs</div>
+                        <div className="text-xs text-zinc-400">Songs</div>
                       </div>
                       <div className="bg-zinc-800 rounded-lg py-2">
                         <div className="text-lg font-bold text-green-400">
                           ${station.sponsorRevenue}
                         </div>
-                        <div className="text-xs text-zinc-500">Rev</div>
+                        <div className="text-xs text-zinc-400">Rev</div>
                       </div>
                     </div>
                   </div>
@@ -242,7 +242,7 @@ export default function NetworkDashboard() {
           </div>
         ) : (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 text-center">
-            <Activity className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
+            <Activity className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
             <p className="text-zinc-400">Could not load network data.</p>
           </div>
         )}

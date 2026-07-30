@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
         <h1 className="mt-8 text-4xl font-bold text-amber-900">
           Privacy Policy
         </h1>
-        <p className="mt-2 text-gray-500 text-sm">
+        <p className="mt-2 text-gray-400 text-sm">
           Last Updated: March 2026
         </p>
 
@@ -554,7 +554,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Cross-links to other legal pages */}
         <div className="mt-16 pt-8 border-t border-gray-200 dark:border-zinc-800">
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
             Related Legal Pages
           </h3>
           <div className="flex flex-wrap gap-4">

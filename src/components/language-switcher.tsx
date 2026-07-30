@@ -56,7 +56,7 @@ export function LanguageSwitcher() {
             >
               <span className="text-base">{lang.flag}</span>
               <span>{lang.label}</span>
-              <span className="ml-auto text-xs uppercase text-zinc-500">
+              <span className="ml-auto text-xs uppercase text-zinc-400">
                 {lang.code}
               </span>
             </button>

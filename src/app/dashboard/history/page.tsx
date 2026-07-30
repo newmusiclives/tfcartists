@@ -133,13 +133,13 @@ export default function ListenerHistoryPage() {
 
         {loading ? (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : !data ? (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 text-center">
-            <Headphones className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
+            <Headphones className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
             <p className="text-zinc-400">No listening history available yet.</p>
-            <p className="text-zinc-500 text-sm mt-1">
+            <p className="text-zinc-400 text-sm mt-1">
               Start listening to build your history!
             </p>
           </div>
@@ -194,7 +194,7 @@ export default function ListenerHistoryPage() {
                 </div>
                 <div className="divide-y divide-zinc-800">
                   {data.recentTracks.length === 0 ? (
-                    <div className="px-6 py-8 text-center text-zinc-500 text-sm">
+                    <div className="px-6 py-8 text-center text-zinc-400 text-sm">
                       No tracks played yet.
                     </div>
                   ) : (
@@ -207,7 +207,7 @@ export default function ListenerHistoryPage() {
                           <div className="text-sm font-medium text-zinc-200 truncate">
                             {track.trackTitle}
                           </div>
-                          <div className="text-xs text-zinc-500">
+                          <div className="text-xs text-zinc-400">
                             {track.artistName}
                             {track.dj && ` — via ${track.dj.name}`}
                           </div>
@@ -218,7 +218,7 @@ export default function ListenerHistoryPage() {
                             className={`p-1 rounded ${
                               favorites.has(track.artistName)
                                 ? "text-red-400"
-                                : "text-zinc-600 hover:text-zinc-400"
+                                : "text-zinc-400 hover:text-zinc-400"
                             }`}
                           >
                             <Heart
@@ -226,7 +226,7 @@ export default function ListenerHistoryPage() {
                               fill={favorites.has(track.artistName) ? "currentColor" : "none"}
                             />
                           </button>
-                          <span className="text-xs text-zinc-600">
+                          <span className="text-xs text-zinc-400">
                             {new Date(track.playedAt).toLocaleTimeString([], {
                               hour: "numeric",
                               minute: "2-digit",
@@ -255,19 +255,19 @@ export default function ListenerHistoryPage() {
                         className="px-5 py-3 flex items-center justify-between"
                       >
                         <div className="flex items-center gap-3">
-                          <span className="text-xs font-bold text-zinc-600 w-5">
+                          <span className="text-xs font-bold text-zinc-400 w-5">
                             {i + 1}
                           </span>
                           <span className="text-sm text-zinc-200">{a.artistName}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-zinc-500">{a.playCount} plays</span>
+                          <span className="text-xs text-zinc-400">{a.playCount} plays</span>
                           <button
                             onClick={() => toggleFavorite(a.artistName)}
                             className={`p-1 rounded ${
                               favorites.has(a.artistName)
                                 ? "text-red-400"
-                                : "text-zinc-600 hover:text-zinc-400"
+                                : "text-zinc-400 hover:text-zinc-400"
                             }`}
                           >
                             <Heart
@@ -295,12 +295,12 @@ export default function ListenerHistoryPage() {
                         className="px-5 py-3 flex items-center justify-between"
                       >
                         <div className="flex items-center gap-3">
-                          <span className="text-xs font-bold text-zinc-600 w-5">
+                          <span className="text-xs font-bold text-zinc-400 w-5">
                             {i + 1}
                           </span>
                           <span className="text-sm text-zinc-200">{d.djName}</span>
                         </div>
-                        <span className="text-xs text-zinc-500">{d.playCount} plays</span>
+                        <span className="text-xs text-zinc-400">{d.playCount} plays</span>
                       </div>
                     ))}
                   </div>

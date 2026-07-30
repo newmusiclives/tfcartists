@@ -273,7 +273,7 @@ export default function AdminSettingsPage() {
                       {allDone ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <XCircle className="w-4 h-4 text-gray-300" />}
                     </div>
                     <div className="text-xl font-bold text-gray-900 mt-2">{configured}/{total}</div>
-                    <div className="text-xs text-gray-500 dark:text-zinc-500">{cats.map((c) => c.name).join(", ")}</div>
+                    <div className="text-xs text-gray-400 dark:text-zinc-400">{cats.map((c) => c.name).join(", ")}</div>
                   </div>
                 );
               })}
@@ -362,7 +362,7 @@ export default function AdminSettingsPage() {
                                       {isShown ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                     </button>
                                   )}
-                                  <span className="text-sm text-gray-500 font-mono">
+                                  <span className="text-sm text-gray-400 font-mono">
                                     {setting.encrypted && !isShown ? setting.maskedValue : setting.maskedValue}
                                   </span>
                                 </>
@@ -420,7 +420,7 @@ export default function AdminSettingsPage() {
             <div className="text-center pt-4">
               <button
                 onClick={() => { setLoading(true); fetchSettings(); }}
-                className="text-gray-500 hover:text-gray-700 text-sm flex items-center gap-2 mx-auto"
+                className="text-gray-400 hover:text-gray-700 text-sm flex items-center gap-2 mx-auto"
               >
                 <RefreshCw className="w-4 h-4" />
                 Refresh connection status

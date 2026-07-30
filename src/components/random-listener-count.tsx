@@ -17,7 +17,7 @@ export function RandomListenerCount({ variant = "hero" }: Props) {
     return (
       <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
         <div className="text-2xl font-bold text-amber-400">{count}</div>
-        <div className="text-gray-500 text-sm">Listening Now</div>
+        <div className="text-gray-400 text-sm">Listening Now</div>
       </div>
     );
   }
@@ -25,7 +25,7 @@ export function RandomListenerCount({ variant = "hero" }: Props) {
   return (
     <div className="text-center">
       <div className="text-2xl sm:text-3xl font-bold text-amber-400">{count}</div>
-      <div className="text-sm text-gray-500 dark:text-zinc-500">Listening Now</div>
+      <div className="text-sm text-gray-400 dark:text-zinc-400">Listening Now</div>
     </div>
   );
 }

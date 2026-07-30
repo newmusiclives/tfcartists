@@ -130,7 +130,7 @@ export default function AdminVoicemailPage() {
                 className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 text-sm rounded-lg transition-colors ${
                   activeTab === tab.key
                     ? "bg-zinc-700 text-zinc-100 font-medium"
-                    : "text-zinc-500 hover:text-zinc-300"
+                    : "text-zinc-400 hover:text-zinc-300"
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -147,11 +147,11 @@ export default function AdminVoicemailPage() {
 
         {loading ? (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : filtered.length === 0 ? (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 text-center">
-            <Mic className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
+            <Mic className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
             <p className="text-zinc-400">No {activeTab} voicemails.</p>
           </div>
         ) : (
@@ -185,7 +185,7 @@ export default function AdminVoicemailPage() {
                         <span className="font-semibold text-zinc-200">
                           {vm.listenerName || "Anonymous"}
                         </span>
-                        <span className="text-xs text-zinc-600">
+                        <span className="text-xs text-zinc-400">
                           {new Date(vm.createdAt).toLocaleString()}
                         </span>
                       </div>

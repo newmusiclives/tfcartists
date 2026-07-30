@@ -244,7 +244,7 @@ export default function RevenueBreakdownPage() {
               {Object.entries(artistTiers).map(([tier, data]) => (
                 <div key={tier} className="bg-gray-50 rounded-lg p-4 border">
                   <div className="text-sm font-semibold text-gray-600 dark:text-zinc-400 mb-2">{tier.replace('_', ' ')}</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mb-3">{data.count} artists</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mb-3">{data.count} artists</div>
 
                   <div className="space-y-2 text-xs">
                     <div className="flex justify-between">

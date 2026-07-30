@@ -127,7 +127,7 @@ export default function ListenerDashboardPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{profile.name}</h1>
-            <div className="flex items-center space-x-3 text-sm text-gray-500 dark:text-zinc-500">
+            <div className="flex items-center space-x-3 text-sm text-gray-400 dark:text-zinc-400">
               <span className="flex items-center space-x-1"><Trophy className="w-3.5 h-3.5" /><span>Rank #{profile.rank}</span></span>
               <span className="flex items-center space-x-1"><Star className="w-3.5 h-3.5" /><span>{profile.tier}</span></span>
             </div>
@@ -138,7 +138,7 @@ export default function ListenerDashboardPage() {
         <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6 mb-6">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Level {profile.xpLevel}</span>
-            <span className="text-sm text-gray-500 dark:text-zinc-500">{profile.xpTotal.toLocaleString()} / {profile.nextLevelXp.toLocaleString()} XP</span>
+            <span className="text-sm text-gray-400 dark:text-zinc-400">{profile.xpTotal.toLocaleString()} / {profile.nextLevelXp.toLocaleString()} XP</span>
           </div>
           <div className="w-full h-3 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
             <div
@@ -154,22 +154,22 @@ export default function ListenerDashboardPage() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Flame className="w-5 h-5 text-orange-500 mx-auto mb-1" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.listeningStreak}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Day Streak</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Day Streak</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Headphones className="w-5 h-5 text-blue-500 mx-auto mb-1" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.totalSessions}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Sessions</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Sessions</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Clock className="w-5 h-5 text-purple-500 mx-auto mb-1" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.totalListeningHours}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Hours</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Hours</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <TrendingUp className="w-5 h-5 text-green-500 mx-auto mb-1" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.engagementScore}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Engagement</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Engagement</div>
           </div>
         </div>
 
@@ -180,7 +180,7 @@ export default function ListenerDashboardPage() {
             <span>Badges ({profile.badges.length})</span>
           </h2>
           {profile.badges.length === 0 ? (
-            <p className="text-sm text-gray-500 dark:text-zinc-500">No badges yet. Keep listening to earn your first badge!</p>
+            <p className="text-sm text-gray-400 dark:text-zinc-400">No badges yet. Keep listening to earn your first badge!</p>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {profile.badges.map((badge) => (
@@ -194,7 +194,7 @@ export default function ListenerDashboardPage() {
                 >
                   <div className="text-2xl mb-1">{BADGE_ICONS[badge.icon] || "🏅"}</div>
                   <div className="text-sm font-semibold text-gray-900 dark:text-white">{badge.name}</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">{badge.description}</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">{badge.description}</div>
                   {profile.newBadges.includes(badge.id) && (
                     <div className="text-xs font-bold text-yellow-600 mt-1">NEW!</div>
                   )}
@@ -222,7 +222,7 @@ export default function ListenerDashboardPage() {
         <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Recent XP</h2>
           {recentXP.length === 0 ? (
-            <p className="text-sm text-gray-500 dark:text-zinc-500">No XP transactions yet.</p>
+            <p className="text-sm text-gray-400 dark:text-zinc-400">No XP transactions yet.</p>
           ) : (
             <div className="space-y-2">
               {recentXP.map((tx) => (

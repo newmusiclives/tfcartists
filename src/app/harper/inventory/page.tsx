@@ -144,7 +144,7 @@ export default function AdInventoryPage() {
                 {utilizationRate.toFixed(1)}% Utilized
               </div>
             </div>
-            <div className="flex justify-between text-xs text-gray-500 dark:text-zinc-500 mt-2">
+            <div className="flex justify-between text-xs text-gray-400 dark:text-zinc-400 mt-2">
               <span>0 spots</span>
               <span>{totalMonthlySpots.toLocaleString()} spots</span>
             </div>
@@ -184,7 +184,7 @@ export default function AdInventoryPage() {
                     <div className="text-lg font-bold text-green-600">
                       ${revenuePerSpot.toFixed(2)}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-zinc-500">per spot</div>
+                    <div className="text-xs text-gray-400 dark:text-zinc-400">per spot</div>
                   </div>
                 );
               })}
@@ -256,7 +256,7 @@ function MetricCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -316,7 +316,7 @@ function TierAllocationCard({
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1 text-center">
+      <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1 text-center">
         {percentage.toFixed(1)}% of total inventory
       </div>
     </div>

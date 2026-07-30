@@ -181,21 +181,21 @@ export default function HarperDashboardPage() {
             <div className="text-center">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Active Sponsors</div>
               <div className="text-3xl font-bold text-green-600 mb-1">{totalSponsors}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Across all tiers</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Across all tiers</div>
             </div>
             <div className="text-center">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Monthly Revenue</div>
               <div className="text-3xl font-bold text-blue-600 mb-1">
                 ${totalRevenue.toLocaleString()}
               </div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">From sponsorships</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">From sponsorships</div>
             </div>
             <div className="text-center">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Artist Pool (80%)</div>
               <div className="text-3xl font-bold text-purple-600 mb-1">
                 ${Math.round(totalRevenue * 0.8).toLocaleString()}
               </div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Distributed to artists</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Distributed to artists</div>
             </div>
           </div>
 
@@ -204,11 +204,11 @@ export default function HarperDashboardPage() {
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 {Object.entries(revenueByTier).map(([tier, data]) => (
                   <div key={tier} className="bg-gray-50 rounded-lg p-3 text-center">
-                    <div className="text-xs font-bold text-gray-500 dark:text-zinc-500 mb-1">
+                    <div className="text-xs font-bold text-gray-400 dark:text-zinc-400 mb-1">
                       {TIER_NAMES[tier] || tier}
                     </div>
                     <div className="text-lg font-bold text-gray-900 dark:text-white">{data.count}</div>
-                    <div className="text-xs text-gray-500 dark:text-zinc-500">${data.revenue.toLocaleString()}/mo</div>
+                    <div className="text-xs text-gray-400 dark:text-zinc-400">${data.revenue.toLocaleString()}/mo</div>
                   </div>
                 ))}
               </div>
@@ -224,7 +224,7 @@ export default function HarperDashboardPage() {
               {Object.entries(stats.byStage).map(([stage, count]) => (
                 <div key={stage} className="text-center">
                   <div className="text-2xl font-bold text-gray-900 dark:text-white">{count}</div>
-                  <div className="text-xs text-gray-500 capitalize">{stage}</div>
+                  <div className="text-xs text-gray-400 capitalize">{stage}</div>
                 </div>
               ))}
             </div>
@@ -255,7 +255,7 @@ export default function HarperDashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+            <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
               <Building2 className="w-8 h-8 mx-auto mb-2 text-gray-300" />
               <p>No deals yet. Start reaching out to potential sponsors.</p>
             </div>
@@ -348,7 +348,7 @@ function MetricCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -375,7 +375,7 @@ function DealRow({ deal }: { deal: Deal }) {
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-xs text-gray-500 dark:text-zinc-500">{tierName} - ${deal.monthlyAmount}/mo</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">{tierName} - ${deal.monthlyAmount}/mo</div>
           <div className="text-xs text-gray-400">
             {deal.startDate ? new Date(deal.startDate).toLocaleDateString() : "—"}
           </div>

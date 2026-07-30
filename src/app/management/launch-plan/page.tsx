@@ -365,11 +365,11 @@ export default function LaunchPlanPage() {
                   <div className={`rounded-xl border-2 ${tc.border} p-4 text-center hover:shadow-md transition-all`}>
                     <div className={`text-sm font-bold ${tc.color}`}>{tc.label}</div>
                     <div className="text-2xl font-bold text-gray-900 mt-1">{counts.done}/{counts.total}</div>
-                    <div className="text-xs text-gray-500 dark:text-zinc-500">actions</div>
+                    <div className="text-xs text-gray-400 dark:text-zinc-400">actions</div>
                     <div className="mt-2 h-1.5 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                       <div className={`h-full rounded-full ${tc.bg.replace("50", "500").replace("bg-", "bg-")}`} style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{pct}%</div>
+                    <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{pct}%</div>
                   </div>
                 </Link>
               );
@@ -398,7 +398,7 @@ export default function LaunchPlanPage() {
                   <th className="text-center py-3 px-4 font-semibold text-amber-700 dark:text-amber-400">
                     <div className="flex items-center justify-center gap-1"><DollarSign className="w-4 h-4" /> Ad Revenue/mo</div>
                   </th>
-                  <th className="text-center py-3 px-4 font-semibold text-gray-500 dark:text-zinc-500">Team Owner</th>
+                  <th className="text-center py-3 px-4 font-semibold text-gray-400 dark:text-zinc-400">Team Owner</th>
                 </tr>
               </thead>
               <tbody>
@@ -409,7 +409,7 @@ export default function LaunchPlanPage() {
                     <td className="py-3 px-4 text-center text-purple-700">{m.artists}</td>
                     <td className="py-3 px-4 text-center text-green-700">{m.sponsors}</td>
                     <td className="py-3 px-4 text-center text-amber-700 dark:text-amber-400">{m.revenue}</td>
-                    <td className="py-3 px-4 text-center text-gray-500 text-xs">
+                    <td className="py-3 px-4 text-center text-gray-400 text-xs">
                       {i === 0 ? "All Teams" : i === 1 ? "Riley + Harper" : i === 2 ? "All Teams" : "Management"}
                     </td>
                   </tr>
@@ -470,7 +470,7 @@ export default function LaunchPlanPage() {
                           <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colors.light} ${colors.text}`}>
                             Phase {phase.phase}
                           </span>
-                          <span className="text-xs text-gray-500 dark:text-zinc-500">{phase.timeline}</span>
+                          <span className="text-xs text-gray-400 dark:text-zinc-400">{phase.timeline}</span>
                           {isComplete && (
                             <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400">COMPLETE</span>
                           )}
@@ -486,7 +486,7 @@ export default function LaunchPlanPage() {
                           <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
                             <div className={`h-full rounded-full bg-gradient-to-r ${colors.gradient}`} style={{ width: `${progress.pct}%` }} />
                           </div>
-                          <div className="text-xs text-gray-500 text-right mt-0.5">{progress.pct}%</div>
+                          <div className="text-xs text-gray-400 text-right mt-0.5">{progress.pct}%</div>
                         </div>
                       </div>
                       {isExpanded ? <ChevronDown className="w-5 h-5 text-gray-400" /> : <ChevronRight className="w-5 h-5 text-gray-400" />}
@@ -520,7 +520,7 @@ export default function LaunchPlanPage() {
                                   {action.label}
                                 </div>
                                 {action.detail && (
-                                  <div className={`text-sm mt-0.5 ${isDone ? "text-gray-300" : "text-gray-500"}`}>
+                                  <div className={`text-sm mt-0.5 ${isDone ? "text-gray-300" : "text-gray-400"}`}>
                                     {action.detail}
                                   </div>
                                 )}

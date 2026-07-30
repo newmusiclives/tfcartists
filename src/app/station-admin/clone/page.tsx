@@ -173,18 +173,18 @@ export default function StationClonePage() {
 
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-6 h-6 text-zinc-500 animate-spin" />
+            <Loader2 className="w-6 h-6 text-zinc-400 animate-spin" />
           </div>
         ) : !station ? (
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-8 text-center">
-            <Radio className="w-8 h-8 text-zinc-600 mx-auto mb-3" />
+            <Radio className="w-8 h-8 text-zinc-400 mx-auto mb-3" />
             <p className="text-zinc-400">No station found to clone. Create one first.</p>
           </div>
         ) : (
           <div className="space-y-6">
             {/* Source station info */}
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-              <div className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Cloning from</div>
+              <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Cloning from</div>
               <div className="flex items-center gap-3">
                 <Radio className="w-5 h-5 text-amber-400" />
                 <div>
@@ -192,11 +192,11 @@ export default function StationClonePage() {
                   <div className="text-sm text-zinc-400">
                     {station.callSign && <span className="text-amber-400 mr-2">{station.callSign}</span>}
                     {station.genre}
-                    {station.formatType && <span className="text-zinc-500"> / {station.formatType}</span>}
+                    {station.formatType && <span className="text-zinc-400"> / {station.formatType}</span>}
                   </div>
                 </div>
               </div>
-              <div className="mt-3 flex gap-4 text-xs text-zinc-500">
+              <div className="mt-3 flex gap-4 text-xs text-zinc-400">
                 <span>{station._count.stationDJs} DJs</span>
                 <span>{station._count.clockTemplates} Clocks</span>
                 <span>{station._count.clockAssignments} Assignments</span>
@@ -206,7 +206,7 @@ export default function StationClonePage() {
 
             {/* New station form */}
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
-              <div className="text-xs text-zinc-500 uppercase tracking-wider mb-1">New Station Details</div>
+              <div className="text-xs text-zinc-400 uppercase tracking-wider mb-1">New Station Details</div>
 
               <div>
                 <label className="block text-sm text-zinc-300 mb-1">
@@ -231,7 +231,7 @@ export default function StationClonePage() {
                   maxLength={5}
                   className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500 transition-colors uppercase"
                 />
-                <p className="text-xs text-zinc-500 mt-1">2-5 letters, optional</p>
+                <p className="text-xs text-zinc-400 mt-1">2-5 letters, optional</p>
               </div>
 
               <div>
@@ -243,13 +243,13 @@ export default function StationClonePage() {
                   placeholder={station.genre}
                   className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500 transition-colors"
                 />
-                <p className="text-xs text-zinc-500 mt-1">Leave blank to keep &quot;{station.genre}&quot;</p>
+                <p className="text-xs text-zinc-400 mt-1">Leave blank to keep &quot;{station.genre}&quot;</p>
               </div>
             </div>
 
             {/* What gets cloned */}
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-              <div className="text-xs text-zinc-500 uppercase tracking-wider mb-3">What gets cloned</div>
+              <div className="text-xs text-zinc-400 uppercase tracking-wider mb-3">What gets cloned</div>
               <div className="space-y-3">
                 {CLONE_ITEMS.map((item) => (
                   <div key={item.label} className="flex items-center gap-3">
@@ -258,7 +258,7 @@ export default function StationClonePage() {
                     </div>
                     <div>
                       <div className="text-sm text-white font-medium">{item.label}</div>
-                      <div className="text-xs text-zinc-500">{item.desc}</div>
+                      <div className="text-xs text-zinc-400">{item.desc}</div>
                     </div>
                   </div>
                 ))}

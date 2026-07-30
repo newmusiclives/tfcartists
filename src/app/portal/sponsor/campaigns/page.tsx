@@ -116,7 +116,7 @@ export default function SponsorCampaignsPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Campaigns</h1>
-            <p className="text-gray-500 dark:text-zinc-500">View and manage your sponsorship campaigns</p>
+            <p className="text-gray-400 dark:text-zinc-400">View and manage your sponsorship campaigns</p>
           </div>
         </div>
 
@@ -191,7 +191,7 @@ export default function SponsorCampaignsPage() {
                                 {style.label}
                               </span>
                             </div>
-                            <p className="text-xs text-gray-500 dark:text-zinc-500 mt-0.5">
+                            <p className="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">
                               <Calendar className="w-3 h-3 inline mr-1" />
                               {new Date(campaign.startDate).toLocaleDateString()}
                               {campaign.endDate
@@ -205,7 +205,7 @@ export default function SponsorCampaignsPage() {
                             <p className="text-sm font-semibold text-gray-900 dark:text-white">
                               ${campaign.monthlyAmount}/mo
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-zinc-500">
+                            <p className="text-xs text-gray-400 dark:text-zinc-400">
                               {campaign.estimatedImpressions.toLocaleString()} impressions
                             </p>
                           </div>
@@ -276,7 +276,7 @@ function SummaryCard({ label, value, color }: { label: string; value: number; co
   };
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border">
-      <p className="text-xs text-gray-500 dark:text-zinc-500">{label}</p>
+      <p className="text-xs text-gray-400 dark:text-zinc-400">{label}</p>
       <p className={`text-2xl font-bold ${colorMap[color] || "text-gray-900"}`}>{value}</p>
     </div>
   );
@@ -285,7 +285,7 @@ function SummaryCard({ label, value, color }: { label: string; value: number; co
 function DetailItem({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div>
-      <div className="flex items-center gap-1.5 mb-1">{icon}<span className="text-xs text-gray-500 dark:text-zinc-500">{label}</span></div>
+      <div className="flex items-center gap-1.5 mb-1">{icon}<span className="text-xs text-gray-400 dark:text-zinc-400">{label}</span></div>
       <p className="text-sm font-semibold text-gray-900 dark:text-white">{value}</p>
     </div>
   );

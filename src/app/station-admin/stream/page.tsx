@@ -194,7 +194,7 @@ export default function StreamEngineeringPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
         <SharedNav />
         <div className="max-w-4xl mx-auto px-4 py-12 text-center">
-          <p className="text-gray-500 dark:text-zinc-500">
+          <p className="text-gray-400 dark:text-zinc-400">
             No station found. Create a station first.
           </p>
         </div>
@@ -531,7 +531,7 @@ export default function StreamEngineeringPage() {
                   Low
                 </h3>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">
+                  <label className="text-xs text-gray-400 block mb-1">
                     Frequency (Hz)
                   </label>
                   <input
@@ -563,7 +563,7 @@ export default function StreamEngineeringPage() {
                   Mid
                 </h3>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">
+                  <label className="text-xs text-gray-400 block mb-1">
                     Frequency (Hz)
                   </label>
                   <input
@@ -595,7 +595,7 @@ export default function StreamEngineeringPage() {
                   High
                 </h3>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">
+                  <label className="text-xs text-gray-400 block mb-1">
                     Frequency (Hz)
                   </label>
                   <input
@@ -636,7 +636,7 @@ export default function StreamEngineeringPage() {
                 onChange={(v) => update("duckingEnabled", v)}
               />
             </div>
-            <p className="text-sm text-gray-500 dark:text-zinc-500 mb-4">
+            <p className="text-sm text-gray-400 dark:text-zinc-400 mb-4">
               Automatically lower music volume when the DJ speaks.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">

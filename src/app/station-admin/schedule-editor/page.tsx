@@ -232,7 +232,7 @@ export default function ScheduleEditorPage() {
               <CalendarDays className="w-8 h-8 text-indigo-600" />
               Schedule Editor
             </h1>
-            <p className="text-zinc-500 mt-1">Assign hosts and clock templates to each hour of programming</p>
+            <p className="text-zinc-400 mt-1">Assign hosts and clock templates to each hour of programming</p>
           </div>
           <button
             onClick={saveSchedule}
@@ -257,7 +257,7 @@ export default function ScheduleEditorPage() {
               }`}
             >
               <div>{dt.label}</div>
-              <div className={`text-xs mt-0.5 ${activeDay === dt.key ? "text-indigo-200" : "text-zinc-500"}`}>
+              <div className={`text-xs mt-0.5 ${activeDay === dt.key ? "text-indigo-200" : "text-zinc-400"}`}>
                 {dt.subtitle}
               </div>
             </button>
@@ -266,7 +266,7 @@ export default function ScheduleEditorPage() {
 
         {loading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-zinc-500" />
+            <Loader2 className="w-8 h-8 animate-spin text-zinc-400" />
           </div>
         ) : (
           <div className="space-y-2">
@@ -310,7 +310,7 @@ export default function ScheduleEditorPage() {
                       {/* Time */}
                       <div className="w-32 flex-shrink-0">
                         <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-zinc-500" />
+                          <Clock className="w-4 h-4 text-zinc-400" />
                           <span className="font-bold text-zinc-100">{formatHourRange(hour)}</span>
                         </div>
                         <div className="flex items-center gap-1.5 mt-1">
@@ -330,7 +330,7 @@ export default function ScheduleEditorPage() {
 
                       {/* DJ Selector */}
                       <div className="flex-1">
-                        <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1 block">Host</label>
+                        <label className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1 block">Host</label>
                         <div className="relative">
                           <select
                             value={slot?.djId || ""}
@@ -342,13 +342,13 @@ export default function ScheduleEditorPage() {
                               <option key={d.id} value={d.id}>{d.name}</option>
                             ))}
                           </select>
-                          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+                          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
                         </div>
                       </div>
 
                       {/* Clock Selector */}
                       <div className="flex-1">
-                        <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1 block">Clock Template</label>
+                        <label className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1 block">Clock Template</label>
                         <div className="relative">
                           <select
                             value={slot?.clockTemplateId || ""}
@@ -360,7 +360,7 @@ export default function ScheduleEditorPage() {
                               <option key={c.id} value={c.id}>{c.name}</option>
                             ))}
                           </select>
-                          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+                          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
                         </div>
                       </div>
 

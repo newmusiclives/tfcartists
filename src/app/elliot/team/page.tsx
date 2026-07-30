@@ -292,19 +292,19 @@ export default function ElliotTeamPage() {
               <div className="space-y-3">
                 <div className="bg-blue-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artists bring fans → Fans become listeners</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">River activates artist fan bases</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">River activates artist fan bases</div>
                 </div>
                 <div className="bg-purple-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Viral content → New listener discovery</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">Nova creates shareable moments</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">Nova creates shareable moments</div>
                 </div>
                 <div className="bg-rose-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Community → Loyalty & retention</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">Sage builds belonging</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">Sage builds belonging</div>
                 </div>
                 <div className="bg-indigo-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Habits → Regular listening</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">Orion engineers behavior</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">Orion engineers behavior</div>
                 </div>
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function ElliotTeamPage() {
                             </span>
                           </div>
                           <p className="text-gray-600 dark:text-zinc-400 mb-2">{member.title}</p>
-                          <p className="text-sm text-gray-500 italic mb-2">{member.personality}</p>
+                          <p className="text-sm text-gray-400 italic mb-2">{member.personality}</p>
                           <div className="flex items-center space-x-4">
                             {member.dashboardLink && (
                               <Link
@@ -587,7 +587,7 @@ function TacticCard({
         <div className={`p-2 ${classes.bg} ${classes.text} rounded-lg`}>{icon}</div>
         <div className="flex-1">
           <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{title}</h4>
-          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-2">Owned by {owner}</p>
+          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-2">Owned by {owner}</p>
           <p className="text-sm text-gray-700 dark:text-zinc-300 mb-2">{description}</p>
           <div className={`text-xs font-medium ${classes.text}`}>{kpi}</div>
         </div>

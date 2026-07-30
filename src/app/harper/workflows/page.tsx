@@ -341,7 +341,7 @@ export default function HarperWorkflows() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
+                <Link href="/harper" className="text-gray-400 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
@@ -430,7 +430,7 @@ export default function HarperWorkflows() {
                       </span>
                     </div>
                     <p className="text-gray-600 dark:text-zinc-400 mb-2">{workflow.description}</p>
-                    <p className="text-sm text-gray-500 dark:text-zinc-500">
+                    <p className="text-sm text-gray-400 dark:text-zinc-400">
                       <span className="font-medium">Trigger:</span> {workflow.trigger}
                     </p>
                   </div>
@@ -445,23 +445,23 @@ export default function HarperWorkflows() {
                 {/* Stats Row */}
                 <div className="grid grid-cols-5 gap-4 mt-4">
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Enrolled</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Enrolled</p>
                     <p className="text-lg font-bold text-gray-900 dark:text-white">{workflow.stats.enrolled}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Active</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Active</p>
                     <p className="text-lg font-bold text-green-600">{workflow.stats.active}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Completed</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Completed</p>
                     <p className="text-lg font-bold text-blue-600">{workflow.stats.completed}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Converted</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Converted</p>
                     <p className="text-lg font-bold text-purple-600">{workflow.stats.converted}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Conv. Rate</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Conv. Rate</p>
                     <p className="text-lg font-bold text-green-600">{workflow.stats.conversionRate}%</p>
                   </div>
                 </div>
@@ -486,7 +486,7 @@ export default function HarperWorkflows() {
                           <div className="flex items-center justify-between mb-1">
                             <h5 className="font-semibold text-gray-900 dark:text-white">{step.title}</h5>
                             {step.delay && (
-                              <span className="text-sm text-gray-500 dark:text-zinc-500">{step.delay}</span>
+                              <span className="text-sm text-gray-400 dark:text-zinc-400">{step.delay}</span>
                             )}
                           </div>
                           {step.description && (
@@ -494,7 +494,7 @@ export default function HarperWorkflows() {
                           )}
                           {step.template && (
                             <div className="bg-gray-50 p-3 rounded text-sm text-gray-700 mt-2">
-                              <p className="font-medium text-xs text-gray-500 dark:text-zinc-500 mb-1">Email Template:</p>
+                              <p className="font-medium text-xs text-gray-400 dark:text-zinc-400 mb-1">Email Template:</p>
                               <p className="italic">{step.template}</p>
                             </div>
                           )}

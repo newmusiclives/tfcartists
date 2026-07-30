@@ -272,7 +272,7 @@ export default function CassidyDashboardPage() {
             <div>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-gray-600 dark:text-zinc-400">Mainstream</span>
-                <span className="font-semibold text-gray-500 dark:text-zinc-500">{stats.rotationTransformation.mainstream}%</span>
+                <span className="font-semibold text-gray-400 dark:text-zinc-400">{stats.rotationTransformation.mainstream}%</span>
               </div>
               <div className="h-4 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                 <div
@@ -343,7 +343,7 @@ export default function CassidyDashboardPage() {
 
           <div className="space-y-3">
             {progressionRequests.length === 0 ? (
-              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
                 <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50" />
                 <p>No progression requests yet</p>
                 <p className="text-sm mt-1">Artists can request tier upgrades after time in their current tier</p>
@@ -423,7 +423,7 @@ function MetricCard({
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
       <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-1">{label}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }

@@ -77,7 +77,7 @@ export function StationSwitcher() {
 
       {open && (
         <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border py-1 z-50" role="listbox" aria-label="Select radio station">
-          <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-zinc-500 uppercase tracking-wider border-b">
+          <div className="px-3 py-2 text-xs font-semibold text-gray-400 dark:text-zinc-400 uppercase tracking-wider border-b">
             Switch Station
           </div>
           {allStations.map((station) => {
@@ -104,7 +104,7 @@ export function StationSwitcher() {
                   />
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-white text-sm">{station.name}</div>
-                    <div className="text-xs text-gray-500 dark:text-zinc-500">
+                    <div className="text-xs text-gray-400 dark:text-zinc-400">
                       {station.callSign && `${station.callSign} · `}{station.genre}
                     </div>
                   </div>

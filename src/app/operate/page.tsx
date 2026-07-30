@@ -244,7 +244,7 @@ export default function OperatePage() {
                   <div className={`text-sm mb-1 ${tier.highlight ? "text-gray-600" : "text-amber-200"}`}>
                     Platform fee: {tier.fee}
                   </div>
-                  <div className={`text-sm ${tier.highlight ? "text-gray-500" : "text-amber-300"}`}>
+                  <div className={`text-sm ${tier.highlight ? "text-gray-400" : "text-amber-300"}`}>
                     Setup: {tier.setup} (one-time)
                   </div>
                 </div>
@@ -275,7 +275,7 @@ export default function OperatePage() {
                 <div className="h-2" style={{ backgroundColor: template.primaryColor }} />
                 <div className="p-4">
                   <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{template.name}</h3>
-                  <p className="text-xs text-gray-500 dark:text-zinc-500 mb-2">{template.genre}</p>
+                  <p className="text-xs text-gray-400 dark:text-zinc-400 mb-2">{template.genre}</p>
                   <div className="text-xs text-gray-400">
                     {template.djPresets.length} host{template.djPresets.length !== 1 ? "s" : ""} included
                   </div>
@@ -388,7 +388,7 @@ export default function OperatePage() {
               >
                 <tool.icon className="w-5 h-5 text-amber-600 mb-2" />
                 <h3 className="font-medium text-gray-900 dark:text-white text-sm">{tool.title}</h3>
-                <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{tool.desc}</p>
+                <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{tool.desc}</p>
               </div>
             ))}
           </div>

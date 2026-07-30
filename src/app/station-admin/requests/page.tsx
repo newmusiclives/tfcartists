@@ -210,7 +210,7 @@ export default function AdminRequestsPage() {
                 Manage listener song requests
               </p>
             </div>
-            <div className="text-sm text-zinc-500">
+            <div className="text-sm text-zinc-400">
               {requests.length} request{requests.length !== 1 ? "s" : ""}
             </div>
           </div>
@@ -238,7 +238,7 @@ export default function AdminRequestsPage() {
 
             {/* Sort buttons */}
             <div className="flex items-center gap-1 ml-auto">
-              <span className="text-xs text-zinc-500 mr-1">
+              <span className="text-xs text-zinc-400 mr-1">
                 <ArrowUpDown className="w-3.5 h-3.5 inline mr-1" />
                 Sort:
               </span>
@@ -249,7 +249,7 @@ export default function AdminRequestsPage() {
                   className={`px-2.5 py-1 text-xs rounded-md transition-colors ${
                     sortField === f
                       ? "bg-zinc-700 text-white"
-                      : "text-zinc-500 hover:text-white hover:bg-zinc-800"
+                      : "text-zinc-400 hover:text-white hover:bg-zinc-800"
                   }`}
                 >
                   {f === "createdAt" ? "Date" : f.charAt(0).toUpperCase() + f.slice(1)}
@@ -296,19 +296,19 @@ export default function AdminRequestsPage() {
 
           {/* Table */}
           {loading ? (
-            <div className="flex items-center justify-center py-16 text-zinc-500">
+            <div className="flex items-center justify-center py-16 text-zinc-400">
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
               Loading requests...
             </div>
           ) : sorted.length === 0 ? (
-            <div className="text-center py-16 text-zinc-500">
+            <div className="text-center py-16 text-zinc-400">
               <Music className="w-10 h-10 mx-auto mb-3 opacity-40" />
               <p>No requests found.</p>
             </div>
           ) : (
             <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
               {/* Table header */}
-              <div className="grid grid-cols-[40px_1fr_1fr_80px_80px_100px_140px] gap-2 px-4 py-3 border-b border-zinc-800 text-xs text-zinc-500 uppercase tracking-wider">
+              <div className="grid grid-cols-[40px_1fr_1fr_80px_80px_100px_140px] gap-2 px-4 py-3 border-b border-zinc-800 text-xs text-zinc-400 uppercase tracking-wider">
                 <button onClick={toggleSelectAll} className="flex items-center">
                   {selectedIds.size === sorted.length && sorted.length > 0 ? (
                     <CheckSquare className="w-4 h-4 text-violet-400" />
@@ -344,7 +344,7 @@ export default function AdminRequestsPage() {
                       {isSelected ? (
                         <CheckSquare className="w-4 h-4 text-violet-400" />
                       ) : (
-                        <Square className="w-4 h-4 text-zinc-600" />
+                        <Square className="w-4 h-4 text-zinc-400" />
                       )}
                     </button>
 
@@ -353,7 +353,7 @@ export default function AdminRequestsPage() {
                       <div className="text-sm font-medium truncate">
                         {req.songTitle}
                       </div>
-                      <div className="text-xs text-zinc-500 truncate">
+                      <div className="text-xs text-zinc-400 truncate">
                         {req.artistName}
                       </div>
                     </div>
@@ -364,7 +364,7 @@ export default function AdminRequestsPage() {
                         {req.listenerName || "Anonymous"}
                       </div>
                       {req.message && (
-                        <div className="text-xs text-zinc-500 truncate italic">
+                        <div className="text-xs text-zinc-400 truncate italic">
                           &ldquo;{req.message}&rdquo;
                         </div>
                       )}
@@ -390,7 +390,7 @@ export default function AdminRequestsPage() {
                     </div>
 
                     {/* Time */}
-                    <div className="text-xs text-zinc-500">
+                    <div className="text-xs text-zinc-400">
                       {formatDate(req.createdAt)}
                     </div>
 
@@ -405,7 +405,7 @@ export default function AdminRequestsPage() {
                               <button
                                 onClick={() => updateStatus(req.id, "queued")}
                                 title="Approve"
-                                className="p-1.5 rounded-md text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"
+                                className="p-1.5 rounded-md text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"
                               >
                                 <CheckCircle2 className="w-4 h-4" />
                               </button>

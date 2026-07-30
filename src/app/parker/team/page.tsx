@@ -284,12 +284,12 @@ export default function ParkerTeamPage() {
                 <div className="bg-rose-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Live Programming</div>
                   <div className="text-2xl font-bold text-rose-600">6am - 6pm</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">12 DJs across weekday & weekend shifts</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">12 DJs across weekday & weekend shifts</div>
                 </div>
                 <div className="bg-indigo-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Automation</div>
                   <div className="text-2xl font-bold text-indigo-600">6pm - 6am</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">AI-managed overnight programming</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">AI-managed overnight programming</div>
                 </div>
               </div>
             </div>

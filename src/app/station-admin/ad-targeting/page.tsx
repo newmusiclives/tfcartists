@@ -171,7 +171,7 @@ export default function AdTargetingPage() {
 
         {loading ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-zinc-500" />
+            <Loader2 className="w-8 h-8 animate-spin text-zinc-400" />
           </div>
         ) : (
           <>
@@ -185,7 +185,7 @@ export default function AdTargetingPage() {
                   </div>
                   <p className="text-2xl font-bold text-zinc-100">
                     {summary.activeAds}
-                    <span className="text-sm text-zinc-500 font-normal ml-1">
+                    <span className="text-sm text-zinc-400 font-normal ml-1">
                       / {summary.totalAds}
                     </span>
                   </p>
@@ -238,7 +238,7 @@ export default function AdTargetingPage() {
                           <span className="font-medium text-zinc-300">
                             {dp.label}
                           </span>
-                          <span className="text-xs text-zinc-500 ml-1">
+                          <span className="text-xs text-zinc-400 ml-1">
                             {dp.time}
                           </span>
                         </div>
@@ -262,9 +262,9 @@ export default function AdTargetingPage() {
             {/* Per-Ad Targeting Config */}
             {activeAds.length === 0 ? (
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-12 text-center">
-                <AlertCircle className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
+                <AlertCircle className="w-12 h-12 text-zinc-400 mx-auto mb-3" />
                 <p className="text-zinc-400">No active ads to configure.</p>
-                <p className="text-sm text-zinc-500 mt-1">
+                <p className="text-sm text-zinc-400 mt-1">
                   Create sponsor ads first, then configure targeting here.
                 </p>
               </div>
@@ -330,7 +330,7 @@ export default function AdTargetingPage() {
 
                       {/* Daypart Checkboxes */}
                       <div className="mb-4">
-                        <label className="text-xs text-zinc-500 block mb-2 uppercase tracking-wider">
+                        <label className="text-xs text-zinc-400 block mb-2 uppercase tracking-wider">
                           Daypart Targeting
                         </label>
                         <div className="flex flex-wrap gap-2">
@@ -356,7 +356,7 @@ export default function AdTargetingPage() {
                             );
                           })}
                           {cfg.daypartTargets.length === 0 && (
-                            <span className="text-xs text-zinc-500 self-center ml-2">
+                            <span className="text-xs text-zinc-400 self-center ml-2">
                               No targeting = runs in all dayparts
                             </span>
                           )}
@@ -366,7 +366,7 @@ export default function AdTargetingPage() {
                       {/* Numeric configs */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                         <div>
-                          <label className="text-xs text-zinc-500 block mb-1">
+                          <label className="text-xs text-zinc-400 block mb-1">
                             Max Impressions
                           </label>
                           <input
@@ -383,7 +383,7 @@ export default function AdTargetingPage() {
                           />
                         </div>
                         <div>
-                          <label className="text-xs text-zinc-500 block mb-1">
+                          <label className="text-xs text-zinc-400 block mb-1">
                             Frequency Cap / hr
                           </label>
                           <input
@@ -400,7 +400,7 @@ export default function AdTargetingPage() {
                           />
                         </div>
                         <div>
-                          <label className="text-xs text-zinc-500 block mb-1">
+                          <label className="text-xs text-zinc-400 block mb-1">
                             Priority Override
                           </label>
                           <input
@@ -443,7 +443,7 @@ export default function AdTargetingPage() {
                       {/* Impression budget bar */}
                       {ad.maxImpressions !== null && ad.maxImpressions > 0 && (
                         <div>
-                          <div className="flex justify-between text-xs text-zinc-500 mb-1">
+                          <div className="flex justify-between text-xs text-zinc-400 mb-1">
                             <span>
                               {ad.impressions.toLocaleString()} /{" "}
                               {ad.maxImpressions.toLocaleString()} impressions

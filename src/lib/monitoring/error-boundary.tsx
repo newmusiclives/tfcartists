@@ -79,7 +79,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             <h2 className="text-lg font-semibold text-gray-900 mb-2">
               Something went wrong
             </h2>
-            <p className="text-sm text-gray-500 mb-6">
+            <p className="text-sm text-gray-400 mb-6">
               An unexpected error occurred. Our team has been notified.
             </p>
             {process.env.NODE_ENV === "development" && this.state.error && (

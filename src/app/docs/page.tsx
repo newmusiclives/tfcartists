@@ -436,19 +436,19 @@ function CompleteDemo() {
         <div className="bg-white dark:bg-zinc-900 border rounded-lg p-4">
           <div className="text-3xl font-bold text-green-600 mb-2">$186,000</div>
           <div className="text-sm text-gray-600 dark:text-zinc-400">Sponsor Revenue</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">1,093 sponsors</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">1,093 sponsors</div>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border rounded-lg p-4">
           <div className="text-3xl font-bold text-purple-600 mb-2">$148,800</div>
           <div className="text-sm text-gray-600 dark:text-zinc-400">To Artist Pool (80%)</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">861 artists</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">861 artists</div>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border rounded-lg p-4">
           <div className="text-3xl font-bold text-blue-600 mb-2">$37,200</div>
           <div className="text-sm text-gray-600 dark:text-zinc-400">Station Operations (20%)</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Profit margin</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Profit margin</div>
         </div>
       </div>
 
@@ -650,7 +650,7 @@ function Roadmap() {
               <span className="font-bold text-green-600">0.6%</span>
             </div>
           </div>
-          <p className="text-xs text-gray-500 dark:text-zinc-500 mt-3 italic">Excellent profit margins!</p>
+          <p className="text-xs text-gray-400 dark:text-zinc-400 mt-3 italic">Excellent profit margins!</p>
         </div>
       </div>
 
@@ -766,7 +766,7 @@ function ApiReference() {
   return (
     <div className="prose prose-lg max-w-none">
       <h2 className="text-3xl font-bold mb-2">{docs.name}</h2>
-      <p className="text-gray-500 dark:text-zinc-500 mb-6">Version {docs.version} &middot; Base URL: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{docs.baseUrl}</code></p>
+      <p className="text-gray-400 dark:text-zinc-400 mb-6">Version {docs.version} &middot; Base URL: <code className="bg-gray-100 px-2 py-1 rounded text-sm">{docs.baseUrl}</code></p>
 
       {/* Authentication */}
       <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
@@ -817,7 +817,7 @@ function ApiReference() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {Object.entries(docs.rateLimits).map(([category, limit]) => (
             <div key={category} className="bg-gray-50 rounded-lg p-4 text-center">
-              <div className="text-sm text-gray-500 capitalize mb-1">{category}</div>
+              <div className="text-sm text-gray-400 capitalize mb-1">{category}</div>
               <div className="text-lg font-bold text-gray-900 dark:text-white">{limit}</div>
             </div>
           ))}

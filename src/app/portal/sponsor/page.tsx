@@ -175,13 +175,13 @@ export default function SponsorPortalPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{sponsor.businessName}</h1>
-            <p className="text-gray-500 dark:text-zinc-500">
+            <p className="text-gray-400 dark:text-zinc-400">
               {sponsor.contactName} &middot; {sponsor.city}, {sponsor.state}
             </p>
           </div>
           <button
             onClick={() => { setData(null); setSponsorId(""); router.replace("/portal/sponsor"); }}
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="text-sm text-gray-400 hover:text-gray-700"
           >
             Switch Account
           </button>
@@ -191,16 +191,16 @@ export default function SponsorPortalPage() {
         <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border-2 border-blue-200 mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-zinc-500">Sponsorship Tier</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">Sponsorship Tier</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {tier ? tier.name : "Not Active"}
               </p>
-              <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
+              <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">
                 {tier ? `$${tier.cost}/month \u2022 ${tier.adSpots} ad spots/month` : "Contact us to activate"}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-500 dark:text-zinc-500">Monthly Investment</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">Monthly Investment</p>
               <p className="text-3xl font-bold text-blue-600">
                 ${sponsor.monthlyAmount || tier?.cost || 0}
               </p>
@@ -250,12 +250,12 @@ export default function SponsorPortalPage() {
               <Radio className="w-5 h-5 text-gray-400" />
               Active Ad Spots
             </h2>
-            <span className="text-sm text-gray-500 dark:text-zinc-500">
+            <span className="text-sm text-gray-400 dark:text-zinc-400">
               {ads.filter((a) => a.isActive).length} active / {ads.length} total
             </span>
           </div>
           {ads.length === 0 ? (
-            <div className="px-6 pb-6 text-sm text-gray-500 dark:text-zinc-500">
+            <div className="px-6 pb-6 text-sm text-gray-400 dark:text-zinc-400">
               No ad spots found. Contact the station team to set up your first ad.
             </div>
           ) : (
@@ -266,7 +266,7 @@ export default function SponsorPortalPage() {
                     <div className={`w-2 h-2 rounded-full ${ad.isActive ? "bg-green-500" : "bg-gray-300"}`} />
                     <div>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">{ad.title}</p>
-                      <p className="text-xs text-gray-500 dark:text-zinc-500">
+                      <p className="text-xs text-gray-400 dark:text-zinc-400">
                         {ad.tier.charAt(0).toUpperCase() + ad.tier.slice(1)} tier
                         {ad.durationSeconds ? ` \u2022 ${Math.round(ad.durationSeconds)}s` : ""}
                         {ad.lastPlayedAt
@@ -277,7 +277,7 @@ export default function SponsorPortalPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-semibold text-gray-900 dark:text-white">{ad.playCount.toLocaleString()}</p>
-                    <p className="text-xs text-gray-500 dark:text-zinc-500">plays</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400">plays</p>
                   </div>
                 </div>
               ))}
@@ -339,7 +339,7 @@ function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border">
       <div className="mb-2">{icon}</div>
-      <p className="text-xs text-gray-500 dark:text-zinc-500">{label}</p>
+      <p className="text-xs text-gray-400 dark:text-zinc-400">{label}</p>
       <p className="text-xl font-bold text-gray-900 dark:text-white">{value}</p>
     </div>
   );
@@ -366,7 +366,7 @@ function QuickAction({
     >
       <div className="mb-2">{icon}</div>
       <p className="text-sm font-semibold text-gray-900 dark:text-white">{title}</p>
-      <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{description}</p>
+      <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{description}</p>
     </a>
   );
 }

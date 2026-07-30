@@ -177,7 +177,7 @@ export default function DemoPage() {
                   onChange={(e) => setStationName(e.target.value)}
                   placeholder="e.g. Sunset Radio, The Barn, Groove FM"
                   maxLength={100}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all"
                 />
               </div>
 
@@ -209,7 +209,7 @@ export default function DemoPage() {
               <div>
                 <label className="block text-sm font-medium text-zinc-300 mb-2">
                   DJ Name{" "}
-                  <span className="text-zinc-500 font-normal">(optional)</span>
+                  <span className="text-zinc-400 font-normal">(optional)</span>
                 </label>
                 <input
                   type="text"
@@ -217,7 +217,7 @@ export default function DemoPage() {
                   onChange={(e) => setDjName(e.target.value)}
                   placeholder="Leave blank for a preset DJ"
                   maxLength={50}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all"
                 />
               </div>
 
@@ -264,7 +264,7 @@ export default function DemoPage() {
                     />
                   ))}
                 </div>
-                <p className="text-sm text-zinc-500">
+                <p className="text-sm text-zinc-400">
                   Our AI DJ is writing and recording your demo...
                 </p>
               </div>
@@ -303,7 +303,7 @@ export default function DemoPage() {
 
                 {/* Script preview */}
                 <details className="group">
-                  <summary className="text-sm text-zinc-500 cursor-pointer hover:text-zinc-300 transition-colors">
+                  <summary className="text-sm text-zinc-400 cursor-pointer hover:text-zinc-300 transition-colors">
                     View DJ script
                   </summary>
                   <div className="mt-3 p-4 rounded-xl bg-zinc-800/40 border border-zinc-700/30 text-sm text-zinc-400 leading-relaxed italic">
@@ -347,7 +347,7 @@ export default function DemoPage() {
                     </Link>
                     <Link
                       href="/showreel"
-                      className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+                      className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
                     >
                       Try 20-min showreel
                     </Link>
@@ -401,7 +401,7 @@ export default function DemoPage() {
                     <p className="text-sm font-medium text-zinc-200">
                       {testimonial.name}
                     </p>
-                    <p className="text-xs text-zinc-500">{testimonial.station}</p>
+                    <p className="text-xs text-zinc-400">{testimonial.station}</p>
                   </div>
                 </div>
               </div>
@@ -473,7 +473,7 @@ export default function DemoPage() {
                 >
                   <span className="font-medium pr-4">{item.q}</span>
                   <ChevronDown
-                    className={`w-5 h-5 text-zinc-500 shrink-0 transition-transform duration-200 ${
+                    className={`w-5 h-5 text-zinc-400 shrink-0 transition-transform duration-200 ${
                       openFaq === i ? "rotate-180" : ""
                     }`}
                   />
@@ -510,7 +510,7 @@ export default function DemoPage() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-zinc-800/50 py-8 px-6">
-        <div className="max-w-4xl mx-auto flex items-center justify-between text-sm text-zinc-500">
+        <div className="max-w-4xl mx-auto flex items-center justify-between text-sm text-zinc-400">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4" />
             <span>TrueFans Radio</span>

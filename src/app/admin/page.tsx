@@ -351,7 +351,7 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <h3 className="text-lg font-bold text-gray-900 dark:text-white">{team.name}</h3>
-                          <p className="text-sm text-gray-500 dark:text-zinc-500">{team.role}</p>
+                          <p className="text-sm text-gray-400 dark:text-zinc-400">{team.role}</p>
                         </div>
                       </div>
                       <ArrowRight className="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform" />
@@ -360,7 +360,7 @@ export default function AdminDashboard() {
                       {team.stats.map((stat) => (
                         <div key={stat.label} className="bg-gray-50 rounded-lg p-3">
                           <div className="text-lg font-bold text-gray-900 dark:text-white">{stat.value}</div>
-                          <div className="text-xs text-gray-500 dark:text-zinc-500">{stat.label}</div>
+                          <div className="text-xs text-gray-400 dark:text-zinc-400">{stat.label}</div>
                         </div>
                       ))}
                     </div>
@@ -545,22 +545,22 @@ export default function AdminDashboard() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Artist
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Conversations
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Shows
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Donations
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -572,7 +572,7 @@ export default function AdminDashboard() {
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {artist.name}
                       </div>
-                      <div className="text-sm text-gray-500 dark:text-zinc-500">{artist.genre || "—"}</div>
+                      <div className="text-sm text-gray-400 dark:text-zinc-400">{artist.genre || "—"}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
@@ -675,7 +675,7 @@ function HealthMetric({
       </div>
       <div className="text-right">
         <span className="text-sm font-bold text-gray-900 dark:text-white">{value}</span>
-        <span className="text-xs text-gray-500 ml-1">{unit}</span>
+        <span className="text-xs text-gray-400 ml-1">{unit}</span>
       </div>
     </div>
   );

@@ -829,7 +829,7 @@ function SlotEditor({
                     </option>
                   ))}
                 </select>
-                <label className="text-xs text-zinc-500">min:</label>
+                <label className="text-xs text-zinc-400">min:</label>
                 <input
                   type="number"
                   value={slot.minute}
@@ -838,7 +838,7 @@ function SlotEditor({
                   min={0}
                   max={59}
                 />
-                <label className="text-xs text-zinc-500">dur:</label>
+                <label className="text-xs text-zinc-400">dur:</label>
                 <input
                   type="number"
                   value={slot.duration}
@@ -857,7 +857,7 @@ function SlotEditor({
                 <button
                   onClick={() => moveSlot(sortedIdx, "up")}
                   disabled={sortedIdx === 0}
-                  className="text-zinc-500 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="text-zinc-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Move up"
                 >
                   <ArrowUp className="w-4 h-4" />
@@ -865,7 +865,7 @@ function SlotEditor({
                 <button
                   onClick={() => moveSlot(sortedIdx, "down")}
                   disabled={sortedIdx === slots.length - 1}
-                  className="text-zinc-500 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="text-zinc-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
                   title="Move down"
                 >
                   <ArrowDown className="w-4 h-4" />
@@ -909,7 +909,7 @@ function SlotEditor({
                   className="w-3 h-3 rounded-full shrink-0"
                   style={{ backgroundColor: BREAK_COLORS[block.breakType] }}
                 />
-                <Layers className="w-4 h-4 text-zinc-500 shrink-0" />
+                <Layers className="w-4 h-4 text-zinc-400 shrink-0" />
                 <span
                   className="inline-flex items-center justify-center w-5 h-5 rounded-full text-white text-[10px] font-bold shrink-0"
                   style={{ backgroundColor: BREAK_COLORS[block.breakType] }}
@@ -917,13 +917,13 @@ function SlotEditor({
                   {block.num}
                 </span>
                 <span className="font-medium text-zinc-100">{block.label}</span>
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-zinc-400">
                   {block.slots.length} slot{block.slots.length !== 1 ? "s" : ""}, {Math.round(block.totalDuration * 10) / 10}min at :{String(block.startMinute).padStart(2, "0")}
                 </span>
                 <span className="flex-1" />
                 <button
                   onClick={(e) => { e.stopPropagation(); toggleBreak(block.id); }}
-                  className="text-zinc-500 hover:text-zinc-300 p-0.5"
+                  className="text-zinc-400 hover:text-zinc-300 p-0.5"
                   title={isExpanded ? "Collapse" : "Expand"}
                 >
                   {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -964,7 +964,7 @@ function SlotEditor({
                           <option key={c} value={c}>{c}</option>
                         ))}
                       </select>
-                      <label className="text-xs text-zinc-500">min:</label>
+                      <label className="text-xs text-zinc-400">min:</label>
                       <input
                         type="number"
                         value={bSlot.minute}
@@ -973,7 +973,7 @@ function SlotEditor({
                         min={0}
                         max={59}
                       />
-                      <label className="text-xs text-zinc-500">dur:</label>
+                      <label className="text-xs text-zinc-400">dur:</label>
                       <input
                         type="number"
                         value={bSlot.duration}
@@ -1001,7 +1001,7 @@ function SlotEditor({
 
       {/* Add Slot */}
       <div className="flex items-center gap-2 bg-zinc-900 border-2 border-dashed border-zinc-700 rounded px-3 py-2 text-sm">
-        <Plus className="w-4 h-4 text-zinc-500" />
+        <Plus className="w-4 h-4 text-zinc-400" />
         <select
           value={newSlot.type}
           onChange={(e) => setNewSlot({ ...newSlot, type: e.target.value })}
@@ -1024,7 +1024,7 @@ function SlotEditor({
             </option>
           ))}
         </select>
-        <label className="text-xs text-zinc-500">min:</label>
+        <label className="text-xs text-zinc-400">min:</label>
         <input
           type="number"
           value={newSlot.minute ?? 0}
@@ -1033,7 +1033,7 @@ function SlotEditor({
           min={0}
           max={59}
         />
-        <label className="text-xs text-zinc-500">dur:</label>
+        <label className="text-xs text-zinc-400">dur:</label>
         <input
           type="number"
           value={newSlot.duration ?? 0}
@@ -1069,7 +1069,7 @@ function SlotEditor({
         {showInsertBreak && (
           <div className="mt-2 bg-zinc-900 border border-zinc-700 rounded-lg p-3 space-y-3">
             <div className="flex items-center gap-2">
-              <label className="text-xs text-zinc-500">At minute:</label>
+              <label className="text-xs text-zinc-400">At minute:</label>
               <input
                 type="number"
                 value={insertBreakMinute}
@@ -1870,7 +1870,7 @@ export default function RadioClocksPage() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold">New Clock Template</h3>
               <button onClick={() => setShowCreate(false)}>
-                <X className="w-5 h-5 text-zinc-500" />
+                <X className="w-5 h-5 text-zinc-400" />
               </button>
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -1902,7 +1902,7 @@ export default function RadioClocksPage() {
             />
             <div className="flex gap-4 mb-4">
               <div>
-                <label className="text-xs text-zinc-500">Tempo</label>
+                <label className="text-xs text-zinc-400">Tempo</label>
                 <select
                   value={newTemplate.tempo}
                   onChange={(e) => setNewTemplate({ ...newTemplate, tempo: e.target.value })}
@@ -1945,7 +1945,7 @@ export default function RadioClocksPage() {
               <Users className="w-7 h-7 text-amber-600" />
               Host Show Clocks
             </h2>
-            <p className="text-sm text-zinc-500 mb-4">
+            <p className="text-sm text-zinc-400 mb-4">
               Assign different clock templates to each hour of a host&apos;s shift,
               or generate 3 dedicated templates per host.
             </p>
@@ -1965,7 +1965,7 @@ export default function RadioClocksPage() {
                         <h3 className="font-semibold text-white">
                           {show.djName}
                         </h3>
-                        <span className="text-sm text-zinc-500">
+                        <span className="text-sm text-zinc-400">
                           {formatTime12(show.hours[0].startTime)} –{" "}
                           {formatTime12(show.hours[show.hours.length - 1].endTime)}
                         </span>
@@ -2000,7 +2000,7 @@ export default function RadioClocksPage() {
                               <span className="text-sm font-medium text-zinc-300">
                                 Hour {hour.hour}
                               </span>
-                              <span className="text-xs text-zinc-500 ml-1">
+                              <span className="text-xs text-zinc-400 ml-1">
                                 ({formatTime12(hour.startTime)}–
                                 {formatTime12(hour.endTime)})
                               </span>
@@ -2063,7 +2063,7 @@ export default function RadioClocksPage() {
                                 />
                               ))}
                               {hourSlots.length === 0 && (
-                                <span className="absolute inset-0 flex items-center justify-center text-xs text-zinc-500">
+                                <span className="absolute inset-0 flex items-center justify-center text-xs text-zinc-400">
                                   No slots
                                 </span>
                               )}
@@ -2093,12 +2093,12 @@ export default function RadioClocksPage() {
         {/* Templates */}
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : templates.length === 0 ? (
           <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
-            <Clock className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-            <p className="text-zinc-500">No clock templates yet.</p>
+            <Clock className="w-12 h-12 text-zinc-400 mx-auto mb-3" />
+            <p className="text-zinc-400">No clock templates yet.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -2134,7 +2134,7 @@ export default function RadioClocksPage() {
                             </span>
                           )}
                         </h3>
-                        <div className="flex items-center gap-3 text-xs text-zinc-500 mt-1">
+                        <div className="flex items-center gap-3 text-xs text-zinc-400 mt-1">
                           <span className="bg-zinc-800 px-2 py-0.5 rounded">
                             {formatClockType(t.clock_type)}
                           </span>
@@ -2182,9 +2182,9 @@ export default function RadioClocksPage() {
                         </>
                       )}
                       {isExpanded ? (
-                        <ChevronUp className="w-5 h-5 text-zinc-500" />
+                        <ChevronUp className="w-5 h-5 text-zinc-400" />
                       ) : (
-                        <ChevronDown className="w-5 h-5 text-zinc-500" />
+                        <ChevronDown className="w-5 h-5 text-zinc-400" />
                       )}
                     </div>
                   </button>
@@ -2215,7 +2215,7 @@ export default function RadioClocksPage() {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-sm text-zinc-500 italic">
+                        <p className="text-sm text-zinc-400 italic">
                           No clock pattern defined. Click the edit button to add slots.
                         </p>
                       )}
@@ -2320,7 +2320,7 @@ export default function RadioClocksPage() {
             <h3 className="font-semibold text-zinc-100 mb-4">Add Assignment</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 mb-4">
               <div>
-                <label className="text-xs text-zinc-500 mb-1 block">Host</label>
+                <label className="text-xs text-zinc-400 mb-1 block">Host</label>
                 <select
                   value={newAssignment.dj_id}
                   onChange={(e) =>
@@ -2339,7 +2339,7 @@ export default function RadioClocksPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-zinc-500 mb-1 block">Template</label>
+                <label className="text-xs text-zinc-400 mb-1 block">Template</label>
                 <select
                   value={newAssignment.clock_template_id}
                   onChange={(e) =>
@@ -2359,7 +2359,7 @@ export default function RadioClocksPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-zinc-500 mb-1 block">Day</label>
+                <label className="text-xs text-zinc-400 mb-1 block">Day</label>
                 <select
                   value={newAssignment.day_of_week}
                   onChange={(e) =>
@@ -2376,7 +2376,7 @@ export default function RadioClocksPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-zinc-500 mb-1 block">Start</label>
+                <label className="text-xs text-zinc-400 mb-1 block">Start</label>
                 <input
                   type="time"
                   value={newAssignment.time_slot_start}
@@ -2390,7 +2390,7 @@ export default function RadioClocksPage() {
                 />
               </div>
               <div>
-                <label className="text-xs text-zinc-500 mb-1 block">End</label>
+                <label className="text-xs text-zinc-400 mb-1 block">End</label>
                 <input
                   type="time"
                   value={newAssignment.time_slot_end}

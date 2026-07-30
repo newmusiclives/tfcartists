@@ -95,7 +95,7 @@ function TemplatePickerInner() {
                 <h3 className="text-lg font-bold text-white mb-1">{template.name}</h3>
                 <p className="text-sm text-zinc-400 mb-3 line-clamp-2">{template.tagline}</p>
 
-                <div className="space-y-1.5 text-xs text-zinc-500">
+                <div className="space-y-1.5 text-xs text-zinc-400">
                   <div className="flex items-center gap-1.5">
                     <Music className="w-3.5 h-3.5" />
                     <span>{template.genre}</span>
@@ -158,7 +158,7 @@ function TemplatePickerInner() {
                     setSelected(null);
                     setError(null);
                   }}
-                  className="text-zinc-500 hover:text-zinc-300 transition-colors p-1"
+                  className="text-zinc-400 hover:text-zinc-300 transition-colors p-1"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -169,7 +169,7 @@ function TemplatePickerInner() {
 
               {/* DJ Preview */}
               <div className="mb-6">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3 flex items-center gap-1.5">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-3 flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5" />
                   AI DJ Lineup
                 </h3>
@@ -196,7 +196,7 @@ function TemplatePickerInner() {
 
               {/* Provision Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-1">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1">
                   Station Details
                 </h3>
 

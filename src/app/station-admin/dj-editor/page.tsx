@@ -179,13 +179,13 @@ export default function DJEditorPage() {
 
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : djs.length === 0 ? (
           <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
-            <Users className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-            <p className="text-zinc-500">No hosts configured yet.</p>
-            <p className="text-sm text-zinc-500 mt-1">Click &ldquo;Add New Host&rdquo; to create your first host personality.</p>
+            <Users className="w-12 h-12 text-zinc-400 mx-auto mb-3" />
+            <p className="text-zinc-400">No hosts configured yet.</p>
+            <p className="text-sm text-zinc-400 mt-1">Click &ldquo;Add New Host&rdquo; to create your first host personality.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -226,9 +226,9 @@ export default function DJEditorPage() {
                       </span>
                     </div>
                     {dj.tagline && (
-                      <p className="text-sm text-zinc-500 italic mt-0.5 truncate">{dj.tagline}</p>
+                      <p className="text-sm text-zinc-400 italic mt-0.5 truncate">{dj.tagline}</p>
                     )}
-                    <div className="flex items-center gap-2 mt-2 text-xs text-zinc-500">
+                    <div className="flex items-center gap-2 mt-2 text-xs text-zinc-400">
                       <span>{getShowTime(dj)}</span>
                       {dj.isWeekend && <span className="bg-amber-500/15 text-amber-400 px-1.5 py-0.5 rounded">Weekend</span>}
                     </div>
@@ -252,7 +252,7 @@ export default function DJEditorPage() {
                         {loadingDjId === dj.id ? "Generating..." : playingDjId === dj.id ? "Stop" : "Voice Demo"}
                       </button>
                       {dj.ttsVoice && (
-                        <span className="text-xs text-zinc-500">{dj.ttsVoice}</span>
+                        <span className="text-xs text-zinc-400">{dj.ttsVoice}</span>
                       )}
                     </div>
                   </div>
@@ -269,7 +269,7 @@ export default function DJEditorPage() {
           <div className="bg-zinc-900 rounded-xl p-6 w-full max-w-md shadow-xl border border-zinc-800">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-white">Create New Host</h2>
-              <button onClick={() => { setShowModal(false); setCreateError(null); }} className="text-zinc-500 hover:text-zinc-300">
+              <button onClick={() => { setShowModal(false); setCreateError(null); }} className="text-zinc-400 hover:text-zinc-300">
                 <X className="w-5 h-5" />
               </button>
             </div>

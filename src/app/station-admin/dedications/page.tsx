@@ -186,12 +186,12 @@ export default function DedicationsPage() {
           )}
 
           {loading ? (
-            <div className="flex items-center justify-center py-20 gap-3 text-zinc-500">
+            <div className="flex items-center justify-center py-20 gap-3 text-zinc-400">
               <Loader2 className="w-5 h-5 animate-spin" />
               Loading dedications...
             </div>
           ) : requests.length === 0 ? (
-            <div className="text-center py-20 text-zinc-500">
+            <div className="text-center py-20 text-zinc-400">
               <Heart className="w-12 h-12 mx-auto mb-3 opacity-30" />
               <p>No dedication requests yet.</p>
               <p className="text-sm mt-1">
@@ -206,7 +206,7 @@ export default function DedicationsPage() {
                   <h2 className="text-lg font-semibold flex items-center gap-2">
                     <Clock className="w-5 h-5 text-amber-400" />
                     Pending Dedications
-                    <span className="text-sm font-normal text-zinc-500">
+                    <span className="text-sm font-normal text-zinc-400">
                       ({pendingRequests.length})
                     </span>
                   </h2>
@@ -223,7 +223,7 @@ export default function DedicationsPage() {
                               <span className="font-medium text-pink-300">
                                 {req.listenerName}
                               </span>
-                              <span className="text-zinc-600 text-xs">
+                              <span className="text-zinc-400 text-xs">
                                 {formatDate(req.createdAt)}
                               </span>
                             </div>
@@ -276,7 +276,7 @@ export default function DedicationsPage() {
                   <h2 className="text-lg font-semibold flex items-center gap-2">
                     <Volume2 className="w-5 h-5 text-emerald-400" />
                     Generated Dedications
-                    <span className="text-sm font-normal text-zinc-500">
+                    <span className="text-sm font-normal text-zinc-400">
                       ({generatedRequests.length})
                     </span>
                   </h2>
@@ -320,14 +320,14 @@ export default function DedicationsPage() {
                               </div>
 
                               {/* Original message */}
-                              <p className="text-xs text-zinc-500 mt-1">
+                              <p className="text-xs text-zinc-400 mt-1">
                                 Original: &ldquo;{req.message}&rdquo;
                               </p>
 
                               {/* Generated script */}
                               {ded?.scriptText && (
                                 <div className="bg-zinc-800/70 rounded-lg px-3 py-2 mt-2">
-                                  <p className="text-xs text-zinc-500 mb-1 font-medium uppercase tracking-wide">
+                                  <p className="text-xs text-zinc-400 mb-1 font-medium uppercase tracking-wide">
                                     DJ Script
                                   </p>
                                   <p className="text-sm text-zinc-200">
@@ -346,7 +346,7 @@ export default function DedicationsPage() {
                                     preload="none"
                                   />
                                   {ded.audioDuration && (
-                                    <p className="text-xs text-zinc-600 mt-1">
+                                    <p className="text-xs text-zinc-400 mt-1">
                                       Duration: {ded.audioDuration}s
                                     </p>
                                   )}
@@ -383,7 +383,7 @@ export default function DedicationsPage() {
 
               {/* Skipped dedications info */}
               {skippedIds.size > 0 && (
-                <p className="text-xs text-zinc-600 text-center">
+                <p className="text-xs text-zinc-400 text-center">
                   {skippedIds.size} dedication{skippedIds.size > 1 ? "s" : ""} skipped this session
                 </p>
               )}

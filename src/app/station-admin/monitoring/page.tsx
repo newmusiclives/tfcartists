@@ -146,7 +146,7 @@ export default function MonitoringDashboard() {
               <Activity className="w-6 h-6 text-blue-600" />
               System Monitoring
             </h1>
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-gray-400 text-sm mt-1">
               Real-time health and error tracking
             </p>
           </div>
@@ -194,12 +194,12 @@ export default function MonitoringDashboard() {
                   <div key={name} className="bg-white dark:bg-zinc-900 rounded-xl border p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <Icon className="w-4 h-4 text-gray-500" />
+                        <Icon className="w-4 h-4 text-gray-400" />
                         <span className="text-sm font-medium text-gray-900 dark:text-white">{labels[name] || name}</span>
                       </div>
                       <StatusIndicator status={comp.status} />
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-zinc-500">{comp.message}</p>
+                    <p className="text-sm text-gray-400 dark:text-zinc-400">{comp.message}</p>
                   </div>
                 );
               })}
@@ -263,10 +263,10 @@ export default function MonitoringDashboard() {
                         <td className="px-6 py-3">
                           <StatusIndicator status={detail.status} />
                         </td>
-                        <td className="px-6 py-3 text-gray-500 dark:text-zinc-500">
+                        <td className="px-6 py-3 text-gray-400 dark:text-zinc-400">
                           {detail.lastRun ? formatTime(detail.lastRun) : "Never"}
                         </td>
-                        <td className="px-6 py-3 text-gray-500 capitalize">
+                        <td className="px-6 py-3 text-gray-400 capitalize">
                           {detail.lastStatus || "N/A"}
                         </td>
                       </tr>
@@ -302,7 +302,7 @@ export default function MonitoringDashboard() {
                         {state.isOpen ? "OPEN" : "CLOSED"}
                       </div>
                       {state.failures > 0 && (
-                        <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{state.failures} failures</div>
+                        <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{state.failures} failures</div>
                       )}
                     </div>
                   ))}
@@ -342,7 +342,7 @@ export default function MonitoringDashboard() {
                           <td className={`px-6 py-3 ${stats.maxMs > 5000 ? "text-red-600 font-medium" : "text-gray-600"}`}>
                             {stats.maxMs}ms
                           </td>
-                          <td className="px-6 py-3 text-gray-500 dark:text-zinc-500">{stats.slowCount}</td>
+                          <td className="px-6 py-3 text-gray-400 dark:text-zinc-400">{stats.slowCount}</td>
                         </tr>
                       ))}
                   </tbody>
@@ -387,7 +387,7 @@ export default function MonitoringDashboard() {
         ) : (
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-12 border text-center">
             <Activity className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-zinc-500">Could not load health data.</p>
+            <p className="text-gray-400 dark:text-zinc-400">Could not load health data.</p>
             <p className="text-gray-400 text-sm mt-1">
               Check your database connection and try again.
             </p>

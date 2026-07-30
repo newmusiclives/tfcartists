@@ -307,7 +307,7 @@ export default function WebhooksPage() {
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
                   placeholder="e.g. Zapier Song Notifications"
-                  className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
+                  className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
                 />
               </div>
               <div>
@@ -317,7 +317,7 @@ export default function WebhooksPage() {
                   value={formUrl}
                   onChange={(e) => setFormUrl(e.target.value)}
                   placeholder="https://hooks.zapier.com/hooks/catch/..."
-                  className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
+                  className="w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-sm text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
                 />
               </div>
             </div>
@@ -344,7 +344,7 @@ export default function WebhooksPage() {
                 ))}
               </div>
             </div>
-            <p className="text-xs text-zinc-500 mb-4">
+            <p className="text-xs text-zinc-400 mb-4">
               A signing secret will be auto-generated. Use it to verify webhook authenticity via the X-Webhook-Signature header (HMAC-SHA256).
             </p>
             <div className="flex items-center gap-3">
@@ -369,13 +369,13 @@ export default function WebhooksPage() {
         {/* Endpoints Table */}
         {loading && endpoints.length === 0 ? (
           <div className="bg-zinc-900 rounded-xl border border-zinc-700 p-12 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : endpoints.length === 0 ? (
           <div className="bg-zinc-900 rounded-xl border border-zinc-700 p-12 text-center">
-            <Webhook className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
+            <Webhook className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
             <p className="text-zinc-400">No webhook endpoints configured.</p>
-            <p className="text-zinc-500 text-sm mt-1">
+            <p className="text-zinc-400 text-sm mt-1">
               Add an endpoint to start sending events to external services.
             </p>
           </div>
@@ -416,14 +416,14 @@ export default function WebhooksPage() {
                       </td>
                       <td className="px-6 py-3">
                         <div className="flex items-center gap-1">
-                          <span className="font-mono text-xs text-zinc-500">
+                          <span className="font-mono text-xs text-zinc-400">
                             {revealedSecrets.has(ep.id)
                               ? ep.secret.slice(0, 16) + "..."
                               : "********"}
                           </span>
                           <button
                             onClick={() => toggleSecret(ep.id)}
-                            className="p-0.5 text-zinc-500 hover:text-zinc-300"
+                            className="p-0.5 text-zinc-400 hover:text-zinc-300"
                             title={revealedSecrets.has(ep.id) ? "Hide" : "Reveal"}
                           >
                             {revealedSecrets.has(ep.id) ? (
@@ -434,7 +434,7 @@ export default function WebhooksPage() {
                           </button>
                           <button
                             onClick={() => copySecret(ep.id, ep.secret)}
-                            className="p-0.5 text-zinc-500 hover:text-zinc-300"
+                            className="p-0.5 text-zinc-400 hover:text-zinc-300"
                             title="Copy secret"
                           >
                             {copiedId === ep.id ? (
@@ -455,10 +455,10 @@ export default function WebhooksPage() {
                             <XCircle className="w-3 h-3" /> Failed
                           </span>
                         ) : (
-                          <span className="text-xs text-zinc-500">Never fired</span>
+                          <span className="text-xs text-zinc-400">Never fired</span>
                         )}
                       </td>
-                      <td className="px-6 py-3 text-zinc-500 text-xs">
+                      <td className="px-6 py-3 text-zinc-400 text-xs">
                         {ep.lastTriggered ? formatTime(ep.lastTriggered) : "---"}
                       </td>
                       <td className="px-6 py-3 text-right">
@@ -518,10 +518,10 @@ export default function WebhooksPage() {
                       )}
                       <div>
                         <span className="text-sm text-zinc-200">{ep.name}</span>
-                        <span className="text-xs text-zinc-500 ml-2">{truncateUrl(ep.url, 30)}</span>
+                        <span className="text-xs text-zinc-400 ml-2">{truncateUrl(ep.url, 30)}</span>
                       </div>
                     </div>
-                    <span className="text-xs text-zinc-500">
+                    <span className="text-xs text-zinc-400">
                       {ep.lastTriggered ? formatTime(ep.lastTriggered) : ""}
                     </span>
                   </div>
@@ -555,7 +555,7 @@ export default function WebhooksPage() {
                     <span className="text-sm text-zinc-300">{EVENT_DESCRIPTIONS[event]}</span>
                   </div>
                   <div className="mt-2">
-                    <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Example Payload</div>
+                    <div className="text-[10px] uppercase tracking-wider text-zinc-400 mb-1">Example Payload</div>
                     <pre className="text-xs font-mono bg-zinc-800 border border-zinc-700 rounded-lg p-3 overflow-x-auto text-zinc-300">
 {JSON.stringify(
   { event, timestamp: "2026-03-25T12:00:00.000Z", data: EVENT_EXAMPLES[event] },

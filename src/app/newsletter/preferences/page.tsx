@@ -90,7 +90,7 @@ function PreferencesForm() {
             />
             <div>
               <span className="font-medium text-gray-900 dark:text-white">{opt.label}</span>
-              <p className="text-sm text-gray-500 dark:text-zinc-500">{opt.desc}</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">{opt.desc}</p>
             </div>
           </label>
         ))}
@@ -112,7 +112,7 @@ function PreferencesForm() {
         <button
           onClick={handleUnsubscribeAll}
           disabled={saving}
-          className="text-sm text-gray-500 hover:text-red-600"
+          className="text-sm text-gray-400 hover:text-red-600"
         >
           Unsubscribe from all
         </button>

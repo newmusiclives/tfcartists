@@ -145,7 +145,7 @@ export default function ApiKeyManagementPage() {
         <div className="mb-8">
           <Link
             href="/developers"
-            className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 transition mb-4"
+            className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-300 transition mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to API Docs
@@ -286,15 +286,15 @@ export default function ApiKeyManagementPage() {
 
         {/* Keys list */}
         {loading ? (
-          <div className="flex items-center justify-center py-20 text-zinc-500">
+          <div className="flex items-center justify-center py-20 text-zinc-400">
             <Loader2 className="h-6 w-6 animate-spin mr-2" />
             Loading keys...
           </div>
         ) : keys.length === 0 ? (
           <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-12 text-center">
-            <Key className="h-10 w-10 text-zinc-600 mx-auto mb-3" />
+            <Key className="h-10 w-10 text-zinc-400 mx-auto mb-3" />
             <p className="text-zinc-400">No API keys yet.</p>
-            <p className="text-zinc-500 text-sm mt-1">
+            <p className="text-zinc-400 text-sm mt-1">
               Create your first key to start using the API.
             </p>
           </div>
@@ -317,7 +317,7 @@ export default function ApiKeyManagementPage() {
                       {k.keyPreview}
                     </code>
                   </div>
-                  <div className="flex items-center gap-4 mt-1 text-xs text-zinc-500">
+                  <div className="flex items-center gap-4 mt-1 text-xs text-zinc-400">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       Created{" "}
@@ -341,7 +341,7 @@ export default function ApiKeyManagementPage() {
                 <button
                   onClick={() => handleDelete(k.id)}
                   disabled={deleting === k.id}
-                  className="rounded-lg border border-zinc-700 p-2 text-zinc-500 hover:text-red-400 hover:border-red-500/50 transition disabled:opacity-50"
+                  className="rounded-lg border border-zinc-700 p-2 text-zinc-400 hover:text-red-400 hover:border-red-500/50 transition disabled:opacity-50"
                   title="Revoke key"
                 >
                   {deleting === k.id ? (

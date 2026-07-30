@@ -192,7 +192,7 @@ export default function ListenerAnalyticsPage() {
                     <div key={b.bucket}>
                       <div className="flex justify-between text-sm mb-1">
                         <span className="text-gray-700 font-medium">{b.bucket}</span>
-                        <span className="text-gray-500 dark:text-zinc-500">{b.count.toLocaleString()}</span>
+                        <span className="text-gray-400 dark:text-zinc-400">{b.count.toLocaleString()}</span>
                       </div>
                       <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
                         <div
@@ -223,7 +223,7 @@ export default function ListenerAnalyticsPage() {
                       <div key={s.source}>
                         <div className="flex justify-between text-sm mb-1">
                           <span className="text-gray-700 font-medium">{s.source}</span>
-                          <span className="text-gray-500 dark:text-zinc-500">{s.count.toLocaleString()} ({pct}%)</span>
+                          <span className="text-gray-400 dark:text-zinc-400">{s.count.toLocaleString()} ({pct}%)</span>
                         </div>
                         <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
                           <div
@@ -250,7 +250,7 @@ export default function ListenerAnalyticsPage() {
             <div className="grid grid-cols-4 gap-4">
               {analytics.retentionCohorts.map((c) => (
                 <div key={c.week} className="text-center">
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mb-2">{c.week}</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mb-2">{c.week}</div>
                   <div className="relative mx-auto w-20 h-20">
                     <svg className="w-20 h-20 -rotate-90" viewBox="0 0 36 36">
                       <path
@@ -274,7 +274,7 @@ export default function ListenerAnalyticsPage() {
                       <span className="text-lg font-bold text-gray-900 dark:text-white">{c.rate}%</span>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500 mt-2">{c.active}/{c.total} active</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-2">{c.active}/{c.total} active</div>
                 </div>
               ))}
             </div>
@@ -472,11 +472,11 @@ function ArtistRow({ rank, name, plays, newListeners, avgCompletion }: { rank: n
       <div className="flex items-center space-x-6 text-sm">
         <div className="text-center">
           <div className="text-green-600 font-semibold">+{newListeners}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">new listeners</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">new listeners</div>
         </div>
         <div className="text-center">
           <div className="text-indigo-600 font-semibold">{avgCompletion}%</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">completion</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">completion</div>
         </div>
       </div>
     </div>

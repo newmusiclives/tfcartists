@@ -72,7 +72,7 @@ function CapacityBar({ label, current, max, pct, color }: { label: string; curre
     <div>
       <div className="flex justify-between text-sm mb-1">
         <span className="font-medium text-gray-700 dark:text-zinc-300">{label}</span>
-        <span className="text-gray-500 dark:text-zinc-500">{current} / {max} ({pct.toFixed(0)}%)</span>
+        <span className="text-gray-400 dark:text-zinc-400">{current} / {max} ({pct.toFixed(0)}%)</span>
       </div>
       <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-3">
         <div className={`${color} h-3 rounded-full transition-all`} style={{ width: `${clampedPct}%` }} />
@@ -107,7 +107,7 @@ export default function FinancialsPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
         <SharedNav />
         <div className="max-w-7xl mx-auto px-4 py-12 text-center">
-          <p className="text-gray-500 dark:text-zinc-500">Failed to load financial data.</p>
+          <p className="text-gray-400 dark:text-zinc-400">Failed to load financial data.</p>
         </div>
       </div>
     );
@@ -160,7 +160,7 @@ export default function FinancialsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-zinc-500 mb-2">
+          <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-2">
             <Link href="/admin" className="hover:text-gray-700 dark:text-zinc-300">Admin</Link>
             <ArrowRight className="w-3 h-3" />
             <span>Financial Summary</span>
@@ -177,7 +177,7 @@ export default function FinancialsPage() {
         {/* Top KPIs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-zinc-500 mb-1">
+            <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-1">
               <DollarSign className="w-4 h-4" />
               Total Revenue
             </div>
@@ -185,7 +185,7 @@ export default function FinancialsPage() {
             <div className="text-xs text-gray-400 mt-1">monthly</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-zinc-500 mb-1">
+            <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-1">
               <Award className="w-4 h-4" />
               Artist Pool (80%)
             </div>
@@ -193,7 +193,7 @@ export default function FinancialsPage() {
             <div className="text-xs text-gray-400 mt-1">distributed to artists</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-zinc-500 mb-1">
+            <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-1">
               <TrendingUp className="w-4 h-4" />
               Station Retained
             </div>
@@ -201,7 +201,7 @@ export default function FinancialsPage() {
             <div className="text-xs text-gray-400 mt-1">operations + subs</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-zinc-500 mb-1">
+            <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-1">
               <PieChart className="w-4 h-4" />
               Per Share Value
             </div>
@@ -358,15 +358,15 @@ export default function FinancialsPage() {
           <div className="grid grid-cols-3 gap-4 mt-6 text-center">
             <div className="bg-gray-50 rounded-lg p-3">
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{data.programming.djs}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Active DJs</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Active DJs</div>
             </div>
             <div className="bg-gray-50 rounded-lg p-3">
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{data.programming.songs.toLocaleString()}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Songs in Library</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Songs in Library</div>
             </div>
             <div className="bg-gray-50 rounded-lg p-3">
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{data.scouts.active}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Active Scouts</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Active Scouts</div>
             </div>
           </div>
         </div>
@@ -376,7 +376,7 @@ export default function FinancialsPage() {
           {/* Current */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
             <h3 className="font-bold text-lg mb-1">Current State</h3>
-            <p className="text-sm text-gray-500 dark:text-zinc-500 mb-4">{data.capacity.artists.pct.toFixed(0)}% capacity</p>
+            <p className="text-sm text-gray-400 dark:text-zinc-400 mb-4">{data.capacity.artists.pct.toFixed(0)}% capacity</p>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between"><span>Gross Revenue</span><span className="font-semibold">${fmt(f.totalGrossRevenue)}</span></div>
               <div className="flex justify-between"><span>Artist Pool</span><span className="text-green-600">-${fmt(f.artistPool)}</span></div>

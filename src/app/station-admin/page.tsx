@@ -213,7 +213,7 @@ export default function StationAdminHub() {
         {/* Station Info Card */}
         {loading ? (
           <div className="bg-zinc-900/80 rounded-xl p-8 border border-zinc-800 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : primary ? (
           <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 mb-8">
@@ -237,7 +237,7 @@ export default function StationAdminHub() {
                   </span>
                 </div>
                 {primary.tagline && (
-                  <p className="text-zinc-500 mt-1 italic">{primary.tagline}</p>
+                  <p className="text-zinc-400 mt-1 italic">{primary.tagline}</p>
                 )}
                 <p className="text-sm text-zinc-400 mt-2">
                   {primary.genre}
@@ -247,19 +247,19 @@ export default function StationAdminHub() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center">
                 <div>
                   <div className="text-2xl font-bold text-white">{primary._count.songs}</div>
-                  <div className="text-xs text-zinc-500">Songs</div>
+                  <div className="text-xs text-zinc-400">Songs</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">{primary._count.stationDJs}</div>
-                  <div className="text-xs text-zinc-500">Hosts</div>
+                  <div className="text-xs text-zinc-400">Hosts</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">{primary._count.clockTemplates}</div>
-                  <div className="text-xs text-zinc-500">Clocks</div>
+                  <div className="text-xs text-zinc-400">Clocks</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">{primary._count.imagingVoices}</div>
-                  <div className="text-xs text-zinc-500">Voices</div>
+                  <div className="text-xs text-zinc-400">Voices</div>
                 </div>
               </div>
             </div>
@@ -282,7 +282,7 @@ export default function StationAdminHub() {
                 <Activity className={`w-5 h-5 ${streamHealth?.healthy ? "text-green-500" : "text-red-500"}`} />
                 <div>
                   <h3 className="font-semibold text-white text-sm">Stream Status</h3>
-                  <p className="text-xs text-zinc-500 mt-0.5">
+                  <p className="text-xs text-zinc-400 mt-0.5">
                     {streamHealth === null
                       ? "Checking..."
                       : streamHealth.healthy
@@ -310,7 +310,7 @@ export default function StationAdminHub() {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-semibold text-white text-sm">Today&apos;s Playlists</h3>
-                <p className="text-xs text-zinc-500 mt-0.5">
+                <p className="text-xs text-zinc-400 mt-0.5">
                   {regenResult || "Rebuild all host playlists for today"}
                 </p>
               </div>
@@ -342,7 +342,7 @@ export default function StationAdminHub() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white">{card.title}</h3>
-                  <p className="text-sm text-zinc-500 mt-1">{card.description}</p>
+                  <p className="text-sm text-zinc-400 mt-1">{card.description}</p>
                 </div>
               </div>
             </Link>

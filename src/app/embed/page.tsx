@@ -102,7 +102,7 @@ export default function EmbedCodeGeneratorPage() {
                     }`}
                   >
                     <div className="font-semibold text-sm text-gray-900 dark:text-white">{val.label} ({val.width} x {val.height})</div>
-                    <div className="text-xs text-gray-500 dark:text-zinc-500">{val.description}</div>
+                    <div className="text-xs text-gray-400 dark:text-zinc-400">{val.description}</div>
                   </button>
                 ))}
               </div>
@@ -152,7 +152,7 @@ export default function EmbedCodeGeneratorPage() {
               <label className="block text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-1">
                 Referral Code <span className="text-gray-400 font-normal">(optional)</span>
               </label>
-              <p className="text-xs text-gray-500 dark:text-zinc-500 mb-2">
+              <p className="text-xs text-gray-400 dark:text-zinc-400 mb-2">
                 Include your scout/artist/sponsor referral code to earn rewards when people listen through your embed.
               </p>
               <input
@@ -200,7 +200,7 @@ export default function EmbedCodeGeneratorPage() {
                 title="Player preview"
               />
             </div>
-            <p className="text-xs text-gray-500 dark:text-zinc-500 mt-3 text-center">
+            <p className="text-xs text-gray-400 dark:text-zinc-400 mt-3 text-center">
               Live preview — click play to test the audio stream with real cover art and track info.
             </p>
           </div>

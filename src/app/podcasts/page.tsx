@@ -159,17 +159,17 @@ export default async function PodcastsPage() {
         <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
           <div className="text-center">
             <div className="text-2xl font-bold text-white">{episodes.length}</div>
-            <div className="text-xs text-gray-500 uppercase tracking-wider">Episodes</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Episodes</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-white">{djNames.length}</div>
-            <div className="text-xs text-gray-500 uppercase tracking-wider">Hosts</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Hosts</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-white">
               {episodes.filter((e) => e.audioFilePath).length}
             </div>
-            <div className="text-xs text-gray-500 uppercase tracking-wider">Playable</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">Playable</div>
           </div>
         </div>
       </section>
@@ -178,7 +178,7 @@ export default async function PodcastsPage() {
       <section className="py-8">
         {episodes.length === 0 ? (
           <div className="max-w-5xl mx-auto px-4 text-center py-16">
-            <Headphones className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
+            <Headphones className="w-16 h-16 text-zinc-400 mx-auto mb-4" />
             <p className="text-gray-400 text-lg">
               No episodes published yet. Check back soon!
             </p>

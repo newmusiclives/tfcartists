@@ -148,7 +148,7 @@ export default function TrafficPage() {
                     </span>
                   </div>
                   <div className="flex items-center space-x-4 text-sm">
-                    <span className="text-gray-500 dark:text-zinc-500">{dp.spots} spots</span>
+                    <span className="text-gray-400 dark:text-zinc-400">{dp.spots} spots</span>
                     <span className="text-rose-600 font-medium">{dp.avails} avail{dp.avails !== 1 ? "s" : ""}</span>
                     <span className="font-bold text-gray-900 dark:text-white">{dp.fill}%</span>
                   </div>
@@ -172,10 +172,10 @@ export default function TrafficPage() {
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Active Sponsor Ads</h2>
-            <span className="text-sm text-gray-500 dark:text-zinc-500">{activeAds.length} active / {ads.length} total</span>
+            <span className="text-sm text-gray-400 dark:text-zinc-400">{activeAds.length} active / {ads.length} total</span>
           </div>
           {activeAds.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 dark:text-zinc-500">No active ads found</div>
+            <div className="text-center py-8 text-gray-400 dark:text-zinc-400">No active ads found</div>
           ) : (
             <div className="space-y-3">
               {activeAds.slice(0, 10).map((ad) => (
@@ -189,7 +189,7 @@ export default function TrafficPage() {
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
-                      <div className="text-xs text-gray-500 dark:text-zinc-500">Weight: {ad.rotationWeight || 1}x</div>
+                      <div className="text-xs text-gray-400 dark:text-zinc-400">Weight: {ad.rotationWeight || 1}x</div>
                     </div>
                     <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400">
                       Active
@@ -209,17 +209,17 @@ export default function TrafficPage() {
             <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-orange-200">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Prime Avails</div>
               <div className="text-2xl font-bold text-orange-600">2</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Morning & afternoon drive</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Morning & afternoon drive</div>
             </div>
             <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-orange-200">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Sub-Prime Avails</div>
               <div className="text-2xl font-bold text-orange-600">{totalAvails - 2}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">Evening & overnight</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">Evening & overnight</div>
             </div>
             <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-orange-200">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Est. Revenue Opportunity</div>
               <div className="text-2xl font-bold text-green-600">${(totalAvails * 85).toLocaleString()}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500">If all avails sold</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400">If all avails sold</div>
             </div>
           </div>
         </section>

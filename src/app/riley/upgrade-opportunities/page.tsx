@@ -217,7 +217,7 @@ export default function UpgradeOpportunitiesPage() {
               />
             ))}
             {filteredOpportunities.length === 0 && (
-              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
                 No opportunities found
               </div>
             )}
@@ -304,7 +304,7 @@ function StatCard({ icon, label, value, subtitle }: { icon: React.ReactNode; lab
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -352,7 +352,7 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityIt
             )}
           </div>
           <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{opportunity.email}</div>
-          <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
+          <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
             <span>{opportunity.tracksSubmitted} tracks submitted</span>
             <span>{opportunity.monthsSinceJoin} months on platform</span>
             <span>{opportunity.currentPlays} plays vs {opportunity.targetPlays} allocated</span>
@@ -361,9 +361,9 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityIt
 
         <div className="flex items-center space-x-6">
           <div className="text-center">
-            <div className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Current</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Current</div>
             <div className="font-bold text-gray-700 dark:text-zinc-300">{opportunity.currentTier}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">${currentPrice}/mo</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">${currentPrice}/mo</div>
           </div>
           <div className="text-gray-400 text-2xl">→</div>
           <div className="text-center">
@@ -374,7 +374,7 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityIt
           <div className="text-center bg-purple-50 rounded-lg p-3">
             <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Revenue Gain</div>
             <div className="text-lg font-bold text-purple-600">+${priceDiff}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">per month</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">per month</div>
           </div>
           <button
             onClick={() => onSelect(opportunity)}
@@ -496,7 +496,7 @@ TrueFans RADIO™ Network`;
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="text-center mb-3">
                   <div className="text-lg font-bold text-gray-700 dark:text-zinc-300">{opportunity.currentTier}</div>
-                  <div className="text-sm text-gray-500 dark:text-zinc-500">Current Tier</div>
+                  <div className="text-sm text-gray-400 dark:text-zinc-400">Current Tier</div>
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">

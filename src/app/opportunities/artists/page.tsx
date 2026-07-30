@@ -139,9 +139,9 @@ export default function ArtistOpportunityPage() {
             <div className="rounded-lg p-5 border-2 border-gray-200 bg-gray-50 flex flex-col">
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">Free</h3>
               <div className="text-3xl font-bold text-gray-700 dark:text-zinc-300 mb-1">$0</div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-3">forever</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-3">forever</div>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">Get discovered — 1 play/month, station promotion</p>
-              <ul className="text-xs text-gray-500 space-y-1">
+              <ul className="text-xs text-gray-400 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 1 play per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Artist Pool share</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Station promotion</li>
@@ -154,7 +154,7 @@ export default function ArtistOpportunityPage() {
               <div className="text-3xl font-bold text-orange-600 mb-1">$5<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-orange-500 mb-3">Less than a coffee</div>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">Buy a coffee, get on the radio — 5 plays/month</p>
-              <ul className="text-xs text-gray-500 space-y-1">
+              <ul className="text-xs text-gray-400 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 5 plays per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Priority rotation</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Artist spotlight</li>
@@ -167,7 +167,7 @@ export default function ArtistOpportunityPage() {
               <div className="text-3xl font-bold text-blue-600 mb-1">$15<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-blue-500 mb-3">Less than a Spotify playlist push</div>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">20 plays/month with heavy rotation and social features</p>
-              <ul className="text-xs text-gray-500 space-y-1">
+              <ul className="text-xs text-gray-400 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 20 plays per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Heavy rotation</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Social media features</li>
@@ -184,7 +184,7 @@ export default function ArtistOpportunityPage() {
               <div className="text-3xl font-bold text-yellow-600 mb-1">$40<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-yellow-600 font-semibold mb-3">Less than Netflix</div>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">65 plays/month, heavy rotation, dedicated show segment</p>
-              <ul className="text-xs text-gray-500 space-y-1">
+              <ul className="text-xs text-gray-400 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 65 plays per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Heavy rotation</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Dedicated show segment</li>
@@ -199,7 +199,7 @@ export default function ArtistOpportunityPage() {
               <div className="text-3xl font-bold text-purple-600 mb-1">$100<span className="text-base font-normal">/mo</span></div>
               <div className="text-sm text-purple-500 mb-3">Power rotation</div>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 flex-1">250 plays/month, VIP events — earn more from the pool than you pay</p>
-              <ul className="text-xs text-gray-500 space-y-1">
+              <ul className="text-xs text-gray-400 space-y-1">
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> 250 plays per month</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Power rotation</li>
                 <li className="flex items-center"><Check className="w-3 h-3 mr-1 text-green-500" /> Artist takeover hour</li>
@@ -327,7 +327,7 @@ export default function ArtistOpportunityPage() {
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">{scoutModel.tiers.elite.name}</h3>
               <div className="text-2xl font-bold text-orange-600 mb-2">{scoutModel.tiers.elite.range}</div>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.elite.count} artist promoters</p>
-              <p className="text-xs text-gray-500 dark:text-zinc-500">{scoutModel.tiers.elite.description}</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-400">{scoutModel.tiers.elite.description}</p>
             </div>
 
             <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 border-2 border-orange-300">
@@ -335,7 +335,7 @@ export default function ArtistOpportunityPage() {
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">{scoutModel.tiers.strong.name}</h3>
               <div className="text-2xl font-bold text-orange-600 mb-2">{scoutModel.tiers.strong.range}</div>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.strong.count} artist promoters</p>
-              <p className="text-xs text-gray-500 dark:text-zinc-500">{scoutModel.tiers.strong.description}</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-400">{scoutModel.tiers.strong.description}</p>
             </div>
 
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border-2 border-purple-200">
@@ -343,7 +343,7 @@ export default function ArtistOpportunityPage() {
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">{scoutModel.tiers.active.name}</h3>
               <div className="text-2xl font-bold text-purple-600 mb-2">{scoutModel.tiers.active.range}</div>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.active.count} artist promoters</p>
-              <p className="text-xs text-gray-500 dark:text-zinc-500">{scoutModel.tiers.active.description}</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-400">{scoutModel.tiers.active.description}</p>
             </div>
 
             <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 border-2 border-gray-200 dark:border-zinc-800">
@@ -351,7 +351,7 @@ export default function ArtistOpportunityPage() {
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">{scoutModel.tiers.developing.name}</h3>
               <div className="text-2xl font-bold text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.developing.range}</div>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{scoutModel.tiers.developing.count} artist promoters</p>
-              <p className="text-xs text-gray-500 dark:text-zinc-500">{scoutModel.tiers.developing.description}</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-400">{scoutModel.tiers.developing.description}</p>
             </div>
           </div>
         </div>

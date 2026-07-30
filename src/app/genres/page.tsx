@@ -67,7 +67,7 @@ export default function GenresPage() {
                 </p>
 
                 {/* Meta */}
-                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-zinc-500">
+                <div className="flex items-center justify-between text-xs text-gray-400 dark:text-zinc-400">
                   <span className="flex items-center space-x-1">
                     <Mic className="w-3.5 h-3.5" />
                     <span>
@@ -90,7 +90,7 @@ export default function GenresPage() {
             <span>Launch Your Station</span>
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="mt-3 text-sm text-gray-500 dark:text-zinc-500">
+          <p className="mt-3 text-sm text-gray-400 dark:text-zinc-400">
             No credit card required to get started
           </p>
         </div>

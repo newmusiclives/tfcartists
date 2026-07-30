@@ -467,7 +467,7 @@ export default function OperatorAnalyticsPage() {
             <TrendingUp className="w-5 h-5 text-amber-700" />
             <span>Listener Sessions (Last 7 Days)</span>
           </h2>
-          <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">
+          <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">
             New listeners per day
           </p>
           {last7Days.length > 0 ? (
@@ -487,7 +487,7 @@ export default function OperatorAnalyticsPage() {
               <UserPlus className="w-5 h-5 text-amber-700" />
               <span>Artist Pipeline</span>
             </h2>
-            <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">
+            <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">
               Funnel from discovery to active
             </p>
             {artistFunnel.length > 0 ? (
@@ -503,7 +503,7 @@ export default function OperatorAnalyticsPage() {
               <Target className="w-5 h-5 text-amber-700" />
               <span>Sponsor Pipeline</span>
             </h2>
-            <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">
+            <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">
               Funnel from discovery to active
             </p>
             {sponsorFunnel.length > 0 ? (
@@ -528,7 +528,7 @@ export default function OperatorAnalyticsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b text-left text-gray-500 dark:text-zinc-500">
+                  <tr className="border-b text-left text-gray-400 dark:text-zinc-400">
                     <th className="pb-2 font-medium w-10">#</th>
                     <th className="pb-2 font-medium">Song</th>
                     <th className="pb-2 font-medium">Artist</th>
@@ -646,7 +646,7 @@ export default function OperatorAnalyticsPage() {
               </div>
               {stats?.targets.revenue ? (
                 <div className="mt-3">
-                  <div className="flex justify-between text-xs text-gray-500 dark:text-zinc-500 mb-1">
+                  <div className="flex justify-between text-xs text-gray-400 dark:text-zinc-400 mb-1">
                     <span>
                       Progress to ${stats.targets.revenue.toLocaleString()}{" "}
                       target
@@ -694,7 +694,7 @@ export default function OperatorAnalyticsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-left text-gray-500 dark:text-zinc-500">
+                    <tr className="border-b text-left text-gray-400 dark:text-zinc-400">
                       <th className="pb-2 font-medium">#</th>
                       <th className="pb-2 font-medium">Artist</th>
                       <th className="pb-2 font-medium text-right">Plays</th>
@@ -737,7 +737,7 @@ export default function OperatorAnalyticsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-left text-gray-500 dark:text-zinc-500">
+                    <tr className="border-b text-left text-gray-400 dark:text-zinc-400">
                       <th className="pb-2 font-medium">Ad</th>
                       <th className="pb-2 font-medium">Sponsor</th>
                       <th className="pb-2 font-medium text-right">Plays</th>
@@ -791,7 +791,7 @@ export default function OperatorAnalyticsPage() {
                     key={c.week}
                     className="bg-gray-50 rounded-lg p-4 text-center"
                   >
-                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">{c.week}</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">{c.week}</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       {c.rate}%
                     </p>
@@ -827,7 +827,7 @@ function Header({
             <Building2 className="w-6 h-6 text-amber-700" />
             <div>
               <h1 className="font-bold text-gray-900 dark:text-white">Analytics</h1>
-              <p className="text-xs text-gray-500 dark:text-zinc-500">
+              <p className="text-xs text-gray-400 dark:text-zinc-400">
                 {session?.user?.name || "Operator"}
               </p>
             </div>
@@ -842,7 +842,7 @@ function Header({
             </Link>
             <button
               onClick={onRefresh}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="text-sm text-gray-400 hover:text-gray-700"
               title="Refresh data"
             >
               <RefreshCw className="w-4 h-4" />
@@ -873,7 +873,7 @@ function KpiCard({
     <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-5">
       <div className="flex items-center space-x-2 mb-2">
         <Icon className="w-4 h-4 text-amber-700" />
-        <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+        <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">
           {label}
         </span>
       </div>
@@ -1004,7 +1004,7 @@ function CSSBarChart({ data }: { data: { date: string; count: number }[] }) {
             />
             {/* Label */}
             <div className="mt-2 text-center">
-              <p className="text-[10px] font-medium text-gray-500 dark:text-zinc-500">
+              <p className="text-[10px] font-medium text-gray-400 dark:text-zinc-400">
                 {dayLabel}
               </p>
               <p className="text-[9px] text-gray-400">{dateLabel}</p>
@@ -1057,7 +1057,7 @@ function PipelineFunnel({
               <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">
                 {stage.label}
               </span>
-              <span className="text-sm text-gray-500 dark:text-zinc-500">
+              <span className="text-sm text-gray-400 dark:text-zinc-400">
                 {stage.count.toLocaleString()}{" "}
                 <span className="text-gray-400">({shareOfTotal}%)</span>
               </span>

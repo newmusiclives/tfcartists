@@ -188,16 +188,16 @@ export default async function MarketingPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto">
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-amber-400">{metrics.artistCount.toLocaleString()}+</div>
-                <div className="text-sm text-gray-500 dark:text-zinc-500">Artists</div>
+                <div className="text-sm text-gray-400 dark:text-zinc-400">Artists</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-amber-400">{metrics.songCount.toLocaleString()}+</div>
-                <div className="text-sm text-gray-500 dark:text-zinc-500">Songs in Rotation</div>
+                <div className="text-sm text-gray-400 dark:text-zinc-400">Songs in Rotation</div>
               </div>
               <RandomListenerCount />
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-amber-400">24/7</div>
-                <div className="text-sm text-gray-500 dark:text-zinc-500">Live Radio</div>
+                <div className="text-sm text-gray-400 dark:text-zinc-400">Live Radio</div>
               </div>
             </div>
           </div>
@@ -421,7 +421,7 @@ export default async function MarketingPage() {
             <div className="bg-gray-800/50 border border-white/10 rounded-2xl p-6 hover:border-purple-500/30 transition-colors">
               <div className="text-purple-400 font-semibold text-sm mb-2">For Artists</div>
               <div className="text-3xl font-bold text-white mb-1">Free</div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-6">to get started</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-6">to get started</div>
               <ul className="space-y-2 mb-6">
                 {["Radio airplay", "Artist profile", "Listener analytics", "Upgrade from $5/mo"].map((item) => (
                   <li key={item} className="flex items-center space-x-2 text-sm text-gray-300">
@@ -440,9 +440,9 @@ export default async function MarketingPage() {
               <div className="text-green-400 font-semibold text-sm mb-2">For Sponsors</div>
               <div className="flex items-baseline">
                 <span className="text-3xl font-bold text-white">$30</span>
-                <span className="text-sm text-gray-500 ml-1">/mo</span>
+                <span className="text-sm text-gray-400 ml-1">/mo</span>
               </div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-6">a dollar a day</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-6">a dollar a day</div>
               <ul className="space-y-2 mb-6">
                 {["30 ad spots/mo", "Professionally produced ads", "Performance dashboard", "4 tiers up to $300/mo"].map((item) => (
                   <li key={item} className="flex items-center space-x-2 text-sm text-gray-300">
@@ -464,9 +464,9 @@ export default async function MarketingPage() {
               <div className="text-amber-400 font-semibold text-sm mb-2">For Operators</div>
               <div className="flex items-baseline">
                 <span className="text-3xl font-bold text-white">$200</span>
-                <span className="text-sm text-gray-500 ml-1">/mo</span>
+                <span className="text-sm text-gray-400 ml-1">/mo</span>
               </div>
-              <div className="text-sm text-gray-500 dark:text-zinc-500 mb-6">launch your station</div>
+              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-6">launch your station</div>
               <ul className="space-y-2 mb-6">
                 {["Full automated station", "2 hosts, 24/7 live", "Full operations team included", "No broadcast license needed"].map((item) => (
                   <li key={item} className="flex items-center space-x-2 text-sm text-gray-300">
@@ -478,7 +478,7 @@ export default async function MarketingPage() {
               <Link href="/operate" className="block text-center bg-amber-500 text-gray-950 px-4 py-2.5 rounded-lg font-bold hover:bg-amber-400 transition-colors text-sm">
                 Learn More
               </Link>
-              <p className="text-xs text-center text-gray-500 dark:text-zinc-500 mt-2"><Link href="/pricing" className="text-amber-400/70 hover:text-amber-400">See all plans</Link></p>
+              <p className="text-xs text-center text-gray-400 dark:text-zinc-400 mt-2"><Link href="/pricing" className="text-amber-400/70 hover:text-amber-400">See all plans</Link></p>
             </div>
           </div>
         </div>
@@ -502,15 +502,15 @@ export default async function MarketingPage() {
               <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
                   <div className="text-2xl font-bold text-amber-400">{metrics.artistCount}</div>
-                  <div className="text-gray-500 text-sm">Artists</div>
+                  <div className="text-gray-400 text-sm">Artists</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
                   <div className="text-2xl font-bold text-amber-400">{metrics.songCount.toLocaleString()}</div>
-                  <div className="text-gray-500 text-sm">Songs</div>
+                  <div className="text-gray-400 text-sm">Songs</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
                   <div className="text-2xl font-bold text-amber-400">{metrics.sponsorCount}</div>
-                  <div className="text-gray-500 text-sm">Sponsors</div>
+                  <div className="text-gray-400 text-sm">Sponsors</div>
                 </div>
                 <RandomListenerCount variant="demo" />
               </div>
@@ -609,14 +609,14 @@ export default async function MarketingPage() {
             </Link>
             <Link
               href="/sponsor"
-              className="inline-flex items-center space-x-2 bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-green-500 transition-colors w-full sm:w-auto justify-center"
+              className="inline-flex items-center space-x-2 bg-green-700 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-green-500 transition-colors w-full sm:w-auto justify-center"
             >
               <Building2 className="w-5 h-5" />
               <span>Sponsor a Station</span>
             </Link>
             <Link
               href="/operate"
-              className="inline-flex items-center space-x-2 bg-amber-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-amber-500 transition-colors w-full sm:w-auto justify-center"
+              className="inline-flex items-center space-x-2 bg-amber-700 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-amber-500 transition-colors w-full sm:w-auto justify-center"
             >
               <Radio className="w-5 h-5" />
               <span>Launch a Station</span>
@@ -631,7 +631,7 @@ export default async function MarketingPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
               <h4 className="text-white font-semibold mb-3">For Artists</h4>
-              <ul className="space-y-2 text-sm text-gray-500 dark:text-zinc-500">
+              <ul className="space-y-2 text-sm text-gray-400 dark:text-zinc-400">
                 <li><Link href="/onboard" className="hover:text-white transition-colors">Submit Music</Link></li>
                 <li><Link href="/station" className="hover:text-white transition-colors">Browse Station</Link></li>
                 <li><Link href="/community" className="hover:text-white transition-colors">Community</Link></li>
@@ -639,7 +639,7 @@ export default async function MarketingPage() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-3">For Business</h4>
-              <ul className="space-y-2 text-sm text-gray-500 dark:text-zinc-500">
+              <ul className="space-y-2 text-sm text-gray-400 dark:text-zinc-400">
                 <li><Link href="/sponsor" className="hover:text-white transition-colors">Sponsor a Station</Link></li>
                 <li><Link href="/operate" className="hover:text-white transition-colors">Operate a Station</Link></li>
                 <li><Link href="/network" className="hover:text-white transition-colors">The Network</Link></li>
@@ -647,7 +647,7 @@ export default async function MarketingPage() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-3">Listen</h4>
-              <ul className="space-y-2 text-sm text-gray-500 dark:text-zinc-500">
+              <ul className="space-y-2 text-sm text-gray-400 dark:text-zinc-400">
                 <li><Link href="/player" className="hover:text-white transition-colors">Web Player</Link></li>
                 <li><Link href="/schedule" className="hover:text-white transition-colors">Schedule</Link></li>
                 <li><Link href="/listen/register" className="hover:text-white transition-colors">Register</Link></li>
@@ -655,7 +655,7 @@ export default async function MarketingPage() {
             </div>
             <div>
               <h4 className="text-white font-semibold mb-3">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-500 dark:text-zinc-500">
+              <ul className="space-y-2 text-sm text-gray-400 dark:text-zinc-400">
                 <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
                 <li><a href="mailto:support@truefans.radio" className="hover:text-white transition-colors">Contact</a></li>
                 <li><Link href="/newsletter" className="hover:text-white transition-colors">Newsletter</Link></li>

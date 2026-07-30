@@ -168,7 +168,7 @@ export function EpisodeList({ episodes, djNames }: EpisodeListProps) {
           <div className="text-center py-16">
             <Mic2 className="w-12 h-12 text-gray-600 mx-auto mb-4" />
             <p className="text-gray-400 text-lg">No episodes match your filters.</p>
-            <p className="text-gray-500 text-sm mt-2">Try adjusting your search criteria.</p>
+            <p className="text-gray-400 text-sm mt-2">Try adjusting your search criteria.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -209,7 +209,7 @@ export function EpisodeList({ episodes, djNames }: EpisodeListProps) {
                         </button>
                       ) : (
                         <div className="w-12 h-12 rounded-full bg-zinc-700/50 flex items-center justify-center">
-                          <Clock className="w-5 h-5 text-zinc-500" />
+                          <Clock className="w-5 h-5 text-zinc-400" />
                         </div>
                       )}
                     </div>
@@ -227,13 +227,13 @@ export function EpisodeList({ episodes, djNames }: EpisodeListProps) {
                           </span>
                         )}
                         {(ep.airDate || ep.publishedAt) && (
-                          <span className="text-gray-500 text-xs flex items-center gap-1">
+                          <span className="text-gray-400 text-xs flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
                             {formatDate(ep.airDate || ep.publishedAt!)}
                           </span>
                         )}
                         {ep.duration && (
-                          <span className="text-gray-500 text-xs flex items-center gap-1">
+                          <span className="text-gray-400 text-xs flex items-center gap-1">
                             <Clock className="w-3 h-3" />
                             {formatDuration(ep.duration)}
                           </span>
@@ -251,7 +251,7 @@ export function EpisodeList({ episodes, djNames }: EpisodeListProps) {
                         {EPISODE_TYPE_LABELS[ep.episodeType] || ep.episodeType}
                       </span>
                       {!ep.audioFilePath && (
-                        <span className="text-xs text-zinc-500 italic">Coming Soon</span>
+                        <span className="text-xs text-zinc-400 italic">Coming Soon</span>
                       )}
                     </div>
                   </div>

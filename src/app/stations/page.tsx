@@ -90,7 +90,7 @@ export default async function StationsDirectoryPage() {
         {/* Station Grid */}
         {stations.length === 0 ? (
           <div className="text-center py-20">
-            <Radio className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+            <Radio className="w-12 h-12 text-zinc-400 mx-auto mb-4" />
             <p className="text-zinc-400 text-lg">No stations yet. Be the first!</p>
           </div>
         ) : (
@@ -117,21 +117,21 @@ export default async function StationsDirectoryPage() {
                       {station.name}
                     </h3>
                     {station.callSign && (
-                      <span className="text-xs text-zinc-500 font-mono">
+                      <span className="text-xs text-zinc-400 font-mono">
                         {station.callSign}
                       </span>
                     )}
                   </div>
                 </div>
 
-                <p className="text-sm text-zinc-500 mb-1">{station.genre}</p>
+                <p className="text-sm text-zinc-400 mb-1">{station.genre}</p>
                 {station.tagline && (
                   <p className="text-sm text-zinc-400 italic mb-4">
                     &ldquo;{station.tagline}&rdquo;
                   </p>
                 )}
 
-                <div className="flex items-center gap-4 text-xs text-zinc-500">
+                <div className="flex items-center gap-4 text-xs text-zinc-400">
                   <span className="flex items-center gap-1">
                     <Users className="w-3.5 h-3.5" />
                     {station.djCount} DJs

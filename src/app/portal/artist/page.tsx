@@ -465,11 +465,11 @@ export default function ArtistPortalPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{artist?.name}</h1>
-            <p className="text-gray-500 dark:text-zinc-500">{artist?.genre} &middot; {artist?.email}</p>
+            <p className="text-gray-400 dark:text-zinc-400">{artist?.genre} &middot; {artist?.email}</p>
           </div>
           <button
             onClick={() => { setView("lookup"); setArtist(null); setActiveTab("dashboard"); }}
-            className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1"
+            className="text-sm text-gray-400 hover:text-gray-700 flex items-center gap-1"
           >
             <ArrowLeft className="w-3 h-3" /> Switch Artist
           </button>
@@ -511,14 +511,14 @@ export default function ArtistPortalPage() {
             <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border-2 border-amber-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">Current Tier</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">Current Tier</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">{tier.name}</p>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
+                  <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">
                     {tier.shares} shares &middot; ${tier.cost}/month
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">Level</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">Level</p>
                   <p className="text-3xl font-bold text-amber-600 dark:text-amber-400">{artist?.xpLevel || 1}</p>
                   <p className="text-xs text-gray-400">{artist?.xpTotal || 0} XP</p>
                 </div>
@@ -597,7 +597,7 @@ export default function ArtistPortalPage() {
                       >
                         <p className="font-semibold text-sm">{info.name}</p>
                         <p className="text-lg font-bold text-amber-600 dark:text-amber-400">${info.cost}/mo</p>
-                        <p className="text-xs text-gray-500 dark:text-zinc-500">{info.shares} shares</p>
+                        <p className="text-xs text-gray-400 dark:text-zinc-400">{info.shares} shares</p>
                       </Link>
                     ))}
                 </div>
@@ -612,7 +612,7 @@ export default function ArtistPortalPage() {
               >
                 <Upload className="w-5 h-5 text-purple-500 mb-2" />
                 <p className="font-semibold text-gray-900 dark:text-white">Submit a Track</p>
-                <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">Upload music for curator review</p>
+                <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">Upload music for curator review</p>
               </button>
               <button
                 onClick={() => setActiveTab("earnings")}
@@ -620,7 +620,7 @@ export default function ArtistPortalPage() {
               >
                 <DollarSign className="w-5 h-5 text-green-500 mb-2" />
                 <p className="font-semibold text-gray-900 dark:text-white">View Earnings</p>
-                <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">Monthly revenue breakdown</p>
+                <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">Monthly revenue breakdown</p>
               </button>
               <button
                 onClick={() => setActiveTab("analytics")}
@@ -628,7 +628,7 @@ export default function ArtistPortalPage() {
               >
                 <BarChart3 className="w-5 h-5 text-blue-500 mb-2" />
                 <p className="font-semibold text-gray-900 dark:text-white">Analytics</p>
-                <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">Plays, reach, peak hours</p>
+                <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">Plays, reach, peak hours</p>
               </button>
             </div>
           </div>
@@ -744,7 +744,7 @@ export default function ArtistPortalPage() {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400 mx-auto" />
                 </div>
               ) : tracks.length === 0 ? (
-                <div className="p-8 text-center text-gray-500 dark:text-zinc-500">
+                <div className="p-8 text-center text-gray-400 dark:text-zinc-400">
                   <Music className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <p>No tracks submitted yet.</p>
                   <button
@@ -759,12 +759,12 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Title</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Genre</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Status</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right">Total Plays</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right">This Month</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Submitted</th>
+                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Title</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Genre</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Status</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 text-right">Total Plays</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 text-right">This Month</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Submitted</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -780,7 +780,7 @@ export default function ArtistPortalPage() {
                           <td className="px-4 py-3">{statusBadge(track.status)}</td>
                           <td className="px-4 py-3 text-right font-medium">{track.playCount.toLocaleString()}</td>
                           <td className="px-4 py-3 text-right text-gray-600 dark:text-zinc-400">{track.playsThisMonth.toLocaleString()}</td>
-                          <td className="px-4 py-3 text-gray-500 dark:text-zinc-500">
+                          <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">
                             {new Date(track.submittedAt).toLocaleDateString()}
                           </td>
                         </tr>
@@ -800,15 +800,15 @@ export default function ArtistPortalPage() {
             {earningsSummary && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">Total Earned</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">Total Earned</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">${earningsSummary.totalEarned.toFixed(2)}</p>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">Paid Out</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">Paid Out</p>
                   <p className="text-2xl font-bold text-green-600">${earningsSummary.totalPaid.toFixed(2)}</p>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">Pending</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">Pending</p>
                   <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">${earningsSummary.totalPending.toFixed(2)}</p>
                 </div>
               </div>
@@ -827,7 +827,7 @@ export default function ArtistPortalPage() {
                       const pct = (e.earnings / maxEarning) * 100;
                       return (
                         <div key={e.id} className="flex items-center gap-3">
-                          <span className="text-xs text-gray-500 w-16 text-right flex-shrink-0">
+                          <span className="text-xs text-gray-400 w-16 text-right flex-shrink-0">
                             {formatPeriod(e.period)}
                           </span>
                           <div className="flex-1 bg-gray-100 rounded-full h-6 relative overflow-hidden">
@@ -848,7 +848,7 @@ export default function ArtistPortalPage() {
                       );
                     })}
                   </div>
-                  <div className="flex items-center gap-4 mt-4 text-xs text-gray-500 dark:text-zinc-500">
+                  <div className="flex items-center gap-4 mt-4 text-xs text-gray-400 dark:text-zinc-400">
                     <span className="flex items-center gap-1">
                       <span className="w-3 h-3 rounded-full bg-green-400" /> Paid
                     </span>
@@ -872,7 +872,7 @@ export default function ArtistPortalPage() {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400 mx-auto" />
                 </div>
               ) : earnings.length === 0 ? (
-                <div className="p-8 text-center text-gray-500 dark:text-zinc-500">
+                <div className="p-8 text-center text-gray-400 dark:text-zinc-400">
                   <Clock className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <p>No earnings yet. Earnings are distributed monthly via Manifest Financial.</p>
                 </div>
@@ -881,12 +881,12 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Tier</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right">Shares</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right">Earnings</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Status</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Invoice</th>
+                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Tier</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 text-right">Shares</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 text-right">Earnings</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Status</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Invoice</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -932,15 +932,15 @@ export default function ArtistPortalPage() {
             {paymentSummary && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">Total Subscription Payments</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">Total Subscription Payments</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">${paymentSummary.totalPayments.toFixed(2)}</p>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">Total Earnings Paid Out</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">Total Earnings Paid Out</p>
                   <p className="text-2xl font-bold text-green-600">${paymentSummary.totalPayouts.toFixed(2)}</p>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">Pending Payout</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">Pending Payout</p>
                   <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">${paymentSummary.pendingAmount.toFixed(2)}</p>
                 </div>
               </div>
@@ -965,10 +965,10 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Tier</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right">Shares</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right">Amount</th>
+                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Tier</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 text-right">Shares</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 text-right">Amount</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -998,7 +998,7 @@ export default function ArtistPortalPage() {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400 mx-auto" />
                 </div>
               ) : payments.length === 0 ? (
-                <div className="p-8 text-center text-gray-500 dark:text-zinc-500">
+                <div className="p-8 text-center text-gray-400 dark:text-zinc-400">
                   <FileText className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <p>No subscription payments recorded.</p>
                 </div>
@@ -1007,12 +1007,12 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Date</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Tier</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right">Amount</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Status</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Method</th>
+                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Date</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Tier</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 text-right">Amount</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Status</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Method</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1023,7 +1023,7 @@ export default function ArtistPortalPage() {
                           <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{p.tier}</td>
                           <td className="px-4 py-3 text-right font-medium">${p.amount.toFixed(2)}</td>
                           <td className="px-4 py-3">{statusBadge(p.status)}</td>
-                          <td className="px-4 py-3 text-gray-500 text-xs">{p.paymentMethod}</td>
+                          <td className="px-4 py-3 text-gray-400 text-xs">{p.paymentMethod}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1043,11 +1043,11 @@ export default function ArtistPortalPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-500 dark:text-zinc-500">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Tier</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right">Shares</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right">Amount</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Paid On</th>
+                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Tier</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 text-right">Shares</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 text-right">Amount</th>
+                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Paid On</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1057,7 +1057,7 @@ export default function ArtistPortalPage() {
                           <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{p.tier}</td>
                           <td className="px-4 py-3 text-right">{p.shares}</td>
                           <td className="px-4 py-3 text-right font-medium text-green-600">${p.earnings.toFixed(2)}</td>
-                          <td className="px-4 py-3 text-gray-500 dark:text-zinc-500">
+                          <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">
                             {p.paidAt ? new Date(p.paidAt).toLocaleDateString() : "-"}
                           </td>
                         </tr>
@@ -1108,7 +1108,7 @@ export default function ArtistPortalPage() {
                   <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
                     <div className="px-6 py-4 border-b">
                       <h2 className="font-semibold">Earnings Trend</h2>
-                      <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Monthly earnings over the last 12 months</p>
+                      <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Monthly earnings over the last 12 months</p>
                     </div>
                     <div className="p-6">
                       <div className="flex items-end gap-2 h-40">
@@ -1117,7 +1117,7 @@ export default function ArtistPortalPage() {
                           const heightPct = (e.earnings / maxEarning) * 100;
                           return (
                             <div key={e.id} className="flex-1 flex flex-col items-center gap-1">
-                              <span className="text-[10px] text-gray-500 dark:text-zinc-500">${e.earnings.toFixed(0)}</span>
+                              <span className="text-[10px] text-gray-400 dark:text-zinc-400">${e.earnings.toFixed(0)}</span>
                               <div
                                 className={`w-full rounded-t ${e.paid ? "bg-green-400" : "bg-amber-400"}`}
                                 style={{ height: `${Math.max(heightPct, 4)}%` }}
@@ -1175,22 +1175,22 @@ export default function ArtistPortalPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="text-center p-4 bg-blue-50 rounded-lg">
                         <p className="text-2xl font-bold text-blue-600">Morning</p>
-                        <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">6am - 12pm</p>
+                        <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">6am - 12pm</p>
                         <p className="text-sm font-medium text-gray-700 mt-2">Peak Discovery</p>
                       </div>
                       <div className="text-center p-4 bg-amber-50 rounded-lg">
                         <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">Midday</p>
-                        <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">12pm - 5pm</p>
+                        <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">12pm - 5pm</p>
                         <p className="text-sm font-medium text-gray-700 mt-2">Steady Listening</p>
                       </div>
                       <div className="text-center p-4 bg-purple-50 rounded-lg">
                         <p className="text-2xl font-bold text-purple-600">Evening</p>
-                        <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">5pm - 10pm</p>
+                        <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">5pm - 10pm</p>
                         <p className="text-sm font-medium text-gray-700 mt-2">Peak Engagement</p>
                       </div>
                       <div className="text-center p-4 bg-gray-50 rounded-lg">
                         <p className="text-2xl font-bold text-gray-600 dark:text-zinc-400">Late Night</p>
-                        <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">10pm - 6am</p>
+                        <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">10pm - 6am</p>
                         <p className="text-sm font-medium text-gray-700 mt-2">Niche Audience</p>
                       </div>
                     </div>
@@ -1275,7 +1275,7 @@ export default function ArtistPortalPage() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Social Links</label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs text-gray-500 dark:text-zinc-500 mb-1">Instagram</label>
+                      <label className="block text-xs text-gray-400 dark:text-zinc-400 mb-1">Instagram</label>
                       <input
                         type="text"
                         value={editSocials.instagram}
@@ -1285,7 +1285,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 dark:text-zinc-500 mb-1">Twitter / X</label>
+                      <label className="block text-xs text-gray-400 dark:text-zinc-400 mb-1">Twitter / X</label>
                       <input
                         type="text"
                         value={editSocials.twitter}
@@ -1295,7 +1295,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 dark:text-zinc-500 mb-1">Spotify</label>
+                      <label className="block text-xs text-gray-400 dark:text-zinc-400 mb-1">Spotify</label>
                       <input
                         type="text"
                         value={editSocials.spotify}
@@ -1305,7 +1305,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-500 dark:text-zinc-500 mb-1">Website</label>
+                      <label className="block text-xs text-gray-400 dark:text-zinc-400 mb-1">Website</label>
                       <input
                         type="text"
                         value={editSocials.website}
@@ -1341,25 +1341,25 @@ export default function ArtistPortalPage() {
               </div>
               <div className="px-6 py-4 space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500 dark:text-zinc-500">Artist ID</span>
+                  <span className="text-gray-400 dark:text-zinc-400">Artist ID</span>
                   <span className="font-mono text-gray-700 dark:text-zinc-300">{artist?.id}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500 dark:text-zinc-500">Email</span>
+                  <span className="text-gray-400 dark:text-zinc-400">Email</span>
                   <span className="text-gray-700 dark:text-zinc-300">{artist?.email}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500 dark:text-zinc-500">Tier</span>
+                  <span className="text-gray-400 dark:text-zinc-400">Tier</span>
                   <span className="text-gray-700 dark:text-zinc-300">{tier.name} ({artist?.airplayTier})</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500 dark:text-zinc-500">Member Since</span>
+                  <span className="text-gray-400 dark:text-zinc-400">Member Since</span>
                   <span className="text-gray-700 dark:text-zinc-300">
                     {artist?.createdAt ? new Date(artist.createdAt).toLocaleDateString() : "-"}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500 dark:text-zinc-500">Payment Processor</span>
+                  <span className="text-gray-400 dark:text-zinc-400">Payment Processor</span>
                   <span className="text-gray-700 dark:text-zinc-300">Manifest Financial</span>
                 </div>
               </div>
@@ -1377,7 +1377,7 @@ function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border">
       <div className="mb-2">{icon}</div>
-      <p className="text-sm text-gray-500 dark:text-zinc-500">{label}</p>
+      <p className="text-sm text-gray-400 dark:text-zinc-400">{label}</p>
       <p className="text-xl font-bold text-gray-900 dark:text-white">{value}</p>
     </div>
   );

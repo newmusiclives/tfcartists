@@ -127,7 +127,7 @@ export default function SponsorBillingPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Billing</h1>
-          <p className="text-gray-500 dark:text-zinc-500">Payment history and invoices via Manifest Financial</p>
+          <p className="text-gray-400 dark:text-zinc-400">Payment history and invoices via Manifest Financial</p>
         </div>
 
         {loading && (
@@ -197,7 +197,7 @@ export default function SponsorBillingPage() {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900 dark:text-white">Manifest Financial</p>
-                    <p className="text-sm text-gray-500 dark:text-zinc-500">
+                    <p className="text-sm text-gray-400 dark:text-zinc-400">
                       Payments processed securely through Manifest Financial
                     </p>
                   </div>
@@ -228,7 +228,7 @@ export default function SponsorBillingPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {data.billing.contractStart && (
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Start Date</p>
+                      <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Start Date</p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {new Date(data.billing.contractStart).toLocaleDateString("en-US", {
                           month: "long",
@@ -240,7 +240,7 @@ export default function SponsorBillingPage() {
                   )}
                   {data.billing.contractEnd && (
                     <div>
-                      <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">End Date</p>
+                      <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">End Date</p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {new Date(data.billing.contractEnd).toLocaleDateString("en-US", {
                           month: "long",
@@ -251,7 +251,7 @@ export default function SponsorBillingPage() {
                     </div>
                   )}
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Renewal Status</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Renewal Status</p>
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
                       {data.billing.isActive ? "Auto-renewing monthly" : "Not active"}
                     </p>
@@ -267,13 +267,13 @@ export default function SponsorBillingPage() {
                   <FileText className="w-5 h-5 text-gray-400" />
                   Invoice History
                 </h2>
-                <span className="text-sm text-gray-500 dark:text-zinc-500">
+                <span className="text-sm text-gray-400 dark:text-zinc-400">
                   {data.invoices.length} invoices
                 </span>
               </div>
 
               {data.invoices.length === 0 ? (
-                <div className="px-6 pb-6 text-sm text-gray-500 dark:text-zinc-500">
+                <div className="px-6 pb-6 text-sm text-gray-400 dark:text-zinc-400">
                   No invoices found.
                 </div>
               ) : (
@@ -287,7 +287,7 @@ export default function SponsorBillingPage() {
                           }`} />
                           <div>
                             <p className="text-sm font-medium text-gray-900 dark:text-white">{inv.invoiceNumber}</p>
-                            <p className="text-xs text-gray-500 dark:text-zinc-500">{inv.monthLabel}</p>
+                            <p className="text-xs text-gray-400 dark:text-zinc-400">{inv.monthLabel}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
@@ -365,7 +365,7 @@ function BillingCard({
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
       <div className="mb-3">{icon}</div>
-      <p className="text-xs text-gray-500 dark:text-zinc-500">{label}</p>
+      <p className="text-xs text-gray-400 dark:text-zinc-400">{label}</p>
       <p className="text-xl font-bold text-gray-900 mt-0.5">{value}</p>
       <p className={`text-xs mt-1 ${sublabelColor}`}>{sublabel}</p>
     </div>

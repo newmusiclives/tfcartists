@@ -99,7 +99,7 @@ export default function VotePage() {
             Vote for your favorite! Results update live.
           </p>
           {data && (
-            <p className="text-xs text-zinc-600 mt-2">
+            <p className="text-xs text-zinc-400 mt-2">
               {new Date(data.date).toLocaleDateString("en-US", {
                 weekday: "long",
                 month: "long",
@@ -112,11 +112,11 @@ export default function VotePage() {
 
         {loading && !data ? (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : !data || data.candidates.length === 0 ? (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 text-center">
-            <Music className="w-10 h-10 text-zinc-600 mx-auto mb-3" />
+            <Music className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
             <p className="text-zinc-400">No songs available for voting today.</p>
           </div>
         ) : (
@@ -156,7 +156,7 @@ export default function VotePage() {
                         </h3>
                         <p className="text-sm text-zinc-400">{song.artistName}</p>
                         {song.genre && (
-                          <span className="text-xs text-zinc-600">{song.genre}</span>
+                          <span className="text-xs text-zinc-400">{song.genre}</span>
                         )}
                       </div>
 
@@ -184,7 +184,7 @@ export default function VotePage() {
                     {/* Progress Bar */}
                     {voted && (
                       <div className="mt-3">
-                        <div className="flex justify-between text-xs text-zinc-500 mb-1">
+                        <div className="flex justify-between text-xs text-zinc-400 mb-1">
                           <span>{Math.round(pct)}%</span>
                           <span>{voteCount} votes</span>
                         </div>
@@ -226,18 +226,18 @@ export default function VotePage() {
                       className="px-6 py-3 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
-                        <Calendar className="w-4 h-4 text-zinc-600" />
-                        <span className="text-xs text-zinc-500">{w.date}</span>
+                        <Calendar className="w-4 h-4 text-zinc-400" />
+                        <span className="text-xs text-zinc-400">{w.date}</span>
                       </div>
                       <div className="text-right">
                         <span className="text-sm font-medium text-zinc-200">
                           {w.song.title}
                         </span>
-                        <span className="text-xs text-zinc-500 ml-2">
+                        <span className="text-xs text-zinc-400 ml-2">
                           by {w.song.artistName}
                         </span>
                       </div>
-                      <span className="text-xs text-zinc-500">
+                      <span className="text-xs text-zinc-400">
                         {w.voteCount} votes
                       </span>
                     </div>

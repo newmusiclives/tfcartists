@@ -214,7 +214,7 @@ export default function RedeemRewardsPage() {
         {filteredRewards.length === 0 ? (
           <div className="text-center py-16">
             <Gift className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 text-lg">No rewards available yet</p>
+            <p className="text-gray-400 text-lg">No rewards available yet</p>
             <p className="text-gray-400 text-sm mt-1">Check back soon — new rewards are being added!</p>
           </div>
         ) : (

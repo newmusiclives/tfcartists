@@ -111,7 +111,7 @@ export default function SponsorAnalyticsPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics</h1>
-            <p className="text-gray-500 dark:text-zinc-500">Ad performance and audience insights</p>
+            <p className="text-gray-400 dark:text-zinc-400">Ad performance and audience insights</p>
           </div>
           <select
             value={months}
@@ -143,7 +143,7 @@ export default function SponsorAnalyticsPage() {
                 <h2 className="font-semibold text-gray-900 dark:text-white">Ad Impressions Over Time</h2>
               </div>
               {data.monthlyData.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-zinc-500">No impression data available yet.</p>
+                <p className="text-sm text-gray-400 dark:text-zinc-400">No impression data available yet.</p>
               ) : (
                 <div className="space-y-3">
                   {(() => {
@@ -184,7 +184,7 @@ export default function SponsorAnalyticsPage() {
                 <h2 className="font-semibold text-gray-900 dark:text-white">Listener Reach Over Time</h2>
               </div>
               {data.monthlyData.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-zinc-500">No listener data available yet.</p>
+                <p className="text-sm text-gray-400 dark:text-zinc-400">No listener data available yet.</p>
               ) : (
                 <div className="space-y-3">
                   {(() => {
@@ -263,7 +263,7 @@ export default function SponsorAnalyticsPage() {
                   <h2 className="font-semibold text-gray-900 dark:text-white">Audience Locations</h2>
                 </div>
                 {data.topLocations.length === 0 ? (
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">Location data not yet available.</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">Location data not yet available.</p>
                 ) : (
                   <div className="space-y-3">
                     {data.topLocations.map((loc, i) => (
@@ -295,11 +295,11 @@ export default function SponsorAnalyticsPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-gray-200 dark:border-zinc-800">
-                        <th className="text-left py-2 pr-4 text-gray-500 font-medium">Campaign</th>
-                        <th className="text-left py-2 pr-4 text-gray-500 font-medium">Period</th>
-                        <th className="text-right py-2 pr-4 text-gray-500 font-medium">Monthly</th>
-                        <th className="text-right py-2 pr-4 text-gray-500 font-medium">Impressions</th>
-                        <th className="text-right py-2 text-gray-500 font-medium">Status</th>
+                        <th className="text-left py-2 pr-4 text-gray-400 font-medium">Campaign</th>
+                        <th className="text-left py-2 pr-4 text-gray-400 font-medium">Period</th>
+                        <th className="text-right py-2 pr-4 text-gray-400 font-medium">Monthly</th>
+                        <th className="text-right py-2 pr-4 text-gray-400 font-medium">Impressions</th>
+                        <th className="text-right py-2 text-gray-400 font-medium">Status</th>
                       </tr>
                     </thead>
                     <tbody>

@@ -244,7 +244,7 @@ export default function SponsorRoiPage() {
             </div>
           )}
 
-          <p className="text-xs text-zinc-600 mt-4">
+          <p className="text-xs text-zinc-400 mt-4">
             Your Sponsor ID was provided when your sponsorship was activated.
           </p>
         </div>
@@ -297,7 +297,7 @@ export default function SponsorRoiPage() {
                 setView("lookup");
                 setReport(null);
               }}
-              className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
             >
               Switch
             </button>
@@ -425,7 +425,7 @@ export default function SponsorRoiPage() {
                           <p className="text-sm font-medium text-zinc-300">
                             {DAYPART_LABELS[daypart]}
                           </p>
-                          <p className="text-xs text-zinc-500">
+                          <p className="text-xs text-zinc-400">
                             {DAYPART_TIMES[daypart]}
                           </p>
                         </div>
@@ -485,7 +485,7 @@ export default function SponsorRoiPage() {
                         <p className="text-sm font-medium text-zinc-200">
                           {ad.title}
                         </p>
-                        <p className="text-xs text-zinc-500 capitalize">
+                        <p className="text-xs text-zinc-400 capitalize">
                           {ad.tier} tier
                           {ad.lastPlayed &&
                             ` \u00b7 Last played ${new Date(ad.lastPlayed).toLocaleDateString()}`}
@@ -554,11 +554,11 @@ function MetricCard({
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
       <div className="mb-3">{icon}</div>
-      <p className="text-xs text-zinc-500 uppercase tracking-wide font-medium mb-1">
+      <p className="text-xs text-zinc-400 uppercase tracking-wide font-medium mb-1">
         {label}
       </p>
       <p className="text-2xl font-bold text-white mb-1">{value}</p>
-      <p className="text-xs text-zinc-500">{sublabel}</p>
+      <p className="text-xs text-zinc-400">{sublabel}</p>
     </div>
   );
 }

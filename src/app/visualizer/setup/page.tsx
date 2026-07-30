@@ -65,7 +65,7 @@ Refresh when scene becomes active: ON`;
           </Link>
           <div>
             <h1 className="text-lg font-semibold">Visualizer Setup Guide</h1>
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-zinc-400">
               Stream your station to YouTube, Twitch, or any RTMP service
             </p>
           </div>
@@ -75,7 +75,7 @@ Refresh when scene becomes active: ON`;
       <main className="max-w-4xl mx-auto px-6 py-10 space-y-12">
         {/* Preview */}
         <section>
-          <h2 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">
+          <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wider mb-4">
             Preview
           </h2>
           <div className="relative aspect-video rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900">
@@ -124,7 +124,7 @@ Refresh when scene becomes active: ON`;
               1920 x 1080
             </div>
           </div>
-          <p className="text-sm text-zinc-500 mt-3">
+          <p className="text-sm text-zinc-400 mt-3">
             The visualizer displays audio-reactive frequency bars with real-time
             now-playing information. Designed for 1080p screen capture.
           </p>
@@ -132,7 +132,7 @@ Refresh when scene becomes active: ON`;
 
         {/* Steps */}
         <section>
-          <h2 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-6">
+          <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wider mb-6">
             Setup Steps
           </h2>
           <div className="space-y-6">
@@ -159,7 +159,7 @@ Refresh when scene becomes active: ON`;
 
         {/* Browser Source config */}
         <section>
-          <h2 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">
+          <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wider mb-4">
             OBS Browser Source Settings
           </h2>
           <p className="text-sm text-zinc-400 mb-4">
@@ -170,7 +170,7 @@ Refresh when scene becomes active: ON`;
           </p>
           <div className="relative rounded-xl bg-zinc-900 border border-zinc-800 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2 bg-zinc-800/50 border-b border-zinc-800">
-              <span className="text-xs text-zinc-500 font-mono">
+              <span className="text-xs text-zinc-400 font-mono">
                 Browser Source Config
               </span>
               <button
@@ -194,7 +194,7 @@ Refresh when scene becomes active: ON`;
               {browserSourceSnippet}
             </pre>
           </div>
-          <p className="text-xs text-zinc-600 mt-3">
+          <p className="text-xs text-zinc-400 mt-3">
             Note: OBS Browser Source uses Chromium, so the Web Audio API
             visualizer works natively. Audio from the browser source will be
             captured by OBS automatically.
@@ -203,30 +203,30 @@ Refresh when scene becomes active: ON`;
 
         {/* Tips */}
         <section>
-          <h2 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">
+          <h2 className="text-sm font-medium text-zinc-400 uppercase tracking-wider mb-4">
             Tips
           </h2>
           <ul className="space-y-3 text-sm text-zinc-400">
             <li className="flex gap-3">
-              <Monitor className="w-4 h-4 text-zinc-600 flex-shrink-0 mt-0.5" />
+              <Monitor className="w-4 h-4 text-zinc-400 flex-shrink-0 mt-0.5" />
               <span>
                 For Window Capture, press <kbd className="px-1.5 py-0.5 bg-zinc-800 rounded text-xs text-zinc-300 border border-zinc-700">F11</kbd> to enter fullscreen in your browser first.
               </span>
             </li>
             <li className="flex gap-3">
-              <Monitor className="w-4 h-4 text-zinc-600 flex-shrink-0 mt-0.5" />
+              <Monitor className="w-4 h-4 text-zinc-400 flex-shrink-0 mt-0.5" />
               <span>
                 The visualizer uses <code className="text-zinc-300">requestAnimationFrame</code> and runs at 60fps. On lower-end hardware, consider setting OBS canvas FPS to 30.
               </span>
             </li>
             <li className="flex gap-3">
-              <Monitor className="w-4 h-4 text-zinc-600 flex-shrink-0 mt-0.5" />
+              <Monitor className="w-4 h-4 text-zinc-400 flex-shrink-0 mt-0.5" />
               <span>
                 Track info updates every 15 seconds with smooth fade transitions. No manual intervention needed once running.
               </span>
             </li>
             <li className="flex gap-3">
-              <Monitor className="w-4 h-4 text-zinc-600 flex-shrink-0 mt-0.5" />
+              <Monitor className="w-4 h-4 text-zinc-400 flex-shrink-0 mt-0.5" />
               <span>
                 The cursor is hidden and all UI controls are removed. The page is designed purely for capture — no interactive elements are visible.
               </span>

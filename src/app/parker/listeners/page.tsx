@@ -117,7 +117,7 @@ export default function ListenersPage() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <div className="text-sm text-gray-500 dark:text-zinc-500">{req.time}</div>
+                  <div className="text-sm text-gray-400 dark:text-zinc-400">{req.time}</div>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     req.status === "played"
                       ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
@@ -154,8 +154,8 @@ export default function ListenersPage() {
                 <h3 className="font-bold text-gray-900 dark:text-white mb-1">{contest.name}</h3>
                 <div className="text-sm text-gray-600 dark:text-zinc-400 mb-3">Prize: {contest.prize}</div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500 dark:text-zinc-500">{contest.entries} entries</span>
-                  <span className="text-gray-500 dark:text-zinc-500">Ends {contest.endDate}</span>
+                  <span className="text-gray-400 dark:text-zinc-400">{contest.entries} entries</span>
+                  <span className="text-gray-400 dark:text-zinc-400">Ends {contest.endDate}</span>
                 </div>
               </div>
             ))}
@@ -172,9 +172,9 @@ export default function ListenersPage() {
                 <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{social.followers}</div>
                 <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">followers</div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500 dark:text-zinc-500">Engagement: {social.engagement}</span>
+                  <span className="text-sm text-gray-400 dark:text-zinc-400">Engagement: {social.engagement}</span>
                   <span className={`flex items-center space-x-1 text-xs font-medium ${
-                    social.trend === "up" ? "text-green-600" : "text-gray-500"
+                    social.trend === "up" ? "text-green-600" : "text-gray-400"
                   }`}>
                     {social.trend === "up" && <TrendingUp className="w-3 h-3" />}
                     <span>{social.trend === "up" ? "Growing" : "Stable"}</span>

@@ -282,7 +282,7 @@ export default function ViralContentPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
                 No content yet. Generate your first piece of viral content.
               </div>
             )}
@@ -331,7 +331,7 @@ function MetricCard({ icon, label, value, subtitle }: { icon: React.ReactNode; l
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -372,7 +372,7 @@ function ContentCard({ title, platform, creator, publishedDate, views, likes, sh
               </span>
             </div>
             <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{description}</p>
-            <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
+            <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
               <span>{platform}</span>
               <span>•</span>
               <span>By {creator}</span>
@@ -389,35 +389,35 @@ function ContentCard({ title, platform, creator, publishedDate, views, likes, sh
             <Eye className="w-4 h-4" />
           </div>
           <div className="text-lg font-bold text-gray-900 dark:text-white">{views >= 1000 ? `${(views / 1000).toFixed(0)}k` : views}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">Views</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">Views</div>
         </div>
         <div>
           <div className="flex items-center justify-center space-x-1 text-gray-600 dark:text-zinc-400 mb-1">
             <Heart className="w-4 h-4" />
           </div>
           <div className="text-lg font-bold text-gray-900 dark:text-white">{likes >= 1000 ? `${(likes / 1000).toFixed(1)}k` : likes}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">Likes</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">Likes</div>
         </div>
         <div>
           <div className="flex items-center justify-center space-x-1 text-gray-600 dark:text-zinc-400 mb-1">
             <Share2 className="w-4 h-4" />
           </div>
           <div className="text-lg font-bold text-gray-900 dark:text-white">{shares >= 1000 ? `${(shares / 1000).toFixed(1)}k` : shares}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">Shares</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">Shares</div>
         </div>
         <div>
           <div className="flex items-center justify-center space-x-1 text-gray-600 dark:text-zinc-400 mb-1">
             <MessageCircle className="w-4 h-4" />
           </div>
           <div className="text-lg font-bold text-gray-900 dark:text-white">{comments}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">Comments</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">Comments</div>
         </div>
         <div>
           <div className="flex items-center justify-center space-x-1 text-gray-600 dark:text-zinc-400 mb-1">
             <TrendingUp className="w-4 h-4" />
           </div>
           <div className="text-lg font-bold text-green-600">+{conversions}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">Listeners</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">Listeners</div>
         </div>
       </div>
     </div>

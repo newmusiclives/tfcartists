@@ -133,22 +133,22 @@ export default function ArtistsListPage() {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                       Artist
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                       Contact
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                       Source
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                       Activity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                       Actions
                     </th>
                   </tr>
@@ -160,13 +160,13 @@ export default function ArtistsListPage() {
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {artist.name}
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-zinc-500">
+                        <div className="text-sm text-gray-400 dark:text-zinc-400">
                           {artist.genre || "—"}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900 dark:text-white">{artist.email || "—"}</div>
-                        <div className="text-sm text-gray-500 dark:text-zinc-500">{artist.phone || "—"}</div>
+                        <div className="text-sm text-gray-400 dark:text-zinc-400">{artist.phone || "—"}</div>
                       </td>
                       <td className="px-6 py-4">
                         <span

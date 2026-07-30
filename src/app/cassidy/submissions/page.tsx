@@ -241,7 +241,7 @@ export default function CassidySubmissionsPage() {
               Loading submissions...
             </div>
           ) : submissions.length === 0 ? (
-            <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
+            <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
               No submissions found for this filter.
             </div>
           ) : (

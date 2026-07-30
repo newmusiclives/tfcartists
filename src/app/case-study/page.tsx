@@ -121,10 +121,10 @@ export default function CaseStudyPage() {
                 className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6 text-center"
               >
                 <s.icon className="w-6 h-6 text-amber-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-500 dark:text-zinc-500 mb-1">{s.label}</p>
+                <p className="text-sm text-gray-400 dark:text-zinc-400 mb-1">{s.label}</p>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">{s.value}</p>
                 {s.sub && (
-                  <p className="text-xs text-gray-500 dark:text-zinc-500">{s.sub}</p>
+                  <p className="text-xs text-gray-400 dark:text-zinc-400">{s.sub}</p>
                 )}
               </div>
             ))}
@@ -179,7 +179,7 @@ export default function CaseStudyPage() {
                   </div>
                   <h3 className="font-bold text-gray-900 dark:text-white text-lg">{dj.name}</h3>
                   <p className="text-sm text-amber-700 font-medium mb-1">{dj.time}</p>
-                  <p className="text-sm text-gray-500 italic">{dj.vibe}</p>
+                  <p className="text-sm text-gray-400 italic">{dj.vibe}</p>
                 </div>
               </div>
             ))}
@@ -230,7 +230,7 @@ export default function CaseStudyPage() {
           <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 dark:border-zinc-800">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <p className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Revenue Split</p>
+                <p className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Revenue Split</p>
                 <p className="text-gray-700 dark:text-zinc-300">
                   <span className="font-bold text-amber-700 dark:text-amber-400">80%</span> to artist pool{" "}
                   <span className="text-gray-400 mx-2">|</span>
@@ -238,8 +238,8 @@ export default function CaseStudyPage() {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-500 dark:text-zinc-500 mb-1">Operator Take-Home</p>
-                <p className="text-2xl font-extrabold text-gray-900 dark:text-white">~$6,400<span className="text-base text-gray-500 dark:text-zinc-500">/mo</span></p>
+                <p className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Operator Take-Home</p>
+                <p className="text-2xl font-extrabold text-gray-900 dark:text-white">~$6,400<span className="text-base text-gray-400 dark:text-zinc-400">/mo</span></p>
               </div>
             </div>
           </div>
@@ -279,7 +279,7 @@ export default function CaseStudyPage() {
               &ldquo;This station runs itself. I spend 30 minutes a day checking dashboards and
               the AI handles everything else.&rdquo;
             </blockquote>
-            <p className="text-sm text-gray-500 font-medium">— Station Operator</p>
+            <p className="text-sm text-gray-400 font-medium">— Station Operator</p>
           </div>
         </section>
 

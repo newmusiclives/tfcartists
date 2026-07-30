@@ -143,7 +143,7 @@ export default function StreamStatusPage() {
               ) : (
                 <WifiOff className="w-5 h-5 text-red-500" />
               )}
-              <span className="text-sm font-medium text-gray-500 dark:text-zinc-500">Stream Status</span>
+              <span className="text-sm font-medium text-gray-400 dark:text-zinc-400">Stream Status</span>
             </div>
             <p className={`text-2xl font-bold ${latest?.streamOnline ? "text-green-600" : "text-red-600"}`}>
               {latest?.streamOnline ? "ONLINE" : "OFFLINE"}
@@ -156,7 +156,7 @@ export default function StreamStatusPage() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-5 h-5 text-blue-500" />
-              <span className="text-sm font-medium text-gray-500 dark:text-zinc-500">Response Time</span>
+              <span className="text-sm font-medium text-gray-400 dark:text-zinc-400">Response Time</span>
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{latest?.responseTime || 0}ms</p>
             <p className="text-xs text-gray-400 mt-1">Avg: {avgResponseTime}ms</p>
@@ -165,7 +165,7 @@ export default function StreamStatusPage() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
             <div className="flex items-center gap-2 mb-2">
               <CheckCircle className="w-5 h-5 text-green-500" />
-              <span className="text-sm font-medium text-gray-500 dark:text-zinc-500">Uptime</span>
+              <span className="text-sm font-medium text-gray-400 dark:text-zinc-400">Uptime</span>
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{uptime}%</p>
             <p className="text-xs text-gray-400 mt-1">{checks.length} checks</p>
@@ -174,7 +174,7 @@ export default function StreamStatusPage() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-5 h-5 text-purple-500" />
-              <span className="text-sm font-medium text-gray-500 dark:text-zinc-500">Listeners</span>
+              <span className="text-sm font-medium text-gray-400 dark:text-zinc-400">Listeners</span>
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">
               {latest?.nowPlaying?.listener_count ?? "—"}
@@ -208,11 +208,11 @@ export default function StreamStatusPage() {
           <h2 className="font-semibold mb-3">Stream Configuration</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-500 dark:text-zinc-500">Stream URL:</span>
+              <span className="text-gray-400 dark:text-zinc-400">Stream URL:</span>
               <code className="ml-2 bg-gray-100 px-2 py-0.5 rounded text-xs break-all">{STREAM_URL}</code>
             </div>
             <div>
-              <span className="text-gray-500 dark:text-zinc-500">Now Playing API:</span>
+              <span className="text-gray-400 dark:text-zinc-400">Now Playing API:</span>
               <code className="ml-2 bg-gray-100 px-2 py-0.5 rounded text-xs">{NOW_PLAYING_URL}</code>
             </div>
           </div>
@@ -227,12 +227,12 @@ export default function StreamStatusPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Time</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Status</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">HTTP</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Response</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Track</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500 dark:text-zinc-500">Listeners</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Time</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Status</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">HTTP</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Response</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Track</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Listeners</th>
                 </tr>
               </thead>
               <tbody className="divide-y">

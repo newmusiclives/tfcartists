@@ -357,7 +357,7 @@ export default function HarperOutreach() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
+                <Link href="/harper" className="text-gray-400 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
@@ -536,24 +536,24 @@ export default function HarperOutreach() {
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Contact</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Contact</p>
                               <p className="text-sm font-medium">{lead.contactName}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Business Type</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Business Type</p>
                               <p className="text-sm font-medium">{lead.businessType}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Source</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Source</p>
                               <p className="text-sm font-medium">{sourceLabels[lead.source]}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Potential</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Potential</p>
                               <p className="text-sm font-medium text-green-600">${lead.potentialRevenue}/mo</p>
                             </div>
                           </div>
                           <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">{lead.notes}</p>
-                          <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
+                          <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
                             <span>Added: {lead.dateAdded}</span>
                             {lead.lastContact && <span>Last Contact: {lead.lastContact}</span>}
                           </div>
@@ -603,7 +603,7 @@ export default function HarperOutreach() {
                             }`}>
                               {campaign.status}
                             </span>
-                            <span className="text-xs text-gray-500 dark:text-zinc-500">
+                            <span className="text-xs text-gray-400 dark:text-zinc-400">
                               {campaign.type === 'email' ? <Mail className="w-3 h-3 inline mr-1" /> :
                                campaign.type === 'phone' ? <Phone className="w-3 h-3 inline mr-1" /> :
                                <Calendar className="w-3 h-3 inline mr-1" />}
@@ -618,19 +618,19 @@ export default function HarperOutreach() {
                       </div>
                       <div className="grid grid-cols-4 gap-4">
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Total Leads</p>
+                          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Total Leads</p>
                           <p className="text-2xl font-bold text-gray-900 dark:text-white">{campaign.leads}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Contacted</p>
+                          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Contacted</p>
                           <p className="text-2xl font-bold text-blue-600">{campaign.contacted}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Converted</p>
+                          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Converted</p>
                           <p className="text-2xl font-bold text-green-600">{campaign.converted}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Conv. Rate</p>
+                          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Conv. Rate</p>
                           <p className="text-2xl font-bold text-purple-600">{convRate}%</p>
                         </div>
                       </div>

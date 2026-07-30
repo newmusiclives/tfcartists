@@ -62,7 +62,7 @@ export default function CommunityRadioPage() {
             AI-powered community radio that brings your town together — with
             local weather, events, business sponsors, and 24/7 programming.
           </p>
-          <p className="text-zinc-500 mb-10 max-w-xl mx-auto">
+          <p className="text-zinc-400 mb-10 max-w-xl mx-auto">
             No broadcast license. No expensive equipment. No technical skills.
             Launch in days and let AI handle the rest.
           </p>
@@ -270,9 +270,9 @@ export default function CommunityRadioPage() {
                   <span className="text-3xl font-bold text-emerald-400">
                     {item.price}
                   </span>
-                  <span className="text-zinc-500 text-sm">/month</span>
+                  <span className="text-zinc-400 text-sm">/month</span>
                 </div>
-                <p className="text-xs text-zinc-500 mb-5">
+                <p className="text-xs text-zinc-400 mb-5">
                   {item.spots} ad spots per month
                 </p>
                 <ul className="space-y-2.5">
@@ -289,7 +289,7 @@ export default function CommunityRadioPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-zinc-500 text-sm mt-8">
+          <p className="text-center text-zinc-400 text-sm mt-8">
             All packages include professional AI-voiced ad production. Sponsors
             provide their message — we handle the rest.
           </p>
@@ -383,7 +383,7 @@ export default function CommunityRadioPage() {
 
       {/* Footer */}
       <footer className="border-t border-zinc-800 py-8 px-4">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between text-sm text-zinc-500">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between text-sm text-zinc-400">
           <div className="flex items-center space-x-2 mb-4 sm:mb-0">
             <Radio className="w-4 h-4 text-emerald-500" />
             <span>TrueFans Radio</span>

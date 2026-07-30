@@ -58,7 +58,7 @@ export default async function NewsletterEditionPage({ params }: Props) {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {edition.subject}
             </h1>
-            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-zinc-500">
+            <div className="flex items-center gap-4 text-sm text-gray-400 dark:text-zinc-400">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 {new Date(edition.createdAt).toLocaleDateString("en-US", {

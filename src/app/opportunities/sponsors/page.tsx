@@ -161,7 +161,7 @@ export default function SponsorOpportunityPage() {
                 <div className="text-xs text-gray-600 dark:text-zinc-400">You Earn</div>
                 <div className="text-2xl font-bold text-green-600">${referralModel.tiers.localHero.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500 dark:text-zinc-500">Per Local Hero sponsor referred</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-400">Per Local Hero sponsor referred</p>
             </div>
 
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-300">
@@ -176,7 +176,7 @@ export default function SponsorOpportunityPage() {
                 <div className="text-xs text-gray-600 dark:text-zinc-400">You Earn</div>
                 <div className="text-2xl font-bold text-green-600">${referralModel.tiers.tier1.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500 dark:text-zinc-500">Per Tier 1 sponsor referred</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-400">Per Tier 1 sponsor referred</p>
             </div>
 
             <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg p-6 border-2 border-yellow-400">
@@ -191,7 +191,7 @@ export default function SponsorOpportunityPage() {
                 <div className="text-xs text-gray-600 dark:text-zinc-400">You Earn</div>
                 <div className="text-2xl font-bold text-green-600">${referralModel.tiers.tier2.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500 dark:text-zinc-500">Per Tier 2 sponsor referred</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-400">Per Tier 2 sponsor referred</p>
             </div>
 
             <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg p-6 border-4 border-purple-400 relative">
@@ -209,7 +209,7 @@ export default function SponsorOpportunityPage() {
                 <div className="text-xs text-gray-600 dark:text-zinc-400">You Earn</div>
                 <div className="text-2xl font-bold text-green-600">${referralModel.tiers.tier3.referralBonus}</div>
               </div>
-              <p className="text-xs text-gray-500 dark:text-zinc-500">Per Tier 3 sponsor referred</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-400">Per Tier 3 sponsor referred</p>
             </div>
           </div>
 
@@ -331,8 +331,8 @@ export default function SponsorOpportunityPage() {
             {referralModel.premiums.map((premium, idx) => (
               <div key={idx} className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6 border-2 border-purple-200">
                 <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">{premium.name}</h3>
-                <div className="text-3xl font-bold text-purple-600 mb-2">${premium.price}<span className="text-sm font-normal text-gray-500 dark:text-zinc-500">/mo</span></div>
-                <p className="text-xs text-gray-500 dark:text-zinc-500">AI-generated professional audio ads included</p>
+                <div className="text-3xl font-bold text-purple-600 mb-2">${premium.price}<span className="text-sm font-normal text-gray-400 dark:text-zinc-400">/mo</span></div>
+                <p className="text-xs text-gray-400 dark:text-zinc-400">AI-generated professional audio ads included</p>
               </div>
             ))}
           </div>
@@ -371,7 +371,7 @@ export default function SponsorOpportunityPage() {
           <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-bold hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg">
             Get Your Referral Link →
           </button>
-          <p className="text-sm text-gray-500 dark:text-zinc-500 mt-4">Already a sponsor? Access your referral dashboard to get started</p>
+          <p className="text-sm text-gray-400 dark:text-zinc-400 mt-4">Already a sponsor? Access your referral dashboard to get started</p>
         </div>
 
       </div>

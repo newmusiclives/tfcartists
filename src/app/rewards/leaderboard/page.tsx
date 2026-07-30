@@ -87,7 +87,7 @@ export default function LeaderboardPage() {
           {loading ? (
             <div className="p-12 text-center text-gray-400 animate-pulse">Loading leaderboard...</div>
           ) : entries.length === 0 ? (
-            <div className="p-12 text-center text-gray-500 dark:text-zinc-500">
+            <div className="p-12 text-center text-gray-400 dark:text-zinc-400">
               No entries yet. Start earning XP to appear on the leaderboard!
             </div>
           ) : (
@@ -116,7 +116,7 @@ export default function LeaderboardPage() {
                   {/* Name */}
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-gray-900 truncate">{entry.name || "Anonymous"}</div>
-                    <div className="text-xs text-gray-500 dark:text-zinc-500">
+                    <div className="text-xs text-gray-400 dark:text-zinc-400">
                       Level {entry.xpLevel}
                       {entry.badges.length > 0 && ` · ${entry.badges.length} badges`}
                     </div>

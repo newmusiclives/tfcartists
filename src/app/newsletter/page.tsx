@@ -88,7 +88,7 @@ export default async function NewsletterPage() {
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
             Subscribe to the Newsletter
           </h2>
-          <p className="text-gray-500 dark:text-zinc-500 mb-6">
+          <p className="text-gray-400 dark:text-zinc-400 mb-6">
             Join {subscriberCount > 0 ? `${subscriberCount}+` : "our"}{" "}
             subscribers and never miss a beat.
           </p>
@@ -101,7 +101,7 @@ export default async function NewsletterPage() {
             <Rss className="w-5 h-5 text-orange-500" />
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">RSS Feeds</h2>
           </div>
-          <p className="text-gray-500 dark:text-zinc-500 mb-4">
+          <p className="text-gray-400 dark:text-zinc-400 mb-4">
             Follow what&apos;s playing via RSS. Works with any feed reader or
             WordPress widget.
           </p>
@@ -117,7 +117,7 @@ export default async function NewsletterPage() {
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">Recently Played</p>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Last 50 tracks with timestamps
                 </p>
               </div>
@@ -133,7 +133,7 @@ export default async function NewsletterPage() {
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">Now Playing</p>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Live single-item feed, updates every request
                 </p>
               </div>
@@ -148,7 +148,7 @@ export default async function NewsletterPage() {
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                 Latest Digest
               </h2>
-              <span className="text-sm text-gray-500 dark:text-zinc-500">
+              <span className="text-sm text-gray-400 dark:text-zinc-400">
                 {new Date(latestDigest.createdAt).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -183,7 +183,7 @@ export default async function NewsletterPage() {
                     <p className="font-medium text-gray-900 dark:text-white">
                       {edition.subject}
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-zinc-500">
+                    <p className="text-sm text-gray-400 dark:text-zinc-400">
                       {new Date(edition.createdAt).toLocaleDateString("en-US", {
                         month: "long",
                         day: "numeric",

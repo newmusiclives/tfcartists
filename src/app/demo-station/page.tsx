@@ -181,7 +181,7 @@ export default function DemoStationPage() {
               </div>
               <div className="font-bold">{dj.name}</div>
               <div className="text-amber-400 text-sm">{dj.time}</div>
-              <div className="text-gray-500 text-xs mt-1">{dj.show}</div>
+              <div className="text-gray-400 text-xs mt-1">{dj.show}</div>
             </div>
           ))}
         </div>

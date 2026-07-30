@@ -308,7 +308,7 @@ export default function PricingPage() {
                 className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   audience === a.id
                     ? "bg-amber-700 text-white shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
+                    : "text-gray-400 hover:text-gray-700"
                 }`}
               >
                 <a.icon className="w-4 h-4" />
@@ -340,7 +340,7 @@ export default function PricingPage() {
                   <div className="text-amber-600 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
                     <span className="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
-                    <span className="text-sm text-gray-500 ml-1">/mo</span>
+                    <span className="text-sm text-gray-400 ml-1">/mo</span>
                   </div>
                   {plan.setup > 0 && (
                     <div className="text-xs text-gray-400 mb-3">+ ${plan.setup} one-time setup</div>
@@ -348,7 +348,7 @@ export default function PricingPage() {
                   {plan.setup === 0 && (
                     <div className="text-xs text-green-600 font-medium mb-3">No setup fee</div>
                   )}
-                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">{plan.description}</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
@@ -387,9 +387,9 @@ export default function PricingPage() {
                   <div className="text-purple-600 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
                     <span className="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
-                    <span className="text-sm text-gray-500 ml-1">/mo</span>
+                    <span className="text-sm text-gray-400 ml-1">/mo</span>
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">{plan.description}</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
@@ -431,9 +431,9 @@ export default function PricingPage() {
                   <div className="text-green-600 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
                     <span className="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
-                    <span className="text-sm text-gray-500 ml-1">/mo</span>
+                    <span className="text-sm text-gray-400 ml-1">/mo</span>
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-5">{plan.description}</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
@@ -546,7 +546,7 @@ export default function PricingPage() {
 
       {/* Footer */}
       <footer className="border-t border-gray-200 py-8 px-4 bg-white/60">
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm text-gray-500 dark:text-zinc-500">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm text-gray-400 dark:text-zinc-400">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4" />
             <span>TrueFans Radio</span>

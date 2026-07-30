@@ -132,7 +132,7 @@ export default function ResetPasswordPage() {
           <Radio className="w-8 h-8 text-amber-700 mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Set New Password</h1>
         </div>
-        <Suspense fallback={<div className="text-center text-gray-500 dark:text-zinc-500">Loading...</div>}>
+        <Suspense fallback={<div className="text-center text-gray-400 dark:text-zinc-400">Loading...</div>}>
           <ResetForm />
         </Suspense>
       </div>

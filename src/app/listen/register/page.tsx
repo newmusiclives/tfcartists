@@ -275,7 +275,7 @@ export default function ListenerRegisterPage() {
             )}
           </button>
 
-          <p className="text-center text-sm text-gray-500 dark:text-zinc-500">
+          <p className="text-center text-sm text-gray-400 dark:text-zinc-400">
             Already registered?{" "}
             <Link href="/player" className="text-blue-600 hover:text-blue-700 font-medium">
               Go to player

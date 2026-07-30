@@ -61,12 +61,12 @@ export default function AffiliateSignupPage() {
             </p>
 
             <div className="bg-zinc-800 border border-zinc-700 rounded-lg px-6 py-4 mb-6">
-              <div className="text-xs text-zinc-500 uppercase tracking-wider mb-1">Your Referral Code</div>
+              <div className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Your Referral Code</div>
               <div className="text-3xl font-bold font-mono text-amber-500">{success.referralCode}</div>
             </div>
 
             <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg px-4 py-3 mb-8 text-left">
-              <div className="text-xs text-zinc-500 mb-1">Your referral link</div>
+              <div className="text-xs text-zinc-400 mb-1">Your referral link</div>
               <div className="font-mono text-sm text-zinc-300 break-all">
                 {typeof window !== "undefined" ? window.location.origin : ""}/api/affiliates/track?ref={success.referralCode}
               </div>
@@ -132,7 +132,7 @@ export default function AffiliateSignupPage() {
               Full Name
             </label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
               <input
                 id="name"
                 type="text"
@@ -150,7 +150,7 @@ export default function AffiliateSignupPage() {
               Email Address
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
               <input
                 id="email"
                 type="email"
@@ -168,7 +168,7 @@ export default function AffiliateSignupPage() {
               Company / Agency Name
             </label>
             <div className="relative">
-              <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
               <input
                 id="company"
                 type="text"
@@ -183,10 +183,10 @@ export default function AffiliateSignupPage() {
 
           <div>
             <label htmlFor="website" className="block text-sm font-medium text-zinc-300 mb-1.5">
-              Website <span className="text-zinc-600">(optional)</span>
+              Website <span className="text-zinc-400">(optional)</span>
             </label>
             <div className="relative">
-              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
               <input
                 id="website"
                 type="url"
@@ -203,7 +203,7 @@ export default function AffiliateSignupPage() {
               How will you promote TrueFans RADIO?
             </label>
             <div className="relative">
-              <Megaphone className="absolute left-3 top-3 w-4 h-4 text-zinc-500" />
+              <Megaphone className="absolute left-3 top-3 w-4 h-4 text-zinc-400" />
               <textarea
                 id="promotionMethod"
                 rows={3}
@@ -230,7 +230,7 @@ export default function AffiliateSignupPage() {
             )}
           </button>
 
-          <p className="text-center text-sm text-zinc-500">
+          <p className="text-center text-sm text-zinc-400">
             Already an affiliate?{" "}
             <a href="/affiliate" className="text-amber-500 hover:text-amber-400 font-medium">
               Access your dashboard

@@ -79,12 +79,12 @@ export function PWAInstallPrompt() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 text-sm">Install TrueFans RADIO</h3>
-                <p className="text-xs text-gray-500 dark:text-zinc-500">Listen anywhere, get notifications</p>
+                <p className="text-xs text-gray-600">Listen anywhere, get notifications</p>
               </div>
             </div>
             <button
               onClick={handleDismiss}
-              className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+              className="text-gray-600 hover:text-gray-800 transition-colors p-1"
               aria-label="Dismiss"
             >
               <X className="w-4 h-4" />
@@ -109,7 +109,7 @@ export function PWAInstallPrompt() {
               </h3>
               <button
                 onClick={handleDismiss}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-600 hover:text-gray-800 transition-colors"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />

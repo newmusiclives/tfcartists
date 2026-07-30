@@ -149,7 +149,7 @@ export default function ShoutoutsPage() {
               onChange={(e) => setName(e.target.value)}
               required
               placeholder="e.g., Sarah from Denver"
-              className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-yellow-500"
+              className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-yellow-500"
             />
           </div>
 
@@ -164,9 +164,9 @@ export default function ShoutoutsPage() {
               maxLength={500}
               rows={4}
               placeholder="e.g., Happy birthday to my buddy Mike! Play something upbeat for him!"
-              className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-yellow-500 resize-none"
+              className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-yellow-500 resize-none"
             />
-            <div className="text-xs text-zinc-600 text-right mt-1">
+            <div className="text-xs text-zinc-400 text-right mt-1">
               {message.length}/500
             </div>
           </div>
@@ -226,7 +226,7 @@ export default function ShoutoutsPage() {
                       {s.listenerName}
                     </span>
                     {s.djName && (
-                      <span className="text-xs text-zinc-500">
+                      <span className="text-xs text-zinc-400">
                         read by {s.djName}
                       </span>
                     )}

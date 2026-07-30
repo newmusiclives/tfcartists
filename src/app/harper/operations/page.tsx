@@ -67,7 +67,7 @@ export default function AdOperations() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
+                <Link href="/harper" className="text-gray-400 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
@@ -177,7 +177,7 @@ export default function AdOperations() {
               </div>
               <div className="divide-y">
                 {filteredAds.length === 0 ? (
-                  <p className="text-gray-500 text-center py-12">No ads match the selected filters</p>
+                  <p className="text-gray-400 text-center py-12">No ads match the selected filters</p>
                 ) : (
                   filteredAds.map((ad) => (
                     <div key={ad.id} className="p-4 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
@@ -196,25 +196,25 @@ export default function AdOperations() {
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ml-8">
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Duration</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Duration</p>
                               <p className="text-sm font-medium">{ad.durationSeconds ? `${ad.durationSeconds}s` : '—'}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Play Count</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Play Count</p>
                               <p className="text-sm font-medium text-blue-600">{ad.playCount}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Last Played</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Last Played</p>
                               <p className="text-sm font-medium">
                                 {ad.lastPlayedAt ? new Date(ad.lastPlayedAt).toLocaleString() : 'Never'}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Audio</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Audio</p>
                               <p className="text-sm font-medium">{ad.audioFilePath ? 'Ready' : 'Pending'}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Weight</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Weight</p>
                               <p className="text-sm font-medium">1x</p>
                             </div>
                           </div>

@@ -181,7 +181,7 @@ export default function MusicPage() {
                   }`}>
                     {track.category}
                   </span>
-                  <div className="text-sm text-gray-500 dark:text-zinc-500">{track.addedDate}</div>
+                  <div className="text-sm text-gray-400 dark:text-zinc-400">{track.addedDate}</div>
                 </div>
               </div>
             ))}
@@ -198,7 +198,7 @@ export default function MusicPage() {
                 <div key={idx}>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">{cat.name}</span>
-                    <span className="text-sm text-gray-500 dark:text-zinc-500">{cat.count} songs ({cat.pct}%)</span>
+                    <span className="text-sm text-gray-400 dark:text-zinc-400">{cat.count} songs ({cat.pct}%)</span>
                   </div>
                   <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-3 overflow-hidden">
                     <div className={`h-full rounded-full ${barColors[idx]} transition-all`} style={{ width: `${cat.pct}%` }} />

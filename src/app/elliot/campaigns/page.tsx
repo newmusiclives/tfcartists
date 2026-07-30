@@ -259,7 +259,7 @@ export default function GrowthCampaignsPage() {
                 <CampaignCard key={campaign.id} campaign={campaign} />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
                 No active campaigns. Launch your first campaign to get started.
               </div>
             )}
@@ -322,7 +322,7 @@ function MetricCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -346,7 +346,7 @@ function CampaignCard({ campaign }: { campaign: CampaignData }) {
               {config.label}
             </span>
           </div>
-          <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-zinc-500">
+          <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
             <span>{campaign.type}</span>
             <span>•</span>
             <span>Managed by {campaign.managedBy}</span>

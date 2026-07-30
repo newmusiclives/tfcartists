@@ -194,7 +194,7 @@ export default function WhiteLabelPage() {
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Custom Domain
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Use your own domain for your radio station
                 </p>
               </div>
@@ -234,19 +234,19 @@ export default function WhiteLabelPage() {
                   </p>
                   <div className="bg-white dark:bg-zinc-900 rounded-md p-3 font-mono text-sm border border-blue-100 flex items-center justify-between">
                     <div>
-                      <div className="text-gray-500 dark:text-zinc-500">
+                      <div className="text-gray-400 dark:text-zinc-400">
                         <span className="text-blue-600 font-semibold">
                           Type:
                         </span>{" "}
                         CNAME
                       </div>
-                      <div className="text-gray-500 dark:text-zinc-500">
+                      <div className="text-gray-400 dark:text-zinc-400">
                         <span className="text-blue-600 font-semibold">
                           Name:
                         </span>{" "}
                         {settings.customDomain}
                       </div>
-                      <div className="text-gray-500 dark:text-zinc-500">
+                      <div className="text-gray-400 dark:text-zinc-400">
                         <span className="text-blue-600 font-semibold">
                           Value:
                         </span>{" "}
@@ -303,7 +303,7 @@ export default function WhiteLabelPage() {
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Logo & Favicon
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Upload your brand assets
                 </p>
               </div>
@@ -372,7 +372,7 @@ export default function WhiteLabelPage() {
                         (e.target as HTMLImageElement).style.display = "none";
                       }}
                     />
-                    <span className="text-xs text-gray-500 dark:text-zinc-500">Preview</span>
+                    <span className="text-xs text-gray-400 dark:text-zinc-400">Preview</span>
                   </div>
                 )}
               </div>
@@ -389,7 +389,7 @@ export default function WhiteLabelPage() {
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Brand Colors
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Customize the color palette for your station
                 </p>
               </div>
@@ -497,7 +497,7 @@ export default function WhiteLabelPage() {
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   White-Label Mode
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-zinc-500">
+                <p className="text-sm text-gray-400 dark:text-zinc-400">
                   Control platform branding visibility
                 </p>
               </div>
@@ -510,7 +510,7 @@ export default function WhiteLabelPage() {
                   <p className="font-medium text-gray-900 dark:text-white">
                     Hide &quot;Powered by TrueFans&quot;
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">
                     When enabled, all TrueFans platform branding is removed from
                     your station
                   </p>

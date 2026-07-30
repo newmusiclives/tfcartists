@@ -137,7 +137,7 @@ export default async function SchedulePage() {
 
       {!hasData ? (
         <section className="max-w-4xl mx-auto px-4 py-16 text-center">
-          <p className="text-gray-500 text-lg">Schedule data is being set up. Check back soon!</p>
+          <p className="text-gray-400 text-lg">Schedule data is being set up. Check back soon!</p>
         </section>
       ) : (
         <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

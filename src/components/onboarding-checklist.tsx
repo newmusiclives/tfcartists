@@ -151,7 +151,7 @@ export function OnboardingChecklist({
           <Rocket className="w-5 h-5 text-amber-700" />
           <div>
             <h3 className="font-bold text-gray-900 dark:text-white">Getting Started</h3>
-            <p className="text-sm text-gray-500 dark:text-zinc-500">
+            <p className="text-sm text-gray-400 dark:text-zinc-400">
               {completedCount} of {steps.length} complete
             </p>
           </div>
@@ -210,7 +210,7 @@ export function OnboardingChecklist({
                 >
                   {step.title}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-zinc-500">{step.description}</p>
+                <p className="text-xs text-gray-400 dark:text-zinc-400">{step.description}</p>
               </div>
             </Link>
           ))}

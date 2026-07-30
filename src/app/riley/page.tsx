@@ -516,7 +516,7 @@ function MetricCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500">{subtitle}</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -552,10 +552,10 @@ function TierCard({
         <div className={`text-xs font-bold px-2 py-1 rounded ${colorClasses}`}>
           {tier}
         </div>
-        <div className="text-xs text-gray-500 dark:text-zinc-500">${price}/mo</div>
+        <div className="text-xs text-gray-400 dark:text-zinc-400">${price}/mo</div>
       </div>
       <div className="text-3xl font-bold mb-1">{count}</div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500 mb-3">of {capacity} capacity</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400 mb-3">of {capacity} capacity</div>
 
       <div className="space-y-1 text-xs text-gray-600 dark:text-zinc-400">
         <div>• {shares} {shares === 1 ? 'share' : 'shares'}</div>
@@ -568,7 +568,7 @@ function TierCard({
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1 text-center">{percentage.toFixed(0)}% filled</div>
+      <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1 text-center">{percentage.toFixed(0)}% filled</div>
     </div>
   );
 }
@@ -623,7 +623,7 @@ function SubmissionRow({
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-xs text-gray-500 dark:text-zinc-500">{tier} Tier</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">{tier} Tier</div>
           <div className="text-xs text-gray-400">{submittedAt}</div>
         </div>
         <div className={`px-3 py-1 rounded-full ${statusConfig.bg} ${statusConfig.text} flex items-center space-x-1`}>
@@ -662,9 +662,9 @@ function UpgradeOpportunityCard({
         </div>
         <div className="flex items-center space-x-3">
           <div className="text-center">
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Current</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Current</div>
             <div className="font-bold text-gray-700 dark:text-zinc-300">{currentTier}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">${currentPrice}/mo</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">${currentPrice}/mo</div>
           </div>
           <div className="text-gray-400">→</div>
           <div className="text-center">

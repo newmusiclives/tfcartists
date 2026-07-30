@@ -153,7 +153,7 @@ export default function InvoicesPage() {
 
         {loading ? (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : (
           <>
@@ -193,7 +193,7 @@ export default function InvoicesPage() {
                 <tbody className="divide-y divide-zinc-800">
                   {sponsors.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center text-zinc-500">
+                      <td colSpan={5} className="px-6 py-12 text-center text-zinc-400">
                         No active sponsors found.
                       </td>
                     </tr>

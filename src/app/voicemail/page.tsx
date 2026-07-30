@@ -286,7 +286,7 @@ export default function VoicemailPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Anonymous"
-                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-blue-500"
               />
             </div>
             <div>
@@ -298,7 +298,7 @@ export default function VoicemailPage() {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="What's this about? Song request, shoutout, feedback..."
                 rows={3}
-                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 resize-none"
+                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-blue-500 resize-none"
               />
             </div>
           </div>

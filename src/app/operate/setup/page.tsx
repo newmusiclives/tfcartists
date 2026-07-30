@@ -238,7 +238,7 @@ export default function OperatorSetupWizard() {
 
               {/* Preview */}
               <div className="border rounded-xl p-4">
-                <p className="text-xs text-gray-500 dark:text-zinc-500 mb-2">Preview</p>
+                <p className="text-xs text-gray-400 dark:text-zinc-400 mb-2">Preview</p>
                 <div className="rounded-lg overflow-hidden" style={{ background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})` }}>
                   <div className="p-6 text-white">
                     <p className="font-bold text-lg">{stationName || "Your Station Name"}</p>
@@ -252,7 +252,7 @@ export default function OperatorSetupWizard() {
                 <input type="text" value={customDomain} onChange={(e) => setCustomDomain(e.target.value)}
                   placeholder="e.g., radio.yourbrand.com"
                   className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" />
-                <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">
+                <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">
                   Point a CNAME record to truefans-radio.netlify.app. Configure in White Label settings after setup.
                 </p>
               </div>
@@ -275,7 +275,7 @@ export default function OperatorSetupWizard() {
                     }`}
                   >
                     <p className="font-semibold text-sm text-gray-900 dark:text-white">{f.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">{f.desc}</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{f.desc}</p>
                   </button>
                 ))}
               </div>
@@ -351,13 +351,13 @@ export default function OperatorSetupWizard() {
             <div className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="border rounded-lg p-4">
-                  <p className="text-xs text-gray-500 uppercase font-medium mb-2">Station</p>
+                  <p className="text-xs text-gray-400 uppercase font-medium mb-2">Station</p>
                   <p className="font-semibold">{stationName || "(not set)"}</p>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">{callSign} | {genre} | {timezone}</p>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">{tagline}</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">{callSign} | {genre} | {timezone}</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">{tagline}</p>
                 </div>
                 <div className="border rounded-lg p-4">
-                  <p className="text-xs text-gray-500 uppercase font-medium mb-2">Branding</p>
+                  <p className="text-xs text-gray-400 uppercase font-medium mb-2">Branding</p>
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded" style={{ backgroundColor: primaryColor }} />
                     <div className="w-6 h-6 rounded" style={{ backgroundColor: secondaryColor }} />
@@ -365,12 +365,12 @@ export default function OperatorSetupWizard() {
                   </div>
                 </div>
                 <div className="border rounded-lg p-4">
-                  <p className="text-xs text-gray-500 uppercase font-medium mb-2">Programming</p>
+                  <p className="text-xs text-gray-400 uppercase font-medium mb-2">Programming</p>
                   <p className="font-semibold text-sm">{FORMAT_TEMPLATES.find((f) => f.id === format)?.name}</p>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">{hoursPerDay}h/day, {djCount} AI DJs</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">{hoursPerDay}h/day, {djCount} AI DJs</p>
                 </div>
                 <div className="border rounded-lg p-4">
-                  <p className="text-xs text-gray-500 uppercase font-medium mb-2">Stream</p>
+                  <p className="text-xs text-gray-400 uppercase font-medium mb-2">Stream</p>
                   <p className="text-sm">{streamUrl ? `${streamUrl}:${streamPort}${mountPoint}` : "To be configured"}</p>
                 </div>
               </div>

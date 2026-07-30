@@ -255,14 +255,14 @@ export default function ShowReelPage() {
                   onChange={(e) => setStationName(e.target.value)}
                   placeholder="e.g. Nashville Nights Radio"
                   maxLength={100}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
                 />
               </div>
 
               {/* Tagline */}
               <div>
                 <label className="block text-sm font-medium text-zinc-300 mb-2">
-                  Tagline <span className="text-zinc-500 font-normal">(optional)</span>
+                  Tagline <span className="text-zinc-400 font-normal">(optional)</span>
                 </label>
                 <input
                   type="text"
@@ -270,7 +270,7 @@ export default function ShowReelPage() {
                   onChange={(e) => setTagline(e.target.value)}
                   placeholder="Auto-generated from genre if blank"
                   maxLength={100}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
                 />
               </div>
 
@@ -313,9 +313,9 @@ export default function ShowReelPage() {
                   onChange={(e) => setProspectName(e.target.value)}
                   placeholder="e.g. Sarah Mitchell"
                   maxLength={80}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
                 />
-                <p className="text-xs text-zinc-500 mt-1">Loretta Merrick will mention them by name using her cloned voice</p>
+                <p className="text-xs text-zinc-400 mt-1">Loretta Merrick will mention them by name using her cloned voice</p>
               </div>
 
               {/* Venue / Location */}
@@ -330,7 +330,7 @@ export default function ShowReelPage() {
                   onChange={(e) => setVenueName(e.target.value)}
                   placeholder="e.g. The Bluebird Cafe, Nashville"
                   maxLength={120}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-800/60 border border-zinc-700 text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
                 />
               </div>
 
@@ -372,7 +372,7 @@ export default function ShowReelPage() {
                           ? "text-green-400"
                           : i === loadingStep
                           ? "text-indigo-400"
-                          : "text-zinc-600"
+                          : "text-zinc-400"
                       }`}
                     >
                       {i < loadingStep ? (
@@ -450,7 +450,7 @@ export default function ShowReelPage() {
                           <div className="flex items-center gap-2 text-xs text-zinc-400">
                             <Clock className="w-3 h-3" />
                             <span>{seg.timeLabel}</span>
-                            <span className="text-zinc-600">|</span>
+                            <span className="text-zinc-400">|</span>
                             <span>{seg.slot}</span>
                           </div>
                         </div>
@@ -477,7 +477,7 @@ export default function ShowReelPage() {
 
                     {/* Script */}
                     <details className="mt-3 group">
-                      <summary className="text-xs text-zinc-500 cursor-pointer hover:text-zinc-300 transition-colors">
+                      <summary className="text-xs text-zinc-400 cursor-pointer hover:text-zinc-300 transition-colors">
                         View script
                       </summary>
                       <div className="mt-2 p-3 rounded-lg bg-zinc-800/40 border border-zinc-700/30 text-sm text-zinc-400 leading-relaxed italic">
@@ -498,7 +498,7 @@ export default function ShowReelPage() {
                 Ready to Launch This Station?
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <p className="text-xs text-zinc-500 mt-3">
+              <p className="text-xs text-zinc-400 mt-3">
                 Go live in 48 hours. Plans from $200/mo.
               </p>
             </div>
@@ -533,7 +533,7 @@ export default function ShowReelPage() {
                   {item.step}
                 </div>
                 <h3 className="font-semibold mb-1">{item.title}</h3>
-                <p className="text-xs text-zinc-500 mb-2">{item.time}</p>
+                <p className="text-xs text-zinc-400 mb-2">{item.time}</p>
                 <p className="text-sm text-zinc-400">{item.desc}</p>
               </div>
             ))}
@@ -543,7 +543,7 @@ export default function ShowReelPage() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-zinc-800/50 py-8 px-6">
-        <div className="max-w-4xl mx-auto flex items-center justify-between text-sm text-zinc-500">
+        <div className="max-w-4xl mx-auto flex items-center justify-between text-sm text-zinc-400">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4" />
             <span>TrueFans Radio</span>

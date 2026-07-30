@@ -276,15 +276,15 @@ export default function SponsorAdsPage() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800">
-            <p className="text-sm text-zinc-500">Total Ads</p>
+            <p className="text-sm text-zinc-400">Total Ads</p>
             <p className="text-2xl font-bold text-white">{ads.length}</p>
           </div>
           <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800">
-            <p className="text-sm text-zinc-500">Active</p>
+            <p className="text-sm text-zinc-400">Active</p>
             <p className="text-2xl font-bold text-green-500">{activeAds}</p>
           </div>
           <div className="bg-zinc-900/80 rounded-xl p-4 border border-zinc-800">
-            <p className="text-sm text-zinc-500">Total Plays</p>
+            <p className="text-sm text-zinc-400">Total Plays</p>
             <p className="text-2xl font-bold text-blue-500">{totalPlays}</p>
           </div>
         </div>
@@ -297,12 +297,12 @@ export default function SponsorAdsPage() {
                 {editingId ? "Edit Ad" : "New Sponsor Ad"}
               </h3>
               <button onClick={resetForm}>
-                <X className="w-5 h-5 text-zinc-500" />
+                <X className="w-5 h-5 text-zinc-400" />
               </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">
+                <label className="text-xs text-zinc-400 block mb-1">
                   Sponsor Name
                 </label>
                 <input
@@ -316,7 +316,7 @@ export default function SponsorAdsPage() {
                 />
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">
+                <label className="text-xs text-zinc-400 block mb-1">
                   Ad Title
                 </label>
                 <input
@@ -331,7 +331,7 @@ export default function SponsorAdsPage() {
               </div>
             </div>
             <div className="mb-4">
-              <label className="text-xs text-zinc-500 block mb-1">
+              <label className="text-xs text-zinc-400 block mb-1">
                 Script Text
               </label>
               <textarea
@@ -346,7 +346,7 @@ export default function SponsorAdsPage() {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">
+                <label className="text-xs text-zinc-400 block mb-1">
                   Music Bed
                 </label>
                 <select
@@ -365,7 +365,7 @@ export default function SponsorAdsPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">
+                <label className="text-xs text-zinc-400 block mb-1">
                   Duration (seconds)
                 </label>
                 <input
@@ -379,7 +379,7 @@ export default function SponsorAdsPage() {
                 />
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Tier</label>
+                <label className="text-xs text-zinc-400 block mb-1">Tier</label>
                 <select
                   value={form.tier}
                   onChange={(e) => setForm({ ...form, tier: e.target.value })}
@@ -393,7 +393,7 @@ export default function SponsorAdsPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">
+                <label className="text-xs text-zinc-400 block mb-1">
                   Weight
                 </label>
                 <input
@@ -438,13 +438,13 @@ export default function SponsorAdsPage() {
         {/* Ads list */}
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : ads.length === 0 ? (
           <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
-            <Megaphone className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-            <p className="text-zinc-500">No sponsor ads yet.</p>
-            <p className="text-sm text-zinc-500 mt-1">
+            <Megaphone className="w-12 h-12 text-zinc-400 mx-auto mb-3" />
+            <p className="text-zinc-400">No sponsor ads yet.</p>
+            <p className="text-sm text-zinc-400 mt-1">
               Create ads to start rotating them on air.
             </p>
           </div>
@@ -482,11 +482,11 @@ export default function SponsorAdsPage() {
                     </div>
                     <p className="text-sm text-zinc-400">{ad.sponsorName}</p>
                     {ad.scriptText && (
-                      <p className="text-sm text-zinc-500 mt-1 italic line-clamp-2">
+                      <p className="text-sm text-zinc-400 mt-1 italic line-clamp-2">
                         {ad.scriptText}
                       </p>
                     )}
-                    <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500">
+                    <div className="flex items-center gap-4 mt-2 text-xs text-zinc-400">
                       {ad.musicBed && (
                         <span className="flex items-center gap-1">
                           <Music className="w-3 h-3" />
@@ -546,7 +546,7 @@ export default function SponsorAdsPage() {
                       {ad.isActive ? (
                         <ToggleRight className="w-5 h-5 text-green-600" />
                       ) : (
-                        <ToggleLeft className="w-5 h-5 text-zinc-500" />
+                        <ToggleLeft className="w-5 h-5 text-zinc-400" />
                       )}
                     </button>
                     <button

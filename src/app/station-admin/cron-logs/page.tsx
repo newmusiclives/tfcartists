@@ -147,7 +147,7 @@ export default function CronLogsPage() {
               <Clock className="w-6 h-6 text-blue-600" />
               Cron Job Logs
             </h1>
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-gray-400 text-sm mt-1">
               {total} total executions logged
             </p>
           </div>
@@ -164,15 +164,15 @@ export default function CronLogsPage() {
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
             <div className="text-2xl font-bold text-green-600">{successCount}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Successful</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Successful</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
             <div className="text-2xl font-bold text-red-600">{errorCount}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Errors</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Errors</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
             <div className="text-2xl font-bold text-blue-600">{formatDuration(avgDuration)}</div>
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Avg Duration</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Avg Duration</div>
           </div>
         </div>
 
@@ -244,7 +244,7 @@ export default function CronLogsPage() {
         ) : logs.length === 0 ? (
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-12 border text-center">
             <Clock className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-zinc-500">No cron logs yet.</p>
+            <p className="text-gray-400 dark:text-zinc-400">No cron logs yet.</p>
             <p className="text-gray-400 text-sm mt-1">
               Logs will appear after the first cron job runs tonight at midnight MT.
             </p>
@@ -274,7 +274,7 @@ export default function CronLogsPage() {
                       <StatusBadge status={log.status} />
                     </td>
                     <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{formatDuration(log.duration)}</td>
-                    <td className="px-4 py-3 text-gray-500 dark:text-zinc-500">{formatTime(log.startedAt)}</td>
+                    <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">{formatTime(log.startedAt)}</td>
                   </tr>
                 ))}
               </tbody>

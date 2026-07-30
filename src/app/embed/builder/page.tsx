@@ -167,13 +167,13 @@ export default function WidgetBuilderPage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/station-admin"
-                className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                className="text-xs text-gray-400 hover:text-gray-300 transition-colors"
               >
                 Station Admin
               </Link>
               <Link
                 href="/embed"
-                className="text-xs text-gray-500 hover:text-gray-300 flex items-center gap-1 transition-colors"
+                className="text-xs text-gray-400 hover:text-gray-300 flex items-center gap-1 transition-colors"
               >
                 Simple Builder <ExternalLink className="w-3 h-3" />
               </Link>
@@ -253,8 +253,8 @@ export default function WidgetBuilderPage() {
                             : "border-gray-700 hover:border-gray-600"
                         }`}
                       >
-                        <div className="font-medium text-xs text-gray-200">{val.label} <span className="text-gray-500 dark:text-zinc-500">({val.width}x{val.height})</span></div>
-                        <div className="text-[11px] text-gray-500 dark:text-zinc-500 mt-0.5">{val.description}</div>
+                        <div className="font-medium text-xs text-gray-200">{val.label} <span className="text-gray-400 dark:text-zinc-400">({val.width}x{val.height})</span></div>
+                        <div className="text-[11px] text-gray-400 dark:text-zinc-400 mt-0.5">{val.description}</div>
                       </button>
                     ))}
                   </div>
@@ -366,7 +366,7 @@ export default function WidgetBuilderPage() {
                   <label className="flex items-center justify-between px-3 py-2.5 rounded-lg border border-gray-700 hover:border-gray-600 cursor-pointer transition-colors">
                     <div>
                       <span className="text-sm text-gray-300">Auto-play</span>
-                      <p className="text-[11px] text-gray-500 dark:text-zinc-500 mt-0.5">May be blocked by browsers</p>
+                      <p className="text-[11px] text-gray-400 dark:text-zinc-400 mt-0.5">May be blocked by browsers</p>
                     </div>
                     <button
                       onClick={() => setAutoplay(!autoplay)}
@@ -388,7 +388,7 @@ export default function WidgetBuilderPage() {
                   <label className="block text-xs font-semibold text-gray-300 mb-1 uppercase tracking-wide">
                     Referral Code
                   </label>
-                  <p className="text-[11px] text-gray-500 dark:text-zinc-500 mb-2">
+                  <p className="text-[11px] text-gray-400 dark:text-zinc-400 mb-2">
                     Earn rewards when listeners play through your embed
                   </p>
                   <input
@@ -408,7 +408,7 @@ export default function WidgetBuilderPage() {
                 {/* Custom CSS */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">Custom CSS Override</label>
-                  <p className="text-[11px] text-gray-500 dark:text-zinc-500 mb-2">
+                  <p className="text-[11px] text-gray-400 dark:text-zinc-400 mb-2">
                     Injected into the embed iframe. Use with caution.
                   </p>
                   <textarea
@@ -444,7 +444,7 @@ export default function WidgetBuilderPage() {
                     ))}
                   </div>
                   {platform === "javascript" && (
-                    <p className="text-[11px] text-gray-500 dark:text-zinc-500 mt-2">
+                    <p className="text-[11px] text-gray-400 dark:text-zinc-400 mt-2">
                       The JS widget auto-creates an iframe with your settings. Supports TrueFansRadio.init() API.
                     </p>
                   )}
@@ -458,7 +458,7 @@ export default function WidgetBuilderPage() {
             {/* Device preview selector */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-gray-500" />
+                <Eye className="w-4 h-4 text-gray-400" />
                 <span className="text-sm font-medium text-gray-400">Live Preview</span>
               </div>
               <div className="flex bg-gray-900 rounded-lg p-1 gap-1">
@@ -473,7 +473,7 @@ export default function WidgetBuilderPage() {
                     className={`p-2 rounded-md transition-all ${
                       previewDevice === key
                         ? "bg-gray-700 text-white"
-                        : "text-gray-500 hover:text-gray-300"
+                        : "text-gray-400 hover:text-gray-300"
                     }`}
                     title={key.charAt(0).toUpperCase() + key.slice(1)}
                   >
@@ -524,19 +524,19 @@ export default function WidgetBuilderPage() {
                     setCopied(true);
                     setTimeout(() => setCopied(false), 2000);
                   }}
-                  className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+                  className="text-xs text-gray-400 hover:text-gray-300 transition-colors"
                 >
                   Copy URL
                 </button>
               </div>
-              <p className="text-[11px] text-gray-500 font-mono break-all">{embedUrl}</p>
+              <p className="text-[11px] text-gray-400 font-mono break-all">{embedUrl}</p>
             </div>
 
             {/* Code output */}
             <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                 <div className="flex items-center gap-2">
-                  <Code className="w-4 h-4 text-gray-500" />
+                  <Code className="w-4 h-4 text-gray-400" />
                   <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
                     Embed Code ({platform === "javascript" ? "JS Widget" : platform.toUpperCase()})
                   </span>

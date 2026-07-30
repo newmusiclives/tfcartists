@@ -207,7 +207,7 @@ export default function MusicLibraryPage() {
                   <Star className={`w-3.5 h-3.5 ${featuredOnly ? "fill-white" : ""}`} />
                   Featured Only
                 </button>
-                <span className="text-xs text-gray-500 dark:text-zinc-500">
+                <span className="text-xs text-gray-400 dark:text-zinc-400">
                   {featuredCount}/{MAX_FEATURED} featured
                 </span>
               </>
@@ -251,7 +251,7 @@ export default function MusicLibraryPage() {
         ) : songs.length === 0 ? (
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-12 shadow-sm border text-center">
             <Music className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-zinc-500">No songs in the library yet.</p>
+            <p className="text-gray-400 dark:text-zinc-400">No songs in the library yet.</p>
             <Link href="/station-admin/music/import" className="text-green-600 text-sm hover:underline mt-2 inline-block">
               Import songs to get started
             </Link>
@@ -263,14 +263,14 @@ export default function MusicLibraryPage() {
                 <thead className="bg-gray-50 border-b">
                   <tr>
                     <th className="w-10 px-2 py-3"></th>
-                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Title</th>
-                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">Artist</th>
-                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Duration</th>
-                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Category</th>
-                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Vocal</th>
-                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">BPM</th>
-                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Cue</th>
-                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-500 uppercase">Plays</th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase">Title</th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-gray-400 uppercase">Artist</th>
+                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-400 uppercase">Duration</th>
+                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-400 uppercase">Category</th>
+                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-400 uppercase">Vocal</th>
+                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-400 uppercase">BPM</th>
+                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-400 uppercase">Cue</th>
+                    <th className="text-center px-4 py-3 text-xs font-medium text-gray-400 uppercase">Plays</th>
                     <th className="w-10 px-2 py-3"></th>
                   </tr>
                 </thead>
@@ -306,14 +306,14 @@ export default function MusicLibraryPage() {
                         {song.title}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-600 dark:text-zinc-400">{song.artistName}</td>
-                      <td className="px-4 py-3 text-sm text-gray-500 text-center">{formatDuration(song.duration)}</td>
+                      <td className="px-4 py-3 text-sm text-gray-400 text-center">{formatDuration(song.duration)}</td>
                       <td className="px-4 py-3 text-center">
                         <span className={`text-xs font-semibold px-2 py-0.5 rounded ${CATEGORY_BADGES[song.rotationCategory] || "bg-gray-100 text-gray-600"}`}>
                           {song.rotationCategory}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-500 text-center capitalize">{song.vocalGender}</td>
-                      <td className="px-4 py-3 text-sm text-gray-500 text-center">{song.bpm || "--"}</td>
+                      <td className="px-4 py-3 text-sm text-gray-400 text-center capitalize">{song.vocalGender}</td>
+                      <td className="px-4 py-3 text-sm text-gray-400 text-center">{song.bpm || "--"}</td>
                       <td className="px-4 py-3 text-center">
                         {(song.introEnd || song.outroStart || song.crossfadeStart || song.hookStart) ? (
                           <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 dark:text-amber-400">CUE</span>
@@ -321,7 +321,7 @@ export default function MusicLibraryPage() {
                           <span className="text-gray-300 text-xs">--</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-500 text-center">{song.playCount}</td>
+                      <td className="px-4 py-3 text-sm text-gray-400 text-center">{song.playCount}</td>
                       <td className="px-2 py-3 w-10">
                         <button
                           onClick={() => setEditing(song)}
@@ -390,7 +390,7 @@ export default function MusicLibraryPage() {
                 >
                   Last
                 </button>
-                <span className="ml-3 text-xs text-gray-500 dark:text-zinc-500">Page {page} of {totalPages}</span>
+                <span className="ml-3 text-xs text-gray-400 dark:text-zinc-400">Page {page} of {totalPages}</span>
               </div>
             )}
           </>
@@ -406,15 +406,15 @@ export default function MusicLibraryPage() {
               </div>
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs text-gray-500 dark:text-zinc-500">Title</label>
+                  <label className="text-xs text-gray-400 dark:text-zinc-400">Title</label>
                   <p className="text-sm font-medium">{editing.title}</p>
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500 dark:text-zinc-500">Artist</label>
+                  <label className="text-xs text-gray-400 dark:text-zinc-400">Artist</label>
                   <p className="text-sm">{editing.artistName}</p>
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Rotation Category</label>
+                  <label className="text-xs text-gray-400 block mb-1">Rotation Category</label>
                   <select
                     value={editing.rotationCategory}
                     onChange={(e) => setEditing({ ...editing, rotationCategory: e.target.value })}
@@ -440,7 +440,7 @@ export default function MusicLibraryPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Featured Track</h4>
-                        <p className="text-xs text-gray-500 dark:text-zinc-500">Featured tracks get 1-in-4 E rotation slots</p>
+                        <p className="text-xs text-gray-400 dark:text-zinc-400">Featured tracks get 1-in-4 E rotation slots</p>
                       </div>
                       <button
                         onClick={() => toggleFeatured(editing)}
@@ -462,40 +462,40 @@ export default function MusicLibraryPage() {
                   <h4 className="text-sm font-semibold text-gray-700 dark:text-zinc-300 mb-2">Cue Points (seconds)</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-gray-500 block mb-1">Intro End</label>
+                      <label className="text-xs text-gray-400 block mb-1">Intro End</label>
                       <input type="number" step="0.1" value={editing.introEnd ?? ""} onChange={(e) => setEditing({ ...editing, introEnd: e.target.value === "" ? null : parseFloat(e.target.value) })} className="w-full border rounded-lg px-3 py-1.5 text-sm" placeholder="--" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 block mb-1">Outro Start</label>
+                      <label className="text-xs text-gray-400 block mb-1">Outro Start</label>
                       <input type="number" step="0.1" value={editing.outroStart ?? ""} onChange={(e) => setEditing({ ...editing, outroStart: e.target.value === "" ? null : parseFloat(e.target.value) })} className="w-full border rounded-lg px-3 py-1.5 text-sm" placeholder="--" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 block mb-1">Crossfade Start</label>
+                      <label className="text-xs text-gray-400 block mb-1">Crossfade Start</label>
                       <input type="number" step="0.1" value={editing.crossfadeStart ?? ""} onChange={(e) => setEditing({ ...editing, crossfadeStart: e.target.value === "" ? null : parseFloat(e.target.value) })} className="w-full border rounded-lg px-3 py-1.5 text-sm" placeholder="--" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 block mb-1">Crossfade Duration</label>
+                      <label className="text-xs text-gray-400 block mb-1">Crossfade Duration</label>
                       <input type="number" step="0.1" value={editing.crossfadeDuration ?? ""} onChange={(e) => setEditing({ ...editing, crossfadeDuration: e.target.value === "" ? null : parseFloat(e.target.value) })} className="w-full border rounded-lg px-3 py-1.5 text-sm" placeholder="--" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 block mb-1">Mix In Point</label>
+                      <label className="text-xs text-gray-400 block mb-1">Mix In Point</label>
                       <input type="number" step="0.1" value={editing.mixInPoint ?? ""} onChange={(e) => setEditing({ ...editing, mixInPoint: e.target.value === "" ? null : parseFloat(e.target.value) })} className="w-full border rounded-lg px-3 py-1.5 text-sm" placeholder="--" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 block mb-1">Mix Out Point</label>
+                      <label className="text-xs text-gray-400 block mb-1">Mix Out Point</label>
                       <input type="number" step="0.1" value={editing.mixOutPoint ?? ""} onChange={(e) => setEditing({ ...editing, mixOutPoint: e.target.value === "" ? null : parseFloat(e.target.value) })} className="w-full border rounded-lg px-3 py-1.5 text-sm" placeholder="--" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 block mb-1">Hook Start</label>
+                      <label className="text-xs text-gray-400 block mb-1">Hook Start</label>
                       <input type="number" step="0.1" value={editing.hookStart ?? ""} onChange={(e) => setEditing({ ...editing, hookStart: e.target.value === "" ? null : parseFloat(e.target.value) })} className="w-full border rounded-lg px-3 py-1.5 text-sm" placeholder="--" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 block mb-1">Hook End</label>
+                      <label className="text-xs text-gray-400 block mb-1">Hook End</label>
                       <input type="number" step="0.1" value={editing.hookEnd ?? ""} onChange={(e) => setEditing({ ...editing, hookEnd: e.target.value === "" ? null : parseFloat(e.target.value) })} className="w-full border rounded-lg px-3 py-1.5 text-sm" placeholder="--" />
                     </div>
                   </div>
                   <div className="mt-3">
-                    <label className="text-xs text-gray-500 block mb-1">Cue Notes</label>
+                    <label className="text-xs text-gray-400 block mb-1">Cue Notes</label>
                     <textarea value={editing.cueNotes || ""} onChange={(e) => setEditing({ ...editing, cueNotes: e.target.value || null })} rows={2} className="w-full border rounded-lg px-3 py-1.5 text-sm" placeholder="Notes about cue points..." />
                   </div>
                 </div>

@@ -170,7 +170,7 @@ export default function LicensingDashboard() {
               <Scale className="w-6 h-6 text-emerald-500" />
               Music Licensing
             </h1>
-            <p className="text-zinc-500 text-sm mt-1">
+            <p className="text-zinc-400 text-sm mt-1">
               Royalty tracking and PRO reporting
             </p>
           </div>
@@ -189,7 +189,7 @@ export default function LicensingDashboard() {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
             </div>
 
             <button
@@ -215,7 +215,7 @@ export default function LicensingDashboard() {
 
         {loading && !data ? (
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-12 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : (
           <div className="space-y-6">
@@ -286,8 +286,8 @@ export default function LicensingDashboard() {
                     <div className="overflow-x-auto">
                       {songs.length === 0 ? (
                         <div className="p-12 text-center">
-                          <Music className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-                          <p className="text-zinc-500">
+                          <Music className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
+                          <p className="text-zinc-400">
                             No play data for this period.
                           </p>
                         </div>
@@ -295,22 +295,22 @@ export default function LicensingDashboard() {
                         <table className="w-full text-sm">
                           <thead className="bg-zinc-900/80 border-b border-zinc-800">
                             <tr>
-                              <th className="text-left px-4 py-2.5 font-medium text-zinc-500 w-12">
+                              <th className="text-left px-4 py-2.5 font-medium text-zinc-400 w-12">
                                 #
                               </th>
-                              <th className="text-left px-4 py-2.5 font-medium text-zinc-500">
+                              <th className="text-left px-4 py-2.5 font-medium text-zinc-400">
                                 Title
                               </th>
-                              <th className="text-left px-4 py-2.5 font-medium text-zinc-500">
+                              <th className="text-left px-4 py-2.5 font-medium text-zinc-400">
                                 Artist
                               </th>
-                              <th className="text-left px-4 py-2.5 font-medium text-zinc-500">
+                              <th className="text-left px-4 py-2.5 font-medium text-zinc-400">
                                 Album
                               </th>
-                              <th className="text-right px-4 py-2.5 font-medium text-zinc-500 w-20">
+                              <th className="text-right px-4 py-2.5 font-medium text-zinc-400 w-20">
                                 Plays
                               </th>
-                              <th className="text-right px-4 py-2.5 font-medium text-zinc-500 w-28">
+                              <th className="text-right px-4 py-2.5 font-medium text-zinc-400 w-28">
                                 Est. Royalty
                               </th>
                             </tr>
@@ -321,7 +321,7 @@ export default function LicensingDashboard() {
                                 key={`${song.title}-${song.artist}`}
                                 className="text-zinc-100 hover:bg-zinc-800/40 transition-colors"
                               >
-                                <td className="px-4 py-2.5 text-zinc-500 font-mono text-xs">
+                                <td className="px-4 py-2.5 text-zinc-400 font-mono text-xs">
                                   {i + 1}
                                 </td>
                                 <td className="px-4 py-2.5 font-medium truncate max-w-[200px]">
@@ -330,7 +330,7 @@ export default function LicensingDashboard() {
                                 <td className="px-4 py-2.5 text-zinc-400 truncate max-w-[160px]">
                                   {song.artist}
                                 </td>
-                                <td className="px-4 py-2.5 text-zinc-500 truncate max-w-[140px]">
+                                <td className="px-4 py-2.5 text-zinc-400 truncate max-w-[140px]">
                                   {song.album || "-"}
                                 </td>
                                 <td className="px-4 py-2.5 text-right font-mono text-zinc-300">
@@ -345,7 +345,7 @@ export default function LicensingDashboard() {
                         </table>
                       )}
                       {songs.length > 50 && (
-                        <div className="px-4 py-3 border-t border-zinc-800 text-xs text-zinc-500 text-center">
+                        <div className="px-4 py-3 border-t border-zinc-800 text-xs text-zinc-400 text-center">
                           Showing top 50 of {songs.length} songs. Export CSV for
                           full list.
                         </div>
@@ -355,8 +355,8 @@ export default function LicensingDashboard() {
                     <div className="overflow-x-auto">
                       {artists.length === 0 ? (
                         <div className="p-12 text-center">
-                          <Users className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-                          <p className="text-zinc-500">
+                          <Users className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
+                          <p className="text-zinc-400">
                             No play data for this period.
                           </p>
                         </div>
@@ -364,19 +364,19 @@ export default function LicensingDashboard() {
                         <table className="w-full text-sm">
                           <thead className="bg-zinc-900/80 border-b border-zinc-800">
                             <tr>
-                              <th className="text-left px-4 py-2.5 font-medium text-zinc-500 w-12">
+                              <th className="text-left px-4 py-2.5 font-medium text-zinc-400 w-12">
                                 #
                               </th>
-                              <th className="text-left px-4 py-2.5 font-medium text-zinc-500">
+                              <th className="text-left px-4 py-2.5 font-medium text-zinc-400">
                                 Artist
                               </th>
-                              <th className="text-right px-4 py-2.5 font-medium text-zinc-500 w-24">
+                              <th className="text-right px-4 py-2.5 font-medium text-zinc-400 w-24">
                                 Plays
                               </th>
-                              <th className="text-right px-4 py-2.5 font-medium text-zinc-500 w-28">
+                              <th className="text-right px-4 py-2.5 font-medium text-zinc-400 w-28">
                                 Total Time
                               </th>
-                              <th className="text-right px-4 py-2.5 font-medium text-zinc-500 w-28">
+                              <th className="text-right px-4 py-2.5 font-medium text-zinc-400 w-28">
                                 Est. Royalty
                               </th>
                             </tr>
@@ -387,7 +387,7 @@ export default function LicensingDashboard() {
                                 key={artist.artist}
                                 className="text-zinc-100 hover:bg-zinc-800/40 transition-colors"
                               >
-                                <td className="px-4 py-2.5 text-zinc-500 font-mono text-xs">
+                                <td className="px-4 py-2.5 text-zinc-400 font-mono text-xs">
                                   {i + 1}
                                 </td>
                                 <td className="px-4 py-2.5 font-medium">
@@ -408,7 +408,7 @@ export default function LicensingDashboard() {
                         </table>
                       )}
                       {artists.length > 50 && (
-                        <div className="px-4 py-3 border-t border-zinc-800 text-xs text-zinc-500 text-center">
+                        <div className="px-4 py-3 border-t border-zinc-800 text-xs text-zinc-400 text-center">
                           Showing top 50 of {artists.length} artists. Export CSV
                           for full list.
                         </div>
@@ -423,10 +423,10 @@ export default function LicensingDashboard() {
                 {/* PRO Filing Section */}
                 <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
                   <h3 className="text-sm font-semibold text-zinc-300 flex items-center gap-2 mb-4">
-                    <FileSpreadsheet className="w-4 h-4 text-zinc-500" />
+                    <FileSpreadsheet className="w-4 h-4 text-zinc-400" />
                     PRO Report Filing
                   </h3>
-                  <p className="text-xs text-zinc-500 mb-4">
+                  <p className="text-xs text-zinc-400 mb-4">
                     Generate pre-formatted reports for Performance Rights
                     Organizations.
                   </p>
@@ -447,12 +447,12 @@ export default function LicensingDashboard() {
                             href={pro.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-zinc-500 hover:text-zinc-300 transition-colors"
+                            className="text-zinc-400 hover:text-zinc-300 transition-colors"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </a>
                         </div>
-                        <p className="text-xs text-zinc-500 mb-2">
+                        <p className="text-xs text-zinc-400 mb-2">
                           {pro.description}
                         </p>
                         <button
@@ -472,7 +472,7 @@ export default function LicensingDashboard() {
                   <h3 className="text-sm font-semibold text-zinc-300 mb-3">
                     Period Info
                   </h3>
-                  <div className="text-xs text-zinc-500 space-y-2">
+                  <div className="text-xs text-zinc-400 space-y-2">
                     <div className="flex justify-between">
                       <span>Period</span>
                       <span className="text-zinc-300">
@@ -517,7 +517,7 @@ export default function LicensingDashboard() {
                   <h3 className="text-sm font-semibold text-zinc-300 mb-3">
                     Licensing Notes
                   </h3>
-                  <div className="text-xs text-zinc-500 space-y-2">
+                  <div className="text-xs text-zinc-400 space-y-2">
                     <p>
                       Estimated royalties use $0.003/play, the industry
                       average for streaming radio. Actual rates vary by PRO
@@ -564,7 +564,7 @@ function SummaryCard({
     >
       <div className="flex items-center gap-2 mb-2">{icon}</div>
       <p className="text-2xl font-bold text-zinc-100">{value}</p>
-      <p className="text-xs text-zinc-500 mt-0.5">{label}</p>
+      <p className="text-xs text-zinc-400 mt-0.5">{label}</p>
     </div>
   );
 }

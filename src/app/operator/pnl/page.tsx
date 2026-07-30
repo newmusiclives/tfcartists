@@ -259,7 +259,7 @@ export default function OperatorPnlPage() {
             <div className="text-2xl font-bold text-emerald-400">
               {formatCurrency(summary.monthlyRevenue)}
             </div>
-            <div className="text-xs text-zinc-500 mt-1">
+            <div className="text-xs text-zinc-400 mt-1">
               {formatCurrency(summary.monthlyRevenue * 12)}/year projected
             </div>
           </div>
@@ -273,7 +273,7 @@ export default function OperatorPnlPage() {
             <div className="text-2xl font-bold text-red-400">
               {formatCurrency(summary.monthlyCosts)}
             </div>
-            <div className="text-xs text-zinc-500 mt-1">
+            <div className="text-xs text-zinc-400 mt-1">
               {formatCurrency(summary.monthlyCosts * 12)}/year projected
             </div>
           </div>
@@ -295,7 +295,7 @@ export default function OperatorPnlPage() {
             >
               {formatCurrency(summary.netProfit)}
             </div>
-            <div className="text-xs text-zinc-500 mt-1">
+            <div className="text-xs text-zinc-400 mt-1">
               {formatCurrency(summary.netProfit * 12)}/year projected
             </div>
           </div>
@@ -313,7 +313,7 @@ export default function OperatorPnlPage() {
             >
               {summary.netMarginPct.toFixed(1)}%
             </div>
-            <div className="text-xs text-zinc-500 mt-1">
+            <div className="text-xs text-zinc-400 mt-1">
               Gross: {summary.grossMarginPct.toFixed(1)}%
             </div>
           </div>
@@ -347,7 +347,7 @@ export default function OperatorPnlPage() {
                     style={{ width: `${sponsorPct}%` }}
                   />
                 </div>
-                <div className="text-xs text-zinc-500 mt-1">
+                <div className="text-xs text-zinc-400 mt-1">
                   {sponsorPct.toFixed(1)}% of revenue
                 </div>
               </div>
@@ -371,7 +371,7 @@ export default function OperatorPnlPage() {
                     style={{ width: `${artistPct}%` }}
                   />
                 </div>
-                <div className="text-xs text-zinc-500 mt-1">
+                <div className="text-xs text-zinc-400 mt-1">
                   {artistPct.toFixed(1)}% of revenue
                 </div>
               </div>
@@ -416,7 +416,7 @@ export default function OperatorPnlPage() {
                     style={{ width: `${aiPct}%` }}
                   />
                 </div>
-                <div className="text-xs text-zinc-500 mt-1">
+                <div className="text-xs text-zinc-400 mt-1">
                   {aiPct.toFixed(1)}% of costs
                 </div>
               </div>
@@ -438,7 +438,7 @@ export default function OperatorPnlPage() {
                     style={{ width: `${hostingPct}%` }}
                   />
                 </div>
-                <div className="text-xs text-zinc-500 mt-1">
+                <div className="text-xs text-zinc-400 mt-1">
                   {hostingPct.toFixed(1)}% of costs
                 </div>
               </div>
@@ -460,7 +460,7 @@ export default function OperatorPnlPage() {
                     style={{ width: `${streamingPct}%` }}
                   />
                 </div>
-                <div className="text-xs text-zinc-500 mt-1">
+                <div className="text-xs text-zinc-400 mt-1">
                   {streamingPct.toFixed(1)}% of costs
                 </div>
               </div>
@@ -514,7 +514,7 @@ export default function OperatorPnlPage() {
                         />
                       </div>
                     </div>
-                    <span className="text-xs text-zinc-500 mt-1">
+                    <span className="text-xs text-zinc-400 mt-1">
                       {monthLabel(m.month)}
                     </span>
                   </div>
@@ -765,7 +765,7 @@ export default function OperatorPnlPage() {
               >
                 {formatCurrency(summary.netProfit)}/mo
               </div>
-              <div className="text-sm text-zinc-500 mt-1">
+              <div className="text-sm text-zinc-400 mt-1">
                 {formatCurrency(summary.netProfit * 12)}/year at current rate
               </div>
             </div>

@@ -295,7 +295,7 @@ export default function SongRequestPage() {
               Search our library
             </label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
               <input
                 type="text"
                 value={searchQuery}
@@ -304,7 +304,7 @@ export default function SongRequestPage() {
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg pl-10 pr-4 py-2.5 text-sm placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               />
               {searching && (
-                <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 animate-spin" />
+                <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 animate-spin" />
               )}
             </div>
 
@@ -331,7 +331,7 @@ export default function SongRequestPage() {
           {/* Divider */}
           <div className="flex items-center gap-3 mb-4">
             <div className="flex-1 h-px bg-zinc-800" />
-            <span className="text-xs text-zinc-500 uppercase tracking-wider">
+            <span className="text-xs text-zinc-400 uppercase tracking-wider">
               or enter manually
             </span>
             <div className="flex-1 h-px bg-zinc-800" />
@@ -411,7 +411,7 @@ export default function SongRequestPage() {
           <button
             type="submit"
             disabled={submitting || !songTitle.trim() || !artistName.trim()}
-            className="w-full bg-violet-600 hover:bg-violet-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-violet-600 hover:bg-violet-500 disabled:bg-zinc-700 disabled:text-zinc-400 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>
@@ -448,12 +448,12 @@ export default function SongRequestPage() {
           </h2>
 
           {loadingQueue ? (
-            <div className="flex items-center justify-center py-12 text-zinc-500">
+            <div className="flex items-center justify-center py-12 text-zinc-400">
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
               Loading requests...
             </div>
           ) : requests.length === 0 ? (
-            <div className="text-center py-12 text-zinc-500">
+            <div className="text-center py-12 text-zinc-400">
               <Music className="w-10 h-10 mx-auto mb-3 opacity-40" />
               <p>No requests yet. Be the first!</p>
             </div>
@@ -480,7 +480,7 @@ export default function SongRequestPage() {
                       className={`flex flex-col items-center min-w-[48px] pt-0.5 transition-colors ${
                         hasVoted
                           ? "text-violet-400"
-                          : "text-zinc-500 hover:text-violet-400"
+                          : "text-zinc-400 hover:text-violet-400"
                       } disabled:cursor-default`}
                       title={hasVoted ? "Already voted" : "Upvote this request"}
                     >
@@ -522,7 +522,7 @@ export default function SongRequestPage() {
                       </div>
 
                       {/* Meta line */}
-                      <div className="flex items-center gap-2 mt-1.5 text-xs text-zinc-500">
+                      <div className="flex items-center gap-2 mt-1.5 text-xs text-zinc-400">
                         {req.listenerName && (
                           <span className="flex items-center gap-1">
                             <User className="w-3 h-3" />

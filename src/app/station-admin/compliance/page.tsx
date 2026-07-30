@@ -302,7 +302,7 @@ export default function ComplianceDashboard() {
               <FileText className="w-6 h-6 text-emerald-500" />
               FCC Compliance Log
             </h1>
-            <p className="text-zinc-500 text-sm mt-1">
+            <p className="text-zinc-400 text-sm mt-1">
               Program log and broadcast records
             </p>
           </div>
@@ -310,7 +310,7 @@ export default function ComplianceDashboard() {
           <div className="flex items-center gap-3">
             {/* Date Picker */}
             <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2">
-              <Calendar className="w-4 h-4 text-zinc-500" />
+              <Calendar className="w-4 h-4 text-zinc-400" />
               <input
                 type="date"
                 value={date}
@@ -334,7 +334,7 @@ export default function ComplianceDashboard() {
 
         {loading && !data ? (
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-12 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -389,7 +389,7 @@ export default function ComplianceDashboard() {
                   <h2 className="text-sm font-semibold text-zinc-300">
                     Program Log - {date}
                   </h2>
-                  <div className="flex items-center gap-3 text-xs text-zinc-500">
+                  <div className="flex items-center gap-3 text-xs text-zinc-400">
                     <span className="flex items-center gap-1">
                       <span className="w-2 h-2 rounded-full bg-zinc-400" />
                       Song
@@ -411,11 +411,11 @@ export default function ComplianceDashboard() {
 
                 {entries.length === 0 ? (
                   <div className="p-12 text-center">
-                    <FileText className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-                    <p className="text-zinc-500">
+                    <FileText className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
+                    <p className="text-zinc-400">
                       No log entries for this date.
                     </p>
-                    <p className="text-zinc-600 text-sm mt-1">
+                    <p className="text-zinc-400 text-sm mt-1">
                       Select a date with broadcast activity.
                     </p>
                   </div>
@@ -424,22 +424,22 @@ export default function ComplianceDashboard() {
                     <table className="w-full text-sm">
                       <thead className="bg-zinc-900/80 border-b border-zinc-800">
                         <tr>
-                          <th className="text-left px-4 py-2.5 font-medium text-zinc-500 w-44">
+                          <th className="text-left px-4 py-2.5 font-medium text-zinc-400 w-44">
                             Time
                           </th>
-                          <th className="text-left px-4 py-2.5 font-medium text-zinc-500 w-28">
+                          <th className="text-left px-4 py-2.5 font-medium text-zinc-400 w-28">
                             Type
                           </th>
-                          <th className="text-left px-4 py-2.5 font-medium text-zinc-500">
+                          <th className="text-left px-4 py-2.5 font-medium text-zinc-400">
                             Title / Description
                           </th>
-                          <th className="text-left px-4 py-2.5 font-medium text-zinc-500">
+                          <th className="text-left px-4 py-2.5 font-medium text-zinc-400">
                             Artist
                           </th>
-                          <th className="text-left px-4 py-2.5 font-medium text-zinc-500 w-20">
+                          <th className="text-left px-4 py-2.5 font-medium text-zinc-400 w-20">
                             Duration
                           </th>
-                          <th className="text-left px-4 py-2.5 font-medium text-zinc-500 w-32">
+                          <th className="text-left px-4 py-2.5 font-medium text-zinc-400 w-32">
                             DJ
                           </th>
                         </tr>
@@ -484,20 +484,20 @@ export default function ComplianceDashboard() {
                 <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
                   <div className="px-5 py-3 border-b border-zinc-800 flex items-center justify-between">
                     <h2 className="text-sm font-semibold text-zinc-300 flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-zinc-500" />
+                      <Clock className="w-4 h-4 text-zinc-400" />
                       Hour-by-Hour Breakdown
                     </h2>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={expandAll}
-                        className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                        className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
                       >
                         Expand All
                       </button>
-                      <span className="text-zinc-700">|</span>
+                      <span className="text-zinc-400">|</span>
                       <button
                         onClick={collapseAll}
-                        className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                        className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
                       >
                         Collapse All
                       </button>
@@ -523,15 +523,15 @@ export default function ComplianceDashboard() {
                           >
                             <div className="flex items-center gap-3">
                               {isExpanded ? (
-                                <ChevronDown className="w-4 h-4 text-zinc-500" />
+                                <ChevronDown className="w-4 h-4 text-zinc-400" />
                               ) : (
-                                <ChevronRight className="w-4 h-4 text-zinc-500" />
+                                <ChevronRight className="w-4 h-4 text-zinc-400" />
                               )}
                               <span className="text-sm font-medium text-zinc-200">
                                 {formatHourLabel(hour)}
                               </span>
                             </div>
-                            <div className="flex items-center gap-4 text-xs text-zinc-500">
+                            <div className="flex items-center gap-4 text-xs text-zinc-400">
                               <span>{hourEntries.length} items</span>
                               <span>{hourSongs} songs</span>
                               {hourAds > 0 && (
@@ -563,13 +563,13 @@ export default function ComplianceDashboard() {
                                       <td className="px-3 py-1.5 font-medium truncate max-w-xs">
                                         {entry.title}
                                       </td>
-                                      <td className="px-3 py-1.5 text-zinc-500 truncate max-w-[140px]">
+                                      <td className="px-3 py-1.5 text-zinc-400 truncate max-w-[140px]">
                                         {entry.artist || "-"}
                                       </td>
-                                      <td className="px-3 py-1.5 font-mono text-zinc-500 w-16">
+                                      <td className="px-3 py-1.5 font-mono text-zinc-400 w-16">
                                         {formatDuration(entry.duration)}
                                       </td>
-                                      <td className="px-3 py-1.5 text-zinc-500 w-28">
+                                      <td className="px-3 py-1.5 text-zinc-400 w-28">
                                         {entry.djOnDuty}
                                       </td>
                                     </tr>
@@ -590,7 +590,7 @@ export default function ComplianceDashboard() {
             <div className="space-y-4">
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
                 <h3 className="text-sm font-semibold text-zinc-300 flex items-center gap-2 mb-4">
-                  <BarChart3 className="w-4 h-4 text-zinc-500" />
+                  <BarChart3 className="w-4 h-4 text-zinc-400" />
                   Daily Summary
                 </h3>
 
@@ -628,7 +628,7 @@ export default function ComplianceDashboard() {
                 <h3 className="text-sm font-semibold text-zinc-300 mb-3">
                   Log Info
                 </h3>
-                <div className="text-xs text-zinc-500 space-y-2">
+                <div className="text-xs text-zinc-400 space-y-2">
                   <div className="flex justify-between">
                     <span>Date</span>
                     <span className="text-zinc-300">{date}</span>

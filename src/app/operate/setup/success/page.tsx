@@ -24,7 +24,7 @@ export default function SetupSuccessPage() {
             <Music className="w-8 h-8 text-amber-600 flex-shrink-0" />
             <div>
               <p className="font-semibold text-gray-900 dark:text-white">Upload Music</p>
-              <p className="text-sm text-gray-500 dark:text-zinc-500">Add tracks to your station library</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">Add tracks to your station library</p>
             </div>
             <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
           </Link>
@@ -36,7 +36,7 @@ export default function SetupSuccessPage() {
             <Mic className="w-8 h-8 text-purple-600 flex-shrink-0" />
             <div>
               <p className="font-semibold text-gray-900 dark:text-white">Customize DJs</p>
-              <p className="text-sm text-gray-500 dark:text-zinc-500">Edit AI DJ personalities and voices</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">Edit AI DJ personalities and voices</p>
             </div>
             <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
           </Link>
@@ -48,7 +48,7 @@ export default function SetupSuccessPage() {
             <Radio className="w-8 h-8 text-blue-600 flex-shrink-0" />
             <div>
               <p className="font-semibold text-gray-900 dark:text-white">Set Schedule</p>
-              <p className="text-sm text-gray-500 dark:text-zinc-500">Configure show times and rotations</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">Configure show times and rotations</p>
             </div>
             <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
           </Link>
@@ -60,7 +60,7 @@ export default function SetupSuccessPage() {
             <Settings className="w-8 h-8 text-gray-600 flex-shrink-0" />
             <div>
               <p className="font-semibold text-gray-900 dark:text-white">Admin Settings</p>
-              <p className="text-sm text-gray-500 dark:text-zinc-500">Configure stream, payments, API keys</p>
+              <p className="text-sm text-gray-400 dark:text-zinc-400">Configure stream, payments, API keys</p>
             </div>
             <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
           </Link>

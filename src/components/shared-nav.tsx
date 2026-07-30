@@ -248,7 +248,7 @@ export function SharedNav() {
                 {openMenu === "station" && (
                   <div className="absolute left-0 mt-1 w-72 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-200 dark:border-zinc-800 py-2 z-50">
                     {/* Station Info section */}
-                    <div className="px-3 py-1.5 text-xs font-bold text-gray-500 dark:text-zinc-500 uppercase tracking-wider">Station Info</div>
+                    <div className="px-3 py-1.5 text-xs font-bold text-gray-400 dark:text-zinc-400 uppercase tracking-wider">Station Info</div>
                     <Link href="/revenue/projections" className="block px-4 py-2 text-sm font-semibold bg-gradient-to-r from-green-50 to-blue-50 text-green-700 hover:from-green-100 hover:to-blue-100 flex items-center space-x-2">
                       <Target className="w-4 h-4" />
                       <span>Revenue Model</span>
@@ -331,21 +331,21 @@ export function SharedNav() {
                       <Users className="w-4 h-4 text-orange-600" />
                       <div>
                         <div className="font-semibold">For Artists</div>
-                        <div className="text-xs text-gray-500 dark:text-zinc-500">Artist Referrals - Earn $30-100/mo</div>
+                        <div className="text-xs text-gray-400 dark:text-zinc-400">Artist Referrals - Earn $30-100/mo</div>
                       </div>
                     </Link>
                     <Link href="/opportunities/listeners" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 flex items-center space-x-2">
                       <Radio className="w-4 h-4 text-blue-600" />
                       <div>
                         <div className="font-semibold">For Listeners</div>
-                        <div className="text-xs text-gray-500 dark:text-zinc-500">Listener Promotions - Earn $44+/mo</div>
+                        <div className="text-xs text-gray-400 dark:text-zinc-400">Listener Promotions - Earn $44+/mo</div>
                       </div>
                     </Link>
                     <Link href="/opportunities/sponsors" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 flex items-center space-x-2">
                       <Building2 className="w-4 h-4 text-purple-600" />
                       <div>
                         <div className="font-semibold">For Sponsors</div>
-                        <div className="text-xs text-gray-500 dark:text-zinc-500">Referral Bonuses - Earn $50-250</div>
+                        <div className="text-xs text-gray-400 dark:text-zinc-400">Referral Bonuses - Earn $50-250</div>
                       </div>
                     </Link>
                   </div>

@@ -133,17 +133,17 @@ export default function PoolCalculatorPage() {
             <div className="bg-purple-50 rounded-lg p-4">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Pool (80%)</div>
               <div className="text-3xl font-bold text-purple-600">${artistPoolAmount.toLocaleString()}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Distributed to artists</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Distributed to artists</div>
             </div>
             <div className="bg-green-50 rounded-lg p-4">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Station Revenue (20%)</div>
               <div className="text-3xl font-bold text-green-600">${(harperRevenue * 0.20).toLocaleString()}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Station operations</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Station operations</div>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Per Share Value</div>
               <div className="text-3xl font-bold text-gray-900 dark:text-white">${perShareValue.toFixed(4)}</div>
-              <div className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Based on {totalShares.toLocaleString()} shares</div>
+              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Based on {totalShares.toLocaleString()} shares</div>
             </div>
           </div>
         </div>
@@ -290,7 +290,7 @@ export default function PoolCalculatorPage() {
               <span className="text-gray-900 dark:text-white">TOTAL DISTRIBUTED:</span>
               <span className="text-green-600">${artistPoolAmount.toLocaleString()}</span>
             </div>
-            <div className="text-xs text-gray-500 text-center mt-2">
+            <div className="text-xs text-gray-400 text-center mt-2">
               ✓ Verification: All pool funds accounted for
             </div>
           </div>
@@ -350,7 +350,7 @@ function TierRow({
       <div className="grid grid-cols-5 gap-4 items-center">
         <div>
           <div className="font-bold text-gray-900 dark:text-white">{tier}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">{shares} share{shares !== 1 && 's'}</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">{shares} share{shares !== 1 && 's'}</div>
         </div>
         <div className="text-center">
           <div className="text-sm text-gray-600 dark:text-zinc-400">Artists</div>
@@ -410,21 +410,21 @@ function EarningsCard({
         </div>
         <div className="flex items-center space-x-6">
           <div className="text-right">
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Monthly Pool Share</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Monthly Pool Share</div>
             <div className="text-lg font-bold text-green-600">${perMonth.toFixed(2)}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Subscription Cost</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Subscription Cost</div>
             <div className="text-lg font-bold text-gray-900 dark:text-white">${subscription.toFixed(2)}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Net Monthly</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Net Monthly</div>
             <div className={`text-lg font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
               {isProfit ? '+' : ''}${netMonthly.toFixed(2)}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500 dark:text-zinc-500">Net Yearly</div>
+            <div className="text-xs text-gray-400 dark:text-zinc-400">Net Yearly</div>
             <div className={`text-lg font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
               {isProfit ? '+' : ''}${netYearly.toFixed(2)}
             </div>

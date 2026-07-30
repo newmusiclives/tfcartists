@@ -31,7 +31,7 @@ export default function NativeAppGuidePage() {
         <h1 className="mt-8 text-4xl font-bold text-amber-900">
           Native App Setup
         </h1>
-        <p className="mt-2 text-gray-500 text-sm">
+        <p className="mt-2 text-gray-400 text-sm">
           Wrap the TrueFans RADIO PWA as an iOS &amp; Android app with
           Capacitor.
         </p>
@@ -81,7 +81,7 @@ export default function NativeAppGuidePage() {
               2. Initialise Capacitor (already done &mdash; config checked in)
             </h3>
             <CodeBlock>{`npx cap init "TrueFans RADIO" com.truefans.radio --web-dir out`}</CodeBlock>
-            <p className="mt-2 text-sm text-gray-500 dark:text-zinc-500">
+            <p className="mt-2 text-sm text-gray-400 dark:text-zinc-400">
               Skip this step &mdash; <code>capacitor.config.ts</code> is already
               in the repo.
             </p>
@@ -95,7 +95,7 @@ export default function NativeAppGuidePage() {
               4. Build the web app &amp; export
             </h3>
             <CodeBlock>{`npm run build\nnpx next export`}</CodeBlock>
-            <p className="mt-2 text-sm text-gray-500 dark:text-zinc-500">
+            <p className="mt-2 text-sm text-gray-400 dark:text-zinc-400">
               This produces the <code>out/</code> directory that Capacitor
               bundles into the native shell. In production the app live-loads
               from the deployed URL instead.

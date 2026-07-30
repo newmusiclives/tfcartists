@@ -85,7 +85,7 @@ export default function SponsorReachPage() {
         {/* Back link */}
         <Link
           href="/portal/sponsor"
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 mb-6 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-300 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Sponsor Portal
@@ -113,21 +113,21 @@ export default function SponsorReachPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
             <Users className="w-5 h-5 text-green-400 mb-2" />
-            <p className="text-sm text-zinc-500">Total Listeners</p>
+            <p className="text-sm text-zinc-400">Total Listeners</p>
             <p className="text-2xl font-bold text-white">
               {data?.stats.totalListeners ?? "---"}
             </p>
           </div>
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
             <MapPin className="w-5 h-5 text-green-400 mb-2" />
-            <p className="text-sm text-zinc-500">Cities Reached</p>
+            <p className="text-sm text-zinc-400">Cities Reached</p>
             <p className="text-2xl font-bold text-white">
               {data?.stats.totalCities ?? "---"}
             </p>
           </div>
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
             <Globe className="w-5 h-5 text-green-400 mb-2" />
-            <p className="text-sm text-zinc-500">Your Ads Reach</p>
+            <p className="text-sm text-zinc-400">Your Ads Reach</p>
             <p className="text-lg font-bold text-green-400">
               {data ? `${data.stats.totalCities} cities` : "---"}
             </p>
@@ -169,7 +169,7 @@ export default function SponsorReachPage() {
               Top Listener Cities
             </h2>
             {data?.cities.length === 0 && (
-              <p className="text-sm text-zinc-500">No location data yet</p>
+              <p className="text-sm text-zinc-400">No location data yet</p>
             )}
             <div className="space-y-2">
               {data?.cities.slice(0, 15).map((city, i) => {
@@ -179,7 +179,7 @@ export default function SponsorReachPage() {
                     : 0;
                 return (
                   <div key={city.city + city.region} className="flex items-center gap-3">
-                    <span className="text-xs text-zinc-600 w-5 text-right">
+                    <span className="text-xs text-zinc-400 w-5 text-right">
                       {i + 1}
                     </span>
                     <div className="flex-1 min-w-0">
@@ -187,10 +187,10 @@ export default function SponsorReachPage() {
                         <span className="text-sm text-zinc-300 truncate">
                           {city.city}
                           {city.region !== "Unknown" && (
-                            <span className="text-zinc-600">, {city.region}</span>
+                            <span className="text-zinc-400">, {city.region}</span>
                           )}
                         </span>
-                        <span className="text-xs text-zinc-500 ml-2 flex-shrink-0">
+                        <span className="text-xs text-zinc-400 ml-2 flex-shrink-0">
                           {city.count}
                         </span>
                       </div>
@@ -214,7 +214,7 @@ export default function SponsorReachPage() {
               <h2 className="text-sm font-semibold text-white mb-2">
                 Share with Your Team
               </h2>
-              <p className="text-xs text-zinc-500 mb-3">
+              <p className="text-xs text-zinc-400 mb-3">
                 Embed this live heatmap on your website or share with stakeholders.
               </p>
               <div className="relative">
@@ -245,7 +245,7 @@ export default function SponsorReachPage() {
               <h2 className="text-sm font-semibold text-white mb-2">
                 Copy Stats Summary
               </h2>
-              <p className="text-xs text-zinc-500 mb-3">
+              <p className="text-xs text-zinc-400 mb-3">
                 Plain-text summary for reports, emails, or presentations.
               </p>
               <button

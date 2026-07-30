@@ -103,7 +103,7 @@ function UptimeBar({ percent, label }: { percent: number; label: string }) {
 function ResponseTimeChart({ history }: { history: StreamHealthPoint[] }) {
   if (history.length === 0) {
     return (
-      <div className="text-sm text-zinc-500 text-center py-8">
+      <div className="text-sm text-zinc-400 text-center py-8">
         No response time data yet
       </div>
     );
@@ -135,7 +135,7 @@ function ResponseTimeChart({ history }: { history: StreamHealthPoint[] }) {
             />
             <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-hover:block z-10 bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-300 whitespace-nowrap shadow-lg">
               <div>{point.responseTimeMs}ms</div>
-              <div className="text-zinc-500">
+              <div className="text-zinc-400">
                 {new Date(point.timestamp).toLocaleTimeString("en-US", {
                   hour: "numeric",
                   minute: "2-digit",
@@ -157,7 +157,7 @@ function ListenerChart({ history }: { history: StreamHealthPoint[] }) {
 
   if (withListeners.length === 0) {
     return (
-      <div className="text-sm text-zinc-500 text-center py-8">
+      <div className="text-sm text-zinc-400 text-center py-8">
         No listener data available
       </div>
     );
@@ -178,7 +178,7 @@ function ListenerChart({ history }: { history: StreamHealthPoint[] }) {
   return (
     <div className="relative h-32">
       {/* Y-axis labels */}
-      <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-xs text-zinc-600 w-8">
+      <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-xs text-zinc-400 w-8">
         <span>{maxListeners}</span>
         <span>{Math.round(maxListeners / 2)}</span>
         <span>0</span>
@@ -196,7 +196,7 @@ function ListenerChart({ history }: { history: StreamHealthPoint[] }) {
         </svg>
       </div>
       {/* X-axis time labels */}
-      <div className="ml-10 flex justify-between text-xs text-zinc-600 mt-1">
+      <div className="ml-10 flex justify-between text-xs text-zinc-400 mt-1">
         {withListeners.length > 0 && (
           <>
             <span>
@@ -306,10 +306,10 @@ export default function StreamHealthDashboard() {
               <Radio className="w-6 h-6 text-blue-500" />
               Stream Health Monitor
             </h1>
-            <p className="text-zinc-500 text-sm mt-1">
+            <p className="text-zinc-400 text-sm mt-1">
               Real-time Icecast stream monitoring
               {lastRefresh && (
-                <span className="ml-2 text-zinc-600">
+                <span className="ml-2 text-zinc-400">
                   -- Last updated{" "}
                   {lastRefresh.toLocaleTimeString("en-US", {
                     hour: "numeric",
@@ -333,7 +333,7 @@ export default function StreamHealthDashboard() {
 
         {loading && !data ? (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : data ? (
           <div className="space-y-6">
@@ -383,23 +383,23 @@ export default function StreamHealthDashboard() {
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-                <div className="flex items-center gap-2 text-zinc-500 text-xs font-medium mb-2">
+                <div className="flex items-center gap-2 text-zinc-400 text-xs font-medium mb-2">
                   <Zap className="w-3.5 h-3.5" />
                   RESPONSE TIME
                 </div>
                 <div className="text-2xl font-bold text-zinc-100">
                   {current?.responseTimeMs ?? "--"}
-                  <span className="text-sm text-zinc-500 ml-1">ms</span>
+                  <span className="text-sm text-zinc-400 ml-1">ms</span>
                 </div>
                 {avgResponseTime != null && (
-                  <div className="text-xs text-zinc-600 mt-1">
+                  <div className="text-xs text-zinc-400 mt-1">
                     avg {avgResponseTime}ms (24h)
                   </div>
                 )}
               </div>
 
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-                <div className="flex items-center gap-2 text-zinc-500 text-xs font-medium mb-2">
+                <div className="flex items-center gap-2 text-zinc-400 text-xs font-medium mb-2">
                   <Users className="w-3.5 h-3.5" />
                   LISTENERS
                 </div>
@@ -407,27 +407,27 @@ export default function StreamHealthDashboard() {
                   {currentListeners ?? "--"}
                 </div>
                 {peakListeners != null && peakListeners > 0 && (
-                  <div className="text-xs text-zinc-600 mt-1">
+                  <div className="text-xs text-zinc-400 mt-1">
                     peak {peakListeners} (24h)
                   </div>
                 )}
               </div>
 
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-                <div className="flex items-center gap-2 text-zinc-500 text-xs font-medium mb-2">
+                <div className="flex items-center gap-2 text-zinc-400 text-xs font-medium mb-2">
                   <Activity className="w-3.5 h-3.5" />
                   BITRATE
                 </div>
                 <div className="text-2xl font-bold text-zinc-100">
                   {current?.bitrate ?? "--"}
                   {current?.bitrate && (
-                    <span className="text-sm text-zinc-500 ml-1">kbps</span>
+                    <span className="text-sm text-zinc-400 ml-1">kbps</span>
                   )}
                 </div>
               </div>
 
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-                <div className="flex items-center gap-2 text-zinc-500 text-xs font-medium mb-2">
+                <div className="flex items-center gap-2 text-zinc-400 text-xs font-medium mb-2">
                   <Clock className="w-3.5 h-3.5" />
                   UPTIME (24H)
                 </div>
@@ -463,7 +463,7 @@ export default function StreamHealthDashboard() {
                 />
               </div>
               {!uptime7d && (
-                <p className="text-xs text-zinc-600 mt-3">
+                <p className="text-xs text-zinc-400 mt-3">
                   7-day and 30-day data will populate as the cron job collects more history.
                 </p>
               )}
@@ -476,7 +476,7 @@ export default function StreamHealthDashboard() {
                   <Zap className="w-4 h-4 text-yellow-500" />
                   Response Time (24h)
                 </h2>
-                <div className="flex items-center gap-3 text-xs text-zinc-600">
+                <div className="flex items-center gap-3 text-xs text-zinc-400">
                   <span className="flex items-center gap-1">
                     <span className="w-2 h-2 rounded-full bg-green-500" />
                     &lt;500ms
@@ -514,7 +514,7 @@ export default function StreamHealthDashboard() {
               {incidents.length === 0 ? (
                 <div className="px-6 py-8 text-center">
                   <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <p className="text-sm text-zinc-500">
+                  <p className="text-sm text-zinc-400">
                     No downtime incidents in the last 24 hours
                   </p>
                 </div>
@@ -531,7 +531,7 @@ export default function StreamHealthDashboard() {
                         <div className="text-sm text-zinc-300">
                           {incident.end ? "Resolved" : "Ongoing"} outage
                         </div>
-                        <div className="text-xs text-zinc-500 mt-0.5">
+                        <div className="text-xs text-zinc-400 mt-0.5">
                           Started {formatTime(incident.start)}
                           {incident.end && ` -- Resolved ${formatTime(incident.end)}`}
                         </div>
@@ -582,7 +582,7 @@ export default function StreamHealthDashboard() {
                     },
                   ].map((item) => (
                     <div key={item.label} className="flex flex-col">
-                      <span className="text-xs text-zinc-500 font-medium">
+                      <span className="text-xs text-zinc-400 font-medium">
                         {item.label}
                       </span>
                       <span className="text-sm text-zinc-300 font-mono mt-0.5 truncate">
@@ -596,9 +596,9 @@ export default function StreamHealthDashboard() {
           </div>
         ) : (
           <div className="bg-zinc-900 rounded-xl p-12 border border-zinc-800 text-center">
-            <Radio className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
+            <Radio className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
             <p className="text-zinc-400">Could not load stream health data.</p>
-            <p className="text-zinc-600 text-sm mt-1">
+            <p className="text-zinc-400 text-sm mt-1">
               Check the monitoring API and try again.
             </p>
           </div>

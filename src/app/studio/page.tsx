@@ -93,7 +93,7 @@ function slotTypeIcon(type: string) {
     case "station_id":
       return <Radio className="w-4 h-4 text-cyan-400" />;
     default:
-      return <Volume2 className="w-4 h-4 text-zinc-500" />;
+      return <Volume2 className="w-4 h-4 text-zinc-400" />;
   }
 }
 
@@ -157,7 +157,7 @@ function OnAirBanner({ data }: { data: NowPlaying | null }) {
   if (!data) {
     return (
       <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 flex items-center justify-center min-h-[260px]">
-        <div className="text-zinc-600 flex items-center gap-3">
+        <div className="text-zinc-400 flex items-center gap-3">
           <WifiOff className="w-6 h-6" />
           <span className="text-lg">Connecting to stream...</span>
         </div>
@@ -187,7 +187,7 @@ function OnAirBanner({ data }: { data: NowPlaying | null }) {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <Music className="w-16 h-16 text-zinc-700" />
+              <Music className="w-16 h-16 text-zinc-400" />
             </div>
           )}
         </div>
@@ -233,7 +233,7 @@ function OnAirBanner({ data }: { data: NowPlaying | null }) {
 
           {/* Elapsed */}
           <div className="mt-4 flex items-center gap-3">
-            <span className="font-mono text-sm text-zinc-500 tabular-nums">
+            <span className="font-mono text-sm text-zinc-400 tabular-nums">
               {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")} elapsed
             </span>
             <div className="flex-1 h-1 bg-zinc-800 rounded-full overflow-hidden max-w-xs">
@@ -257,7 +257,7 @@ function UpNextQueue({ slots }: { slots: PlayoutSlot[] }) {
           <SkipForward className="w-4 h-4" />
           Up Next
         </h2>
-        <p className="text-zinc-600 text-sm text-center py-8">No upcoming items</p>
+        <p className="text-zinc-400 text-sm text-center py-8">No upcoming items</p>
       </div>
     );
   }
@@ -279,20 +279,20 @@ function UpNextQueue({ slots }: { slots: PlayoutSlot[] }) {
               key={i}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-zinc-800/50 transition-colors group"
             >
-              <span className="text-zinc-600 font-mono text-xs w-5 text-right">{i + 1}</span>
+              <span className="text-zinc-400 font-mono text-xs w-5 text-right">{i + 1}</span>
               {slotTypeIcon(slot.type)}
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-zinc-200 truncate">
                   {slot.title || slotTypeLabel(slot.type)}
                 </p>
                 {(slot.artist || slot.artistName) && (
-                  <p className="text-xs text-zinc-500 truncate">
+                  <p className="text-xs text-zinc-400 truncate">
                     {slot.artist || slot.artistName}
                   </p>
                 )}
               </div>
-              <span className="text-xs text-zinc-600 font-mono tabular-nums">{durStr}</span>
-              <span className="text-[10px] text-zinc-700 uppercase tracking-wide w-16 text-right">
+              <span className="text-xs text-zinc-400 font-mono tabular-nums">{durStr}</span>
+              <span className="text-[10px] text-zinc-400 uppercase tracking-wide w-16 text-right">
                 {slotTypeLabel(slot.type)}
               </span>
             </div>
@@ -311,7 +311,7 @@ function RecentPlays({ tracks }: { tracks: RecentTrack[] }) {
         Recent Plays
       </h2>
       {tracks.length === 0 ? (
-        <p className="text-zinc-600 text-sm text-center py-8">No recent plays</p>
+        <p className="text-zinc-400 text-sm text-center py-8">No recent plays</p>
       ) : (
         <div className="space-y-1">
           {tracks.map((t, i) => (
@@ -319,12 +319,12 @@ function RecentPlays({ tracks }: { tracks: RecentTrack[] }) {
               key={`${t.title}-${t.playedAt}-${i}`}
               className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-zinc-800/50 transition-colors"
             >
-              <Music className="w-4 h-4 text-zinc-600 flex-shrink-0" />
+              <Music className="w-4 h-4 text-zinc-400 flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-zinc-300 truncate">{t.title}</p>
-                <p className="text-xs text-zinc-500 truncate">{t.artist}</p>
+                <p className="text-xs text-zinc-400 truncate">{t.artist}</p>
               </div>
-              <span className="text-xs text-zinc-600 font-mono tabular-nums flex-shrink-0">
+              <span className="text-xs text-zinc-400 font-mono tabular-nums flex-shrink-0">
                 {formatTimeAgo(t.playedAt)}
               </span>
             </div>
@@ -386,7 +386,7 @@ function StationVitals({
         >
           <div className="flex items-center gap-2">
             <span className={s.color}>{s.icon}</span>
-            <span className="text-xs text-zinc-500 uppercase tracking-wider">{s.label}</span>
+            <span className="text-xs text-zinc-400 uppercase tracking-wider">{s.label}</span>
           </div>
           <span className="text-xl font-bold text-zinc-100 truncate">{s.value}</span>
         </div>
@@ -498,7 +498,7 @@ export default function StudioDashboard() {
             <Radio className="w-6 h-6 text-red-500" />
             <div>
               <h1 className="text-lg font-bold text-zinc-100 tracking-tight">Live Studio</h1>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-zinc-400">
                 {nowPlaying?.station || "TrueFans Radio"} Control Room
               </p>
             </div>
@@ -529,14 +529,14 @@ export default function StudioDashboard() {
                 fetchAll();
               }}
               disabled={loading}
-              className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-300 transition-colors disabled:opacity-50"
               title="Refresh now"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
             </button>
 
             {lastRefresh && (
-              <span className="text-[10px] text-zinc-700 font-mono">
+              <span className="text-[10px] text-zinc-400 font-mono">
                 {formatClock(lastRefresh)}
               </span>
             )}
@@ -564,7 +564,7 @@ export default function StudioDashboard() {
 
         {/* Footer info */}
         <div className="text-center py-4">
-          <p className="text-[10px] text-zinc-800 font-mono uppercase tracking-widest">
+          <p className="text-[10px] text-zinc-300 font-mono uppercase tracking-widest">
             Auto-refreshing every 10s
           </p>
         </div>

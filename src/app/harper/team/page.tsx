@@ -287,17 +287,17 @@ export default function HarperTeamPage() {
                 <div className="bg-green-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Base Sponsor Revenue</div>
                   <div className="text-2xl font-bold text-green-600">$5,200/month</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">8 Tier 1 + 10 Tier 2 + 6 Tier 3</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">8 Tier 1 + 10 Tier 2 + 6 Tier 3</div>
                 </div>
                 <div className="bg-emerald-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Premium Add-ons</div>
                   <div className="text-2xl font-bold text-emerald-600">$2,600/month</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">News/Weather, Sponsored Hours, Takeovers</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">News/Weather, Sponsored Hours, Takeovers</div>
                 </div>
                 <div className="bg-blue-50 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Pool Distribution</div>
                   <div className="text-2xl font-bold text-blue-600">$6,240/month</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">80% of total revenue → 340 artists</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">80% of total revenue → 340 artists</div>
                 </div>
               </div>
             </div>

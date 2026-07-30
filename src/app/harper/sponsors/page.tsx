@@ -596,7 +596,7 @@ export default function SponsorManagement() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t text-xs text-gray-500 dark:text-zinc-500">
+                <div className="pt-3 border-t text-xs text-gray-400 dark:text-zinc-400">
                   {sponsor.status === 'ending_soon' && (
                     <p className="text-orange-600 font-medium mb-1">
                       Contract ends in {daysUntilEnd} days

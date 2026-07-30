@@ -27,7 +27,7 @@ export default function ContactPage() {
               >
                 hello@truefansconnect.com
               </a>
-              <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
+              <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">
                 For general inquiries, artist submissions, and sponsorship questions.
               </p>
             </div>
@@ -47,7 +47,7 @@ export default function ContactPage() {
               >
                 truefansconnect.com
               </a>
-              <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
+              <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">
                 Learn more about TrueFans CONNECT and how to support independent artists.
               </p>
             </div>
@@ -62,7 +62,7 @@ export default function ContactPage() {
               <p className="text-sm text-gray-700 dark:text-zinc-300">
                 Part of the TrueFans Radio Network
               </p>
-              <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
+              <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">
                 24/7 Americana and country music featuring independent artists.
               </p>
             </div>
@@ -77,7 +77,7 @@ export default function ContactPage() {
               <p className="text-sm text-gray-700 dark:text-zinc-300">
                 Pacific Northwest, USA
               </p>
-              <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
+              <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">
                 Broadcasting online to listeners everywhere.
               </p>
             </div>

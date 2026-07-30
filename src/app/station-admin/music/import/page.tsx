@@ -336,7 +336,7 @@ export default function MusicImportPage() {
     <div ref={rootRef} className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
       <SharedNav />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link href="/station-admin/music" className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-4">
+        <Link href="/station-admin/music" className="text-sm text-gray-400 hover:text-gray-700 flex items-center gap-1 mb-4">
           <ArrowLeft className="w-4 h-4" /> Back to Music Library
         </Link>
         <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3 mb-2">
@@ -403,7 +403,7 @@ export default function MusicImportPage() {
                     <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-2xl text-center">
                       <FolderUp className="w-16 h-16 text-green-500 mx-auto mb-3" />
                       <p className="text-xl font-bold text-gray-900 dark:text-white">Drop audio files to import</p>
-                      <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
+                      <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">
                         Adding to category:{" "}
                         <span className={`inline-block px-2 py-0.5 rounded font-black ${CATEGORIES.find(c => c.value === defaultCategory)?.color || ""}`}>
                           {defaultCategory}
@@ -416,7 +416,7 @@ export default function MusicImportPage() {
                 {/* Step 1: Select category */}
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-4">
                   <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">Step 1: Select Rotation Category</h3>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-4">Choose which category these songs should be added to</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400 mb-4">Choose which category these songs should be added to</p>
                   <div className="grid grid-cols-5 gap-2 mb-4">
                     {CATEGORIES.map((cat) => (
                       <button
@@ -435,7 +435,7 @@ export default function MusicImportPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <div>
-                      <label className="text-xs font-medium text-gray-500 block mb-1">Vocal Type</label>
+                      <label className="text-xs font-medium text-gray-400 block mb-1">Vocal Type</label>
                       <select
                         value={defaultGender}
                         onChange={(e) => setDefaultGender(e.target.value)}
@@ -471,7 +471,7 @@ export default function MusicImportPage() {
                   <p className="text-lg font-medium text-gray-700 dark:text-zinc-300 mb-1">
                     Drag & drop audio files anywhere on the page
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500 mb-3">
+                  <p className="text-sm text-gray-400 dark:text-zinc-400 mb-3">
                     or click here to browse. Supports MP3, WAV, M4A, FLAC, OGG
                   </p>
                   <p className="text-sm font-medium">
@@ -605,9 +605,9 @@ export default function MusicImportPage() {
                       <table className="w-full text-sm">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">Title</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">Artist</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-zinc-500">Category</th>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">Title</th>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">Artist</th>
+                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">Category</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y">

@@ -194,7 +194,7 @@ export default function CommunityPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
                 No super fans or evangelists yet. Build your community to see top members here.
               </div>
             )}
@@ -211,7 +211,7 @@ export default function CommunityPage() {
                 <ActivityRow key={activity.id} {...activity} />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
                 No community activity yet. Engagements will appear here as listeners interact.
               </div>
             )}
@@ -381,7 +381,7 @@ function ActivityRow({ user, action, topic, time, engagement }: { user: string; 
             <span>{engagement}</span>
           </div>
         )}
-        <div className="text-sm text-gray-500 dark:text-zinc-500">{time}</div>
+        <div className="text-sm text-gray-400 dark:text-zinc-400">{time}</div>
       </div>
     </div>
   );
@@ -437,15 +437,15 @@ function TopicCard({ topic, posts, members, lastActive }: { topic: string; posts
       <div className="grid grid-cols-3 gap-2 text-center text-sm">
         <div>
           <div className="font-bold text-gray-900 dark:text-white">{posts}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">posts</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">posts</div>
         </div>
         <div>
           <div className="font-bold text-gray-900 dark:text-white">{members}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">members</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">members</div>
         </div>
         <div>
           <div className="text-xs text-green-600 font-medium">{lastActive}</div>
-          <div className="text-xs text-gray-500 dark:text-zinc-500">last active</div>
+          <div className="text-xs text-gray-400 dark:text-zinc-400">last active</div>
         </div>
       </div>
     </div>

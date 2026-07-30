@@ -173,7 +173,7 @@ export default async function GenreDetailPage({
                 />
                 <div className="flex-1">
                   <p className="font-semibold text-gray-900 dark:text-white">{dj.name}</p>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">{dj.tagline}</p>
+                  <p className="text-sm text-gray-400 dark:text-zinc-400">{dj.tagline}</p>
                 </div>
                 <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">
                   {time}
@@ -194,7 +194,7 @@ export default async function GenreDetailPage({
             <span>Launch Your {tpl.name.replace(" Station", "")} Station</span>
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="mt-3 text-sm text-gray-500 dark:text-zinc-500">
+          <p className="mt-3 text-sm text-gray-400 dark:text-zinc-400">
             Pre-configured with {tpl.djPresets.length} AI DJs, scheduling, and
             branding
           </p>
@@ -207,7 +207,7 @@ export default async function GenreDetailPage({
 function DetailCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-lg border p-4">
-      <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">{label}</p>
+      <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">{label}</p>
       <p className="font-semibold text-gray-900 capitalize">{value}</p>
     </div>
   );

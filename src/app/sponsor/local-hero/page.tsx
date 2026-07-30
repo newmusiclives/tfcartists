@@ -271,7 +271,7 @@ export default function LocalHeroSignup() {
             </span>
             <span
               className={`hidden sm:inline text-sm font-medium ${
-                s.num <= step ? "text-zinc-200" : "text-zinc-500"
+                s.num <= step ? "text-zinc-200" : "text-zinc-400"
               }`}
             >
               {s.label}
@@ -413,7 +413,7 @@ export default function LocalHeroSignup() {
                   className="block text-sm font-medium text-zinc-300 mb-2"
                 >
                   Phone{" "}
-                  <span className="text-zinc-500 font-normal">(optional)</span>
+                  <span className="text-zinc-400 font-normal">(optional)</span>
                 </label>
                 <input
                   id="phone"
@@ -544,7 +544,7 @@ export default function LocalHeroSignup() {
                         >
                           {slot.label}
                         </span>
-                        <span className="block text-sm text-zinc-500 mt-0.5">
+                        <span className="block text-sm text-zinc-400 mt-0.5">
                           {slot.time}
                         </span>
                       </button>
@@ -584,7 +584,7 @@ export default function LocalHeroSignup() {
                 >
                   Tell us about your business
                 </label>
-                <p className="text-sm text-zinc-500 mb-2">
+                <p className="text-sm text-zinc-400 mb-2">
                   We&apos;ll use this to write your ad. What makes your business
                   special?
                 </p>
@@ -682,7 +682,7 @@ export default function LocalHeroSignup() {
                 )}
                 {form.businessDescription && (
                   <div className="pt-3 border-t border-zinc-800">
-                    <p className="text-sm text-zinc-500 mb-1">
+                    <p className="text-sm text-zinc-400 mb-1">
                       Business Description
                     </p>
                     <p className="text-zinc-200 text-base leading-relaxed">
@@ -703,7 +703,7 @@ export default function LocalHeroSignup() {
                   ${form.exclusiveCategory ? "75" : "30"} / month
                 </p>
                 {form.exclusiveCategory && (
-                  <p className="text-sm text-zinc-500">
+                  <p className="text-sm text-zinc-400">
                     ($30 base + $45 exclusivity)
                   </p>
                 )}
@@ -774,7 +774,7 @@ export default function LocalHeroSignup() {
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between items-baseline gap-4 py-2 border-b border-zinc-800/50 last:border-0">
-      <span className="text-sm text-zinc-500 flex-shrink-0">{label}</span>
+      <span className="text-sm text-zinc-400 flex-shrink-0">{label}</span>
       <span className="text-zinc-200 text-base text-right">{value}</span>
     </div>
   );

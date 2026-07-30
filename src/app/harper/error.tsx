@@ -33,7 +33,7 @@ export default function HarperError({
               <strong>Error:</strong> {error.message}
             </p>
             {error.digest && (
-              <p className="text-xs font-mono text-gray-500 dark:text-zinc-500 mt-1">Digest: {error.digest}</p>
+              <p className="text-xs font-mono text-gray-400 dark:text-zinc-400 mt-1">Digest: {error.digest}</p>
             )}
           </div>
         )}

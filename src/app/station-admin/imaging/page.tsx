@@ -318,7 +318,7 @@ export default function StationImagingPage() {
           <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800 mb-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-white">New Imaging Voice</h3>
-              <button onClick={() => setShowAdd(false)}><X className="w-5 h-5 text-zinc-500" /></button>
+              <button onClick={() => setShowAdd(false)}><X className="w-5 h-5 text-zinc-400" /></button>
             </div>
             <div className="grid grid-cols-3 gap-4 mb-4">
               <input
@@ -356,13 +356,13 @@ export default function StationImagingPage() {
         {/* Voice list */}
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
           </div>
         ) : voices.length === 0 ? (
           <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
-            <Mic className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-            <p className="text-zinc-500">No imaging voices configured.</p>
-            <p className="text-sm text-zinc-500 mt-1">Add voices for station promos, IDs, and sweepers.</p>
+            <Mic className="w-12 h-12 text-zinc-400 mx-auto mb-3" />
+            <p className="text-zinc-400">No imaging voices configured.</p>
+            <p className="text-sm text-zinc-400 mt-1">Add voices for station promos, IDs, and sweepers.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -456,7 +456,7 @@ export default function StationImagingPage() {
                     <div className="mt-4 pt-4 border-t border-zinc-800 space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="text-xs text-zinc-500 block mb-1">Gemini Voice</label>
+                          <label className="text-xs text-zinc-400 block mb-1">Gemini Voice</label>
                           <select
                             value={current.elevenlabsVoiceId || ""}
                             onChange={(e) => setEditing({ ...current, elevenlabsVoiceId: e.target.value })}
@@ -471,7 +471,7 @@ export default function StationImagingPage() {
                           </select>
                         </div>
                         <div>
-                          <label className="text-xs text-zinc-500 block mb-1">Voice Type</label>
+                          <label className="text-xs text-zinc-400 block mb-1">Voice Type</label>
                           <select
                             value={current.voiceType}
                             onChange={(e) => setEditing({ ...current, voiceType: e.target.value })}
@@ -483,8 +483,8 @@ export default function StationImagingPage() {
                         </div>
                       </div>
                       <div>
-                        <label className="text-xs text-zinc-500 block mb-1">Voice Direction (Gemini prompt instructions)</label>
-                        <p className="text-xs text-zinc-500 mb-1">Tone, accent, pacing, atmosphere — passed to Gemini before each script.</p>
+                        <label className="text-xs text-zinc-400 block mb-1">Voice Direction (Gemini prompt instructions)</label>
+                        <p className="text-xs text-zinc-400 mb-1">Tone, accent, pacing, atmosphere — passed to Gemini before each script.</p>
                         <textarea
                           value={current.metadata?.voiceDirection || ""}
                           onChange={(e) => setEditing({ ...current, metadata: { ...(current.metadata || {}), voiceDirection: e.target.value } })}
@@ -495,20 +495,20 @@ export default function StationImagingPage() {
                       </div>
                       <div className="grid grid-cols-3 gap-4">
                         <div>
-                          <label className="text-xs text-zinc-500 block mb-1">Stability: {current.voiceStability}</label>
+                          <label className="text-xs text-zinc-400 block mb-1">Stability: {current.voiceStability}</label>
                           <input type="range" min="0" max="1" step="0.05" value={current.voiceStability} onChange={(e) => setEditing({ ...current, voiceStability: parseFloat(e.target.value) })} className="w-full" />
                         </div>
                         <div>
-                          <label className="text-xs text-zinc-500 block mb-1">Similarity: {current.voiceSimilarityBoost}</label>
+                          <label className="text-xs text-zinc-400 block mb-1">Similarity: {current.voiceSimilarityBoost}</label>
                           <input type="range" min="0" max="1" step="0.05" value={current.voiceSimilarityBoost} onChange={(e) => setEditing({ ...current, voiceSimilarityBoost: parseFloat(e.target.value) })} className="w-full" />
                         </div>
                         <div>
-                          <label className="text-xs text-zinc-500 block mb-1">Style: {current.voiceStyle}</label>
+                          <label className="text-xs text-zinc-400 block mb-1">Style: {current.voiceStyle}</label>
                           <input type="range" min="0" max="1" step="0.05" value={current.voiceStyle} onChange={(e) => setEditing({ ...current, voiceStyle: parseFloat(e.target.value) })} className="w-full" />
                         </div>
                       </div>
                       <div>
-                        <label className="text-xs text-zinc-500 block mb-2">Usage Types</label>
+                        <label className="text-xs text-zinc-400 block mb-2">Usage Types</label>
                         <div className="flex gap-3">
                           {USAGE_OPTIONS.map((u) => (
                             <label key={u} className="flex items-center gap-1.5 cursor-pointer">
@@ -559,7 +559,7 @@ export default function StationImagingPage() {
                                     <div key={i} className={`rounded-lg border p-3 ${typeBg[scriptType]}`}>
                                       <div className="flex items-start justify-between gap-2">
                                         <div className="flex-1">
-                                          <span className="text-xs font-medium text-zinc-500">{script.label}</span>
+                                          <span className="text-xs font-medium text-zinc-400">{script.label}</span>
                                           <p className="text-sm font-medium text-white mt-0.5">&ldquo;{script.text}&rdquo;</p>
                                         </div>
                                       </div>
@@ -596,7 +596,7 @@ export default function StationImagingPage() {
             <h3 className="font-semibold text-white mb-4">Upload Imaging Element</h3>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Name</label>
+                <label className="text-xs text-zinc-400 block mb-1">Name</label>
                 <input
                   type="text"
                   value={prodUploadName}
@@ -606,7 +606,7 @@ export default function StationImagingPage() {
                 />
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Category</label>
+                <label className="text-xs text-zinc-400 block mb-1">Category</label>
                 <select
                   value={prodUploadCategory}
                   onChange={(e) => setProdUploadCategory(e.target.value)}
@@ -618,7 +618,7 @@ export default function StationImagingPage() {
                 </select>
               </div>
               <div className="md:col-span-2">
-                <label className="text-xs text-zinc-500 block mb-1">Audio File (MP3/WAV)</label>
+                <label className="text-xs text-zinc-400 block mb-1">Audio File (MP3/WAV)</label>
                 <input
                   type="file"
                   accept=".mp3,.wav,audio/mpeg,audio/wav"
@@ -640,9 +640,9 @@ export default function StationImagingPage() {
           {/* Produced imaging list */}
           {producedImaging.length === 0 ? (
             <div className="bg-zinc-900/80 rounded-xl p-12 border border-zinc-800 text-center">
-              <Mic className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-              <p className="text-zinc-500">No pre-produced imaging uploaded yet.</p>
-              <p className="text-sm text-zinc-500 mt-1">Upload ready-to-air promos, sweepers, IDs, and more.</p>
+              <Mic className="w-12 h-12 text-zinc-400 mx-auto mb-3" />
+              <p className="text-zinc-400">No pre-produced imaging uploaded yet.</p>
+              <p className="text-sm text-zinc-400 mt-1">Upload ready-to-air promos, sweepers, IDs, and more.</p>
             </div>
           ) : (
             <div className="bg-zinc-900/80 rounded-xl border border-zinc-800 divide-y divide-zinc-800">
@@ -661,9 +661,9 @@ export default function StationImagingPage() {
                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${categoryColor(item.category)}`}>
                           {categoryLabel(item.category)}
                         </span>
-                        <span className="text-xs text-zinc-500">{item.fileName}</span>
+                        <span className="text-xs text-zinc-400">{item.fileName}</span>
                         {item.durationSeconds && (
-                          <span className="text-xs text-zinc-500">{Math.round(item.durationSeconds)}s</span>
+                          <span className="text-xs text-zinc-400">{Math.round(item.durationSeconds)}s</span>
                         )}
                       </div>
                     </div>

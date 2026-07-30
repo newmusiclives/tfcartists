@@ -377,7 +377,7 @@ export default function OutreachPage() {
             </div>
 
             {filteredLeads.length === 0 && (
-              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
                 <Users className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                 <p>No artists found matching your filters.</p>
               </div>
@@ -430,13 +430,13 @@ export default function OutreachPage() {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Artist</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">First Contact</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Contact</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Follow-up</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Artist</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Source</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">First Contact</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Last Contact</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Next Follow-up</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:divide-zinc-800">
@@ -444,7 +444,7 @@ export default function OutreachPage() {
                     <tr key={lead.id} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900 dark:text-white">{lead.name}</div>
-                        <div className="text-sm text-gray-500 dark:text-zinc-500">{lead.genre}</div>
+                        <div className="text-sm text-gray-400 dark:text-zinc-400">{lead.genre}</div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(lead.status)}`}>
@@ -458,9 +458,9 @@ export default function OutreachPage() {
                           <span>{lead.source}</span>
                         </span>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-500">{lead.firstContact || "-"}</td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-500">{lead.lastContact || "-"}</td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-500">{lead.nextFollowUp || "-"}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-400 dark:text-zinc-400">{lead.firstContact || "-"}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-400 dark:text-zinc-400">{lead.lastContact || "-"}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-400 dark:text-zinc-400">{lead.nextFollowUp || "-"}</td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm">
                         <button onClick={() => setSelectedLead(lead)} className="text-purple-600 hover:text-purple-700 font-medium">
                           View Details

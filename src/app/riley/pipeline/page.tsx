@@ -287,7 +287,7 @@ export default function PipelinePage() {
                 <div className="text-center">
                   <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stage.count}</div>
                   <div className="text-xs font-medium text-gray-600 dark:text-zinc-400 mb-2">{stage.label}</div>
-                  <div className="text-xs text-gray-500 dark:text-zinc-500">{stage.assignedTo}</div>
+                  <div className="text-xs text-gray-400 dark:text-zinc-400">{stage.assignedTo}</div>
                 </div>
                 {idx < pipelineStages.length - 1 && (
                   <ChevronRight className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-4 text-gray-400 hidden lg:block" />
@@ -345,7 +345,7 @@ export default function PipelinePage() {
           {/* Artist Cards */}
           <div className="space-y-4">
             {filteredArtists.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 dark:text-zinc-500">
+              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
                 <Users className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                 <p>No artists found in this stage.</p>
               </div>

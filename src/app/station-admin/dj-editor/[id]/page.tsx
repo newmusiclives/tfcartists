@@ -199,7 +199,7 @@ export default function DJEditorDetailPage() {
     return (
       <div className="min-h-screen bg-zinc-950 text-zinc-100">
         <SharedNav />
-        <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-zinc-500" /></div>
+        <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-zinc-400" /></div>
       </div>
     );
   }
@@ -209,7 +209,7 @@ export default function DJEditorDetailPage() {
       <div className="min-h-screen bg-zinc-950 text-zinc-100">
         <SharedNav />
         <div className="max-w-4xl mx-auto px-4 py-12 text-center">
-          <p className="text-zinc-500">Host not found.</p>
+          <p className="text-zinc-400">Host not found.</p>
           <Link href="/station-admin/dj-editor" className="text-purple-600 hover:underline text-sm mt-2 inline-block">Back to Host Editor</Link>
         </div>
       </div>
@@ -220,7 +220,7 @@ export default function DJEditorDetailPage() {
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <SharedNav />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link href="/station-admin/dj-editor" className="text-sm text-zinc-500 hover:text-zinc-300 flex items-center gap-1 mb-4">
+        <Link href="/station-admin/dj-editor" className="text-sm text-zinc-400 hover:text-zinc-300 flex items-center gap-1 mb-4">
           <ArrowLeft className="w-4 h-4" /> Back to Host Editor
         </Link>
 
@@ -238,7 +238,7 @@ export default function DJEditorDetailPage() {
             )}
             <div>
               <h1 className="text-2xl font-bold text-white">{dj.name}</h1>
-              {dj.tagline && <p className="text-zinc-500 text-sm italic">{dj.tagline}</p>}
+              {dj.tagline && <p className="text-zinc-400 text-sm italic">{dj.tagline}</p>}
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -264,33 +264,33 @@ export default function DJEditorDetailPage() {
             <h2 className="font-semibold mb-4">Identity</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Stage Name</label>
+                <label className="text-xs text-zinc-400 block mb-1">Stage Name</label>
                 <input type="text" value={dj.name} onChange={(e) => setDj({ ...dj, name: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" />
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Real Name</label>
+                <label className="text-xs text-zinc-400 block mb-1">Real Name</label>
                 <input type="text" value={dj.fullName || ""} onChange={(e) => setDj({ ...dj, fullName: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" placeholder="Full legal or character name" />
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Age</label>
+                <label className="text-xs text-zinc-400 block mb-1">Age</label>
                 <input type="text" value={dj.age || ""} onChange={(e) => setDj({ ...dj, age: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" placeholder="Late 40s" />
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Hometown</label>
+                <label className="text-xs text-zinc-400 block mb-1">Hometown</label>
                 <input type="text" value={dj.hometown || ""} onChange={(e) => setDj({ ...dj, hometown: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" placeholder="Austin, TX" />
               </div>
             </div>
             <div className="mt-4">
-              <label className="text-xs text-zinc-500 block mb-1">Show Format</label>
+              <label className="text-xs text-zinc-400 block mb-1">Show Format</label>
               <input type="text" value={dj.showFormat || ""} onChange={(e) => setDj({ ...dj, showFormat: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" placeholder="Morning Drive Americana" />
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Tagline</label>
+                <label className="text-xs text-zinc-400 block mb-1">Tagline</label>
                 <input type="text" value={dj.tagline || ""} onChange={(e) => setDj({ ...dj, tagline: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" placeholder="Pour the coffee. Fire up the engine." />
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Vibe</label>
+                <label className="text-xs text-zinc-400 block mb-1">Vibe</label>
                 <input type="text" value={dj.vibe || ""} onChange={(e) => setDj({ ...dj, vibe: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" placeholder="Blue-collar optimism" />
               </div>
             </div>
@@ -300,13 +300,13 @@ export default function DJEditorDetailPage() {
           <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800">
             <h2 className="font-semibold mb-4">Biography & Backstory</h2>
             <div>
-              <label className="text-xs text-zinc-500 block mb-1">Short On-Air Bio</label>
-              <p className="text-xs text-zinc-500 mb-1">Public-facing biography — who this host is to the listener.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Short On-Air Bio</label>
+              <p className="text-xs text-zinc-400 mb-1">Public-facing biography — who this host is to the listener.</p>
               <textarea value={dj.bio} onChange={(e) => setDj({ ...dj, bio: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={6} />
             </div>
             <div className="mt-4">
-              <label className="text-xs text-zinc-500 block mb-1">Extended Backstory</label>
-              <p className="text-xs text-zinc-500 mb-1">Internal character background — life history, motivations, formative experiences. Not shown to listeners.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Extended Backstory</label>
+              <p className="text-xs text-zinc-400 mb-1">Internal character background — life history, motivations, formative experiences. Not shown to listeners.</p>
               <textarea value={dj.background || ""} onChange={(e) => setDj({ ...dj, background: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={8} />
             </div>
           </div>
@@ -315,18 +315,18 @@ export default function DJEditorDetailPage() {
           <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800">
             <h2 className="font-semibold mb-4">Personality & Behavior</h2>
             <div>
-              <label className="text-xs text-zinc-500 block mb-1">Core Personality Traits</label>
-              <p className="text-xs text-zinc-500 mb-1">One trait per line — who this person is at their core.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Core Personality Traits</label>
+              <p className="text-xs text-zinc-400 mb-1">One trait per line — who this person is at their core.</p>
               <textarea value={dj.personalityTraits || ""} onChange={(e) => setDj({ ...dj, personalityTraits: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={4} placeholder="warm&#10;folksy&#10;philosophical&#10;dry humor" />
             </div>
             <div className="mt-4">
-              <label className="text-xs text-zinc-500 block mb-1">Catch Phrases</label>
-              <p className="text-xs text-zinc-500 mb-1">Signature phrases this host uses on air, one per line.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Catch Phrases</label>
+              <p className="text-xs text-zinc-400 mb-1">Signature phrases this host uses on air, one per line.</p>
               <textarea value={dj.catchPhrases || ""} onChange={(e) => setDj({ ...dj, catchPhrases: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={4} placeholder="Pour the coffee. Fire up the engine.&#10;That's the good stuff right there." />
             </div>
             <div className="mt-4">
-              <label className="text-xs text-zinc-500 block mb-1">Quirks & Habits</label>
-              <p className="text-xs text-zinc-500 mb-1">Recurring bits, pet peeves, studio behaviors — the little things that make this character feel real.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Quirks & Habits</label>
+              <p className="text-xs text-zinc-400 mb-1">Recurring bits, pet peeves, studio behaviors — the little things that make this character feel real.</p>
               <textarea value={dj.quirksAndHabits || ""} onChange={(e) => setDj({ ...dj, quirksAndHabits: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={4} placeholder="Always taps the mic twice before speaking&#10;Hates when people call it 'country pop'" />
             </div>
           </div>
@@ -335,13 +335,13 @@ export default function DJEditorDetailPage() {
           <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800">
             <h2 className="font-semibold mb-4">Voice & On-Air Presence</h2>
             <div>
-              <label className="text-xs text-zinc-500 block mb-1">Voice Profile</label>
-              <p className="text-xs text-zinc-500 mb-1">How this host sounds — tone, pacing, energy, accent, delivery style.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Voice Profile</label>
+              <p className="text-xs text-zinc-400 mb-1">How this host sounds — tone, pacing, energy, accent, delivery style.</p>
               <textarea value={dj.voiceDescription || ""} onChange={(e) => setDj({ ...dj, voiceDescription: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Tone: Warm and gravelly&#10;Pacing: Unhurried, lets moments breathe&#10;Energy: Calm confidence, never rushed&#10;Accent: Slight Texas drawl&#10;Delivery: Conversational, like talking to a friend" />
             </div>
             <div className="mt-4">
-              <label className="text-xs text-zinc-500 block mb-1">On-Air Style</label>
-              <p className="text-xs text-zinc-500 mb-1">How they run the show — intros, interviews, listener interaction, humor, emotional tone.</p>
+              <label className="text-xs text-zinc-400 block mb-1">On-Air Style</label>
+              <p className="text-xs text-zinc-400 mb-1">How they run the show — intros, interviews, listener interaction, humor, emotional tone.</p>
               <textarea value={dj.onAirStyle || ""} onChange={(e) => setDj({ ...dj, onAirStyle: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Song intros: Brief story about the artist or song&#10;Interviews: Relaxed, lets guests talk&#10;Listener talk: Warm, uses first names&#10;Humor: Dry, self-deprecating&#10;Emotional tone: Genuine, never performative" />
             </div>
           </div>
@@ -350,18 +350,18 @@ export default function DJEditorDetailPage() {
           <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800">
             <h2 className="font-semibold mb-4">Musical Identity</h2>
             <div>
-              <label className="text-xs text-zinc-500 block mb-1">Musical Identity</label>
-              <p className="text-xs text-zinc-500 mb-1">Genres, championed artists, and philosophy toward music selection.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Musical Identity</label>
+              <p className="text-xs text-zinc-400 mb-1">Genres, championed artists, and philosophy toward music selection.</p>
               <textarea value={dj.musicalFocus || ""} onChange={(e) => setDj({ ...dj, musicalFocus: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Genres: Americana, alt-country, folk, roots rock&#10;Champions: Jason Isbell, Sturgill Simpson, Tyler Childers&#10;Philosophy: Real songs by real people about real life" />
             </div>
             <div className="mt-4">
-              <label className="text-xs text-zinc-500 block mb-1">Signature Atmosphere</label>
-              <p className="text-xs text-zinc-500 mb-1">The sensory mood of the show — what it feels like to listen.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Signature Atmosphere</label>
+              <p className="text-xs text-zinc-400 mb-1">The sensory mood of the show — what it feels like to listen.</p>
               <textarea value={dj.atmosphere || ""} onChange={(e) => setDj({ ...dj, atmosphere: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={4} placeholder="Like sitting on a porch at dawn with a cup of black coffee, watching the sun come up over the hills..." />
             </div>
             <div className="mt-4">
-              <label className="text-xs text-zinc-500 block mb-1">Guiding Philosophy</label>
-              <p className="text-xs text-zinc-500 mb-1">This host's core belief about music, radio, and connection.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Guiding Philosophy</label>
+              <p className="text-xs text-zinc-400 mb-1">This host's core belief about music, radio, and connection.</p>
               <textarea value={dj.philosophy || ""} onChange={(e) => setDj({ ...dj, philosophy: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={3} placeholder="Music is the thread that holds working people together..." />
             </div>
           </div>
@@ -371,7 +371,7 @@ export default function DJEditorDetailPage() {
             <h2 className="font-semibold mb-4">Voice Configuration</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">TTS Provider</label>
+                <label className="text-xs text-zinc-400 block mb-1">TTS Provider</label>
                 <select
                   value={dj.ttsProvider || "gemini"}
                   onChange={(e) => setDj({ ...dj, ttsProvider: e.target.value, ttsVoice: null })}
@@ -385,7 +385,7 @@ export default function DJEditorDetailPage() {
             </div>
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">TTS Voice</label>
+                <label className="text-xs text-zinc-400 block mb-1">TTS Voice</label>
                 {(dj.ttsProvider || "gemini") === "openai" ? (
                   <select
                     value={dj.ttsVoice || ""}
@@ -455,18 +455,18 @@ export default function DJEditorDetailPage() {
           <div className="bg-zinc-900/80 rounded-xl p-6 border border-zinc-800">
             <h2 className="font-semibold mb-4">AI Settings</h2>
             <div>
-              <label className="text-xs text-zinc-500 block mb-1">GPT Temperature: {dj.gptTemperature}</label>
+              <label className="text-xs text-zinc-400 block mb-1">GPT Temperature: {dj.gptTemperature}</label>
               <input type="range" min="0" max="1" step="0.05" value={dj.gptTemperature} onChange={(e) => setDj({ ...dj, gptTemperature: parseFloat(e.target.value) })} className="w-full" />
-              <p className="text-xs text-zinc-500 mt-1">Lower = more consistent, higher = more creative. Default: 0.8</p>
+              <p className="text-xs text-zinc-400 mt-1">Lower = more consistent, higher = more creative. Default: 0.8</p>
             </div>
             <div className="mt-4">
-              <label className="text-xs text-zinc-500 block mb-1">Full AI Prompt</label>
-              <p className="text-xs text-zinc-500 mb-1">The system prompt sent to the AI when generating host dialogue.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Full AI Prompt</label>
+              <p className="text-xs text-zinc-400 mb-1">The system prompt sent to the AI when generating host dialogue.</p>
               <textarea value={dj.gptSystemPrompt || ""} onChange={(e) => setDj({ ...dj, gptSystemPrompt: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm font-mono" rows={8} placeholder="You are a radio host named..." />
             </div>
             <div className="mt-4">
-              <label className="text-xs text-zinc-500 block mb-1">Additional Knowledge</label>
-              <p className="text-xs text-zinc-500 mb-1">Extra context the AI can reference — opinions, pet peeves, favorite stories, local knowledge.</p>
+              <label className="text-xs text-zinc-400 block mb-1">Additional Knowledge</label>
+              <p className="text-xs text-zinc-400 mb-1">Extra context the AI can reference — opinions, pet peeves, favorite stories, local knowledge.</p>
               <textarea value={dj.additionalKnowledge || ""} onChange={(e) => setDj({ ...dj, additionalKnowledge: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" rows={6} placeholder="Things this character knows, believes, or cares about..." />
             </div>
           </div>
@@ -486,7 +486,7 @@ export default function DJEditorDetailPage() {
                 </div>
               )}
               <div className="flex-1">
-                <label className="text-xs text-zinc-500 block mb-1">Photo URL</label>
+                <label className="text-xs text-zinc-400 block mb-1">Photo URL</label>
                 <input type="text" value={dj.photoUrl || ""} onChange={(e) => setDj({ ...dj, photoUrl: e.target.value })} className="w-full bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" />
                 <button
                   onClick={generatePhoto}
@@ -500,14 +500,14 @@ export default function DJEditorDetailPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Primary Color</label>
+                <label className="text-xs text-zinc-400 block mb-1">Primary Color</label>
                 <div className="flex gap-2">
                   <input type="color" value={dj.colorPrimary || "#6b7280"} onChange={(e) => setDj({ ...dj, colorPrimary: e.target.value })} className="w-10 h-10 rounded border border-zinc-700 cursor-pointer" />
                   <input type="text" value={dj.colorPrimary || ""} onChange={(e) => setDj({ ...dj, colorPrimary: e.target.value })} className="flex-1 bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" />
                 </div>
               </div>
               <div>
-                <label className="text-xs text-zinc-500 block mb-1">Secondary Color</label>
+                <label className="text-xs text-zinc-400 block mb-1">Secondary Color</label>
                 <div className="flex gap-2">
                   <input type="color" value={dj.colorSecondary || "#9ca3af"} onChange={(e) => setDj({ ...dj, colorSecondary: e.target.value })} className="w-10 h-10 rounded border border-zinc-700 cursor-pointer" />
                   <input type="text" value={dj.colorSecondary || ""} onChange={(e) => setDj({ ...dj, colorSecondary: e.target.value })} className="flex-1 bg-zinc-800 text-white border border-zinc-700 rounded-lg px-3 py-2 text-sm" />
@@ -521,7 +521,7 @@ export default function DJEditorDetailPage() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="font-semibold flex items-center gap-2"><Mic className="w-4 h-4" /> Generic Voice Tracks</h2>
-                <p className="text-xs text-zinc-500 mt-1">
+                <p className="text-xs text-zinc-400 mt-1">
                   Pre-generated reusable voice breaks — saves 1 AI call per hour during daily cron.
                   {genericTracks.length > 0 && (
                     <span className="ml-1 font-medium text-zinc-400">
@@ -541,9 +541,9 @@ export default function DJEditorDetailPage() {
             </div>
 
             {genericLoading ? (
-              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-zinc-500" /></div>
+              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-zinc-400" /></div>
             ) : genericTracks.length === 0 ? (
-              <p className="text-sm text-zinc-500 text-center py-6">No generic tracks yet. Click &quot;Generate Batch&quot; to create 12.</p>
+              <p className="text-sm text-zinc-400 text-center py-6">No generic tracks yet. Click &quot;Generate Batch&quot; to create 12.</p>
             ) : (
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {genericTracks.map((track) => (
@@ -566,22 +566,22 @@ export default function DJEditorDetailPage() {
                           {track.category.replace("_", " ")}
                         </span>
                         {track.timeOfDay && (
-                          <span className="text-[10px] text-zinc-500">{track.timeOfDay}</span>
+                          <span className="text-[10px] text-zinc-400">{track.timeOfDay}</span>
                         )}
-                        <span className="text-[10px] text-zinc-500">used {track.useCount}x</span>
+                        <span className="text-[10px] text-zinc-400">used {track.useCount}x</span>
                       </div>
                       <p className="text-xs text-zinc-400 truncate mt-0.5">{track.scriptText}</p>
                     </div>
                     <button
                       onClick={() => toggleGenericTrack(track.id, !track.isActive)}
-                      className="flex-shrink-0 text-zinc-500 hover:text-zinc-300"
+                      className="flex-shrink-0 text-zinc-400 hover:text-zinc-300"
                       title={track.isActive ? "Deactivate" : "Activate"}
                     >
                       {track.isActive ? <ToggleRight className="w-5 h-5 text-green-500" /> : <ToggleLeft className="w-5 h-5" />}
                     </button>
                     <button
                       onClick={() => deleteGenericTrack(track.id)}
-                      className="flex-shrink-0 text-zinc-600 hover:text-red-400"
+                      className="flex-shrink-0 text-zinc-400 hover:text-red-400"
                       title="Delete"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

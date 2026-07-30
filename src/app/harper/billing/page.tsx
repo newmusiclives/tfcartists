@@ -278,7 +278,7 @@ export default function BillingDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3">
-                <Link href="/harper" className="text-gray-500 hover:text-gray-700 dark:text-zinc-300">
+                <Link href="/harper" className="text-gray-400 hover:text-gray-700 dark:text-zinc-300">
                   <Building2 className="w-6 h-6" />
                 </Link>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
@@ -413,26 +413,26 @@ export default function BillingDashboard() {
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ml-8">
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Amount</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Amount</p>
                               <p className="text-sm font-semibold text-green-600">${invoice.amount}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Billing Period</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Billing Period</p>
                               <p className="text-sm font-medium">{invoice.billingPeriod}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 dark:text-zinc-500">Due Date</p>
+                              <p className="text-xs text-gray-400 dark:text-zinc-400">Due Date</p>
                               <p className="text-sm font-medium">{invoice.dueDate}</p>
                             </div>
                             {invoice.paidDate && (
                               <div>
-                                <p className="text-xs text-gray-500 dark:text-zinc-500">Paid Date</p>
+                                <p className="text-xs text-gray-400 dark:text-zinc-400">Paid Date</p>
                                 <p className="text-sm font-medium text-green-600">{invoice.paidDate}</p>
                               </div>
                             )}
                             {invoice.paymentMethod && (
                               <div>
-                                <p className="text-xs text-gray-500 dark:text-zinc-500">Payment Method</p>
+                                <p className="text-xs text-gray-400 dark:text-zinc-400">Payment Method</p>
                                 <p className="text-sm font-medium capitalize">{invoice.paymentMethod.replace('_', ' ')}</p>
                               </div>
                             )}
@@ -510,11 +510,11 @@ export default function BillingDashboard() {
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Artist Pool (80%)</p>
+                          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Artist Pool (80%)</p>
                           <p className="text-sm font-semibold text-purple-600">${record.artistPool.toLocaleString()}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-zinc-500 mb-1">Station Operations (20%)</p>
+                          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Station Operations (20%)</p>
                           <p className="text-sm font-semibold text-blue-600">${record.stationOperations.toLocaleString()}</p>
                         </div>
                       </div>
