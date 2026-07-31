@@ -21,11 +21,25 @@ const argUrl = process.argv.includes("--url")
   : null;
 const SHOTS = process.argv.includes("--shots");
 
-const PAGES = argUrl
-  ? [argUrl]
-  : ["/login", "/", "/whats-playing", "/schedule", "/station-admin", "/studio", "/stations"].map(
-      (p) => BASE + p
-    );
+// Accept a bare URL as well as --url. Passing one positionally used to be
+// ignored in silence, so the run quietly audited the DEFAULT page list and
+// reported a clean result for pages the caller never asked about.
+const positionalUrl = process.argv
+  .slice(2)
+  .find((a) => /^https?:\/\//.test(a) && a !== argUrl);
+
+const PAGES = (argUrl ?? positionalUrl)
+  ? [argUrl ?? positionalUrl]
+  : [
+      "/login",
+      "/",
+      "/whats-playing",
+      "/schedule",
+      "/artists",
+      "/station-admin",
+      "/studio",
+      "/stations",
+    ].map((p) => BASE + p);
 
 const SHOT_DIR = "/tmp/tfc-contrast-shots";
 if (SHOTS) mkdirSync(SHOT_DIR, { recursive: true });
@@ -156,12 +170,18 @@ const EVAL = () => {
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 let total = 0;
+let unreachable = 0;
 
 for (const url of PAGES) {
   try {
     await page.goto(url, { waitUntil: "networkidle", timeout: 90000 });
   } catch {
-    console.log(`\n  ${url}\n    (failed to load)`);
+    // A page that never loaded is NOT a page that passed. Counting it as
+    // neither meant an unreachable page produced the same clean TOTAL as an
+    // audited one - the worst possible outcome for a check whose whole job is
+    // to tell you the site is readable.
+    console.log(`\n  ${url}\n    FAILED TO LOAD - not audited`);
+    unreachable++;
     continue;
   }
   await page.waitForTimeout(600);
@@ -187,4 +207,9 @@ for (const url of PAGES) {
 console.log(`\n  TOTAL: ${total} rendered contrast issue(s)`);
 if (SHOTS) console.log(`  screenshots: ${SHOT_DIR}`);
 await browser.close();
-process.exit(total > 0 && process.argv.includes("--strict") ? 1 : 0);
+if (unreachable) {
+  console.log(`  ${unreachable} page(s) could not be loaded and were NOT audited.`);
+}
+process.exit(
+  (total > 0 || unreachable > 0) && process.argv.includes("--strict") ? 1 : 0,
+);

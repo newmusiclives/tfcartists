@@ -27,6 +27,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "i.scdn.co", // Spotify album art
       },
+      {
+        // Artist portraits for the owned catalogue, served from Cloudflare R2
+        // by TrueFans LABEL. Without this, next/image refuses the host and
+        // every artist image 400s - which affects the now-playing artwork as
+        // well as the artists page.
+        protocol: "https",
+        hostname: "**.r2.dev",
+      },
     ],
   },
   experimental: {
