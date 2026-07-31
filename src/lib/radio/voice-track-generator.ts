@@ -203,37 +203,43 @@ export async function generateVoiceTrackScripts(
       // template into "creative" prose that omits the artist/title.
       const VOICE_TRACK_TEMPERATURE = 0.5;
 
-      // Few-shot prompting: include 2 fake-prior turns with concrete
-      // intros that follow the required structure. Without few-shot,
-      // Claude's training prior for "DJ intro" produces generic vibe
-      // monologues that ignore the artist/title even when the prompt
-      // demands them. With few-shot, Claude pattern-matches the
-      // assistant turns and produces specific intros that name the song.
+      // Few-shot prompting: include fake-prior turns with concrete intros
+      // that follow the required structure. Without few-shot, Claude's
+      // training prior for "DJ intro" produces generic vibe monologues
+      // that ignore the artist/title even when the prompt demands them.
+      // With few-shot, Claude pattern-matches the assistant turns and
+      // produces specific intros that name the song.
+      //
+      // The examples use OUR OWN artists, deliberately. They previously used
+      // major-label acts, which put those names in context on every single
+      // generation - inviting the model to reach for them when improvising,
+      // and teaching it that this is a station that plays them. It is not.
+      // Examples are drawn from the catalogue the DJs can actually play.
       const fewShotMessages = vb.trackType === "intro" && nextSong
         ? [
             {
               role: "user" as const,
-              content: "DJ: Hank. Artist: Eric Church. Song: Drink In My Hand. Time: morning.",
+              content: "DJ: Hank. Artist: Copper & Clay. Song: When the Whistle Stopped Blowing. Time: morning.",
             },
             {
               role: "assistant" as const,
-              content: 'Hank here on North Country Radio, easing you into the morning. Coming up, Eric Church with "Drink In My Hand."',
+              content: 'Hank here on North Country Radio, easing you into the morning. Coming up, Copper & Clay with "When the Whistle Stopped Blowing."',
             },
             {
               role: "user" as const,
-              content: "DJ: Loretta. Artist: Carrie Underwood. Song: Before He Cheats. Time: midday.",
+              content: "DJ: Loretta. Artist: The Esker Doves. Song: I Practiced Saying Goodbye in the Mirror. Time: midday.",
             },
             {
               role: "assistant" as const,
-              content: 'You\'re locked in with Loretta on North Country Radio. Up next, Carrie Underwood with "Before He Cheats."',
+              content: 'You\'re locked in with Loretta on North Country Radio. Up next, The Esker Doves with "I Practiced Saying Goodbye in the Mirror."',
             },
             {
               role: "user" as const,
-              content: "DJ: Doc. Artist: Brad Paisley. Song: Mud On The Tires. Time: afternoon.",
+              content: "DJ: Doc. Artist: Motor Assembly. Song: The Landlord Always Wins. Time: afternoon.",
             },
             {
               role: "assistant" as const,
-              content: 'This is Doc on North Country Radio — afternoon drive in full swing. Next up, Brad Paisley with "Mud On The Tires."',
+              content: 'This is Doc on North Country Radio — afternoon drive in full swing. Next up, Motor Assembly with "The Landlord Always Wins."',
             },
           ]
         : [];
