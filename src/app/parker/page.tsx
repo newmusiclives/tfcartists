@@ -74,7 +74,7 @@ export default function ParkerDashboardPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-rose-50 dark:from-rose-950 via-white dark:via-zinc-900 to-orange-50 dark:to-orange-950 flex items-center justify-center">
         <div className="text-gray-600 dark:text-zinc-400">Loading dashboard...</div>
       </main>
     );
@@ -82,9 +82,9 @@ export default function ParkerDashboardPage() {
 
   if (unauthorized) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-rose-50 dark:from-rose-950 via-white dark:via-zinc-900 to-orange-50 dark:to-orange-950 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-zinc-100 mb-2">Login Required</h2>
           <p className="text-gray-600 dark:text-zinc-400 mb-4">Sign in as Parker to access this dashboard.</p>
           <Link href="/login?callbackUrl=/parker" className="bg-rose-600 text-white px-6 py-2 rounded-lg hover:bg-rose-700">Sign In</Link>
         </div>
@@ -94,24 +94,24 @@ export default function ParkerDashboardPage() {
 
   if (!stationData && activeAds === 0) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-rose-50 dark:from-rose-950 via-white dark:via-zinc-900 to-orange-50 dark:to-orange-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-red-600 font-semibold mb-2">Unable to load station data</div>
-          <button onClick={() => window.location.reload()} className="text-rose-600 hover:underline text-sm">Try again</button>
+          <div className="text-red-600 dark:text-red-300 font-semibold mb-2">Unable to load station data</div>
+          <button onClick={() => window.location.reload()} className="text-rose-600 dark:text-rose-300 hover:underline text-sm">Try again</button>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50">
+    <main className="min-h-screen bg-gradient-to-br from-rose-50 dark:from-rose-950 via-white dark:via-zinc-900 to-orange-50 dark:to-orange-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/admin"
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Admin</span>
@@ -125,7 +125,7 @@ export default function ParkerDashboardPage() {
             </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <Radio className="w-8 h-8 text-rose-600" />
+            <Radio className="w-8 h-8 text-rose-600 dark:text-rose-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Team Parker Dashboard</h1>
               <p className="text-gray-600 dark:text-zinc-400">Station Management & Operations</p>
@@ -138,25 +138,25 @@ export default function ParkerDashboardPage() {
         {/* Key Metrics */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
-            icon={<Music className="w-6 h-6 text-rose-600" />}
+            icon={<Music className="w-6 h-6 text-rose-600 dark:text-rose-300" />}
             label="Songs in Library"
             value={songCount}
             subtitle="Music library"
           />
           <MetricCard
-            icon={<Users className="w-6 h-6 text-indigo-600" />}
+            icon={<Users className="w-6 h-6 text-indigo-600 dark:text-indigo-300" />}
             label="Active DJs"
             value={djCount}
             subtitle="Station roster"
           />
           <MetricCard
-            icon={<Clock className="w-6 h-6 text-violet-600" />}
+            icon={<Clock className="w-6 h-6 text-violet-600 dark:text-violet-300" />}
             label="Clock Templates"
             value={clockCount}
             subtitle="Format clocks"
           />
           <MetricCard
-            icon={<Megaphone className="w-6 h-6 text-orange-600" />}
+            icon={<Megaphone className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Active Ads"
             value={activeAds}
             subtitle="Sponsor spots"
@@ -166,7 +166,7 @@ export default function ParkerDashboardPage() {
         {/* Team Members */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
-            <Users className="w-6 h-6 text-rose-600" />
+            <Users className="w-6 h-6 text-rose-600 dark:text-rose-300" />
             <span>Team Members</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -177,11 +177,11 @@ export default function ParkerDashboardPage() {
               { name: "Nolan Torres", role: "Traffic Manager", avatar: "NT", color: "bg-orange-100 text-orange-600", status: "Ad inventory & spots", kpi: `${activeAds} ads` },
               { name: "Ivy Brennan", role: "Listener Services Director", avatar: "IB", color: "bg-teal-100 text-teal-600", status: "Community engagement", kpi: "Listener care" },
             ].map((member, idx) => (
-              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800 hover:border-rose-300 transition-colors">
+              <div key={idx} className="bg-gradient-to-br from-gray-50 dark:from-zinc-950 to-white dark:to-zinc-900 rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800 hover:border-rose-300 transition-colors">
                 <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>
                 <div className="font-semibold text-gray-900 dark:text-white text-sm">{member.name}</div>
                 <div className="text-xs text-gray-600 dark:text-zinc-400 mb-2">{member.role}</div>
-                <div className="text-xs text-rose-600 mb-2 truncate">{member.status}</div>
+                <div className="text-xs text-rose-600 dark:text-rose-300 mb-2 truncate">{member.status}</div>
                 <div className="mt-2 pt-2 border-t border-gray-200 dark:border-zinc-800">
                   <div className="text-xs font-semibold text-gray-700 dark:text-zinc-300">{member.kpi}</div>
                 </div>
@@ -193,33 +193,33 @@ export default function ParkerDashboardPage() {
         {/* Station Health */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4 flex items-center space-x-2">
-            <Shield className="w-6 h-6 text-rose-600" />
+            <Shield className="w-6 h-6 text-rose-600 dark:text-rose-300" />
             <span>Station Health</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-green-50 rounded-lg p-5 border border-green-200">
+            <div className="bg-green-50 dark:bg-green-950 rounded-lg p-5 border border-green-200 dark:border-green-800">
               <div className="flex items-center space-x-2 mb-3">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-                <span className="text-sm font-semibold text-green-700">Format Compliance</span>
+                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-300" />
+                <span className="text-sm font-semibold text-green-700 dark:text-green-300">Format Compliance</span>
               </div>
-              <div className="text-3xl font-bold text-green-900 mb-1">98%</div>
-              <div className="text-sm text-green-600">Within format guidelines</div>
+              <div className="text-3xl font-bold text-green-900 dark:text-green-200 mb-1">98%</div>
+              <div className="text-sm text-green-600 dark:text-green-300">Within format guidelines</div>
             </div>
-            <div className="bg-blue-50 rounded-lg p-5 border border-blue-200">
+            <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-5 border border-blue-200 dark:border-blue-800">
               <div className="flex items-center space-x-2 mb-3">
-                <CalendarDays className="w-5 h-5 text-blue-600" />
-                <span className="text-sm font-semibold text-blue-700">Schedule Coverage</span>
+                <CalendarDays className="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">Schedule Coverage</span>
               </div>
-              <div className="text-3xl font-bold text-blue-900 mb-1">100%</div>
-              <div className="text-sm text-blue-600">All dayparts staffed</div>
+              <div className="text-3xl font-bold text-blue-900 dark:text-blue-200 mb-1">100%</div>
+              <div className="text-sm text-blue-600 dark:text-blue-300">All dayparts staffed</div>
             </div>
-            <div className="bg-violet-50 rounded-lg p-5 border border-violet-200">
+            <div className="bg-violet-50 dark:bg-violet-950 rounded-lg p-5 border border-violet-200 dark:border-violet-800">
               <div className="flex items-center space-x-2 mb-3">
-                <BarChart3 className="w-5 h-5 text-violet-600" />
-                <span className="text-sm font-semibold text-violet-700">Music Rotation</span>
+                <BarChart3 className="w-5 h-5 text-violet-600 dark:text-violet-300" />
+                <span className="text-sm font-semibold text-violet-700 dark:text-violet-300">Music Rotation</span>
               </div>
-              <div className="text-3xl font-bold text-violet-900 mb-1">Healthy</div>
-              <div className="text-sm text-violet-600">Categories balanced</div>
+              <div className="text-3xl font-bold text-violet-900 dark:text-violet-200 mb-1">Healthy</div>
+              <div className="text-sm text-violet-600 dark:text-violet-300">Categories balanced</div>
             </div>
           </div>
         </section>
@@ -230,35 +230,35 @@ export default function ParkerDashboardPage() {
             title="Programming"
             description="Show scheduling, format compliance, and daypart strategy"
             href="/parker/programming"
-            icon={<CalendarDays className="w-8 h-8 text-indigo-600" />}
+            icon={<CalendarDays className="w-8 h-8 text-indigo-600 dark:text-indigo-300" />}
             managedBy="Sage Calloway"
           />
           <QuickActionCard
             title="Music Library"
             description="Rotation management, category balance, and new music"
             href="/parker/music"
-            icon={<ListMusic className="w-8 h-8 text-violet-600" />}
+            icon={<ListMusic className="w-8 h-8 text-violet-600 dark:text-violet-300" />}
             managedBy="Wren Nakamura"
           />
           <QuickActionCard
             title="Traffic & Ads"
             description="Commercial scheduling, ad inventory, and sponsor fulfillment"
             href="/parker/traffic"
-            icon={<Megaphone className="w-8 h-8 text-orange-600" />}
+            icon={<Megaphone className="w-8 h-8 text-orange-600 dark:text-orange-300" />}
             managedBy="Nolan Torres"
           />
           <QuickActionCard
             title="Listener Services"
             description="Feedback, requests, contests, and community engagement"
             href="/parker/listeners"
-            icon={<MessageCircle className="w-8 h-8 text-teal-600" />}
+            icon={<MessageCircle className="w-8 h-8 text-teal-600 dark:text-teal-300" />}
             managedBy="Ivy Brennan"
           />
           <QuickActionCard
             title="Station Admin"
             description="Full station administration and configuration tools"
             href="/station-admin"
-            icon={<Radio className="w-8 h-8 text-rose-600" />}
+            icon={<Radio className="w-8 h-8 text-rose-600 dark:text-rose-300" />}
             managedBy="Parker Hayes"
           />
         </section>
@@ -285,7 +285,7 @@ function MetricCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -311,7 +311,7 @@ function QuickActionCard({
         </div>
         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{title}</h3>
         {managedBy && (
-          <p className="text-xs text-rose-600 font-medium mb-1">Managed by {managedBy}</p>
+          <p className="text-xs text-rose-600 dark:text-rose-300 font-medium mb-1">Managed by {managedBy}</p>
         )}
         <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
       </div>

@@ -86,11 +86,11 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       }
 
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
-            <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-900">
+          <div className="max-w-md w-full bg-white dark:bg-zinc-900 shadow-lg rounded-lg p-8">
+            <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 dark:bg-red-900 rounded-full mb-4">
               <svg
-                className="w-6 h-6 text-red-600"
+                className="w-6 h-6 text-red-600 dark:text-red-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -103,18 +103,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-zinc-100 mb-2">
               Something went wrong
             </h2>
-            <p className="text-gray-600 text-center mb-6">
+            <p className="text-gray-600 dark:text-zinc-300 text-center mb-6">
               We're sorry for the inconvenience. Please try refreshing the page.
             </p>
             {process.env.NODE_ENV === "development" && this.state.error && (
-              <details className="mt-4 p-4 bg-gray-100 rounded text-sm">
-                <summary className="cursor-pointer font-semibold text-gray-700 mb-2">
+              <details className="mt-4 p-4 bg-gray-100 dark:bg-zinc-800 rounded text-sm">
+                <summary className="cursor-pointer font-semibold text-gray-700 dark:text-zinc-200 mb-2">
                   Error Details (Development Only)
                 </summary>
-                <pre className="text-xs text-red-600 overflow-auto">
+                <pre className="text-xs text-red-600 dark:text-red-300 overflow-auto">
                   {this.state.error.message}
                   {"\n\n"}
                   {this.state.error.stack}
@@ -143,10 +143,10 @@ export function ErrorFallback({ error, reset }: { error?: Error; reset?: () => v
   return (
     <div className="min-h-[400px] flex items-center justify-center">
       <div className="text-center">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-zinc-100 mb-2">
           Oops! Something went wrong
         </h3>
-        <p className="text-gray-600 mb-4">
+        <p className="text-gray-600 dark:text-zinc-300 mb-4">
           {error?.message || "An unexpected error occurred"}
         </p>
         {reset && (
@@ -176,10 +176,10 @@ export function SectionErrorFallback({
   onRetry?: () => void;
 }) {
   return (
-    <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
-      <div className="flex items-center justify-center w-10 h-10 mx-auto bg-red-100 rounded-full mb-3">
+    <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950 p-6 text-center">
+      <div className="flex items-center justify-center w-10 h-10 mx-auto bg-red-100 dark:bg-red-900 rounded-full mb-3">
         <svg
-          className="w-5 h-5 text-red-600"
+          className="w-5 h-5 text-red-600 dark:text-red-300"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -192,10 +192,10 @@ export function SectionErrorFallback({
           />
         </svg>
       </div>
-      <h3 className="text-sm font-semibold text-red-800 mb-1">
+      <h3 className="text-sm font-semibold text-red-800 dark:text-red-200 mb-1">
         {section ? `Failed to load ${section}` : "Something went wrong"}
       </h3>
-      <p className="text-xs text-red-600 mb-3">
+      <p className="text-xs text-red-600 dark:text-red-300 mb-3">
         This section encountered an error. Other parts of the page are unaffected.
       </p>
       {process.env.NODE_ENV === "development" && error && (

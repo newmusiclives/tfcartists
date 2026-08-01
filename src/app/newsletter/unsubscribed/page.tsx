@@ -7,8 +7,8 @@ export default function UnsubscribedPage() {
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-          <CheckCircle2 className="w-8 h-8 text-green-600" />
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full mb-4">
+          <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-300" />
         </div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Unsubscribed</h1>
         <p className="text-gray-600 dark:text-zinc-400 mb-6">
@@ -17,7 +17,7 @@ export default function UnsubscribedPage() {
         </p>
         <Link
           href="/"
-          className="inline-flex items-center space-x-2 text-amber-700 hover:text-amber-800 font-medium"
+          className="inline-flex items-center space-x-2 text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium"
         >
           <Radio className="w-4 h-4" />
           <span>Back to TrueFans RADIO</span>

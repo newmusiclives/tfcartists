@@ -401,7 +401,7 @@ export default function ArtistPortalPage() {
       cancelled: "bg-red-100 text-red-800",
     };
     return (
-      <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${colors[status] || "bg-gray-100 text-gray-600"}`}>
+      <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${colors[status] || "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300"}`}>
         {status}
       </span>
     );
@@ -411,7 +411,7 @@ export default function ArtistPortalPage() {
 
   if (view === "lookup") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
+      <div className="min-h-screen bg-gradient-to-b from-amber-50 dark:from-amber-950 to-white dark:to-zinc-900">
         <SharedNav />
         <div className="max-w-xl mx-auto px-4 py-20 text-center">
           <Radio className="w-12 h-12 text-amber-500 mx-auto mb-4" />
@@ -437,7 +437,7 @@ export default function ArtistPortalPage() {
               Go
             </button>
           </div>
-          {error && <p className="text-sm text-red-600 mt-3">{error}</p>}
+          {error && <p className="text-sm text-red-600 dark:text-red-300 mt-3">{error}</p>}
           <p className="text-xs text-gray-400 mt-3">
             Enter your Artist ID (from your welcome email) or the email you signed up with.
           </p>
@@ -465,7 +465,7 @@ export default function ArtistPortalPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{artist?.name}</h1>
-            <p className="text-gray-400 dark:text-zinc-400">{artist?.genre} &middot; {artist?.email}</p>
+            <p className="text-gray-600 dark:text-zinc-400">{artist?.genre} &middot; {artist?.email}</p>
           </div>
           <button
             onClick={() => { setView("lookup"); setArtist(null); setActiveTab("dashboard"); }}
@@ -483,8 +483,8 @@ export default function ArtistPortalPage() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
                 activeTab === tab.id
-                  ? "bg-amber-100 text-amber-900"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  ? "bg-amber-100 dark:bg-amber-900 text-amber-900 dark:text-amber-200"
+                  : "text-gray-600 dark:text-zinc-300 hover:text-gray-900 hover:bg-gray-50"
               }`}
             >
               {tab.icon}
@@ -495,9 +495,9 @@ export default function ArtistPortalPage() {
 
         {/* Error banner */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 flex items-center gap-2">
+          <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-4 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-            <p className="text-sm text-red-700">{error}</p>
+            <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
             <button onClick={() => setError(null)} className="ml-auto text-red-400 hover:text-red-600 text-sm">
               Dismiss
             </button>
@@ -508,17 +508,17 @@ export default function ArtistPortalPage() {
         {activeTab === "dashboard" && (
           <div className="space-y-6">
             {/* Tier Card */}
-            <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border-2 border-amber-200">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border-2 border-amber-200 dark:border-amber-800">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">Current Tier</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Current Tier</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">{tier.name}</p>
-                  <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">
+                  <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">
                     {tier.shares} shares &middot; ${tier.cost}/month
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">Level</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Level</p>
                   <p className="text-3xl font-bold text-amber-600 dark:text-amber-400">{artist?.xpLevel || 1}</p>
                   <p className="text-xs text-gray-400">{artist?.xpTotal || 0} XP</p>
                 </div>
@@ -574,16 +574,16 @@ export default function ArtistPortalPage() {
                 />
               </div>
             ) : (
-              <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 text-center text-gray-500 shadow-sm border">
+              <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 text-center text-gray-500 dark:text-zinc-400 shadow-sm border">
                 <p>No stats available yet. Keep submitting tracks and building your audience!</p>
               </div>
             )}
 
             {/* Tier Upgrade CTA */}
             {artist?.airplayTier !== "TIER_120" && (
-              <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200">
-                <h3 className="font-semibold text-amber-900 mb-2">Upgrade Your Tier</h3>
-                <p className="text-sm text-amber-700 mb-4">
+              <div className="bg-gradient-to-r from-amber-50 dark:from-amber-950 to-orange-50 dark:to-orange-950 rounded-xl p-6 border border-amber-200 dark:border-amber-800">
+                <h3 className="font-semibold text-amber-900 dark:text-amber-200 mb-2">Upgrade Your Tier</h3>
+                <p className="text-sm text-amber-700 dark:text-amber-300 mb-4">
                   Higher tiers mean more shares in the revenue pool and more airplay for your music.
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -597,7 +597,7 @@ export default function ArtistPortalPage() {
                       >
                         <p className="font-semibold text-sm">{info.name}</p>
                         <p className="text-lg font-bold text-amber-600 dark:text-amber-400">${info.cost}/mo</p>
-                        <p className="text-xs text-gray-400 dark:text-zinc-400">{info.shares} shares</p>
+                        <p className="text-xs text-gray-600 dark:text-zinc-400">{info.shares} shares</p>
                       </Link>
                     ))}
                 </div>
@@ -612,7 +612,7 @@ export default function ArtistPortalPage() {
               >
                 <Upload className="w-5 h-5 text-purple-500 mb-2" />
                 <p className="font-semibold text-gray-900 dark:text-white">Submit a Track</p>
-                <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">Upload music for curator review</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">Upload music for curator review</p>
               </button>
               <button
                 onClick={() => setActiveTab("earnings")}
@@ -620,7 +620,7 @@ export default function ArtistPortalPage() {
               >
                 <DollarSign className="w-5 h-5 text-green-500 mb-2" />
                 <p className="font-semibold text-gray-900 dark:text-white">View Earnings</p>
-                <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">Monthly revenue breakdown</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">Monthly revenue breakdown</p>
               </button>
               <button
                 onClick={() => setActiveTab("analytics")}
@@ -628,7 +628,7 @@ export default function ArtistPortalPage() {
               >
                 <BarChart3 className="w-5 h-5 text-blue-500 mb-2" />
                 <p className="font-semibold text-gray-900 dark:text-white">Analytics</p>
-                <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">Plays, reach, peak hours</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">Plays, reach, peak hours</p>
               </button>
             </div>
           </div>
@@ -646,7 +646,7 @@ export default function ArtistPortalPage() {
                 </div>
                 <button
                   onClick={() => setShowUploadForm(!showUploadForm)}
-                  className="text-sm text-purple-600 hover:text-purple-800 font-medium"
+                  className="text-sm text-purple-600 dark:text-purple-300 hover:text-purple-800 font-medium"
                 >
                   {showUploadForm ? "Cancel" : "New Submission"}
                 </button>
@@ -655,9 +655,9 @@ export default function ArtistPortalPage() {
               {showUploadForm && (
                 <div className="p-6 space-y-4">
                   {uploadSuccess && (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                      <p className="text-sm text-green-800">Track submitted for review!</p>
+                    <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-3 flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-300" />
+                      <p className="text-sm text-green-800 dark:text-green-200">Track submitted for review!</p>
                     </div>
                   )}
 
@@ -694,7 +694,7 @@ export default function ArtistPortalPage() {
                         type="file"
                         accept=".mp3,.wav,.ogg,audio/*"
                         onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
-                        className="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                        className="w-full text-sm text-gray-500 dark:text-zinc-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
                       />
                     </div>
                   </div>
@@ -744,12 +744,12 @@ export default function ArtistPortalPage() {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400 mx-auto" />
                 </div>
               ) : tracks.length === 0 ? (
-                <div className="p-8 text-center text-gray-400 dark:text-zinc-400">
+                <div className="p-8 text-center text-gray-600 dark:text-zinc-400">
                   <Music className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <p>No tracks submitted yet.</p>
                   <button
                     onClick={() => setShowUploadForm(true)}
-                    className="text-sm text-purple-600 hover:underline mt-2"
+                    className="text-sm text-purple-600 dark:text-purple-300 hover:underline mt-2"
                   >
                     Submit your first track
                   </button>
@@ -758,13 +758,13 @@ export default function ArtistPortalPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Title</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Genre</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Status</th>
+                      <tr className="bg-gray-50 dark:bg-zinc-900 text-left">
+                        <th className="px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Title</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Genre</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Status</th>
                         <th className="px-4 py-3 font-medium text-gray-400 text-right">Total Plays</th>
                         <th className="px-4 py-3 font-medium text-gray-400 text-right">This Month</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Submitted</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Submitted</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -780,7 +780,7 @@ export default function ArtistPortalPage() {
                           <td className="px-4 py-3">{statusBadge(track.status)}</td>
                           <td className="px-4 py-3 text-right font-medium">{track.playCount.toLocaleString()}</td>
                           <td className="px-4 py-3 text-right text-gray-600 dark:text-zinc-400">{track.playsThisMonth.toLocaleString()}</td>
-                          <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">
+                          <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">
                             {new Date(track.submittedAt).toLocaleDateString()}
                           </td>
                         </tr>
@@ -800,15 +800,15 @@ export default function ArtistPortalPage() {
             {earningsSummary && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">Total Earned</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Total Earned</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">${earningsSummary.totalEarned.toFixed(2)}</p>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">Paid Out</p>
-                  <p className="text-2xl font-bold text-green-600">${earningsSummary.totalPaid.toFixed(2)}</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Paid Out</p>
+                  <p className="text-2xl font-bold text-green-600 dark:text-green-300">${earningsSummary.totalPaid.toFixed(2)}</p>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">Pending</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Pending</p>
                   <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">${earningsSummary.totalPending.toFixed(2)}</p>
                 </div>
               </div>
@@ -830,7 +830,7 @@ export default function ArtistPortalPage() {
                           <span className="text-xs text-gray-400 w-16 text-right flex-shrink-0">
                             {formatPeriod(e.period)}
                           </span>
-                          <div className="flex-1 bg-gray-100 rounded-full h-6 relative overflow-hidden">
+                          <div className="flex-1 bg-gray-100 dark:bg-zinc-800 rounded-full h-6 relative overflow-hidden">
                             <div
                               className={`h-full rounded-full ${e.paid ? "bg-green-400" : "bg-amber-400"}`}
                               style={{ width: `${Math.max(pct, 2)}%` }}
@@ -848,7 +848,7 @@ export default function ArtistPortalPage() {
                       );
                     })}
                   </div>
-                  <div className="flex items-center gap-4 mt-4 text-xs text-gray-400 dark:text-zinc-400">
+                  <div className="flex items-center gap-4 mt-4 text-xs text-gray-600 dark:text-zinc-400">
                     <span className="flex items-center gap-1">
                       <span className="w-3 h-3 rounded-full bg-green-400" /> Paid
                     </span>
@@ -872,7 +872,7 @@ export default function ArtistPortalPage() {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400 mx-auto" />
                 </div>
               ) : earnings.length === 0 ? (
-                <div className="p-8 text-center text-gray-400 dark:text-zinc-400">
+                <div className="p-8 text-center text-gray-600 dark:text-zinc-400">
                   <Clock className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <p>No earnings yet. Earnings are distributed monthly via Manifest Financial.</p>
                 </div>
@@ -880,13 +880,13 @@ export default function ArtistPortalPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Tier</th>
+                      <tr className="bg-gray-50 dark:bg-zinc-900 text-left">
+                        <th className="px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Tier</th>
                         <th className="px-4 py-3 font-medium text-gray-400 text-right">Shares</th>
                         <th className="px-4 py-3 font-medium text-gray-400 text-right">Earnings</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Status</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Invoice</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Status</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Invoice</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -898,11 +898,11 @@ export default function ArtistPortalPage() {
                           <td className="px-4 py-3 text-right font-medium">${e.earnings.toFixed(2)}</td>
                           <td className="px-4 py-3">
                             {e.paid ? (
-                              <span className="text-green-600 flex items-center gap-1 text-xs">
+                              <span className="text-green-600 dark:text-green-300 flex items-center gap-1 text-xs">
                                 <CheckCircle className="w-3 h-3" /> Paid
                               </span>
                             ) : (
-                              <span className="text-amber-600 flex items-center gap-1 text-xs">
+                              <span className="text-amber-600 dark:text-amber-300 flex items-center gap-1 text-xs">
                                 <Clock className="w-3 h-3" /> Pending
                               </span>
                             )}
@@ -910,7 +910,7 @@ export default function ArtistPortalPage() {
                           <td className="px-4 py-3">
                             <Link
                               href={`/portal/artist/invoice?artistId=${artist?.id}&period=${e.period}`}
-                              className="text-amber-600 hover:text-amber-800 flex items-center gap-1 text-xs font-medium"
+                              className="text-amber-600 dark:text-amber-300 hover:text-amber-800 flex items-center gap-1 text-xs font-medium"
                             >
                               <Download className="w-3 h-3" /> Download
                             </Link>
@@ -932,23 +932,23 @@ export default function ArtistPortalPage() {
             {paymentSummary && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">Total Subscription Payments</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Total Subscription Payments</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">${paymentSummary.totalPayments.toFixed(2)}</p>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">Total Earnings Paid Out</p>
-                  <p className="text-2xl font-bold text-green-600">${paymentSummary.totalPayouts.toFixed(2)}</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Total Earnings Paid Out</p>
+                  <p className="text-2xl font-bold text-green-600 dark:text-green-300">${paymentSummary.totalPayouts.toFixed(2)}</p>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">Pending Payout</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Pending Payout</p>
                   <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">${paymentSummary.pendingAmount.toFixed(2)}</p>
                 </div>
               </div>
             )}
 
             {/* Manifest Financial note */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
+            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
                 All payments are processed through <strong>Manifest Financial</strong>.
                 Payouts are deposited to your registered bank account monthly.
               </p>
@@ -964,9 +964,9 @@ export default function ArtistPortalPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Tier</th>
+                      <tr className="bg-gray-50 dark:bg-zinc-900 text-left">
+                        <th className="px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Tier</th>
                         <th className="px-4 py-3 font-medium text-gray-400 text-right">Shares</th>
                         <th className="px-4 py-3 font-medium text-gray-400 text-right">Amount</th>
                       </tr>
@@ -998,7 +998,7 @@ export default function ArtistPortalPage() {
                   <Loader2 className="w-6 h-6 animate-spin text-gray-400 mx-auto" />
                 </div>
               ) : payments.length === 0 ? (
-                <div className="p-8 text-center text-gray-400 dark:text-zinc-400">
+                <div className="p-8 text-center text-gray-600 dark:text-zinc-400">
                   <FileText className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <p>No subscription payments recorded.</p>
                 </div>
@@ -1006,13 +1006,13 @@ export default function ArtistPortalPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Date</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Tier</th>
+                      <tr className="bg-gray-50 dark:bg-zinc-900 text-left">
+                        <th className="px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Date</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Tier</th>
                         <th className="px-4 py-3 font-medium text-gray-400 text-right">Amount</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Status</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Method</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Status</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Method</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1042,12 +1042,12 @@ export default function ArtistPortalPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="bg-gray-50 text-left">
-                        <th className="px-6 py-3 font-medium text-gray-400 dark:text-zinc-400">Period</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Tier</th>
+                      <tr className="bg-gray-50 dark:bg-zinc-900 text-left">
+                        <th className="px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Period</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Tier</th>
                         <th className="px-4 py-3 font-medium text-gray-400 text-right">Shares</th>
                         <th className="px-4 py-3 font-medium text-gray-400 text-right">Amount</th>
-                        <th className="px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Paid On</th>
+                        <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Paid On</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1056,8 +1056,8 @@ export default function ArtistPortalPage() {
                           <td className="px-6 py-3 font-medium">{formatPeriod(p.period)}</td>
                           <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{p.tier}</td>
                           <td className="px-4 py-3 text-right">{p.shares}</td>
-                          <td className="px-4 py-3 text-right font-medium text-green-600">${p.earnings.toFixed(2)}</td>
-                          <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">
+                          <td className="px-4 py-3 text-right font-medium text-green-600 dark:text-green-300">${p.earnings.toFixed(2)}</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">
                             {p.paidAt ? new Date(p.paidAt).toLocaleDateString() : "-"}
                           </td>
                         </tr>
@@ -1108,7 +1108,7 @@ export default function ArtistPortalPage() {
                   <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
                     <div className="px-6 py-4 border-b">
                       <h2 className="font-semibold">Earnings Trend</h2>
-                      <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Monthly earnings over the last 12 months</p>
+                      <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Monthly earnings over the last 12 months</p>
                     </div>
                     <div className="p-6">
                       <div className="flex items-end gap-2 h-40">
@@ -1117,7 +1117,7 @@ export default function ArtistPortalPage() {
                           const heightPct = (e.earnings / maxEarning) * 100;
                           return (
                             <div key={e.id} className="flex-1 flex flex-col items-center gap-1">
-                              <span className="text-[10px] text-gray-400 dark:text-zinc-400">${e.earnings.toFixed(0)}</span>
+                              <span className="text-[10px] text-gray-600 dark:text-zinc-400">${e.earnings.toFixed(0)}</span>
                               <div
                                 className={`w-full rounded-t ${e.paid ? "bg-green-400" : "bg-amber-400"}`}
                                 style={{ height: `${Math.max(heightPct, 4)}%` }}
@@ -1147,10 +1147,10 @@ export default function ArtistPortalPage() {
                           const pct = (track.playCount / maxPlays) * 100;
                           return (
                             <div key={track.id} className="flex items-center gap-3">
-                              <span className="text-sm text-gray-700 w-40 truncate flex-shrink-0" title={track.trackTitle}>
+                              <span className="text-sm text-gray-700 dark:text-zinc-200 w-40 truncate flex-shrink-0" title={track.trackTitle}>
                                 {track.trackTitle}
                               </span>
-                              <div className="flex-1 bg-gray-100 rounded-full h-4 relative overflow-hidden">
+                              <div className="flex-1 bg-gray-100 dark:bg-zinc-800 rounded-full h-4 relative overflow-hidden">
                                 <div
                                   className="h-full rounded-full bg-blue-400"
                                   style={{ width: `${Math.max(pct, 2)}%` }}
@@ -1173,25 +1173,25 @@ export default function ArtistPortalPage() {
                   </div>
                   <div className="p-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="text-center p-4 bg-blue-50 rounded-lg">
-                        <p className="text-2xl font-bold text-blue-600">Morning</p>
-                        <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">6am - 12pm</p>
-                        <p className="text-sm font-medium text-gray-700 mt-2">Peak Discovery</p>
+                      <div className="text-center p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
+                        <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">Morning</p>
+                        <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">6am - 12pm</p>
+                        <p className="text-sm font-medium text-gray-700 dark:text-zinc-200 mt-2">Peak Discovery</p>
                       </div>
-                      <div className="text-center p-4 bg-amber-50 rounded-lg">
+                      <div className="text-center p-4 bg-amber-50 dark:bg-amber-950 rounded-lg">
                         <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">Midday</p>
-                        <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">12pm - 5pm</p>
-                        <p className="text-sm font-medium text-gray-700 mt-2">Steady Listening</p>
+                        <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">12pm - 5pm</p>
+                        <p className="text-sm font-medium text-gray-700 dark:text-zinc-200 mt-2">Steady Listening</p>
                       </div>
-                      <div className="text-center p-4 bg-purple-50 rounded-lg">
-                        <p className="text-2xl font-bold text-purple-600">Evening</p>
-                        <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">5pm - 10pm</p>
-                        <p className="text-sm font-medium text-gray-700 mt-2">Peak Engagement</p>
+                      <div className="text-center p-4 bg-purple-50 dark:bg-purple-950 rounded-lg">
+                        <p className="text-2xl font-bold text-purple-600 dark:text-purple-300">Evening</p>
+                        <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">5pm - 10pm</p>
+                        <p className="text-sm font-medium text-gray-700 dark:text-zinc-200 mt-2">Peak Engagement</p>
                       </div>
-                      <div className="text-center p-4 bg-gray-50 rounded-lg">
+                      <div className="text-center p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg">
                         <p className="text-2xl font-bold text-gray-600 dark:text-zinc-400">Late Night</p>
-                        <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">10pm - 6am</p>
-                        <p className="text-sm font-medium text-gray-700 mt-2">Niche Audience</p>
+                        <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">10pm - 6am</p>
+                        <p className="text-sm font-medium text-gray-700 dark:text-zinc-200 mt-2">Niche Audience</p>
                       </div>
                     </div>
                     <p className="text-xs text-gray-400 mt-4 text-center">
@@ -1215,9 +1215,9 @@ export default function ArtistPortalPage() {
 
               <div className="p-6 space-y-5">
                 {profileSaved && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-600" />
-                    <p className="text-sm text-green-800">Profile saved successfully!</p>
+                  <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-3 flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-300" />
+                    <p className="text-sm text-green-800 dark:text-green-200">Profile saved successfully!</p>
                   </div>
                 )}
 
@@ -1232,7 +1232,7 @@ export default function ArtistPortalPage() {
                         className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-zinc-800"
                       />
                     ) : (
-                      <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-zinc-800 flex items-center justify-center">
                         <Music className="w-6 h-6 text-gray-400" />
                       </div>
                     )}
@@ -1241,7 +1241,7 @@ export default function ArtistPortalPage() {
                       type="file"
                       accept="image/*"
                       onChange={(e) => setProfileImage(e.target.files?.[0] || null)}
-                      className="text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
+                      className="text-sm text-gray-500 dark:text-zinc-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
                     />
                   </div>
                 </div>
@@ -1275,7 +1275,7 @@ export default function ArtistPortalPage() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Social Links</label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs text-gray-400 dark:text-zinc-400 mb-1">Instagram</label>
+                      <label className="block text-xs text-gray-600 dark:text-zinc-400 mb-1">Instagram</label>
                       <input
                         type="text"
                         value={editSocials.instagram}
@@ -1285,7 +1285,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-400 dark:text-zinc-400 mb-1">Twitter / X</label>
+                      <label className="block text-xs text-gray-600 dark:text-zinc-400 mb-1">Twitter / X</label>
                       <input
                         type="text"
                         value={editSocials.twitter}
@@ -1295,7 +1295,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-400 dark:text-zinc-400 mb-1">Spotify</label>
+                      <label className="block text-xs text-gray-600 dark:text-zinc-400 mb-1">Spotify</label>
                       <input
                         type="text"
                         value={editSocials.spotify}
@@ -1305,7 +1305,7 @@ export default function ArtistPortalPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-400 dark:text-zinc-400 mb-1">Website</label>
+                      <label className="block text-xs text-gray-600 dark:text-zinc-400 mb-1">Website</label>
                       <input
                         type="text"
                         value={editSocials.website}
@@ -1341,25 +1341,25 @@ export default function ArtistPortalPage() {
               </div>
               <div className="px-6 py-4 space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400 dark:text-zinc-400">Artist ID</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Artist ID</span>
                   <span className="font-mono text-gray-700 dark:text-zinc-300">{artist?.id}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400 dark:text-zinc-400">Email</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Email</span>
                   <span className="text-gray-700 dark:text-zinc-300">{artist?.email}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400 dark:text-zinc-400">Tier</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Tier</span>
                   <span className="text-gray-700 dark:text-zinc-300">{tier.name} ({artist?.airplayTier})</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400 dark:text-zinc-400">Member Since</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Member Since</span>
                   <span className="text-gray-700 dark:text-zinc-300">
                     {artist?.createdAt ? new Date(artist.createdAt).toLocaleDateString() : "-"}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-400 dark:text-zinc-400">Payment Processor</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Payment Processor</span>
                   <span className="text-gray-700 dark:text-zinc-300">Manifest Financial</span>
                 </div>
               </div>
@@ -1377,7 +1377,7 @@ function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border">
       <div className="mb-2">{icon}</div>
-      <p className="text-sm text-gray-400 dark:text-zinc-400">{label}</p>
+      <p className="text-sm text-gray-600 dark:text-zinc-400">{label}</p>
       <p className="text-xl font-bold text-gray-900 dark:text-white">{value}</p>
     </div>
   );

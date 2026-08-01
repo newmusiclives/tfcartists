@@ -708,7 +708,7 @@ export default function StationBrandingPage() {
                           }`}
                         >
                           <div className={`w-full h-8 rounded mb-2 ${
-                            style === "dark" ? "bg-zinc-950" : style === "light" ? "bg-white" : "bg-gradient-to-r from-zinc-900 to-zinc-800"
+                            style === "dark" ? "bg-zinc-950" : style === "light" ? "bg-white dark:bg-zinc-900" : "bg-gradient-to-r from-zinc-900 to-zinc-800"
                           }`} />
                           {style}
                         </button>

@@ -96,7 +96,7 @@ export function ListenerCount({ mode = "compact", className = "" }: ListenerCoun
         <div className="relative">
           <Headphones
             className={`w-5 h-5 transition-colors duration-300 ${
-              changed ? "text-green-500" : "text-amber-600"
+              changed ? "text-green-500" : "text-amber-600 dark:text-amber-300"
             }`}
           />
           {count > 0 && (
@@ -105,12 +105,12 @@ export function ListenerCount({ mode = "compact", className = "" }: ListenerCoun
         </div>
         <span
           className={`text-2xl sm:text-3xl font-bold tabular-nums transition-colors duration-300 ${
-            changed ? "text-green-600" : "text-gray-900"
+            changed ? "text-green-600 dark:text-green-300" : "text-gray-900 dark:text-zinc-100"
           }`}
         >
           {count.toLocaleString()}
         </span>
-        <span className="text-sm text-gray-400 dark:text-zinc-400">listening now</span>
+        <span className="text-sm text-gray-600 dark:text-zinc-400">listening now</span>
       </div>
       {peak != null && peak > 0 && (
         <div className="flex items-center gap-1 text-xs text-gray-400">

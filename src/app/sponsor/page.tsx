@@ -134,11 +134,11 @@ export default function SponsorPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
+    <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-emerald-50 dark:to-emerald-950">
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2 text-green-700 hover:text-green-800 transition-colors">
+            <Link href="/" className="flex items-center space-x-2 text-green-700 dark:text-green-300 hover:text-green-800 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               <Radio className="w-5 h-5" />
               <span className="font-bold">{currentStation.name}</span>
@@ -150,8 +150,8 @@ export default function SponsorPage() {
       {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
-            <Building2 className="w-8 h-8 text-green-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full mb-6">
+            <Building2 className="w-8 h-8 text-green-600 dark:text-green-300" />
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Reach Music Lovers Who Support Local
@@ -172,7 +172,7 @@ export default function SponsorPage() {
       </section>
 
       {/* Benefits Grid */}
-      <section className="py-16 px-4 bg-white/60">
+      <section className="py-16 px-4 bg-white dark:bg-zinc-900/60">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             Why Sponsors Choose {currentStation.name}
@@ -204,8 +204,8 @@ export default function SponsorPage() {
                 key={item.title}
                 className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-green-100 hover:shadow-md transition-shadow"
               >
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-green-100 rounded-lg mb-4">
-                  <item.icon className="w-5 h-5 text-green-600" />
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg mb-4">
+                  <item.icon className="w-5 h-5 text-green-600 dark:text-green-300" />
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
@@ -261,17 +261,17 @@ export default function SponsorPage() {
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className={`font-bold text-lg ${isSelected ? colors.text : "text-gray-900"}`}>
+                    <span className={`font-bold text-lg ${isSelected ? colors.text : "text-gray-900 dark:text-zinc-100"}`}>
                       {tier.name}
                     </span>
                     {isSelected && <Check className={`w-5 h-5 ${colors.text}`} />}
                   </div>
-                  <div className={`text-xl font-bold mb-3 ${isSelected ? colors.text : "text-gray-700"}`}>
+                  <div className={`text-xl font-bold mb-3 ${isSelected ? colors.text : "text-gray-700 dark:text-zinc-200"}`}>
                     {tier.price}
                   </div>
                   <ul className="space-y-1.5">
                     {tier.features.map((f) => (
-                      <li key={f} className="text-sm text-gray-600 flex items-start space-x-1.5">
+                      <li key={f} className="text-sm text-gray-600 dark:text-zinc-300 flex items-start space-x-1.5">
                         <Check className="w-3.5 h-3.5 text-green-500 mt-0.5 flex-shrink-0" />
                         <span>{f}</span>
                       </li>
@@ -305,7 +305,7 @@ export default function SponsorPage() {
                 value={form.businessName}
                 onChange={(e) => setForm({ ...form, businessName: e.target.value })}
                 placeholder="Your business name"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
               />
             </div>
 
@@ -319,7 +319,7 @@ export default function SponsorPage() {
                 value={form.contactName}
                 onChange={(e) => setForm({ ...form, contactName: e.target.value })}
                 placeholder="Your name"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
               />
             </div>
 
@@ -334,7 +334,7 @@ export default function SponsorPage() {
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="you@business.com"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
               />
             </div>
 
@@ -348,7 +348,7 @@ export default function SponsorPage() {
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 placeholder="(555) 123-4567"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
               />
             </div>
 
@@ -362,7 +362,7 @@ export default function SponsorPage() {
                 value={form.city}
                 onChange={(e) => setForm({ ...form, city: e.target.value })}
                 placeholder="Your city"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors"
               />
             </div>
 
@@ -374,7 +374,7 @@ export default function SponsorPage() {
                 id="businessType"
                 value={form.businessType}
                 onChange={(e) => setForm({ ...form, businessType: e.target.value })}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors bg-white"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-colors bg-white dark:bg-zinc-900"
               >
                 <option value="">Select type...</option>
                 {BUSINESS_TYPES.map((t) => (

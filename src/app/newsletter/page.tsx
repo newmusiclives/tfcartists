@@ -57,7 +57,7 @@ export default async function NewsletterPage() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-amber-700 via-amber-800 to-orange-900 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-2xl mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white dark:bg-zinc-900/10 rounded-2xl mb-6">
             <Mail className="w-8 h-8" />
           </div>
           <h1 className="text-4xl font-bold mb-3">Station Newsletter</h1>
@@ -88,7 +88,7 @@ export default async function NewsletterPage() {
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
             Subscribe to the Newsletter
           </h2>
-          <p className="text-gray-400 dark:text-zinc-400 mb-6">
+          <p className="text-gray-600 dark:text-zinc-400 mb-6">
             Join {subscriberCount > 0 ? `${subscriberCount}+` : "our"}{" "}
             subscribers and never miss a beat.
           </p>
@@ -101,7 +101,7 @@ export default async function NewsletterPage() {
             <Rss className="w-5 h-5 text-orange-500" />
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">RSS Feeds</h2>
           </div>
-          <p className="text-gray-400 dark:text-zinc-400 mb-4">
+          <p className="text-gray-600 dark:text-zinc-400 mb-4">
             Follow what&apos;s playing via RSS. Works with any feed reader or
             WordPress widget.
           </p>
@@ -112,12 +112,12 @@ export default async function NewsletterPage() {
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:border-amber-300 hover:bg-amber-50 transition-colors"
             >
-              <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
-                <Music className="w-5 h-5 text-orange-600" />
+              <div className="w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900 flex items-center justify-center flex-shrink-0">
+                <Music className="w-5 h-5 text-orange-600 dark:text-orange-300" />
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">Recently Played</p>
-                <p className="text-sm text-gray-400 dark:text-zinc-400">
+                <p className="text-sm text-gray-600 dark:text-zinc-400">
                   Last 50 tracks with timestamps
                 </p>
               </div>
@@ -128,12 +128,12 @@ export default async function NewsletterPage() {
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-4 border border-gray-200 dark:border-zinc-800 rounded-lg hover:border-amber-300 hover:bg-amber-50 transition-colors"
             >
-              <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
-                <Radio className="w-5 h-5 text-amber-600" />
+              <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900 flex items-center justify-center flex-shrink-0">
+                <Radio className="w-5 h-5 text-amber-600 dark:text-amber-300" />
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">Now Playing</p>
-                <p className="text-sm text-gray-400 dark:text-zinc-400">
+                <p className="text-sm text-gray-600 dark:text-zinc-400">
                   Live single-item feed, updates every request
                 </p>
               </div>
@@ -148,7 +148,7 @@ export default async function NewsletterPage() {
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                 Latest Digest
               </h2>
-              <span className="text-sm text-gray-400 dark:text-zinc-400">
+              <span className="text-sm text-gray-600 dark:text-zinc-400">
                 {new Date(latestDigest.createdAt).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -156,7 +156,7 @@ export default async function NewsletterPage() {
                 })}
               </span>
             </div>
-            <h3 className="text-lg font-medium text-amber-800 mb-4">
+            <h3 className="text-lg font-medium text-amber-800 dark:text-amber-200 mb-4">
               {latestDigest.subject}
             </h3>
             <div
@@ -183,7 +183,7 @@ export default async function NewsletterPage() {
                     <p className="font-medium text-gray-900 dark:text-white">
                       {edition.subject}
                     </p>
-                    <p className="text-sm text-gray-400 dark:text-zinc-400">
+                    <p className="text-sm text-gray-600 dark:text-zinc-400">
                       {new Date(edition.createdAt).toLocaleDateString("en-US", {
                         month: "long",
                         day: "numeric",

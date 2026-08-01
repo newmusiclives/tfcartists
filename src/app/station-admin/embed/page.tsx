@@ -149,8 +149,8 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                <Code className="w-5 h-5 text-amber-700" />
+              <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900 rounded-xl flex items-center justify-center">
+                <Code className="w-5 h-5 text-amber-700 dark:text-amber-300" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-zinc-100">Embed Widget</h1>
@@ -171,11 +171,11 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                     onClick={() => setWidgetType("player")}
                     className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left ${
                       widgetType === "player"
-                        ? "border-amber-500 bg-amber-50"
+                        ? "border-amber-500 bg-amber-50 dark:bg-amber-950"
                         : "border-zinc-800 hover:border-zinc-700"
                     }`}
                   >
-                    <Radio className={`w-5 h-5 ${widgetType === "player" ? "text-amber-600" : "text-zinc-400"}`} />
+                    <Radio className={`w-5 h-5 ${widgetType === "player" ? "text-amber-600 dark:text-amber-300" : "text-zinc-400"}`} />
                     <div>
                       <div className="font-semibold text-sm text-zinc-100">Player</div>
                       <div className="text-xs text-zinc-400">Play/pause, volume, now-playing</div>
@@ -185,11 +185,11 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                     onClick={() => setWidgetType("now-playing")}
                     className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left ${
                       widgetType === "now-playing"
-                        ? "border-amber-500 bg-amber-50"
+                        ? "border-amber-500 bg-amber-50 dark:bg-amber-950"
                         : "border-zinc-800 hover:border-zinc-700"
                     }`}
                   >
-                    <Music className={`w-5 h-5 ${widgetType === "now-playing" ? "text-amber-600" : "text-zinc-400"}`} />
+                    <Music className={`w-5 h-5 ${widgetType === "now-playing" ? "text-amber-600 dark:text-amber-300" : "text-zinc-400"}`} />
                     <div>
                       <div className="font-semibold text-sm text-zinc-100">Now Playing</div>
                       <div className="text-xs text-zinc-400">Song info only, no controls</div>
@@ -207,7 +207,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 transition-all ${
                       theme === "dark"
                         ? "border-amber-500 bg-gray-900 text-white"
-                        : "border-zinc-800 text-gray-600 hover:border-zinc-700"
+                        : "border-zinc-800 text-gray-600 dark:text-zinc-300 hover:border-zinc-700"
                     }`}
                   >
                     <Moon className="w-4 h-4" />
@@ -217,8 +217,8 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                     onClick={() => setTheme("light")}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 transition-all ${
                       theme === "light"
-                        ? "border-amber-500 bg-amber-50 text-amber-700"
-                        : "border-zinc-800 text-gray-600 hover:border-zinc-700"
+                        ? "border-amber-500 bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300"
+                        : "border-zinc-800 text-gray-600 dark:text-zinc-300 hover:border-zinc-700"
                     }`}
                   >
                     <Sun className="w-4 h-4" />
@@ -292,7 +292,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                         onClick={() => setSnippetFormat(key)}
                         className={`px-3 py-1 text-xs rounded-lg border transition-all ${
                           snippetFormat === key
-                            ? "border-amber-500 bg-amber-50 text-amber-700 font-medium"
+                            ? "border-amber-500 bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-medium"
                             : "border-zinc-800 text-zinc-500 hover:border-zinc-700"
                         }`}
                       >
@@ -325,7 +325,7 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                   </button>
                 </div>
                 {copied && (
-                  <p className="text-xs text-green-600 mt-2 font-medium">Embed code copied to clipboard!</p>
+                  <p className="text-xs text-green-600 dark:text-green-300 mt-2 font-medium">Embed code copied to clipboard!</p>
                 )}
               </div>
             </div>
@@ -397,9 +397,9 @@ export function TrueFansRadio${widgetType === "player" ? "Player" : "NowPlaying"
                 </div>
 
                 {/* Quick Tips */}
-                <div className="bg-amber-50 rounded-2xl border border-amber-200 p-5">
-                  <h3 className="text-sm font-semibold text-amber-800 mb-3">Embedding Tips</h3>
-                  <ul className="text-xs text-amber-700 space-y-2">
+                <div className="bg-amber-50 dark:bg-amber-950 rounded-2xl border border-amber-200 dark:border-amber-800 p-5">
+                  <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-3">Embedding Tips</h3>
+                  <ul className="text-xs text-amber-700 dark:text-amber-300 space-y-2">
                     <li className="flex gap-2">
                       <span className="text-amber-400 mt-0.5">1.</span>
                       <span>The player widget includes audio controls. The now-playing widget is display-only.</span>

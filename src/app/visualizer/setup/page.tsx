@@ -108,11 +108,11 @@ Refresh when scene becomes active: ON`;
                 <div className="h-20 bg-gradient-to-t from-zinc-950/95 to-transparent" />
                 <div className="bg-zinc-950/95 px-6 pb-4 -mt-px flex items-end justify-between">
                   <div>
-                    <div className="h-4 w-48 bg-white/80 rounded mb-1.5" />
+                    <div className="h-4 w-48 bg-white dark:bg-zinc-900/80 rounded mb-1.5" />
                     <div className="h-3 w-32 bg-amber-500/60 rounded" />
                   </div>
                   <div className="text-right">
-                    <div className="h-2.5 w-24 bg-white/50 rounded mb-1" />
+                    <div className="h-2.5 w-24 bg-white dark:bg-zinc-900/50 rounded mb-1" />
                     <div className="h-2 w-16 bg-zinc-500/40 rounded" />
                   </div>
                 </div>

@@ -38,7 +38,7 @@ export default function OperatePage() {
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
+            <Link href="/" className="flex items-center space-x-2 text-amber-700 dark:text-amber-300 hover:text-amber-800 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               <Radio className="w-5 h-5" />
               <span className="font-bold">{currentStation.name}</span>
@@ -50,8 +50,8 @@ export default function OperatePage() {
       {/* Section 2: Hero */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-6">
-            <Settings className="w-8 h-8 text-amber-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 dark:bg-amber-900 rounded-full mb-6">
+            <Settings className="w-8 h-8 text-amber-600 dark:text-amber-300" />
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Run Your Own AI-Powered Radio Station
@@ -74,7 +74,7 @@ export default function OperatePage() {
       </section>
 
       {/* Section 3: Benefits Grid */}
-      <section className="py-16 px-4 bg-white/60">
+      <section className="py-16 px-4 bg-white dark:bg-zinc-900/60">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             Why Operate a Station?
@@ -106,8 +106,8 @@ export default function OperatePage() {
                 key={item.title}
                 className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-amber-100 hover:shadow-md transition-shadow"
               >
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-amber-100 rounded-lg mb-4">
-                  <item.icon className="w-5 h-5 text-amber-600" />
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-amber-100 dark:bg-amber-900 rounded-lg mb-4">
+                  <item.icon className="w-5 h-5 text-amber-600 dark:text-amber-300" />
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
@@ -158,7 +158,7 @@ export default function OperatePage() {
               { value: "$75K/yr", label: "Annual Revenue Potential" },
               { value: "$6,400/mo", label: "Operator Revenue at Capacity" },
             ].map((stat) => (
-              <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
+              <div key={stat.label} className="bg-white dark:bg-zinc-900/10 backdrop-blur-sm rounded-xl p-6 text-center">
                 <div className="text-3xl font-bold mb-1">{stat.value}</div>
                 <div className="text-amber-200 text-sm">{stat.label}</div>
               </div>
@@ -168,7 +168,7 @@ export default function OperatePage() {
           {/* Two columns */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Artist Subscriptions */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur-sm rounded-xl p-6">
               <h3 className="text-xl font-bold mb-1">Artist Subscriptions</h3>
               <p className="text-amber-200 text-sm mb-4">100% retained by you</p>
               <div className="space-y-2">
@@ -192,7 +192,7 @@ export default function OperatePage() {
             </div>
 
             {/* Sponsor Revenue */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur-sm rounded-xl p-6">
               <h3 className="text-xl font-bold mb-1">Sponsor Revenue</h3>
               <p className="text-amber-200 text-sm mb-4">20% commission (80% funds artist pool)</p>
               <div className="space-y-2">
@@ -232,16 +232,16 @@ export default function OperatePage() {
                   key={tier.plan}
                   className={`rounded-xl p-5 text-center ${
                     tier.highlight
-                      ? "bg-white text-gray-900 ring-2 ring-amber-400 shadow-lg"
-                      : "bg-white/10 backdrop-blur-sm"
+                      ? "bg-white dark:bg-zinc-900 text-gray-900 dark:text-zinc-100 ring-2 ring-amber-400 shadow-lg"
+                      : "bg-white dark:bg-zinc-900/10 backdrop-blur-sm"
                   }`}
                 >
                   {tier.highlight && (
-                    <div className="text-xs font-bold text-amber-600 uppercase tracking-wide mb-2">Most Popular</div>
+                    <div className="text-xs font-bold text-amber-600 dark:text-amber-300 uppercase tracking-wide mb-2">Most Popular</div>
                   )}
-                  <h4 className={`text-lg font-bold mb-1 ${tier.highlight ? "text-gray-900" : ""}`}>{tier.plan}</h4>
-                  <div className={`text-2xl font-bold mb-2 ${tier.highlight ? "text-amber-600" : ""}`}>{tier.price}</div>
-                  <div className={`text-sm mb-1 ${tier.highlight ? "text-gray-600" : "text-amber-200"}`}>
+                  <h4 className={`text-lg font-bold mb-1 ${tier.highlight ? "text-gray-900 dark:text-zinc-100" : ""}`}>{tier.plan}</h4>
+                  <div className={`text-2xl font-bold mb-2 ${tier.highlight ? "text-amber-600 dark:text-amber-300" : ""}`}>{tier.price}</div>
+                  <div className={`text-sm mb-1 ${tier.highlight ? "text-gray-600 dark:text-zinc-300" : "text-amber-200"}`}>
                     Platform fee: {tier.fee}
                   </div>
                   <div className={`text-sm ${tier.highlight ? "text-gray-400" : "text-amber-300"}`}>
@@ -275,7 +275,7 @@ export default function OperatePage() {
                 <div className="h-2" style={{ backgroundColor: template.primaryColor }} />
                 <div className="p-4">
                   <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{template.name}</h3>
-                  <p className="text-xs text-gray-400 dark:text-zinc-400 mb-2">{template.genre}</p>
+                  <p className="text-xs text-gray-600 dark:text-zinc-400 mb-2">{template.genre}</p>
                   <div className="text-xs text-gray-400">
                     {template.djPresets.length} host{template.djPresets.length !== 1 ? "s" : ""} included
                   </div>
@@ -287,7 +287,7 @@ export default function OperatePage() {
       </section>
 
       {/* Section 7: AI Agents Grid */}
-      <section className="py-16 px-4 bg-white/60">
+      <section className="py-16 px-4 bg-white dark:bg-zinc-900/60">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-3">
             Your AI Team
@@ -386,9 +386,9 @@ export default function OperatePage() {
                 key={tool.title}
                 className="bg-white dark:bg-zinc-900 rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
               >
-                <tool.icon className="w-5 h-5 text-amber-600 mb-2" />
+                <tool.icon className="w-5 h-5 text-amber-600 dark:text-amber-300 mb-2" />
                 <h3 className="font-medium text-gray-900 dark:text-white text-sm">{tool.title}</h3>
-                <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{tool.desc}</p>
+                <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">{tool.desc}</p>
               </div>
             ))}
           </div>
@@ -414,7 +414,7 @@ export default function OperatePage() {
             </p>
             <Link
               href="/station-admin/wizard"
-              className="inline-flex items-center space-x-2 bg-white text-amber-700 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg"
+              className="inline-flex items-center space-x-2 bg-white dark:bg-zinc-900 text-amber-700 dark:text-amber-300 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg"
             >
               <span>Create Your Station</span>
               <ArrowRight className="w-5 h-5" />

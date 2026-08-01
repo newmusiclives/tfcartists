@@ -83,18 +83,18 @@ export default function InvoicePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <p className="text-gray-400 dark:text-zinc-400">Loading invoice...</p>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-zinc-900">
+        <p className="text-gray-600 dark:text-zinc-400">Loading invoice...</p>
       </div>
     );
   }
 
   if (!invoice) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-zinc-900">
         <div className="text-center">
-          <p className="text-gray-400 dark:text-zinc-400 mb-4">Invoice not found.</p>
-          <Link href="/portal/artist" className="text-amber-600 hover:underline">
+          <p className="text-gray-600 dark:text-zinc-400 mb-4">Invoice not found.</p>
+          <Link href="/portal/artist" className="text-amber-600 dark:text-amber-300 hover:underline">
             Back to Portal
           </Link>
         </div>
@@ -103,12 +103,12 @@ export default function InvoicePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 dark:bg-zinc-800">
       {/* Print controls - hidden when printing */}
-      <div className="print:hidden bg-white border-b px-6 py-3 flex items-center justify-between">
+      <div className="print:hidden bg-white dark:bg-zinc-900 border-b px-6 py-3 flex items-center justify-between">
         <Link
           href="/portal/artist"
-          className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
+          className="text-sm text-gray-600 dark:text-zinc-300 hover:text-gray-900 flex items-center gap-1"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Portal
         </Link>
@@ -121,15 +121,15 @@ export default function InvoicePage() {
       </div>
 
       {/* Invoice content */}
-      <div className="max-w-2xl mx-auto my-8 print:my-0 bg-white rounded-lg shadow-sm print:shadow-none p-10">
+      <div className="max-w-2xl mx-auto my-8 print:my-0 bg-white dark:bg-zinc-900 rounded-lg shadow-sm print:shadow-none p-10">
         {/* Header */}
         <div className="flex justify-between items-start mb-10">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">EARNINGS STATEMENT</h1>
-            <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">TrueFans Radio</p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">TrueFans Radio</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-400 dark:text-zinc-400">Statement Period</p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400">Statement Period</p>
             <p className="text-lg font-semibold">{formatPeriod(invoice.period)}</p>
           </div>
         </div>
@@ -149,14 +149,14 @@ export default function InvoicePage() {
               <span
                 className={`inline-block px-2 py-1 rounded text-xs font-medium ${
                   invoice.paid
-                    ? "bg-green-100 text-green-800"
-                    : "bg-yellow-100 text-yellow-800"
+                    ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
+                    : "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
                 }`}
               >
                 {invoice.paid ? "PAID" : "PENDING"}
               </span>
               {invoice.paidAt && (
-                <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">
+                <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">
                   Paid {new Date(invoice.paidAt).toLocaleDateString()}
                 </p>
               )}
@@ -177,7 +177,7 @@ export default function InvoicePage() {
             <tr className="border-b">
               <td className="py-3">
                 <p className="font-medium">Radio Airplay Earnings</p>
-                <p className="text-sm text-gray-400 dark:text-zinc-400">
+                <p className="text-sm text-gray-600 dark:text-zinc-400">
                   {formatPeriod(invoice.period)} revenue share
                 </p>
               </td>
@@ -200,10 +200,10 @@ export default function InvoicePage() {
         </table>
 
         {/* Payment method */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4 mb-6">
           <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Payment Method</p>
           <p className="text-sm font-medium text-gray-900 dark:text-white">Manifest Financial</p>
-          <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">
+          <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">
             Payments are processed through Manifest Financial and deposited to your registered account.
           </p>
         </div>

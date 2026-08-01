@@ -73,7 +73,7 @@ export default function ElliotDashboardPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950 flex items-center justify-center">
         <div className="text-gray-600 dark:text-zinc-400">Loading dashboard...</div>
       </main>
     );
@@ -81,9 +81,9 @@ export default function ElliotDashboardPage() {
 
   if (unauthorized) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-zinc-100 mb-2">Login Required</h2>
           <p className="text-gray-600 dark:text-zinc-400 mb-4">Sign in as Elliot to access this dashboard.</p>
           <Link href="/login?callbackUrl=/elliot" className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">Sign In</Link>
         </div>
@@ -93,8 +93,8 @@ export default function ElliotDashboardPage() {
 
   if (!stats) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-red-600">Error loading dashboard data</div>
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950 flex items-center justify-center">
+        <div className="text-red-600 dark:text-red-300">Error loading dashboard data</div>
       </main>
     );
   }
@@ -146,14 +146,14 @@ export default function ElliotDashboardPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/admin"
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Admin</span>
@@ -167,7 +167,7 @@ export default function ElliotDashboardPage() {
             </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <Users className="w-8 h-8 text-indigo-600" />
+            <Users className="w-8 h-8 text-indigo-600 dark:text-indigo-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Team Elliot Dashboard</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -183,28 +183,28 @@ export default function ElliotDashboardPage() {
         {/* Core Metrics - The Big Four */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
-            icon={<Users className="w-6 h-6 text-indigo-600" />}
+            icon={<Users className="w-6 h-6 text-indigo-600 dark:text-indigo-300" />}
             label="Total Listeners"
             value={stats.totalListeners.toLocaleString()}
             subtitle={`+${stats.growth.newThisWeek} this week`}
             color="indigo"
           />
           <MetricCard
-            icon={<Clock className="w-6 h-6 text-purple-600" />}
+            icon={<Clock className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="Avg Session Length"
             value={`${stats.behavior.avgSessionLength} min`}
             subtitle="Target: 25-40 min"
             color="purple"
           />
           <MetricCard
-            icon={<TrendingUp className="w-6 h-6 text-green-600" />}
+            icon={<TrendingUp className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Returning Listeners"
             value={`${stats.growth.returningListenerPercent}%`}
             subtitle="Target: 50-60%"
             color="green"
           />
           <MetricCard
-            icon={<Share2 className="w-6 h-6 text-pink-600" />}
+            icon={<Share2 className="w-6 h-6 text-pink-600 dark:text-pink-300" />}
             label="Content Conversions"
             value={stats.content.totalConversions.toString()}
             subtitle={`From ${stats.content.totalContent} pieces`}
@@ -215,7 +215,7 @@ export default function ElliotDashboardPage() {
         {/* Team Status */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
-            <Users className="w-6 h-6 text-indigo-600" />
+            <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-300" />
             <span>Team Status - Live Activity</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -264,11 +264,11 @@ export default function ElliotDashboardPage() {
         </section>
 
         {/* Viral Content Performance */}
-        <section className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+        <section className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold flex items-center space-x-2">
-                <Video className="w-6 h-6 text-purple-600" />
+                <Video className="w-6 h-6 text-purple-600 dark:text-purple-300" />
                 <span>Viral Content Performance</span>
               </h2>
               <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
@@ -295,7 +295,7 @@ export default function ElliotDashboardPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-8 text-gray-600 dark:text-zinc-400">
                 No content yet. Create your first viral content piece.
               </div>
             )}
@@ -303,11 +303,11 @@ export default function ElliotDashboardPage() {
         </section>
 
         {/* Active Growth Campaigns */}
-        <section className="bg-gradient-to-br from-green-50 to-white rounded-xl shadow-lg p-6">
+        <section className="bg-gradient-to-br from-green-50 dark:from-green-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold flex items-center space-x-2">
-                <Target className="w-6 h-6 text-green-600" />
+                <Target className="w-6 h-6 text-green-600 dark:text-green-300" />
                 <span>Active Growth Campaigns</span>
               </h2>
               <p className="text-gray-600 dark:text-zinc-400 text-sm mt-1">
@@ -334,7 +334,7 @@ export default function ElliotDashboardPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-8 text-gray-600 dark:text-zinc-400">
                 No active campaigns. Launch your first growth campaign.
               </div>
             )}
@@ -349,19 +349,19 @@ export default function ElliotDashboardPage() {
               label="Total Sessions"
               value={stats.behavior.totalSessions.toLocaleString()}
               subtitle="All time"
-              icon={<BarChart3 className="w-5 h-5 text-indigo-600" />}
+              icon={<BarChart3 className="w-5 h-5 text-indigo-600 dark:text-indigo-300" />}
             />
             <BehaviorStat
               label="Total Listening Hours"
               value={Math.round(stats.behavior.totalListeningHours).toLocaleString()}
               subtitle="All time"
-              icon={<Clock className="w-5 h-5 text-purple-600" />}
+              icon={<Clock className="w-5 h-5 text-purple-600 dark:text-purple-300" />}
             />
             <BehaviorStat
               label="Avg Listening Streak"
               value={`${stats.behavior.avgStreak} days`}
               subtitle="Consecutive days"
-              icon={<TrendingUp className="w-5 h-5 text-green-600" />}
+              icon={<TrendingUp className="w-5 h-5 text-green-600 dark:text-green-300" />}
             />
           </div>
         </section>
@@ -372,35 +372,35 @@ export default function ElliotDashboardPage() {
             title="Growth Strategy"
             description="Overall listener growth engine coordination"
             href="/elliot"
-            icon={<Users className="w-8 h-8 text-blue-600" />}
+            icon={<Users className="w-8 h-8 text-blue-600 dark:text-blue-300" />}
             managedBy="Elliot Brooks"
           />
           <QuickActionCard
             title="Viral Content"
             description="Create and track social content performance"
             href="/elliot/content"
-            icon={<Video className="w-8 h-8 text-purple-600" />}
+            icon={<Video className="w-8 h-8 text-purple-600 dark:text-purple-300" />}
             managedBy="Nova Lane"
           />
           <QuickActionCard
             title="Artist Activation"
             description="Convert artist fans into station listeners"
             href="/elliot/campaigns"
-            icon={<Target className="w-8 h-8 text-green-600" />}
+            icon={<Target className="w-8 h-8 text-green-600 dark:text-green-300" />}
             managedBy="River Maxwell"
           />
           <QuickActionCard
             title="Community"
             description="Manage Discord/Facebook communities"
             href="/elliot/community"
-            icon={<Heart className="w-8 h-8 text-pink-600" />}
+            icon={<Heart className="w-8 h-8 text-pink-600 dark:text-pink-300" />}
             managedBy="Sage Hart"
           />
           <QuickActionCard
             title="Listener Analytics"
             description="Behavior patterns and habit formation"
             href="/elliot/analytics"
-            icon={<BarChart3 className="w-8 h-8 text-indigo-600" />}
+            icon={<BarChart3 className="w-8 h-8 text-indigo-600 dark:text-indigo-300" />}
             managedBy="Orion Pike"
           />
         </section>
@@ -432,9 +432,9 @@ function MetricCard({
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
       <div className="flex items-center justify-between">
-        <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
+        <div className="text-xs text-gray-600 dark:text-zinc-400">{subtitle}</div>
         {change && (
-          <div className="text-xs font-semibold text-green-600">{change}</div>
+          <div className="text-xs font-semibold text-green-600 dark:text-green-300">{change}</div>
         )}
       </div>
     </div>
@@ -457,11 +457,11 @@ function TeamMemberCard({
   kpi: string;
 }) {
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800 hover:border-indigo-300 transition-colors">
+    <div className="bg-gradient-to-br from-gray-50 dark:from-zinc-950 to-white dark:to-zinc-900 rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800 hover:border-indigo-300 transition-colors">
       <div className="text-4xl mb-2">{avatar}</div>
       <div className="font-semibold text-gray-900 dark:text-white mb-1">{name}</div>
       <div className="text-xs text-gray-600 dark:text-zinc-400 mb-2">{role}</div>
-      <div className="text-xs text-indigo-600 mb-2 truncate">{status}</div>
+      <div className="text-xs text-indigo-600 dark:text-indigo-300 mb-2 truncate">{status}</div>
       <div className="text-xs text-gray-400">{lastActivity}</div>
       <div className="mt-2 pt-2 border-t border-gray-200 dark:border-zinc-800">
         <div className="text-xs font-semibold text-gray-700 dark:text-zinc-300">{kpi}</div>
@@ -491,19 +491,19 @@ function ListenerTierCard({
   }[color];
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800">
+    <div className="bg-gradient-to-br from-gray-50 dark:from-zinc-950 to-white dark:to-zinc-900 rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800">
       <div className={`text-xs font-bold px-2 py-1 rounded inline-block mb-2 ${colorClasses}`}>
         {tier}
       </div>
       <div className="text-3xl font-bold mb-1">{count}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400 mb-3">{description}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400 mb-3">{description}</div>
       <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
         <div
           className={`h-full rounded-full transition-all ${color === 'blue' ? 'bg-blue-600' : color === 'green' ? 'bg-green-600' : color === 'purple' ? 'bg-purple-600' : 'bg-pink-600'}`}
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{percentage}% of total</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">{percentage}% of total</div>
     </div>
   );
 }
@@ -533,15 +533,15 @@ function ViralContentRow({
       <div className="flex items-center space-x-6 text-sm">
         <div className="text-center">
           <div className="font-semibold text-gray-900 dark:text-white">{views >= 1000 ? `${(views / 1000).toFixed(0)}k` : views}</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">views</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">views</div>
         </div>
         <div className="text-center">
-          <div className="font-semibold text-purple-600">{shares >= 1000 ? `${(shares / 1000).toFixed(1)}k` : shares}</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">shares</div>
+          <div className="font-semibold text-purple-600 dark:text-purple-300">{shares >= 1000 ? `${(shares / 1000).toFixed(1)}k` : shares}</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">shares</div>
         </div>
         <div className="text-center">
-          <div className="font-semibold text-green-600">{conversions}</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">listeners</div>
+          <div className="font-semibold text-green-600 dark:text-green-300">{conversions}</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">listeners</div>
         </div>
       </div>
     </div>
@@ -570,7 +570,7 @@ function CampaignCard({
         </div>
         <div className="text-right">
           <div className="text-sm font-semibold text-gray-900 dark:text-white">{Math.round(progress)}%</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">complete</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">complete</div>
         </div>
       </div>
       <div className="bg-gray-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden mb-2">
@@ -581,7 +581,7 @@ function CampaignCard({
       </div>
       <div className="flex items-center justify-between text-xs text-gray-600 dark:text-zinc-400">
         <span>{typeof reached === 'number' ? reached.toLocaleString() : reached} / {target}</span>
-        <span className="text-green-600 font-semibold">{progress >= 80 ? "Almost there!" : "In progress"}</span>
+        <span className="text-green-600 dark:text-green-300 font-semibold">{progress >= 80 ? "Almost there!" : "In progress"}</span>
       </div>
     </div>
   );
@@ -600,12 +600,12 @@ function BehaviorStat({
 }) {
   return (
     <div className="text-center">
-      <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-3">
+      <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-zinc-800 rounded-full mb-3">
         {icon}
       </div>
       <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
       <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">{label}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -629,7 +629,7 @@ function QuickActionCard({
         <div className="mb-3">{icon}</div>
         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{title}</h3>
         {managedBy && (
-          <p className="text-xs text-indigo-600 font-medium mb-1">Managed by {managedBy}</p>
+          <p className="text-xs text-indigo-600 dark:text-indigo-300 font-medium mb-1">Managed by {managedBy}</p>
         )}
         <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
       </div>

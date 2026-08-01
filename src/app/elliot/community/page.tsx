@@ -61,7 +61,7 @@ export default function CommunityPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950 flex items-center justify-center">
         <div className="text-gray-600 dark:text-zinc-400">Loading community...</div>
       </main>
     );
@@ -69,8 +69,8 @@ export default function CommunityPage() {
 
   if (!stats) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-red-600">Error loading community data</div>
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950 flex items-center justify-center">
+        <div className="text-red-600 dark:text-red-300">Error loading community data</div>
       </main>
     );
   }
@@ -109,7 +109,7 @@ export default function CommunityPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -121,7 +121,7 @@ export default function CommunityPage() {
             <span>Back to Elliot Dashboard</span>
           </Link>
           <div className="flex items-center space-x-3">
-            <Users className="w-8 h-8 text-purple-600" />
+            <Users className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Community Hub</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -136,28 +136,28 @@ export default function CommunityPage() {
         {/* Key Metrics */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
-            icon={<Users className="w-6 h-6 text-purple-600" />}
+            icon={<Users className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="Community Members"
             value={stats.community.communityMembers.toLocaleString()}
             change={`of ${stats.totalListeners.toLocaleString()} total listeners`}
             positive={true}
           />
           <MetricCard
-            icon={<TrendingUp className="w-6 h-6 text-green-600" />}
+            icon={<TrendingUp className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Engagements This Month"
             value={stats.activity.engagementsThisMonth.toLocaleString()}
             change="listener interactions"
             positive={true}
           />
           <MetricCard
-            icon={<MessageCircle className="w-6 h-6 text-blue-600" />}
+            icon={<MessageCircle className="w-6 h-6 text-blue-600 dark:text-blue-300" />}
             label="Scouts"
             value={stats.community.scoutCount.toLocaleString()}
             change="active scout program"
             positive={true}
           />
           <MetricCard
-            icon={<Award className="w-6 h-6 text-orange-600" />}
+            icon={<Award className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Super Fans"
             value={stats.byTier.SUPER_FAN + stats.byTier.EVANGELIST}
             change={`${stats.byTier.EVANGELIST} evangelists`}
@@ -194,7 +194,7 @@ export default function CommunityPage() {
                 />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-8 text-gray-600 dark:text-zinc-400">
                 No super fans or evangelists yet. Build your community to see top members here.
               </div>
             )}
@@ -211,7 +211,7 @@ export default function CommunityPage() {
                 <ActivityRow key={activity.id} {...activity} />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-8 text-gray-600 dark:text-zinc-400">
                 No community activity yet. Engagements will appear here as listeners interact.
               </div>
             )}
@@ -219,7 +219,7 @@ export default function CommunityPage() {
         </section>
 
         {/* Upcoming Events */}
-        <section className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+        <section className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Upcoming Community Events</h2>
           <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Virtual and in-person events for the community
@@ -255,19 +255,19 @@ export default function CommunityPage() {
         {/* Community Programs */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <ProgramCard
-            icon={<Award className="w-8 h-8 text-purple-600" />}
+            icon={<Award className="w-8 h-8 text-purple-600 dark:text-purple-300" />}
             title="Ambassador Program"
             description="Recognize and reward your most engaged community leaders"
             buttonText="Manage Program"
           />
           <ProgramCard
-            icon={<Star className="w-8 h-8 text-yellow-600" />}
+            icon={<Star className="w-8 h-8 text-yellow-600 dark:text-yellow-300" />}
             title="Rewards System"
             description="Points, badges, and exclusive perks for members"
             buttonText="View Rewards"
           />
           <ProgramCard
-            icon={<Calendar className="w-8 h-8 text-blue-600" />}
+            icon={<Calendar className="w-8 h-8 text-blue-600 dark:text-blue-300" />}
             title="Events Calendar"
             description="Schedule and manage community events"
             buttonText="View Calendar"
@@ -324,7 +324,7 @@ function MemberCard({ rank, name, avatar, tier, points, sessions, hours, joinDat
   const config = tierConfig[tier];
 
   return (
-    <div className={`border-2 ${config.border} rounded-lg p-4 bg-white`}>
+    <div className={`border-2 ${config.border} rounded-lg p-4 bg-white dark:bg-zinc-900`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
@@ -354,7 +354,7 @@ function MemberCard({ rank, name, avatar, tier, points, sessions, hours, joinDat
         </div>
         <div className="text-right text-sm">
           <div className="text-gray-600 dark:text-zinc-400">Joined {joinDate}</div>
-          <div className="text-green-600 font-medium">{lastActive}</div>
+          <div className="text-green-600 dark:text-green-300 font-medium">{lastActive}</div>
         </div>
       </div>
     </div>
@@ -363,15 +363,15 @@ function MemberCard({ rank, name, avatar, tier, points, sessions, hours, joinDat
 
 function ActivityRow({ user, action, topic, time, engagement }: { user: string; action: string; topic: string; time: string; engagement: number }) {
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg hover:bg-gray-100 transition-colors">
       <div className="flex items-center space-x-4 flex-1">
-        <MessageCircle className="w-8 h-8 text-purple-600" />
+        <MessageCircle className="w-8 h-8 text-purple-600 dark:text-purple-300" />
         <div>
           <div className="text-sm">
             <span className="font-semibold text-gray-900 dark:text-white">{user}</span>
             <span className="text-gray-600 dark:text-zinc-400"> {action}</span>
           </div>
-          <div className="text-sm font-medium text-gray-900 mt-1">{topic}</div>
+          <div className="text-sm font-medium text-gray-900 dark:text-zinc-100 mt-1">{topic}</div>
         </div>
       </div>
       <div className="flex items-center space-x-4">
@@ -381,7 +381,7 @@ function ActivityRow({ user, action, topic, time, engagement }: { user: string; 
             <span>{engagement}</span>
           </div>
         )}
-        <div className="text-sm text-gray-400 dark:text-zinc-400">{time}</div>
+        <div className="text-sm text-gray-600 dark:text-zinc-400">{time}</div>
       </div>
     </div>
   );
@@ -403,7 +403,7 @@ function EventRow({ name, date, time, host, attendees, type }: {
   const eventConfig = typeConfig[type];
 
   return (
-    <div className="flex items-center justify-between p-4 bg-white dark:bg-zinc-900 rounded-lg border-2 border-purple-200">
+    <div className="flex items-center justify-between p-4 bg-white dark:bg-zinc-900 rounded-lg border-2 border-purple-200 dark:border-purple-800">
       <div className="flex-1">
         <div className="flex items-center space-x-2 mb-1">
           <div className="font-semibold text-gray-900 dark:text-white">{name}</div>
@@ -431,21 +431,21 @@ function TopicCard({ topic, posts, members, lastActive }: { topic: string; posts
   return (
     <div className="border-2 border-gray-200 dark:border-zinc-800 rounded-lg p-4 hover:border-purple-300 transition-colors">
       <div className="flex items-center space-x-2 mb-3">
-        <MessageCircle className="w-5 h-5 text-purple-600" />
+        <MessageCircle className="w-5 h-5 text-purple-600 dark:text-purple-300" />
         <h3 className="font-bold text-gray-900 dark:text-white">{topic}</h3>
       </div>
       <div className="grid grid-cols-3 gap-2 text-center text-sm">
         <div>
           <div className="font-bold text-gray-900 dark:text-white">{posts}</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">posts</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">posts</div>
         </div>
         <div>
           <div className="font-bold text-gray-900 dark:text-white">{members}</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">members</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">members</div>
         </div>
         <div>
-          <div className="text-xs text-green-600 font-medium">{lastActive}</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">last active</div>
+          <div className="text-xs text-green-600 dark:text-green-300 font-medium">{lastActive}</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">last active</div>
         </div>
       </div>
     </div>

@@ -229,7 +229,7 @@ export default function ScheduleEditorPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <CalendarDays className="w-8 h-8 text-indigo-600" />
+              <CalendarDays className="w-8 h-8 text-indigo-600 dark:text-indigo-300" />
               Schedule Editor
             </h1>
             <p className="text-zinc-400 mt-1">Assign hosts and clock templates to each hour of programming</p>
@@ -320,10 +320,10 @@ export default function ScheduleEditorPage() {
                             </span>
                           )}
                           {isFirst && selectedDj && (
-                            <span className="text-[10px] text-amber-600 font-semibold">Show Start</span>
+                            <span className="text-[10px] text-amber-600 dark:text-amber-300 font-semibold">Show Start</span>
                           )}
                           {isLast && selectedDj && (
-                            <span className="text-[10px] text-rose-600 font-semibold">Show End</span>
+                            <span className="text-[10px] text-rose-600 dark:text-rose-300 font-semibold">Show End</span>
                           )}
                         </div>
                       </div>

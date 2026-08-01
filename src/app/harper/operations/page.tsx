@@ -78,7 +78,7 @@ export default function AdOperations() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/harper/team"
-                className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
               >
                 <Users className="w-4 h-4" />
                 <span>View Team</span>
@@ -101,36 +101,36 @@ export default function AdOperations() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 dark:text-zinc-400">Total Ads</p>
-                    <p className="text-2xl font-bold text-blue-600">{ads.length}</p>
+                    <p className="text-2xl font-bold text-blue-600 dark:text-blue-300">{ads.length}</p>
                   </div>
-                  <Calendar className="w-8 h-8 text-blue-600" />
+                  <Calendar className="w-8 h-8 text-blue-600 dark:text-blue-300" />
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 dark:text-zinc-400">Active in Rotation</p>
-                    <p className="text-2xl font-bold text-green-600">{activeCount}</p>
+                    <p className="text-2xl font-bold text-green-600 dark:text-green-300">{activeCount}</p>
                   </div>
-                  <Play className="w-8 h-8 text-green-600" />
+                  <Play className="w-8 h-8 text-green-600 dark:text-green-300" />
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 dark:text-zinc-400">With Audio</p>
-                    <p className="text-2xl font-bold text-yellow-600">{withAudio}</p>
+                    <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-300">{withAudio}</p>
                   </div>
-                  <Clock className="w-8 h-8 text-yellow-600" />
+                  <Clock className="w-8 h-8 text-yellow-600 dark:text-yellow-300" />
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 dark:text-zinc-400">Total Plays</p>
-                    <p className="text-2xl font-bold text-purple-600">{totalPlays.toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-purple-600 dark:text-purple-300">{totalPlays.toLocaleString()}</p>
                   </div>
-                  <TrendingUp className="w-8 h-8 text-purple-600" />
+                  <TrendingUp className="w-8 h-8 text-purple-600 dark:text-purple-300" />
                 </div>
               </div>
             </div>
@@ -169,8 +169,8 @@ export default function AdOperations() {
 
             {/* Ad Spots List */}
             <div className="bg-white dark:bg-zinc-900 border rounded-lg">
-              <div className="p-4 border-b bg-gray-50">
-                <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+              <div className="p-4 border-b bg-gray-50 dark:bg-zinc-900">
+                <h3 className="font-semibold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                   <BarChart3 className="w-5 h-5" />
                   Sponsor Ad Rotation
                 </h3>
@@ -185,7 +185,7 @@ export default function AdOperations() {
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             {ad.isActive ? (
-                              <CheckCircle className="w-5 h-5 text-green-600" />
+                              <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-300" />
                             ) : (
                               <AlertCircle className="w-5 h-5 text-gray-400" />
                             )}
@@ -196,25 +196,25 @@ export default function AdOperations() {
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ml-8">
                             <div>
-                              <p className="text-xs text-gray-400 dark:text-zinc-400">Duration</p>
+                              <p className="text-xs text-gray-600 dark:text-zinc-400">Duration</p>
                               <p className="text-sm font-medium">{ad.durationSeconds ? `${ad.durationSeconds}s` : '—'}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-400 dark:text-zinc-400">Play Count</p>
-                              <p className="text-sm font-medium text-blue-600">{ad.playCount}</p>
+                              <p className="text-xs text-gray-600 dark:text-zinc-400">Play Count</p>
+                              <p className="text-sm font-medium text-blue-600 dark:text-blue-300">{ad.playCount}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-400 dark:text-zinc-400">Last Played</p>
+                              <p className="text-xs text-gray-600 dark:text-zinc-400">Last Played</p>
                               <p className="text-sm font-medium">
                                 {ad.lastPlayedAt ? new Date(ad.lastPlayedAt).toLocaleString() : 'Never'}
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-400 dark:text-zinc-400">Audio</p>
+                              <p className="text-xs text-gray-600 dark:text-zinc-400">Audio</p>
                               <p className="text-sm font-medium">{ad.audioFilePath ? 'Ready' : 'Pending'}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-400 dark:text-zinc-400">Weight</p>
+                              <p className="text-xs text-gray-600 dark:text-zinc-400">Weight</p>
                               <p className="text-sm font-medium">1x</p>
                             </div>
                           </div>
@@ -230,12 +230,12 @@ export default function AdOperations() {
             </div>
 
             {/* Capacity Info */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-6">
+            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mt-6">
               <div className="flex items-start space-x-3">
-                <Radio className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                <Radio className="w-6 h-6 text-blue-600 dark:text-blue-300 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-blue-900 mb-2">Ad Operations Capacity</h4>
-                  <div className="text-blue-800 text-sm space-y-1">
+                  <h4 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">Ad Operations Capacity</h4>
+                  <div className="text-blue-800 dark:text-blue-200 text-sm space-y-1">
                     <p><strong>Daily Capacity:</strong> 24 ad spots (12 prime, 12 subprime)</p>
                     <p><strong>Monthly Capacity:</strong> 720 ad spots (360 prime, 360 subprime)</p>
                     <p><strong>Rotation:</strong> Round-robin — least recently played ad serves next</p>

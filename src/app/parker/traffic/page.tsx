@@ -58,21 +58,21 @@ export default function TrafficPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-rose-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-orange-50 dark:from-orange-950 via-white dark:via-zinc-900 to-rose-50 dark:to-rose-950 flex items-center justify-center">
         <div className="text-gray-600 dark:text-zinc-400">Loading traffic data...</div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-rose-50">
+    <main className="min-h-screen bg-gradient-to-br from-orange-50 dark:from-orange-950 via-white dark:via-zinc-900 to-rose-50 dark:to-rose-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/parker"
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Parker Dashboard</span>
@@ -86,7 +86,7 @@ export default function TrafficPage() {
             </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <Megaphone className="w-8 h-8 text-orange-600" />
+            <Megaphone className="w-8 h-8 text-orange-600 dark:text-orange-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Traffic Manager Dashboard</h1>
               <p className="text-gray-600 dark:text-zinc-400">Managed by Nolan Torres</p>
@@ -100,31 +100,31 @@ export default function TrafficPage() {
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <Megaphone className="w-6 h-6 text-orange-600" />
+              <Megaphone className="w-6 h-6 text-orange-600 dark:text-orange-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Active Ads</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{activeAds.length}</div>
-            <div className="text-xs text-orange-600">Currently running</div>
+            <div className="text-xs text-orange-600 dark:text-orange-300">Currently running</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <BarChart3 className="w-6 h-6 text-green-600" />
+              <BarChart3 className="w-6 h-6 text-green-600 dark:text-green-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Overall Fill Rate</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{overallFill}%</div>
-            <div className="text-xs text-green-600">Across all dayparts</div>
+            <div className="text-xs text-green-600 dark:text-green-300">Across all dayparts</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <Clock className="w-6 h-6 text-rose-600" />
+              <Clock className="w-6 h-6 text-rose-600 dark:text-rose-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Avails Remaining</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{totalAvails}</div>
-            <div className="text-xs text-rose-600">Unsold spots</div>
+            <div className="text-xs text-rose-600 dark:text-rose-300">Unsold spots</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <AlertTriangle className="w-6 h-6 text-amber-600" />
+              <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Make-Goods Pending</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">3</div>
@@ -142,14 +142,14 @@ export default function TrafficPage() {
                   <div className="flex items-center space-x-3">
                     <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">{dp.name}</span>
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                      dp.type === "Prime" ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-gray-100 text-gray-600"
+                      dp.type === "Prime" ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300"
                     }`}>
                       {dp.type}
                     </span>
                   </div>
                   <div className="flex items-center space-x-4 text-sm">
-                    <span className="text-gray-400 dark:text-zinc-400">{dp.spots} spots</span>
-                    <span className="text-rose-600 font-medium">{dp.avails} avail{dp.avails !== 1 ? "s" : ""}</span>
+                    <span className="text-gray-600 dark:text-zinc-400">{dp.spots} spots</span>
+                    <span className="text-rose-600 dark:text-rose-300 font-medium">{dp.avails} avail{dp.avails !== 1 ? "s" : ""}</span>
                     <span className="font-bold text-gray-900 dark:text-white">{dp.fill}%</span>
                   </div>
                 </div>
@@ -172,14 +172,14 @@ export default function TrafficPage() {
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Active Sponsor Ads</h2>
-            <span className="text-sm text-gray-400 dark:text-zinc-400">{activeAds.length} active / {ads.length} total</span>
+            <span className="text-sm text-gray-600 dark:text-zinc-400">{activeAds.length} active / {ads.length} total</span>
           </div>
           {activeAds.length === 0 ? (
-            <div className="text-center py-8 text-gray-400 dark:text-zinc-400">No active ads found</div>
+            <div className="text-center py-8 text-gray-600 dark:text-zinc-400">No active ads found</div>
           ) : (
             <div className="space-y-3">
               {activeAds.slice(0, 10).map((ad) => (
-                <div key={ad.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div key={ad.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg hover:bg-gray-100 transition-colors">
                   <div className="flex items-center space-x-4">
                     <div className="w-3 h-3 rounded-full bg-green-500" />
                     <div>
@@ -189,7 +189,7 @@ export default function TrafficPage() {
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
-                      <div className="text-xs text-gray-400 dark:text-zinc-400">Weight: {ad.rotationWeight || 1}x</div>
+                      <div className="text-xs text-gray-600 dark:text-zinc-400">Weight: {ad.rotationWeight || 1}x</div>
                     </div>
                     <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400">
                       Active
@@ -202,24 +202,24 @@ export default function TrafficPage() {
         </section>
 
         {/* Avail Report */}
-        <section className="bg-gradient-to-br from-orange-50 to-white rounded-xl shadow-lg p-6">
+        <section className="bg-gradient-to-br from-orange-50 dark:from-orange-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Avail Report Summary</h2>
           <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">Unsold commercial spots available for sale</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-orange-200">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Prime Avails</div>
-              <div className="text-2xl font-bold text-orange-600">2</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Morning & afternoon drive</div>
+              <div className="text-2xl font-bold text-orange-600 dark:text-orange-300">2</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Morning & afternoon drive</div>
             </div>
-            <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-orange-200">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Sub-Prime Avails</div>
-              <div className="text-2xl font-bold text-orange-600">{totalAvails - 2}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Evening & overnight</div>
+              <div className="text-2xl font-bold text-orange-600 dark:text-orange-300">{totalAvails - 2}</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Evening & overnight</div>
             </div>
-            <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-orange-200">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Est. Revenue Opportunity</div>
-              <div className="text-2xl font-bold text-green-600">${(totalAvails * 85).toLocaleString()}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">If all avails sold</div>
+              <div className="text-2xl font-bold text-green-600 dark:text-green-300">${(totalAvails * 85).toLocaleString()}</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">If all avails sold</div>
             </div>
           </div>
         </section>

@@ -79,7 +79,7 @@ export default function PoolCalculatorPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-blue-50 dark:to-blue-950 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-zinc-400">Loading pool calculator data...</p>
@@ -89,7 +89,7 @@ export default function PoolCalculatorPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-blue-50 dark:to-blue-950">
       {/* Shared Navigation */}
       <SharedNav />
 
@@ -97,7 +97,7 @@ export default function PoolCalculatorPage() {
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center space-x-3">
-            <Calculator className="w-8 h-8 text-green-600" />
+            <Calculator className="w-8 h-8 text-green-600 dark:text-green-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Artist Pool Share Calculator</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -113,7 +113,7 @@ export default function PoolCalculatorPage() {
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Monthly Revenue Input</h2>
 
-          <div className="bg-blue-50 rounded-lg p-6 mb-6">
+          <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-6 mb-6">
             <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Harper's Team Total Revenue</div>
             <div className="flex items-center space-x-4">
               <input
@@ -130,20 +130,20 @@ export default function PoolCalculatorPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-purple-50 rounded-lg p-4">
+            <div className="bg-purple-50 dark:bg-purple-950 rounded-lg p-4">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Pool (80%)</div>
-              <div className="text-3xl font-bold text-purple-600">${artistPoolAmount.toLocaleString()}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Distributed to artists</div>
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-300">${artistPoolAmount.toLocaleString()}</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Distributed to artists</div>
             </div>
-            <div className="bg-green-50 rounded-lg p-4">
+            <div className="bg-green-50 dark:bg-green-950 rounded-lg p-4">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Station Revenue (20%)</div>
-              <div className="text-3xl font-bold text-green-600">${(harperRevenue * 0.20).toLocaleString()}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Station operations</div>
+              <div className="text-3xl font-bold text-green-600 dark:text-green-300">${(harperRevenue * 0.20).toLocaleString()}</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Station operations</div>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Per Share Value</div>
               <div className="text-3xl font-bold text-gray-900 dark:text-white">${perShareValue.toFixed(4)}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Based on {totalShares.toLocaleString()} shares</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Based on {totalShares.toLocaleString()} shares</div>
             </div>
           </div>
         </div>
@@ -207,7 +207,7 @@ export default function PoolCalculatorPage() {
               </div>
               <div className="text-center">
                 <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Total Distribution</div>
-                <div className="text-3xl font-bold text-purple-600">${artistPoolAmount.toLocaleString()}</div>
+                <div className="text-3xl font-bold text-purple-600 dark:text-purple-300">${artistPoolAmount.toLocaleString()}</div>
               </div>
             </div>
           </div>
@@ -262,7 +262,7 @@ export default function PoolCalculatorPage() {
         </div>
 
         {/* Payout Verification */}
-        <div className="bg-gradient-to-br from-green-50 to-white rounded-xl shadow-lg p-6">
+        <div className="bg-gradient-to-br from-green-50 dark:from-green-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Payout Verification</h2>
 
           <div className="space-y-3 text-sm">
@@ -286,9 +286,9 @@ export default function PoolCalculatorPage() {
               <span className="text-gray-600 dark:text-zinc-400">PLATINUM Tier Total:</span>
               <span className="font-semibold">${totalPayoutByTier.PLATINUM.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-green-100 rounded-lg font-bold text-lg">
+            <div className="flex justify-between items-center p-3 bg-green-100 dark:bg-green-900 rounded-lg font-bold text-lg">
               <span className="text-gray-900 dark:text-white">TOTAL DISTRIBUTED:</span>
-              <span className="text-green-600">${artistPoolAmount.toLocaleString()}</span>
+              <span className="text-green-600 dark:text-green-300">${artistPoolAmount.toLocaleString()}</span>
             </div>
             <div className="text-xs text-gray-400 text-center mt-2">
               ✓ Verification: All pool funds accounted for
@@ -297,15 +297,15 @@ export default function PoolCalculatorPage() {
         </div>
 
         {/* Team Member Info */}
-        <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+        <div className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-start space-x-4">
-            <div className="bg-purple-100 rounded-full p-3">
-              <User className="w-8 h-8 text-purple-600" />
+            <div className="bg-purple-100 dark:bg-purple-900 rounded-full p-3">
+              <User className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Jordan Cross</h3>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">Payment Processing & Artist Support</p>
-              <div className="text-sm text-gray-700 space-y-2">
+              <div className="text-sm text-gray-700 dark:text-zinc-200 space-y-2">
                 <p><strong>Responsibilities:</strong></p>
                 <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                   <li>Calculate monthly pool share distributions</li>
@@ -350,7 +350,7 @@ function TierRow({
       <div className="grid grid-cols-5 gap-4 items-center">
         <div>
           <div className="font-bold text-gray-900 dark:text-white">{tier}</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">{shares} share{shares !== 1 && 's'}</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">{shares} share{shares !== 1 && 's'}</div>
         </div>
         <div className="text-center">
           <div className="text-sm text-gray-600 dark:text-zinc-400">Artists</div>
@@ -358,11 +358,11 @@ function TierRow({
         </div>
         <div className="text-center">
           <div className="text-sm text-gray-600 dark:text-zinc-400">Per Artist</div>
-          <div className="text-xl font-bold text-green-600">${perArtist.toFixed(2)}</div>
+          <div className="text-xl font-bold text-green-600 dark:text-green-300">${perArtist.toFixed(2)}</div>
         </div>
         <div className="text-center">
           <div className="text-sm text-gray-600 dark:text-zinc-400">Total Payout</div>
-          <div className="text-xl font-bold text-purple-600">${totalPayout.toLocaleString()}</div>
+          <div className="text-xl font-bold text-purple-600 dark:text-purple-300">${totalPayout.toLocaleString()}</div>
         </div>
         <div className="text-center">
           <div className="text-sm text-gray-600 dark:text-zinc-400">Total Shares</div>
@@ -400,7 +400,7 @@ function EarningsCard({
   }[color];
 
   return (
-    <div className="bg-gray-50 rounded-lg p-4">
+    <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className={`px-3 py-1 rounded font-bold text-sm ${colorClasses}`}>
@@ -410,21 +410,21 @@ function EarningsCard({
         </div>
         <div className="flex items-center space-x-6">
           <div className="text-right">
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Monthly Pool Share</div>
-            <div className="text-lg font-bold text-green-600">${perMonth.toFixed(2)}</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Monthly Pool Share</div>
+            <div className="text-lg font-bold text-green-600 dark:text-green-300">${perMonth.toFixed(2)}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Subscription Cost</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Subscription Cost</div>
             <div className="text-lg font-bold text-gray-900 dark:text-white">${subscription.toFixed(2)}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Net Monthly</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Net Monthly</div>
             <div className={`text-lg font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
               {isProfit ? '+' : ''}${netMonthly.toFixed(2)}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Net Yearly</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Net Yearly</div>
             <div className={`text-lg font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
               {isProfit ? '+' : ''}${netYearly.toFixed(2)}
             </div>

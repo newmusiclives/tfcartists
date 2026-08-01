@@ -152,7 +152,7 @@ export function SharedNav() {
                   <ChevronDown className={`w-3 h-3 transition-transform ${openMenu === "teams" ? "rotate-180" : ""}`} />
                 </button>
                 {openMenu === "teams" && (
-                  <div role="menu" className="absolute right-0 mt-1 w-[880px] bg-white rounded-xl shadow-xl border py-4 px-3 z-50">
+                  <div role="menu" className="absolute right-0 mt-1 w-[880px] bg-white dark:bg-zinc-900 rounded-xl shadow-xl border py-4 px-3 z-50">
                     <div className="grid grid-cols-5 gap-2">
                       {/* Parker */}
                       <div>
@@ -248,8 +248,8 @@ export function SharedNav() {
                 {openMenu === "station" && (
                   <div className="absolute left-0 mt-1 w-72 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-200 dark:border-zinc-800 py-2 z-50">
                     {/* Station Info section */}
-                    <div className="px-3 py-1.5 text-xs font-bold text-gray-400 dark:text-zinc-400 uppercase tracking-wider">Station Info</div>
-                    <Link href="/revenue/projections" className="block px-4 py-2 text-sm font-semibold bg-gradient-to-r from-green-50 to-blue-50 text-green-700 hover:from-green-100 hover:to-blue-100 flex items-center space-x-2">
+                    <div className="px-3 py-1.5 text-xs font-bold text-gray-600 dark:text-zinc-400 uppercase tracking-wider">Station Info</div>
+                    <Link href="/revenue/projections" className="block px-4 py-2 text-sm font-semibold bg-gradient-to-r from-green-50 dark:from-green-950 to-blue-50 dark:to-blue-950 text-green-700 dark:text-green-300 hover:from-green-100 hover:to-blue-100 flex items-center space-x-2">
                       <Target className="w-4 h-4" />
                       <span>Revenue Model</span>
                     </Link>
@@ -272,40 +272,40 @@ export function SharedNav() {
                     {/* Station Ops section */}
                     <div className="px-3 py-1.5 text-xs font-bold text-amber-400 uppercase tracking-wider">Station Ops</div>
                     <Link href="/station-admin" className={activeLinkClass("/station-admin", "amber")}>
-                      <span className="flex items-center space-x-2"><Settings className="w-4 h-4 text-amber-600" /><span>Admin Hub</span></span>
+                      <span className="flex items-center space-x-2"><Settings className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Admin Hub</span></span>
                     </Link>
                     <Link href="/operate" className={activeLinkClass("/operate", "amber")}>
-                      <span className="flex items-center space-x-2"><Wand2 className="w-4 h-4 text-amber-600" /><span>Create Station</span></span>
+                      <span className="flex items-center space-x-2"><Wand2 className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Create Station</span></span>
                     </Link>
                     <Link href="/station-admin/clocks" className={activeLinkClass("/station-admin/clocks", "amber")}>
-                      <span className="flex items-center space-x-2"><Clock className="w-4 h-4 text-amber-600" /><span>Radio Clocks</span></span>
+                      <span className="flex items-center space-x-2"><Clock className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Radio Clocks</span></span>
                     </Link>
                     <Link href="/station-admin/music" className={activeLinkClass("/station-admin/music", "amber")}>
-                      <span className="flex items-center space-x-2"><Music className="w-4 h-4 text-amber-600" /><span>Music Library</span></span>
+                      <span className="flex items-center space-x-2"><Music className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Music Library</span></span>
                     </Link>
                     <Link href="/station-admin/dj-editor" className={activeLinkClass("/station-admin/dj-editor", "amber")}>
-                      <span className="flex items-center space-x-2"><Users className="w-4 h-4 text-amber-600" /><span>Host Editor</span></span>
+                      <span className="flex items-center space-x-2"><Users className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Host Editor</span></span>
                     </Link>
                     <Link href="/station-admin/schedule-editor" className={activeLinkClass("/station-admin/schedule-editor", "amber")}>
-                      <span className="flex items-center space-x-2"><CalendarDays className="w-4 h-4 text-amber-600" /><span>Schedule Editor</span></span>
+                      <span className="flex items-center space-x-2"><CalendarDays className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Schedule Editor</span></span>
                     </Link>
                     <Link href="/station-admin/imaging" className={activeLinkClass("/station-admin/imaging", "amber")}>
-                      <span className="flex items-center space-x-2"><Mic className="w-4 h-4 text-amber-600" /><span>Station Imaging</span></span>
+                      <span className="flex items-center space-x-2"><Mic className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Station Imaging</span></span>
                     </Link>
                     <Link href="/station-admin/branding" className={activeLinkClass("/station-admin/branding", "amber")}>
-                      <span className="flex items-center space-x-2"><Paintbrush className="w-4 h-4 text-amber-600" /><span>Station Branding</span></span>
+                      <span className="flex items-center space-x-2"><Paintbrush className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Station Branding</span></span>
                     </Link>
                     <Link href="/station-admin/stream" className={activeLinkClass("/station-admin/stream", "amber")}>
-                      <span className="flex items-center space-x-2"><SlidersHorizontal className="w-4 h-4 text-amber-600" /><span>Stream Engineering</span></span>
+                      <span className="flex items-center space-x-2"><SlidersHorizontal className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Stream Engineering</span></span>
                     </Link>
                     <Link href="/station-admin/embed" className={activeLinkClass("/station-admin/embed", "amber")}>
-                      <span className="flex items-center space-x-2"><Code className="w-4 h-4 text-amber-600" /><span>Embed Widget</span></span>
+                      <span className="flex items-center space-x-2"><Code className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Embed Widget</span></span>
                     </Link>
                     <Link href="/station-admin/social" className={activeLinkClass("/station-admin/social", "amber")}>
-                      <span className="flex items-center space-x-2"><Globe className="w-4 h-4 text-amber-600" /><span>Social Posting</span></span>
+                      <span className="flex items-center space-x-2"><Globe className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Social Posting</span></span>
                     </Link>
                     <Link href="/station-admin/webhooks" className={activeLinkClass("/station-admin/webhooks", "amber")}>
-                      <span className="flex items-center space-x-2"><Webhook className="w-4 h-4 text-amber-600" /><span>Webhooks</span></span>
+                      <span className="flex items-center space-x-2"><Webhook className="w-4 h-4 text-amber-600 dark:text-amber-300" /><span>Webhooks</span></span>
                     </Link>
                   </div>
                 )}
@@ -326,26 +326,26 @@ export function SharedNav() {
                   <ChevronDown className={`w-3 h-3 transition-transform ${openMenu === "opportunities" ? "rotate-180" : ""}`} />
                 </button>
                 {openMenu === "opportunities" && (
-                  <div className="absolute right-0 mt-1 w-64 bg-white rounded-xl shadow-xl border py-1 z-50">
-                    <Link href="/opportunities/artists" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 flex items-center space-x-2">
-                      <Users className="w-4 h-4 text-orange-600" />
+                  <div className="absolute right-0 mt-1 w-64 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border py-1 z-50">
+                    <Link href="/opportunities/artists" className="block px-4 py-2.5 text-sm text-gray-700 dark:text-zinc-200 hover:bg-orange-50 flex items-center space-x-2">
+                      <Users className="w-4 h-4 text-orange-600 dark:text-orange-300" />
                       <div>
                         <div className="font-semibold">For Artists</div>
-                        <div className="text-xs text-gray-400 dark:text-zinc-400">Artist Referrals - Earn $30-100/mo</div>
+                        <div className="text-xs text-gray-600 dark:text-zinc-400">Artist Referrals - Earn $30-100/mo</div>
                       </div>
                     </Link>
-                    <Link href="/opportunities/listeners" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 flex items-center space-x-2">
-                      <Radio className="w-4 h-4 text-blue-600" />
+                    <Link href="/opportunities/listeners" className="block px-4 py-2.5 text-sm text-gray-700 dark:text-zinc-200 hover:bg-blue-50 flex items-center space-x-2">
+                      <Radio className="w-4 h-4 text-blue-600 dark:text-blue-300" />
                       <div>
                         <div className="font-semibold">For Listeners</div>
-                        <div className="text-xs text-gray-400 dark:text-zinc-400">Listener Promotions - Earn $44+/mo</div>
+                        <div className="text-xs text-gray-600 dark:text-zinc-400">Listener Promotions - Earn $44+/mo</div>
                       </div>
                     </Link>
-                    <Link href="/opportunities/sponsors" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-purple-50 flex items-center space-x-2">
-                      <Building2 className="w-4 h-4 text-purple-600" />
+                    <Link href="/opportunities/sponsors" className="block px-4 py-2.5 text-sm text-gray-700 dark:text-zinc-200 hover:bg-purple-50 flex items-center space-x-2">
+                      <Building2 className="w-4 h-4 text-purple-600 dark:text-purple-300" />
                       <div>
                         <div className="font-semibold">For Sponsors</div>
-                        <div className="text-xs text-gray-400 dark:text-zinc-400">Referral Bonuses - Earn $50-250</div>
+                        <div className="text-xs text-gray-600 dark:text-zinc-400">Referral Bonuses - Earn $50-250</div>
                       </div>
                     </Link>
                   </div>
@@ -371,7 +371,7 @@ export function SharedNav() {
                 <Link
                   href="/admin/station-costs"
                   className={`p-2 rounded-lg transition-colors group relative ${
-                    isActive("/admin/station-costs") ? "bg-indigo-100 text-indigo-700" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-700 dark:hover:text-white"
+                    isActive("/admin/station-costs") ? "bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-700 dark:hover:text-white"
                   }`}
                   title="Station Costs"
                   aria-current={isActive("/admin/station-costs") ? "page" : undefined}
@@ -426,7 +426,7 @@ export function SharedNav() {
                   <ChevronDown className="w-3 h-3" />
                 </button>
                 {openMenu === "teams" && (
-                  <div className="absolute left-0 mt-1 w-[520px] bg-white rounded-xl shadow-xl border py-4 px-2 z-50">
+                  <div className="absolute left-0 mt-1 w-[520px] bg-white dark:bg-zinc-900 rounded-xl shadow-xl border py-4 px-2 z-50">
                     <div className="grid grid-cols-2 gap-1">
                       {/* Parker */}
                       <div>
@@ -479,16 +479,16 @@ export function SharedNav() {
                 )}
               </div>
 
-              <Link href="/station" className={`p-2 rounded-lg text-sm font-medium transition-colors ${isActive("/station") || isActive("/station-admin") ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400" : "text-gray-500 hover:bg-gray-100"}`} title="Station" aria-current={isActive("/station") ? "page" : undefined}>
+              <Link href="/station" className={`p-2 rounded-lg text-sm font-medium transition-colors ${isActive("/station") || isActive("/station-admin") ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100"}`} title="Station" aria-current={isActive("/station") ? "page" : undefined}>
                 <Radio className="w-4 h-4" />
               </Link>
-              <Link href="/admin" className={`p-2 rounded-lg transition-colors ${pathname === "/admin" ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-500 hover:bg-gray-100"}`} title="Admin" aria-current={pathname === "/admin" ? "page" : undefined}>
+              <Link href="/admin" className={`p-2 rounded-lg transition-colors ${pathname === "/admin" ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100"}`} title="Admin" aria-current={pathname === "/admin" ? "page" : undefined}>
                 <Home className="w-4 h-4" />
               </Link>
-              <Link href="/management" className={`p-2 rounded-lg transition-colors ${isActive("/management") ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400" : "text-gray-500 hover:bg-gray-100"}`} title="Management" aria-current={isActive("/management") ? "page" : undefined}>
+              <Link href="/management" className={`p-2 rounded-lg transition-colors ${isActive("/management") ? "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100"}`} title="Management" aria-current={isActive("/management") ? "page" : undefined}>
                 <Shield className="w-4 h-4" />
               </Link>
-              <Link href="/network" className={`p-2 rounded-lg transition-colors ${isActive("/network") ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-500 hover:bg-gray-100"}`} title="Network" aria-current={isActive("/network") ? "page" : undefined}>
+              <Link href="/network" className={`p-2 rounded-lg transition-colors ${isActive("/network") ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100"}`} title="Network" aria-current={isActive("/network") ? "page" : undefined}>
                 <Globe className="w-4 h-4" />
               </Link>
             </div>
@@ -496,7 +496,7 @@ export function SharedNav() {
             {/* Mobile Hamburger (<md) */}
             <button
               onClick={() => setMobileOpen(true)}
-              className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+              className="md:hidden p-2 rounded-lg text-gray-700 dark:text-zinc-200 hover:bg-gray-100 transition-colors"
               aria-label="Toggle mobile menu"
               aria-expanded={mobileOpen}
             >
@@ -520,14 +520,14 @@ export function SharedNav() {
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
-            className="fixed inset-y-0 right-0 w-80 max-w-[85vw] bg-white z-[70] md:hidden shadow-2xl overflow-y-auto"
+            className="fixed inset-y-0 right-0 w-80 max-w-[85vw] bg-white dark:bg-zinc-900 z-[70] md:hidden shadow-2xl overflow-y-auto"
           >
             {/* Drawer header */}
             <div className="flex items-center justify-between px-4 h-16 border-b">
-              <span className="font-bold text-amber-700 text-lg">Menu</span>
+              <span className="font-bold text-amber-700 dark:text-amber-300 text-lg">Menu</span>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="p-2 rounded-lg text-gray-500 hover:bg-gray-100"
+                className="p-2 rounded-lg text-gray-500 dark:text-zinc-400 hover:bg-gray-100"
                 aria-label="Close menu"
               >
                 <X className="w-5 h-5" />
@@ -536,17 +536,17 @@ export function SharedNav() {
 
             <div className="py-2">
               {/* Admin */}
-              <Link href="/admin" className={`flex items-center space-x-3 px-4 py-3 ${pathname === "/admin" ? "bg-purple-50 text-purple-700" : "text-gray-700"}`} aria-current={pathname === "/admin" ? "page" : undefined}>
+              <Link href="/admin" className={`flex items-center space-x-3 px-4 py-3 ${pathname === "/admin" ? "bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300" : "text-gray-700 dark:text-zinc-200"}`} aria-current={pathname === "/admin" ? "page" : undefined}>
                 <Home className="w-5 h-5" />
                 <span className="font-medium">Admin Home</span>
               </Link>
-              <Link href="/admin/station-costs" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/admin/station-costs") ? "bg-indigo-50 text-indigo-700" : "text-gray-700"}`} aria-current={isActive("/admin/station-costs") ? "page" : undefined}>
+              <Link href="/admin/station-costs" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/admin/station-costs") ? "bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300" : "text-gray-700 dark:text-zinc-200"}`} aria-current={isActive("/admin/station-costs") ? "page" : undefined}>
                 <Calculator className="w-5 h-5" />
                 <span className="font-medium">Station Costs</span>
               </Link>
 
               {/* Management */}
-              <Link href="/management" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/management") ? "bg-amber-50 text-amber-700" : "text-gray-700"}`} aria-current={isActive("/management") ? "page" : undefined}>
+              <Link href="/management" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/management") ? "bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300" : "text-gray-700 dark:text-zinc-200"}`} aria-current={isActive("/management") ? "page" : undefined}>
                 <Shield className="w-5 h-5" />
                 <span className="font-medium">Management</span>
               </Link>
@@ -556,7 +556,7 @@ export function SharedNav() {
               {/* Teams Accordion */}
               <button
                 onClick={() => toggleMobileSection(mobileSection === "teams" ? null : "teams")}
-                className="flex items-center justify-between w-full px-4 py-3 text-gray-700"
+                className="flex items-center justify-between w-full px-4 py-3 text-gray-700 dark:text-zinc-200"
               >
                 <span className="flex items-center space-x-3">
                   <Users className="w-5 h-5" />
@@ -570,7 +570,7 @@ export function SharedNav() {
                   {/* Parker */}
                   <button
                     onClick={() => toggleMobileSection("parker")}
-                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-rose-700"
+                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-rose-700 dark:text-rose-300"
                   >
                     <span className="font-semibold">Parker Team</span>
                     <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "parker" ? "rotate-90" : ""}`} />
@@ -589,7 +589,7 @@ export function SharedNav() {
                   {/* Riley */}
                   <button
                     onClick={() => toggleMobileSection("riley")}
-                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-purple-700"
+                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-purple-700 dark:text-purple-300"
                   >
                     <span className="font-semibold">Riley Team</span>
                     <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "riley" ? "rotate-90" : ""}`} />
@@ -610,7 +610,7 @@ export function SharedNav() {
                   {/* Cassidy */}
                   <button
                     onClick={() => toggleMobileSection("cassidy")}
-                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-amber-700"
+                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-amber-700 dark:text-amber-300"
                   >
                     <span className="font-semibold">Cassidy Team</span>
                     <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "cassidy" ? "rotate-90" : ""}`} />
@@ -628,7 +628,7 @@ export function SharedNav() {
                   {/* Elliot */}
                   <button
                     onClick={() => toggleMobileSection("elliot")}
-                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-green-700"
+                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-green-700 dark:text-green-300"
                   >
                     <span className="font-semibold">Elliot Team</span>
                     <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "elliot" ? "rotate-90" : ""}`} />
@@ -647,7 +647,7 @@ export function SharedNav() {
                   {/* Harper */}
                   <button
                     onClick={() => toggleMobileSection("harper")}
-                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-blue-700"
+                    className="flex items-center justify-between w-full px-4 py-2 text-sm text-blue-700 dark:text-blue-300"
                   >
                     <span className="font-semibold">Harper Team</span>
                     <ChevronRight className={`w-3 h-3 transition-transform ${mobileSection === "harper" ? "rotate-90" : ""}`} />
@@ -672,7 +672,7 @@ export function SharedNav() {
               {/* Station Accordion */}
               <button
                 onClick={() => toggleMobileSection(mobileSection === "station" || mobileSection === "stationOps" ? null : "station")}
-                className="flex items-center justify-between w-full px-4 py-3 text-gray-700"
+                className="flex items-center justify-between w-full px-4 py-3 text-gray-700 dark:text-zinc-200"
               >
                 <span className="flex items-center space-x-3">
                   <Radio className="w-5 h-5" />
@@ -683,7 +683,7 @@ export function SharedNav() {
 
               {(mobileSection === "station" || mobileSection === "stationOps") && (
                 <div className="pl-4 pb-2 space-y-0.5">
-                  <Link href="/revenue/projections" className="block px-4 py-2 text-sm font-semibold text-green-700">Revenue Model</Link>
+                  <Link href="/revenue/projections" className="block px-4 py-2 text-sm font-semibold text-green-700 dark:text-green-300">Revenue Model</Link>
                   <Link href="/capacity" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Capacity Calculator</Link>
                   <Link href="/whats-playing" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">What&apos;s Playing</Link>
                   <Link href="/schedule" className="block px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 dark:text-zinc-400">Schedule</Link>
@@ -711,7 +711,7 @@ export function SharedNav() {
               {/* Opportunities Accordion */}
               <button
                 onClick={() => toggleMobileSection(mobileSection === "opportunities" ? null : "opportunities")}
-                className="flex items-center justify-between w-full px-4 py-3 text-gray-700"
+                className="flex items-center justify-between w-full px-4 py-3 text-gray-700 dark:text-zinc-200"
               >
                 <span className="flex items-center space-x-3">
                   <DollarSign className="w-5 h-5" />
@@ -731,7 +731,7 @@ export function SharedNav() {
               <div className="border-t my-1" />
 
               {/* Quick Links */}
-              <Link href="/network" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/network") ? "bg-purple-50 text-purple-700" : "text-gray-700"}`} aria-current={isActive("/network") ? "page" : undefined}>
+              <Link href="/network" className={`flex items-center space-x-3 px-4 py-3 ${isActive("/network") ? "bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300" : "text-gray-700 dark:text-zinc-200"}`} aria-current={isActive("/network") ? "page" : undefined}>
                 <Globe className="w-5 h-5" />
                 <span className="font-medium">Network</span>
               </Link>

@@ -435,7 +435,7 @@ export default function ArtistStationPlayerPage() {
                 ? "bg-green-500/20 text-green-400"
                 : showLoading
                   ? "bg-violet-500/20 text-violet-400"
-                  : "bg-white/10 text-violet-300/60"
+                  : "bg-white dark:bg-zinc-900/10 text-violet-300/60"
             }`}
           >
             <span
@@ -610,7 +610,7 @@ export default function ArtistStationPlayerPage() {
               {similarArtists.map((artist) => (
                 <div
                   key={artist.name}
-                  className="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+                  className="flex flex-col items-center gap-2 p-3 rounded-xl bg-white dark:bg-zinc-900/5 hover:bg-white/10 transition-colors"
                 >
                   <div className="w-12 h-12 rounded-full overflow-hidden bg-violet-800/30 flex-shrink-0">
                     {artist.imageUrl ? (
@@ -648,7 +648,7 @@ export default function ArtistStationPlayerPage() {
             </h3>
             <div className="space-y-2 max-w-sm mx-auto">
               {recentRequests.slice(0, 5).map((req) => (
-                <div key={req.id} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-white/5">
+                <div key={req.id} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-white dark:bg-zinc-900/5">
                   <Music className="w-4 h-4 text-violet-400/40 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-medium text-white truncate">{req.songTitle}</p>
@@ -663,7 +663,7 @@ export default function ArtistStationPlayerPage() {
                         ? "bg-green-500/20 text-green-400"
                         : req.status === "queued"
                           ? "bg-violet-500/20 text-violet-400"
-                          : "bg-white/10 text-violet-300/50"
+                          : "bg-white dark:bg-zinc-900/10 text-violet-300/50"
                     }`}
                   >
                     {req.status}
@@ -712,7 +712,7 @@ export default function ArtistStationPlayerPage() {
                     onChange={(e) => setRequestSongTitle(e.target.value)}
                     placeholder="Enter song title"
                     required
-                    className="mt-1 w-full bg-white/5 border border-violet-500/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-violet-300/30 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                    className="mt-1 w-full bg-white dark:bg-zinc-900/5 border border-violet-500/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-violet-300/30 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
                   />
                 </div>
                 <div>
@@ -724,7 +724,7 @@ export default function ArtistStationPlayerPage() {
                     value={requestArtistName}
                     onChange={(e) => setRequestArtistName(e.target.value)}
                     placeholder={station.artistName}
-                    className="mt-1 w-full bg-white/5 border border-violet-500/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-violet-300/30 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                    className="mt-1 w-full bg-white dark:bg-zinc-900/5 border border-violet-500/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-violet-300/30 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
                   />
                 </div>
                 <div>
@@ -736,7 +736,7 @@ export default function ArtistStationPlayerPage() {
                     value={requestListenerName}
                     onChange={(e) => setRequestListenerName(e.target.value)}
                     placeholder="Your name"
-                    className="mt-1 w-full bg-white/5 border border-violet-500/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-violet-300/30 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+                    className="mt-1 w-full bg-white dark:bg-zinc-900/5 border border-violet-500/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-violet-300/30 focus:outline-none focus:ring-2 focus:ring-violet-500/40"
                   />
                 </div>
                 <div>
@@ -748,7 +748,7 @@ export default function ArtistStationPlayerPage() {
                     onChange={(e) => setRequestMessage(e.target.value)}
                     placeholder="Add a message..."
                     rows={2}
-                    className="mt-1 w-full bg-white/5 border border-violet-500/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-violet-300/30 focus:outline-none focus:ring-2 focus:ring-violet-500/40 resize-none"
+                    className="mt-1 w-full bg-white dark:bg-zinc-900/5 border border-violet-500/20 rounded-lg px-3 py-2.5 text-sm text-white placeholder-violet-300/30 focus:outline-none focus:ring-2 focus:ring-violet-500/40 resize-none"
                   />
                 </div>
                 <button

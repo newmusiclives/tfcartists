@@ -37,20 +37,20 @@ const JOB_LABELS: Record<string, string> = {
 function StatusBadge({ status }: { status: string }) {
   if (status === "success") {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
+      <span className="inline-flex items-center gap-1 text-xs font-medium text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900 px-2 py-0.5 rounded-full">
         <CheckCircle className="w-3 h-3" /> Success
       </span>
     );
   }
   if (status === "error") {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded-full">
+      <span className="inline-flex items-center gap-1 text-xs font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900 px-2 py-0.5 rounded-full">
         <XCircle className="w-3 h-3" /> Error
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 text-xs font-medium text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded-full">
+    <span className="inline-flex items-center gap-1 text-xs font-medium text-yellow-700 dark:text-yellow-300 bg-yellow-100 dark:bg-yellow-900 px-2 py-0.5 rounded-full">
       <AlertTriangle className="w-3 h-3" /> {status}
     </span>
   );
@@ -143,8 +143,8 @@ export default function CronLogsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Clock className="w-6 h-6 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+              <Clock className="w-6 h-6 text-blue-600 dark:text-blue-300" />
               Cron Job Logs
             </h1>
             <p className="text-gray-400 text-sm mt-1">
@@ -153,7 +153,7 @@ export default function CronLogsPage() {
           </div>
           <button
             onClick={fetchLogs}
-            className="flex items-center gap-2 px-3 py-2 text-sm bg-white border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800"
+            className="flex items-center gap-2 px-3 py-2 text-sm bg-white dark:bg-zinc-900 border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh
@@ -163,16 +163,16 @@ export default function CronLogsPage() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
-            <div className="text-2xl font-bold text-green-600">{successCount}</div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Successful</div>
+            <div className="text-2xl font-bold text-green-600 dark:text-green-300">{successCount}</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Successful</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
-            <div className="text-2xl font-bold text-red-600">{errorCount}</div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Errors</div>
+            <div className="text-2xl font-bold text-red-600 dark:text-red-300">{errorCount}</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Errors</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
-            <div className="text-2xl font-bold text-blue-600">{formatDuration(avgDuration)}</div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Avg Duration</div>
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">{formatDuration(avgDuration)}</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Avg Duration</div>
           </div>
         </div>
 
@@ -191,8 +191,8 @@ export default function CronLogsPage() {
                   disabled={togglingJob === job.name}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                     job.suspended
-                      ? "bg-red-50 border-red-200 text-red-700 hover:bg-red-100"
-                      : "bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                      ? "bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-100"
+                      : "bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 hover:bg-green-100"
                   } ${togglingJob === job.name ? "opacity-50" : ""}`}
                 >
                   {job.suspended ? (
@@ -215,7 +215,7 @@ export default function CronLogsPage() {
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="border rounded-lg px-3 py-1.5 text-sm bg-white"
+            className="border rounded-lg px-3 py-1.5 text-sm bg-white dark:bg-zinc-900"
           >
             <option value="all">All Jobs</option>
             {jobNames.map((name) => (
@@ -227,7 +227,7 @@ export default function CronLogsPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border rounded-lg px-3 py-1.5 text-sm bg-white"
+            className="border rounded-lg px-3 py-1.5 text-sm bg-white dark:bg-zinc-900"
           >
             <option value="all">All Statuses</option>
             <option value="success">Success</option>
@@ -244,7 +244,7 @@ export default function CronLogsPage() {
         ) : logs.length === 0 ? (
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-12 border text-center">
             <Clock className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-400 dark:text-zinc-400">No cron logs yet.</p>
+            <p className="text-gray-600 dark:text-zinc-400">No cron logs yet.</p>
             <p className="text-gray-400 text-sm mt-1">
               Logs will appear after the first cron job runs tonight at midnight MT.
             </p>
@@ -252,7 +252,7 @@ export default function CronLogsPage() {
         ) : (
           <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b">
+              <thead className="bg-gray-50 dark:bg-zinc-900 border-b">
                 <tr>
                   <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Job</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Status</th>
@@ -274,7 +274,7 @@ export default function CronLogsPage() {
                       <StatusBadge status={log.status} />
                     </td>
                     <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{formatDuration(log.duration)}</td>
-                    <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">{formatTime(log.startedAt)}</td>
+                    <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{formatTime(log.startedAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -294,12 +294,12 @@ export default function CronLogsPage() {
                     {JOB_LABELS[log.jobName] || log.jobName} — {formatTime(log.startedAt)}
                   </h3>
                   {log.error && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
-                      <p className="text-sm text-red-800 font-mono">{log.error}</p>
+                    <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-3">
+                      <p className="text-sm text-red-800 dark:text-red-200 font-mono">{log.error}</p>
                     </div>
                   )}
                   {log.summary && (
-                    <pre className="bg-gray-50 rounded-lg p-3 text-xs font-mono text-gray-700 overflow-x-auto">
+                    <pre className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3 text-xs font-mono text-gray-700 dark:text-zinc-200 overflow-x-auto">
                       {JSON.stringify(log.summary, null, 2)}
                     </pre>
                   )}

@@ -163,7 +163,7 @@ export default function DJEditorPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Users className="w-8 h-8 text-purple-600" />
+              <Users className="w-8 h-8 text-purple-600 dark:text-purple-300" />
               Host Editor
             </h1>
             <p className="text-zinc-400 mt-1">Create and configure host personalities</p>
@@ -297,7 +297,7 @@ export default function DJEditorPage() {
                 />
               </div>
               {createError && (
-                <p className="text-sm text-red-600">{createError}</p>
+                <p className="text-sm text-red-600 dark:text-red-300">{createError}</p>
               )}
               <button
                 onClick={createDJ}

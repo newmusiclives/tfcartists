@@ -263,7 +263,7 @@ export default function PricingPage() {
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
+            <Link href="/" className="flex items-center space-x-2 text-amber-700 dark:text-amber-300 hover:text-amber-800 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               <Radio className="w-5 h-5" />
               <span className="font-bold">TrueFans Radio</span>
@@ -300,7 +300,7 @@ export default function PricingPage() {
       {/* Audience Toggle */}
       <section className="px-4 pb-12">
         <div className="max-w-md mx-auto">
-          <div className="flex rounded-xl bg-white shadow-sm border border-gray-200 dark:border-zinc-800 p-1">
+          <div className="flex rounded-xl bg-white dark:bg-zinc-900 shadow-sm border border-gray-200 dark:border-zinc-800 p-1">
             {audiences.map((a) => (
               <button
                 key={a.id}
@@ -328,8 +328,8 @@ export default function PricingPage() {
               {OPERATOR_PLANS.map((plan) => (
                 <div
                   key={plan.id}
-                  className={`bg-white rounded-2xl p-6 shadow-sm border hover:shadow-lg transition-shadow relative ${
-                    plan.recommended ? "border-2 border-amber-400 shadow-lg" : "border-gray-200"
+                  className={`bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border hover:shadow-lg transition-shadow relative ${
+                    plan.recommended ? "border-2 border-amber-400 shadow-lg" : "border-gray-200 dark:border-zinc-800"
                   }`}
                 >
                   {plan.recommended && (
@@ -337,7 +337,7 @@ export default function PricingPage() {
                       MOST POPULAR
                     </div>
                   )}
-                  <div className="text-amber-600 font-semibold text-sm mb-1">{plan.name}</div>
+                  <div className="text-amber-600 dark:text-amber-300 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
                     <span className="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
                     <span className="text-sm text-gray-400 ml-1">/mo</span>
@@ -346,9 +346,9 @@ export default function PricingPage() {
                     <div className="text-xs text-gray-400 mb-3">+ ${plan.setup} one-time setup</div>
                   )}
                   {plan.setup === 0 && (
-                    <div className="text-xs text-green-600 font-medium mb-3">No setup fee</div>
+                    <div className="text-xs text-green-600 dark:text-green-300 font-medium mb-3">No setup fee</div>
                   )}
-                  <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">{plan.description}</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
@@ -362,7 +362,7 @@ export default function PricingPage() {
                     className={`block text-center px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
                       plan.recommended
                         ? "bg-amber-700 text-white hover:bg-amber-700"
-                        : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                        : "bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-zinc-100 hover:bg-gray-200"
                     }`}
                   >
                     Get Started
@@ -382,14 +382,14 @@ export default function PricingPage() {
               {ARTIST_PLANS.map((plan) => (
                 <div
                   key={plan.id}
-                  className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-shadow"
+                  className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800 hover:shadow-lg transition-shadow"
                 >
-                  <div className="text-purple-600 font-semibold text-sm mb-1">{plan.name}</div>
+                  <div className="text-purple-600 dark:text-purple-300 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
                     <span className="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
                     <span className="text-sm text-gray-400 ml-1">/mo</span>
                   </div>
-                  <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">{plan.description}</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
@@ -419,8 +419,8 @@ export default function PricingPage() {
               {SPONSOR_PLANS.map((plan) => (
                 <div
                   key={plan.id}
-                  className={`bg-white rounded-2xl p-6 shadow-sm border hover:shadow-lg transition-shadow relative ${
-                    "recommended" in plan && plan.recommended ? "border-2 border-green-400 shadow-lg" : "border-gray-200"
+                  className={`bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border hover:shadow-lg transition-shadow relative ${
+                    "recommended" in plan && plan.recommended ? "border-2 border-green-400 shadow-lg" : "border-gray-200 dark:border-zinc-800"
                   }`}
                 >
                   {"recommended" in plan && plan.recommended && (
@@ -428,12 +428,12 @@ export default function PricingPage() {
                       BEST VALUE
                     </div>
                   )}
-                  <div className="text-green-600 font-semibold text-sm mb-1">{plan.name}</div>
+                  <div className="text-green-600 dark:text-green-300 font-semibold text-sm mb-1">{plan.name}</div>
                   <div className="flex items-baseline mb-1">
                     <span className="text-4xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
                     <span className="text-sm text-gray-400 ml-1">/mo</span>
                   </div>
-                  <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">{plan.description}</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400 mb-5">{plan.description}</p>
                   <ul className="space-y-2.5 mb-6">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm text-gray-700 dark:text-zinc-300">
@@ -447,7 +447,7 @@ export default function PricingPage() {
                     className={`block text-center px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
                       "recommended" in plan && plan.recommended
                         ? "bg-green-700 text-white hover:bg-green-700"
-                        : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                        : "bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-zinc-100 hover:bg-gray-200"
                     }`}
                   >
                     Get Started
@@ -471,7 +471,7 @@ export default function PricingPage() {
             </p>
             <Link
               href="/demo"
-              className="inline-flex items-center gap-2 bg-white text-amber-800 px-8 py-4 rounded-xl font-bold text-lg hover:bg-amber-50 transition-colors active:scale-[0.98]"
+              className="inline-flex items-center gap-2 bg-white dark:bg-zinc-900 text-amber-800 dark:text-amber-200 px-8 py-4 rounded-xl font-bold text-lg hover:bg-amber-50 transition-colors active:scale-[0.98]"
             >
               <Play className="w-5 h-5" />
               Try Free Demo
@@ -490,13 +490,13 @@ export default function PricingPage() {
             {FAQ_ITEMS.map((item, i) => (
               <div
                 key={i}
-                className="rounded-xl border border-gray-200 bg-white overflow-hidden"
+                className="rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden"
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
                 >
-                  <span className="font-medium text-gray-900 pr-4">{item.q}</span>
+                  <span className="font-medium text-gray-900 dark:text-zinc-100 pr-4">{item.q}</span>
                   <ChevronDown
                     className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-200 ${
                       openFaq === i ? "rotate-180" : ""
@@ -517,7 +517,7 @@ export default function PricingPage() {
       {/* Final CTA */}
       <section className="px-4 pb-20">
         <div className="max-w-2xl mx-auto text-center">
-          <Headphones className="w-12 h-12 text-amber-600 mx-auto mb-6" />
+          <Headphones className="w-12 h-12 text-amber-600 dark:text-amber-300 mx-auto mb-6" />
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Ready to Launch Your Station?
           </h2>
@@ -535,7 +535,7 @@ export default function PricingPage() {
             </Link>
             <Link
               href="/demo"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-amber-600 text-amber-700 hover:bg-amber-50 transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-amber-600 text-amber-700 dark:text-amber-300 hover:bg-amber-50 transition-colors"
             >
               <Play className="w-5 h-5" />
               Try Free Demo
@@ -545,8 +545,8 @@ export default function PricingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 py-8 px-4 bg-white/60">
-        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm text-gray-400 dark:text-zinc-400">
+      <footer className="border-t border-gray-200 dark:border-zinc-800 py-8 px-4 bg-white dark:bg-zinc-900/60">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm text-gray-600 dark:text-zinc-400">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4" />
             <span>TrueFans Radio</span>

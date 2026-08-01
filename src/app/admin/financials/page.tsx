@@ -72,7 +72,7 @@ function CapacityBar({ label, current, max, pct, color }: { label: string; curre
     <div>
       <div className="flex justify-between text-sm mb-1">
         <span className="font-medium text-gray-700 dark:text-zinc-300">{label}</span>
-        <span className="text-gray-400 dark:text-zinc-400">{current} / {max} ({pct.toFixed(0)}%)</span>
+        <span className="text-gray-600 dark:text-zinc-400">{current} / {max} ({pct.toFixed(0)}%)</span>
       </div>
       <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-3">
         <div className={`${color} h-3 rounded-full transition-all`} style={{ width: `${clampedPct}%` }} />
@@ -107,7 +107,7 @@ export default function FinancialsPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100">
         <SharedNav />
         <div className="max-w-7xl mx-auto px-4 py-12 text-center">
-          <p className="text-gray-400 dark:text-zinc-400">Failed to load financial data.</p>
+          <p className="text-gray-600 dark:text-zinc-400">Failed to load financial data.</p>
         </div>
       </div>
     );
@@ -160,13 +160,13 @@ export default function FinancialsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-2">
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-zinc-400 mb-2">
             <Link href="/admin" className="hover:text-gray-700 dark:text-zinc-300">Admin</Link>
             <ArrowRight className="w-3 h-3" />
             <span>Financial Summary</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <BarChart3 className="w-8 h-8 text-green-600" />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-3">
+            <BarChart3 className="w-8 h-8 text-green-600 dark:text-green-300" />
             Station Financial Summary
           </h1>
           <p className="text-gray-600 dark:text-zinc-400 mt-1">
@@ -177,7 +177,7 @@ export default function FinancialsPage() {
         {/* Top KPIs */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-            <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-1">
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-zinc-400 mb-1">
               <DollarSign className="w-4 h-4" />
               Total Revenue
             </div>
@@ -185,15 +185,15 @@ export default function FinancialsPage() {
             <div className="text-xs text-gray-400 mt-1">monthly</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-            <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-1">
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-zinc-400 mb-1">
               <Award className="w-4 h-4" />
               Artist Pool (80%)
             </div>
-            <div className="text-2xl font-bold text-green-600">${fmt(f.artistPool)}</div>
+            <div className="text-2xl font-bold text-green-600 dark:text-green-300">${fmt(f.artistPool)}</div>
             <div className="text-xs text-gray-400 mt-1">distributed to artists</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-            <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-1">
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-zinc-400 mb-1">
               <TrendingUp className="w-4 h-4" />
               Station Retained
             </div>
@@ -201,11 +201,11 @@ export default function FinancialsPage() {
             <div className="text-xs text-gray-400 mt-1">operations + subs</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
-            <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-zinc-400 mb-1">
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-zinc-400 mb-1">
               <PieChart className="w-4 h-4" />
               Per Share Value
             </div>
-            <div className="text-2xl font-bold text-purple-600">${fmt(f.perShareValue)}</div>
+            <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">${fmt(f.perShareValue)}</div>
             <div className="text-xs text-gray-400 mt-1">{data.artists.totalShares.toLocaleString()} total shares</div>
           </div>
         </div>
@@ -215,23 +215,23 @@ export default function FinancialsPage() {
           {/* Revenue Sources */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
             <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-green-600" />
+              <DollarSign className="w-5 h-5 text-green-600 dark:text-green-300" />
               Revenue Sources (Monthly)
             </h2>
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-950 rounded-lg">
                 <div>
-                  <div className="font-semibold text-green-900">Sponsor Revenue</div>
-                  <div className="text-sm text-green-700">{data.sponsors.activeSponsorships} active sponsorships</div>
+                  <div className="font-semibold text-green-900 dark:text-green-200">Sponsor Revenue</div>
+                  <div className="text-sm text-green-700 dark:text-green-300">{data.sponsors.activeSponsorships} active sponsorships</div>
                 </div>
-                <div className="text-xl font-bold text-green-600">${fmt(f.sponsorRevenue)}</div>
+                <div className="text-xl font-bold text-green-600 dark:text-green-300">${fmt(f.sponsorRevenue)}</div>
               </div>
-              <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-purple-50 dark:bg-purple-950 rounded-lg">
                 <div>
-                  <div className="font-semibold text-purple-900">Artist Subscriptions</div>
-                  <div className="text-sm text-purple-700">{data.artists.total - data.artists.byTier.FREE} paid artists</div>
+                  <div className="font-semibold text-purple-900 dark:text-purple-200">Artist Subscriptions</div>
+                  <div className="text-sm text-purple-700 dark:text-purple-300">{data.artists.total - data.artists.byTier.FREE} paid artists</div>
                 </div>
-                <div className="text-xl font-bold text-purple-600">${fmt(f.artistSubscriptionRevenue)}</div>
+                <div className="text-xl font-bold text-purple-600 dark:text-purple-300">${fmt(f.artistSubscriptionRevenue)}</div>
               </div>
               <div className="border-t pt-3 flex justify-between items-center">
                 <span className="font-bold text-gray-900 dark:text-white">Total Gross Revenue</span>
@@ -243,30 +243,30 @@ export default function FinancialsPage() {
           {/* Distribution */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
             <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-              <PieChart className="w-5 h-5 text-blue-600" />
+              <PieChart className="w-5 h-5 text-blue-600 dark:text-blue-300" />
               Revenue Distribution
             </h2>
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-blue-50 dark:bg-blue-950 rounded-lg">
                 <div>
-                  <div className="font-semibold text-blue-900">Artist Pool</div>
-                  <div className="text-sm text-blue-700">80% of sponsor revenue to artists</div>
+                  <div className="font-semibold text-blue-900 dark:text-blue-200">Artist Pool</div>
+                  <div className="text-sm text-blue-700 dark:text-blue-300">80% of sponsor revenue to artists</div>
                 </div>
-                <div className="text-xl font-bold text-blue-600">${fmt(f.artistPool)}</div>
+                <div className="text-xl font-bold text-blue-600 dark:text-blue-300">${fmt(f.artistPool)}</div>
               </div>
-              <div className="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-amber-50 dark:bg-amber-950 rounded-lg">
                 <div>
-                  <div className="font-semibold text-amber-900">Station Operations</div>
+                  <div className="font-semibold text-amber-900 dark:text-amber-200">Station Operations</div>
                   <div className="text-sm text-amber-700 dark:text-amber-400">20% of sponsor revenue retained</div>
                 </div>
                 <div className="text-xl font-bold text-amber-600 dark:text-amber-400">${fmt(f.stationRetained)}</div>
               </div>
-              <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-purple-50 dark:bg-purple-950 rounded-lg">
                 <div>
-                  <div className="font-semibold text-purple-900">Subscription Revenue</div>
-                  <div className="text-sm text-purple-700">Artist tier payments (station keeps)</div>
+                  <div className="font-semibold text-purple-900 dark:text-purple-200">Subscription Revenue</div>
+                  <div className="text-sm text-purple-700 dark:text-purple-300">Artist tier payments (station keeps)</div>
                 </div>
-                <div className="text-xl font-bold text-purple-600">${fmt(f.artistSubscriptionRevenue)}</div>
+                <div className="text-xl font-bold text-purple-600 dark:text-purple-300">${fmt(f.artistSubscriptionRevenue)}</div>
               </div>
             </div>
           </div>
@@ -275,7 +275,7 @@ export default function FinancialsPage() {
         {/* Artist Tier Breakdown */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-8">
           <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-            <Music className="w-5 h-5 text-purple-600" />
+            <Music className="w-5 h-5 text-purple-600 dark:text-purple-300" />
             Artist Tier Breakdown & ROI
           </h2>
           <div className="overflow-x-auto">
@@ -302,11 +302,11 @@ export default function FinancialsPage() {
                       <td className="py-3 pr-4 text-right">{count}</td>
                       <td className="py-3 pr-4 text-right">${info.cost}</td>
                       <td className="py-3 pr-4 text-right">{info.shares}</td>
-                      <td className="py-3 pr-4 text-right text-green-600">${fmt(info.poolEarnings)}</td>
-                      <td className={`py-3 pr-4 text-right font-semibold ${info.net >= 0 ? "text-green-600" : "text-red-500"}`}>
+                      <td className="py-3 pr-4 text-right text-green-600 dark:text-green-300">${fmt(info.poolEarnings)}</td>
+                      <td className={`py-3 pr-4 text-right font-semibold ${info.net >= 0 ? "text-green-600 dark:text-green-300" : "text-red-500"}`}>
                         ${fmt(info.net)}
                       </td>
-                      <td className={`py-3 pr-4 text-right ${roi > 0 ? "text-green-600" : roi < 0 ? "text-red-500" : "text-gray-400"}`}>
+                      <td className={`py-3 pr-4 text-right ${roi > 0 ? "text-green-600 dark:text-green-300" : roi < 0 ? "text-red-500" : "text-gray-400"}`}>
                         {info.cost > 0 ? `${roi.toFixed(0)}%` : "—"}
                       </td>
                       <td className="py-3 text-right">${fmt(count * info.cost)}</td>
@@ -317,7 +317,7 @@ export default function FinancialsPage() {
                   <td className="py-3 pr-4">TOTAL</td>
                   <td className="py-3 pr-4 text-right">{data.artists.total}</td>
                   <td className="py-3 pr-4 text-right" colSpan={2}>{data.artists.totalShares.toLocaleString()} shares</td>
-                  <td className="py-3 pr-4 text-right text-green-600">${fmt(f.artistPool)}</td>
+                  <td className="py-3 pr-4 text-right text-green-600 dark:text-green-300">${fmt(f.artistPool)}</td>
                   <td className="py-3 pr-4 text-right" colSpan={2}></td>
                   <td className="py-3 text-right">${fmt(f.artistSubscriptionRevenue)}</td>
                 </tr>
@@ -329,7 +329,7 @@ export default function FinancialsPage() {
         {/* Capacity Gauges */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-8">
           <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-            <Radio className="w-5 h-5 text-amber-600" />
+            <Radio className="w-5 h-5 text-amber-600 dark:text-amber-300" />
             Station Capacity
           </h2>
           <div className="space-y-4">
@@ -356,17 +356,17 @@ export default function FinancialsPage() {
             />
           </div>
           <div className="grid grid-cols-3 gap-4 mt-6 text-center">
-            <div className="bg-gray-50 rounded-lg p-3">
+            <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3">
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{data.programming.djs}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Active DJs</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Active DJs</div>
             </div>
-            <div className="bg-gray-50 rounded-lg p-3">
+            <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3">
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{data.programming.songs.toLocaleString()}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Songs in Library</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Songs in Library</div>
             </div>
-            <div className="bg-gray-50 rounded-lg p-3">
+            <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3">
               <div className="text-2xl font-bold text-gray-900 dark:text-white">{data.scouts.active}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Active Scouts</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Active Scouts</div>
             </div>
           </div>
         </div>
@@ -376,36 +376,36 @@ export default function FinancialsPage() {
           {/* Current */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
             <h3 className="font-bold text-lg mb-1">Current State</h3>
-            <p className="text-sm text-gray-400 dark:text-zinc-400 mb-4">{data.capacity.artists.pct.toFixed(0)}% capacity</p>
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-4">{data.capacity.artists.pct.toFixed(0)}% capacity</p>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between"><span>Gross Revenue</span><span className="font-semibold">${fmt(f.totalGrossRevenue)}</span></div>
-              <div className="flex justify-between"><span>Artist Pool</span><span className="text-green-600">-${fmt(f.artistPool)}</span></div>
+              <div className="flex justify-between"><span>Artist Pool</span><span className="text-green-600 dark:text-green-300">-${fmt(f.artistPool)}</span></div>
               <div className="flex justify-between"><span>Subscriptions</span><span className="font-semibold">${fmt(f.artistSubscriptionRevenue)}</span></div>
               <div className="flex justify-between border-t pt-2"><span className="font-bold">Station Net</span><span className="font-bold text-amber-600 dark:text-amber-400">${fmt(f.stationRetained + f.artistSubscriptionRevenue)}</span></div>
             </div>
           </div>
           {/* 60% Projected */}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 shadow-sm border border-green-200">
-            <h3 className="font-bold text-lg mb-1 text-green-900">60% Capacity</h3>
-            <p className="text-sm text-green-700 mb-4">{projected60.artists} artists, {projected60.sponsors} sponsors</p>
+          <div className="bg-gradient-to-br from-green-50 dark:from-green-950 to-emerald-50 dark:to-emerald-950 rounded-xl p-6 shadow-sm border border-green-200 dark:border-green-800">
+            <h3 className="font-bold text-lg mb-1 text-green-900 dark:text-green-200">60% Capacity</h3>
+            <p className="text-sm text-green-700 dark:text-green-300 mb-4">{projected60.artists} artists, {projected60.sponsors} sponsors</p>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between"><span>Sponsor Revenue</span><span className="font-semibold">${projected60.sponsorRevenue.toLocaleString()}</span></div>
               <div className="flex justify-between"><span>Artist Subs</span><span className="font-semibold">${projected60.artistSubs.toLocaleString()}</span></div>
-              <div className="flex justify-between"><span>Artist Pool (80%)</span><span className="text-green-600">-${proj60Pool.toLocaleString()}</span></div>
+              <div className="flex justify-between"><span>Artist Pool (80%)</span><span className="text-green-600 dark:text-green-300">-${proj60Pool.toLocaleString()}</span></div>
               <div className="flex justify-between"><span>Commissions</span><span className="text-red-500">-$2,900</span></div>
               <div className="flex justify-between"><span>Operations</span><span className="text-red-500">-$1,380</span></div>
-              <div className="flex justify-between border-t pt-2"><span className="font-bold">Net Profit</span><span className="font-bold text-green-600">${proj60Profit.toLocaleString()}/mo</span></div>
-              <div className="text-right text-xs text-green-700">${(proj60Profit * 12).toLocaleString()}/year</div>
+              <div className="flex justify-between border-t pt-2"><span className="font-bold">Net Profit</span><span className="font-bold text-green-600 dark:text-green-300">${proj60Profit.toLocaleString()}/mo</span></div>
+              <div className="text-right text-xs text-green-700 dark:text-green-300">${(proj60Profit * 12).toLocaleString()}/year</div>
             </div>
           </div>
           {/* 100% Projected */}
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 shadow-sm border border-amber-200">
-            <h3 className="font-bold text-lg mb-1 text-amber-900">100% Capacity</h3>
-            <p className="text-sm text-amber-700 mb-4">{projected100.artists} artists, {projected100.sponsors} sponsors</p>
+          <div className="bg-gradient-to-br from-amber-50 dark:from-amber-950 to-orange-50 dark:to-orange-950 rounded-xl p-6 shadow-sm border border-amber-200 dark:border-amber-800">
+            <h3 className="font-bold text-lg mb-1 text-amber-900 dark:text-amber-200">100% Capacity</h3>
+            <p className="text-sm text-amber-700 dark:text-amber-300 mb-4">{projected100.artists} artists, {projected100.sponsors} sponsors</p>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between"><span>Sponsor Revenue</span><span className="font-semibold">${projected100.sponsorRevenue.toLocaleString()}</span></div>
               <div className="flex justify-between"><span>Artist Subs</span><span className="font-semibold">${projected100.artistSubs.toLocaleString()}</span></div>
-              <div className="flex justify-between"><span>Artist Pool (80%)</span><span className="text-green-600">-${proj100Pool.toLocaleString()}</span></div>
+              <div className="flex justify-between"><span>Artist Pool (80%)</span><span className="text-green-600 dark:text-green-300">-${proj100Pool.toLocaleString()}</span></div>
               <div className="flex justify-between"><span>Commissions</span><span className="text-red-500">-$3,900</span></div>
               <div className="flex justify-between"><span>Operations</span><span className="text-red-500">-$1,800</span></div>
               <div className="flex justify-between border-t pt-2"><span className="font-bold">Net Profit</span><span className="font-bold text-amber-600 dark:text-amber-400">${proj100Profit.toLocaleString()}/mo</span></div>
@@ -417,7 +417,7 @@ export default function FinancialsPage() {
         {/* Model Viability Checks */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border mb-8">
           <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-            {allChecks ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : <XCircle className="w-5 h-5 text-red-500" />}
+            {allChecks ? <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-300" /> : <XCircle className="w-5 h-5 text-red-500" />}
             Station Model Viability Checks
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -435,7 +435,7 @@ export default function FinancialsPage() {
               <div
                 key={c.label}
                 className={`flex items-center gap-2 p-3 rounded-lg text-sm font-medium ${
-                  c.ok ? "bg-green-50 text-green-800" : "bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400"
+                  c.ok ? "bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-200" : "bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400"
                 }`}
               >
                 {c.ok ? <CheckCircle2 className="w-4 h-4 flex-shrink-0" /> : <XCircle className="w-4 h-4 flex-shrink-0" />}
@@ -444,7 +444,7 @@ export default function FinancialsPage() {
             ))}
           </div>
           {allChecks && (
-            <div className="mt-4 bg-green-100 border border-green-300 rounded-lg p-3 text-sm text-green-800 font-medium">
+            <div className="mt-4 bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700 rounded-lg p-3 text-sm text-green-800 dark:text-green-200 font-medium">
               All viability checks passed. The station model is mathematically sound and operational.
             </div>
           )}
@@ -453,19 +453,19 @@ export default function FinancialsPage() {
         {/* Quick Links */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link href="/admin/verification" className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border hover:shadow-md transition text-center">
-            <BarChart3 className="w-6 h-6 mx-auto mb-2 text-blue-600" />
+            <BarChart3 className="w-6 h-6 mx-auto mb-2 text-blue-600 dark:text-blue-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">Revenue Verification</span>
           </Link>
           <Link href="/revenue/projections" className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border hover:shadow-md transition text-center">
-            <TrendingUp className="w-6 h-6 mx-auto mb-2 text-green-600" />
+            <TrendingUp className="w-6 h-6 mx-auto mb-2 text-green-600 dark:text-green-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">Revenue Projections</span>
           </Link>
           <Link href="/capacity" className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border hover:shadow-md transition text-center">
-            <Radio className="w-6 h-6 mx-auto mb-2 text-amber-600" />
+            <Radio className="w-6 h-6 mx-auto mb-2 text-amber-600 dark:text-amber-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">Capacity Planner</span>
           </Link>
           <Link href="/riley/pool-calculator" className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border hover:shadow-md transition text-center">
-            <DollarSign className="w-6 h-6 mx-auto mb-2 text-purple-600" />
+            <DollarSign className="w-6 h-6 mx-auto mb-2 text-purple-600 dark:text-purple-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">Pool Calculator</span>
           </Link>
         </div>

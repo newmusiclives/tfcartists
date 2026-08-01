@@ -23,12 +23,12 @@ export default function NativeAppGuidePage() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <Link
           href="/"
-          className="text-amber-700 hover:text-amber-900 text-sm font-medium transition-colors"
+          className="text-amber-700 dark:text-amber-300 hover:text-amber-900 text-sm font-medium transition-colors"
         >
           &larr; Back to Home
         </Link>
 
-        <h1 className="mt-8 text-4xl font-bold text-amber-900">
+        <h1 className="mt-8 text-4xl font-bold text-amber-900 dark:text-amber-200">
           Native App Setup
         </h1>
         <p className="mt-2 text-gray-400 text-sm">
@@ -39,7 +39,7 @@ export default function NativeAppGuidePage() {
         <div className="mt-10 space-y-12 text-gray-700 dark:text-zinc-300 leading-relaxed">
           {/* ---- Prerequisites ---- */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               Prerequisites
             </h2>
             <ul className="list-disc pl-6 space-y-2">
@@ -63,11 +63,11 @@ export default function NativeAppGuidePage() {
 
           {/* ---- Quick Start ---- */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               Quick Start
             </h2>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-6">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-6">
               1. Install Capacitor packages
             </h3>
             <CodeBlock>
@@ -77,41 +77,41 @@ export default function NativeAppGuidePage() {
   @capacitor/push-notifications @capacitor/browser`}
             </CodeBlock>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-6">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-6">
               2. Initialise Capacitor (already done &mdash; config checked in)
             </h3>
             <CodeBlock>{`npx cap init "TrueFans RADIO" com.truefans.radio --web-dir out`}</CodeBlock>
-            <p className="mt-2 text-sm text-gray-400 dark:text-zinc-400">
+            <p className="mt-2 text-sm text-gray-600 dark:text-zinc-400">
               Skip this step &mdash; <code>capacitor.config.ts</code> is already
               in the repo.
             </p>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-6">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-6">
               3. Add native platforms
             </h3>
             <CodeBlock>{`npx cap add ios\nnpx cap add android`}</CodeBlock>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-6">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-6">
               4. Build the web app &amp; export
             </h3>
             <CodeBlock>{`npm run build\nnpx next export`}</CodeBlock>
-            <p className="mt-2 text-sm text-gray-400 dark:text-zinc-400">
+            <p className="mt-2 text-sm text-gray-600 dark:text-zinc-400">
               This produces the <code>out/</code> directory that Capacitor
               bundles into the native shell. In production the app live-loads
               from the deployed URL instead.
             </p>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-6">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-6">
               5. Sync web assets to native projects
             </h3>
             <CodeBlock>{`npx cap sync`}</CodeBlock>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-6">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-6">
               6. Open in IDE
             </h3>
             <CodeBlock>{`npx cap open ios      # opens Xcode\nnpx cap open android  # opens Android Studio`}</CodeBlock>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-6">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-6">
               One-liner build script
             </h3>
             <CodeBlock>{`bash scripts/build-native.sh`}</CodeBlock>
@@ -119,16 +119,16 @@ export default function NativeAppGuidePage() {
 
           {/* ---- Configuration ---- */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               Configuration
             </h2>
             <p>
               All Capacitor settings live in{" "}
-              <code className="bg-gray-100 px-1 rounded">capacitor.config.ts</code>{" "}
+              <code className="bg-gray-100 dark:bg-zinc-800 px-1 rounded">capacitor.config.ts</code>{" "}
               at the project root.
             </p>
 
-            <div className="mt-4 rounded-lg bg-amber-50 border border-amber-200 p-4 text-sm space-y-3">
+            <div className="mt-4 rounded-lg bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-4 text-sm space-y-3">
               <div>
                 <strong>appId:</strong>{" "}
                 <code>com.truefans.radio</code> &mdash; bundle identifier for
@@ -160,11 +160,11 @@ export default function NativeAppGuidePage() {
 
           {/* ---- Push Notifications ---- */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               Push Notifications
             </h2>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-4">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-4">
               iOS &mdash; Apple Push Notification service (APNs)
             </h3>
             <ol className="list-decimal pl-6 space-y-2 mt-2">
@@ -176,7 +176,7 @@ export default function NativeAppGuidePage() {
                 Generate an APNs Key in{" "}
                 <a
                   href="https://developer.apple.com/account/resources/authkeys/list"
-                  className="text-amber-700 underline"
+                  className="text-amber-700 dark:text-amber-300 underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -194,7 +194,7 @@ export default function NativeAppGuidePage() {
               </li>
             </ol>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-6">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-6">
               Android &mdash; Firebase Cloud Messaging (FCM)
             </h3>
             <ol className="list-decimal pl-6 space-y-2 mt-2">
@@ -215,7 +215,7 @@ export default function NativeAppGuidePage() {
 
           {/* ---- Deep Linking ---- */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               Deep Linking
             </h2>
             <p>
@@ -224,7 +224,7 @@ export default function NativeAppGuidePage() {
               directly inside the native app.
             </p>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-4">iOS</h3>
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-4">iOS</h3>
             <ol className="list-decimal pl-6 space-y-2 mt-2">
               <li>
                 Add an <code>apple-app-site-association</code> file to{" "}
@@ -236,7 +236,7 @@ export default function NativeAppGuidePage() {
               </li>
             </ol>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-4">Android</h3>
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-4">Android</h3>
             <ol className="list-decimal pl-6 space-y-2 mt-2">
               <li>
                 Add an <code>assetlinks.json</code> file to{" "}
@@ -251,11 +251,11 @@ export default function NativeAppGuidePage() {
 
           {/* ---- App Store Submission ---- */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               App Store Submission Checklist
             </h2>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-4">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-4">
               Apple App Store
             </h3>
             <ul className="list-disc pl-6 space-y-2 mt-2">
@@ -272,7 +272,7 @@ export default function NativeAppGuidePage() {
               </li>
             </ul>
 
-            <h3 className="text-lg font-medium text-gray-800 mt-6">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-zinc-100 mt-6">
               Google Play Store
             </h3>
             <ul className="list-disc pl-6 space-y-2 mt-2">
@@ -286,7 +286,7 @@ export default function NativeAppGuidePage() {
 
           {/* ---- Troubleshooting ---- */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               Troubleshooting
             </h2>
             <ul className="list-disc pl-6 space-y-2">
@@ -314,7 +314,7 @@ export default function NativeAppGuidePage() {
           </section>
         </div>
 
-        <div className="mt-16 border-t border-amber-200 pt-8 text-center text-sm text-gray-400">
+        <div className="mt-16 border-t border-amber-200 dark:border-amber-800 pt-8 text-center text-sm text-gray-400">
           TrueFans RADIO &mdash; Native App Documentation
         </div>
       </div>

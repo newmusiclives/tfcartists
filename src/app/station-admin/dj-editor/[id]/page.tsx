@@ -210,7 +210,7 @@ export default function DJEditorDetailPage() {
         <SharedNav />
         <div className="max-w-4xl mx-auto px-4 py-12 text-center">
           <p className="text-zinc-400">Host not found.</p>
-          <Link href="/station-admin/dj-editor" className="text-purple-600 hover:underline text-sm mt-2 inline-block">Back to Host Editor</Link>
+          <Link href="/station-admin/dj-editor" className="text-purple-600 dark:text-purple-300 hover:underline text-sm mt-2 inline-block">Back to Host Editor</Link>
         </div>
       </div>
     );
@@ -243,7 +243,7 @@ export default function DJEditorDetailPage() {
           </div>
           <div className="flex items-center gap-3">
             {saveMessage && (
-              <span className={`text-sm font-medium ${saveMessage.type === "success" ? "text-green-600" : "text-red-600"}`}>
+              <span className={`text-sm font-medium ${saveMessage.type === "success" ? "text-green-600 dark:text-green-300" : "text-red-600 dark:text-red-300"}`}>
                 {saveMessage.text}
               </span>
             )}
@@ -551,7 +551,7 @@ export default function DJEditorDetailPage() {
                     <button
                       onClick={() => playPreview(track.id, track.audioFilePath)}
                       disabled={!track.audioFilePath}
-                      className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center hover:bg-purple-200 disabled:opacity-30"
+                      className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 flex items-center justify-center hover:bg-purple-200 disabled:opacity-30"
                     >
                       {playingTrackId === track.id ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
                     </button>

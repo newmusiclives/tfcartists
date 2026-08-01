@@ -144,14 +144,14 @@ export function OnboardingChecklist({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border mb-8 overflow-hidden">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border mb-8 overflow-hidden">
       {/* Header */}
       <div className="px-6 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <Rocket className="w-5 h-5 text-amber-700" />
+          <Rocket className="w-5 h-5 text-amber-700 dark:text-amber-300" />
           <div>
             <h3 className="font-bold text-gray-900 dark:text-white">Getting Started</h3>
-            <p className="text-sm text-gray-400 dark:text-zinc-400">
+            <p className="text-sm text-gray-600 dark:text-zinc-400">
               {completedCount} of {steps.length} complete
             </p>
           </div>
@@ -180,7 +180,7 @@ export function OnboardingChecklist({
 
       {/* Progress bar */}
       <div className="px-6 pb-4">
-        <div className="w-full bg-gray-100 rounded-full h-2">
+        <div className="w-full bg-gray-100 dark:bg-zinc-800 rounded-full h-2">
           <div
             className="bg-amber-600 h-2 rounded-full transition-all duration-500"
             style={{ width: `${pct}%` }}
@@ -205,12 +205,12 @@ export function OnboardingChecklist({
               <div className="ml-3">
                 <p
                   className={`text-sm font-medium ${
-                    step.complete ? "text-gray-400 line-through" : "text-gray-900"
+                    step.complete ? "text-gray-400 line-through" : "text-gray-900 dark:text-zinc-100"
                   }`}
                 >
                   {step.title}
                 </p>
-                <p className="text-xs text-gray-400 dark:text-zinc-400">{step.description}</p>
+                <p className="text-xs text-gray-600 dark:text-zinc-400">{step.description}</p>
               </div>
             </Link>
           ))}

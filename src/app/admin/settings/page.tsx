@@ -212,7 +212,7 @@ export default function AdminSettingsPage() {
       case "critical": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-400">REQUIRED</span>;
       case "high": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400">RECOMMENDED</span>;
       case "medium": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400">HELPFUL</span>;
-      case "low": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 dark:text-zinc-400">OPTIONAL</span>;
+      case "low": return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-400">OPTIONAL</span>;
       default: return null;
     }
   };
@@ -267,13 +267,13 @@ export default function AdminSettingsPage() {
                 const total = catSettings.length;
                 const allDone = total > 0 && configured === total;
                 return (
-                  <div key={priority} className={`rounded-xl p-4 border ${allDone ? "bg-green-50 border-green-200" : "bg-white border-gray-200 dark:border-zinc-800"}`}>
+                  <div key={priority} className={`rounded-xl p-4 border ${allDone ? "bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800" : "bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800"}`}>
                     <div className="flex items-center justify-between mb-1">
                       {priorityLabel(priority)}
                       {allDone ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <XCircle className="w-4 h-4 text-gray-300" />}
                     </div>
-                    <div className="text-xl font-bold text-gray-900 mt-2">{configured}/{total}</div>
-                    <div className="text-xs text-gray-400 dark:text-zinc-400">{cats.map((c) => c.name).join(", ")}</div>
+                    <div className="text-xl font-bold text-gray-900 dark:text-zinc-100 mt-2">{configured}/{total}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">{cats.map((c) => c.name).join(", ")}</div>
                   </div>
                 );
               })}
@@ -287,7 +287,7 @@ export default function AdminSettingsPage() {
               const configured = catSettings.filter((s) => s.hasValue).length;
 
               return (
-                <section key={cat.id} className={`bg-white rounded-xl shadow-sm border-2 overflow-hidden ${status === "complete" ? "border-green-300" : colors.border}`}>
+                <section key={cat.id} className={`bg-white dark:bg-zinc-900 rounded-xl shadow-sm border-2 overflow-hidden ${status === "complete" ? "border-green-300 dark:border-green-700" : colors.border}`}>
                   {/* Category Header */}
                   <div className={`px-6 py-4 ${colors.bg} border-b ${colors.border}`}>
                     <div className="flex items-center justify-between">
@@ -346,7 +346,7 @@ export default function AdminSettingsPage() {
                                   <span className="text-xs text-blue-500">(saved)</span>
                                 )}
                                 {msg && (
-                                  <span className={`text-xs font-bold ${msg.type === "success" ? "text-green-600" : "text-red-600"}`}>
+                                  <span className={`text-xs font-bold ${msg.type === "success" ? "text-green-600 dark:text-green-300" : "text-red-600 dark:text-red-300"}`}>
                                     {msg.text}
                                   </span>
                                 )}

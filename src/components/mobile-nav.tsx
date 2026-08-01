@@ -24,7 +24,7 @@ export function MobileNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 sm:hidden safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-zinc-900/95 backdrop-blur-md border-t border-gray-200 dark:border-zinc-800 sm:hidden safe-area-bottom">
       <div className="flex items-center justify-around h-14">
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -33,7 +33,7 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
-                isActive ? "text-amber-600" : "text-gray-400"
+                isActive ? "text-amber-600 dark:text-amber-300" : "text-gray-400"
               }`}
             >
               <item.icon className="w-5 h-5" />

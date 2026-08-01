@@ -31,7 +31,7 @@ export default function StationCapacityPage() {
   );
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 dark:from-blue-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950">
       {/* Shared Navigation */}
       <SharedNav />
 
@@ -39,7 +39,7 @@ export default function StationCapacityPage() {
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center space-x-3">
-            <Radio className="w-8 h-8 text-blue-600" />
+            <Radio className="w-8 h-8 text-blue-600 dark:text-blue-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Station Capacity Calculator</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -54,7 +54,7 @@ export default function StationCapacityPage() {
         {/* Airtime Constraints */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4 flex items-center space-x-2">
-            <Radio className="w-6 h-6 text-blue-600" />
+            <Radio className="w-6 h-6 text-blue-600 dark:text-blue-300" />
             <span>Airtime Constraints</span>
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -110,9 +110,9 @@ export default function StationCapacityPage() {
         </section>
 
         {/* Riley's Team - Artist Capacity */}
-        <section className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+        <section className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4 flex items-center space-x-2">
-            <Users className="w-6 h-6 text-purple-600" />
+            <Users className="w-6 h-6 text-purple-600 dark:text-purple-300" />
             <span>Riley's Team - Artist Capacity</span>
           </h2>
 
@@ -122,10 +122,10 @@ export default function StationCapacityPage() {
               <p className="text-gray-600 dark:text-zinc-400 text-sm mb-3">
                 340 total artists across 5 tiers (as per Master Overview)
               </p>
-              <div className="text-3xl font-bold text-purple-600">
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-300">
                 340 artists
               </div>
-              <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">Target capacity per station</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">Target capacity per station</p>
             </div>
 
             {/* Artist Distribution - Master Overview */}
@@ -170,11 +170,11 @@ export default function StationCapacityPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-zinc-400">Total Shares</span>
-                  <span className="font-bold text-purple-600">{artistCapacity.scenarios.masterOverview.totalShares.toLocaleString()}</span>
+                  <span className="font-bold text-purple-600 dark:text-purple-300">{artistCapacity.scenarios.masterOverview.totalShares.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-zinc-400">Monthly Revenue (Team Riley)</span>
-                  <span className="font-bold text-purple-600">${artistCapacity.scenarios.masterOverview.revenue.toLocaleString()}</span>
+                  <span className="font-bold text-purple-600 dark:text-purple-300">${artistCapacity.scenarios.masterOverview.revenue.toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -182,9 +182,9 @@ export default function StationCapacityPage() {
         </section>
 
         {/* Harper's Team - Sponsor Capacity */}
-        <section className="bg-gradient-to-br from-green-50 to-white rounded-xl shadow-lg p-6">
+        <section className="bg-gradient-to-br from-green-50 dark:from-green-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4 flex items-center space-x-2">
-            <DollarSign className="w-6 h-6 text-green-600" />
+            <DollarSign className="w-6 h-6 text-green-600 dark:text-green-300" />
             <span>Harper's Team - Sponsor Capacity</span>
           </h2>
 
@@ -230,31 +230,31 @@ export default function StationCapacityPage() {
               <div className="grid grid-cols-4 gap-4 mb-4">
                 <div className="text-center">
                   <div className="text-sm text-gray-600 dark:text-zinc-400">Local Hero ($50)</div>
-                  <div className="text-2xl font-bold text-teal-600">
+                  <div className="text-2xl font-bold text-teal-600 dark:text-teal-300">
                     {sponsorCapacity.optimal.LOCAL_HERO}
                   </div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">1 spot/day</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">1 spot/day</div>
                 </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-600 dark:text-zinc-400">Tier 1 ($100)</div>
-                  <div className="text-2xl font-bold text-green-600">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-300">
                     {sponsorCapacity.optimal.TIER_1}
                   </div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">2 spots/day</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">2 spots/day</div>
                 </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-600 dark:text-zinc-400">Tier 2 ($200)</div>
-                  <div className="text-2xl font-bold text-green-600">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-300">
                     {sponsorCapacity.optimal.TIER_2}
                   </div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">5 spots/day</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">5 spots/day</div>
                 </div>
                 <div className="text-center">
                   <div className="text-sm text-gray-600 dark:text-zinc-400">Tier 3 ($400)</div>
-                  <div className="text-2xl font-bold text-green-600">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-300">
                     {sponsorCapacity.optimal.TIER_3}
                   </div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">10 spots/day</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">10 spots/day</div>
                 </div>
               </div>
               <div className="pt-4 border-t space-y-2">
@@ -265,20 +265,20 @@ export default function StationCapacityPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-gray-600 dark:text-zinc-400">Base Revenue</div>
-                    <div className="text-2xl font-bold text-green-600">
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-300">
                       ${sponsorCapacity.optimal.revenue.toLocaleString()}
                     </div>
                   </div>
                 </div>
                 <div className="flex justify-between items-center pt-2 border-t">
                   <div className="text-sm text-gray-600 dark:text-zinc-400">+ Premium Add-ons</div>
-                  <div className="text-sm font-semibold text-green-600">
+                  <div className="text-sm font-semibold text-green-600 dark:text-green-300">
                     +${premiumRevenue.totalPremiumRevenue.toLocaleString()}
                   </div>
                 </div>
                 <div className="flex justify-between items-center pt-2 border-t">
                   <div className="font-semibold">Total Harper Revenue</div>
-                  <div className="text-2xl font-bold text-green-600">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-300">
                     ${(sponsorCapacity.optimal.revenue + premiumRevenue.totalPremiumRevenue).toLocaleString()}
                   </div>
                 </div>
@@ -288,9 +288,9 @@ export default function StationCapacityPage() {
         </section>
 
         {/* Premium Sponsor Opportunities */}
-        <section className="bg-gradient-to-br from-yellow-50 to-white rounded-xl shadow-lg p-6">
+        <section className="bg-gradient-to-br from-yellow-50 dark:from-yellow-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4 flex items-center space-x-2">
-            <TrendingUp className="w-6 h-6 text-yellow-600" />
+            <TrendingUp className="w-6 h-6 text-yellow-600 dark:text-yellow-300" />
             <span>Premium Sponsor Opportunities</span>
           </h2>
 
@@ -318,10 +318,10 @@ export default function StationCapacityPage() {
             />
           </div>
 
-          <div className="mt-4 bg-white rounded-lg p-4">
+          <div className="mt-4 bg-white dark:bg-zinc-900 rounded-lg p-4">
             <div className="flex justify-between items-center">
               <span className="font-semibold">Total Premium Revenue</span>
-              <span className="text-2xl font-bold text-yellow-600">
+              <span className="text-2xl font-bold text-yellow-600 dark:text-yellow-300">
                 ${premiumRevenue.totalPremiumRevenue.toLocaleString()}/month
               </span>
             </div>
@@ -334,7 +334,7 @@ export default function StationCapacityPage() {
           <p className="text-purple-100 mb-6">Per station monthly revenue with Local Hero entry tier ($50/mo)</p>
 
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur-sm rounded-lg p-6">
               <div className="space-y-3">
                 <RevenueRow
                   label="Team Riley (Artist Submissions)"
@@ -397,10 +397,10 @@ function ConstraintCard({
   subtitle?: string;
 }) {
   return (
-    <div className="bg-gray-50 rounded-lg p-4">
+    <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
       <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">{label}</div>
       <div className="text-2xl font-bold text-gray-900 dark:text-white">{value}</div>
-      {subtitle && <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{subtitle}</div>}
+      {subtitle && <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">{subtitle}</div>}
     </div>
   );
 }
@@ -422,10 +422,10 @@ function StatCard({
   };
 
   return (
-    <div className="bg-gray-50 rounded-lg p-4">
+    <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
       <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">{label}</div>
       <div className={`text-3xl font-bold ${colorClasses[color]}`}>{value}</div>
-      {subtitle && <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{subtitle}</div>}
+      {subtitle && <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">{subtitle}</div>}
     </div>
   );
 }
@@ -466,7 +466,7 @@ function ScenarioCard({
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600 dark:text-zinc-400">Monthly Revenue</span>
-          <span className="font-bold text-purple-600">${revenue.toLocaleString()}</span>
+          <span className="font-bold text-purple-600 dark:text-purple-300">${revenue.toLocaleString()}</span>
         </div>
       </div>
     </div>
@@ -489,10 +489,10 @@ function TierMaxCard({
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-lg p-4">
       <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Max {tier} ({price})</div>
-      <div className="text-2xl font-bold text-green-600 mb-1">
+      <div className="text-2xl font-bold text-green-600 dark:text-green-300 mb-1">
         {sponsors.toLocaleString()}
       </div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400 mb-2">{spots} spots/month</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400 mb-2">{spots} spots/month</div>
       <div className="text-sm font-semibold">${(revenue / 1000).toFixed(0)}k/mo</div>
     </div>
   );
@@ -527,7 +527,7 @@ function PremiumCard({
         <div className="pt-2 border-t">
           <div className="flex justify-between">
             <span className="text-gray-600 dark:text-zinc-400">Monthly Revenue</span>
-            <span className="font-bold text-yellow-600">${revenue.toLocaleString()}</span>
+            <span className="font-bold text-yellow-600 dark:text-yellow-300">${revenue.toLocaleString()}</span>
           </div>
         </div>
       </div>

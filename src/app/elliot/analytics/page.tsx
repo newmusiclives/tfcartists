@@ -44,7 +44,7 @@ export default function ListenerAnalyticsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950 flex items-center justify-center">
         <div className="text-gray-600 dark:text-zinc-400">Loading analytics...</div>
       </main>
     );
@@ -52,8 +52,8 @@ export default function ListenerAnalyticsPage() {
 
   if (!stats) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-red-600">Error loading analytics data</div>
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950 flex items-center justify-center">
+        <div className="text-red-600 dark:text-red-300">Error loading analytics data</div>
       </main>
     );
   }
@@ -92,7 +92,7 @@ export default function ListenerAnalyticsPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -104,7 +104,7 @@ export default function ListenerAnalyticsPage() {
             <span>Back to Elliot Dashboard</span>
           </Link>
           <div className="flex items-center space-x-3">
-            <BarChart3 className="w-8 h-8 text-indigo-600" />
+            <BarChart3 className="w-8 h-8 text-indigo-600 dark:text-indigo-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Listener Analytics</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -119,28 +119,28 @@ export default function ListenerAnalyticsPage() {
         {/* Key Metrics */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
-            icon={<Users className="w-6 h-6 text-indigo-600" />}
+            icon={<Users className="w-6 h-6 text-indigo-600 dark:text-indigo-300" />}
             label="Total Listeners"
             value={stats.totalListeners.toLocaleString()}
             change={`+${stats.growth.newThisMonth} this month`}
             positive={true}
           />
           <MetricCard
-            icon={<TrendingUp className="w-6 h-6 text-green-600" />}
+            icon={<TrendingUp className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="New This Week"
             value={stats.growth.newThisWeek.toLocaleString()}
             change={`${stats.growth.churnedThisWeek} churned`}
             positive={stats.growth.newThisWeek > stats.growth.churnedThisWeek}
           />
           <MetricCard
-            icon={<Clock className="w-6 h-6 text-purple-600" />}
+            icon={<Clock className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="Avg Session"
             value={`${stats.behavior.avgSessionLength} min`}
             change="Target: 25-40 min"
             positive={true}
           />
           <MetricCard
-            icon={<Target className="w-6 h-6 text-orange-600" />}
+            icon={<Target className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Retention Rate"
             value={`${stats.growth.returningListenerPercent}%`}
             change="Target: 50-60%"
@@ -191,10 +191,10 @@ export default function ListenerAnalyticsPage() {
                   return (
                     <div key={b.bucket}>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-700 font-medium">{b.bucket}</span>
-                        <span className="text-gray-400 dark:text-zinc-400">{b.count.toLocaleString()}</span>
+                        <span className="text-gray-700 dark:text-zinc-200 font-medium">{b.bucket}</span>
+                        <span className="text-gray-600 dark:text-zinc-400">{b.count.toLocaleString()}</span>
                       </div>
-                      <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-3 bg-gray-100 dark:bg-zinc-800 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all"
                           style={{ width: `${width}%` }}
@@ -222,10 +222,10 @@ export default function ListenerAnalyticsPage() {
                     return (
                       <div key={s.source}>
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-700 font-medium">{s.source}</span>
-                          <span className="text-gray-400 dark:text-zinc-400">{s.count.toLocaleString()} ({pct}%)</span>
+                          <span className="text-gray-700 dark:text-zinc-200 font-medium">{s.source}</span>
+                          <span className="text-gray-600 dark:text-zinc-400">{s.count.toLocaleString()} ({pct}%)</span>
                         </div>
-                        <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-3 bg-gray-100 dark:bg-zinc-800 rounded-full overflow-hidden">
                           <div
                             className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full transition-all"
                             style={{ width: `${width}%` }}
@@ -250,7 +250,7 @@ export default function ListenerAnalyticsPage() {
             <div className="grid grid-cols-4 gap-4">
               {analytics.retentionCohorts.map((c) => (
                 <div key={c.week} className="text-center">
-                  <div className="text-xs text-gray-400 dark:text-zinc-400 mb-2">{c.week}</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mb-2">{c.week}</div>
                   <div className="relative mx-auto w-20 h-20">
                     <svg className="w-20 h-20 -rotate-90" viewBox="0 0 36 36">
                       <path
@@ -274,7 +274,7 @@ export default function ListenerAnalyticsPage() {
                       <span className="text-lg font-bold text-gray-900 dark:text-white">{c.rate}%</span>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-2">{c.active}/{c.total} active</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mt-2">{c.active}/{c.total} active</div>
                 </div>
               ))}
             </div>
@@ -295,9 +295,9 @@ export default function ListenerAnalyticsPage() {
           </div>
 
           <div className="mt-6 pt-6 border-t">
-            <div className="bg-indigo-50 rounded-lg p-4">
-              <h3 className="font-semibold text-indigo-900 mb-2">Tier Progression Goal</h3>
-              <p className="text-sm text-indigo-700">
+            <div className="bg-indigo-50 dark:bg-indigo-950 rounded-lg p-4">
+              <h3 className="font-semibold text-indigo-900 dark:text-indigo-200 mb-2">Tier Progression Goal</h3>
+              <p className="text-sm text-indigo-700 dark:text-indigo-300">
                 Focus: Convert Casual listeners to Regular (+15% target). Currently at {stats.byTier.CASUAL} casual listeners.
               </p>
             </div>
@@ -316,7 +316,7 @@ export default function ListenerAnalyticsPage() {
 
           <div className="mt-6 pt-6 border-t">
             <div className="flex items-start space-x-2 text-sm text-gray-600 dark:text-zinc-400">
-              <Activity className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+              <Activity className="w-5 h-5 text-indigo-600 dark:text-indigo-300 flex-shrink-0 mt-0.5" />
               <div>
                 <strong>Peak Time:</strong> Morning (6am-10am) with 450 average listeners. Late night shows highest engagement (45 min avg session).
               </div>
@@ -352,15 +352,15 @@ export default function ListenerAnalyticsPage() {
             <h3 className="font-semibold mb-4">Recommendations</h3>
             <ul className="space-y-2 text-sm text-gray-700 dark:text-zinc-300">
               <li className="flex items-start space-x-2">
-                <span className="text-indigo-600">•</span>
+                <span className="text-indigo-600 dark:text-indigo-300">•</span>
                 <span>Mobile is dominant (58%) - prioritize mobile app experience</span>
               </li>
               <li className="flex items-start space-x-2">
-                <span className="text-indigo-600">•</span>
+                <span className="text-indigo-600 dark:text-indigo-300">•</span>
                 <span>Smart speaker adoption growing - optimize for voice commands</span>
               </li>
               <li className="flex items-start space-x-2">
-                <span className="text-indigo-600">•</span>
+                <span className="text-indigo-600 dark:text-indigo-300">•</span>
                 <span>Desktop users have longer sessions - great for work/background listening</span>
               </li>
             </ul>
@@ -372,17 +372,17 @@ export default function ListenerAnalyticsPage() {
           <StatBox
             label="Total Sessions"
             value={stats.behavior.totalSessions.toLocaleString()}
-            icon={<Activity className="w-8 h-8 text-blue-600" />}
+            icon={<Activity className="w-8 h-8 text-blue-600 dark:text-blue-300" />}
           />
           <StatBox
             label="Total Listening Hours"
             value={Math.round(stats.behavior.totalListeningHours).toLocaleString()}
-            icon={<Clock className="w-8 h-8 text-green-600" />}
+            icon={<Clock className="w-8 h-8 text-green-600 dark:text-green-300" />}
           />
           <StatBox
             label="Avg Listening Streak"
             value={`${stats.behavior.avgStreak} days`}
-            icon={<TrendingUp className="w-8 h-8 text-purple-600" />}
+            icon={<TrendingUp className="w-8 h-8 text-purple-600 dark:text-purple-300" />}
           />
         </section>
       </div>
@@ -444,7 +444,7 @@ function TierCard({ tier, count, percentage, sessions, color }: {
 
 function TimeSlotRow({ slot, listeners, avgSession, topDJ }: { slot: string; listeners: number; avgSession: number; topDJ: string }) {
   return (
-    <div className="bg-gray-50 rounded-lg p-4">
+    <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
         <div className="font-semibold text-gray-900 dark:text-white">{slot}</div>
         <div className="text-sm text-gray-600 dark:text-zinc-400">{listeners} avg listeners</div>
@@ -459,7 +459,7 @@ function TimeSlotRow({ slot, listeners, avgSession, topDJ }: { slot: string; lis
 
 function ArtistRow({ rank, name, plays, newListeners, avgCompletion }: { rank: number; name: string; plays: number; newListeners: number; avgCompletion: number }) {
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg">
       <div className="flex items-center space-x-4">
         <div className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
           {rank}
@@ -471,12 +471,12 @@ function ArtistRow({ rank, name, plays, newListeners, avgCompletion }: { rank: n
       </div>
       <div className="flex items-center space-x-6 text-sm">
         <div className="text-center">
-          <div className="text-green-600 font-semibold">+{newListeners}</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">new listeners</div>
+          <div className="text-green-600 dark:text-green-300 font-semibold">+{newListeners}</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">new listeners</div>
         </div>
         <div className="text-center">
-          <div className="text-indigo-600 font-semibold">{avgCompletion}%</div>
-          <div className="text-xs text-gray-400 dark:text-zinc-400">completion</div>
+          <div className="text-indigo-600 dark:text-indigo-300 font-semibold">{avgCompletion}%</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">completion</div>
         </div>
       </div>
     </div>
@@ -485,10 +485,10 @@ function ArtistRow({ rank, name, plays, newListeners, avgCompletion }: { rank: n
 
 function DeviceCard({ device, count, percentage }: { device: string; count: number; percentage: number }) {
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-6 border-2 border-gray-200 dark:border-zinc-800 text-center">
+    <div className="bg-gradient-to-br from-gray-50 dark:from-zinc-950 to-white dark:to-zinc-900 rounded-lg p-6 border-2 border-gray-200 dark:border-zinc-800 text-center">
       <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{device}</div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{count}</div>
-      <div className="text-lg font-semibold text-indigo-600">{percentage}%</div>
+      <div className="text-lg font-semibold text-indigo-600 dark:text-indigo-300">{percentage}%</div>
     </div>
   );
 }

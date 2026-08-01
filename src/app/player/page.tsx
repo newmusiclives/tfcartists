@@ -284,7 +284,7 @@ export default function PlayerPage() {
                   ? "bg-red-500/20 text-red-400"
                   : showLoading
                     ? "bg-amber-500/20 text-amber-400"
-                    : "bg-white/10 text-amber-300/60"
+                    : "bg-white dark:bg-zinc-900/10 text-amber-300/60"
             }`}
           >
             <span

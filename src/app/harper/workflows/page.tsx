@@ -317,11 +317,11 @@ export default function HarperWorkflows() {
 
   const getStepIcon = (type: StepType) => {
     switch (type) {
-      case 'email': return <Mail className="w-5 h-5 text-blue-600" />;
-      case 'phone': return <Phone className="w-5 h-5 text-green-600" />;
-      case 'wait': return <Clock className="w-5 h-5 text-gray-600" />;
-      case 'condition': return <GitBranch className="w-5 h-5 text-purple-600" />;
-      case 'task': return <CheckCircle className="w-5 h-5 text-orange-600" />;
+      case 'email': return <Mail className="w-5 h-5 text-blue-600 dark:text-blue-300" />;
+      case 'phone': return <Phone className="w-5 h-5 text-green-600 dark:text-green-300" />;
+      case 'wait': return <Clock className="w-5 h-5 text-gray-600 dark:text-zinc-300" />;
+      case 'condition': return <GitBranch className="w-5 h-5 text-purple-600 dark:text-purple-300" />;
+      case 'task': return <CheckCircle className="w-5 h-5 text-orange-600 dark:text-orange-300" />;
     }
   };
 
@@ -352,14 +352,14 @@ export default function HarperWorkflows() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/harper/outreach"
-                className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
               >
                 <Send className="w-4 h-4" />
                 <span>Back to Outreach</span>
               </Link>
               <Link
                 href="/harper/team"
-                className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
               >
                 <Users className="w-4 h-4" />
                 <span>View Team</span>
@@ -370,7 +370,7 @@ export default function HarperWorkflows() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
+        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live workflow data will appear once automation is connected.
         </div>
       </div>
@@ -384,34 +384,34 @@ export default function HarperWorkflows() {
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Total Enrolled</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalEnrolled}</p>
               </div>
-              <Users className="w-8 h-8 text-blue-600" />
+              <Users className="w-8 h-8 text-blue-600 dark:text-blue-300" />
             </div>
           </div>
           <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Currently Active</p>
-                <p className="text-2xl font-bold text-green-600">{totalActive}</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-300">{totalActive}</p>
               </div>
-              <Play className="w-8 h-8 text-green-600" />
+              <Play className="w-8 h-8 text-green-600 dark:text-green-300" />
             </div>
           </div>
           <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Total Converted</p>
-                <p className="text-2xl font-bold text-purple-600">{totalConverted}</p>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-300">{totalConverted}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-purple-600" />
+              <CheckCircle className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             </div>
           </div>
           <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Avg Conversion</p>
-                <p className="text-2xl font-bold text-green-600">{avgConversionRate.toFixed(1)}%</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-300">{avgConversionRate.toFixed(1)}%</p>
               </div>
-              <TrendingUp className="w-8 h-8 text-green-600" />
+              <TrendingUp className="w-8 h-8 text-green-600 dark:text-green-300" />
             </div>
           </div>
         </div>
@@ -430,13 +430,13 @@ export default function HarperWorkflows() {
                       </span>
                     </div>
                     <p className="text-gray-600 dark:text-zinc-400 mb-2">{workflow.description}</p>
-                    <p className="text-sm text-gray-400 dark:text-zinc-400">
+                    <p className="text-sm text-gray-600 dark:text-zinc-400">
                       <span className="font-medium">Trigger:</span> {workflow.trigger}
                     </p>
                   </div>
                   <button
                     onClick={() => setSelectedWorkflow(selectedWorkflow?.id === workflow.id ? null : workflow)}
-                    className="text-green-600 hover:text-green-700 font-medium"
+                    className="text-green-600 dark:text-green-300 hover:text-green-700 font-medium"
                   >
                     {selectedWorkflow?.id === workflow.id ? 'Hide Details' : 'View Details'}
                   </button>
@@ -445,56 +445,56 @@ export default function HarperWorkflows() {
                 {/* Stats Row */}
                 <div className="grid grid-cols-5 gap-4 mt-4">
                   <div>
-                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Enrolled</p>
+                    <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Enrolled</p>
                     <p className="text-lg font-bold text-gray-900 dark:text-white">{workflow.stats.enrolled}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Active</p>
-                    <p className="text-lg font-bold text-green-600">{workflow.stats.active}</p>
+                    <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Active</p>
+                    <p className="text-lg font-bold text-green-600 dark:text-green-300">{workflow.stats.active}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Completed</p>
-                    <p className="text-lg font-bold text-blue-600">{workflow.stats.completed}</p>
+                    <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Completed</p>
+                    <p className="text-lg font-bold text-blue-600 dark:text-blue-300">{workflow.stats.completed}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Converted</p>
-                    <p className="text-lg font-bold text-purple-600">{workflow.stats.converted}</p>
+                    <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Converted</p>
+                    <p className="text-lg font-bold text-purple-600 dark:text-purple-300">{workflow.stats.converted}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Conv. Rate</p>
-                    <p className="text-lg font-bold text-green-600">{workflow.stats.conversionRate}%</p>
+                    <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Conv. Rate</p>
+                    <p className="text-lg font-bold text-green-600 dark:text-green-300">{workflow.stats.conversionRate}%</p>
                   </div>
                 </div>
               </div>
 
               {/* Workflow Steps (Expandable) */}
               {selectedWorkflow?.id === workflow.id && (
-                <div className="p-6 bg-gray-50">
+                <div className="p-6 bg-gray-50 dark:bg-zinc-900">
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Workflow Steps</h4>
                   <div className="space-y-4">
                     {workflow.steps.map((step, index) => (
                       <div key={index} className="flex items-start space-x-4">
                         <div className="flex-shrink-0">
-                          <div className="w-10 h-10 rounded-full bg-white border-2 border-gray-300 dark:border-zinc-700 flex items-center justify-center">
+                          <div className="w-10 h-10 rounded-full bg-white dark:bg-zinc-900 border-2 border-gray-300 dark:border-zinc-700 flex items-center justify-center">
                             {getStepIcon(step.type)}
                           </div>
                           {index < workflow.steps.length - 1 && (
                             <div className="w-0.5 h-12 bg-gray-300 ml-5 mt-2"></div>
                           )}
                         </div>
-                        <div className="flex-1 bg-white p-4 rounded-lg border">
+                        <div className="flex-1 bg-white dark:bg-zinc-900 p-4 rounded-lg border">
                           <div className="flex items-center justify-between mb-1">
                             <h5 className="font-semibold text-gray-900 dark:text-white">{step.title}</h5>
                             {step.delay && (
-                              <span className="text-sm text-gray-400 dark:text-zinc-400">{step.delay}</span>
+                              <span className="text-sm text-gray-600 dark:text-zinc-400">{step.delay}</span>
                             )}
                           </div>
                           {step.description && (
                             <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{step.description}</p>
                           )}
                           {step.template && (
-                            <div className="bg-gray-50 p-3 rounded text-sm text-gray-700 mt-2">
-                              <p className="font-medium text-xs text-gray-400 dark:text-zinc-400 mb-1">Email Template:</p>
+                            <div className="bg-gray-50 dark:bg-zinc-900 p-3 rounded text-sm text-gray-700 dark:text-zinc-200 mt-2">
+                              <p className="font-medium text-xs text-gray-600 dark:text-zinc-400 mb-1">Email Template:</p>
                               <p className="italic">{step.template}</p>
                             </div>
                           )}
@@ -509,15 +509,15 @@ export default function HarperWorkflows() {
         </div>
 
         {/* Info Box */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-6">
+        <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mt-6">
           <div className="flex items-start space-x-3">
-            <AlertCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-6 h-6 text-blue-600 dark:text-blue-300 flex-shrink-0 mt-0.5" />
             <div>
-              <h4 className="font-semibold text-blue-900 mb-2">How Automated Workflows Work</h4>
-              <p className="text-blue-800 text-sm mb-2">
+              <h4 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">How Automated Workflows Work</h4>
+              <p className="text-blue-800 dark:text-blue-200 text-sm mb-2">
                 These workflows automatically nurture sponsor leads through the entire acquisition journey. When a trigger condition is met (like a status change), the workflow enrolls the sponsor and executes each step in sequence.
               </p>
-              <ul className="text-blue-800 text-sm space-y-1 ml-4 list-disc">
+              <ul className="text-blue-800 dark:text-blue-200 text-sm space-y-1 ml-4 list-disc">
                 <li><strong>Email steps</strong> send automated personalized emails</li>
                 <li><strong>Wait steps</strong> add delays between actions</li>
                 <li><strong>Phone steps</strong> create tasks for Blake to make calls</li>

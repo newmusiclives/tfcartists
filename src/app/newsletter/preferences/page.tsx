@@ -86,18 +86,18 @@ function PreferencesForm() {
               type="checkbox"
               checked={prefs[opt.key]}
               onChange={(e) => setPrefs({ ...prefs, [opt.key]: e.target.checked })}
-              className="mt-1 rounded border-gray-300 text-amber-700 focus:ring-amber-500"
+              className="mt-1 rounded border-gray-300 dark:border-zinc-700 text-amber-700 dark:text-amber-300 focus:ring-amber-500"
             />
             <div>
               <span className="font-medium text-gray-900 dark:text-white">{opt.label}</span>
-              <p className="text-sm text-gray-400 dark:text-zinc-400">{opt.desc}</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">{opt.desc}</p>
             </div>
           </label>
         ))}
       </div>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
-      {saved && <p className="mt-4 text-sm text-green-600">Preferences saved!</p>}
+      {error && <p className="mt-4 text-sm text-red-600 dark:text-red-300">{error}</p>}
+      {saved && <p className="mt-4 text-sm text-green-600 dark:text-green-300">Preferences saved!</p>}
 
       <div className="mt-6 flex items-center justify-between">
         <button
@@ -126,14 +126,14 @@ export default function NewsletterPreferencesPage() {
     <main className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <Radio className="w-8 h-8 text-amber-700 mx-auto mb-2" />
+          <Radio className="w-8 h-8 text-amber-700 dark:text-amber-300 mx-auto mb-2" />
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Newsletter Preferences</h1>
           <p className="text-gray-600 dark:text-zinc-400">Choose which emails you'd like to receive</p>
         </div>
 
         <Suspense fallback={
           <div className="text-center">
-            <Loader2 className="w-6 h-6 animate-spin text-amber-700 mx-auto" />
+            <Loader2 className="w-6 h-6 animate-spin text-amber-700 dark:text-amber-300 mx-auto" />
           </div>
         }>
           <PreferencesForm />

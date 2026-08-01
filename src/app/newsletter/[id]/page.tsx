@@ -47,7 +47,7 @@ export default async function NewsletterEditionPage({ params }: Props) {
       <div className="max-w-3xl mx-auto px-4 py-12">
         <Link
           href="/newsletter"
-          className="inline-flex items-center gap-2 text-amber-700 hover:text-amber-800 font-medium mb-8"
+          className="inline-flex items-center gap-2 text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Newsletter
@@ -58,7 +58,7 @@ export default async function NewsletterEditionPage({ params }: Props) {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {edition.subject}
             </h1>
-            <div className="flex items-center gap-4 text-sm text-gray-400 dark:text-zinc-400">
+            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-zinc-400">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 {new Date(edition.createdAt).toLocaleDateString("en-US", {

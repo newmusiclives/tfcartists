@@ -62,7 +62,7 @@ export default async function GenreDetailPage({
           </Link>
           <Link
             href="/genres"
-            className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900"
+            className="flex items-center space-x-1 text-sm text-gray-600 dark:text-zinc-300 hover:text-gray-900"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>All Genres</span>
@@ -126,7 +126,7 @@ export default async function GenreDetailPage({
                       {dj.tagline}
                     </p>
                   </div>
-                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                  <span className="text-xs bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 px-2 py-1 rounded-full">
                     {dj.age}
                   </span>
                 </div>
@@ -173,7 +173,7 @@ export default async function GenreDetailPage({
                 />
                 <div className="flex-1">
                   <p className="font-semibold text-gray-900 dark:text-white">{dj.name}</p>
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">{dj.tagline}</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">{dj.tagline}</p>
                 </div>
                 <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">
                   {time}
@@ -194,7 +194,7 @@ export default async function GenreDetailPage({
             <span>Launch Your {tpl.name.replace(" Station", "")} Station</span>
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="mt-3 text-sm text-gray-400 dark:text-zinc-400">
+          <p className="mt-3 text-sm text-gray-600 dark:text-zinc-400">
             Pre-configured with {tpl.djPresets.length} AI DJs, scheduling, and
             branding
           </p>
@@ -207,8 +207,8 @@ export default async function GenreDetailPage({
 function DetailCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-lg border p-4">
-      <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">{label}</p>
-      <p className="font-semibold text-gray-900 capitalize">{value}</p>
+      <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">{label}</p>
+      <p className="font-semibold text-gray-900 dark:text-zinc-100 capitalize">{value}</p>
     </div>
   );
 }

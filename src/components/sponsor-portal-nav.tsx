@@ -22,7 +22,7 @@ export function SponsorPortalNav({ sponsorId }: { sponsorId: string }) {
   const pathname = usePathname();
 
   return (
-    <nav className="border-b border-gray-200 bg-white">
+    <nav className="border-b border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-1 overflow-x-auto py-1 -mb-px">
           {NAV_ITEMS.map((item) => {
@@ -37,7 +37,7 @@ export function SponsorPortalNav({ sponsorId }: { sponsorId: string }) {
                 href={`${item.href}?sponsorId=${sponsorId}`}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                   isActive
-                    ? "border-blue-500 text-blue-600"
+                    ? "border-blue-500 text-blue-600 dark:text-blue-300"
                     : "border-transparent text-gray-400 hover:text-gray-700 hover:border-gray-300"
                 }`}
               >

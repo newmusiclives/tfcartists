@@ -99,7 +99,7 @@ export default function BillingPage() {
       <div className="min-h-screen bg-stone-50">
         <SharedNav />
         <div className="flex items-center justify-center mt-32">
-          <Loader2 className="w-8 h-8 animate-spin text-amber-700" />
+          <Loader2 className="w-8 h-8 animate-spin text-amber-700 dark:text-amber-300" />
         </div>
       </div>
     );
@@ -160,7 +160,7 @@ export default function BillingPage() {
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-amber-700" />
+              <Building2 className="w-5 h-5 text-amber-700 dark:text-amber-300" />
               <h2 className="text-lg font-bold text-stone-900">
                 Current Plan
               </h2>
@@ -216,7 +216,7 @@ export default function BillingPage() {
           <div className="mt-4 pt-4 border-t border-stone-100">
             <Link
               href="/operator/signup"
-              className="inline-flex items-center gap-2 text-amber-700 hover:text-amber-800 text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 text-amber-700 dark:text-amber-300 hover:text-amber-800 text-sm font-medium transition-colors"
             >
               <ArrowUpRight className="w-4 h-4" />
               {planPrice > 0 ? "Upgrade Plan" : "Choose a Plan"}
@@ -227,7 +227,7 @@ export default function BillingPage() {
         {/* Payment Method */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6">
           <div className="flex items-center gap-2 mb-4">
-            <CreditCard className="w-5 h-5 text-amber-700" />
+            <CreditCard className="w-5 h-5 text-amber-700 dark:text-amber-300" />
             <h2 className="text-lg font-bold text-stone-900">
               Payment Method
             </h2>
@@ -259,7 +259,7 @@ export default function BillingPage() {
         {/* Billing History */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6">
           <div className="flex items-center gap-2 mb-4">
-            <FileText className="w-5 h-5 text-amber-700" />
+            <FileText className="w-5 h-5 text-amber-700 dark:text-amber-300" />
             <h2 className="text-lg font-bold text-stone-900">
               Billing History
             </h2>
@@ -334,7 +334,7 @@ export default function BillingPage() {
         {planPrice > 0 && (
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6 border border-red-100">
             <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="w-5 h-5 text-red-600" />
+              <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-300" />
               <h2 className="text-lg font-bold text-stone-900">
                 Cancel Subscription
               </h2>
@@ -379,7 +379,7 @@ export default function BillingPage() {
               billing period. After that, streaming and AI features will be
               disabled.
             </p>
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
+            <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-6">
               <p className="text-sm text-amber-800 dark:text-amber-400">
                 To cancel your subscription, please contact support at{" "}
                 <a

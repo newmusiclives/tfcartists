@@ -513,7 +513,7 @@ export default function StreamHealthDashboard() {
               </div>
               {incidents.length === 0 ? (
                 <div className="px-6 py-8 text-center">
-                  <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                  <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-300 mx-auto mb-2" />
                   <p className="text-sm text-zinc-400">
                     No downtime incidents in the last 24 hours
                   </p>

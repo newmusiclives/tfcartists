@@ -99,7 +99,7 @@ export default function OperatorSignupPage() {
       <div className={step === 1 ? "w-full max-w-4xl" : "w-full max-w-md"}>
         <div className="text-center mb-8">
           <div className="inline-flex items-center space-x-2 mb-4">
-            <Radio className="w-8 h-8 text-amber-700" />
+            <Radio className="w-8 h-8 text-amber-700 dark:text-amber-300" />
             <span className="text-2xl font-bold text-gray-900 dark:text-white">TrueFans RADIO</span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Start Your Station</h1>
@@ -110,9 +110,9 @@ export default function OperatorSignupPage() {
           </p>
           {/* Step indicator */}
           <div className="flex items-center justify-center gap-2 mt-4">
-            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step === 1 ? "bg-amber-700 text-white" : "bg-amber-200 text-amber-800"}`}>1</span>
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step === 1 ? "bg-amber-700 text-white" : "bg-amber-200 text-amber-800 dark:text-amber-200"}`}>1</span>
             <span className="w-8 h-0.5 bg-amber-200" />
-            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step === 2 ? "bg-amber-700 text-white" : "bg-amber-200 text-amber-800"}`}>2</span>
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step === 2 ? "bg-amber-700 text-white" : "bg-amber-200 text-amber-800 dark:text-amber-200"}`}>2</span>
           </div>
         </div>
 
@@ -139,27 +139,27 @@ export default function OperatorSignupPage() {
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{plan.name}</h3>
                   <div className="mb-3">
                     <span className="text-3xl font-bold text-gray-900 dark:text-white">${plan.price}</span>
-                    <span className="text-gray-400 dark:text-zinc-400">/mo</span>
+                    <span className="text-gray-600 dark:text-zinc-400">/mo</span>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-600 dark:text-zinc-400">
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                      <Check className="w-4 h-4 text-amber-600 dark:text-amber-300 mt-0.5 flex-shrink-0" />
                       {plan.fee} platform fee
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                      <Check className="w-4 h-4 text-amber-600 dark:text-amber-300 mt-0.5 flex-shrink-0" />
                       {plan.setup === 0 ? "Free setup" : `$${plan.setup.toLocaleString()} setup`}
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                      <Check className="w-4 h-4 text-amber-600 dark:text-amber-300 mt-0.5 flex-shrink-0" />
                       {plan.stations} station{plan.stations > 1 ? "s" : ""}
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                      <Check className="w-4 h-4 text-amber-600 dark:text-amber-300 mt-0.5 flex-shrink-0" />
                       {plan.djs} DJ{plan.djs !== "1" ? "s" : ""}
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                      <Check className="w-4 h-4 text-amber-600 dark:text-amber-300 mt-0.5 flex-shrink-0" />
                       {plan.artists.toLocaleString()} artists
                     </li>
                   </ul>
@@ -185,14 +185,14 @@ export default function OperatorSignupPage() {
         {step === 2 && (
           <>
             {activePlan && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 text-sm text-amber-800 text-center">
+              <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-4 text-sm text-amber-800 dark:text-amber-200 text-center">
                 <span className="font-semibold">{activePlan.name}</span> plan selected — ${activePlan.price}/mo
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 space-y-5">
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
+                <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">
                   {error}
                 </div>
               )}
@@ -265,7 +265,7 @@ export default function OperatorSignupPage() {
                 <button
                   type="button"
                   onClick={() => { setStep(1); setError(null); }}
-                  className="flex items-center space-x-1 px-4 py-3 border border-gray-300 dark:border-zinc-700 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
+                  className="flex items-center space-x-1 px-4 py-3 border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-zinc-200 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span>Back</span>
@@ -288,7 +288,7 @@ export default function OperatorSignupPage() {
 
               <p className="text-center text-sm text-gray-600 dark:text-zinc-400">
                 Already have an account?{" "}
-                <Link href="/login" className="text-amber-700 hover:text-amber-800 font-medium">
+                <Link href="/login" className="text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium">
                   Log in
                 </Link>
               </p>

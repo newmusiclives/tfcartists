@@ -51,7 +51,7 @@ export default function CassidyRotationPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-teal-50 dark:from-teal-950 via-white dark:via-zinc-900 to-cyan-50 dark:to-cyan-950 flex items-center justify-center">
         <div className="text-gray-600 dark:text-zinc-400">Loading rotation planner...</div>
       </main>
     );
@@ -59,8 +59,8 @@ export default function CassidyRotationPage() {
 
   if (!stats) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 flex items-center justify-center">
-        <div className="text-red-600">Error loading rotation data</div>
+      <main className="min-h-screen bg-gradient-to-br from-teal-50 dark:from-teal-950 via-white dark:via-zinc-900 to-cyan-50 dark:to-cyan-950 flex items-center justify-center">
+        <div className="text-red-600 dark:text-red-300">Error loading rotation data</div>
       </main>
     );
   }
@@ -76,21 +76,21 @@ export default function CassidyRotationPage() {
   );
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
+    <main className="min-h-screen bg-gradient-to-br from-teal-50 dark:from-teal-950 via-white dark:via-zinc-900 to-cyan-50 dark:to-cyan-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/cassidy"
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Dashboard</span>
             </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <Radio className="w-8 h-8 text-teal-600" />
+            <Radio className="w-8 h-8 text-teal-600 dark:text-teal-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Rotation Planner
@@ -119,10 +119,10 @@ export default function CassidyRotationPage() {
             {/* Indie Progress */}
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="font-semibold text-teal-700">
+                <span className="font-semibold text-teal-700 dark:text-teal-300">
                   Indie Artists
                 </span>
-                <span className="font-bold text-teal-600 text-lg">
+                <span className="font-bold text-teal-600 dark:text-teal-300 text-lg">
                   {indie}%
                 </span>
               </div>
@@ -155,7 +155,7 @@ export default function CassidyRotationPage() {
             {/* Goal Line */}
             <div className="pt-6 border-t">
               <div className="flex items-center justify-center space-x-3">
-                <Target className="w-6 h-6 text-teal-600" />
+                <Target className="w-6 h-6 text-teal-600 dark:text-teal-300" />
                 <span className="text-lg font-semibold text-gray-900 dark:text-white">
                   Target: {target}% indie
                 </span>
@@ -167,10 +167,10 @@ export default function CassidyRotationPage() {
                 />
               </div>
               <div className="text-center mt-2">
-                <span className="text-3xl font-bold text-teal-600">
+                <span className="text-3xl font-bold text-teal-600 dark:text-teal-300">
                   {progressPct}%
                 </span>
-                <span className="text-gray-600 ml-2">toward goal</span>
+                <span className="text-gray-600 dark:text-zinc-300 ml-2">toward goal</span>
               </div>
             </div>
           </div>
@@ -178,9 +178,9 @@ export default function CassidyRotationPage() {
 
         {/* Stats Cards */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 border border-teal-200 shadow-sm">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 border border-teal-200 dark:border-teal-800 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <Zap className="w-6 h-6 text-teal-600" />
+              <Zap className="w-6 h-6 text-teal-600 dark:text-teal-300" />
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
               {slotsRemaining}
@@ -188,27 +188,27 @@ export default function CassidyRotationPage() {
             <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Slots Remaining
             </div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">
+            <div className="text-xs text-gray-600 dark:text-zinc-400">
               To reach {target}% indie
             </div>
           </div>
 
-          <div className="bg-teal-50 rounded-xl p-6 border border-teal-200 shadow-sm">
+          <div className="bg-teal-50 dark:bg-teal-950 rounded-xl p-6 border border-teal-200 dark:border-teal-800 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <TrendingUp className="w-6 h-6 text-teal-600" />
+              <TrendingUp className="w-6 h-6 text-teal-600 dark:text-teal-300" />
             </div>
-            <div className="text-3xl font-bold text-teal-700 mb-1">
+            <div className="text-3xl font-bold text-teal-700 dark:text-teal-300 mb-1">
               {indie}%
             </div>
             <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Current Indie %
             </div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">
+            <div className="text-xs text-gray-600 dark:text-zinc-400">
               Up from 20% baseline
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200 dark:border-zinc-800 shadow-sm">
+          <div className="bg-gray-50 dark:bg-zinc-900 rounded-xl p-6 border border-gray-200 dark:border-zinc-800 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <Radio className="w-6 h-6 text-gray-400" />
             </div>
@@ -218,22 +218,22 @@ export default function CassidyRotationPage() {
             <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Mainstream %
             </div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">
+            <div className="text-xs text-gray-600 dark:text-zinc-400">
               Target: {100 - target}%
             </div>
           </div>
 
-          <div className="bg-purple-50 rounded-xl p-6 border border-purple-200 shadow-sm">
+          <div className="bg-purple-50 dark:bg-purple-950 rounded-xl p-6 border border-purple-200 dark:border-purple-800 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <Target className="w-6 h-6 text-purple-600" />
+              <Target className="w-6 h-6 text-purple-600 dark:text-purple-300" />
             </div>
-            <div className="text-3xl font-bold text-purple-700 mb-1">
+            <div className="text-3xl font-bold text-purple-700 dark:text-purple-300 mb-1">
               {target}%
             </div>
             <div className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
               Indie Target
             </div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">
+            <div className="text-xs text-gray-600 dark:text-zinc-400">
               {progressPct}% complete
             </div>
           </div>
@@ -248,11 +248,11 @@ export default function CassidyRotationPage() {
                 Latest indie artists replacing mainstream rotation slots
               </p>
             </div>
-            <Award className="w-8 h-8 text-teal-600" />
+            <Award className="w-8 h-8 text-teal-600 dark:text-teal-300" />
           </div>
 
           {recentlyPlaced.length === 0 ? (
-            <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
+            <div className="text-center py-8 text-gray-600 dark:text-zinc-400">
               No recently placed artists.
             </div>
           ) : (
@@ -260,7 +260,7 @@ export default function CassidyRotationPage() {
               {recentlyPlaced.map((artist) => (
                 <div
                   key={artist.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-teal-300 transition-colors"
+                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-teal-300 transition-colors"
                 >
                   <div className="flex items-center space-x-3">
                     <Music className="w-5 h-5 text-teal-500" />
@@ -284,7 +284,7 @@ export default function CassidyRotationPage() {
                       <span
                         className={`px-3 py-1.5 rounded-full text-sm font-medium ${
                           tierBadgeClasses[artist.tierAwarded] ||
-                          "bg-gray-100 text-gray-700"
+                          "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200"
                         }`}
                       >
                         {artist.tierAwarded}

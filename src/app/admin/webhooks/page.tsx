@@ -145,7 +145,7 @@ export default function WebhooksAdminPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-600 dark:text-amber-300" />
       </div>
     );
   }
@@ -159,7 +159,7 @@ export default function WebhooksAdminPage() {
             <Link href="/admin" className="text-gray-400 hover:text-gray-700 dark:text-zinc-300">
               <ArrowLeft className="w-5 h-5" />
             </Link>
-            <Webhook className="w-7 h-7 text-amber-600" />
+            <Webhook className="w-7 h-7 text-amber-600 dark:text-amber-300" />
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Webhooks</h1>
               <p className="text-sm text-gray-600 dark:text-zinc-400">
@@ -176,12 +176,12 @@ export default function WebhooksAdminPage() {
         </div>
 
         {/* Zapier instructions */}
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
-          <h3 className="font-semibold text-amber-800 text-sm">Zapier / Make / n8n Integration</h3>
-          <p className="text-sm text-amber-700 mt-1">
+        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-xl p-4 mb-6">
+          <h3 className="font-semibold text-amber-800 dark:text-amber-200 text-sm">Zapier / Make / n8n Integration</h3>
+          <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
             Create a &quot;Webhooks by Zapier&quot; trigger, copy the webhook URL, and paste it below.
             Select the events you want to forward. Each delivery is signed with HMAC-SHA256 via the
-            <code className="bg-amber-100 px-1 rounded">X-Webhook-Signature</code> header.
+            <code className="bg-amber-100 dark:bg-amber-900 px-1 rounded">X-Webhook-Signature</code> header.
           </p>
         </div>
 
@@ -190,7 +190,7 @@ export default function WebhooksAdminPage() {
           <button
             onClick={() => setTab("endpoints")}
             className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
-              tab === "endpoints" ? "border-amber-600 text-amber-700" : "border-transparent text-gray-400 hover:text-gray-700"
+              tab === "endpoints" ? "border-amber-600 text-amber-700 dark:text-amber-300" : "border-transparent text-gray-400 hover:text-gray-700"
             }`}
           >
             Endpoints ({endpoints.length})
@@ -198,7 +198,7 @@ export default function WebhooksAdminPage() {
           <button
             onClick={() => setTab("deliveries")}
             className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
-              tab === "deliveries" ? "border-amber-600 text-amber-700" : "border-transparent text-gray-400 hover:text-gray-700"
+              tab === "deliveries" ? "border-amber-600 text-amber-700 dark:text-amber-300" : "border-transparent text-gray-400 hover:text-gray-700"
             }`}
           >
             Delivery History ({deliveries.length})
@@ -243,7 +243,7 @@ export default function WebhooksAdminPage() {
                         type="checkbox"
                         checked={formEvents.includes(evt)}
                         onChange={() => toggleEvent(evt)}
-                        className="rounded border-gray-300 dark:border-zinc-700 text-amber-600 focus:ring-amber-500"
+                        className="rounded border-gray-300 dark:border-zinc-700 text-amber-600 dark:text-amber-300 focus:ring-amber-500"
                       />
                       <span className="text-gray-700 dark:text-zinc-300">{evt}</span>
                     </label>
@@ -262,7 +262,7 @@ export default function WebhooksAdminPage() {
               </button>
               <button
                 onClick={() => setShowForm(false)}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 text-sm"
+                className="px-4 py-2 text-gray-600 dark:text-zinc-300 hover:text-gray-800 text-sm"
               >
                 Cancel
               </button>
@@ -274,7 +274,7 @@ export default function WebhooksAdminPage() {
         {tab === "endpoints" && (
           <div className="space-y-4">
             {endpoints.length === 0 && !showForm && (
-              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-12 text-gray-600 dark:text-zinc-400">
                 <Webhook className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                 <p className="font-medium">No webhook endpoints yet</p>
                 <p className="text-sm mt-1">Add an endpoint to start receiving real-time events</p>
@@ -289,7 +289,7 @@ export default function WebhooksAdminPage() {
                       <h3 className="font-semibold text-gray-900 dark:text-white">{ep.name}</h3>
                     </div>
                     <p className="text-sm text-gray-400 font-mono truncate max-w-md">{ep.url}</p>
-                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-400 dark:text-zinc-400">
+                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-600 dark:text-zinc-400">
                       <span>{ep.events.length} events</span>
                       <span>|</span>
                       <span>Created {new Date(ep.createdAt).toLocaleDateString()}</span>
@@ -310,7 +310,7 @@ export default function WebhooksAdminPage() {
                     {/* Secret */}
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-xs text-gray-400">Secret:</span>
-                      <code className="text-xs bg-gray-100 px-2 py-0.5 rounded font-mono">
+                      <code className="text-xs bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded font-mono">
                         {revealSecrets.has(ep.id) ? ep.secret : "••••••••••••••••"}
                       </code>
                       <button onClick={() => toggleSecret(ep.id)} className="text-gray-400 hover:text-gray-600 dark:text-zinc-400">
@@ -327,7 +327,7 @@ export default function WebhooksAdminPage() {
                     {/* Subscribed events */}
                     <div className="flex flex-wrap gap-1 mt-2">
                       {ep.events.map((evt) => (
-                        <span key={evt} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                        <span key={evt} className="text-xs bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 px-2 py-0.5 rounded-full">
                           {evt}
                         </span>
                       ))}
@@ -337,7 +337,7 @@ export default function WebhooksAdminPage() {
                     <button
                       onClick={() => handleTest(ep)}
                       disabled={testingId === ep.id}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 disabled:opacity-50"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 hover:bg-blue-100 disabled:opacity-50"
                       title="Send a test ping"
                     >
                       {testingId === ep.id ? (
@@ -373,13 +373,13 @@ export default function WebhooksAdminPage() {
               </button>
             </div>
             {deliveries.length === 0 ? (
-              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-12 text-gray-600 dark:text-zinc-400">
                 <p>No deliveries yet. Send a test ping to see results here.</p>
               </div>
             ) : (
               <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 text-left">
+                  <thead className="bg-gray-50 dark:bg-zinc-900 text-left">
                     <tr>
                       <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Status</th>
                       <th className="px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Event</th>
@@ -401,8 +401,8 @@ export default function WebhooksAdminPage() {
                         </td>
                         <td className="px-4 py-3 font-mono text-xs">{d.event}</td>
                         <td className="px-4 py-3 text-gray-700 dark:text-zinc-300">{d.endpointName}</td>
-                        <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">{d.statusCode || "-"}</td>
-                        <td className="px-4 py-3 text-gray-400 dark:text-zinc-400">{d.duration ? `${d.duration}ms` : "-"}</td>
+                        <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{d.statusCode || "-"}</td>
+                        <td className="px-4 py-3 text-gray-600 dark:text-zinc-400">{d.duration ? `${d.duration}ms` : "-"}</td>
                         <td className="px-4 py-3 text-gray-400 text-xs">
                           {new Date(d.timestamp).toLocaleString()}
                         </td>

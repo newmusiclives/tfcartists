@@ -201,14 +201,14 @@ export default function ManagementDashboard() {
               </Link>
               <Link
                 href="/management/team"
-                className="inline-flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors"
+                className="inline-flex items-center space-x-2 bg-white dark:bg-zinc-900/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors"
               >
                 <UserCircle className="w-4 h-4" />
                 <span>Management Team</span>
               </Link>
               <Link
                 href="/admin"
-                className="inline-flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors"
+                className="inline-flex items-center space-x-2 bg-white dark:bg-zinc-900/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors"
               >
                 <BarChart3 className="w-4 h-4" />
                 <span>Admin Dashboard</span>
@@ -221,7 +221,7 @@ export default function ManagementDashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {loading && (
           <div className="text-center py-12">
-            <div className="animate-spin w-8 h-8 border-4 border-amber-300 border-t-amber-700 rounded-full mx-auto mb-4" />
+            <div className="animate-spin w-8 h-8 border-4 border-amber-300 dark:border-amber-700 border-t-amber-700 rounded-full mx-auto mb-4" />
             <p className="text-gray-600 dark:text-zinc-400">Loading live station data...</p>
           </div>
         )}
@@ -359,7 +359,7 @@ export default function ManagementDashboard() {
                       <div className="flex items-center space-x-4 ml-4">
                         <div className="text-right">
                           <div className={`text-xs font-bold ${colors.text}`}>Team {action.team}</div>
-                          <div className="text-xs text-gray-400 dark:text-zinc-400">{action.dueLabel}</div>
+                          <div className="text-xs text-gray-600 dark:text-zinc-400">{action.dueLabel}</div>
                         </div>
                         <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -472,7 +472,7 @@ export default function ManagementDashboard() {
                       {item.team}
                     </span>
                     <span className="text-sm text-gray-900 dark:text-zinc-100 flex-1">{item.details}</span>
-                    <span className="text-xs text-gray-400 dark:text-zinc-400">
+                    <span className="text-xs text-gray-600 dark:text-zinc-400">
                       {new Date(item.timestamp).toLocaleDateString()}
                     </span>
                   </div>
@@ -578,7 +578,7 @@ function KPICard({
       <div className="text-sm text-zinc-400 mb-1">{label}</div>
       <div className="flex items-baseline space-x-2 mb-2">
         <span className="text-2xl font-bold text-gray-900 dark:text-white">{current}</span>
-        <span className="text-sm text-gray-400 dark:text-zinc-400">/ {target}</span>
+        <span className="text-sm text-gray-600 dark:text-zinc-400">/ {target}</span>
       </div>
       <div className="bg-zinc-700 rounded-full h-2 overflow-hidden mb-2">
         <div
@@ -587,7 +587,7 @@ function KPICard({
         />
       </div>
       <div className="flex items-center justify-between text-xs">
-        <span className="text-gray-400 dark:text-zinc-400">{progress}% of target</span>
+        <span className="text-gray-600 dark:text-zinc-400">{progress}% of target</span>
         <span className="font-medium text-gray-600 dark:text-zinc-400">{team}</span>
       </div>
     </div>

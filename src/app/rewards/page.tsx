@@ -9,7 +9,7 @@ export default function RewardsHubPage() {
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
+            <Link href="/" className="flex items-center space-x-2 text-amber-700 dark:text-amber-300 hover:text-amber-800 transition-colors">
               <Radio className="w-5 h-5" />
               <span className="font-bold">TrueFans RADIO</span>
             </Link>
@@ -19,8 +19,8 @@ export default function RewardsHubPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-4">
-            <Trophy className="w-8 h-8 text-amber-700" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 dark:bg-amber-900 rounded-full mb-4">
+            <Trophy className="w-8 h-8 text-amber-700 dark:text-amber-300" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Rewards & Gamification</h1>
           <p className="mt-2 text-gray-600 dark:text-zinc-400 max-w-lg mx-auto">
@@ -33,11 +33,11 @@ export default function RewardsHubPage() {
           {/* Listener Rewards */}
           <Link
             href="/rewards/listener"
-            className="group bg-white rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
+            className="group bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
           >
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Users className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
+                <Users className="w-5 h-5 text-blue-600 dark:text-blue-300" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Listener Dashboard</h2>
             </div>
@@ -45,7 +45,7 @@ export default function RewardsHubPage() {
               Track your XP, listening streaks, badges earned, and see where you rank on the leaderboard.
               Earn XP by listening, referring friends, and maintaining streaks.
             </p>
-            <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
+            <div className="flex items-center space-x-4 text-xs text-gray-600 dark:text-zinc-400">
               <span className="flex items-center space-x-1"><Gift className="w-3 h-3" /><span>10 XP per 30-min session</span></span>
               <span className="flex items-center space-x-1"><TrendingUp className="w-3 h-3" /><span>Streak bonuses</span></span>
             </div>
@@ -58,11 +58,11 @@ export default function RewardsHubPage() {
           {/* Artist Rewards */}
           <Link
             href="/rewards/artist"
-            className="group bg-white rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
+            className="group bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
           >
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                <Music className="w-5 h-5 text-orange-600" />
+              <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-xl flex items-center justify-center">
+                <Music className="w-5 h-5 text-orange-600 dark:text-orange-300" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Artist Dashboard</h2>
             </div>
@@ -70,7 +70,7 @@ export default function RewardsHubPage() {
               See how your embeddable player is performing. Track listeners gained through your embed,
               XP earned, and your level progression.
             </p>
-            <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
+            <div className="flex items-center space-x-4 text-xs text-gray-600 dark:text-zinc-400">
               <span className="flex items-center space-x-1"><Code className="w-3 h-3" /><span>Embed code + ref link</span></span>
               <span className="flex items-center space-x-1"><Gift className="w-3 h-3" /><span>50 XP per new listener</span></span>
             </div>
@@ -83,11 +83,11 @@ export default function RewardsHubPage() {
           {/* Redeem Rewards */}
           <Link
             href="/rewards/redeem"
-            className="group bg-white rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
+            className="group bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
           >
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                <Gift className="w-5 h-5 text-amber-600" />
+              <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900 rounded-xl flex items-center justify-center">
+                <Gift className="w-5 h-5 text-amber-600 dark:text-amber-300" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Redeem Rewards</h2>
             </div>
@@ -104,11 +104,11 @@ export default function RewardsHubPage() {
           {/* Leaderboard */}
           <Link
             href="/rewards/leaderboard"
-            className="group bg-white rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
+            className="group bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
           >
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-purple-600" />
+              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center">
+                <Trophy className="w-5 h-5 text-purple-600 dark:text-purple-300" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Leaderboard</h2>
             </div>
@@ -125,11 +125,11 @@ export default function RewardsHubPage() {
           {/* Embed Code Generator */}
           <Link
             href="/embed"
-            className="group bg-white rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
+            className="group bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 hover:shadow-lg hover:border-amber-300 transition-all"
           >
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                <Code className="w-5 h-5 text-green-600" />
+              <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
+                <Code className="w-5 h-5 text-green-600 dark:text-green-300" />
               </div>
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Get Embed Code</h2>
             </div>

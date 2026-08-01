@@ -17,10 +17,10 @@ export default function HarperError({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-6">
-          <AlertCircle className="w-10 h-10 text-amber-600" />
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 dark:from-amber-950 via-white dark:via-zinc-900 to-yellow-50 dark:to-yellow-950 flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-8 text-center">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 dark:bg-amber-900 rounded-full mb-6">
+          <AlertCircle className="w-10 h-10 text-amber-600 dark:text-amber-300" />
         </div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Harper Dashboard Error</h1>
         <p className="text-gray-600 dark:text-zinc-400 mb-6">
@@ -28,12 +28,12 @@ export default function HarperError({
         </p>
 
         {process.env.NODE_ENV === "development" && (
-          <div className="mb-6 p-4 bg-gray-100 rounded-lg text-left">
-            <p className="text-sm font-mono text-gray-700 break-words">
+          <div className="mb-6 p-4 bg-gray-100 dark:bg-zinc-800 rounded-lg text-left">
+            <p className="text-sm font-mono text-gray-700 dark:text-zinc-200 break-words">
               <strong>Error:</strong> {error.message}
             </p>
             {error.digest && (
-              <p className="text-xs font-mono text-gray-400 dark:text-zinc-400 mt-1">Digest: {error.digest}</p>
+              <p className="text-xs font-mono text-gray-600 dark:text-zinc-400 mt-1">Digest: {error.digest}</p>
             )}
           </div>
         )}
@@ -48,7 +48,7 @@ export default function HarperError({
           </button>
           <Link
             href="/"
-            className="w-full inline-flex items-center justify-center space-x-2 border-2 border-amber-300 text-amber-700 px-6 py-3 rounded-lg hover:border-amber-400 transition-colors font-medium"
+            className="w-full inline-flex items-center justify-center space-x-2 border-2 border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 px-6 py-3 rounded-lg hover:border-amber-400 transition-colors font-medium"
           >
             <Home className="w-5 h-5" />
             <span>Go Home</span>

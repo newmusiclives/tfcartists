@@ -54,7 +54,7 @@ export default function ArtistDashboardPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-orange-50 dark:from-orange-950 via-white dark:via-zinc-900 to-amber-50 dark:to-amber-950 flex items-center justify-center">
         <div className="animate-pulse text-gray-400">Loading...</div>
       </main>
     );
@@ -62,10 +62,10 @@ export default function ArtistDashboardPage() {
 
   if (error || !profile) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
+      <main className="min-h-screen bg-gradient-to-br from-orange-50 dark:from-orange-950 via-white dark:via-zinc-900 to-amber-50 dark:to-amber-950">
         <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-          <p className="text-red-600 mb-4">{error || "Profile not found"}</p>
-          <Link href="/rewards" className="text-amber-600 hover:text-amber-700 font-medium">
+          <p className="text-red-600 dark:text-red-300 mb-4">{error || "Profile not found"}</p>
+          <Link href="/rewards" className="text-amber-600 dark:text-amber-300 hover:text-amber-700 font-medium">
             Back to Rewards
           </Link>
         </div>
@@ -74,11 +74,11 @@ export default function ArtistDashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
+    <main className="min-h-screen bg-gradient-to-br from-orange-50 dark:from-orange-950 via-white dark:via-zinc-900 to-amber-50 dark:to-amber-950">
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/rewards" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
+            <Link href="/rewards" className="flex items-center space-x-2 text-amber-700 dark:text-amber-300 hover:text-amber-800 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               <Radio className="w-5 h-5" />
               <span className="font-bold">Rewards</span>
@@ -95,7 +95,7 @@ export default function ArtistDashboardPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{profile.name}</h1>
-            <div className="flex items-center space-x-3 text-sm text-gray-400 dark:text-zinc-400">
+            <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-zinc-400">
               <span className="flex items-center space-x-1"><Trophy className="w-3.5 h-3.5" /><span>Rank #{profile.rank}</span></span>
               <span className="flex items-center space-x-1"><Music className="w-3.5 h-3.5" /><span>{profile.airplayTier}</span></span>
             </div>
@@ -106,7 +106,7 @@ export default function ArtistDashboardPage() {
         <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6 mb-6">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-semibold text-gray-700 dark:text-zinc-300">Level {profile.xpLevel}</span>
-            <span className="text-sm text-gray-400 dark:text-zinc-400">{profile.xpTotal.toLocaleString()} / {profile.nextLevelXp.toLocaleString()} XP</span>
+            <span className="text-sm text-gray-600 dark:text-zinc-400">{profile.xpTotal.toLocaleString()} / {profile.nextLevelXp.toLocaleString()} XP</span>
           </div>
           <div className="w-full h-3 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
             <div
@@ -121,17 +121,17 @@ export default function ArtistDashboardPage() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Users className="w-5 h-5 text-blue-500 mx-auto mb-1" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.embedListeners}</div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Embed Listeners</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Embed Listeners</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <TrendingUp className="w-5 h-5 text-green-500 mx-auto mb-1" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.xpTotal.toLocaleString()}</div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Total XP</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Total XP</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-4 text-center">
             <Trophy className="w-5 h-5 text-amber-500 mx-auto mb-1" />
             <div className="text-2xl font-bold text-gray-900 dark:text-white">#{profile.rank}</div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Rank</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Rank</div>
           </div>
         </div>
 

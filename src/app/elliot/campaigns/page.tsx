@@ -79,7 +79,7 @@ export default function GrowthCampaignsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950 flex items-center justify-center">
         <div className="text-gray-600 dark:text-zinc-400">Loading campaigns...</div>
       </main>
     );
@@ -92,7 +92,7 @@ export default function GrowthCampaignsPage() {
   const avgConversionRate = totalResponses > 0 ? Math.round((totalConversions / totalResponses) * 100 * 10) / 10 : 0;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -104,7 +104,7 @@ export default function GrowthCampaignsPage() {
             <span>Back to Elliot Dashboard</span>
           </Link>
           <div className="flex items-center space-x-3">
-            <Megaphone className="w-8 h-8 text-purple-600" />
+            <Megaphone className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Growth Campaigns</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -119,25 +119,25 @@ export default function GrowthCampaignsPage() {
         {/* Key Metrics */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
-            icon={<Zap className="w-6 h-6 text-purple-600" />}
+            icon={<Zap className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="Active Campaigns"
             value={activeCampaigns.length}
             subtitle="running now"
           />
           <MetricCard
-            icon={<Target className="w-6 h-6 text-green-600" />}
+            icon={<Target className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Total Campaigns"
             value={campaigns.length}
             subtitle={`${completedCampaigns.length} completed`}
           />
           <MetricCard
-            icon={<Users className="w-6 h-6 text-blue-600" />}
+            icon={<Users className="w-6 h-6 text-blue-600 dark:text-blue-300" />}
             label="Total Conversions"
             value={totalConversions}
             subtitle="from campaign responses"
           />
           <MetricCard
-            icon={<TrendingUp className="w-6 h-6 text-orange-600" />}
+            icon={<TrendingUp className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Conversion Rate"
             value={`${avgConversionRate}%`}
             subtitle={`${totalResponses} total responses`}
@@ -225,7 +225,7 @@ export default function GrowthCampaignsPage() {
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="text-gray-600 hover:text-gray-900 px-4 py-2"
+                  className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 px-4 py-2"
                 >
                   Cancel
                 </button>
@@ -259,7 +259,7 @@ export default function GrowthCampaignsPage() {
                 <CampaignCard key={campaign.id} campaign={campaign} />
               ))
             ) : (
-              <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-8 text-gray-600 dark:text-zinc-400">
                 No active campaigns. Launch your first campaign to get started.
               </div>
             )}
@@ -268,7 +268,7 @@ export default function GrowthCampaignsPage() {
 
         {/* Completed Campaigns */}
         {completedCampaigns.length > 0 && (
-          <section className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+          <section className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-6">Completed Campaigns</h2>
             <div className="space-y-4">
               {completedCampaigns.map((campaign) => (
@@ -281,19 +281,19 @@ export default function GrowthCampaignsPage() {
         {/* Quick Actions */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <ActionCard
-            icon={<Target className="w-8 h-8 text-purple-600" />}
+            icon={<Target className="w-8 h-8 text-purple-600 dark:text-purple-300" />}
             title="A/B Test Creator"
             description="Test different campaign variants"
             buttonText="Create Test"
           />
           <ActionCard
-            icon={<TrendingUp className="w-8 h-8 text-green-600" />}
+            icon={<TrendingUp className="w-8 h-8 text-green-600 dark:text-green-300" />}
             title="Campaign Analytics"
             description="Deep dive into performance data"
             buttonText="View Analytics"
           />
           <ActionCard
-            icon={<Calendar className="w-8 h-8 text-blue-600" />}
+            icon={<Calendar className="w-8 h-8 text-blue-600 dark:text-blue-300" />}
             title="Budget Planner"
             description="Plan quarterly marketing budget"
             buttonText="Plan Budget"
@@ -322,7 +322,7 @@ function MetricCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -337,7 +337,7 @@ function CampaignCard({ campaign }: { campaign: CampaignData }) {
   const progress = campaign.metrics?.progress || 0;
 
   return (
-    <div className={`border-2 ${config.border} rounded-lg p-5 bg-white`}>
+    <div className={`border-2 ${config.border} rounded-lg p-5 bg-white dark:bg-zinc-900`}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-1">
@@ -346,7 +346,7 @@ function CampaignCard({ campaign }: { campaign: CampaignData }) {
               {config.label}
             </span>
           </div>
-          <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
+          <div className="flex items-center space-x-4 text-xs text-gray-600 dark:text-zinc-400">
             <span>{campaign.type}</span>
             <span>•</span>
             <span>Managed by {campaign.managedBy}</span>
@@ -363,11 +363,11 @@ function CampaignCard({ campaign }: { campaign: CampaignData }) {
         </div>
         <div className="text-center">
           <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Conversions</div>
-          <div className="text-lg font-bold text-green-600">{campaign.metrics?.conversions || 0}</div>
+          <div className="text-lg font-bold text-green-600 dark:text-green-300">{campaign.metrics?.conversions || 0}</div>
         </div>
         <div className="text-center">
           <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Conv. Rate</div>
-          <div className="text-lg font-bold text-purple-600">{(campaign.metrics?.conversionRate || 0).toFixed(1)}%</div>
+          <div className="text-lg font-bold text-purple-600 dark:text-purple-300">{(campaign.metrics?.conversionRate || 0).toFixed(1)}%</div>
         </div>
         <div className="text-center">
           <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Goal</div>

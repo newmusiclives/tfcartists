@@ -245,7 +245,7 @@ export default function SponsorAdsPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Megaphone className="w-8 h-8 text-green-600" />
+              <Megaphone className="w-8 h-8 text-green-600 dark:text-green-300" />
               Sponsor Ads
             </h1>
             <p className="text-zinc-400 mt-1">
@@ -544,7 +544,7 @@ export default function SponsorAdsPage() {
                       title={ad.isActive ? "Deactivate" : "Activate"}
                     >
                       {ad.isActive ? (
-                        <ToggleRight className="w-5 h-5 text-green-600" />
+                        <ToggleRight className="w-5 h-5 text-green-600 dark:text-green-300" />
                       ) : (
                         <ToggleLeft className="w-5 h-5 text-zinc-400" />
                       )}

@@ -39,46 +39,46 @@ interface ErrorEntry {
 
 function StatusIndicator({ status }: { status: "healthy" | "degraded" | "down" | string }) {
   if (status === "healthy" || status === "ok") {
-    return <span className="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full"><CheckCircle className="w-3 h-3" /> Healthy</span>;
+    return <span className="inline-flex items-center gap-1 text-xs font-medium text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900 px-2 py-0.5 rounded-full"><CheckCircle className="w-3 h-3" /> Healthy</span>;
   }
   if (status === "degraded" || status === "stale") {
-    return <span className="inline-flex items-center gap-1 text-xs font-medium text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded-full"><AlertTriangle className="w-3 h-3" /> Degraded</span>;
+    return <span className="inline-flex items-center gap-1 text-xs font-medium text-yellow-700 dark:text-yellow-300 bg-yellow-100 dark:bg-yellow-900 px-2 py-0.5 rounded-full"><AlertTriangle className="w-3 h-3" /> Degraded</span>;
   }
   if (status === "down" || status === "error") {
-    return <span className="inline-flex items-center gap-1 text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded-full"><XCircle className="w-3 h-3" /> Down</span>;
+    return <span className="inline-flex items-center gap-1 text-xs font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-900 px-2 py-0.5 rounded-full"><XCircle className="w-3 h-3" /> Down</span>;
   }
-  return <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-700 bg-gray-100 px-2 py-0.5 rounded-full">{status}</span>;
+  return <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-700 dark:text-zinc-200 bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full">{status}</span>;
 }
 
 function OverallBanner({ status }: { status: string }) {
   if (status === "healthy") {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3">
-        <CheckCircle className="w-6 h-6 text-green-600" />
+      <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-xl p-4 flex items-center gap-3">
+        <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-300" />
         <div>
-          <div className="font-semibold text-green-800">All Systems Operational</div>
-          <div className="text-sm text-green-600">Everything is running normally.</div>
+          <div className="font-semibold text-green-800 dark:text-green-200">All Systems Operational</div>
+          <div className="text-sm text-green-600 dark:text-green-300">Everything is running normally.</div>
         </div>
       </div>
     );
   }
   if (status === "degraded") {
     return (
-      <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center gap-3">
-        <AlertTriangle className="w-6 h-6 text-yellow-600" />
+      <div className="bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 flex items-center gap-3">
+        <AlertTriangle className="w-6 h-6 text-yellow-600 dark:text-yellow-300" />
         <div>
-          <div className="font-semibold text-yellow-800">Degraded Performance</div>
-          <div className="text-sm text-yellow-600">Some components are experiencing issues.</div>
+          <div className="font-semibold text-yellow-800 dark:text-yellow-200">Degraded Performance</div>
+          <div className="text-sm text-yellow-600 dark:text-yellow-300">Some components are experiencing issues.</div>
         </div>
       </div>
     );
   }
   return (
-    <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-3">
-      <XCircle className="w-6 h-6 text-red-600" />
+    <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-xl p-4 flex items-center gap-3">
+      <XCircle className="w-6 h-6 text-red-600 dark:text-red-300" />
       <div>
-        <div className="font-semibold text-red-800">System Outage</div>
-        <div className="text-sm text-red-600">Critical components are down. Immediate attention required.</div>
+        <div className="font-semibold text-red-800 dark:text-red-200">System Outage</div>
+        <div className="text-sm text-red-600 dark:text-red-300">Critical components are down. Immediate attention required.</div>
       </div>
     </div>
   );
@@ -142,8 +142,8 @@ export default function MonitoringDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Activity className="w-6 h-6 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+              <Activity className="w-6 h-6 text-blue-600 dark:text-blue-300" />
               System Monitoring
             </h1>
             <p className="text-gray-400 text-sm mt-1">
@@ -153,7 +153,7 @@ export default function MonitoringDashboard() {
           <button
             onClick={fetchData}
             disabled={loading}
-            className="flex items-center gap-2 px-3 py-2 text-sm bg-white border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-50"
+            className="flex items-center gap-2 px-3 py-2 text-sm bg-white dark:bg-zinc-900 border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
@@ -199,7 +199,7 @@ export default function MonitoringDashboard() {
                       </div>
                       <StatusIndicator status={comp.status} />
                     </div>
-                    <p className="text-sm text-gray-400 dark:text-zinc-400">{comp.message}</p>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400">{comp.message}</p>
                   </div>
                 );
               })}
@@ -218,7 +218,7 @@ export default function MonitoringDashboard() {
                       <span className="text-gray-600 dark:text-zinc-400">${aiDetails.todaySpend.toFixed(2)} spent</span>
                       <span className="text-gray-400">${aiDetails.dailyLimit.toFixed(2)} limit</span>
                     </div>
-                    <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="w-full h-3 bg-gray-100 dark:bg-zinc-800 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all ${
                           aiDetails.percentUsed >= 100
@@ -242,13 +242,13 @@ export default function MonitoringDashboard() {
             {cronDetails && (
               <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden">
                 <div className="px-6 py-4 border-b">
-                  <h2 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <h2 className="text-sm font-semibold text-gray-700 dark:text-zinc-200 flex items-center gap-2">
                     <Clock className="w-4 h-4" />
                     Cron Job Status
                   </h2>
                 </div>
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 border-b">
+                  <thead className="bg-gray-50 dark:bg-zinc-900 border-b">
                     <tr>
                       <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Job</th>
                       <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Status</th>
@@ -263,7 +263,7 @@ export default function MonitoringDashboard() {
                         <td className="px-6 py-3">
                           <StatusIndicator status={detail.status} />
                         </td>
-                        <td className="px-6 py-3 text-gray-400 dark:text-zinc-400">
+                        <td className="px-6 py-3 text-gray-600 dark:text-zinc-400">
                           {detail.lastRun ? formatTime(detail.lastRun) : "Never"}
                         </td>
                         <td className="px-6 py-3 text-gray-400 capitalize">
@@ -289,20 +289,20 @@ export default function MonitoringDashboard() {
                       key={service}
                       className={`rounded-lg border p-3 text-center ${
                         state.isOpen
-                          ? "bg-red-50 border-red-200"
+                          ? "bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800"
                           : state.failures > 0
-                            ? "bg-yellow-50 border-yellow-200"
-                            : "bg-green-50 border-green-200"
+                            ? "bg-yellow-50 dark:bg-yellow-950 border-yellow-200 dark:border-yellow-800"
+                            : "bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800"
                       }`}
                     >
                       <div className="text-xs font-medium text-gray-700 dark:text-zinc-300 mb-1">{service}</div>
                       <div className={`text-sm font-bold ${
-                        state.isOpen ? "text-red-700" : state.failures > 0 ? "text-yellow-700" : "text-green-700"
+                        state.isOpen ? "text-red-700 dark:text-red-300" : state.failures > 0 ? "text-yellow-700 dark:text-yellow-300" : "text-green-700 dark:text-green-300"
                       }`}>
                         {state.isOpen ? "OPEN" : "CLOSED"}
                       </div>
                       {state.failures > 0 && (
-                        <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{state.failures} failures</div>
+                        <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">{state.failures} failures</div>
                       )}
                     </div>
                   ))}
@@ -314,13 +314,13 @@ export default function MonitoringDashboard() {
             {timerDetails && Object.keys(timerDetails).length > 0 && (
               <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden">
                 <div className="px-6 py-4 border-b">
-                  <h2 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <h2 className="text-sm font-semibold text-gray-700 dark:text-zinc-200 flex items-center gap-2">
                     <Timer className="w-4 h-4" />
                     API Response Times
                   </h2>
                 </div>
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 border-b">
+                  <thead className="bg-gray-50 dark:bg-zinc-900 border-b">
                     <tr>
                       <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Endpoint</th>
                       <th className="text-left px-6 py-3 font-medium text-gray-600 dark:text-zinc-400">Requests</th>
@@ -336,13 +336,13 @@ export default function MonitoringDashboard() {
                         <tr key={endpoint} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
                           <td className="px-6 py-3 font-mono text-xs text-gray-900 dark:text-white">{endpoint}</td>
                           <td className="px-6 py-3 text-gray-600 dark:text-zinc-400">{stats.totalRequests}</td>
-                          <td className={`px-6 py-3 ${stats.avgMs > 5000 ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                          <td className={`px-6 py-3 ${stats.avgMs > 5000 ? "text-red-600 dark:text-red-300 font-medium" : "text-gray-600 dark:text-zinc-300"}`}>
                             {stats.avgMs}ms
                           </td>
-                          <td className={`px-6 py-3 ${stats.maxMs > 5000 ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                          <td className={`px-6 py-3 ${stats.maxMs > 5000 ? "text-red-600 dark:text-red-300 font-medium" : "text-gray-600 dark:text-zinc-300"}`}>
                             {stats.maxMs}ms
                           </td>
-                          <td className="px-6 py-3 text-gray-400 dark:text-zinc-400">{stats.slowCount}</td>
+                          <td className="px-6 py-3 text-gray-600 dark:text-zinc-400">{stats.slowCount}</td>
                         </tr>
                       ))}
                   </tbody>
@@ -354,7 +354,7 @@ export default function MonitoringDashboard() {
             {errors.length > 0 && (
               <div className="bg-white dark:bg-zinc-900 rounded-xl border overflow-hidden">
                 <div className="px-6 py-4 border-b">
-                  <h2 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <h2 className="text-sm font-semibold text-gray-700 dark:text-zinc-200 flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-red-500" />
                     Recent Errors (Last 24h)
                   </h2>
@@ -367,14 +367,14 @@ export default function MonitoringDashboard() {
                       onClick={() => setExpandedError(expandedError === err.key ? null : err.key)}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-red-800 truncate max-w-[60%]">
+                        <span className="text-sm font-medium text-red-800 dark:text-red-200 truncate max-w-[60%]">
                           {err.message}
                         </span>
                         <span className="text-xs text-gray-400">{formatTime(err.timestamp)}</span>
                       </div>
                       {err.url && <div className="text-xs text-gray-400 mt-0.5">{err.url}</div>}
                       {expandedError === err.key && err.stack && (
-                        <pre className="mt-2 text-xs font-mono bg-red-50 border border-red-100 rounded-lg p-3 overflow-x-auto text-red-800">
+                        <pre className="mt-2 text-xs font-mono bg-red-50 dark:bg-red-950 border border-red-100 rounded-lg p-3 overflow-x-auto text-red-800 dark:text-red-200">
                           {err.stack}
                         </pre>
                       )}
@@ -387,7 +387,7 @@ export default function MonitoringDashboard() {
         ) : (
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-12 border text-center">
             <Activity className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-400 dark:text-zinc-400">Could not load health data.</p>
+            <p className="text-gray-600 dark:text-zinc-400">Could not load health data.</p>
             <p className="text-gray-400 text-sm mt-1">
               Check your database connection and try again.
             </p>

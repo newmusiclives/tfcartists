@@ -88,7 +88,7 @@ export default function RileySubmissionsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-zinc-400">Loading submissions...</p>
@@ -98,7 +98,7 @@ export default function RileySubmissionsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -110,7 +110,7 @@ export default function RileySubmissionsPage() {
             <span>Back to Riley Dashboard</span>
           </Link>
           <div className="flex items-center space-x-3">
-            <Music className="w-8 h-8 text-purple-600" />
+            <Music className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Track Submissions</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -125,19 +125,19 @@ export default function RileySubmissionsPage() {
         {/* Stats Bar */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <StatCard
-            icon={<Clock className="w-6 h-6 text-yellow-600" />}
+            icon={<Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-300" />}
             label="Pending Review"
             value={stats.pending}
             color="yellow"
           />
           <StatCard
-            icon={<CheckCircle className="w-6 h-6 text-green-600" />}
+            icon={<CheckCircle className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Approved"
             value={stats.approved}
             color="green"
           />
           <StatCard
-            icon={<XCircle className="w-6 h-6 text-red-600" />}
+            icon={<XCircle className="w-6 h-6 text-red-600 dark:text-red-300" />}
             label="Rejected"
             value={stats.rejected}
             color="red"
@@ -183,7 +183,7 @@ export default function RileySubmissionsPage() {
               />
             ))}
             {filteredSubmissions.length === 0 && (
-              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-12 text-gray-600 dark:text-zinc-400">
                 No {filter !== "all" && filter} submissions found
               </div>
             )}
@@ -191,15 +191,15 @@ export default function RileySubmissionsPage() {
         </div>
 
         {/* Team Member Info */}
-        <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+        <div className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-start space-x-4">
-            <div className="bg-purple-100 rounded-full p-3">
-              <User className="w-8 h-8 text-purple-600" />
+            <div className="bg-purple-100 dark:bg-purple-900 rounded-full p-3">
+              <User className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Sienna Park</h3>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">Content Vetting & Quality Control</p>
-              <div className="text-sm text-gray-700 space-y-2">
+              <div className="text-sm text-gray-700 dark:text-zinc-200 space-y-2">
                 <p><strong>Responsibilities:</strong></p>
                 <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                   <li>Review submitted tracks for audio quality</li>
@@ -246,7 +246,7 @@ function FilterButton({ active, onClick, label, count }: { active: boolean; onCl
       className={`px-4 py-2 rounded-lg font-medium transition-colors ${
         active
           ? "bg-purple-600 text-white"
-          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          : "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 hover:bg-gray-200"
       }`}
     >
       {label} ({count})
@@ -257,28 +257,28 @@ function FilterButton({ active, onClick, label, count }: { active: boolean; onCl
 function SubmissionCard({ submission, onSelect }: { submission: SubmissionItem; onSelect: (s: SubmissionItem) => void }) {
   const statusConfig = {
     pending: {
-      icon: <Clock className="w-4 h-4 text-yellow-600" />,
+      icon: <Clock className="w-4 h-4 text-yellow-600 dark:text-yellow-300" />,
       bg: "bg-yellow-50",
       text: "text-yellow-700",
       border: "border-yellow-200",
       label: "Pending Review",
     },
     approved: {
-      icon: <CheckCircle className="w-4 h-4 text-green-600" />,
+      icon: <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-300" />,
       bg: "bg-green-50",
       text: "text-green-700",
       border: "border-green-200",
       label: "Approved",
     },
     rejected: {
-      icon: <XCircle className="w-4 h-4 text-red-600" />,
+      icon: <XCircle className="w-4 h-4 text-red-600 dark:text-red-300" />,
       bg: "bg-red-50",
       text: "text-red-700",
       border: "border-red-200",
       label: "Rejected",
     },
   }[submission.status] || {
-    icon: <Clock className="w-4 h-4 text-gray-600" />,
+    icon: <Clock className="w-4 h-4 text-gray-600 dark:text-zinc-300" />,
     bg: "bg-gray-50",
     text: "text-gray-700",
     border: "border-gray-200 dark:border-zinc-800",
@@ -286,15 +286,15 @@ function SubmissionCard({ submission, onSelect }: { submission: SubmissionItem; 
   };
 
   return (
-    <div className={`flex items-center justify-between p-4 bg-gray-50 rounded-lg border-2 ${statusConfig.border} hover:shadow-md transition-shadow`}>
+    <div className={`flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg border-2 ${statusConfig.border} hover:shadow-md transition-shadow`}>
       <div className="flex items-center space-x-4 flex-1">
-        <div className="bg-purple-100 rounded-lg p-3">
-          <Music className="w-8 h-8 text-purple-600" />
+        <div className="bg-purple-100 dark:bg-purple-900 rounded-lg p-3">
+          <Music className="w-8 h-8 text-purple-600 dark:text-purple-300" />
         </div>
         <div>
           <div className="font-semibold text-gray-900 dark:text-white">{submission.track}</div>
           <div className="text-sm text-gray-600 dark:text-zinc-400">{submission.artist}</div>
-          <div className="flex items-center space-x-3 mt-1 text-xs text-gray-400 dark:text-zinc-400">
+          <div className="flex items-center space-x-3 mt-1 text-xs text-gray-600 dark:text-zinc-400">
             <span className="flex items-center space-x-1">
               <Tag className="w-3 h-3" />
               <span>{submission.genre}</span>
@@ -312,7 +312,7 @@ function SubmissionCard({ submission, onSelect }: { submission: SubmissionItem; 
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-xs font-medium text-purple-600">{submission.tier} Tier</div>
+          <div className="text-xs font-medium text-purple-600 dark:text-purple-300">{submission.tier} Tier</div>
         </div>
         <div className={`px-3 py-1 rounded-full ${statusConfig.bg} ${statusConfig.text} flex items-center space-x-1`}>
           {statusConfig.icon}
@@ -329,7 +329,7 @@ function SubmissionCard({ submission, onSelect }: { submission: SubmissionItem; 
         {submission.status !== "pending" && (
           <button
             onClick={() => onSelect(submission)}
-            className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
+            className="bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
           >
             View
           </button>
@@ -356,7 +356,7 @@ function ReviewModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b sticky top-0 bg-white z-10">
+        <div className="p-6 border-b sticky top-0 bg-white dark:bg-zinc-900 z-10">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Review Submission</h2>
             <button
@@ -371,39 +371,39 @@ function ReviewModal({
         <div className="p-6 space-y-6">
           {/* Track Info */}
           <div>
-            <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Track Title</div>
+            <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Track Title</div>
             <div className="text-2xl font-bold text-gray-900 dark:text-white">{submission.track}</div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Artist</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist</div>
               <div className="font-semibold text-gray-900 dark:text-white">{submission.artist}</div>
               <div className="text-sm text-gray-600 dark:text-zinc-400">{submission.artistEmail}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Tier</div>
-              <div className="font-semibold text-purple-600">{submission.tier}</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Tier</div>
+              <div className="font-semibold text-purple-600 dark:text-purple-300">{submission.tier}</div>
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Genre</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Genre</div>
               <div className="font-semibold text-gray-900 dark:text-white">{submission.genre}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Duration</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Duration</div>
               <div className="font-semibold text-gray-900 dark:text-white">{submission.duration}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Submitted</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Submitted</div>
               <div className="font-semibold text-gray-900 dark:text-white">{submission.submittedAt}</div>
             </div>
           </div>
 
           {/* Audio Player */}
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
             <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Audio Preview</div>
             <div className="flex items-center space-x-3">
               <button className="bg-purple-600 text-white p-3 rounded-full hover:bg-purple-700 transition-colors">
@@ -417,7 +417,7 @@ function ReviewModal({
           </div>
 
           {/* Quality Checklist */}
-          <div className="bg-purple-50 rounded-lg p-4">
+          <div className="bg-purple-50 dark:bg-purple-950 rounded-lg p-4">
             <div className="font-semibold text-gray-900 dark:text-white mb-3">Quality Checklist</div>
             <div className="space-y-2 text-sm">
               <label className="flex items-center space-x-2">
@@ -442,20 +442,20 @@ function ReviewModal({
           {/* Notes */}
           {submission.notes && (
             <div>
-              <div className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Notes</div>
-              <div className="bg-gray-50 rounded-lg p-3 text-gray-700 dark:text-zinc-300">{submission.notes}</div>
+              <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Notes</div>
+              <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3 text-gray-700 dark:text-zinc-300">{submission.notes}</div>
             </div>
           )}
 
           {/* Rejection Form */}
           {showRejectForm && (
-            <div className="bg-red-50 rounded-lg p-4">
+            <div className="bg-red-50 dark:bg-red-950 rounded-lg p-4">
               <div className="font-semibold text-gray-900 dark:text-white mb-2">Rejection Reason</div>
               <textarea
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
                 placeholder="Provide specific feedback to help the artist improve..."
-                className="w-full p-3 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full p-3 border border-red-200 dark:border-red-800 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 rows={4}
               />
             </div>
@@ -463,7 +463,7 @@ function ReviewModal({
         </div>
 
         {/* Actions */}
-        <div className="p-6 border-t bg-gray-50 sticky bottom-0 flex items-center justify-end space-x-3">
+        <div className="p-6 border-t bg-gray-50 dark:bg-zinc-900 sticky bottom-0 flex items-center justify-end space-x-3">
           {submission.status === "pending" && (
             <>
               {!showRejectForm ? (
@@ -487,7 +487,7 @@ function ReviewModal({
                 <>
                   <button
                     onClick={() => setShowRejectForm(false)}
-                    className="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                    className="bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium"
                   >
                     Cancel
                   </button>

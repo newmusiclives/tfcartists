@@ -290,7 +290,7 @@ export default function VerificationPage() {
   const sponsorEarnings = calculateSponsorReferrals();
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 dark:from-zinc-950 via-white dark:via-zinc-900 to-blue-50 dark:to-blue-950">
       <SharedNav />
 
       {/* Header */}
@@ -308,13 +308,13 @@ export default function VerificationPage() {
             </div>
 
             {/* Capacity Toggle */}
-            <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
+            <div className="flex items-center space-x-2 bg-gray-100 dark:bg-zinc-800 rounded-lg p-1">
               <button
                 onClick={() => setCapacity("60")}
                 className={`px-4 py-2 rounded-md font-semibold transition-all ${
                   capacity === "60"
-                    ? "bg-white text-blue-600 shadow"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-white dark:bg-zinc-900 text-blue-600 dark:text-blue-300 shadow"
+                    : "text-gray-600 dark:text-zinc-300 hover:text-gray-900"
                 }`}
               >
                 60% Capacity
@@ -323,8 +323,8 @@ export default function VerificationPage() {
                 onClick={() => setCapacity("100")}
                 className={`px-4 py-2 rounded-md font-semibold transition-all ${
                   capacity === "100"
-                    ? "bg-white text-blue-600 shadow"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-white dark:bg-zinc-900 text-blue-600 dark:text-blue-300 shadow"
+                    : "text-gray-600 dark:text-zinc-300 hover:text-gray-900"
                 }`}
               >
                 100% Capacity
@@ -339,14 +339,14 @@ export default function VerificationPage() {
         {/* Revenue Model Verification */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <Target className="w-6 h-6 mr-2 text-green-600" />
+            <Target className="w-6 h-6 mr-2 text-green-600 dark:text-green-300" />
             Revenue Model Verification - {capacity}% Capacity
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {/* Revenue Breakdown */}
-            <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
-              <h3 className="font-bold text-lg mb-3 text-green-900">Revenue Sources</h3>
+            <div className="bg-green-50 dark:bg-green-950 rounded-lg p-4 border-2 border-green-200 dark:border-green-800">
+              <h3 className="font-bold text-lg mb-3 text-green-900 dark:text-green-200">Revenue Sources</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-700 dark:text-zinc-300">Artist Subscriptions:</span>
@@ -368,16 +368,16 @@ export default function VerificationPage() {
                   <span className="text-gray-700 dark:text-zinc-300">Sponsored Content:</span>
                   <span className="font-semibold">${revenueVerification.model.revenue.sponsored.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between pt-2 border-t-2 border-green-300">
-                  <span className="font-bold text-green-900">Total Revenue:</span>
-                  <span className="font-bold text-green-600">${revenueVerification.model.revenue.total.toLocaleString()}</span>
+                <div className="flex justify-between pt-2 border-t-2 border-green-300 dark:border-green-700">
+                  <span className="font-bold text-green-900 dark:text-green-200">Total Revenue:</span>
+                  <span className="font-bold text-green-600 dark:text-green-300">${revenueVerification.model.revenue.total.toLocaleString()}</span>
                 </div>
               </div>
             </div>
 
             {/* Expense Breakdown */}
-            <div className="bg-red-50 rounded-lg p-4 border-2 border-red-200">
-              <h3 className="font-bold text-lg mb-3 text-red-900">Expenses</h3>
+            <div className="bg-red-50 dark:bg-red-950 rounded-lg p-4 border-2 border-red-200 dark:border-red-800">
+              <h3 className="font-bold text-lg mb-3 text-red-900 dark:text-red-200">Expenses</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-700 dark:text-zinc-300">Artist Pool (80%):</span>
@@ -395,77 +395,77 @@ export default function VerificationPage() {
                   <span className="text-gray-700 dark:text-zinc-300">Operations:</span>
                   <span className="font-semibold">${revenueVerification.model.expenses.operations.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between pt-2 border-t-2 border-red-300">
-                  <span className="font-bold text-red-900">Total Expenses:</span>
-                  <span className="font-bold text-red-600">${revenueVerification.model.expenses.total.toLocaleString()}</span>
+                <div className="flex justify-between pt-2 border-t-2 border-red-300 dark:border-red-700">
+                  <span className="font-bold text-red-900 dark:text-red-200">Total Expenses:</span>
+                  <span className="font-bold text-red-600 dark:text-red-300">${revenueVerification.model.expenses.total.toLocaleString()}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Verification Checks */}
-          <div className="bg-blue-50 rounded-lg p-4 border-2 border-blue-200">
-            <h3 className="font-bold text-lg mb-3 text-blue-900">Automated Verification Checks</h3>
+          <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-4 border-2 border-blue-200 dark:border-blue-800">
+            <h3 className="font-bold text-lg mb-3 text-blue-900 dark:text-blue-200">Automated Verification Checks</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
               <div className={`flex items-center space-x-2 p-3 rounded ${revenueVerification.checks.revenueCalculation ? 'bg-green-100' : 'bg-red-100'}`}>
                 {revenueVerification.checks.revenueCalculation ?
-                  <CheckCircle2 className="w-5 h-5 text-green-600" /> :
-                  <XCircle className="w-5 h-5 text-red-600" />
+                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-300" /> :
+                  <XCircle className="w-5 h-5 text-red-600 dark:text-red-300" />
                 }
                 <span className="text-sm font-semibold">Revenue Math</span>
               </div>
 
               <div className={`flex items-center space-x-2 p-3 rounded ${revenueVerification.checks.expensesCalculation ? 'bg-green-100' : 'bg-red-100'}`}>
                 {revenueVerification.checks.expensesCalculation ?
-                  <CheckCircle2 className="w-5 h-5 text-green-600" /> :
-                  <XCircle className="w-5 h-5 text-red-600" />
+                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-300" /> :
+                  <XCircle className="w-5 h-5 text-red-600 dark:text-red-300" />
                 }
                 <span className="text-sm font-semibold">Expense Math</span>
               </div>
 
               <div className={`flex items-center space-x-2 p-3 rounded ${revenueVerification.checks.profitCalculation ? 'bg-green-100' : 'bg-red-100'}`}>
                 {revenueVerification.checks.profitCalculation ?
-                  <CheckCircle2 className="w-5 h-5 text-green-600" /> :
-                  <XCircle className="w-5 h-5 text-red-600" />
+                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-300" /> :
+                  <XCircle className="w-5 h-5 text-red-600 dark:text-red-300" />
                 }
                 <span className="text-sm font-semibold">Profit Math</span>
               </div>
 
               <div className={`flex items-center space-x-2 p-3 rounded ${revenueVerification.checks.artistPoolProtected ? 'bg-green-100' : 'bg-red-100'}`}>
                 {revenueVerification.checks.artistPoolProtected ?
-                  <CheckCircle2 className="w-5 h-5 text-green-600" /> :
-                  <XCircle className="w-5 h-5 text-red-600" />
+                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-300" /> :
+                  <XCircle className="w-5 h-5 text-red-600 dark:text-red-300" />
                 }
                 <span className="text-sm font-semibold">80% Protected</span>
               </div>
             </div>
 
             {/* Final Profit */}
-            <div className="mt-4 pt-4 border-t-2 border-blue-300">
+            <div className="mt-4 pt-4 border-t-2 border-blue-300 dark:border-blue-700">
               <div className="flex items-center justify-between">
-                <span className="text-xl font-bold text-blue-900">NET PROFIT:</span>
-                <span className="text-3xl font-bold text-green-600">${revenueVerification.model.profit.toLocaleString()}/month</span>
+                <span className="text-xl font-bold text-blue-900 dark:text-blue-200">NET PROFIT:</span>
+                <span className="text-3xl font-bold text-green-600 dark:text-green-300">${revenueVerification.model.profit.toLocaleString()}/month</span>
               </div>
-              <div className="text-sm text-blue-700 text-right mt-1">
+              <div className="text-sm text-blue-700 dark:text-blue-300 text-right mt-1">
                 ${(revenueVerification.model.profit * 12).toLocaleString()}/year
               </div>
             </div>
           </div>
 
           {revenueVerification.checks.allPassed ? (
-            <div className="mt-4 bg-green-100 border-2 border-green-400 rounded-lg p-4 flex items-start space-x-3">
-              <CheckCircle2 className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+            <div className="mt-4 bg-green-100 dark:bg-green-900 border-2 border-green-400 rounded-lg p-4 flex items-start space-x-3">
+              <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-300 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-bold text-green-900">✅ All Revenue Model Checks PASSED!</div>
-                <div className="text-sm text-green-700">All calculations are mathematically correct and the 80% artist pool is protected.</div>
+                <div className="font-bold text-green-900 dark:text-green-200">✅ All Revenue Model Checks PASSED!</div>
+                <div className="text-sm text-green-700 dark:text-green-300">All calculations are mathematically correct and the 80% artist pool is protected.</div>
               </div>
             </div>
           ) : (
-            <div className="mt-4 bg-red-100 border-2 border-red-400 rounded-lg p-4 flex items-start space-x-3">
-              <XCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="mt-4 bg-red-100 dark:bg-red-900 border-2 border-red-400 rounded-lg p-4 flex items-start space-x-3">
+              <XCircle className="w-6 h-6 text-red-600 dark:text-red-300 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-bold text-red-900">❌ Revenue Model Has Errors!</div>
-                <div className="text-sm text-red-700">One or more calculations are incorrect. Check the model.</div>
+                <div className="font-bold text-red-900 dark:text-red-200">❌ Revenue Model Has Errors!</div>
+                <div className="text-sm text-red-700 dark:text-red-300">One or more calculations are incorrect. Check the model.</div>
               </div>
             </div>
           )}
@@ -477,7 +477,7 @@ export default function VerificationPage() {
           {/* Artist Referral Calculator */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h3 className="text-xl font-bold mb-4 flex items-center">
-              <Award className="w-5 h-5 mr-2 text-orange-600" />
+              <Award className="w-5 h-5 mr-2 text-orange-600 dark:text-orange-300" />
               Artist Referral Commission Calculator
             </h3>
 
@@ -537,16 +537,16 @@ export default function VerificationPage() {
               </div>
             </div>
 
-            <div className="bg-orange-50 rounded-lg p-4 border-2 border-orange-200">
-              <div className="text-sm text-orange-700 mb-2">Total Earnings:</div>
-              <div className="text-3xl font-bold text-orange-600 mb-3">${scoutEarnings.total.toFixed(2)}</div>
+            <div className="bg-orange-50 dark:bg-orange-950 rounded-lg p-4 border-2 border-orange-200 dark:border-orange-800">
+              <div className="text-sm text-orange-700 dark:text-orange-300 mb-2">Total Earnings:</div>
+              <div className="text-3xl font-bold text-orange-600 dark:text-orange-300 mb-3">${scoutEarnings.total.toFixed(2)}</div>
 
               <div className="space-y-1 text-xs">
                 {scoutEarnings.breakdown.map((item, idx) => (
-                  <div key={idx} className="border-t border-orange-200 pt-1">
-                    <div className="font-semibold text-orange-900">{item.label}</div>
-                    <div className="text-orange-700">{item.calculation}</div>
-                    <div className="text-orange-600 font-bold">${item.amount.toFixed(2)}</div>
+                  <div key={idx} className="border-t border-orange-200 dark:border-orange-800 pt-1">
+                    <div className="font-semibold text-orange-900 dark:text-orange-200">{item.label}</div>
+                    <div className="text-orange-700 dark:text-orange-300">{item.calculation}</div>
+                    <div className="text-orange-600 dark:text-orange-300 font-bold">${item.amount.toFixed(2)}</div>
                   </div>
                 ))}
               </div>
@@ -556,7 +556,7 @@ export default function VerificationPage() {
           {/* Listener Promotion Calculator */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h3 className="text-xl font-bold mb-4 flex items-center">
-              <Zap className="w-5 h-5 mr-2 text-blue-600" />
+              <Zap className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-300" />
               Listener Promotion Commission Calculator
             </h3>
 
@@ -612,19 +612,19 @@ export default function VerificationPage() {
               </div>
             </div>
 
-            <div className="bg-blue-50 rounded-lg p-4 border-2 border-blue-200">
-              <div className="text-sm text-blue-700 mb-2">Total Monthly Earnings:</div>
-              <div className="text-3xl font-bold text-blue-600 mb-3">${gpEarnings.total.toFixed(2)}/mo</div>
+            <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-4 border-2 border-blue-200 dark:border-blue-800">
+              <div className="text-sm text-blue-700 dark:text-blue-300 mb-2">Total Monthly Earnings:</div>
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-300 mb-3">${gpEarnings.total.toFixed(2)}/mo</div>
 
               <div className="space-y-1 text-xs">
                 {gpEarnings.breakdown.map((item, idx) => (
-                  <div key={idx} className="border-t border-blue-200 pt-1">
+                  <div key={idx} className="border-t border-blue-200 dark:border-blue-800 pt-1">
                     <div className="flex items-center justify-between">
-                      <div className="font-semibold text-blue-900">{item.label}</div>
-                      {item.recurring && <span className="text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded">RECURRING</span>}
+                      <div className="font-semibold text-blue-900 dark:text-blue-200">{item.label}</div>
+                      {item.recurring && <span className="text-xs bg-blue-200 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded">RECURRING</span>}
                     </div>
-                    <div className="text-blue-700">{item.calculation}</div>
-                    <div className="text-blue-600 font-bold">${item.amount.toFixed(2)}</div>
+                    <div className="text-blue-700 dark:text-blue-300">{item.calculation}</div>
+                    <div className="text-blue-600 dark:text-blue-300 font-bold">${item.amount.toFixed(2)}</div>
                   </div>
                 ))}
               </div>
@@ -634,7 +634,7 @@ export default function VerificationPage() {
           {/* Sponsor Referral Calculator */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
             <h3 className="text-xl font-bold mb-4 flex items-center">
-              <Building2 className="w-5 h-5 mr-2 text-purple-600" />
+              <Building2 className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-300" />
               Sponsor Referral Calculator
             </h3>
 
@@ -656,16 +656,16 @@ export default function VerificationPage() {
               ))}
             </div>
 
-            <div className="bg-purple-50 rounded-lg p-4 border-2 border-purple-200">
-              <div className="text-sm text-purple-700 mb-2">Total Referral Earnings:</div>
-              <div className="text-3xl font-bold text-purple-600 mb-3">${sponsorEarnings.total.toFixed(2)}</div>
+            <div className="bg-purple-50 dark:bg-purple-950 rounded-lg p-4 border-2 border-purple-200 dark:border-purple-800">
+              <div className="text-sm text-purple-700 dark:text-purple-300 mb-2">Total Referral Earnings:</div>
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-300 mb-3">${sponsorEarnings.total.toFixed(2)}</div>
 
               <div className="space-y-1 text-xs">
                 {sponsorEarnings.breakdown.map((item, idx) => (
-                  <div key={idx} className="border-t border-purple-200 pt-1">
-                    <div className="font-semibold text-purple-900">{item.label}</div>
-                    <div className="text-purple-700">{item.calculation}</div>
-                    <div className="text-purple-600 font-bold">${item.amount.toFixed(2)}</div>
+                  <div key={idx} className="border-t border-purple-200 dark:border-purple-800 pt-1">
+                    <div className="font-semibold text-purple-900 dark:text-purple-200">{item.label}</div>
+                    <div className="text-purple-700 dark:text-purple-300">{item.calculation}</div>
+                    <div className="text-purple-600 dark:text-purple-300 font-bold">${item.amount.toFixed(2)}</div>
                   </div>
                 ))}
               </div>
@@ -678,22 +678,22 @@ export default function VerificationPage() {
         <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-xl shadow-lg p-8 text-white">
           <h2 className="text-2xl font-bold mb-6">✅ All Systems Operational</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white/10 backdrop-blur rounded-lg p-4">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur rounded-lg p-4">
               <CheckCircle2 className="w-8 h-8 mb-2" />
               <div className="font-bold mb-1">Revenue Model</div>
               <div className="text-sm text-green-100">Math verified ✓</div>
             </div>
-            <div className="bg-white/10 backdrop-blur rounded-lg p-4">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur rounded-lg p-4">
               <CheckCircle2 className="w-8 h-8 mb-2" />
               <div className="font-bold mb-1">Artist Referral System</div>
               <div className="text-sm text-green-100">Calculations accurate ✓</div>
             </div>
-            <div className="bg-white/10 backdrop-blur rounded-lg p-4">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur rounded-lg p-4">
               <CheckCircle2 className="w-8 h-8 mb-2" />
               <div className="font-bold mb-1">Listener Promotion System</div>
               <div className="text-sm text-green-100">Multi-stream working ✓</div>
             </div>
-            <div className="bg-white/10 backdrop-blur rounded-lg p-4">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur rounded-lg p-4">
               <CheckCircle2 className="w-8 h-8 mb-2" />
               <div className="font-bold mb-1">Sponsor Referrals</div>
               <div className="text-sm text-green-100">Bonuses calculated ✓</div>

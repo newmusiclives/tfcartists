@@ -63,13 +63,13 @@ export default function ArtistsListPage() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/admin"
-                className="text-gray-600 hover:text-gray-900 inline-flex items-center space-x-2"
+                className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 inline-flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back</span>
               </Link>
               <div className="flex items-center space-x-2">
-                <Sparkles className="w-6 h-6 text-purple-600" />
+                <Sparkles className="w-6 h-6 text-purple-600 dark:text-purple-300" />
                 <h1 className="text-xl font-bold">All Artists</h1>
               </div>
             </div>
@@ -105,7 +105,7 @@ export default function ArtistsListPage() {
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 aria-label="Filter by status"
-                className="pl-10 pr-8 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none bg-white"
+                className="pl-10 pr-8 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none bg-white dark:bg-zinc-900"
               >
                 <option value="">All Statuses</option>
                 <option value="DISCOVERED">Discovered</option>
@@ -131,7 +131,7 @@ export default function ArtistsListPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-gray-50 dark:bg-zinc-900 border-b">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">
                       Artist
@@ -160,13 +160,13 @@ export default function ArtistsListPage() {
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {artist.name}
                         </div>
-                        <div className="text-sm text-gray-400 dark:text-zinc-400">
+                        <div className="text-sm text-gray-600 dark:text-zinc-400">
                           {artist.genre || "—"}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900 dark:text-white">{artist.email || "—"}</div>
-                        <div className="text-sm text-gray-400 dark:text-zinc-400">{artist.phone || "—"}</div>
+                        <div className="text-sm text-gray-600 dark:text-zinc-400">{artist.phone || "—"}</div>
                       </td>
                       <td className="px-6 py-4">
                         <span
@@ -196,7 +196,7 @@ export default function ArtistsListPage() {
                       <td className="px-6 py-4">
                         <Link
                           href={`/admin/artists/${artist.id}`}
-                          className="text-purple-600 hover:text-purple-900 text-sm font-medium"
+                          className="text-purple-600 dark:text-purple-300 hover:text-purple-900 text-sm font-medium"
                         >
                           View Details
                         </Link>

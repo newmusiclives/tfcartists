@@ -8,10 +8,10 @@ export default function SponsorThankYouPage() {
   const { currentStation } = useStation();
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center">
+    <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-emerald-50 dark:to-emerald-950 flex items-center justify-center">
       <div className="max-w-lg mx-auto px-4 text-center">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
-          <CheckCircle className="w-10 h-10 text-green-600" />
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full mb-6">
+          <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-300" />
         </div>
 
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Thank You!</h1>
@@ -41,7 +41,7 @@ export default function SponsorThankYouPage() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/"
-            className="inline-flex items-center space-x-2 text-green-700 hover:text-green-800 font-medium transition-colors"
+            className="inline-flex items-center space-x-2 text-green-700 dark:text-green-300 hover:text-green-800 font-medium transition-colors"
           >
             <Radio className="w-4 h-4" />
             <span>Back to Home</span>

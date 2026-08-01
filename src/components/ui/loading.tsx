@@ -17,7 +17,7 @@ export function Spinner({ size = "md", className = "" }: { size?: "sm" | "md" | 
 
   return (
     <div className={`${sizeClasses[size]} ${className}`}>
-      <div className="animate-spin rounded-full border-4 border-gray-200 border-t-purple-600 w-full h-full"></div>
+      <div className="animate-spin rounded-full border-4 border-gray-200 dark:border-zinc-800 border-t-purple-600 w-full h-full"></div>
     </div>
   );
 }
@@ -29,7 +29,7 @@ export function Spinner({ size = "md", className = "" }: { size?: "sm" | "md" | 
 export function Skeleton({ className = "", width = "100%", height = "20px" }: { className?: string; width?: string; height?: string }) {
   return (
     <div
-      className={`bg-gray-200 animate-pulse rounded ${className}`}
+      className={`bg-gray-200 dark:bg-zinc-800 animate-pulse rounded ${className}`}
       style={{ width, height }}
     />
   );
@@ -41,7 +41,7 @@ export function Skeleton({ className = "", width = "100%", height = "20px" }: { 
  */
 export function CardSkeleton() {
   return (
-    <div className="bg-white rounded-lg shadow p-6 space-y-4">
+    <div className="bg-white dark:bg-zinc-900 rounded-lg shadow p-6 space-y-4">
       <Skeleton height="24px" width="60%" />
       <Skeleton height="16px" width="100%" />
       <Skeleton height="16px" width="90%" />
@@ -75,10 +75,10 @@ export function TableSkeleton({ rows = 5 }: { rows?: number }) {
  */
 export function PageLoading({ message = "Loading..." }: { message?: string }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-900">
       <div className="text-center">
         <Spinner size="lg" className="mx-auto mb-4" />
-        <p className="text-gray-600 text-lg">{message}</p>
+        <p className="text-gray-600 dark:text-zinc-300 text-lg">{message}</p>
       </div>
     </div>
   );

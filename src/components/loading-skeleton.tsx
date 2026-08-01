@@ -4,7 +4,7 @@
  */
 
 function Shimmer({ className }: { className?: string }) {
-  return <div className={`bg-gray-200 rounded animate-pulse ${className || ""}`} />;
+  return <div className={`bg-gray-200 dark:bg-zinc-800 rounded animate-pulse ${className || ""}`} />;
 }
 
 /**
@@ -12,7 +12,7 @@ function Shimmer({ className }: { className?: string }) {
  */
 export function PageSkeleton() {
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Page title */}
         <Shimmer className="h-8 w-56" />
@@ -39,7 +39,7 @@ export function PageSkeleton() {
  */
 export function CardSkeleton({ lines = 3 }: { lines?: number }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
       <Shimmer className="h-5 w-32 mb-4" />
       <div className="space-y-3">
         {Array.from({ length: lines }).map((_, i) => (
@@ -58,14 +58,14 @@ export function CardSkeleton({ lines = 3 }: { lines?: number }) {
  */
 export function TableSkeleton({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border overflow-hidden">
       {/* Table header */}
       <div className="border-b px-6 py-4">
         <Shimmer className="h-5 w-40" />
       </div>
 
       {/* Column headers */}
-      <div className="px-6 py-3 border-b bg-gray-50">
+      <div className="px-6 py-3 border-b bg-gray-50 dark:bg-zinc-900">
         <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
           {Array.from({ length: columns }).map((_, i) => (
             <Shimmer key={i} className="h-3 w-20" />
@@ -96,7 +96,7 @@ export function StatsSkeleton({ count = 4 }: { count?: number }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-white rounded-xl p-6 shadow-sm border">
+        <div key={i} className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border">
           <Shimmer className="h-3 w-20 mb-3" />
           <Shimmer className="h-8 w-16 mb-2" />
           <Shimmer className="h-3 w-24" />

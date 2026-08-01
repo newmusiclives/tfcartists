@@ -22,7 +22,7 @@ function ResetForm() {
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Invalid Reset Link</h2>
         <p className="text-gray-600 dark:text-zinc-400 mb-4">This password reset link is invalid or has expired.</p>
-        <Link href="/operator/forgot-password" className="text-amber-700 hover:text-amber-800 font-medium">
+        <Link href="/operator/forgot-password" className="text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium">
           Request a new link
         </Link>
       </div>
@@ -63,7 +63,7 @@ function ResetForm() {
   if (success) {
     return (
       <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 text-center">
-        <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
+        <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-300 mx-auto mb-4" />
         <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Password Reset!</h2>
         <p className="text-gray-600 dark:text-zinc-400">Redirecting you to login...</p>
       </div>
@@ -73,7 +73,7 @@ function ResetForm() {
   return (
     <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 space-y-5">
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
+        <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">
           {error}
         </div>
       )}
@@ -129,10 +129,10 @@ export default function ResetPasswordPage() {
     <main className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Radio className="w-8 h-8 text-amber-700 mx-auto mb-4" />
+          <Radio className="w-8 h-8 text-amber-700 dark:text-amber-300 mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Set New Password</h1>
         </div>
-        <Suspense fallback={<div className="text-center text-gray-400 dark:text-zinc-400">Loading...</div>}>
+        <Suspense fallback={<div className="text-center text-gray-600 dark:text-zinc-400">Loading...</div>}>
           <ResetForm />
         </Suspense>
       </div>

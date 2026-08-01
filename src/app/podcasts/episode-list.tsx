@@ -110,7 +110,7 @@ export function EpisodeList({ episodes, djNames }: EpisodeListProps) {
     <div>
       {/* Filter Bar */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col sm:flex-row gap-4">
+        <div className="bg-white dark:bg-zinc-900/10 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col sm:flex-row gap-4">
           {/* DJ Filter */}
           <div className="flex-1">
             <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
@@ -166,7 +166,7 @@ export function EpisodeList({ episodes, djNames }: EpisodeListProps) {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {paginated.length === 0 ? (
           <div className="text-center py-16">
-            <Mic2 className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+            <Mic2 className="w-12 h-12 text-gray-600 dark:text-zinc-300 mx-auto mb-4" />
             <p className="text-gray-400 text-lg">No episodes match your filters.</p>
             <p className="text-gray-400 text-sm mt-2">Try adjusting your search criteria.</p>
           </div>

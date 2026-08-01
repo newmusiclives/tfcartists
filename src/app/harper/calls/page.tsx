@@ -98,7 +98,7 @@ export default function CallSchedulePage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-blue-50 dark:to-blue-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -110,7 +110,7 @@ export default function CallSchedulePage() {
             <span>Back to Harper Dashboard</span>
           </Link>
           <div className="flex items-center space-x-3">
-            <Phone className="w-8 h-8 text-blue-600" />
+            <Phone className="w-8 h-8 text-blue-600 dark:text-blue-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Call Schedule</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -122,7 +122,7 @@ export default function CallSchedulePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
+        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live call scheduling will appear once GoHighLevel calendar is connected.
         </div>
       </div>
@@ -131,25 +131,25 @@ export default function CallSchedulePage() {
         {/* Stats */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <StatCard
-            icon={<Calendar className="w-6 h-6 text-blue-600" />}
+            icon={<Calendar className="w-6 h-6 text-blue-600 dark:text-blue-300" />}
             label="Today"
             value={stats.today}
             subtitle="calls scheduled"
           />
           <StatCard
-            icon={<Clock className="w-6 h-6 text-purple-600" />}
+            icon={<Clock className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="This Week"
             value={stats.thisWeek}
             subtitle="total calls"
           />
           <StatCard
-            icon={<CheckCircle className="w-6 h-6 text-green-600" />}
+            icon={<CheckCircle className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Close Rate"
             value={`${stats.closeRate}%`}
             subtitle="last 30 days"
           />
           <StatCard
-            icon={<Phone className="w-6 h-6 text-orange-600" />}
+            icon={<Phone className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Avg Duration"
             value={`${stats.avgCallDuration} min`}
             subtitle="per call"
@@ -205,7 +205,7 @@ function StatCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -228,7 +228,7 @@ function CallCard({ call }: { call: any }) {
               {typeConfig.icon} {typeConfig.label}
             </span>
           </div>
-          <div className="text-sm text-gray-600 space-y-1">
+          <div className="text-sm text-gray-600 dark:text-zinc-300 space-y-1">
             <div className="flex items-center space-x-2">
               <User className="w-4 h-4" />
               <span>{call.contact}</span>
@@ -250,7 +250,7 @@ function CallCard({ call }: { call: any }) {
       </div>
 
       {call.notes && (
-        <div className="bg-gray-50 rounded p-3 text-sm text-gray-700 dark:text-zinc-300">
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded p-3 text-sm text-gray-700 dark:text-zinc-300">
           <strong>Notes:</strong> {call.notes}
         </div>
       )}
@@ -267,9 +267,9 @@ function CompletedCallRow({ call }: { call: any }) {
   const typeConfig = typeConfigs[call.type] || { color: "gray", label: call.type };
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg">
       <div className="flex items-center space-x-4 flex-1">
-        <CheckCircle className="w-8 h-8 text-green-600" />
+        <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-300" />
         <div>
           <div className="font-semibold text-gray-900 dark:text-white">{call.business}</div>
           <div className="text-sm text-gray-600 dark:text-zinc-400">{call.contact}</div>

@@ -111,7 +111,7 @@ export default function SponsorAnalyticsPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics</h1>
-            <p className="text-gray-400 dark:text-zinc-400">Ad performance and audience insights</p>
+            <p className="text-gray-600 dark:text-zinc-400">Ad performance and audience insights</p>
           </div>
           <select
             value={months}
@@ -143,7 +143,7 @@ export default function SponsorAnalyticsPage() {
                 <h2 className="font-semibold text-gray-900 dark:text-white">Ad Impressions Over Time</h2>
               </div>
               {data.monthlyData.length === 0 ? (
-                <p className="text-sm text-gray-400 dark:text-zinc-400">No impression data available yet.</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">No impression data available yet.</p>
               ) : (
                 <div className="space-y-3">
                   {(() => {
@@ -156,7 +156,7 @@ export default function SponsorAnalyticsPage() {
                             <p className="text-sm font-medium text-gray-700 dark:text-zinc-300">{point.label}</p>
                           </div>
                           <div className="flex-1 relative">
-                            <div className="h-8 bg-gray-100 rounded-lg overflow-hidden">
+                            <div className="h-8 bg-gray-100 dark:bg-zinc-800 rounded-lg overflow-hidden">
                               <div
                                 className="h-full bg-blue-500 rounded-lg transition-all duration-500"
                                 style={{ width: `${Math.max(pct, 2)}%` }}
@@ -184,7 +184,7 @@ export default function SponsorAnalyticsPage() {
                 <h2 className="font-semibold text-gray-900 dark:text-white">Listener Reach Over Time</h2>
               </div>
               {data.monthlyData.length === 0 ? (
-                <p className="text-sm text-gray-400 dark:text-zinc-400">No listener data available yet.</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">No listener data available yet.</p>
               ) : (
                 <div className="space-y-3">
                   {(() => {
@@ -197,7 +197,7 @@ export default function SponsorAnalyticsPage() {
                             <p className="text-sm font-medium text-gray-700 dark:text-zinc-300">{point.label}</p>
                           </div>
                           <div className="flex-1 relative">
-                            <div className="h-8 bg-gray-100 rounded-lg overflow-hidden">
+                            <div className="h-8 bg-gray-100 dark:bg-zinc-800 rounded-lg overflow-hidden">
                               <div
                                 className="h-full bg-green-500 rounded-lg transition-all duration-500"
                                 style={{ width: `${Math.max(pct, 2)}%` }}
@@ -239,13 +239,13 @@ export default function SponsorAnalyticsPage() {
                               <p className="text-sm font-medium text-gray-700 dark:text-zinc-300">{info.name}</p>
                               <p className="text-xs text-gray-400">{info.time}</p>
                             </div>
-                            <div className="flex-1 h-6 bg-gray-100 rounded-lg overflow-hidden">
+                            <div className="flex-1 h-6 bg-gray-100 dark:bg-zinc-800 rounded-lg overflow-hidden">
                               <div
                                 className={`h-full ${info.color} rounded-lg transition-all`}
                                 style={{ width: `${Math.max(pct, 2)}%` }}
                               />
                             </div>
-                            <span className="text-sm font-medium text-gray-700 w-12 text-right">
+                            <span className="text-sm font-medium text-gray-700 dark:text-zinc-200 w-12 text-right">
                               {plays}
                             </span>
                           </div>
@@ -263,13 +263,13 @@ export default function SponsorAnalyticsPage() {
                   <h2 className="font-semibold text-gray-900 dark:text-white">Audience Locations</h2>
                 </div>
                 {data.topLocations.length === 0 ? (
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">Location data not yet available.</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Location data not yet available.</p>
                 ) : (
                   <div className="space-y-3">
                     {data.topLocations.map((loc, i) => (
                       <div key={loc.location} className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-full bg-gray-100 text-gray-600 text-xs font-medium flex items-center justify-center">
+                          <span className="w-6 h-6 rounded-full bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 text-xs font-medium flex items-center justify-center">
                             {i + 1}
                           </span>
                           <span className="text-sm text-gray-900 dark:text-white">{loc.location}</span>
@@ -318,7 +318,7 @@ export default function SponsorAnalyticsPage() {
                           <td className="py-3 pr-4 text-right text-gray-900 dark:text-white font-medium">{c.impressions.toLocaleString()}</td>
                           <td className="py-3 text-right">
                             <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                              c.status === "active" ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-gray-100 text-gray-600"
+                              c.status === "active" ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300"
                             }`}>
                               {c.status.charAt(0).toUpperCase() + c.status.slice(1)}
                             </span>
@@ -346,18 +346,18 @@ export default function SponsorAnalyticsPage() {
                       return (
                         <div key={ad.id} className="flex items-center gap-4">
                           <div className="w-48 flex-shrink-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">{ad.title}</p>
+                            <p className="text-sm font-medium text-gray-900 dark:text-zinc-100 truncate">{ad.title}</p>
                             <p className="text-xs text-gray-400">
                               {ad.tier} {ad.isActive ? "" : "(inactive)"}
                             </p>
                           </div>
-                          <div className="flex-1 h-6 bg-gray-100 rounded-lg overflow-hidden">
+                          <div className="flex-1 h-6 bg-gray-100 dark:bg-zinc-800 rounded-lg overflow-hidden">
                             <div
                               className={`h-full rounded-lg transition-all ${ad.isActive ? "bg-blue-500" : "bg-gray-300"}`}
                               style={{ width: `${Math.max(pct, 2)}%` }}
                             />
                           </div>
-                          <span className="text-sm font-semibold text-gray-900 w-20 text-right">
+                          <span className="text-sm font-semibold text-gray-900 dark:text-zinc-100 w-20 text-right">
                             {ad.playCount.toLocaleString()} plays
                           </span>
                         </div>

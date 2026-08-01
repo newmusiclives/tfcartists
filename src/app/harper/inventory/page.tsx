@@ -74,7 +74,7 @@ export default function AdInventoryPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-blue-50 dark:to-blue-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -86,7 +86,7 @@ export default function AdInventoryPage() {
             <span>Back to Harper Dashboard</span>
           </Link>
           <div className="flex items-center space-x-3">
-            <Calendar className="w-8 h-8 text-purple-600" />
+            <Calendar className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Ad Inventory Management</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -98,7 +98,7 @@ export default function AdInventoryPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
+        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live inventory data will appear once ad scheduling is connected.
         </div>
       </div>
@@ -107,25 +107,25 @@ export default function AdInventoryPage() {
         {/* Key Metrics */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
-            icon={<Calendar className="w-6 h-6 text-blue-600" />}
+            icon={<Calendar className="w-6 h-6 text-blue-600 dark:text-blue-300" />}
             label="Total Monthly Spots"
             value={stats.totalSpots}
             subtitle="24 spots/hour × 720 hours"
           />
           <MetricCard
-            icon={<CheckCircle className="w-6 h-6 text-green-600" />}
+            icon={<CheckCircle className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Allocated"
             value={stats.allocated}
             subtitle={`${stats.utilization}% utilized`}
           />
           <MetricCard
-            icon={<AlertCircle className="w-6 h-6 text-orange-600" />}
+            icon={<AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Available"
             value={stats.available}
             subtitle="spots remaining"
           />
           <MetricCard
-            icon={<TrendingUp className="w-6 h-6 text-purple-600" />}
+            icon={<TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="Utilization Rate"
             value={`${stats.utilization}%`}
             subtitle="optimal range: 70-85%"
@@ -144,19 +144,19 @@ export default function AdInventoryPage() {
                 {utilizationRate.toFixed(1)}% Utilized
               </div>
             </div>
-            <div className="flex justify-between text-xs text-gray-400 dark:text-zinc-400 mt-2">
+            <div className="flex justify-between text-xs text-gray-600 dark:text-zinc-400 mt-2">
               <span>0 spots</span>
               <span>{totalMonthlySpots.toLocaleString()} spots</span>
             </div>
           </div>
 
           {utilizationRate >= 85 && (
-            <div className="mt-4 bg-orange-50 border border-orange-200 rounded-lg p-4">
-              <div className="flex items-center space-x-2 text-orange-800">
+            <div className="mt-4 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
+              <div className="flex items-center space-x-2 text-orange-800 dark:text-orange-200">
                 <AlertCircle className="w-5 h-5" />
                 <span className="font-semibold">High Utilization Warning</span>
               </div>
-              <p className="text-sm text-orange-700 mt-1">
+              <p className="text-sm text-orange-700 dark:text-orange-300 mt-1">
                 Ad inventory is nearing capacity. Consider premium pricing or waitlist for new sponsors.
               </p>
             </div>
@@ -179,12 +179,12 @@ export default function AdInventoryPage() {
               {tierBreakdown.map((tier) => {
                 const revenuePerSpot = tier.price / tier.spotsPerSponsor;
                 return (
-                  <div key={tier.tier} className="bg-gray-50 rounded-lg p-3 text-center">
+                  <div key={tier.tier} className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3 text-center">
                     <div className="text-xs text-gray-600 dark:text-zinc-400">{tier.tier}</div>
-                    <div className="text-lg font-bold text-green-600">
+                    <div className="text-lg font-bold text-green-600 dark:text-green-300">
                       ${revenuePerSpot.toFixed(2)}
                     </div>
-                    <div className="text-xs text-gray-400 dark:text-zinc-400">per spot</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">per spot</div>
                   </div>
                 );
               })}
@@ -207,7 +207,7 @@ export default function AdInventoryPage() {
 
           <div className="mt-6 pt-6 border-t">
             <div className="flex items-start space-x-2 text-sm text-gray-600 dark:text-zinc-400">
-              <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-300 flex-shrink-0 mt-0.5" />
               <div>
                 <strong>Note:</strong> Subprime hours (6pm-6am) show high utilization.
                 This is optimal as these slots command lower rates. Prime time still has capacity for premium sponsors.
@@ -256,7 +256,7 @@ function MetricCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -316,7 +316,7 @@ function TierAllocationCard({
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1 text-center">
+      <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1 text-center">
         {percentage.toFixed(1)}% of total inventory
       </div>
     </div>
@@ -343,7 +343,7 @@ function TimeSlotRow({
   const status = getStatusColor(percentage);
 
   return (
-    <div className="bg-gray-50 rounded-lg p-4">
+    <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
         <div className="font-semibold text-gray-900 dark:text-white">{slot}</div>
         <div className={`${status.label} ${status.text} px-3 py-1 rounded-full text-xs font-medium`}>

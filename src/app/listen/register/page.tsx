@@ -91,11 +91,11 @@ export default function ListenerRegisterPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 dark:from-blue-950 via-white dark:via-zinc-900 to-indigo-50 dark:to-indigo-950">
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2 text-blue-700 hover:text-blue-800 transition-colors">
+            <Link href="/" className="flex items-center space-x-2 text-blue-700 dark:text-blue-300 hover:text-blue-800 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               <Radio className="w-5 h-5" />
               <span className="font-bold">{currentStation.name}</span>
@@ -107,8 +107,8 @@ export default function ListenerRegisterPage() {
       {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
-            <Headphones className="w-8 h-8 text-blue-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full mb-6">
+            <Headphones className="w-8 h-8 text-blue-600 dark:text-blue-300" />
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Discover Music That Moves You
@@ -129,7 +129,7 @@ export default function ListenerRegisterPage() {
       </section>
 
       {/* Benefits Grid */}
-      <section className="py-16 px-4 bg-white/60">
+      <section className="py-16 px-4 bg-white dark:bg-zinc-900/60">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             Why Listeners Love {currentStation.name}
@@ -161,8 +161,8 @@ export default function ListenerRegisterPage() {
                 key={item.title}
                 className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-blue-100 hover:shadow-md transition-shadow"
               >
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg mb-4">
-                  <item.icon className="w-5 h-5 text-blue-600" />
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg mb-4">
+                  <item.icon className="w-5 h-5 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
@@ -222,7 +222,7 @@ export default function ListenerRegisterPage() {
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="Your name"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
             />
           </div>
 
@@ -237,7 +237,7 @@ export default function ListenerRegisterPage() {
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               placeholder="you@example.com"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
             />
           </div>
 
@@ -249,7 +249,7 @@ export default function ListenerRegisterPage() {
               id="discoverySource"
               value={form.discoverySource}
               onChange={(e) => setForm({ ...form, discoverySource: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors bg-white"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors bg-white dark:bg-zinc-900"
             >
               <option value="">Select one...</option>
               {DISCOVERY_SOURCES.map((s) => (
@@ -275,9 +275,9 @@ export default function ListenerRegisterPage() {
             )}
           </button>
 
-          <p className="text-center text-sm text-gray-400 dark:text-zinc-400">
+          <p className="text-center text-sm text-gray-600 dark:text-zinc-400">
             Already registered?{" "}
-            <Link href="/player" className="text-blue-600 hover:text-blue-700 font-medium">
+            <Link href="/player" className="text-blue-600 dark:text-blue-300 hover:text-blue-700 font-medium">
               Go to player
             </Link>
           </p>

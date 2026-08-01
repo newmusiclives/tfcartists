@@ -299,7 +299,7 @@ export default function StationImagingPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Mic className="w-8 h-8 text-rose-600" />
+              <Mic className="w-8 h-8 text-rose-600 dark:text-rose-300" />
               Station Imaging
             </h1>
             <p className="text-zinc-400 mt-1">Configure imaging voices for promos, IDs, and sweepers</p>
@@ -584,7 +584,7 @@ export default function StationImagingPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <Mic className="w-7 h-7 text-indigo-600" />
+                <Mic className="w-7 h-7 text-indigo-600 dark:text-indigo-300" />
                 Pre-Produced Imaging
               </h2>
               <p className="text-zinc-400 mt-1">Upload ready-to-air promos, sweepers, station IDs, and more</p>

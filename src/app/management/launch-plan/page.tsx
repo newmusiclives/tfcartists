@@ -331,7 +331,7 @@ export default function LaunchPlanPage() {
 
           {/* Overall progress bar */}
           <div className="mt-6">
-            <div className="h-3 bg-white/20 rounded-full overflow-hidden">
+            <div className="h-3 bg-white dark:bg-zinc-900/20 rounded-full overflow-hidden">
               <div
                 className="h-full bg-white dark:bg-zinc-900 rounded-full transition-all duration-500"
                 style={{ width: `${overallPct}%` }}
@@ -364,12 +364,12 @@ export default function LaunchPlanPage() {
                 <Link key={key} href={tc.href} className="block group">
                   <div className={`rounded-xl border-2 ${tc.border} p-4 text-center hover:shadow-md transition-all`}>
                     <div className={`text-sm font-bold ${tc.color}`}>{tc.label}</div>
-                    <div className="text-2xl font-bold text-gray-900 mt-1">{counts.done}/{counts.total}</div>
-                    <div className="text-xs text-gray-400 dark:text-zinc-400">actions</div>
+                    <div className="text-2xl font-bold text-gray-900 dark:text-zinc-100 mt-1">{counts.done}/{counts.total}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">actions</div>
                     <div className="mt-2 h-1.5 bg-gray-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                       <div className={`h-full rounded-full ${tc.bg.replace("50", "500").replace("bg-", "bg-")}`} style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{pct}%</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">{pct}%</div>
                   </div>
                 </Link>
               );
@@ -386,28 +386,28 @@ export default function LaunchPlanPage() {
               <thead>
                 <tr className="border-b">
                   <th className="text-left py-3 px-4 font-semibold text-gray-900 dark:text-white">Milestone</th>
-                  <th className="text-center py-3 px-4 font-semibold text-blue-700">
+                  <th className="text-center py-3 px-4 font-semibold text-blue-700 dark:text-blue-300">
                     <div className="flex items-center justify-center gap-1"><Headphones className="w-4 h-4" /> DAU</div>
                   </th>
-                  <th className="text-center py-3 px-4 font-semibold text-purple-700">
+                  <th className="text-center py-3 px-4 font-semibold text-purple-700 dark:text-purple-300">
                     <div className="flex items-center justify-center gap-1"><Music className="w-4 h-4" /> Artists</div>
                   </th>
-                  <th className="text-center py-3 px-4 font-semibold text-green-700">
+                  <th className="text-center py-3 px-4 font-semibold text-green-700 dark:text-green-300">
                     <div className="flex items-center justify-center gap-1"><Store className="w-4 h-4" /> Sponsors</div>
                   </th>
                   <th className="text-center py-3 px-4 font-semibold text-amber-700 dark:text-amber-400">
                     <div className="flex items-center justify-center gap-1"><DollarSign className="w-4 h-4" /> Ad Revenue/mo</div>
                   </th>
-                  <th className="text-center py-3 px-4 font-semibold text-gray-400 dark:text-zinc-400">Team Owner</th>
+                  <th className="text-center py-3 px-4 font-semibold text-gray-600 dark:text-zinc-400">Team Owner</th>
                 </tr>
               </thead>
               <tbody>
                 {KPI_MILESTONES.map((m, i) => (
-                  <tr key={m.period} className={`border-b ${i === KPI_MILESTONES.length - 1 ? "bg-amber-50 font-semibold" : ""}`}>
+                  <tr key={m.period} className={`border-b ${i === KPI_MILESTONES.length - 1 ? "bg-amber-50 dark:bg-amber-950 font-semibold" : ""}`}>
                     <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{m.period}</td>
-                    <td className="py-3 px-4 text-center text-blue-700">{m.dau.toLocaleString()}</td>
-                    <td className="py-3 px-4 text-center text-purple-700">{m.artists}</td>
-                    <td className="py-3 px-4 text-center text-green-700">{m.sponsors}</td>
+                    <td className="py-3 px-4 text-center text-blue-700 dark:text-blue-300">{m.dau.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-center text-purple-700 dark:text-purple-300">{m.artists}</td>
+                    <td className="py-3 px-4 text-center text-green-700 dark:text-green-300">{m.sponsors}</td>
                     <td className="py-3 px-4 text-center text-amber-700 dark:text-amber-400">{m.revenue}</td>
                     <td className="py-3 px-4 text-center text-gray-400 text-xs">
                       {i === 0 ? "All Teams" : i === 1 ? "Riley + Harper" : i === 2 ? "All Teams" : "Management"}
@@ -418,20 +418,20 @@ export default function LaunchPlanPage() {
             </table>
           </div>
           {stats?.kpis && (
-            <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <div className="text-sm font-bold text-blue-700 mb-2">Current Progress (Live)</div>
+            <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-2">Current Progress (Live)</div>
               <div className="grid grid-cols-4 gap-4 text-center">
                 <div>
-                  <div className="text-lg font-bold text-blue-700">{stats.kpis.listenerCount}</div>
-                  <div className="text-xs text-blue-600">Listeners</div>
+                  <div className="text-lg font-bold text-blue-700 dark:text-blue-300">{stats.kpis.listenerCount}</div>
+                  <div className="text-xs text-blue-600 dark:text-blue-300">Listeners</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-purple-700">{stats.kpis.artistCount}</div>
-                  <div className="text-xs text-purple-600">Artists</div>
+                  <div className="text-lg font-bold text-purple-700 dark:text-purple-300">{stats.kpis.artistCount}</div>
+                  <div className="text-xs text-purple-600 dark:text-purple-300">Artists</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-green-700">{stats.kpis.activeSponsors}</div>
-                  <div className="text-xs text-green-600">Sponsors</div>
+                  <div className="text-lg font-bold text-green-700 dark:text-green-300">{stats.kpis.activeSponsors}</div>
+                  <div className="text-xs text-green-600 dark:text-green-300">Sponsors</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-amber-700 dark:text-amber-400">${stats.kpis.totalRevenue?.toLocaleString()}</div>
@@ -470,12 +470,12 @@ export default function LaunchPlanPage() {
                           <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${colors.light} ${colors.text}`}>
                             Phase {phase.phase}
                           </span>
-                          <span className="text-xs text-gray-400 dark:text-zinc-400">{phase.timeline}</span>
+                          <span className="text-xs text-gray-600 dark:text-zinc-400">{phase.timeline}</span>
                           {isComplete && (
                             <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400">COMPLETE</span>
                           )}
                         </div>
-                        <div className="font-bold text-gray-900 mt-1">{phase.name}</div>
+                        <div className="font-bold text-gray-900 dark:text-zinc-100 mt-1">{phase.name}</div>
                         <div className="text-sm text-gray-600 dark:text-zinc-400">{phase.subtitle}</div>
                       </div>
                     </div>
@@ -495,13 +495,13 @@ export default function LaunchPlanPage() {
 
                   {/* Expanded Action Items */}
                   {isExpanded && (
-                    <div className="border-t bg-white">
+                    <div className="border-t bg-white dark:bg-zinc-900">
                       <div className="divide-y">
                         {phase.actions.map((action) => {
                           const isDone = completed.has(action.id);
                           const tc = TEAM_CONFIG[action.team];
                           return (
-                            <div key={action.id} className={`flex items-start gap-4 p-4 transition-colors ${isDone ? "bg-green-50/50" : "hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
+                            <div key={action.id} className={`flex items-start gap-4 p-4 transition-colors ${isDone ? "bg-green-50 dark:bg-green-950/50" : "hover:bg-gray-50 dark:hover:bg-zinc-800"}`}>
                               {/* Checkbox */}
                               <button
                                 onClick={() => toggleItem(action.id)}
@@ -516,7 +516,7 @@ export default function LaunchPlanPage() {
 
                               {/* Content */}
                               <div className="flex-1 min-w-0">
-                                <div className={`font-medium ${isDone ? "text-gray-400 line-through" : "text-gray-900"}`}>
+                                <div className={`font-medium ${isDone ? "text-gray-400 line-through" : "text-gray-900 dark:text-zinc-100"}`}>
                                   {action.label}
                                 </div>
                                 {action.detail && (
@@ -557,53 +557,53 @@ export default function LaunchPlanPage() {
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Revenue Model at Full Capacity (Month 3)</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-green-50 rounded-xl p-5 border border-green-200">
+            <div className="bg-green-50 dark:bg-green-950 rounded-xl p-5 border border-green-200 dark:border-green-800">
               <div className="flex items-center gap-2 mb-3">
-                <Building2 className="w-5 h-5 text-green-600" />
-                <span className="font-bold text-green-700">Sponsor Revenue</span>
+                <Building2 className="w-5 h-5 text-green-600 dark:text-green-300" />
+                <span className="font-bold text-green-700 dark:text-green-300">Sponsor Revenue</span>
               </div>
-              <div className="text-3xl font-bold text-green-700">$22,250</div>
-              <div className="text-sm text-green-600 mt-1">125 sponsors &times; avg $178/mo</div>
+              <div className="text-3xl font-bold text-green-700 dark:text-green-300">$22,250</div>
+              <div className="text-sm text-green-600 dark:text-green-300 mt-1">125 sponsors &times; avg $178/mo</div>
               <div className="mt-3 space-y-1 text-sm">
-                <div className="flex justify-between text-green-700">
+                <div className="flex justify-between text-green-700 dark:text-green-300">
                   <span>80% &rarr; Artist Pool</span>
                   <span className="font-bold">$17,800</span>
                 </div>
-                <div className="flex justify-between text-green-700">
+                <div className="flex justify-between text-green-700 dark:text-green-300">
                   <span>20% &rarr; Station</span>
                   <span className="font-bold">$4,450</span>
                 </div>
               </div>
-              <div className="mt-2 text-xs text-green-600">Owner: Team Harper</div>
+              <div className="mt-2 text-xs text-green-600 dark:text-green-300">Owner: Team Harper</div>
             </div>
 
-            <div className="bg-purple-50 rounded-xl p-5 border border-purple-200">
+            <div className="bg-purple-50 dark:bg-purple-950 rounded-xl p-5 border border-purple-200 dark:border-purple-800">
               <div className="flex items-center gap-2 mb-3">
-                <Music className="w-5 h-5 text-purple-600" />
-                <span className="font-bold text-purple-700">Artist Tier Revenue</span>
+                <Music className="w-5 h-5 text-purple-600 dark:text-purple-300" />
+                <span className="font-bold text-purple-700 dark:text-purple-300">Artist Tier Revenue</span>
               </div>
-              <div className="text-3xl font-bold text-purple-700">$3,900</div>
-              <div className="text-sm text-purple-600 mt-1">68 paid artists across 4 tiers</div>
-              <div className="mt-3 space-y-1 text-xs text-purple-700">
+              <div className="text-3xl font-bold text-purple-700 dark:text-purple-300">$3,900</div>
+              <div className="text-sm text-purple-600 dark:text-purple-300 mt-1">68 paid artists across 4 tiers</div>
+              <div className="mt-3 space-y-1 text-xs text-purple-700 dark:text-purple-300">
                 <div className="flex justify-between"><span>Tier $5 &times; 34</span><span>$170</span></div>
                 <div className="flex justify-between"><span>Tier $20 &times; 20</span><span>$400</span></div>
                 <div className="flex justify-between"><span>Tier $50 &times; 10</span><span>$500</span></div>
                 <div className="flex justify-between"><span>Tier $120 &times; 4</span><span>$480</span></div>
               </div>
-              <div className="mt-2 text-xs text-purple-600">Owner: Team Riley</div>
+              <div className="mt-2 text-xs text-purple-600 dark:text-purple-300">Owner: Team Riley</div>
             </div>
 
-            <div className="bg-amber-50 rounded-xl p-5 border border-amber-200">
+            <div className="bg-amber-50 dark:bg-amber-950 rounded-xl p-5 border border-amber-200 dark:border-amber-800">
               <div className="flex items-center gap-2 mb-3">
-                <DollarSign className="w-5 h-5 text-amber-600" />
+                <DollarSign className="w-5 h-5 text-amber-600 dark:text-amber-300" />
                 <span className="font-bold text-amber-700 dark:text-amber-400">Net Station Revenue</span>
               </div>
               <div className="text-3xl font-bold text-amber-700 dark:text-amber-400">$8,350</div>
-              <div className="text-sm text-amber-600 mt-1">per month at full capacity</div>
+              <div className="text-sm text-amber-600 dark:text-amber-300 mt-1">per month at full capacity</div>
               <div className="mt-3 space-y-1 text-sm text-amber-700 dark:text-amber-400">
                 <div className="flex justify-between"><span>Tier revenue</span><span>$3,900</span></div>
                 <div className="flex justify-between"><span>Sponsor net (20%)</span><span>$4,450</span></div>
-                <div className="flex justify-between border-t border-amber-300 pt-1 font-bold"><span>Total</span><span>$8,350</span></div>
+                <div className="flex justify-between border-t border-amber-300 dark:border-amber-700 pt-1 font-bold"><span>Total</span><span>$8,350</span></div>
               </div>
               <div className="mt-2 text-xs text-amber-600 dark:text-amber-400">Owner: Management</div>
             </div>
@@ -615,28 +615,28 @@ export default function LaunchPlanPage() {
           <h2 className="text-xl font-bold mb-4">Day 90 Success Definition</h2>
           <p className="text-amber-100 mb-6">If these targets are hit, the model is proven and ready to scale to Station #2.</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur-sm">
+            <div className="bg-white dark:bg-zinc-900/10 rounded-xl p-4 text-center backdrop-blur-sm">
               <div className="text-3xl font-bold">1,250</div>
               <div className="text-amber-200 text-sm">Daily Active Users</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur-sm">
+            <div className="bg-white dark:bg-zinc-900/10 rounded-xl p-4 text-center backdrop-blur-sm">
               <div className="text-3xl font-bold">340</div>
               <div className="text-amber-200 text-sm">Artists Enrolled</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur-sm">
+            <div className="bg-white dark:bg-zinc-900/10 rounded-xl p-4 text-center backdrop-blur-sm">
               <div className="text-3xl font-bold">125</div>
               <div className="text-amber-200 text-sm">Active Sponsors</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur-sm">
+            <div className="bg-white dark:bg-zinc-900/10 rounded-xl p-4 text-center backdrop-blur-sm">
               <div className="text-3xl font-bold">$8,350</div>
               <div className="text-amber-200 text-sm">Monthly Net Revenue</div>
             </div>
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
-            <div className="bg-white/10 rounded-lg px-3 py-1.5 text-sm">52% listener retention</div>
-            <div className="bg-white/10 rounded-lg px-3 py-1.5 text-sm">85%+ sponsor renewal</div>
-            <div className="bg-white/10 rounded-lg px-3 py-1.5 text-sm">Active Discord community</div>
-            <div className="bg-white/10 rounded-lg px-3 py-1.5 text-sm">Artists report feeling valued</div>
+            <div className="bg-white dark:bg-zinc-900/10 rounded-lg px-3 py-1.5 text-sm">52% listener retention</div>
+            <div className="bg-white dark:bg-zinc-900/10 rounded-lg px-3 py-1.5 text-sm">85%+ sponsor renewal</div>
+            <div className="bg-white dark:bg-zinc-900/10 rounded-lg px-3 py-1.5 text-sm">Active Discord community</div>
+            <div className="bg-white dark:bg-zinc-900/10 rounded-lg px-3 py-1.5 text-sm">Artists report feeling valued</div>
           </div>
         </section>
 

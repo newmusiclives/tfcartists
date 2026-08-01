@@ -57,55 +57,55 @@ export default async function HomePage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <Image src="/logos/ncr-logo.png" alt="NCR" width={32} height={32} className="h-8 w-auto object-contain" />
-              <StationName className="font-bold text-xl text-amber-700" />
+              <StationName className="font-bold text-xl text-amber-700 dark:text-amber-300" />
             </div>
             <div className="flex items-center space-x-4">
               <Link
                 href="/station"
-                className="text-amber-700 hover:text-amber-800 font-medium transition-colors inline-flex items-center space-x-1"
+                className="text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium transition-colors inline-flex items-center space-x-1"
               >
                 <Radio className="w-4 h-4" />
                 <span>NCR</span>
               </Link>
               <Link
                 href="/network"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors"
               >
                 Network
               </Link>
               <Link
                 href="/admin"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors"
               >
                 Admin
               </Link>
               <Link
                 href="/parker"
-                className="text-rose-600 hover:text-rose-700 font-medium transition-colors"
+                className="text-rose-600 dark:text-rose-300 hover:text-rose-700 font-medium transition-colors"
               >
                 Parker
               </Link>
               <Link
                 href="/riley"
-                className="text-purple-600 hover:text-purple-700 font-medium transition-colors"
+                className="text-purple-600 dark:text-purple-300 hover:text-purple-700 font-medium transition-colors"
               >
                 Riley
               </Link>
               <Link
                 href="/cassidy"
-                className="text-teal-600 hover:text-teal-700 font-medium transition-colors"
+                className="text-teal-600 dark:text-teal-300 hover:text-teal-700 font-medium transition-colors"
               >
                 Cassidy
               </Link>
               <Link
                 href="/elliot"
-                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                className="text-blue-600 dark:text-blue-300 hover:text-blue-700 font-medium transition-colors"
               >
                 Elliot
               </Link>
               <Link
                 href="/harper"
-                className="text-green-600 hover:text-green-700 font-medium transition-colors"
+                className="text-green-600 dark:text-green-300 hover:text-green-700 font-medium transition-colors"
               >
                 Harper
               </Link>
@@ -140,7 +140,7 @@ export default async function HomePage() {
         <div className="text-center">
           <Image src="/logos/ncr-logo.png" alt="North Country Radio" width={374} height={374} className="mx-auto h-72 sm:h-96 w-auto object-contain mb-4" />
 
-          <div className="inline-flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
+          <div className="inline-flex items-center space-x-2 bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 px-4 py-2 rounded-full text-sm font-medium">
             <Radio className="w-4 h-4" />
             <span>{NETWORK_NAME} Network</span>
           </div>
@@ -189,31 +189,31 @@ export default async function HomePage() {
           {/* Row 1: Parker + Riley centered */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2 lg:col-start-2">
             <div className="flex items-center space-x-3 mb-4">
-              <Radio className="w-10 h-10 text-rose-600" />
+              <Radio className="w-10 h-10 text-rose-600 dark:text-rose-300" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Parker&apos;s Team</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">Parker&apos;s Team</h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Station Management</p>
               </div>
             </div>
             <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
+                <span className="text-rose-600 dark:text-rose-300">✓</span>
                 <span>Show scheduling & programming</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
+                <span className="text-rose-600 dark:text-rose-300">✓</span>
                 <span>Music rotation & library mgmt</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
+                <span className="text-rose-600 dark:text-rose-300">✓</span>
                 <span>Commercial traffic & ad ops</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
+                <span className="text-rose-600 dark:text-rose-300">✓</span>
                 <span>Listener services & engagement</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-rose-600">✓</span>
+                <span className="text-rose-600 dark:text-rose-300">✓</span>
                 <span>FCC compliance, 24/7 operations</span>
               </li>
             </ul>
@@ -221,31 +221,31 @@ export default async function HomePage() {
 
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <Users className="w-10 h-10 text-purple-600" />
+              <Users className="w-10 h-10 text-purple-600 dark:text-purple-300" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Riley's Team</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">Riley's Team</h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Artist Acquisition</p>
               </div>
             </div>
             <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
+                <span className="text-purple-600 dark:text-purple-300">✓</span>
                 <span>Discovers emerging artists</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
+                <span className="text-purple-600 dark:text-purple-300">✓</span>
                 <span>Automated outreach campaigns</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
+                <span className="text-purple-600 dark:text-purple-300">✓</span>
                 <span>Activates FREE radio airplay</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
+                <span className="text-purple-600 dark:text-purple-300">✓</span>
                 <span>Manages upgrade opportunities</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-purple-600">✓</span>
+                <span className="text-purple-600 dark:text-purple-300">✓</span>
                 <span>{metrics.artistCount.toLocaleString()} artists in pipeline</span>
               </li>
             </ul>
@@ -254,31 +254,31 @@ export default async function HomePage() {
           {/* Row 2: Cassidy, Elliot, Harper */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <Award className="w-10 h-10 text-teal-600" />
+              <Award className="w-10 h-10 text-teal-600 dark:text-teal-300" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Cassidy's Team</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">Cassidy's Team</h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Submission Review</p>
               </div>
             </div>
             <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
-                <span className="text-teal-600">✓</span>
+                <span className="text-teal-600 dark:text-teal-300">✓</span>
                 <span>Expert 6-person review panel</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-teal-600">✓</span>
+                <span className="text-teal-600 dark:text-teal-300">✓</span>
                 <span>5-7 day review process</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-teal-600">✓</span>
+                <span className="text-teal-600 dark:text-teal-300">✓</span>
                 <span>4-tier placement system</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-teal-600">✓</span>
+                <span className="text-teal-600 dark:text-teal-300">✓</span>
                 <span>95% placement success rate</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-teal-600">✓</span>
+                <span className="text-teal-600 dark:text-teal-300">✓</span>
                 <span>{metrics.songCount.toLocaleString()} songs in rotation</span>
               </li>
             </ul>
@@ -286,31 +286,31 @@ export default async function HomePage() {
 
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <Target className="w-10 h-10 text-blue-600" />
+              <Target className="w-10 h-10 text-blue-600 dark:text-blue-300" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Elliot's Team</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">Elliot's Team</h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Listener Growth</p>
               </div>
             </div>
             <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
-                <span className="text-blue-600">✓</span>
+                <span className="text-blue-600 dark:text-blue-300">✓</span>
                 <span>Viral content creation</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-blue-600">✓</span>
+                <span className="text-blue-600 dark:text-blue-300">✓</span>
                 <span>Artist fan activation</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-blue-600">✓</span>
+                <span className="text-blue-600 dark:text-blue-300">✓</span>
                 <span>Community building campaigns</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-blue-600">✓</span>
+                <span className="text-blue-600 dark:text-blue-300">✓</span>
                 <span>Habit formation & retention</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-blue-600">✓</span>
+                <span className="text-blue-600 dark:text-blue-300">✓</span>
                 <span>{metrics.listenerCount.toLocaleString()} listeners and growing</span>
               </li>
             </ul>
@@ -318,31 +318,31 @@ export default async function HomePage() {
 
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-8 shadow-lg lg:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <DollarSign className="w-10 h-10 text-green-600" />
+              <DollarSign className="w-10 h-10 text-green-600 dark:text-green-300" />
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Harper's Team</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 whitespace-nowrap">Harper's Team</h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Sponsor Acquisition</p>
               </div>
             </div>
             <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
               <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
+                <span className="text-green-600 dark:text-green-300">✓</span>
                 <span>Music-related businesses</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
+                <span className="text-green-600 dark:text-green-300">✓</span>
                 <span>Local craft makers & venues</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
+                <span className="text-green-600 dark:text-green-300">✓</span>
                 <span>Community sponsor outreach</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
+                <span className="text-green-600 dark:text-green-300">✓</span>
                 <span>4-tier sponsorship packages</span>
               </li>
               <li className="flex items-center space-x-2">
-                <span className="text-green-600">✓</span>
+                <span className="text-green-600 dark:text-green-300">✓</span>
                 <span>{metrics.sponsorCount.toLocaleString()} sponsors on board</span>
               </li>
             </ul>
@@ -390,17 +390,17 @@ export default async function HomePage() {
             The TrueFans Difference
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">92%</div>
               <div className="text-amber-100">Goes to Artists</div>
               <div className="text-sm text-amber-200 mt-2">Industry-leading donation rate</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">24/7</div>
               <div className="text-amber-100">Live Radio</div>
               <div className="text-sm text-amber-200 mt-2">AI DJs + curated programming</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900/10 backdrop-blur-sm rounded-xl p-6 text-center">
               <div className="text-4xl font-bold mb-2">100%</div>
               <div className="text-amber-100">Transparent</div>
               <div className="text-sm text-amber-200 mt-2">Every dollar tracked & reported</div>
@@ -409,7 +409,7 @@ export default async function HomePage() {
           <div className="mt-8 text-center">
             <Link
               href="/admin"
-              className="inline-flex items-center space-x-2 bg-white text-amber-700 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-xl"
+              className="inline-flex items-center space-x-2 bg-white dark:bg-zinc-900 text-amber-700 dark:text-amber-300 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-xl"
             >
               <span>View Full Dashboard</span>
               <ArrowRight className="w-5 h-5" />

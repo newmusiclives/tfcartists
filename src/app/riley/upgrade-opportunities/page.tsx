@@ -122,7 +122,7 @@ export default function UpgradeOpportunitiesPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-blue-50 dark:from-blue-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-zinc-400">Loading upgrade opportunities...</p>
@@ -132,7 +132,7 @@ export default function UpgradeOpportunitiesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 dark:from-blue-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -144,7 +144,7 @@ export default function UpgradeOpportunitiesPage() {
             <span>Back to Riley Dashboard</span>
           </Link>
           <div className="flex items-center space-x-3">
-            <TrendingUp className="w-8 h-8 text-blue-600" />
+            <TrendingUp className="w-8 h-8 text-blue-600 dark:text-blue-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Tier Upgrade Opportunities</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -159,25 +159,25 @@ export default function UpgradeOpportunitiesPage() {
         {/* Stats Bar */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <StatCard
-            icon={<TrendingUp className="w-6 h-6 text-blue-600" />}
+            icon={<TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-300" />}
             label="Total Opportunities"
             value={stats.total}
             subtitle="Identified candidates"
           />
           <StatCard
-            icon={<MessageCircle className="w-6 h-6 text-green-600" />}
+            icon={<MessageCircle className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Contacted"
             value={stats.contacted}
             subtitle="Outreach sent"
           />
           <StatCard
-            icon={<Mail className="w-6 h-6 text-orange-600" />}
+            icon={<Mail className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Pending Outreach"
             value={stats.notContacted}
             subtitle="Not yet contacted"
           />
           <StatCard
-            icon={<TrendingUp className="w-6 h-6 text-purple-600" />}
+            icon={<TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="Potential Revenue"
             value={`$${stats.potentialRevenue}`}
             subtitle="Monthly if all upgrade"
@@ -217,7 +217,7 @@ export default function UpgradeOpportunitiesPage() {
               />
             ))}
             {filteredOpportunities.length === 0 && (
-              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-12 text-gray-600 dark:text-zinc-400">
                 No opportunities found
               </div>
             )}
@@ -225,7 +225,7 @@ export default function UpgradeOpportunitiesPage() {
         </div>
 
         {/* Upgrade Strategy */}
-        <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+        <div className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Upgrade Strategy</h2>
           <div className="space-y-4 text-sm text-gray-700 dark:text-zinc-300">
             <div className="bg-white dark:bg-zinc-900 rounded-lg p-4">
@@ -261,15 +261,15 @@ export default function UpgradeOpportunitiesPage() {
         </div>
 
         {/* Team Member Info */}
-        <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+        <div className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <div className="flex items-start space-x-4">
-            <div className="bg-purple-100 rounded-full p-3">
-              <User className="w-8 h-8 text-purple-600" />
+            <div className="bg-purple-100 dark:bg-purple-900 rounded-full p-3">
+              <User className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">Riley Carpenter</h3>
               <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">AI Sales Director</p>
-              <div className="text-sm text-gray-700 space-y-2">
+              <div className="text-sm text-gray-700 dark:text-zinc-200 space-y-2">
                 <p><strong>Responsibilities:</strong></p>
                 <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-zinc-400">
                   <li>Identify artists ready for tier upgrades</li>
@@ -304,7 +304,7 @@ function StatCard({ icon, label, value, subtitle }: { icon: React.ReactNode; lab
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -316,7 +316,7 @@ function FilterButton({ active, onClick, label, count }: { active: boolean; onCl
       className={`px-4 py-2 rounded-lg font-medium transition-colors ${
         active
           ? "bg-blue-600 text-white"
-          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          : "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 hover:bg-gray-200"
       }`}
     >
       {label} ({count})
@@ -336,7 +336,7 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityIt
   };
 
   return (
-    <div className={`bg-white border-2 ${opportunity.contacted ? 'border-green-200' : 'border-blue-200'} rounded-lg p-4 hover:shadow-md transition-shadow`}>
+    <div className={`bg-white dark:bg-zinc-900 border-2 ${opportunity.contacted ? 'border-green-200' : 'border-blue-200'} rounded-lg p-4 hover:shadow-md transition-shadow`}>
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
@@ -352,7 +352,7 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityIt
             )}
           </div>
           <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">{opportunity.email}</div>
-          <div className="flex items-center space-x-4 text-xs text-gray-400 dark:text-zinc-400">
+          <div className="flex items-center space-x-4 text-xs text-gray-600 dark:text-zinc-400">
             <span>{opportunity.tracksSubmitted} tracks submitted</span>
             <span>{opportunity.monthsSinceJoin} months on platform</span>
             <span>{opportunity.currentPlays} plays vs {opportunity.targetPlays} allocated</span>
@@ -361,20 +361,20 @@ function OpportunityCard({ opportunity, onSelect }: { opportunity: OpportunityIt
 
         <div className="flex items-center space-x-6">
           <div className="text-center">
-            <div className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Current</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Current</div>
             <div className="font-bold text-gray-700 dark:text-zinc-300">{opportunity.currentTier}</div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">${currentPrice}/mo</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">${currentPrice}/mo</div>
           </div>
           <div className="text-gray-400 text-2xl">→</div>
           <div className="text-center">
-            <div className="text-xs text-blue-600 mb-1">Suggested</div>
-            <div className="font-bold text-blue-600">{opportunity.suggestedTier}</div>
-            <div className="text-xs text-blue-600">${suggestedPrice}/mo</div>
+            <div className="text-xs text-blue-600 dark:text-blue-300 mb-1">Suggested</div>
+            <div className="font-bold text-blue-600 dark:text-blue-300">{opportunity.suggestedTier}</div>
+            <div className="text-xs text-blue-600 dark:text-blue-300">${suggestedPrice}/mo</div>
           </div>
-          <div className="text-center bg-purple-50 rounded-lg p-3">
+          <div className="text-center bg-purple-50 dark:bg-purple-950 rounded-lg p-3">
             <div className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Revenue Gain</div>
-            <div className="text-lg font-bold text-purple-600">+${priceDiff}</div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">per month</div>
+            <div className="text-lg font-bold text-purple-600 dark:text-purple-300">+${priceDiff}</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">per month</div>
           </div>
           <button
             onClick={() => onSelect(opportunity)}
@@ -432,7 +432,7 @@ TrueFans RADIO™ Network`;
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b sticky top-0 bg-white z-10">
+        <div className="p-6 border-b sticky top-0 bg-white dark:bg-zinc-900 z-10">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Upgrade Opportunity</h2>
             <button
@@ -448,7 +448,7 @@ TrueFans RADIO™ Network`;
           {/* Artist Info */}
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Artist Details</h3>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-gray-600 dark:text-zinc-400">Name:</span>
@@ -474,16 +474,16 @@ TrueFans RADIO™ Network`;
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Performance Analysis</h3>
             <div className="grid grid-cols-3 gap-4">
-              <div className="bg-blue-50 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold text-blue-600">{opportunity.currentPlays}</div>
+              <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-4 text-center">
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">{opportunity.currentPlays}</div>
                 <div className="text-xs text-gray-600 dark:text-zinc-400">Actual Plays</div>
               </div>
-              <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-gray-600 dark:text-zinc-400">{currentPlaysAllocation}</div>
                 <div className="text-xs text-gray-600 dark:text-zinc-400">Current Allocation</div>
               </div>
-              <div className="bg-green-50 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold text-green-600">{opportunity.tracksSubmitted}</div>
+              <div className="bg-green-50 dark:bg-green-950 rounded-lg p-4 text-center">
+                <div className="text-2xl font-bold text-green-600 dark:text-green-300">{opportunity.tracksSubmitted}</div>
                 <div className="text-xs text-gray-600 dark:text-zinc-400">Tracks Submitted</div>
               </div>
             </div>
@@ -493,10 +493,10 @@ TrueFans RADIO™ Network`;
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Upgrade Comparison</h3>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
                 <div className="text-center mb-3">
                   <div className="text-lg font-bold text-gray-700 dark:text-zinc-300">{opportunity.currentTier}</div>
-                  <div className="text-sm text-gray-400 dark:text-zinc-400">Current Tier</div>
+                  <div className="text-sm text-gray-600 dark:text-zinc-400">Current Tier</div>
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
@@ -514,23 +514,23 @@ TrueFans RADIO™ Network`;
                 </div>
               </div>
 
-              <div className="bg-blue-50 rounded-lg p-4 border-2 border-blue-300">
+              <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-4 border-2 border-blue-300 dark:border-blue-700">
                 <div className="text-center mb-3">
-                  <div className="text-lg font-bold text-blue-600">{opportunity.suggestedTier}</div>
-                  <div className="text-sm text-blue-600">Recommended Tier</div>
+                  <div className="text-lg font-bold text-blue-600 dark:text-blue-300">{opportunity.suggestedTier}</div>
+                  <div className="text-sm text-blue-600 dark:text-blue-300">Recommended Tier</div>
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-zinc-400">Price:</span>
-                    <span className="font-semibold text-blue-600">${AIRPLAY_TIER_PRICING[opportunity.suggestedTier as keyof typeof AIRPLAY_TIER_PRICING]}/mo</span>
+                    <span className="font-semibold text-blue-600 dark:text-blue-300">${AIRPLAY_TIER_PRICING[opportunity.suggestedTier as keyof typeof AIRPLAY_TIER_PRICING]}/mo</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-zinc-400">Plays:</span>
-                    <span className="font-semibold text-blue-600">{suggestedPlaysAllocation}/mo</span>
+                    <span className="font-semibold text-blue-600 dark:text-blue-300">{suggestedPlaysAllocation}/mo</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-zinc-400">Shares:</span>
-                    <span className="font-semibold text-blue-600">{suggestedShares}</span>
+                    <span className="font-semibold text-blue-600 dark:text-blue-300">{suggestedShares}</span>
                   </div>
                 </div>
               </div>
@@ -538,10 +538,10 @@ TrueFans RADIO™ Network`;
           </div>
 
           {/* Reason */}
-          <div className="bg-purple-50 rounded-lg p-4">
+          <div className="bg-purple-50 dark:bg-purple-950 rounded-lg p-4">
             <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Why This Upgrade?</h3>
-            <p className="text-gray-700 text-sm">{opportunity.reason}</p>
-            <p className="text-gray-700 text-sm mt-2"><strong>ROI:</strong> {opportunity.estimatedROI}</p>
+            <p className="text-gray-700 dark:text-zinc-200 text-sm">{opportunity.reason}</p>
+            <p className="text-gray-700 dark:text-zinc-200 text-sm mt-2"><strong>ROI:</strong> {opportunity.estimatedROI}</p>
           </div>
 
           {/* Email Template */}
@@ -550,19 +550,19 @@ TrueFans RADIO™ Network`;
             <textarea
               value={emailTemplate}
               readOnly
-              className="w-full p-4 border border-gray-300 dark:border-zinc-700 rounded-lg font-mono text-sm bg-gray-50"
+              className="w-full p-4 border border-gray-300 dark:border-zinc-700 rounded-lg font-mono text-sm bg-gray-50 dark:bg-zinc-900"
               rows={15}
             />
           </div>
         </div>
 
         {/* Actions */}
-        <div className="p-6 border-t bg-gray-50 sticky bottom-0 flex items-center justify-end space-x-3">
+        <div className="p-6 border-t bg-gray-50 dark:bg-zinc-900 sticky bottom-0 flex items-center justify-end space-x-3">
           {!opportunity.contacted && (
             <>
               <button
                 onClick={onClose}
-                className="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                className="bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium"
               >
                 Cancel
               </button>

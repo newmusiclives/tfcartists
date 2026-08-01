@@ -493,7 +493,7 @@ export default function ShowReelPage() {
             <div className="mt-10 text-center">
               <Link
                 href="/operator/signup"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-lg bg-white text-black hover:bg-zinc-100 transition-colors active:scale-[0.98]"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-lg bg-white dark:bg-zinc-900 text-black hover:bg-zinc-100 transition-colors active:scale-[0.98]"
               >
                 Ready to Launch This Station?
                 <ArrowRight className="w-5 h-5" />

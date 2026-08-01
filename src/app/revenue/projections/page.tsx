@@ -167,7 +167,7 @@ export default function RevenueProjectionsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-blue-50 dark:to-blue-950">
       <SharedNav />
 
       {/* Header */}
@@ -175,7 +175,7 @@ export default function RevenueProjectionsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Target className="w-8 h-8 text-purple-600" />
+              <Target className="w-8 h-8 text-purple-600 dark:text-purple-300" />
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Revenue Projections</h1>
                 <p className="text-gray-600 dark:text-zinc-400">
@@ -185,13 +185,13 @@ export default function RevenueProjectionsPage() {
             </div>
 
             {/* Capacity Toggle */}
-            <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
+            <div className="flex items-center space-x-2 bg-gray-100 dark:bg-zinc-800 rounded-lg p-1">
               <button
                 onClick={() => setCapacity("60")}
                 className={`px-4 py-2 rounded-md font-semibold transition-all ${
                   capacity === "60"
-                    ? "bg-white text-purple-600 shadow"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-white dark:bg-zinc-900 text-purple-600 dark:text-purple-300 shadow"
+                    : "text-gray-600 dark:text-zinc-300 hover:text-gray-900"
                 }`}
               >
                 60% Capacity
@@ -200,8 +200,8 @@ export default function RevenueProjectionsPage() {
                 onClick={() => setCapacity("100")}
                 className={`px-4 py-2 rounded-md font-semibold transition-all ${
                   capacity === "100"
-                    ? "bg-white text-purple-600 shadow"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-white dark:bg-zinc-900 text-purple-600 dark:text-purple-300 shadow"
+                    : "text-gray-600 dark:text-zinc-300 hover:text-gray-900"
                 }`}
               >
                 100% Capacity
@@ -238,25 +238,25 @@ export default function RevenueProjectionsPage() {
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold mb-4">Station at {capacity}% Capacity</h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <div className="text-3xl font-bold text-purple-600">{current.metadata.artists}</div>
-              <div className="text-sm text-purple-700">Active Artists</div>
+            <div className="text-center p-4 bg-purple-50 dark:bg-purple-950 rounded-lg">
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-300">{current.metadata.artists}</div>
+              <div className="text-sm text-purple-700 dark:text-purple-300">Active Artists</div>
             </div>
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-3xl font-bold text-blue-600">{current.metadata.sponsors}</div>
-              <div className="text-sm text-blue-700">Active Sponsors</div>
+            <div className="text-center p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-300">{current.metadata.sponsors}</div>
+              <div className="text-sm text-blue-700 dark:text-blue-300">Active Sponsors</div>
             </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <div className="text-3xl font-bold text-green-600">{current.metadata.listeners.toLocaleString()}</div>
-              <div className="text-sm text-green-700">Total Listeners</div>
+            <div className="text-center p-4 bg-green-50 dark:bg-green-950 rounded-lg">
+              <div className="text-3xl font-bold text-green-600 dark:text-green-300">{current.metadata.listeners.toLocaleString()}</div>
+              <div className="text-sm text-green-700 dark:text-green-300">Total Listeners</div>
             </div>
-            <div className="text-center p-4 bg-orange-50 rounded-lg">
-              <div className="text-3xl font-bold text-orange-600">{current.metadata.referralArtists}</div>
-              <div className="text-sm text-orange-700">Active Artists</div>
+            <div className="text-center p-4 bg-orange-50 dark:bg-orange-950 rounded-lg">
+              <div className="text-3xl font-bold text-orange-600 dark:text-orange-300">{current.metadata.referralArtists}</div>
+              <div className="text-sm text-orange-700 dark:text-orange-300">Active Artists</div>
             </div>
-            <div className="text-center p-4 bg-pink-50 rounded-lg">
-              <div className="text-3xl font-bold text-pink-600">{current.metadata.growthPartners}</div>
-              <div className="text-sm text-pink-700">Listener Promoters</div>
+            <div className="text-center p-4 bg-pink-50 dark:bg-pink-950 rounded-lg">
+              <div className="text-3xl font-bold text-pink-600 dark:text-pink-300">{current.metadata.growthPartners}</div>
+              <div className="text-sm text-pink-700 dark:text-pink-300">Listener Promoters</div>
             </div>
           </div>
         </div>
@@ -327,7 +327,7 @@ export default function RevenueProjectionsPage() {
         {/* Revenue Breakdown */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <TrendingUp className="w-6 h-6 mr-2 text-green-600" />
+            <TrendingUp className="w-6 h-6 mr-2 text-green-600 dark:text-green-300" />
             Revenue Sources - ${current.revenue.total.toLocaleString()}/month
           </h2>
 
@@ -336,7 +336,7 @@ export default function RevenueProjectionsPage() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Sponsor Revenue</h3>
-                <span className="text-2xl font-bold text-blue-600">
+                <span className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                   ${current.revenue.sponsorRevenue.total.toLocaleString()}
                 </span>
               </div>
@@ -344,9 +344,9 @@ export default function RevenueProjectionsPage() {
                 {Object.entries(current.revenue.sponsorRevenue).map(([tier, amount]) => {
                   if (tier === 'total') return null;
                   return (
-                    <div key={tier} className="bg-blue-50 rounded-lg p-3 text-center">
-                      <div className="text-sm font-semibold text-blue-700">{tier}</div>
-                      <div className="text-lg font-bold text-blue-900">${amount.toLocaleString()}</div>
+                    <div key={tier} className="bg-blue-50 dark:bg-blue-950 rounded-lg p-3 text-center">
+                      <div className="text-sm font-semibold text-blue-700 dark:text-blue-300">{tier}</div>
+                      <div className="text-lg font-bold text-blue-900 dark:text-blue-200">${amount.toLocaleString()}</div>
                     </div>
                   );
                 })}
@@ -357,7 +357,7 @@ export default function RevenueProjectionsPage() {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Artist Tier Subscriptions</h3>
-                <span className="text-2xl font-bold text-purple-600">
+                <span className="text-2xl font-bold text-purple-600 dark:text-purple-300">
                   ${current.revenue.artistSubscriptions.total.toLocaleString()}
                 </span>
               </div>
@@ -365,9 +365,9 @@ export default function RevenueProjectionsPage() {
                 {Object.entries(current.revenue.artistSubscriptions).map(([tier, amount]) => {
                   if (tier === 'total') return null;
                   return (
-                    <div key={tier} className="bg-purple-50 rounded-lg p-3 text-center">
-                      <div className="text-sm font-semibold text-purple-700">{tier}</div>
-                      <div className="text-lg font-bold text-purple-900">${amount.toLocaleString()}</div>
+                    <div key={tier} className="bg-purple-50 dark:bg-purple-950 rounded-lg p-3 text-center">
+                      <div className="text-sm font-semibold text-purple-700 dark:text-purple-300">{tier}</div>
+                      <div className="text-lg font-bold text-purple-900 dark:text-purple-200">${amount.toLocaleString()}</div>
                     </div>
                   );
                 })}
@@ -375,39 +375,39 @@ export default function RevenueProjectionsPage() {
             </div>
 
             {/* NEW REVENUE STREAMS */}
-            <div className="border-t-2 border-green-200 pt-6">
+            <div className="border-t-2 border-green-200 dark:border-green-800 pt-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                  <Zap className="w-5 h-5 mr-2 text-green-600" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-zinc-100 flex items-center">
+                  <Zap className="w-5 h-5 mr-2 text-green-600 dark:text-green-300" />
                   New Revenue Streams (Maximize Incentives)
                 </h3>
-                <span className="text-2xl font-bold text-green-600">
+                <span className="text-2xl font-bold text-green-600 dark:text-green-300">
                   ${(current.revenue.listenerPremium + current.revenue.platformFees + current.revenue.sponsoredContent).toLocaleString()}
                 </span>
               </div>
               <div className="grid grid-cols-3 gap-3">
-                <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
-                  <div className="text-sm font-semibold text-green-700">Premium Listeners</div>
-                  <div className="text-lg font-bold text-green-900">${current.revenue.listenerPremium.toLocaleString()}</div>
-                  <div className="text-xs text-green-600 mt-1">
+                <div className="bg-green-50 dark:bg-green-950 rounded-lg p-4 border-2 border-green-200 dark:border-green-800">
+                  <div className="text-sm font-semibold text-green-700 dark:text-green-300">Premium Listeners</div>
+                  <div className="text-lg font-bold text-green-900 dark:text-green-200">${current.revenue.listenerPremium.toLocaleString()}</div>
+                  <div className="text-xs text-green-600 dark:text-green-300 mt-1">
                     {current.metadata.premiumListeners} @ $3/mo
                   </div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Ad-free, downloads, early access</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Ad-free, downloads, early access</div>
                 </div>
-                <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
-                  <div className="text-sm font-semibold text-green-700">Platform Fees</div>
-                  <div className="text-lg font-bold text-green-900">${current.revenue.platformFees.toLocaleString()}</div>
-                  <div className="text-xs text-green-600 mt-1">2% transaction fee</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Donations, tips, direct support</div>
+                <div className="bg-green-50 dark:bg-green-950 rounded-lg p-4 border-2 border-green-200 dark:border-green-800">
+                  <div className="text-sm font-semibold text-green-700 dark:text-green-300">Platform Fees</div>
+                  <div className="text-lg font-bold text-green-900 dark:text-green-200">${current.revenue.platformFees.toLocaleString()}</div>
+                  <div className="text-xs text-green-600 dark:text-green-300 mt-1">2% transaction fee</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Donations, tips, direct support</div>
                 </div>
-                <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
-                  <div className="text-sm font-semibold text-green-700">Sponsored Content</div>
-                  <div className="text-lg font-bold text-green-900">${current.revenue.sponsoredContent.toLocaleString()}</div>
-                  <div className="text-xs text-green-600 mt-1">Featured placements</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Sponsored playlists, artist features</div>
+                <div className="bg-green-50 dark:bg-green-950 rounded-lg p-4 border-2 border-green-200 dark:border-green-800">
+                  <div className="text-sm font-semibold text-green-700 dark:text-green-300">Sponsored Content</div>
+                  <div className="text-lg font-bold text-green-900 dark:text-green-200">${current.revenue.sponsoredContent.toLocaleString()}</div>
+                  <div className="text-xs text-green-600 dark:text-green-300 mt-1">Featured placements</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Sponsored playlists, artist features</div>
                 </div>
               </div>
-              <div className="mt-3 bg-blue-50 border border-blue-200 rounded p-3 text-sm text-blue-800">
+              <div className="mt-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded p-3 text-sm text-blue-800 dark:text-blue-200">
                 <strong>💡 Key Insight:</strong> These additional streams supplement core revenue. All promoter payouts are capped to fit within budget while maintaining the 80% artist pool and ${current.profit.toLocaleString()}/month profit.
               </div>
             </div>
@@ -417,104 +417,104 @@ export default function RevenueProjectionsPage() {
         {/* Expense Breakdown */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <TrendingDown className="w-6 h-6 mr-2 text-red-600" />
+            <TrendingDown className="w-6 h-6 mr-2 text-red-600 dark:text-red-300" />
             Expenses & Payouts - ${current.expenses.total.toLocaleString()}/month
           </h2>
 
           <div className="space-y-4">
             {/* Artist Pool */}
-            <div className="border-l-4 border-green-500 pl-4 bg-green-50 rounded-r-lg p-4">
+            <div className="border-l-4 border-green-500 pl-4 bg-green-50 dark:bg-green-950 rounded-r-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Artist Pool Distribution</h3>
                   <p className="text-sm text-gray-600 dark:text-zinc-400">80% of sponsor revenue (PROTECTED)</p>
-                  <p className="text-xs text-green-700 mt-1">
+                  <p className="text-xs text-green-700 dark:text-green-300 mt-1">
                     Avg per artist: ${avgEarnings.artistFromPool.toFixed(2)}/month
                   </p>
                 </div>
-                <span className="text-2xl font-bold text-green-600">
+                <span className="text-2xl font-bold text-green-600 dark:text-green-300">
                   ${current.expenses.artistPool.toLocaleString()}
                 </span>
               </div>
             </div>
 
             {/* Artist Referral Commissions - ENHANCED */}
-            <div className="border-l-4 border-orange-500 pl-4 bg-orange-50 rounded-r-lg p-4">
+            <div className="border-l-4 border-orange-500 pl-4 bg-orange-50 dark:bg-orange-950 rounded-r-lg p-4">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-zinc-100 flex items-center">
                     <Award className="w-5 h-5 mr-2 text-orange-500" />
                     Artist Promoter Commissions (Tiered, Capped)
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-zinc-400">{current.metadata.referralArtists} promoters with per-tier earning caps</p>
                 </div>
-                <span className="text-2xl font-bold text-orange-600">
+                <span className="text-2xl font-bold text-orange-600 dark:text-orange-300">
                   ${current.expenses.scoutCommissions.toLocaleString()}
                 </span>
               </div>
 
               {/* Commission Rates */}
               <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs mb-3">
-                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300">
-                  <div className="text-orange-600 font-semibold">First 3 Months</div>
-                  <div className="text-orange-900 font-bold">{scoutCommissionBreakdown.first3Months.rate}</div>
-                  <div className="text-orange-700">${scoutCommissionBreakdown.first3Months.amount}</div>
+                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300 dark:border-orange-700">
+                  <div className="text-orange-600 dark:text-orange-300 font-semibold">First 3 Months</div>
+                  <div className="text-orange-900 dark:text-orange-200 font-bold">{scoutCommissionBreakdown.first3Months.rate}</div>
+                  <div className="text-orange-700 dark:text-orange-300">${scoutCommissionBreakdown.first3Months.amount}</div>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300">
-                  <div className="text-orange-600 font-semibold">Ongoing</div>
-                  <div className="text-orange-900 font-bold">{scoutCommissionBreakdown.ongoing.rate}</div>
-                  <div className="text-orange-700">${scoutCommissionBreakdown.ongoing.amount}</div>
+                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300 dark:border-orange-700">
+                  <div className="text-orange-600 dark:text-orange-300 font-semibold">Ongoing</div>
+                  <div className="text-orange-900 dark:text-orange-200 font-bold">{scoutCommissionBreakdown.ongoing.rate}</div>
+                  <div className="text-orange-700 dark:text-orange-300">${scoutCommissionBreakdown.ongoing.amount}</div>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300">
-                  <div className="text-orange-600 font-semibold">Prepurchase</div>
-                  <div className="text-orange-900 font-bold">{scoutCommissionBreakdown.prepurchase.rate}</div>
-                  <div className="text-orange-700">${scoutCommissionBreakdown.prepurchase.amount}</div>
+                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300 dark:border-orange-700">
+                  <div className="text-orange-600 dark:text-orange-300 font-semibold">Prepurchase</div>
+                  <div className="text-orange-900 dark:text-orange-200 font-bold">{scoutCommissionBreakdown.prepurchase.rate}</div>
+                  <div className="text-orange-700 dark:text-orange-300">${scoutCommissionBreakdown.prepurchase.amount}</div>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300">
-                  <div className="text-orange-600 font-semibold">Upgrade Bonus</div>
-                  <div className="text-orange-900 font-bold">{scoutCommissionBreakdown.upgradeBonuses.per}</div>
-                  <div className="text-orange-700">${scoutCommissionBreakdown.upgradeBonuses.amount}</div>
+                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300 dark:border-orange-700">
+                  <div className="text-orange-600 dark:text-orange-300 font-semibold">Upgrade Bonus</div>
+                  <div className="text-orange-900 dark:text-orange-200 font-bold">{scoutCommissionBreakdown.upgradeBonuses.per}</div>
+                  <div className="text-orange-700 dark:text-orange-300">${scoutCommissionBreakdown.upgradeBonuses.amount}</div>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300">
-                  <div className="text-orange-600 font-semibold">Influence Bonus</div>
-                  <div className="text-orange-900 font-bold">{scoutCommissionBreakdown.influenceBonuses.per}</div>
-                  <div className="text-orange-700">${scoutCommissionBreakdown.influenceBonuses.amount}</div>
+                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-orange-300 dark:border-orange-700">
+                  <div className="text-orange-600 dark:text-orange-300 font-semibold">Influence Bonus</div>
+                  <div className="text-orange-900 dark:text-orange-200 font-bold">{scoutCommissionBreakdown.influenceBonuses.per}</div>
+                  <div className="text-orange-700 dark:text-orange-300">${scoutCommissionBreakdown.influenceBonuses.amount}</div>
                 </div>
               </div>
 
               {/* NEW: Milestone Bonuses */}
               <div className="grid grid-cols-2 gap-2 text-xs mb-3">
-                <div className="bg-gradient-to-r from-yellow-100 to-yellow-200 rounded p-2 border-2 border-yellow-400">
-                  <div className="text-yellow-800 font-semibold">🏆 5 Artists Milestone</div>
-                  <div className="text-yellow-900 font-bold">$30 one-time bonus</div>
-                  <div className="text-yellow-700">${scoutCommissionBreakdown.milestoneBonus5Artists.amount} total</div>
+                <div className="bg-gradient-to-r from-yellow-100 dark:from-yellow-950 to-yellow-200 rounded p-2 border-2 border-yellow-400">
+                  <div className="text-yellow-800 dark:text-yellow-200 font-semibold">🏆 5 Artists Milestone</div>
+                  <div className="text-yellow-900 dark:text-yellow-200 font-bold">$30 one-time bonus</div>
+                  <div className="text-yellow-700 dark:text-yellow-300">${scoutCommissionBreakdown.milestoneBonus5Artists.amount} total</div>
                 </div>
-                <div className="bg-gradient-to-r from-yellow-100 to-yellow-200 rounded p-2 border-2 border-yellow-400">
-                  <div className="text-yellow-800 font-semibold">🏆 10 Artists Milestone</div>
-                  <div className="text-yellow-900 font-bold">$50 one-time bonus</div>
-                  <div className="text-yellow-700">${scoutCommissionBreakdown.milestoneBonus10Artists.amount} total</div>
+                <div className="bg-gradient-to-r from-yellow-100 dark:from-yellow-950 to-yellow-200 rounded p-2 border-2 border-yellow-400">
+                  <div className="text-yellow-800 dark:text-yellow-200 font-semibold">🏆 10 Artists Milestone</div>
+                  <div className="text-yellow-900 dark:text-yellow-200 font-bold">$50 one-time bonus</div>
+                  <div className="text-yellow-700 dark:text-yellow-300">${scoutCommissionBreakdown.milestoneBonus10Artists.amount} total</div>
                 </div>
               </div>
 
               {/* Performance Tiers */}
-              <div className="mt-3 bg-gradient-to-r from-orange-100 to-yellow-100 border-2 border-orange-300 rounded p-3">
-                <div className="text-xs font-bold text-orange-900 mb-2">📊 Performance Tiers (Quality over Quantity):</div>
+              <div className="mt-3 bg-gradient-to-r from-orange-100 dark:from-orange-950 to-yellow-100 dark:to-yellow-950 border-2 border-orange-300 dark:border-orange-700 rounded p-3">
+                <div className="text-xs font-bold text-orange-900 dark:text-orange-200 mb-2">📊 Performance Tiers (Quality over Quantity):</div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
                   {Object.entries(scoutTiers).map(([key, tier]) => (
-                    <div key={key} className="bg-white dark:bg-zinc-900 rounded p-2 border border-orange-200">
-                      <div className="font-semibold text-orange-700">{tier.name}</div>
+                    <div key={key} className="bg-white dark:bg-zinc-900 rounded p-2 border border-orange-200 dark:border-orange-800">
+                      <div className="font-semibold text-orange-700 dark:text-orange-300">{tier.name}</div>
                       <div className="text-gray-600 dark:text-zinc-400">{tier.artists} artists</div>
-                      <div className="font-bold text-orange-900">{tier.range}</div>
+                      <div className="font-bold text-orange-900 dark:text-orange-200">{tier.range}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Caps per tier */}
-              <div className="mt-3 bg-green-50 border-2 border-green-300 rounded p-2 text-xs">
+              <div className="mt-3 bg-green-50 dark:bg-green-950 border-2 border-green-300 dark:border-green-700 rounded p-2 text-xs">
                 <div className="flex items-center space-x-2">
-                  <Check className="w-4 h-4 text-green-600" />
-                  <div className="text-green-800">
+                  <Check className="w-4 h-4 text-green-600 dark:text-green-300" />
+                  <div className="text-green-800 dark:text-green-200">
                     <strong>Per-tier caps ensure budget sustainability.</strong> Elite cap: ${scoutTiers.tier1.cap}/mo, Strong: ${scoutTiers.tier2.cap}/mo, Active: ${scoutTiers.tier3.cap}/mo, Developing: ${scoutTiers.tier4.cap}/mo.
                   </div>
                 </div>
@@ -522,89 +522,89 @@ export default function RevenueProjectionsPage() {
             </div>
 
             {/* Listener Promotion Commissions - ENHANCED */}
-            <div className="border-l-4 border-blue-500 pl-4 bg-blue-50 rounded-r-lg p-4">
+            <div className="border-l-4 border-blue-500 pl-4 bg-blue-50 dark:bg-blue-950 rounded-r-lg p-4">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-zinc-100 flex items-center">
                     <Zap className="w-5 h-5 mr-2 text-blue-500" />
                     Listener Promoter Commissions (Multi-Stream, Capped)
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-zinc-400">{current.metadata.growthPartners} promoters with per-stream earning caps</p>
                 </div>
-                <span className="text-2xl font-bold text-blue-600">
+                <span className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                   ${current.expenses.gpCommissions.toLocaleString()}
                 </span>
               </div>
 
               {/* Core Commission Streams */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs mb-3">
-                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-blue-300">
-                  <div className="text-blue-600 font-semibold">Listener Bounties</div>
-                  <div className="text-blue-900 font-bold">{gpCommissionBreakdown.listenerBounties.rate}/active</div>
-                  <div className="text-blue-700">${gpCommissionBreakdown.listenerBounties.amount.toFixed(2)}</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">{gpCommissionBreakdown.listenerBounties.listeners} listeners</div>
+                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-blue-300 dark:border-blue-700">
+                  <div className="text-blue-600 dark:text-blue-300 font-semibold">Listener Bounties</div>
+                  <div className="text-blue-900 dark:text-blue-200 font-bold">{gpCommissionBreakdown.listenerBounties.rate}/active</div>
+                  <div className="text-blue-700 dark:text-blue-300">${gpCommissionBreakdown.listenerBounties.amount.toFixed(2)}</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">{gpCommissionBreakdown.listenerBounties.listeners} listeners</div>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-blue-300">
-                  <div className="text-blue-600 font-semibold">Artist Discovery</div>
-                  <div className="text-blue-900 font-bold">{gpCommissionBreakdown.artistDiscovery.rate}</div>
-                  <div className="text-blue-700">${gpCommissionBreakdown.artistDiscovery.amount}</div>
-                  <div className="text-xs text-green-600 font-semibold">{gpCommissionBreakdown.artistDiscovery.cap}</div>
+                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-blue-300 dark:border-blue-700">
+                  <div className="text-blue-600 dark:text-blue-300 font-semibold">Artist Discovery</div>
+                  <div className="text-blue-900 dark:text-blue-200 font-bold">{gpCommissionBreakdown.artistDiscovery.rate}</div>
+                  <div className="text-blue-700 dark:text-blue-300">${gpCommissionBreakdown.artistDiscovery.amount}</div>
+                  <div className="text-xs text-green-600 dark:text-green-300 font-semibold">{gpCommissionBreakdown.artistDiscovery.cap}</div>
                 </div>
-                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-blue-300">
-                  <div className="text-blue-600 font-semibold">Artist Development</div>
-                  <div className="text-blue-900 font-bold">{gpCommissionBreakdown.artistDevelopment.rate}</div>
-                  <div className="text-blue-700">${gpCommissionBreakdown.artistDevelopment.amount}</div>
-                  <div className="text-xs text-green-600 font-semibold">{gpCommissionBreakdown.artistDevelopment.cap}</div>
+                <div className="bg-white dark:bg-zinc-900 rounded p-2 border-2 border-blue-300 dark:border-blue-700">
+                  <div className="text-blue-600 dark:text-blue-300 font-semibold">Artist Development</div>
+                  <div className="text-blue-900 dark:text-blue-200 font-bold">{gpCommissionBreakdown.artistDevelopment.rate}</div>
+                  <div className="text-blue-700 dark:text-blue-300">${gpCommissionBreakdown.artistDevelopment.amount}</div>
+                  <div className="text-xs text-green-600 dark:text-green-300 font-semibold">{gpCommissionBreakdown.artistDevelopment.cap}</div>
                 </div>
               </div>
 
               {/* Additional Revenue Streams */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs mb-3">
-                <div className="bg-gradient-to-r from-green-100 to-green-200 rounded p-2 border-2 border-green-400">
-                  <div className="text-green-800 font-semibold">Sponsor Referral</div>
-                  <div className="text-green-900 font-bold">{gpCommissionBreakdown.sponsorReferral.rate} commission</div>
-                  <div className="text-green-700">${gpCommissionBreakdown.sponsorReferral.amount}</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">Cap: {gpCommissionBreakdown.sponsorReferral.cap}</div>
+                <div className="bg-gradient-to-r from-green-100 dark:from-green-950 to-green-200 rounded p-2 border-2 border-green-400">
+                  <div className="text-green-800 dark:text-green-200 font-semibold">Sponsor Referral</div>
+                  <div className="text-green-900 dark:text-green-200 font-bold">{gpCommissionBreakdown.sponsorReferral.rate} commission</div>
+                  <div className="text-green-700 dark:text-green-300">${gpCommissionBreakdown.sponsorReferral.amount}</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">Cap: {gpCommissionBreakdown.sponsorReferral.cap}</div>
                 </div>
-                <div className="bg-gradient-to-r from-green-100 to-green-200 rounded p-2 border-2 border-green-400">
-                  <div className="text-green-800 font-semibold">Premium Listener Bonus</div>
-                  <div className="text-green-900 font-bold">{gpCommissionBreakdown.premiumListenerBonus.rate} per conversion</div>
-                  <div className="text-green-700">${gpCommissionBreakdown.premiumListenerBonus.amount}</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">Cap: {gpCommissionBreakdown.premiumListenerBonus.cap}</div>
+                <div className="bg-gradient-to-r from-green-100 dark:from-green-950 to-green-200 rounded p-2 border-2 border-green-400">
+                  <div className="text-green-800 dark:text-green-200 font-semibold">Premium Listener Bonus</div>
+                  <div className="text-green-900 dark:text-green-200 font-bold">{gpCommissionBreakdown.premiumListenerBonus.rate} per conversion</div>
+                  <div className="text-green-700 dark:text-green-300">${gpCommissionBreakdown.premiumListenerBonus.amount}</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">Cap: {gpCommissionBreakdown.premiumListenerBonus.cap}</div>
                 </div>
-                <div className="bg-gradient-to-r from-purple-100 to-purple-200 rounded p-2 border-2 border-purple-400">
-                  <div className="text-purple-800 font-semibold">Dual-Role Bonus</div>
-                  <div className="text-purple-900 font-bold">{gpCommissionBreakdown.dualRoleBonus.count} participants</div>
-                  <div className="text-purple-700">${gpCommissionBreakdown.dualRoleBonus.amount} total</div>
+                <div className="bg-gradient-to-r from-purple-100 dark:from-purple-950 to-purple-200 rounded p-2 border-2 border-purple-400">
+                  <div className="text-purple-800 dark:text-purple-200 font-semibold">Dual-Role Bonus</div>
+                  <div className="text-purple-900 dark:text-purple-200 font-bold">{gpCommissionBreakdown.dualRoleBonus.count} participants</div>
+                  <div className="text-purple-700 dark:text-purple-300">${gpCommissionBreakdown.dualRoleBonus.amount} total</div>
                 </div>
               </div>
 
               {/* Budget Integrity */}
-              <div className="mt-3 bg-gradient-to-r from-blue-100 to-purple-100 border-2 border-blue-300 rounded p-3 text-xs">
-                <div className="font-bold text-blue-900 mb-2">Budget Integrity:</div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-1 text-blue-800">
+              <div className="mt-3 bg-gradient-to-r from-blue-100 dark:from-blue-950 to-purple-100 dark:to-purple-950 border-2 border-blue-300 dark:border-blue-700 rounded p-3 text-xs">
+                <div className="font-bold text-blue-900 dark:text-blue-200 mb-2">Budget Integrity:</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-1 text-blue-800 dark:text-blue-200">
                   <div className="flex items-start space-x-1">
-                    <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
+                    <Check className="w-3 h-3 text-green-600 dark:text-green-300 flex-shrink-0 mt-0.5" />
                     <span>Listener bounties: $0.50/active (capped {gpCommissionBreakdown.listenerBounties.cap})</span>
                   </div>
                   <div className="flex items-start space-x-1">
-                    <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
+                    <Check className="w-3 h-3 text-green-600 dark:text-green-300 flex-shrink-0 mt-0.5" />
                     <span>Artist commissions: 8% / 12% (capped per stream)</span>
                   </div>
                   <div className="flex items-start space-x-1">
-                    <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
+                    <Check className="w-3 h-3 text-green-600 dark:text-green-300 flex-shrink-0 mt-0.5" />
                     <span>Per-stream caps ensure total stays within ${current.expenses.gpCommissions.toLocaleString()} budget</span>
                   </div>
                   <div className="flex items-start space-x-1">
-                    <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
+                    <Check className="w-3 h-3 text-green-600 dark:text-green-300 flex-shrink-0 mt-0.5" />
                     <span>Sponsor referral: 10% (capped {gpCommissionBreakdown.sponsorReferral.cap})</span>
                   </div>
                   <div className="flex items-start space-x-1">
-                    <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
+                    <Check className="w-3 h-3 text-green-600 dark:text-green-300 flex-shrink-0 mt-0.5" />
                     <span>Premium conversion: $1 each (capped {gpCommissionBreakdown.premiumListenerBonus.cap})</span>
                   </div>
                   <div className="flex items-start space-x-1">
-                    <Check className="w-3 h-3 text-green-600 flex-shrink-0 mt-0.5" />
+                    <Check className="w-3 h-3 text-green-600 dark:text-green-300 flex-shrink-0 mt-0.5" />
                     <span>Dual-role combined: ~${avgEarnings.dualRole}/mo realistic average</span>
                   </div>
                 </div>
@@ -612,20 +612,20 @@ export default function RevenueProjectionsPage() {
             </div>
 
             {/* Sponsor Acquisition Reserve */}
-            <div className="border-l-4 border-yellow-500 pl-4 bg-yellow-50 rounded-r-lg p-4">
+            <div className="border-l-4 border-yellow-500 pl-4 bg-yellow-50 dark:bg-yellow-950 rounded-r-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Sponsor Acquisition Reserve</h3>
                   <p className="text-sm text-gray-600 dark:text-zinc-400">Referral bonuses (50% of first month, amortized monthly)</p>
                 </div>
-                <span className="text-2xl font-bold text-yellow-600">
+                <span className="text-2xl font-bold text-yellow-600 dark:text-yellow-300">
                   ${current.expenses.sponsorAcquisition.toLocaleString()}
                 </span>
               </div>
             </div>
 
             {/* Operational Expenses */}
-            <div className="border-l-4 border-gray-500 pl-4 bg-gray-50 rounded-r-lg p-4">
+            <div className="border-l-4 border-gray-500 pl-4 bg-gray-50 dark:bg-zinc-900 rounded-r-lg p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Operational Expenses</h3>
@@ -640,8 +640,8 @@ export default function RevenueProjectionsPage() {
         </div>
 
         {/* Profit Summary */}
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl shadow-lg p-8 border-2 border-green-300">
-          <h2 className="text-2xl font-bold mb-6 text-green-900 flex items-center">
+        <div className="bg-gradient-to-br from-green-50 dark:from-green-950 to-green-100 dark:to-green-950 rounded-xl shadow-lg p-8 border-2 border-green-300 dark:border-green-700">
+          <h2 className="text-2xl font-bold mb-6 text-green-900 dark:text-green-200 flex items-center">
             <Radio className="w-7 h-7 mr-2" />
             TrueFans RADIO™ Net Profit at {capacity}% Capacity
           </h2>
@@ -649,7 +649,7 @@ export default function RevenueProjectionsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 shadow">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Monthly Net Profit</div>
-              <div className="text-5xl font-bold text-green-600 mb-2">
+              <div className="text-5xl font-bold text-green-600 dark:text-green-300 mb-2">
                 ${current.profit.toLocaleString()}
               </div>
               <div className="text-sm text-gray-600 dark:text-zinc-400">
@@ -659,7 +659,7 @@ export default function RevenueProjectionsPage() {
 
             <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 shadow">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Annual Net Profit</div>
-              <div className="text-5xl font-bold text-green-600 mb-2">
+              <div className="text-5xl font-bold text-green-600 dark:text-green-300 mb-2">
                 ${(current.profit * 12).toLocaleString()}
               </div>
               <div className="text-sm text-gray-600 dark:text-zinc-400">
@@ -674,79 +674,79 @@ export default function RevenueProjectionsPage() {
           <h2 className="text-2xl font-bold mb-6">Earning Opportunities - All Roles (Budget-Backed)</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border-2 border-purple-200">
+            <div className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-purple-100 dark:to-purple-950 rounded-lg p-6 border-2 border-purple-200 dark:border-purple-800">
               <div className="flex items-center justify-between mb-3">
-                <Users className="w-8 h-8 text-purple-600" />
+                <Users className="w-8 h-8 text-purple-600 dark:text-purple-300" />
                 <div className="text-right">
-                  <div className="text-sm text-purple-700">Artists</div>
-                  <div className="text-xs text-purple-600">{current.metadata.artists} active</div>
+                  <div className="text-sm text-purple-700 dark:text-purple-300">Artists</div>
+                  <div className="text-xs text-purple-600 dark:text-purple-300">{current.metadata.artists} active</div>
                 </div>
               </div>
-              <div className="text-3xl font-bold text-purple-700">
+              <div className="text-3xl font-bold text-purple-700 dark:text-purple-300">
                 ${avgEarnings.artistFromPool.toFixed(2)}
               </div>
-              <div className="text-xs text-purple-600 mt-1 font-semibold">From artist pool (80% PROTECTED)</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Unchanged - core value maintained</div>
+              <div className="text-xs text-purple-600 dark:text-purple-300 mt-1 font-semibold">From artist pool (80% PROTECTED)</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Unchanged - core value maintained</div>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6 border-2 border-orange-300 ring-2 ring-orange-400">
+            <div className="bg-gradient-to-br from-orange-50 dark:from-orange-950 to-orange-100 dark:to-orange-950 rounded-lg p-6 border-2 border-orange-300 dark:border-orange-700 ring-2 ring-orange-400">
               <div className="flex items-center justify-between mb-3">
-                <Award className="w-8 h-8 text-orange-600" />
+                <Award className="w-8 h-8 text-orange-600 dark:text-orange-300" />
                 <div className="text-right">
-                  <div className="text-sm text-orange-700 font-bold">Promoters (AVG)</div>
-                  <div className="text-xs text-orange-600">{current.metadata.referralArtists} active</div>
+                  <div className="text-sm text-orange-700 dark:text-orange-300 font-bold">Promoters (AVG)</div>
+                  <div className="text-xs text-orange-600 dark:text-orange-300">{current.metadata.referralArtists} active</div>
                 </div>
               </div>
-              <div className="text-3xl font-bold text-orange-700">
+              <div className="text-3xl font-bold text-orange-700 dark:text-orange-300">
                 ${avgEarnings.scoutMonthly.toFixed(2)}
               </div>
-              <div className="text-xs text-orange-600 mt-1">Elite avg: ${avgEarnings.scoutTop20}/mo</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">Per-tier caps apply</div>
+              <div className="text-xs text-orange-600 dark:text-orange-300 mt-1">Elite avg: ${avgEarnings.scoutTop20}/mo</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Per-tier caps apply</div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-300 ring-2 ring-blue-400">
+            <div className="bg-gradient-to-br from-blue-50 dark:from-blue-950 to-blue-100 dark:to-blue-950 rounded-lg p-6 border-2 border-blue-300 dark:border-blue-700 ring-2 ring-blue-400">
               <div className="flex items-center justify-between mb-3">
-                <Zap className="w-8 h-8 text-blue-600" />
+                <Zap className="w-8 h-8 text-blue-600 dark:text-blue-300" />
                 <div className="text-right">
-                  <div className="text-sm text-blue-700 font-bold">Listener Promoters</div>
-                  <div className="text-xs text-blue-600">{current.metadata.growthPartners} active</div>
+                  <div className="text-sm text-blue-700 dark:text-blue-300 font-bold">Listener Promoters</div>
+                  <div className="text-xs text-blue-600 dark:text-blue-300">{current.metadata.growthPartners} active</div>
                 </div>
               </div>
-              <div className="text-3xl font-bold text-blue-700">
+              <div className="text-3xl font-bold text-blue-700 dark:text-blue-300">
                 ${avgEarnings.gpMonthly.toFixed(2)}
               </div>
-              <div className="text-xs text-blue-600 mt-1">Multi-stream, per-stream caps</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">5 income streams available</div>
+              <div className="text-xs text-blue-600 dark:text-blue-300 mt-1">Multi-stream, per-stream caps</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">5 income streams available</div>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 via-yellow-50 to-pink-50 rounded-lg p-6 border-4 border-green-400 shadow-xl">
+            <div className="bg-gradient-to-br from-green-50 dark:from-green-950 via-yellow-50 dark:via-yellow-950 to-pink-50 dark:to-pink-950 rounded-lg p-6 border-4 border-green-400 shadow-xl">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-1">
-                  <Award className="w-6 h-6 text-orange-600" />
-                  <Zap className="w-6 h-6 text-blue-600" />
+                  <Award className="w-6 h-6 text-orange-600 dark:text-orange-300" />
+                  <Zap className="w-6 h-6 text-blue-600 dark:text-blue-300" />
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-green-700 font-bold">Dual-Role ⭐</div>
-                  <div className="text-xs text-green-600">Artist Promoter + Listener</div>
+                  <div className="text-sm text-green-700 dark:text-green-300 font-bold">Dual-Role ⭐</div>
+                  <div className="text-xs text-green-600 dark:text-green-300">Artist Promoter + Listener</div>
                 </div>
               </div>
               <div className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-blue-600 bg-clip-text text-transparent">
                 ${avgEarnings.dualRole}
               </div>
-              <div className="text-xs text-green-700 mt-1 font-bold">Realistic combined average</div>
+              <div className="text-xs text-green-700 dark:text-green-300 mt-1 font-bold">Realistic combined average</div>
               <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">Both roles, per-tier caps apply</div>
             </div>
           </div>
 
-          <div className="mt-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 border-2 border-green-300">
+          <div className="mt-6 bg-gradient-to-r from-green-50 dark:from-green-950 to-blue-50 dark:to-blue-950 rounded-lg p-4 border-2 border-green-300 dark:border-green-700">
             <p className="text-sm text-gray-800 dark:text-zinc-200">
-              <strong className="text-green-700">Reconciled Model:</strong> Every payout promise is backed by budget with per-tier and per-stream caps.
+              <strong className="text-green-700 dark:text-green-300">Reconciled Model:</strong> Every payout promise is backed by budget with per-tier and per-stream caps.
               Sponsor referral acquisition costs are budgeted. Operations include licensing, hosting, and bandwidth at realistic levels.
               <br/><br/>
-              <strong className="text-purple-700">80% Artist Pool:</strong> ${current.expenses.artistPool.toLocaleString()}/mo PROTECTED.
-              <strong className="text-blue-700"> Station Profit:</strong> ${current.profit.toLocaleString()}/month (${(current.profit * 12).toLocaleString()}/year) at {current.profitMargin}% margin.
+              <strong className="text-purple-700 dark:text-purple-300">80% Artist Pool:</strong> ${current.expenses.artistPool.toLocaleString()}/mo PROTECTED.
+              <strong className="text-blue-700 dark:text-blue-300"> Station Profit:</strong> ${current.profit.toLocaleString()}/month (${(current.profit * 12).toLocaleString()}/year) at {current.profitMargin}% margin.
               <br/>
-              <strong className="text-green-700">Result:</strong> Sustainable payouts, honest caps, no unfunded promises.
+              <strong className="text-green-700 dark:text-green-300">Result:</strong> Sustainable payouts, honest caps, no unfunded promises.
             </p>
           </div>
         </div>
@@ -853,17 +853,17 @@ export default function RevenueProjectionsPage() {
             <div className="text-center">
               <div className="text-sm text-green-200 mb-3 font-semibold">FULLY RECONCILED - EVERY DOLLAR ACCOUNTED FOR</div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4">
+                <div className="bg-white dark:bg-zinc-900/10 backdrop-blur rounded-lg p-4">
                   <div className="text-2xl font-bold text-yellow-300">${current.profit.toLocaleString()}/mo</div>
                   <div className="text-sm text-white/80">Station Profit</div>
                   <div className="text-xs text-green-300">${(current.profit * 12).toLocaleString()}/year</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4">
+                <div className="bg-white dark:bg-zinc-900/10 backdrop-blur rounded-lg p-4">
                   <div className="text-2xl font-bold text-yellow-300">${current.expenses.artistPool.toLocaleString()}</div>
                   <div className="text-sm text-white/80">Artist Pool (Protected)</div>
                   <div className="text-xs text-green-300">80% of sponsor revenue</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4">
+                <div className="bg-white dark:bg-zinc-900/10 backdrop-blur rounded-lg p-4">
                   <div className="text-2xl font-bold text-yellow-300">${(current.expenses.scoutCommissions + current.expenses.gpCommissions).toLocaleString()}</div>
                   <div className="text-sm text-white/80">Promoter Payouts</div>
                   <div className="text-xs text-green-300">Capped and budget-backed</div>

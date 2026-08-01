@@ -75,7 +75,7 @@ export default function OperatorDashboard() {
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 dark:text-zinc-100 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-700" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-700 dark:text-amber-300" />
       </div>
     );
   }
@@ -89,17 +89,17 @@ export default function OperatorDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <Building2 className="w-6 h-6 text-amber-700" />
+              <Building2 className="w-6 h-6 text-amber-700 dark:text-amber-300" />
               <div>
                 <h1 className="font-bold text-gray-900 dark:text-white">Operator Dashboard</h1>
-                <p className="text-xs text-gray-400 dark:text-zinc-400">{session?.user?.name || "Operator"}</p>
+                <p className="text-xs text-gray-600 dark:text-zinc-400">{session?.user?.name || "Operator"}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <Link href="/admin" className="text-sm text-gray-600 hover:text-gray-900 dark:text-white">
                 Admin Panel
               </Link>
-              <Link href="/station-admin" className="text-sm text-amber-700 hover:text-amber-800 font-medium">
+              <Link href="/station-admin" className="text-sm text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium">
                 Station Admin
               </Link>
             </div>
@@ -129,16 +129,16 @@ export default function OperatorDashboard() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 mb-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
-                <Radio className="w-8 h-8 text-amber-700" />
+                <Radio className="w-8 h-8 text-amber-700 dark:text-amber-300" />
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{station.name}</h2>
-                  <p className="text-gray-400 dark:text-zinc-400">{station.callSign ? `${station.callSign} — ` : ""}{station.genre}</p>
+                  <p className="text-gray-600 dark:text-zinc-400">{station.callSign ? `${station.callSign} — ` : ""}{station.genre}</p>
                 </div>
               </div>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                 station.isActive
                   ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
-                  : "bg-gray-100 text-gray-600"
+                  : "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300"
               }`}>
                 {station.isActive ? "On Air" : "Offline"}
               </span>
@@ -156,7 +156,7 @@ export default function OperatorDashboard() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-8 mb-8 text-center">
             <Radio className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No Station Yet</h2>
-            <p className="text-gray-400 dark:text-zinc-400 mb-4">Create your first station to get started.</p>
+            <p className="text-gray-600 dark:text-zinc-400 mb-4">Create your first station to get started.</p>
             <Link
               href="/station-admin/wizard"
               className="inline-flex items-center space-x-2 bg-amber-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-amber-800"
@@ -194,10 +194,10 @@ function StatCard({ icon: Icon, label, value, href }: {
   icon: LucideIcon; label: string; value: number; href: string;
 }) {
   return (
-    <Link href={href} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+    <Link href={href} className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
       <div className="flex items-center space-x-2 mb-1">
         <Icon className="w-4 h-4 text-gray-400" />
-        <span className="text-xs text-gray-400 dark:text-zinc-400">{label}</span>
+        <span className="text-xs text-gray-600 dark:text-zinc-400">{label}</span>
       </div>
       <p className="text-2xl font-bold text-gray-900 dark:text-white">{value.toLocaleString()}</p>
     </Link>
@@ -214,11 +214,11 @@ function MetricCard({ icon: Icon, label, value, color, href }: {
   };
   return (
     <Link href={href} className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow">
-      <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg mb-3 ${colors[color] || "bg-gray-50 text-gray-700"}`}>
+      <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg mb-3 ${colors[color] || "bg-gray-50 dark:bg-zinc-900 text-gray-700 dark:text-zinc-200"}`}>
         <Icon className="w-5 h-5" />
       </div>
       <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value.toLocaleString()}</p>
-      <p className="text-sm text-gray-400 dark:text-zinc-400">{label}</p>
+      <p className="text-sm text-gray-600 dark:text-zinc-400">{label}</p>
     </Link>
   );
 }
@@ -231,7 +231,7 @@ function QuickAction({ href, label, icon: Icon }: {
       href={href}
       className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
     >
-      <Icon className="w-5 h-5 text-amber-700" />
+      <Icon className="w-5 h-5 text-amber-700 dark:text-amber-300" />
       <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">{label}</span>
       <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
     </Link>

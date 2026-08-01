@@ -5,10 +5,10 @@ import { CheckCircle2, Radio, ArrowRight, Settings, Music, Users, Mic } from "lu
 
 export default function SetupSuccessPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-amber-50 flex items-center justify-center p-4">
+    <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-amber-50 dark:to-amber-950 flex items-center justify-center p-4">
       <div className="max-w-2xl w-full text-center">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
-          <CheckCircle2 className="w-10 h-10 text-green-600" />
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full mb-6">
+          <CheckCircle2 className="w-10 h-10 text-green-600 dark:text-green-300" />
         </div>
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">Your Station is Live!</h1>
         <p className="text-gray-600 dark:text-zinc-400 mb-8 max-w-md mx-auto">
@@ -19,55 +19,55 @@ export default function SetupSuccessPage() {
         <div className="grid sm:grid-cols-2 gap-4 mb-10">
           <Link
             href="/station-admin/music"
-            className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:shadow-md transition-shadow text-left"
+            className="flex items-center gap-3 p-4 bg-white dark:bg-zinc-900 border rounded-xl hover:shadow-md transition-shadow text-left"
           >
-            <Music className="w-8 h-8 text-amber-600 flex-shrink-0" />
+            <Music className="w-8 h-8 text-amber-600 dark:text-amber-300 flex-shrink-0" />
             <div>
               <p className="font-semibold text-gray-900 dark:text-white">Upload Music</p>
-              <p className="text-sm text-gray-400 dark:text-zinc-400">Add tracks to your station library</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Add tracks to your station library</p>
             </div>
             <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
           </Link>
 
           <Link
             href="/station-admin/dj-editor"
-            className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:shadow-md transition-shadow text-left"
+            className="flex items-center gap-3 p-4 bg-white dark:bg-zinc-900 border rounded-xl hover:shadow-md transition-shadow text-left"
           >
-            <Mic className="w-8 h-8 text-purple-600 flex-shrink-0" />
+            <Mic className="w-8 h-8 text-purple-600 dark:text-purple-300 flex-shrink-0" />
             <div>
               <p className="font-semibold text-gray-900 dark:text-white">Customize DJs</p>
-              <p className="text-sm text-gray-400 dark:text-zinc-400">Edit AI DJ personalities and voices</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Edit AI DJ personalities and voices</p>
             </div>
             <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
           </Link>
 
           <Link
             href="/station-admin/schedule-editor"
-            className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:shadow-md transition-shadow text-left"
+            className="flex items-center gap-3 p-4 bg-white dark:bg-zinc-900 border rounded-xl hover:shadow-md transition-shadow text-left"
           >
-            <Radio className="w-8 h-8 text-blue-600 flex-shrink-0" />
+            <Radio className="w-8 h-8 text-blue-600 dark:text-blue-300 flex-shrink-0" />
             <div>
               <p className="font-semibold text-gray-900 dark:text-white">Set Schedule</p>
-              <p className="text-sm text-gray-400 dark:text-zinc-400">Configure show times and rotations</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Configure show times and rotations</p>
             </div>
             <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
           </Link>
 
           <Link
             href="/admin/settings"
-            className="flex items-center gap-3 p-4 bg-white border rounded-xl hover:shadow-md transition-shadow text-left"
+            className="flex items-center gap-3 p-4 bg-white dark:bg-zinc-900 border rounded-xl hover:shadow-md transition-shadow text-left"
           >
-            <Settings className="w-8 h-8 text-gray-600 flex-shrink-0" />
+            <Settings className="w-8 h-8 text-gray-600 dark:text-zinc-300 flex-shrink-0" />
             <div>
               <p className="font-semibold text-gray-900 dark:text-white">Admin Settings</p>
-              <p className="text-sm text-gray-400 dark:text-zinc-400">Configure stream, payments, API keys</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Configure stream, payments, API keys</p>
             </div>
             <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
           </Link>
         </div>
 
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-8 text-left">
-          <h3 className="font-semibold text-amber-800 mb-2">Getting Started Checklist</h3>
+        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-xl p-5 mb-8 text-left">
+          <h3 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">Getting Started Checklist</h3>
           <ul className="space-y-2 text-sm text-amber-700 dark:text-amber-400">
             <li className="flex items-center gap-2">
               <input type="checkbox" className="rounded border-amber-400" /> Upload at least 50 tracks to your music library

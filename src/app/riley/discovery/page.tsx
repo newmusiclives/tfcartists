@@ -121,18 +121,18 @@ export default function RileyDiscoveryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 dark:from-blue-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex items-center gap-4 mb-6">
           <Link
             href="/riley"
             className="p-2 hover:bg-white dark:bg-zinc-900 rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
+            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-zinc-300" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-green-600" />
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+              <Sparkles className="w-6 h-6 text-green-600 dark:text-green-300" />
               Artist Discovery
             </h1>
             <p className="text-gray-400 text-sm">
@@ -160,7 +160,7 @@ export default function RileyDiscoveryPage() {
               value={genre}
               onChange={(e) => setGenre(e.target.value)}
               aria-label="Filter by genre"
-              className="border rounded-lg px-3 py-2.5 text-sm bg-white min-w-[180px]"
+              className="border rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-zinc-900 min-w-[180px]"
             >
               <option value="">All Genres</option>
               {GENRE_OPTIONS.map((g) => (
@@ -199,8 +199,8 @@ export default function RileyDiscoveryPage() {
                   }}
                   className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                     genre === g
-                      ? "bg-green-100 border-green-300 text-green-700"
-                      : "bg-gray-50 border-gray-200 dark:border-zinc-800 text-gray-600 hover:bg-gray-100"
+                      ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700 text-green-700 dark:text-green-300"
+                      : "bg-gray-50 dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 text-gray-600 dark:text-zinc-300 hover:bg-gray-100"
                   }`}
                 >
                   {g
@@ -215,15 +215,15 @@ export default function RileyDiscoveryPage() {
 
         {/* Error */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-red-700">{error}</p>
+          <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+            <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
           </div>
         )}
 
         {/* Results */}
         {artists.length > 0 && (
           <>
-            <div className="text-sm text-gray-400 dark:text-zinc-400 mb-4">
+            <div className="text-sm text-gray-600 dark:text-zinc-400 mb-4">
               Showing {artists.length} of {total.toLocaleString()} results
             </div>
 
@@ -243,7 +243,7 @@ export default function RileyDiscoveryPage() {
                           className="w-16 h-16 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-zinc-800 flex items-center justify-center">
                           <Music className="w-6 h-6 text-gray-400" />
                         </div>
                       )}
@@ -253,10 +253,10 @@ export default function RileyDiscoveryPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className="font-semibold text-gray-900 truncate">
+                          <h3 className="font-semibold text-gray-900 dark:text-zinc-100 truncate">
                             {artist.name}
                           </h3>
-                          <div className="flex items-center gap-3 mt-1 text-xs text-gray-400 dark:text-zinc-400">
+                          <div className="flex items-center gap-3 mt-1 text-xs text-gray-600 dark:text-zinc-400">
                             <span className="flex items-center gap-1">
                               <Users className="w-3 h-3" />
                               {formatFollowers(artist.followers)}
@@ -277,7 +277,7 @@ export default function RileyDiscoveryPage() {
                             </a>
                           )}
                           {imported.has(artist.id) ? (
-                            <span className="text-xs text-green-700 font-medium px-2 py-1 bg-green-50 rounded">
+                            <span className="text-xs text-green-700 dark:text-green-300 font-medium px-2 py-1 bg-green-50 dark:bg-green-950 rounded">
                               Added
                             </span>
                           ) : (
@@ -303,7 +303,7 @@ export default function RileyDiscoveryPage() {
                           {artist.genres.slice(0, 4).map((g) => (
                             <span
                               key={g}
-                              className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded"
+                              className="text-xs bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 px-2 py-0.5 rounded"
                             >
                               {g}
                             </span>
@@ -348,7 +348,7 @@ export default function RileyDiscoveryPage() {
                 <button
                   onClick={() => search(artists.length)}
                   disabled={loading}
-                  className="bg-white dark:bg-zinc-900 border px-6 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                  className="bg-white dark:bg-zinc-900 border px-6 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-zinc-200 hover:bg-gray-50 disabled:opacity-50"
                 >
                   {loading ? "Loading..." : "Load More"}
                 </button>

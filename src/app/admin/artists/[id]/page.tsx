@@ -155,14 +155,14 @@ export default function ArtistDetailPage() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/admin/artists"
-                className="text-gray-600 hover:text-gray-900 inline-flex items-center space-x-2"
+                className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 inline-flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Artists</span>
               </Link>
             </div>
             <div className="flex items-center space-x-2">
-              <Sparkles className="w-5 h-5 text-purple-600" />
+              <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-300" />
               <span className="font-semibold">Artist Details</span>
             </div>
           </div>
@@ -176,8 +176,8 @@ export default function ArtistDetailPage() {
             {/* Basic Info */}
             <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                  <User className="w-8 h-8 text-purple-600" />
+                <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                  <User className="w-8 h-8 text-purple-600 dark:text-purple-300" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{artist.name}</h1>
@@ -215,7 +215,7 @@ export default function ArtistDetailPage() {
               {artist.nextShowDate && (
                 <div className="mt-6 pt-6 border-t">
                   <div className="flex items-center space-x-2 mb-2">
-                    <Calendar className="w-4 h-4 text-purple-600" />
+                    <Calendar className="w-4 h-4 text-purple-600 dark:text-purple-300" />
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">Next Show</span>
                   </div>
                   <div className="text-sm text-gray-600 dark:text-zinc-400">
@@ -252,7 +252,7 @@ export default function ArtistDetailPage() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600 dark:text-zinc-400">Total Raised</span>
-                  <span className="font-semibold text-green-600">
+                  <span className="font-semibold text-green-600 dark:text-green-300">
                     {formatCurrency(
                       artist.donations.reduce((sum, d) => sum + d.amount, 0)
                     )}
@@ -268,7 +268,7 @@ export default function ArtistDetailPage() {
             <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm">
               <div className="p-6 border-b">
                 <div className="flex items-center space-x-2">
-                  <MessageCircle className="w-5 h-5 text-purple-600" />
+                  <MessageCircle className="w-5 h-5 text-purple-600 dark:text-purple-300" />
                   <h2 className="text-lg font-semibold">Conversation with Riley</h2>
                 </div>
               </div>
@@ -286,19 +286,19 @@ export default function ArtistDetailPage() {
                       <div
                         className={`max-w-xs px-4 py-3 rounded-lg ${
                           message.role === "riley"
-                            ? "bg-purple-100 text-purple-900"
-                            : "bg-gray-100 text-gray-900"
+                            ? "bg-purple-100 dark:bg-purple-900 text-purple-900 dark:text-purple-200"
+                            : "bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-zinc-100"
                         }`}
                       >
                         <div className="text-xs font-semibold mb-1">
                           {message.role === "riley" ? "Riley" : artist.name}
                         </div>
                         <div className="text-sm">{message.content}</div>
-                        <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">
+                        <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">
                           {formatDateTime(message.createdAt)}
                         </div>
                         {message.intent && (
-                          <div className="text-xs text-purple-600 mt-1">
+                          <div className="text-xs text-purple-600 dark:text-purple-300 mt-1">
                             Intent: {message.intent}
                           </div>
                         )}
@@ -338,7 +338,7 @@ export default function ArtistDetailPage() {
             {artist.shows.length > 0 && (
               <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
-                  <Calendar className="w-5 h-5 text-purple-600" />
+                  <Calendar className="w-5 h-5 text-purple-600 dark:text-purple-300" />
                   <span>Shows</span>
                 </h3>
                 <div className="space-y-3">
@@ -348,7 +348,7 @@ export default function ArtistDetailPage() {
                         <div>
                           <div className="font-semibold text-gray-900 dark:text-white">{show.venue}</div>
                           <div className="text-sm text-gray-600 dark:text-zinc-400">{show.city}</div>
-                          <div className="text-xs text-gray-400 dark:text-zinc-400">
+                          <div className="text-xs text-gray-600 dark:text-zinc-400">
                             {formatDateTime(show.date)}
                           </div>
                         </div>
@@ -360,7 +360,7 @@ export default function ArtistDetailPage() {
                         <span className="text-gray-600 dark:text-zinc-400">
                           {show.donationCount} donations
                         </span>
-                        <span className="text-green-600 font-semibold">
+                        <span className="text-green-600 dark:text-green-300 font-semibold">
                           {formatCurrency(show.totalRaised)}
                         </span>
                       </div>
@@ -374,7 +374,7 @@ export default function ArtistDetailPage() {
             {artist.donations.length > 0 && (
               <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm p-6">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
-                  <DollarSign className="w-5 h-5 text-green-600" />
+                  <DollarSign className="w-5 h-5 text-green-600 dark:text-green-300" />
                   <span>Donations</span>
                 </h3>
                 <div className="space-y-2">
@@ -387,16 +387,16 @@ export default function ArtistDetailPage() {
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {donation.fanName || "Anonymous"}
                           {donation.isFirstWin && (
-                            <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">
+                            <span className="ml-2 text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-0.5 rounded-full">
                               First Win!
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-gray-400 dark:text-zinc-400">
+                        <div className="text-xs text-gray-600 dark:text-zinc-400">
                           {formatDateTime(donation.createdAt)}
                         </div>
                       </div>
-                      <div className="text-sm font-semibold text-green-600">
+                      <div className="text-sm font-semibold text-green-600 dark:text-green-300">
                         {formatCurrency(donation.amount)}
                       </div>
                     </div>

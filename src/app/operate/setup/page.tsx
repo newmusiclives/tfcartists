@@ -143,9 +143,9 @@ export default function OperatorSetupWizard() {
                 onClick={() => setStep(s.key)}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   step === s.key
-                    ? "bg-amber-100 text-amber-800"
+                    ? "bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200"
                     : i < currentIdx
-                    ? "text-green-600"
+                    ? "text-green-600 dark:text-green-300"
                     : "text-gray-400"
                 }`}
               >
@@ -157,7 +157,7 @@ export default function OperatorSetupWizard() {
                 <span className="hidden sm:inline">{s.label}</span>
               </button>
               {i < STEPS.length - 1 && (
-                <div className={`w-8 h-0.5 mx-1 ${i < currentIdx ? "bg-green-300" : "bg-gray-200"}`} />
+                <div className={`w-8 h-0.5 mx-1 ${i < currentIdx ? "bg-green-300" : "bg-gray-200 dark:bg-zinc-800"}`} />
               )}
             </div>
           ))}
@@ -238,7 +238,7 @@ export default function OperatorSetupWizard() {
 
               {/* Preview */}
               <div className="border rounded-xl p-4">
-                <p className="text-xs text-gray-400 dark:text-zinc-400 mb-2">Preview</p>
+                <p className="text-xs text-gray-600 dark:text-zinc-400 mb-2">Preview</p>
                 <div className="rounded-lg overflow-hidden" style={{ background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})` }}>
                   <div className="p-6 text-white">
                     <p className="font-bold text-lg">{stationName || "Your Station Name"}</p>
@@ -252,7 +252,7 @@ export default function OperatorSetupWizard() {
                 <input type="text" value={customDomain} onChange={(e) => setCustomDomain(e.target.value)}
                   placeholder="e.g., radio.yourbrand.com"
                   className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" />
-                <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">
+                <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">
                   Point a CNAME record to truefans-radio.netlify.app. Configure in White Label settings after setup.
                 </p>
               </div>
@@ -271,11 +271,11 @@ export default function OperatorSetupWizard() {
                     key={f.id}
                     onClick={() => setFormat(f.id)}
                     className={`text-left p-4 rounded-xl border-2 transition-all ${
-                      format === f.id ? "border-amber-500 bg-amber-50" : "border-gray-200 hover:border-gray-300"
+                      format === f.id ? "border-amber-500 bg-amber-50 dark:bg-amber-950" : "border-gray-200 dark:border-zinc-800 hover:border-gray-300"
                     }`}
                   >
                     <p className="font-semibold text-sm text-gray-900 dark:text-white">{f.name}</p>
-                    <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{f.desc}</p>
+                    <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">{f.desc}</p>
                   </button>
                 ))}
               </div>
@@ -336,7 +336,7 @@ export default function OperatorSetupWizard() {
                     placeholder="/stream" className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none" />
                 </div>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
+              <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-sm text-blue-800 dark:text-blue-200">
                 <p className="font-medium">No server yet?</p>
                 <p className="mt-1">Skip this step. After setup, go to Admin &gt; Settings to configure streaming, or contact us to provision a managed Liquidsoap/Icecast instance.</p>
               </div>
@@ -353,21 +353,21 @@ export default function OperatorSetupWizard() {
                 <div className="border rounded-lg p-4">
                   <p className="text-xs text-gray-400 uppercase font-medium mb-2">Station</p>
                   <p className="font-semibold">{stationName || "(not set)"}</p>
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">{callSign} | {genre} | {timezone}</p>
-                  <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">{tagline}</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">{callSign} | {genre} | {timezone}</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">{tagline}</p>
                 </div>
                 <div className="border rounded-lg p-4">
                   <p className="text-xs text-gray-400 uppercase font-medium mb-2">Branding</p>
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded" style={{ backgroundColor: primaryColor }} />
                     <div className="w-6 h-6 rounded" style={{ backgroundColor: secondaryColor }} />
-                    <span className="text-sm text-gray-600 ml-2">{customDomain || "No custom domain"}</span>
+                    <span className="text-sm text-gray-600 dark:text-zinc-300 ml-2">{customDomain || "No custom domain"}</span>
                   </div>
                 </div>
                 <div className="border rounded-lg p-4">
                   <p className="text-xs text-gray-400 uppercase font-medium mb-2">Programming</p>
                   <p className="font-semibold text-sm">{FORMAT_TEMPLATES.find((f) => f.id === format)?.name}</p>
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">{hoursPerDay}h/day, {djCount} AI DJs</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">{hoursPerDay}h/day, {djCount} AI DJs</p>
                 </div>
                 <div className="border rounded-lg p-4">
                   <p className="text-xs text-gray-400 uppercase font-medium mb-2">Stream</p>
@@ -376,12 +376,12 @@ export default function OperatorSetupWizard() {
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">{error}</div>
+                <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">{error}</div>
               )}
 
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <p className="font-medium text-green-800">Ready to launch!</p>
-                <p className="text-sm text-green-700 mt-1">
+              <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                <p className="font-medium text-green-800 dark:text-green-200">Ready to launch!</p>
+                <p className="text-sm text-green-700 dark:text-green-300 mt-1">
                   This will create your station, generate AI DJ personalities, set up your schedule,
                   and configure your branding. You can customize everything further in the admin panel.
                 </p>
@@ -395,7 +395,7 @@ export default function OperatorSetupWizard() {
           <button
             onClick={prevStep}
             disabled={!canPrev}
-            className="inline-flex items-center gap-2 px-5 py-2.5 border rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-5 py-2.5 border rounded-lg text-gray-700 dark:text-zinc-200 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ArrowLeft className="w-4 h-4" /> Back
           </button>

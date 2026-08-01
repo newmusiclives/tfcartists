@@ -48,14 +48,14 @@ export default function ProgrammingPage() {
   const schedule = DJ_SCHEDULE[activeDay];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-rose-50">
+    <main className="min-h-screen bg-gradient-to-br from-indigo-50 dark:from-indigo-950 via-white dark:via-zinc-900 to-rose-50 dark:to-rose-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/parker"
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Parker Dashboard</span>
@@ -69,7 +69,7 @@ export default function ProgrammingPage() {
             </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <CalendarDays className="w-8 h-8 text-indigo-600" />
+            <CalendarDays className="w-8 h-8 text-indigo-600 dark:text-indigo-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Program Director Dashboard</h1>
               <p className="text-gray-600 dark:text-zinc-400">Managed by Sage Calloway</p>
@@ -83,35 +83,35 @@ export default function ProgrammingPage() {
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <CheckCircle className="w-6 h-6 text-green-600" />
+              <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Format Compliance</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">98%</div>
-            <div className="text-xs text-green-600">Within guidelines</div>
+            <div className="text-xs text-green-600 dark:text-green-300">Within guidelines</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <CalendarDays className="w-6 h-6 text-indigo-600" />
+              <CalendarDays className="w-6 h-6 text-indigo-600 dark:text-indigo-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Schedule Fill Rate</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">100%</div>
-            <div className="text-xs text-indigo-600">All shifts covered</div>
+            <div className="text-xs text-indigo-600 dark:text-indigo-300">All shifts covered</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <Users className="w-6 h-6 text-violet-600" />
+              <Users className="w-6 h-6 text-violet-600 dark:text-violet-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Active DJs</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">12</div>
-            <div className="text-xs text-violet-600">Across all shifts</div>
+            <div className="text-xs text-violet-600 dark:text-violet-300">Across all shifts</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <Clock className="w-6 h-6 text-rose-600" />
+              <Clock className="w-6 h-6 text-rose-600 dark:text-rose-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Live Hours/Day</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">16</div>
-            <div className="text-xs text-rose-600">6am - 10pm daily</div>
+            <div className="text-xs text-rose-600 dark:text-rose-300">6am - 10pm daily</div>
           </div>
         </section>
 
@@ -126,8 +126,8 @@ export default function ProgrammingPage() {
                   onClick={() => setActiveDay(day)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeDay === day
-                      ? "bg-indigo-600 text-gray-600"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-indigo-600 text-gray-600 dark:text-zinc-300"
+                      : "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200 hover:bg-gray-200"
                   }`}
                 >
                   {day.charAt(0).toUpperCase() + day.slice(1)}
@@ -142,8 +142,8 @@ export default function ProgrammingPage() {
                 key={idx}
                 className={`flex items-center justify-between p-4 rounded-lg border-2 ${
                   slot.status === "live"
-                    ? "border-indigo-200 bg-indigo-50"
-                    : "border-gray-200 dark:border-zinc-800 bg-gray-50"
+                    ? "border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-950"
+                    : "border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900"
                 }`}
               >
                 <div className="flex items-center space-x-4">
@@ -160,7 +160,7 @@ export default function ProgrammingPage() {
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     slot.status === "live"
                       ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
-                      : "bg-gray-100 text-gray-600"
+                      : "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300"
                   }`}>
                     {slot.status === "live" ? "Live DJ" : "Automation"}
                   </span>
@@ -175,7 +175,7 @@ export default function ProgrammingPage() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Daypart Analysis</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b">
+              <thead className="bg-gray-50 dark:bg-zinc-900 border-b">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Daypart</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Time</th>
@@ -184,7 +184,7 @@ export default function ProgrammingPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Format Compliance</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200 dark:divide-zinc-800">
+              <tbody className="bg-white dark:bg-zinc-900 divide-y divide-gray-200 dark:divide-zinc-800">
                 {DAYPART_ANALYSIS.map((dp, idx) => (
                   <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{dp.name}</td>
@@ -194,13 +194,13 @@ export default function ProgrammingPage() {
                         dp.listeners === "High" ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" :
                         dp.listeners === "Medium" ? "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400" :
                         dp.listeners === "Low-Med" ? "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400" :
-                        "bg-gray-100 text-gray-700"
+                        "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200"
                       }`}>
                         {dp.listeners}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">{dp.retention}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">{dp.format}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600 dark:text-green-300">{dp.format}</td>
                   </tr>
                 ))}
               </tbody>
@@ -218,13 +218,13 @@ export default function ProgrammingPage() {
               { dj: "Doc Holloway", shift: "Afternoon", prep: "In Progress", color: "yellow" },
               { dj: "Cody Rampart", shift: "Evening", prep: "Pending", color: "gray" },
             ].map((item, idx) => (
-              <div key={idx} className="bg-gray-50 rounded-lg p-4 border border-gray-200 dark:border-zinc-800">
+              <div key={idx} className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4 border border-gray-200 dark:border-zinc-800">
                 <div className="flex items-center justify-between mb-2">
                   <div className="font-semibold text-gray-900 dark:text-white">{item.dj}</div>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                     item.color === "green" ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" :
                     item.color === "yellow" ? "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400" :
-                    "bg-gray-100 text-gray-600"
+                    "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300"
                   }`}>
                     {item.prep}
                   </span>

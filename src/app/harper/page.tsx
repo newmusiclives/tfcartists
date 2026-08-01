@@ -83,17 +83,17 @@ export default function HarperDashboardPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+      <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-blue-50 dark:to-blue-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-green-600 dark:text-green-300" />
       </main>
     );
   }
 
   if (unauthorized) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-blue-50 dark:to-blue-950 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-zinc-100 mb-2">Login Required</h2>
           <p className="text-gray-600 dark:text-zinc-400 mb-4">Sign in as Harper to access this dashboard.</p>
           <Link href="/login?callbackUrl=/harper" className="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-700">Sign In</Link>
         </div>
@@ -108,14 +108,14 @@ export default function HarperDashboardPage() {
   const revenueByTier = stats?.revenueByTier ?? {};
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <main className="min-h-screen bg-gradient-to-br from-green-50 dark:from-green-950 via-white dark:via-zinc-900 to-blue-50 dark:to-blue-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/admin"
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Admin</span>
@@ -129,7 +129,7 @@ export default function HarperDashboardPage() {
             </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <DollarSign className="w-8 h-8 text-green-600" />
+            <DollarSign className="w-8 h-8 text-green-600 dark:text-green-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Team Harper Dashboard</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -145,28 +145,28 @@ export default function HarperDashboardPage() {
         {/* Key Metrics */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
-            icon={<Building2 className="w-6 h-6 text-green-600" />}
+            icon={<Building2 className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Total Sponsors"
             value={totalSponsors}
             subtitle={`${activeDeals} active deals`}
             color="green"
           />
           <MetricCard
-            icon={<DollarSign className="w-6 h-6 text-blue-600" />}
+            icon={<DollarSign className="w-6 h-6 text-blue-600 dark:text-blue-300" />}
             label="Monthly Revenue"
             value={`$${totalRevenue.toLocaleString()}`}
             subtitle="From active sponsorships"
             color="blue"
           />
           <MetricCard
-            icon={<Phone className="w-6 h-6 text-orange-600" />}
+            icon={<Phone className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Calls This Month"
             value={callsThisMonth}
             subtitle={`${stats?.dealsClosedThisMonth ?? 0} deals closed`}
             color="orange"
           />
           <MetricCard
-            icon={<Target className="w-6 h-6 text-purple-600" />}
+            icon={<Target className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="In Pipeline"
             value={(stats?.byStage?.negotiating ?? 0) + (stats?.byStage?.interested ?? 0)}
             subtitle="Negotiating + interested"
@@ -180,22 +180,22 @@ export default function HarperDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Active Sponsors</div>
-              <div className="text-3xl font-bold text-green-600 mb-1">{totalSponsors}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Across all tiers</div>
+              <div className="text-3xl font-bold text-green-600 dark:text-green-300 mb-1">{totalSponsors}</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Across all tiers</div>
             </div>
             <div className="text-center">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Monthly Revenue</div>
-              <div className="text-3xl font-bold text-blue-600 mb-1">
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-300 mb-1">
                 ${totalRevenue.toLocaleString()}
               </div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">From sponsorships</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">From sponsorships</div>
             </div>
             <div className="text-center">
               <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">Artist Pool (80%)</div>
-              <div className="text-3xl font-bold text-purple-600 mb-1">
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-300 mb-1">
                 ${Math.round(totalRevenue * 0.8).toLocaleString()}
               </div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Distributed to artists</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Distributed to artists</div>
             </div>
           </div>
 
@@ -203,12 +203,12 @@ export default function HarperDashboardPage() {
             <div className="mt-6 pt-6 border-t">
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 {Object.entries(revenueByTier).map(([tier, data]) => (
-                  <div key={tier} className="bg-gray-50 rounded-lg p-3 text-center">
-                    <div className="text-xs font-bold text-gray-400 dark:text-zinc-400 mb-1">
+                  <div key={tier} className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3 text-center">
+                    <div className="text-xs font-bold text-gray-600 dark:text-zinc-400 mb-1">
                       {TIER_NAMES[tier] || tier}
                     </div>
                     <div className="text-lg font-bold text-gray-900 dark:text-white">{data.count}</div>
-                    <div className="text-xs text-gray-400 dark:text-zinc-400">${data.revenue.toLocaleString()}/mo</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">${data.revenue.toLocaleString()}/mo</div>
                   </div>
                 ))}
               </div>
@@ -255,7 +255,7 @@ export default function HarperDashboardPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-gray-400 dark:text-zinc-400">
+            <div className="text-center py-8 text-gray-600 dark:text-zinc-400">
               <Building2 className="w-8 h-8 mx-auto mb-2 text-gray-300" />
               <p>No deals yet. Start reaching out to potential sponsors.</p>
             </div>
@@ -264,7 +264,7 @@ export default function HarperDashboardPage() {
 
         {/* Recent Activity */}
         {stats?.activity && (
-          <section className="bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-6">
+          <section className="bg-gradient-to-br from-blue-50 dark:from-blue-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Recent Activity</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border">
@@ -289,38 +289,38 @@ export default function HarperDashboardPage() {
             title="Sponsor Pipeline"
             description="Complete sponsor journey from discovery to activation"
             href="/harper/pipeline"
-            icon={<GitBranch className="w-8 h-8 text-green-600" />}
+            icon={<GitBranch className="w-8 h-8 text-green-600 dark:text-green-300" />}
           />
           <QuickActionCard
             title="Sponsor Outreach"
             description="Lead discovery and business development"
             href="/harper/outreach"
-            icon={<Send className="w-8 h-8 text-blue-600" />}
+            icon={<Send className="w-8 h-8 text-blue-600 dark:text-blue-300" />}
           />
           <QuickActionCard
             title="Manage Sponsors"
             description="View and manage all sponsor relationships"
             href="/harper/sponsors"
-            icon={<Building2 className="w-8 h-8 text-green-600" />}
+            icon={<Building2 className="w-8 h-8 text-green-600 dark:text-green-300" />}
             badge={totalSponsors}
           />
           <QuickActionCard
             title="Ad Operations"
             description="Schedule and manage ad spots"
             href="/harper/operations"
-            icon={<Radio className="w-8 h-8 text-orange-600" />}
+            icon={<Radio className="w-8 h-8 text-orange-600 dark:text-orange-300" />}
           />
           <QuickActionCard
             title="Billing & Revenue"
             description="Invoicing and revenue distribution"
             href="/harper/billing"
-            icon={<CreditCard className="w-8 h-8 text-blue-600" />}
+            icon={<CreditCard className="w-8 h-8 text-blue-600 dark:text-blue-300" />}
           />
           <QuickActionCard
             title="Ad Inventory"
             description="Manage ad spots and scheduling"
             href="/harper/inventory"
-            icon={<Calendar className="w-8 h-8 text-purple-600" />}
+            icon={<Calendar className="w-8 h-8 text-purple-600 dark:text-purple-300" />}
           />
         </section>
       </div>
@@ -348,7 +348,7 @@ function MetricCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -365,7 +365,7 @@ function DealRow({ deal }: { deal: Deal }) {
   const tierName = TIER_NAMES[deal.tier] || deal.tier;
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
       <div className="flex items-center space-x-4 flex-1">
         <Building2 className="w-10 h-10 text-gray-400" />
         <div>
@@ -375,7 +375,7 @@ function DealRow({ deal }: { deal: Deal }) {
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-xs text-gray-400 dark:text-zinc-400">{tierName} - ${deal.monthlyAmount}/mo</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">{tierName} - ${deal.monthlyAmount}/mo</div>
           <div className="text-xs text-gray-400">
             {deal.startDate ? new Date(deal.startDate).toLocaleDateString() : "—"}
           </div>

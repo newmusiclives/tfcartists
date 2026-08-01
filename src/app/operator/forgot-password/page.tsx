@@ -40,26 +40,26 @@ export default function ForgotPasswordPage() {
     <main className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Radio className="w-8 h-8 text-amber-700 mx-auto mb-4" />
+          <Radio className="w-8 h-8 text-amber-700 dark:text-amber-300 mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Reset Password</h1>
           <p className="text-gray-600 dark:text-zinc-400">Enter your email and we'll send you a reset link.</p>
         </div>
 
         {sent ? (
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 text-center">
-            <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
+            <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-300 mx-auto mb-4" />
             <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Check Your Email</h2>
             <p className="text-gray-600 dark:text-zinc-400 mb-6">
               If an account exists for <strong>{email}</strong>, we've sent password reset instructions.
             </p>
-            <Link href="/login" className="text-amber-700 hover:text-amber-800 font-medium">
+            <Link href="/login" className="text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium">
               Back to Login
             </Link>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8 space-y-5">
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
+              <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">
                 {error}
               </div>
             )}

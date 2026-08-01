@@ -138,7 +138,7 @@ export default function ArtistStationLandingPage() {
   return (
     <main className="min-h-screen">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b bg-white/90 backdrop-blur-md">
+      <nav className="fixed top-0 w-full z-50 border-b bg-white dark:bg-zinc-900/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
@@ -150,17 +150,17 @@ export default function ArtistStationLandingPage() {
                   height={32}
                   className="h-8 w-auto object-contain"
                 />
-                <span className="font-bold text-xl text-violet-700">Artist Stations</span>
+                <span className="font-bold text-xl text-violet-700 dark:text-violet-300">Artist Stations</span>
               </Link>
             </div>
             <div className="hidden md:flex items-center space-x-6">
-              <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">
+              <a href="#how-it-works" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors text-sm font-medium">
                 How It Works
               </a>
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">
+              <a href="#features" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors text-sm font-medium">
                 Features
               </a>
-              <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">
+              <a href="#pricing" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors text-sm font-medium">
                 Pricing
               </a>
               <Link
@@ -185,10 +185,10 @@ export default function ArtistStationLandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-28 pb-20 sm:pt-36 sm:pb-28 bg-gradient-to-br from-violet-50 via-white to-purple-50">
+      <section className="pt-28 pb-20 sm:pt-36 sm:pb-28 bg-gradient-to-br from-violet-50 dark:from-violet-950 via-white dark:via-zinc-900 to-purple-50 dark:to-purple-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center space-x-2 bg-violet-100 text-violet-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center space-x-2 bg-violet-100 dark:bg-violet-900 text-violet-800 dark:text-violet-200 px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               <span>Artist-Powered Radio</span>
             </div>
@@ -219,7 +219,7 @@ export default function ArtistStationLandingPage() {
               </Link>
               <Link
                 href="/player"
-                className="inline-flex items-center space-x-2 border-2 border-violet-600 text-violet-700 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-violet-50 transition-colors w-full sm:w-auto justify-center"
+                className="inline-flex items-center space-x-2 border-2 border-violet-600 text-violet-700 dark:text-violet-300 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-violet-50 transition-colors w-full sm:w-auto justify-center"
               >
                 <Play className="w-5 h-5" />
                 <span>Hear a Demo</span>
@@ -230,15 +230,15 @@ export default function ArtistStationLandingPage() {
             <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto">
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">24/7</div>
-                <div className="text-sm text-gray-400 dark:text-zinc-400">Live Radio</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Live Radio</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">AI</div>
-                <div className="text-sm text-gray-400 dark:text-zinc-400">Powered DJ</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">Powered DJ</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Free</div>
-                <div className="text-sm text-gray-400 dark:text-zinc-400">To Start</div>
+                <div className="text-sm text-gray-600 dark:text-zinc-400">To Start</div>
               </div>
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function ArtistStationLandingPage() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="scroll-mt-20 py-20 bg-white">
+      <section id="how-it-works" className="scroll-mt-20 py-20 bg-white dark:bg-zinc-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -281,7 +281,7 @@ export default function ArtistStationLandingPage() {
       </section>
 
       {/* Features */}
-      <section id="features" className="scroll-mt-20 py-20 bg-gradient-to-br from-gray-50 to-violet-50/30">
+      <section id="features" className="scroll-mt-20 py-20 bg-gradient-to-br from-gray-50 dark:from-zinc-950 to-violet-50 dark:to-violet-950/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -298,8 +298,8 @@ export default function ArtistStationLandingPage() {
                 key={feature.title}
                 className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-violet-100 rounded-xl mb-4">
-                  <feature.icon className="w-5 h-5 text-violet-600" />
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-violet-100 dark:bg-violet-900 rounded-xl mb-4">
+                  <feature.icon className="w-5 h-5 text-violet-600 dark:text-violet-300" />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{feature.title}</h3>
                 <p className="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">{feature.description}</p>
@@ -310,7 +310,7 @@ export default function ArtistStationLandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="scroll-mt-20 py-20 bg-white">
+      <section id="pricing" className="scroll-mt-20 py-20 bg-white dark:bg-zinc-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -327,8 +327,8 @@ export default function ArtistStationLandingPage() {
                 key={tier.name}
                 className={`rounded-2xl p-8 border ${
                   tier.highlight
-                    ? "border-violet-300 bg-gradient-to-br from-violet-50 to-purple-50 shadow-lg ring-2 ring-violet-200"
-                    : "border-gray-200 bg-white"
+                    ? "border-violet-300 dark:border-violet-700 bg-gradient-to-br from-violet-50 dark:from-violet-950 to-purple-50 dark:to-purple-950 shadow-lg ring-2 ring-violet-200"
+                    : "border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900"
                 }`}
               >
                 {tier.highlight && (
@@ -340,7 +340,7 @@ export default function ArtistStationLandingPage() {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">{tier.name}</h3>
                 <div className="flex items-baseline gap-1 mt-2 mb-2">
                   <span className="text-4xl font-bold text-gray-900 dark:text-white">{tier.price}</span>
-                  <span className="text-gray-400 dark:text-zinc-400">{tier.period}</span>
+                  <span className="text-gray-600 dark:text-zinc-400">{tier.period}</span>
                 </div>
                 <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">{tier.description}</p>
 
@@ -357,8 +357,8 @@ export default function ArtistStationLandingPage() {
                   href="/onboard"
                   className={`block text-center py-3 px-6 rounded-xl font-semibold transition-colors ${
                     tier.highlight
-                      ? "bg-violet-600 text-gray-600 hover:bg-violet-700"
-                      : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                      ? "bg-violet-600 text-gray-600 dark:text-zinc-300 hover:bg-violet-700"
+                      : "bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-zinc-100 hover:bg-gray-200"
                   }`}
                 >
                   {tier.cta}
@@ -380,7 +380,7 @@ export default function ArtistStationLandingPage() {
           </p>
           <Link
             href="/onboard"
-            className="inline-flex items-center space-x-2 bg-white text-violet-700 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-violet-50 transition-colors shadow-lg"
+            className="inline-flex items-center space-x-2 bg-white dark:bg-zinc-900 text-violet-700 dark:text-violet-300 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-violet-50 transition-colors shadow-lg"
           >
             <Music className="w-5 h-5" />
             <span>Get Started Free</span>
@@ -405,7 +405,7 @@ export default function ArtistStationLandingPage() {
                 {NETWORK_NAME} Artist Stations
               </span>
             </div>
-            <div className="flex items-center space-x-6 text-sm text-gray-400 dark:text-zinc-400">
+            <div className="flex items-center space-x-6 text-sm text-gray-600 dark:text-zinc-400">
               <Link href="/" className="hover:text-gray-300 transition-colors">Home</Link>
               <Link href="/about" className="hover:text-gray-300 transition-colors">About</Link>
               <Link href="/contact" className="hover:text-gray-300 transition-colors">Contact</Link>

@@ -2985,3 +2985,48 @@ model ImagingElement {
   @@index([elementType])
   @@index([status])
 }
+
+/// A public-facing artist on the station roster.
+///
+/// Distinct from `Artist`, which is an outreach CRM record (discoverySource,
+/// unique email/phone) built around finding and signing people. Our owned AI
+/// artists are not leads and have no contact details, so writing them there
+/// would pollute the discovery pipeline with rows no one can ever contact.
+/// `ArtistPermission` is not right either: it records direct-licence evidence
+/// for EXTERNAL artists, and an artist we own outright needs no permission.
+///
+/// This is the roster: who we present publicly and why we are allowed to.
+/// Deliberately not station-scoped - the same artist can appear on several
+/// stations, and duplicating the bio per station would guarantee they drift.
+model RosterArtist {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  /// Must match Song.artistName exactly - that is the only join between the
+  /// roster and what actually plays, since the two systems have separate ids.
+  name           String   @unique
+  slug           String   @unique
+
+  bio            String?
+  imageUrl       String?
+
+  genre          String?
+  subGenre       String?
+  artistType     String?  // "solo" | "band"
+  originCity     String?
+  originCountry  String?
+
+  /// Why we may broadcast them: owned_ai | direct_licence | public_domain.
+  /// Mirrors Song.rightsStatus so the roster can be audited on its own.
+  rightsBasis    String   @default("owned_ai")
+
+  /// Provenance across the id boundary, so a re-import updates rather than
+  /// duplicates even if the display name changes.
+  sourceSystem   String?
+  sourceArtistId String?  @unique
+
+  isActive       Boolean  @default(true)
+
+  @@index([isActive])
+}

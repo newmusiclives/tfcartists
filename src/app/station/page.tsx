@@ -100,7 +100,7 @@ export default async function StationPage() {
             </Link>
             <Link
               href="/schedule"
-              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-white/5 transition-colors"
+              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-white dark:bg-zinc-900/5 transition-colors"
             >
               <Clock className="w-5 h-5" />
               <span>View Schedule</span>
@@ -215,20 +215,20 @@ export default async function StationPage() {
           </div>
 
           <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900/5 border border-white/10 rounded-xl p-6 text-center">
               <Clock className="w-7 h-7 mx-auto mb-3 text-amber-400" />
               <h3 className="font-bold text-white mb-1">24/7 Music</h3>
-              <p className="text-sm text-gray-400 dark:text-zinc-400">Never stops. Never repeats.</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Never stops. Never repeats.</p>
             </div>
-            <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900/5 border border-white/10 rounded-xl p-6 text-center">
               <Music className="w-7 h-7 mx-auto mb-3 text-amber-400" />
               <h3 className="font-bold text-white mb-1">Five Genres</h3>
-              <p className="text-sm text-gray-400 dark:text-zinc-400">Americana, Country, Folk, Indie, Singer-Songwriter</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Americana, Country, Folk, Indie, Singer-Songwriter</p>
             </div>
-            <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
+            <div className="bg-white dark:bg-zinc-900/5 border border-white/10 rounded-xl p-6 text-center">
               <TrendingUp className="w-7 h-7 mx-auto mb-3 text-amber-400" />
               <h3 className="font-bold text-white mb-1">Smart Rotation</h3>
-              <p className="text-sm text-gray-400 dark:text-zinc-400">Cooldown timers, gender balance, artist separation</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Cooldown timers, gender balance, artist separation</p>
             </div>
           </div>
         </div>
@@ -253,7 +253,7 @@ export default async function StationPage() {
             </Link>
             <Link
               href="/listen/register"
-              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-white/5 transition-colors"
+              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-white dark:bg-zinc-900/5 transition-colors"
             >
               <span>Create Free Account</span>
             </Link>
@@ -279,7 +279,7 @@ export default async function StationPage() {
               TrueFans RADIO Network
             </Link>
           </p>
-          <p className="text-xs text-gray-700 mt-4">&copy; 2026 TrueFans RADIO. All rights reserved.</p>
+          <p className="text-xs text-gray-700 dark:text-zinc-200 mt-4">&copy; 2026 TrueFans RADIO. All rights reserved.</p>
         </div>
       </footer>
     </main>
@@ -291,7 +291,7 @@ function NumberCard({ value, label, sub }: { value: string | number; label: stri
     <div className="bg-gray-800/50 border border-white/10 rounded-xl p-6 text-center">
       <div className="text-3xl sm:text-4xl font-bold text-amber-400 mb-1">{value}</div>
       <div className="text-sm font-semibold text-white">{label}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{sub}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1">{sub}</div>
     </div>
   );
 }

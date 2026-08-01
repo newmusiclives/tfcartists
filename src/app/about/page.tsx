@@ -81,7 +81,7 @@ function TeamCard({ member }: { member: TeamMember }) {
           </div>
         )}
         <h3 className="text-xl font-bold text-gray-900 dark:text-white">{member.name}</h3>
-        <p className="text-amber-700 font-medium text-sm mt-1">{member.title}</p>
+        <p className="text-amber-700 dark:text-amber-300 font-medium text-sm mt-1">{member.title}</p>
         <p className="text-gray-600 dark:text-zinc-400 text-sm mt-3 leading-relaxed">{member.bio}</p>
       </div>
     </div>
@@ -90,26 +90,26 @@ function TeamCard({ member }: { member: TeamMember }) {
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
+    <main className="min-h-screen bg-gradient-to-br from-amber-50 dark:from-amber-950 via-orange-50 dark:via-orange-950 to-rose-50 dark:to-rose-950">
       {/* Navigation */}
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <Radio className="w-6 h-6 text-amber-700" />
-              <StationName className="font-bold text-xl text-gray-900" />
+              <Radio className="w-6 h-6 text-amber-700 dark:text-amber-300" />
+              <StationName className="font-bold text-xl text-gray-900 dark:text-zinc-100" />
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                 Home
               </Link>
-              <Link href="/station" className="text-amber-700 hover:text-amber-800 font-medium transition-colors">
+              <Link href="/station" className="text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium transition-colors">
                 Station
               </Link>
-              <Link href="/schedule" className="text-amber-700 hover:text-amber-800 font-medium transition-colors">
+              <Link href="/schedule" className="text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium transition-colors">
                 Schedule
               </Link>
-              <Link href="/network" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/network" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                 Network
               </Link>
             </div>

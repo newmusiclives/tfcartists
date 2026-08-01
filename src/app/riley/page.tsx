@@ -110,7 +110,7 @@ export default function RileyDashboardPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950 flex items-center justify-center">
         <div className="text-gray-600 dark:text-zinc-400">Loading dashboard...</div>
       </main>
     );
@@ -118,9 +118,9 @@ export default function RileyDashboardPage() {
 
   if (unauthorized) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Login Required</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-zinc-100 mb-2">Login Required</h2>
           <p className="text-gray-600 dark:text-zinc-400 mb-4">Sign in as Riley to access this dashboard.</p>
           <Link href="/login?callbackUrl=/riley" className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">Sign In</Link>
         </div>
@@ -130,8 +130,8 @@ export default function RileyDashboardPage() {
 
   if (!stats) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
-        <div className="text-red-600">Error loading dashboard data</div>
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950 flex items-center justify-center">
+        <div className="text-red-600 dark:text-red-300">Error loading dashboard data</div>
       </main>
     );
   }
@@ -159,14 +159,14 @@ export default function RileyDashboardPage() {
   }));
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/admin"
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Admin</span>
@@ -180,7 +180,7 @@ export default function RileyDashboardPage() {
             </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <Users className="w-8 h-8 text-purple-600" />
+            <Users className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Team Riley Dashboard</h1>
               <p className="text-gray-600 dark:text-zinc-400">
@@ -196,28 +196,28 @@ export default function RileyDashboardPage() {
         {/* Key Metrics */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
-            icon={<Users className="w-6 h-6 text-purple-600" />}
+            icon={<Users className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="Total Artists"
             value={stats.totalArtists}
             subtitle="Active on station"
             color="purple"
           />
           <MetricCard
-            icon={<DollarSign className="w-6 h-6 text-green-600" />}
+            icon={<DollarSign className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Monthly Revenue"
             value={`$${stats.monthlyRevenue.toLocaleString()}`}
             subtitle="100% retained"
             color="green"
           />
           <MetricCard
-            icon={<Music className="w-6 h-6 text-blue-600" />}
+            icon={<Music className="w-6 h-6 text-blue-600 dark:text-blue-300" />}
             label="Pending Submissions"
             value={stats.pendingSubmissions}
             subtitle="Awaiting review"
             color="blue"
           />
           <MetricCard
-            icon={<TrendingUp className="w-6 h-6 text-orange-600" />}
+            icon={<TrendingUp className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Total Pool Shares"
             value={stats.totalShares.toLocaleString()}
             subtitle="Artist pool"
@@ -228,7 +228,7 @@ export default function RileyDashboardPage() {
         {/* Team Members */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6 flex items-center space-x-2">
-            <Users className="w-6 h-6 text-purple-600" />
+            <Users className="w-6 h-6 text-purple-600 dark:text-purple-300" />
             <span>Team Members</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -239,11 +239,11 @@ export default function RileyDashboardPage() {
               { name: "Sienna Park", role: "Content Vetting & QC", avatar: "SP", color: "bg-green-100 text-green-600", status: "Reviewing submissions", kpi: `${stats.pendingSubmissions} pending` },
               { name: "Jordan Cross", role: "Payment Processing", avatar: "JC", color: "bg-emerald-100 text-emerald-600", status: "Processing pool payments", kpi: `$${stats.monthlyRevenue.toLocaleString()}` },
             ].map((member, idx) => (
-              <div key={idx} className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800 hover:border-purple-300 transition-colors">
+              <div key={idx} className="bg-gradient-to-br from-gray-50 dark:from-zinc-950 to-white dark:to-zinc-900 rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800 hover:border-purple-300 transition-colors">
                 <div className={`w-10 h-10 ${member.color} rounded-lg flex items-center justify-center text-sm font-bold mb-2`}>{member.avatar}</div>
                 <div className="font-semibold text-gray-900 dark:text-white text-sm">{member.name}</div>
                 <div className="text-xs text-gray-600 dark:text-zinc-400 mb-2">{member.role}</div>
-                <div className="text-xs text-purple-600 mb-2 truncate">{member.status}</div>
+                <div className="text-xs text-purple-600 dark:text-purple-300 mb-2 truncate">{member.status}</div>
                 <div className="mt-2 pt-2 border-t border-gray-200 dark:border-zinc-800">
                   <div className="text-xs font-semibold text-gray-700 dark:text-zinc-300">{member.kpi}</div>
                 </div>
@@ -311,15 +311,15 @@ export default function RileyDashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="text-sm text-gray-600 dark:text-zinc-400">Monthly Revenue</div>
-                <div className="text-2xl font-bold text-purple-600">${stats.monthlyRevenue.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">${stats.monthlyRevenue.toLocaleString()}</div>
               </div>
               <div className="text-center">
                 <div className="text-sm text-gray-600 dark:text-zinc-400">Annual Revenue</div>
-                <div className="text-2xl font-bold text-purple-600">${(stats.monthlyRevenue * 12).toLocaleString()}</div>
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">${(stats.monthlyRevenue * 12).toLocaleString()}</div>
               </div>
               <div className="text-center">
                 <div className="text-sm text-gray-600 dark:text-zinc-400">Revenue Status</div>
-                <div className="text-sm font-semibold text-green-600">100% Retained by Station</div>
+                <div className="text-sm font-semibold text-green-600 dark:text-green-300">100% Retained by Station</div>
               </div>
             </div>
           </div>
@@ -351,7 +351,7 @@ export default function RileyDashboardPage() {
         </section>
 
         {/* Tier Upgrade Opportunities */}
-        <section className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6">
+        <section className="bg-gradient-to-br from-purple-50 dark:from-purple-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Tier Upgrade Opportunities</h2>
           <p className="text-gray-600 dark:text-zinc-400 text-sm mb-6">
             Artists showing high engagement who might upgrade to higher tiers
@@ -366,7 +366,7 @@ export default function RileyDashboardPage() {
           <div className="mt-6 text-center">
             <Link
               href="/riley/upgrade-opportunities"
-              className="text-purple-600 hover:text-purple-700 font-semibold"
+              className="text-purple-600 dark:text-purple-300 hover:text-purple-700 font-semibold"
             >
               View All Opportunities →
             </Link>
@@ -386,7 +386,7 @@ export default function RileyDashboardPage() {
               <button
                 onClick={() => runDailyAutomation(true)}
                 disabled={automationRunning}
-                className="inline-flex items-center space-x-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center space-x-2 bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Play className="w-4 h-4" />
                 <span>{automationRunning ? "Running..." : "Dry Run"}</span>
@@ -403,14 +403,14 @@ export default function RileyDashboardPage() {
           </div>
 
           {automationResult && (
-            <div className={`mt-4 p-4 rounded-lg ${automationResult.success ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"}`}>
+            <div className={`mt-4 p-4 rounded-lg ${automationResult.success ? "bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800" : "bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800"}`}>
               <div className="flex items-center space-x-2 mb-2">
                 {automationResult.success ? (
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-300" />
                 ) : (
-                  <XCircle className="w-5 h-5 text-red-600" />
+                  <XCircle className="w-5 h-5 text-red-600 dark:text-red-300" />
                 )}
-                <span className={`font-semibold ${automationResult.success ? "text-green-700" : "text-red-700"}`}>
+                <span className={`font-semibold ${automationResult.success ? "text-green-700 dark:text-green-300" : "text-red-700 dark:text-red-300"}`}>
                   {automationResult.success
                     ? automationResult.dryRun ? "Dry Run Complete" : "Automation Complete"
                     : "Automation Failed"}
@@ -419,25 +419,25 @@ export default function RileyDashboardPage() {
               {automationResult.results && (
                 <div className="grid grid-cols-4 gap-4 mt-3">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-600">{automationResult.results.followUps}</div>
+                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">{automationResult.results.followUps}</div>
                     <div className="text-xs text-gray-600 dark:text-zinc-400">Follow-ups{automationResult.dryRun ? " (planned)" : " sent"}</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">{automationResult.results.showReminders}</div>
+                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">{automationResult.results.showReminders}</div>
                     <div className="text-xs text-gray-600 dark:text-zinc-400">Show reminders{automationResult.dryRun ? " (planned)" : " sent"}</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">{automationResult.results.wins}</div>
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-300">{automationResult.results.wins}</div>
                     <div className="text-xs text-gray-600 dark:text-zinc-400">Wins{automationResult.dryRun ? " (planned)" : " celebrated"}</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-red-600">{automationResult.results.errors}</div>
+                    <div className="text-2xl font-bold text-red-600 dark:text-red-300">{automationResult.results.errors}</div>
                     <div className="text-xs text-gray-600 dark:text-zinc-400">Errors</div>
                   </div>
                 </div>
               )}
               {automationResult.error && (
-                <p className="text-sm text-red-600 mt-2">{automationResult.error}</p>
+                <p className="text-sm text-red-600 dark:text-red-300 mt-2">{automationResult.error}</p>
               )}
             </div>
           )}
@@ -449,7 +449,7 @@ export default function RileyDashboardPage() {
             title="Artist Pipeline"
             description="Complete journey from discovery to activation"
             href="/riley/pipeline"
-            icon={<TrendingUp className="w-8 h-8 text-purple-600" />}
+            icon={<TrendingUp className="w-8 h-8 text-purple-600 dark:text-purple-300" />}
             badge={8}
             managedBy="Riley Carpenter"
           />
@@ -457,7 +457,7 @@ export default function RileyDashboardPage() {
             title="Artist Outreach"
             description="Discover and contact new artists for airplay"
             href="/riley/outreach"
-            icon={<Search className="w-8 h-8 text-indigo-600" />}
+            icon={<Search className="w-8 h-8 text-indigo-600 dark:text-indigo-300" />}
             badge={6}
             managedBy="Grace Holland"
           />
@@ -465,7 +465,7 @@ export default function RileyDashboardPage() {
             title="Review Submissions"
             description="Approve or reject pending track submissions"
             href="/riley/submissions"
-            icon={<CheckCircle className="w-8 h-8 text-blue-600" />}
+            icon={<CheckCircle className="w-8 h-8 text-blue-600 dark:text-blue-300" />}
             badge={stats.pendingSubmissions}
             managedBy="Sienna Park"
           />
@@ -473,21 +473,21 @@ export default function RileyDashboardPage() {
             title="Manage Artists"
             description="View and manage all artists in the system"
             href="/riley/artists"
-            icon={<Users className="w-8 h-8 text-orange-600" />}
+            icon={<Users className="w-8 h-8 text-orange-600 dark:text-orange-300" />}
             managedBy="Marcus Tate"
           />
           <QuickActionCard
             title="Spotify Discovery"
             description="Search Spotify for indie artists to recruit"
             href="/riley/discovery"
-            icon={<Music className="w-8 h-8 text-green-600" />}
+            icon={<Music className="w-8 h-8 text-green-600 dark:text-green-300" />}
             managedBy="Riley Carpenter"
           />
           <QuickActionCard
             title="Pool Share Calculator"
             description="Calculate artist earnings from sponsor pool"
             href="/riley/pool-calculator"
-            icon={<DollarSign className="w-8 h-8 text-green-600" />}
+            icon={<DollarSign className="w-8 h-8 text-green-600 dark:text-green-300" />}
             managedBy="Jordan Cross"
           />
         </section>
@@ -516,7 +516,7 @@ function MetricCard({
         <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">{label}</div>
       </div>
       <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{value}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400">{subtitle}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400">{subtitle}</div>
     </div>
   );
 }
@@ -547,15 +547,15 @@ function TierCard({
   }[color];
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800">
+    <div className="bg-gradient-to-br from-gray-50 dark:from-zinc-950 to-white dark:to-zinc-900 rounded-lg p-4 border-2 border-gray-200 dark:border-zinc-800">
       <div className="flex items-center justify-between mb-2">
         <div className={`text-xs font-bold px-2 py-1 rounded ${colorClasses}`}>
           {tier}
         </div>
-        <div className="text-xs text-gray-400 dark:text-zinc-400">${price}/mo</div>
+        <div className="text-xs text-gray-600 dark:text-zinc-400">${price}/mo</div>
       </div>
       <div className="text-3xl font-bold mb-1">{count}</div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400 mb-3">of {capacity} capacity</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400 mb-3">of {capacity} capacity</div>
 
       <div className="space-y-1 text-xs text-gray-600 dark:text-zinc-400">
         <div>• {shares} {shares === 1 ? 'share' : 'shares'}</div>
@@ -568,7 +568,7 @@ function TierCard({
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="text-xs text-gray-400 dark:text-zinc-400 mt-1 text-center">{percentage.toFixed(0)}% filled</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-400 mt-1 text-center">{percentage.toFixed(0)}% filled</div>
     </div>
   );
 }
@@ -588,32 +588,32 @@ function SubmissionRow({
 }) {
   const statusConfig = {
     pending: {
-      icon: <Clock className="w-4 h-4 text-yellow-600" />,
+      icon: <Clock className="w-4 h-4 text-yellow-600 dark:text-yellow-300" />,
       bg: "bg-yellow-50",
       text: "text-yellow-700",
       label: "Pending",
     },
     approved: {
-      icon: <CheckCircle className="w-4 h-4 text-green-600" />,
+      icon: <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-300" />,
       bg: "bg-green-50",
       text: "text-green-700",
       label: "Approved",
     },
     rejected: {
-      icon: <XCircle className="w-4 h-4 text-red-600" />,
+      icon: <XCircle className="w-4 h-4 text-red-600 dark:text-red-300" />,
       bg: "bg-red-50",
       text: "text-red-700",
       label: "Rejected",
     },
   }[status] || {
-    icon: <Clock className="w-4 h-4 text-gray-600" />,
+    icon: <Clock className="w-4 h-4 text-gray-600 dark:text-zinc-300" />,
     bg: "bg-gray-50",
     text: "text-gray-700",
     label: status,
   };
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg hover:bg-gray-100 transition-colors">
       <div className="flex items-center space-x-4 flex-1">
         <Music className="w-10 h-10 text-gray-400" />
         <div>
@@ -623,7 +623,7 @@ function SubmissionRow({
       </div>
       <div className="flex items-center space-x-4">
         <div className="text-right">
-          <div className="text-xs text-gray-400 dark:text-zinc-400">{tier} Tier</div>
+          <div className="text-xs text-gray-600 dark:text-zinc-400">{tier} Tier</div>
           <div className="text-xs text-gray-400">{submittedAt}</div>
         </div>
         <div className={`px-3 py-1 rounded-full ${statusConfig.bg} ${statusConfig.text} flex items-center space-x-1`}>
@@ -652,7 +652,7 @@ function UpgradeOpportunityCard({
   const suggestedPrice = AIRPLAY_TIER_PRICING[suggestedTier as keyof typeof AIRPLAY_TIER_PRICING];
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border-2 border-purple-200">
+    <div className="bg-white dark:bg-zinc-900 rounded-lg p-4 border-2 border-purple-200 dark:border-purple-800">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="font-semibold text-gray-900 dark:text-white">{artist}</div>
@@ -662,15 +662,15 @@ function UpgradeOpportunityCard({
         </div>
         <div className="flex items-center space-x-3">
           <div className="text-center">
-            <div className="text-xs text-gray-400 dark:text-zinc-400">Current</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">Current</div>
             <div className="font-bold text-gray-700 dark:text-zinc-300">{currentTier}</div>
-            <div className="text-xs text-gray-400 dark:text-zinc-400">${currentPrice}/mo</div>
+            <div className="text-xs text-gray-600 dark:text-zinc-400">${currentPrice}/mo</div>
           </div>
           <div className="text-gray-400">→</div>
           <div className="text-center">
-            <div className="text-xs text-purple-600">Suggested</div>
-            <div className="font-bold text-purple-600">{suggestedTier}</div>
-            <div className="text-xs text-purple-600">${suggestedPrice}/mo</div>
+            <div className="text-xs text-purple-600 dark:text-purple-300">Suggested</div>
+            <div className="font-bold text-purple-600 dark:text-purple-300">{suggestedTier}</div>
+            <div className="text-xs text-purple-600 dark:text-purple-300">${suggestedPrice}/mo</div>
           </div>
           <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
             Contact
@@ -709,7 +709,7 @@ function QuickActionCard({
         </div>
         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{title}</h3>
         {managedBy && (
-          <p className="text-xs text-purple-600 font-medium mb-1">Managed by {managedBy}</p>
+          <p className="text-xs text-purple-600 dark:text-purple-300 font-medium mb-1">Managed by {managedBy}</p>
         )}
         <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
       </div>

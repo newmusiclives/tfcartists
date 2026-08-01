@@ -21,12 +21,12 @@ export default function CookiePolicyPage() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <Link
           href="/"
-          className="text-amber-700 hover:text-amber-900 text-sm font-medium transition-colors"
+          className="text-amber-700 dark:text-amber-300 hover:text-amber-900 text-sm font-medium transition-colors"
         >
           &larr; Back to Home
         </Link>
 
-        <h1 className="mt-8 text-4xl font-bold text-amber-900">
+        <h1 className="mt-8 text-4xl font-bold text-amber-900 dark:text-amber-200">
           Cookie Policy
         </h1>
         <p className="mt-2 text-gray-400 text-sm">
@@ -36,7 +36,7 @@ export default function CookiePolicyPage() {
         <div className="mt-10 space-y-10 text-gray-700 dark:text-zinc-300 leading-relaxed">
           {/* 1. What Are Cookies */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               1. What Are Cookies
             </h2>
             <p>
@@ -53,7 +53,7 @@ export default function CookiePolicyPage() {
 
           {/* 2. How We Use Cookies */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               2. How We Use Cookies
             </h2>
             <p className="mb-3">
@@ -92,7 +92,7 @@ export default function CookiePolicyPage() {
 
           {/* 3. Types of Cookies We Use */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               3. Types of Cookies We Use
             </h2>
 
@@ -111,13 +111,13 @@ export default function CookiePolicyPage() {
                 <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
                   <thead className="bg-amber-50 dark:bg-amber-500/10">
                     <tr>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 dark:text-amber-200 border-b border-gray-200 dark:border-zinc-800">
                         Cookie
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 dark:text-amber-200 border-b border-gray-200 dark:border-zinc-800">
                         Purpose
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 dark:text-amber-200 border-b border-gray-200 dark:border-zinc-800">
                         Duration
                       </th>
                     </tr>
@@ -170,13 +170,13 @@ export default function CookiePolicyPage() {
                 <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
                   <thead className="bg-amber-50 dark:bg-amber-500/10">
                     <tr>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 dark:text-amber-200 border-b border-gray-200 dark:border-zinc-800">
                         Cookie
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 dark:text-amber-200 border-b border-gray-200 dark:border-zinc-800">
                         Purpose
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 dark:text-amber-200 border-b border-gray-200 dark:border-zinc-800">
                         Duration
                       </th>
                     </tr>
@@ -220,13 +220,13 @@ export default function CookiePolicyPage() {
                 <table className="w-full text-sm border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
                   <thead className="bg-amber-50 dark:bg-amber-500/10">
                     <tr>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 dark:text-amber-200 border-b border-gray-200 dark:border-zinc-800">
                         Cookie
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 dark:text-amber-200 border-b border-gray-200 dark:border-zinc-800">
                         Purpose
                       </th>
-                      <th className="text-left px-4 py-2 font-semibold text-amber-900 border-b border-gray-200 dark:border-zinc-800">
+                      <th className="text-left px-4 py-2 font-semibold text-amber-900 dark:text-amber-200 border-b border-gray-200 dark:border-zinc-800">
                         Duration
                       </th>
                     </tr>
@@ -261,7 +261,7 @@ export default function CookiePolicyPage() {
 
           {/* 4. Managing Cookies */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               4. Managing Cookies
             </h2>
             <p className="mb-3">
@@ -283,7 +283,7 @@ export default function CookiePolicyPage() {
                   href="https://tools.google.com/dlpage/gaoptout"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   Google Analytics Opt-out Browser Add-on
                 </a>
@@ -306,7 +306,7 @@ export default function CookiePolicyPage() {
 
           {/* 5. Updates to This Policy */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               5. Updates to This Policy
             </h2>
             <p>
@@ -321,7 +321,7 @@ export default function CookiePolicyPage() {
 
           {/* 6. Contact Information */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               6. Contact Information
             </h2>
             <p>
@@ -333,7 +333,7 @@ export default function CookiePolicyPage() {
                 <strong>Email:</strong>{" "}
                 <a
                   href="mailto:legal@truefans.radio"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   legal@truefans.radio
                 </a>
@@ -342,7 +342,7 @@ export default function CookiePolicyPage() {
                 <strong>General Support:</strong>{" "}
                 <a
                   href="mailto:support@truefans.radio"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   support@truefans.radio
                 </a>
@@ -351,7 +351,7 @@ export default function CookiePolicyPage() {
                 <strong>Website:</strong>{" "}
                 <a
                   href="https://truefans-radio.netlify.app"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   truefans-radio.netlify.app
                 </a>
@@ -368,13 +368,13 @@ export default function CookiePolicyPage() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/privacy"
-              className="text-amber-700 hover:text-amber-900 font-medium transition-colors"
+              className="text-amber-700 dark:text-amber-300 hover:text-amber-900 font-medium transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-amber-700 hover:text-amber-900 font-medium transition-colors"
+              className="text-amber-700 dark:text-amber-300 hover:text-amber-900 font-medium transition-colors"
             >
               Terms of Service
             </Link>

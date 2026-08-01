@@ -21,12 +21,12 @@ export default function TermsOfServicePage() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <Link
           href="/"
-          className="text-amber-700 hover:text-amber-900 text-sm font-medium transition-colors"
+          className="text-amber-700 dark:text-amber-300 hover:text-amber-900 text-sm font-medium transition-colors"
         >
           &larr; Back to Home
         </Link>
 
-        <h1 className="mt-8 text-4xl font-bold text-amber-900">
+        <h1 className="mt-8 text-4xl font-bold text-amber-900 dark:text-amber-200">
           Terms of Service
         </h1>
         <p className="mt-2 text-gray-400 text-sm">
@@ -36,14 +36,14 @@ export default function TermsOfServicePage() {
         <div className="mt-10 space-y-10 text-gray-700 dark:text-zinc-300 leading-relaxed">
           {/* 1. Acceptance of Terms */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               1. Acceptance of Terms
             </h2>
             <p>
               By accessing or using the TrueFans RADIO Network website at{" "}
               <a
                 href="https://truefans-radio.netlify.app"
-                className="text-amber-700 underline hover:text-amber-900"
+                className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
               >
                 truefans-radio.netlify.app
               </a>{" "}
@@ -58,7 +58,7 @@ export default function TermsOfServicePage() {
 
           {/* 2. Description of Service */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               2. Description of Service
             </h2>
             <p className="mb-3">
@@ -104,7 +104,7 @@ export default function TermsOfServicePage() {
 
           {/* 2a. Operator Responsibilities */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               2a. Station Operator Responsibilities
             </h2>
             <p className="mb-3">
@@ -150,7 +150,7 @@ export default function TermsOfServicePage() {
 
           {/* 2b. Artist Content Rights */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               2b. Artist Content Rights
             </h2>
             <p className="mb-3">
@@ -187,7 +187,7 @@ export default function TermsOfServicePage() {
 
           {/* 2c. DMCA and Copyright Takedown */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               2c. DMCA and Copyright Takedown
             </h2>
             <p className="mb-3">
@@ -200,7 +200,7 @@ export default function TermsOfServicePage() {
               <strong>Email:</strong>{" "}
               <a
                 href="mailto:copyright@truefansradio.com"
-                className="text-amber-700 underline hover:text-amber-900"
+                className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
               >
                 copyright@truefansradio.com
               </a>
@@ -246,7 +246,7 @@ export default function TermsOfServicePage() {
 
           {/* 3. User Accounts & Registration */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               3. User Accounts and Registration
             </h2>
             <p className="mb-3">
@@ -282,7 +282,7 @@ export default function TermsOfServicePage() {
 
           {/* 4. Artist Subscription Tiers */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               4. Artist Subscription Tiers
             </h2>
             <p className="mb-3">
@@ -326,7 +326,7 @@ export default function TermsOfServicePage() {
 
           {/* 5. Sponsor Agreements */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               5. Sponsor Agreements
             </h2>
             <p className="mb-3">
@@ -362,7 +362,7 @@ export default function TermsOfServicePage() {
 
           {/* 6. Intellectual Property */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               6. Intellectual Property
             </h2>
             <p className="mb-3">
@@ -391,7 +391,7 @@ export default function TermsOfServicePage() {
 
           {/* 7. Prohibited Conduct */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               7. Prohibited Conduct
             </h2>
             <p className="mb-3">
@@ -439,7 +439,7 @@ export default function TermsOfServicePage() {
 
           {/* 7a. Platform Fees and Billing */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               7a. Platform Fees and Billing
             </h2>
             <p className="mb-3">
@@ -479,7 +479,7 @@ export default function TermsOfServicePage() {
 
           {/* 8. Disclaimer of Warranties */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               8. Disclaimer of Warranties
             </h2>
             <p>
@@ -496,7 +496,7 @@ export default function TermsOfServicePage() {
 
           {/* 9. Limitation of Liability */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               9. Limitation of Liability
             </h2>
             <p>
@@ -515,7 +515,7 @@ export default function TermsOfServicePage() {
 
           {/* 10. Indemnification */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               10. Indemnification
             </h2>
             <p>
@@ -532,7 +532,7 @@ export default function TermsOfServicePage() {
 
           {/* 11. Termination */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               11. Termination
             </h2>
             <p className="mb-3">
@@ -563,7 +563,7 @@ export default function TermsOfServicePage() {
               You may terminate your account at any time by contacting us at{" "}
               <a
                 href="mailto:support@truefans.radio"
-                className="text-amber-700 underline hover:text-amber-900"
+                className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
               >
                 support@truefans.radio
               </a>
@@ -582,7 +582,7 @@ export default function TermsOfServicePage() {
 
           {/* 12. Changes to Terms */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               12. Changes to Terms
             </h2>
             <p>
@@ -598,7 +598,7 @@ export default function TermsOfServicePage() {
 
           {/* 13. Governing Law */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               13. Governing Law
             </h2>
             <p>
@@ -612,7 +612,7 @@ export default function TermsOfServicePage() {
 
           {/* 14. Severability */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               14. Severability
             </h2>
             <p>
@@ -625,7 +625,7 @@ export default function TermsOfServicePage() {
 
           {/* 15. Contact Information */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               15. Contact Information
             </h2>
             <p>
@@ -637,7 +637,7 @@ export default function TermsOfServicePage() {
                 <strong>Email:</strong>{" "}
                 <a
                   href="mailto:legal@truefans.radio"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   legal@truefans.radio
                 </a>
@@ -646,7 +646,7 @@ export default function TermsOfServicePage() {
                 <strong>General Support:</strong>{" "}
                 <a
                   href="mailto:support@truefans.radio"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   support@truefans.radio
                 </a>
@@ -655,7 +655,7 @@ export default function TermsOfServicePage() {
                 <strong>Website:</strong>{" "}
                 <a
                   href="https://truefans-radio.netlify.app"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   truefans-radio.netlify.app
                 </a>
@@ -672,13 +672,13 @@ export default function TermsOfServicePage() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/privacy"
-              className="text-amber-700 hover:text-amber-900 font-medium transition-colors"
+              className="text-amber-700 dark:text-amber-300 hover:text-amber-900 font-medium transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/cookies"
-              className="text-amber-700 hover:text-amber-900 font-medium transition-colors"
+              className="text-amber-700 dark:text-amber-300 hover:text-amber-900 font-medium transition-colors"
             >
               Cookie Policy
             </Link>

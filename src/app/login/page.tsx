@@ -62,8 +62,8 @@ function LoginForm() {
       <div className="max-w-md w-full">
         {/* Logo and Title */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full mb-4 shadow-xl">
-            <Radio className="w-12 h-12 text-purple-600" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-white dark:bg-zinc-900 rounded-full mb-4 shadow-xl">
+            <Radio className="w-12 h-12 text-purple-600 dark:text-purple-300" />
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">TrueFans RADIO</h1>
           <p className="text-purple-200">Sign in to access your dashboard</p>
@@ -78,7 +78,7 @@ function LoginForm() {
               onClick={() => { setMode("team"); setUsername(""); setError(""); }}
               className={`flex-1 flex items-center justify-center space-x-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
                 mode === "team"
-                  ? "bg-white text-purple-700 shadow-sm"
+                  ? "bg-white dark:bg-zinc-900 text-purple-700 dark:text-purple-300 shadow-sm"
                   : "text-gray-600 hover:text-gray-800 dark:text-zinc-300 dark:hover:text-zinc-100"
               }`}
             >
@@ -90,7 +90,7 @@ function LoginForm() {
               onClick={() => { setMode("operator"); setUsername(""); setError(""); }}
               className={`flex-1 flex items-center justify-center space-x-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
                 mode === "operator"
-                  ? "bg-white text-amber-700 shadow-sm"
+                  ? "bg-white dark:bg-zinc-900 text-amber-700 dark:text-amber-300 shadow-sm"
                   : "text-gray-600 hover:text-gray-800 dark:text-zinc-300 dark:hover:text-zinc-100"
               }`}
             >
@@ -101,9 +101,9 @@ function LoginForm() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-800">{error}</p>
+              <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-3 flex items-start space-x-3">
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-300 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
               </div>
             )}
 
@@ -124,12 +124,12 @@ function LoginForm() {
                 />
                 {isEmailInput && mode === "team" && (
                   <span className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Mail className="w-4 h-4 text-amber-600" />
+                    <Mail className="w-4 h-4 text-amber-600 dark:text-amber-300" />
                   </span>
                 )}
               </div>
               {isEmailInput && mode === "team" && (
-                <p className="text-xs text-amber-600 mt-1">
+                <p className="text-xs text-amber-600 dark:text-amber-300 mt-1">
                   Detected email address — signing in as organization user
                 </p>
               )}
@@ -176,7 +176,7 @@ function LoginForm() {
 
           {effectiveMode === "operator" && (
             <div className="mt-4 text-center">
-              <Link href="/operator/signup" className="text-sm text-amber-700 hover:text-amber-800 font-medium">
+              <Link href="/operator/signup" className="text-sm text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium">
                 Don&apos;t have an account? Sign up
               </Link>
             </div>

@@ -314,16 +314,16 @@ export default function OperatorAnalyticsPage() {
                 key={i}
                 className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-5 animate-pulse"
               >
-                <div className="h-3 w-20 bg-gray-200 rounded mb-3" />
-                <div className="h-7 w-16 bg-gray-200 rounded mb-2" />
-                <div className="h-2.5 w-24 bg-gray-100 rounded" />
+                <div className="h-3 w-20 bg-gray-200 dark:bg-zinc-800 rounded mb-3" />
+                <div className="h-7 w-16 bg-gray-200 dark:bg-zinc-800 rounded mb-2" />
+                <div className="h-2.5 w-24 bg-gray-100 dark:bg-zinc-800 rounded" />
               </div>
             ))}
           </div>
           {/* Chart skeleton */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse">
-            <div className="h-5 w-48 bg-gray-200 rounded mb-4" />
-            <div className="h-48 bg-gray-100 rounded" />
+            <div className="h-5 w-48 bg-gray-200 dark:bg-zinc-800 rounded mb-4" />
+            <div className="h-48 bg-gray-100 dark:bg-zinc-800 rounded" />
           </div>
           {/* Pipeline skeletons */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -332,12 +332,12 @@ export default function OperatorAnalyticsPage() {
                 key={i}
                 className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse"
               >
-                <div className="h-5 w-40 bg-gray-200 rounded mb-4" />
+                <div className="h-5 w-40 bg-gray-200 dark:bg-zinc-800 rounded mb-4" />
                 <div className="space-y-3">
                   {[...Array(4)].map((_, j) => (
                     <div key={j}>
-                      <div className="h-3 w-24 bg-gray-200 rounded mb-1" />
-                      <div className="h-4 bg-gray-100 rounded-full" />
+                      <div className="h-3 w-24 bg-gray-200 dark:bg-zinc-800 rounded mb-1" />
+                      <div className="h-4 bg-gray-100 dark:bg-zinc-800 rounded-full" />
                     </div>
                   ))}
                 </div>
@@ -346,10 +346,10 @@ export default function OperatorAnalyticsPage() {
           </div>
           {/* Table skeleton */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6 animate-pulse">
-            <div className="h-5 w-36 bg-gray-200 rounded mb-4" />
+            <div className="h-5 w-36 bg-gray-200 dark:bg-zinc-800 rounded mb-4" />
             <div className="space-y-2">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-8 bg-gray-100 rounded" />
+                <div key={i} className="h-8 bg-gray-100 dark:bg-zinc-800 rounded" />
               ))}
             </div>
           </div>
@@ -367,7 +367,7 @@ export default function OperatorAnalyticsPage() {
         <Header session={session} onRefresh={fetchData} />
         <div className="flex items-center justify-center py-32">
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-8 max-w-md text-center">
-            <p className="text-red-600 font-medium mb-4">{error}</p>
+            <p className="text-red-600 dark:text-red-300 font-medium mb-4">{error}</p>
             <button
               onClick={fetchData}
               className="inline-flex items-center space-x-2 bg-amber-700 text-white px-4 py-2 rounded-lg hover:bg-amber-800"
@@ -464,10 +464,10 @@ export default function OperatorAnalyticsPage() {
         {/* ----------------------------------------------------------------- */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center space-x-2">
-            <TrendingUp className="w-5 h-5 text-amber-700" />
+            <TrendingUp className="w-5 h-5 text-amber-700 dark:text-amber-300" />
             <span>Listener Sessions (Last 7 Days)</span>
           </h2>
-          <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-5">
             New listeners per day
           </p>
           {last7Days.length > 0 ? (
@@ -484,10 +484,10 @@ export default function OperatorAnalyticsPage() {
           {/* Artist Pipeline */}
           <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center space-x-2">
-              <UserPlus className="w-5 h-5 text-amber-700" />
+              <UserPlus className="w-5 h-5 text-amber-700 dark:text-amber-300" />
               <span>Artist Pipeline</span>
             </h2>
-            <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-5">
               Funnel from discovery to active
             </p>
             {artistFunnel.length > 0 ? (
@@ -500,10 +500,10 @@ export default function OperatorAnalyticsPage() {
           {/* Sponsor Pipeline */}
           <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center space-x-2">
-              <Target className="w-5 h-5 text-amber-700" />
+              <Target className="w-5 h-5 text-amber-700 dark:text-amber-300" />
               <span>Sponsor Pipeline</span>
             </h2>
-            <p className="text-sm text-gray-400 dark:text-zinc-400 mb-5">
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mb-5">
               Funnel from discovery to active
             </p>
             {sponsorFunnel.length > 0 ? (
@@ -519,7 +519,7 @@ export default function OperatorAnalyticsPage() {
         {/* ----------------------------------------------------------------- */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
-            <Music className="w-5 h-5 text-amber-700" />
+            <Music className="w-5 h-5 text-amber-700 dark:text-amber-300" />
             <span>Top Songs This Month</span>
           </h2>
           {topSongs.length === 0 ? (
@@ -528,7 +528,7 @@ export default function OperatorAnalyticsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b text-left text-gray-400 dark:text-zinc-400">
+                  <tr className="border-b text-left text-gray-600 dark:text-zinc-400">
                     <th className="pb-2 font-medium w-10">#</th>
                     <th className="pb-2 font-medium">Song</th>
                     <th className="pb-2 font-medium">Artist</th>
@@ -544,13 +544,13 @@ export default function OperatorAnalyticsPage() {
                       <td className="py-2.5 text-gray-400 font-medium">
                         {i + 1}
                       </td>
-                      <td className="py-2.5 font-medium text-gray-900 max-w-[240px] truncate">
+                      <td className="py-2.5 font-medium text-gray-900 dark:text-zinc-100 max-w-[240px] truncate">
                         {s.trackTitle}
                       </td>
                       <td className="py-2.5 text-gray-600 dark:text-zinc-400 max-w-[180px] truncate">
                         {s.artistName}
                       </td>
-                      <td className="py-2.5 text-right text-gray-700 font-medium">
+                      <td className="py-2.5 text-right text-gray-700 dark:text-zinc-200 font-medium">
                         {s.count.toLocaleString()}
                       </td>
                     </tr>
@@ -566,7 +566,7 @@ export default function OperatorAnalyticsPage() {
         {/* ----------------------------------------------------------------- */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-5 flex items-center space-x-2">
-            <DollarSign className="w-5 h-5 text-amber-700" />
+            <DollarSign className="w-5 h-5 text-amber-700 dark:text-amber-300" />
             <span>Revenue Breakdown</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -646,7 +646,7 @@ export default function OperatorAnalyticsPage() {
               </div>
               {stats?.targets.revenue ? (
                 <div className="mt-3">
-                  <div className="flex justify-between text-xs text-gray-400 dark:text-zinc-400 mb-1">
+                  <div className="flex justify-between text-xs text-gray-600 dark:text-zinc-400 mb-1">
                     <span>
                       Progress to ${stats.targets.revenue.toLocaleString()}{" "}
                       target
@@ -661,7 +661,7 @@ export default function OperatorAnalyticsPage() {
                       %
                     </span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div className="w-full bg-gray-100 dark:bg-zinc-800 rounded-full h-2">
                     <div
                       className="bg-amber-700 h-2 rounded-full transition-all"
                       style={{
@@ -685,7 +685,7 @@ export default function OperatorAnalyticsPage() {
           {/* Most-Played Artists */}
           <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
-              <Users className="w-5 h-5 text-amber-700" />
+              <Users className="w-5 h-5 text-amber-700 dark:text-amber-300" />
               <span>Top 10 Artists by Plays</span>
             </h2>
             {topArtists.length === 0 ? (
@@ -694,7 +694,7 @@ export default function OperatorAnalyticsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-left text-gray-400 dark:text-zinc-400">
+                    <tr className="border-b text-left text-gray-600 dark:text-zinc-400">
                       <th className="pb-2 font-medium">#</th>
                       <th className="pb-2 font-medium">Artist</th>
                       <th className="pb-2 font-medium text-right">Plays</th>
@@ -728,7 +728,7 @@ export default function OperatorAnalyticsPage() {
           {/* Sponsor Ad Performance */}
           <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-6">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
-              <Megaphone className="w-5 h-5 text-amber-700" />
+              <Megaphone className="w-5 h-5 text-amber-700 dark:text-amber-300" />
               <span>Sponsor Ad Performance</span>
             </h2>
             {sponsorAds.length === 0 ? (
@@ -737,7 +737,7 @@ export default function OperatorAnalyticsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-left text-gray-400 dark:text-zinc-400">
+                    <tr className="border-b text-left text-gray-600 dark:text-zinc-400">
                       <th className="pb-2 font-medium">Ad</th>
                       <th className="pb-2 font-medium">Sponsor</th>
                       <th className="pb-2 font-medium text-right">Plays</th>
@@ -750,7 +750,7 @@ export default function OperatorAnalyticsPage() {
                         key={ad.id}
                         className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-zinc-800"
                       >
-                        <td className="py-2 font-medium text-gray-900 max-w-[160px] truncate">
+                        <td className="py-2 font-medium text-gray-900 dark:text-zinc-100 max-w-[160px] truncate">
                           {ad.adTitle}
                         </td>
                         <td className="py-2 text-gray-600 dark:text-zinc-400 max-w-[120px] truncate">
@@ -789,9 +789,9 @@ export default function OperatorAnalyticsPage() {
                 {analytics.retentionCohorts.map((c) => (
                   <div
                     key={c.week}
-                    className="bg-gray-50 rounded-lg p-4 text-center"
+                    className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4 text-center"
                   >
-                    <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">{c.week}</p>
+                    <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">{c.week}</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       {c.rate}%
                     </p>
@@ -824,10 +824,10 @@ function Header({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
-            <Building2 className="w-6 h-6 text-amber-700" />
+            <Building2 className="w-6 h-6 text-amber-700 dark:text-amber-300" />
             <div>
               <h1 className="font-bold text-gray-900 dark:text-white">Analytics</h1>
-              <p className="text-xs text-gray-400 dark:text-zinc-400">
+              <p className="text-xs text-gray-600 dark:text-zinc-400">
                 {session?.user?.name || "Operator"}
               </p>
             </div>
@@ -835,7 +835,7 @@ function Header({
           <div className="flex items-center space-x-3">
             <Link
               href="/operator/dashboard"
-              className="inline-flex items-center space-x-1 text-sm text-amber-700 hover:text-amber-800 font-medium"
+              className="inline-flex items-center space-x-1 text-sm text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Dashboard</span>
@@ -872,7 +872,7 @@ function KpiCard({
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border p-5">
       <div className="flex items-center space-x-2 mb-2">
-        <Icon className="w-4 h-4 text-amber-700" />
+        <Icon className="w-4 h-4 text-amber-700 dark:text-amber-300" />
         <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">
           {label}
         </span>
@@ -905,7 +905,7 @@ function TierBadge({ tier }: { tier: string }) {
   return (
     <span
       className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
-        colors[tier] || "bg-gray-100 text-gray-600"
+        colors[tier] || "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300"
       }`}
     >
       {labels[tier] || tier}
@@ -931,17 +931,17 @@ function RevenueLineItem({
   return (
     <div className="flex items-center justify-between">
       <span
-        className={`text-sm ${bold ? "font-bold text-gray-900" : "text-gray-600"}`}
+        className={`text-sm ${bold ? "font-bold text-gray-900 dark:text-zinc-100" : "text-gray-600 dark:text-zinc-300"}`}
       >
         {label}
       </span>
       <span
         className={`font-semibold ${
           bold
-            ? "text-gray-900"
+            ? "text-gray-900 dark:text-zinc-100"
             : positive
-              ? "text-gray-900"
-              : "text-red-600"
+              ? "text-gray-900 dark:text-zinc-100"
+              : "text-red-600 dark:text-red-300"
         }`}
       >
         {positive ? "" : "-"}${amount.toLocaleString()}
@@ -992,7 +992,7 @@ function CSSBarChart({ data }: { data: { date: string; count: number }[] }) {
           >
             {/* Tooltip on hover */}
             <div className="relative mb-1">
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-medium text-gray-700 bg-white border rounded px-1.5 py-0.5 shadow-sm whitespace-nowrap absolute -top-6 left-1/2 -translate-x-1/2">
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-medium text-gray-700 dark:text-zinc-200 bg-white dark:bg-zinc-900 border rounded px-1.5 py-0.5 shadow-sm whitespace-nowrap absolute -top-6 left-1/2 -translate-x-1/2">
                 {d.count}
               </span>
             </div>
@@ -1004,7 +1004,7 @@ function CSSBarChart({ data }: { data: { date: string; count: number }[] }) {
             />
             {/* Label */}
             <div className="mt-2 text-center">
-              <p className="text-[10px] font-medium text-gray-400 dark:text-zinc-400">
+              <p className="text-[10px] font-medium text-gray-600 dark:text-zinc-400">
                 {dayLabel}
               </p>
               <p className="text-[9px] text-gray-400">{dateLabel}</p>
@@ -1057,7 +1057,7 @@ function PipelineFunnel({
               <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">
                 {stage.label}
               </span>
-              <span className="text-sm text-gray-400 dark:text-zinc-400">
+              <span className="text-sm text-gray-600 dark:text-zinc-400">
                 {stage.count.toLocaleString()}{" "}
                 <span className="text-gray-400">({shareOfTotal}%)</span>
               </span>

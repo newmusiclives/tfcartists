@@ -228,13 +228,13 @@ export default function CassidyTeamPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
+    <main className="min-h-screen bg-gradient-to-br from-teal-50 dark:from-teal-950 via-white dark:via-zinc-900 to-cyan-50 dark:to-cyan-950">
       {/* Header */}
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/cassidy" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/cassidy" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -291,23 +291,23 @@ export default function CassidyTeamPage() {
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">What We Do</h4>
               <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-2">
-                  <span className="text-teal-600 mt-1">✓</span>
+                  <span className="text-teal-600 dark:text-teal-300 mt-1">✓</span>
                   <span>Expert review of all artist submissions (5-7 day process)</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-teal-600 mt-1">✓</span>
+                  <span className="text-teal-600 dark:text-teal-300 mt-1">✓</span>
                   <span>Assign tier placements (Bronze, Silver, Gold, Platinum)</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-teal-600 mt-1">✓</span>
+                  <span className="text-teal-600 dark:text-teal-300 mt-1">✓</span>
                   <span>Maintain 95% placement rate with tiered support system</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-teal-600 mt-1">✓</span>
+                  <span className="text-teal-600 dark:text-teal-300 mt-1">✓</span>
                   <span>Provide detailed feedback and progression pathways</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-teal-600 mt-1">✓</span>
+                  <span className="text-teal-600 dark:text-teal-300 mt-1">✓</span>
                   <span>Drive 80/20 mainstream-to-indie transformation</span>
                 </li>
               </ul>
@@ -315,33 +315,33 @@ export default function CassidyTeamPage() {
             <div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">The Four-Tier System</h4>
               <div className="space-y-2">
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-semibold text-amber-900">🥉 Bronze</span>
+                    <span className="font-semibold text-amber-900 dark:text-amber-200">🥉 Bronze</span>
                     <span className="text-xs text-amber-700 dark:text-amber-400">60% of artists</span>
                   </div>
                   <div className="text-sm text-amber-800 dark:text-amber-400">4-6 spins/week • Entry point • Development focus</div>
                 </div>
-                <div className="bg-gray-100 border border-gray-300 dark:border-zinc-700 rounded-lg p-3">
+                <div className="bg-gray-100 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-semibold text-gray-900 dark:text-white">🥈 Silver</span>
                     <span className="text-xs text-gray-700 dark:text-zinc-300">25% of artists</span>
                   </div>
                   <div className="text-sm text-gray-800 dark:text-zinc-200">10-14 spins/week • Featured status • Growth focus</div>
                 </div>
-                <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3">
+                <div className="bg-yellow-50 dark:bg-yellow-950 border border-yellow-300 dark:border-yellow-700 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-semibold text-yellow-900">🥇 Gold</span>
-                    <span className="text-xs text-yellow-700">12% of artists</span>
+                    <span className="font-semibold text-yellow-900 dark:text-yellow-200">🥇 Gold</span>
+                    <span className="text-xs text-yellow-700 dark:text-yellow-300">12% of artists</span>
                   </div>
-                  <div className="text-sm text-yellow-800">20-25 spins/week • Heavy rotation • Premium support</div>
+                  <div className="text-sm text-yellow-800 dark:text-yellow-200">20-25 spins/week • Heavy rotation • Premium support</div>
                 </div>
-                <div className="bg-purple-50 border border-purple-300 rounded-lg p-3">
+                <div className="bg-purple-50 dark:bg-purple-950 border border-purple-300 dark:border-purple-700 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-semibold text-purple-900">💎 Platinum</span>
-                    <span className="text-xs text-purple-700">3% of artists</span>
+                    <span className="font-semibold text-purple-900 dark:text-purple-200">💎 Platinum</span>
+                    <span className="text-xs text-purple-700 dark:text-purple-300">3% of artists</span>
                   </div>
-                  <div className="text-sm text-purple-800">30+ spins/week • Anchor artists • Maximum support</div>
+                  <div className="text-sm text-purple-800 dark:text-purple-200">30+ spins/week • Anchor artists • Maximum support</div>
                 </div>
               </div>
             </div>
@@ -405,7 +405,7 @@ export default function CassidyTeamPage() {
                         <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Key Responsibilities</h5>
                         <ul className="space-y-1">
                           {member.responsibilities.map((resp, idx) => (
-                            <li key={idx} className="text-sm text-gray-700 flex items-start space-x-2">
+                            <li key={idx} className="text-sm text-gray-700 dark:text-zinc-200 flex items-start space-x-2">
                               <span className={`${colors.text} mt-0.5`}>•</span>
                               <span>{resp}</span>
                             </li>
@@ -472,36 +472,36 @@ export default function CassidyTeamPage() {
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Cross-Team Integration</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+            <div className="bg-purple-50 dark:bg-purple-950 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
               <div className="flex items-center space-x-3 mb-2">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-purple-600" />
+                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-300" />
                 </div>
-                <h4 className="font-semibold text-purple-900">← Riley's Team</h4>
+                <h4 className="font-semibold text-purple-900 dark:text-purple-200">← Riley's Team</h4>
               </div>
-              <p className="text-sm text-purple-800">
+              <p className="text-sm text-purple-800 dark:text-purple-200">
                 Discovers artists, submits for review with context, receives tier decisions, manages artist communication
               </p>
             </div>
-            <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+            <div className="bg-green-50 dark:bg-green-950 rounded-lg p-4 border border-green-200 dark:border-green-800">
               <div className="flex items-center space-x-3 mb-2">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-green-600" />
+                <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-300" />
                 </div>
-                <h4 className="font-semibold text-green-900">→ Harper's Team</h4>
+                <h4 className="font-semibold text-green-900 dark:text-green-200">→ Harper's Team</h4>
               </div>
-              <p className="text-sm text-green-800">
+              <p className="text-sm text-green-800 dark:text-green-200">
                 Receives tier inventory (Gold/Platinum artists), matches sponsors with artists, creates partnership opportunities
               </p>
             </div>
-            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
               <div className="flex items-center space-x-3 mb-2">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Heart className="w-5 h-5 text-blue-600" />
+                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                  <Heart className="w-5 h-5 text-blue-600 dark:text-blue-300" />
                 </div>
-                <h4 className="font-semibold text-blue-900">→ Elliott's Team</h4>
+                <h4 className="font-semibold text-blue-900 dark:text-blue-200">→ Elliott's Team</h4>
               </div>
-              <p className="text-sm text-blue-800">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
                 Receives curated content, promotes placed artists, drives listener engagement, provides feedback on performance
               </p>
             </div>

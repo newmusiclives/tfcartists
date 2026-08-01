@@ -88,20 +88,20 @@ export default function OnboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950">
       {/* Header */}
       <header className="bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm border-b">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link
               href="/"
-              className="text-gray-600 hover:text-gray-900 inline-flex items-center space-x-2"
+              className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 inline-flex items-center space-x-2"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back</span>
             </Link>
             <div className="flex items-center space-x-2">
-              <Sparkles className="w-5 h-5 text-purple-600" />
+              <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-300" />
               <span className="font-semibold">{currentStation.name}</span>
             </div>
           </div>
@@ -111,8 +111,8 @@ export default function OnboardPage() {
       {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-6">
-            <Radio className="w-8 h-8 text-purple-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full mb-6">
+            <Radio className="w-8 h-8 text-purple-600 dark:text-purple-300" />
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Get Your Music on Real Radio
@@ -133,7 +133,7 @@ export default function OnboardPage() {
       </section>
 
       {/* Benefits Grid */}
-      <section className="py-16 px-4 bg-white/60">
+      <section className="py-16 px-4 bg-white dark:bg-zinc-900/60">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
             Why Artists Choose {currentStation.name}
@@ -165,8 +165,8 @@ export default function OnboardPage() {
                 key={item.title}
                 className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border border-purple-100 hover:shadow-md transition-shadow"
               >
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-purple-100 rounded-lg mb-4">
-                  <item.icon className="w-5 h-5 text-purple-600" />
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg mb-4">
+                  <item.icon className="w-5 h-5 text-purple-600 dark:text-purple-300" />
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{item.title}</h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">{item.desc}</p>
@@ -244,7 +244,7 @@ export default function OnboardPage() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     placeholder="Jane Doe"
                   />
                 </div>
@@ -257,7 +257,7 @@ export default function OnboardPage() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     placeholder="jane@example.com"
                   />
                 </div>
@@ -270,7 +270,7 @@ export default function OnboardPage() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     placeholder="(555) 123-4567"
                   />
                 </div>
@@ -291,7 +291,7 @@ export default function OnboardPage() {
                     required
                     value={formData.genre}
                     onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   >
                     <option value="">Select a genre</option>
                     <option value="Rock">Rock</option>
@@ -312,7 +312,7 @@ export default function OnboardPage() {
                     Instagram Handle (optional)
                   </label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-zinc-400">
+                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600 dark:text-zinc-400">
                       @
                     </span>
                     <input
@@ -321,14 +321,14 @@ export default function OnboardPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, sourceHandle: e.target.value })
                       }
-                      className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       placeholder="yourusername"
                     />
                   </div>
                 </div>
 
-                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                  <div className="text-sm text-purple-900">
+                <div className="bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+                  <div className="text-sm text-purple-900 dark:text-purple-200">
                     <strong>Pro tip:</strong> Adding your social handle helps us personalize
                     your experience and connect with your existing fanbase.
                   </div>
@@ -342,8 +342,8 @@ export default function OnboardPage() {
                   When&apos;s Your Next Show?
                 </h2>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                  <div className="text-sm text-blue-900">
+                <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+                  <div className="text-sm text-blue-900 dark:text-blue-200">
                     We&apos;ll help you try the 9-word line at your next show and get your first
                     win!
                   </div>
@@ -360,7 +360,7 @@ export default function OnboardPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, nextShowDate: e.target.value })
                     }
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
 
@@ -374,7 +374,7 @@ export default function OnboardPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, nextShowVenue: e.target.value })
                     }
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     placeholder="The Blue Note"
                   />
                 </div>
@@ -390,12 +390,12 @@ export default function OnboardPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, nextShowCity: e.target.value })
                     }
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     placeholder="New York, NY"
                   />
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4">
+                <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4">
                   <div className="text-sm text-gray-600 dark:text-zinc-400">
                     Don&apos;t have a show scheduled? No problem! You can skip this and add it
                     later.
@@ -447,7 +447,7 @@ function StepIndicator({
           ? "bg-purple-600 text-white"
           : completed
           ? "bg-green-500 text-white"
-          : "bg-gray-300 text-gray-600"
+          : "bg-gray-300 text-gray-600 dark:text-zinc-300"
       }`}
     >
       {completed ? "✓" : number}

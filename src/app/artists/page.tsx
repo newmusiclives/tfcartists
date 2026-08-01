@@ -1,10 +1,13 @@
-import { prisma } from "@/lib/db";
 import { flag } from "@/lib/flags";
-import { CLEARED_STATUSES } from "@/lib/rights";
 import { SharedNav } from "@/components/shared-nav";
+import {
+  getRoster,
+  formatDuration,
+  RIGHTS_LABEL,
+} from "@/lib/roster";
 import Link from "next/link";
 import Image from "next/image";
-import { Music, Radio, ShieldCheck, Sparkles } from "lucide-react";
+import { Music, Radio, ShieldCheck, Sparkles, MapPin } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -23,90 +26,6 @@ export const metadata = {
  *
  * Gated behind the artist_showcase flag so it can be launched deliberately.
  */
-async function getArtists() {
-  // One query, grouped in the database rather than pulling every song back and
-  // reducing in JS - this page is force-dynamic, so it runs on every request.
-  const grouped = await prisma.song.groupBy({
-    by: ["artistName"],
-    where: {
-      rightsStatus: { in: CLEARED_STATUSES },
-      retiredAt: null,
-      isActive: true,
-    },
-    _count: { _all: true },
-    _sum: { duration: true },
-    orderBy: { _count: { artistName: "desc" } },
-  });
-
-  // Genre, artwork and rights basis are per-artist values in practice, so any
-  // one of the artist's songs carries them.
-  const details = await prisma.song.findMany({
-    where: {
-      artistName: { in: grouped.map((s) => s.artistName) },
-      rightsStatus: { in: CLEARED_STATUSES },
-      retiredAt: null,
-      isActive: true,
-    },
-    select: {
-      artistName: true,
-      genre: true,
-      artworkUrl: true,
-      rightsStatus: true,
-    },
-  });
-
-  // findMany with `distinct` returns whichever row the planner reaches first,
-  // which can be one with a null artworkUrl even though a sibling has art.
-  // Fold instead, preferring the first non-null of each field.
-  const byName = new Map<
-    string,
-    { genre: string | null; artworkUrl: string | null; rightsStatus: string }
-  >();
-  for (const d of details) {
-    const seen = byName.get(d.artistName);
-    byName.set(d.artistName, {
-      genre: seen?.genre ?? d.genre,
-      artworkUrl: seen?.artworkUrl ?? d.artworkUrl,
-      rightsStatus: seen?.rightsStatus ?? d.rightsStatus ?? "owned_ai",
-    });
-  }
-
-  return grouped.map((s) => ({
-    name: s.artistName,
-    trackCount: s._count._all,
-    totalSeconds: s._sum.duration ?? 0,
-    genre: formatGenre(byName.get(s.artistName)?.genre ?? null),
-    artworkUrl: byName.get(s.artistName)?.artworkUrl ?? null,
-    rightsStatus: byName.get(s.artistName)?.rightsStatus ?? "owned_ai",
-  }));
-}
-
-/**
- * Genres arrive from the Music Factory however the generator wrote them -
- * "americana", "Americana", "garage rock" all appear. Title-case them so a
- * grid of cards does not look like a spreadsheet export.
- */
-function formatGenre(genre: string | null): string | null {
-  if (!genre) return null;
-  return genre
-    .split(/[\s/]+/)
-    .map((w) => (w.length > 2 ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w))
-    .join(" ");
-}
-
-function formatDuration(seconds: number): string {
-  const m = Math.round(seconds / 60);
-  if (m < 60) return `${m} min`;
-  const h = Math.floor(m / 60);
-  return `${h}h ${m % 60}m`;
-}
-
-const RIGHTS_LABEL: Record<string, string> = {
-  owned_ai: "Original AI artist",
-  direct_licence: "Permission granted",
-  public_domain: "Public domain",
-};
-
 export default async function ArtistsPage() {
   const enabled = await flag("artist_showcase");
 
@@ -129,7 +48,7 @@ export default async function ArtistsPage() {
     );
   }
 
-  const artists = await getArtists();
+  const artists = await getRoster();
   const totalTracks = artists.reduce((sum, a) => sum + a.trackCount, 0);
   const totalSeconds = artists.reduce((sum, a) => sum + a.totalSeconds, 0);
 
@@ -172,45 +91,7 @@ export default async function ArtistsPage() {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
             {artists.map((a) => (
-              <article
-                key={a.name}
-                className="flex gap-4 rounded-xl border border-zinc-700 bg-zinc-900 p-4 hover:border-amber-600 transition-colors"
-              >
-                <div className="shrink-0">
-                  {a.artworkUrl ? (
-                    <Image
-                      src={a.artworkUrl}
-                      alt=""
-                      width={96}
-                      height={96}
-                      className="w-24 h-24 rounded-lg object-cover bg-zinc-800"
-                    />
-                  ) : (
-                    <div className="w-24 h-24 rounded-lg bg-zinc-800 flex items-center justify-center">
-                      <Music className="w-8 h-8 text-zinc-400" />
-                    </div>
-                  )}
-                </div>
-
-                <div className="min-w-0 flex-1">
-                  <h2 className="text-lg font-semibold text-zinc-50 truncate">
-                    {a.name}
-                  </h2>
-                  {a.genre && (
-                    <p className="text-sm text-zinc-300 mt-0.5">{a.genre}</p>
-                  )}
-
-                  <p className="text-sm text-zinc-200 mt-2 tabular-nums">
-                    {a.trackCount} track{a.trackCount === 1 ? "" : "s"}
-                    {a.totalSeconds > 0 && ` · ${formatDuration(a.totalSeconds)}`}
-                  </p>
-
-                  <span className="inline-flex items-center gap-1.5 mt-3 text-xs font-medium text-green-200 bg-green-900 border border-green-700 px-2 py-1 rounded">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    {RIGHTS_LABEL[a.rightsStatus] ?? "Cleared"}
-                  </span>
-                </div>
-              </article>
+              <ArtistCard key={a.name} artist={a} />
             ))}
           </div>
         )}
@@ -237,6 +118,72 @@ export default async function ArtistsPage() {
         </section>
       </main>
     </div>
+  );
+}
+
+function ArtistCard({
+  artist: a,
+}: {
+  artist: Awaited<ReturnType<typeof getRoster>>[number];
+}) {
+  const body = (
+    <>
+      <div className="shrink-0">
+        {a.artworkUrl ? (
+          <Image
+            src={a.artworkUrl}
+            alt=""
+            width={96}
+            height={96}
+            className="w-24 h-24 rounded-lg object-cover bg-zinc-800"
+          />
+        ) : (
+          <div className="w-24 h-24 rounded-lg bg-zinc-800 flex items-center justify-center">
+            <Music className="w-8 h-8 text-zinc-400" />
+          </div>
+        )}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <h2 className="text-lg font-semibold text-zinc-50 truncate">{a.name}</h2>
+        {a.genre && <p className="text-sm text-zinc-300 mt-0.5">{a.genre}</p>}
+        {a.origin && (
+          <p className="text-sm text-zinc-300 mt-0.5 flex items-center gap-1">
+            <MapPin className="w-3.5 h-3.5 shrink-0" />
+            {a.origin}
+          </p>
+        )}
+
+        <p className="text-sm text-zinc-200 mt-2 tabular-nums">
+          {a.trackCount} track{a.trackCount === 1 ? "" : "s"}
+          {a.totalSeconds > 0 && ` · ${formatDuration(a.totalSeconds)}`}
+        </p>
+
+        <span className="inline-flex items-center gap-1.5 mt-3 text-xs font-medium text-green-200 bg-green-900 border border-green-700 px-2 py-1 rounded">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          {RIGHTS_LABEL[a.rightsStatus] ?? "Cleared"}
+        </span>
+      </div>
+    </>
+  );
+
+  // Only artists with a profile get a detail page. Linking the rest would
+  // promise a biography we do not have.
+  if (a.slug) {
+    return (
+      <Link
+        href={`/artists/${a.slug}`}
+        className="flex gap-4 rounded-xl border border-zinc-700 bg-zinc-900 p-4 hover:border-amber-600 transition-colors"
+      >
+        {body}
+      </Link>
+    );
+  }
+
+  return (
+    <article className="flex gap-4 rounded-xl border border-zinc-700 bg-zinc-900 p-4">
+      {body}
+    </article>
   );
 }
 

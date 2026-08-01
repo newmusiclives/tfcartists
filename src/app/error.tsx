@@ -19,10 +19,10 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-6">
-          <AlertCircle className="w-10 h-10 text-red-600" />
+    <div className="min-h-screen bg-gradient-to-br from-red-50 dark:from-red-950 via-white dark:via-zinc-900 to-orange-50 dark:to-orange-950 flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-8 text-center">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 dark:bg-red-900 rounded-full mb-6">
+          <AlertCircle className="w-10 h-10 text-red-600 dark:text-red-300" />
         </div>
 
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Something went wrong</h1>
@@ -42,7 +42,7 @@ export default function Error({
 
           <Link
             href="/"
-            className="w-full inline-flex items-center justify-center space-x-2 border-2 border-purple-300 text-purple-700 px-6 py-3 rounded-lg hover:border-purple-400 transition-colors font-medium"
+            className="w-full inline-flex items-center justify-center space-x-2 border-2 border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300 px-6 py-3 rounded-lg hover:border-purple-400 transition-colors font-medium"
           >
             <Home className="w-5 h-5" />
             <span>Go Home</span>
@@ -50,12 +50,12 @@ export default function Error({
         </div>
 
         {process.env.NODE_ENV === "development" && (
-          <div className="mt-6 p-4 bg-gray-100 rounded-lg text-left">
+          <div className="mt-6 p-4 bg-gray-100 dark:bg-zinc-800 rounded-lg text-left">
             <p className="text-sm font-mono text-gray-700 dark:text-zinc-300 mb-2">
               <strong>Error:</strong> {error.message}
             </p>
             {error.digest && (
-              <p className="text-xs font-mono text-gray-400 dark:text-zinc-400">Digest: {error.digest}</p>
+              <p className="text-xs font-mono text-gray-600 dark:text-zinc-400">Digest: {error.digest}</p>
             )}
           </div>
         )}

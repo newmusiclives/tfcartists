@@ -168,7 +168,7 @@ export default function ManagementTeamPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/management" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/management" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -225,19 +225,19 @@ export default function ManagementTeamPage() {
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">What We Do</h4>
               <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-2">
-                  <span className="text-amber-600 mt-1">&#10003;</span>
+                  <span className="text-amber-600 dark:text-amber-300 mt-1">&#10003;</span>
                   <span>Coordinate all 4 operational teams toward station launch milestones</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-amber-600 mt-1">&#10003;</span>
+                  <span className="text-amber-600 dark:text-amber-300 mt-1">&#10003;</span>
                   <span>Execute the 5-phase Station Build Playbook from foundation to growth</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-amber-600 mt-1">&#10003;</span>
+                  <span className="text-amber-600 dark:text-amber-300 mt-1">&#10003;</span>
                   <span>Resolve cross-team dependencies and remove blockers</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-amber-600 mt-1">&#10003;</span>
+                  <span className="text-amber-600 dark:text-amber-300 mt-1">&#10003;</span>
                   <span>Track KPI targets and adjust strategy to hit revenue and growth goals</span>
                 </li>
               </ul>
@@ -245,15 +245,15 @@ export default function ManagementTeamPage() {
             <div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Station Targets</h4>
               <div className="space-y-3">
-                <div className="bg-amber-50 rounded-lg p-3">
+                <div className="bg-amber-50 dark:bg-amber-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Revenue Target</div>
                   <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">$10,000/month</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">Operator gross revenue at capacity: ~$9,950/mo</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">Operator gross revenue at capacity: ~$9,950/mo</div>
                 </div>
-                <div className="bg-blue-50 rounded-lg p-3">
+                <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Audience Target</div>
-                  <div className="text-2xl font-bold text-blue-600">5,000 DAU</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">Currently at 1,250 (25%)</div>
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">5,000 DAU</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">Currently at 1,250 (25%)</div>
                 </div>
               </div>
             </div>
@@ -320,7 +320,7 @@ export default function ManagementTeamPage() {
                         <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Key Responsibilities</h5>
                         <ul className="space-y-1">
                           {member.responsibilities.map((resp, idx) => (
-                            <li key={idx} className="text-sm text-gray-700 flex items-start space-x-2">
+                            <li key={idx} className="text-sm text-gray-700 dark:text-zinc-200 flex items-start space-x-2">
                               <span className={`${colors.text} mt-0.5`}>&bull;</span>
                               <span>{resp}</span>
                             </li>
@@ -404,42 +404,42 @@ export default function ManagementTeamPage() {
 
           {/* Directors */}
           <div className="flex justify-center gap-8 mb-6">
-            <div className="bg-orange-50 border-2 border-orange-300 rounded-xl p-4 text-center w-56">
+            <div className="bg-orange-50 dark:bg-orange-950 border-2 border-orange-300 dark:border-orange-700 rounded-xl p-4 text-center w-56">
               <div className="font-bold text-gray-900 dark:text-white">Avery Quinn</div>
-              <div className="text-orange-600 text-sm">Operations Director</div>
+              <div className="text-orange-600 dark:text-orange-300 text-sm">Operations Director</div>
             </div>
-            <div className="bg-red-50 border-2 border-red-300 rounded-xl p-4 text-center w-56">
+            <div className="bg-red-50 dark:bg-red-950 border-2 border-red-300 dark:border-red-700 rounded-xl p-4 text-center w-56">
               <div className="font-bold text-gray-900 dark:text-white">Jordan Blake</div>
-              <div className="text-red-600 text-sm">Strategy Director</div>
+              <div className="text-red-600 dark:text-red-300 text-sm">Strategy Director</div>
             </div>
           </div>
 
           {/* Teams */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            <Link href="/station-admin" className="block bg-amber-50 border-2 border-amber-200 rounded-lg p-3 text-center hover:border-amber-400 transition-colors">
-              <Settings className="w-5 h-5 text-amber-600 mx-auto mb-1" />
+            <Link href="/station-admin" className="block bg-amber-50 dark:bg-amber-950 border-2 border-amber-200 dark:border-amber-800 rounded-lg p-3 text-center hover:border-amber-400 transition-colors">
+              <Settings className="w-5 h-5 text-amber-600 dark:text-amber-300 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Station Ops</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Infrastructure</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Infrastructure</div>
             </Link>
-            <Link href="/riley" className="block bg-purple-50 border-2 border-purple-200 rounded-lg p-3 text-center hover:border-purple-400 transition-colors">
-              <Users className="w-5 h-5 text-purple-600 mx-auto mb-1" />
+            <Link href="/riley" className="block bg-purple-50 dark:bg-purple-950 border-2 border-purple-200 dark:border-purple-800 rounded-lg p-3 text-center hover:border-purple-400 transition-colors">
+              <Users className="w-5 h-5 text-purple-600 dark:text-purple-300 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Team Riley</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Artist Acquisition</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Artist Acquisition</div>
             </Link>
-            <Link href="/cassidy" className="block bg-teal-50 border-2 border-teal-200 rounded-lg p-3 text-center hover:border-teal-400 transition-colors">
-              <Award className="w-5 h-5 text-teal-600 mx-auto mb-1" />
+            <Link href="/cassidy" className="block bg-teal-50 dark:bg-teal-950 border-2 border-teal-200 dark:border-teal-800 rounded-lg p-3 text-center hover:border-teal-400 transition-colors">
+              <Award className="w-5 h-5 text-teal-600 dark:text-teal-300 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Team Cassidy</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Content & Curation</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Content & Curation</div>
             </Link>
-            <Link href="/harper" className="block bg-green-50 border-2 border-green-200 rounded-lg p-3 text-center hover:border-green-400 transition-colors">
-              <Building2 className="w-5 h-5 text-green-600 mx-auto mb-1" />
+            <Link href="/harper" className="block bg-green-50 dark:bg-green-950 border-2 border-green-200 dark:border-green-800 rounded-lg p-3 text-center hover:border-green-400 transition-colors">
+              <Building2 className="w-5 h-5 text-green-600 dark:text-green-300 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Team Harper</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Revenue Generation</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Revenue Generation</div>
             </Link>
-            <Link href="/elliot" className="block bg-blue-50 border-2 border-blue-200 rounded-lg p-3 text-center hover:border-blue-400 transition-colors">
-              <TrendingUp className="w-5 h-5 text-blue-600 mx-auto mb-1" />
+            <Link href="/elliot" className="block bg-blue-50 dark:bg-blue-950 border-2 border-blue-200 dark:border-blue-800 rounded-lg p-3 text-center hover:border-blue-400 transition-colors">
+              <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-300 mx-auto mb-1" />
               <div className="font-semibold text-sm text-gray-900 dark:text-white">Team Elliot</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Audience Growth</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Audience Growth</div>
             </Link>
           </div>
         </div>

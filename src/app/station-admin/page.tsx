@@ -194,7 +194,7 @@ export default function StationAdminHub() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Radio className="w-8 h-8 text-amber-600" />
+              <Radio className="w-8 h-8 text-amber-600 dark:text-amber-300" />
               Station Admin
             </h1>
             <p className="text-zinc-400 mt-1">

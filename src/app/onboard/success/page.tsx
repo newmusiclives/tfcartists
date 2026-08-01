@@ -10,11 +10,11 @@ function OnboardSuccessContent() {
   const name = searchParams.get("name") || "there";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950 flex items-center justify-center px-4">
       <div className="max-w-lg w-full">
         <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
-            <CheckCircle className="w-10 h-10 text-green-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full mb-6">
+            <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-300" />
           </div>
 
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
@@ -26,12 +26,12 @@ function OnboardSuccessContent() {
             next show.
           </p>
 
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 mb-8">
+          <div className="bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800 rounded-lg p-6 mb-8">
             <div className="flex items-start space-x-4">
-              <MessageCircle className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
+              <MessageCircle className="w-6 h-6 text-purple-600 dark:text-purple-300 flex-shrink-0 mt-1" />
               <div className="text-left">
-                <div className="font-semibold text-purple-900 mb-2">What happens next?</div>
-                <ul className="text-sm text-purple-800 space-y-2">
+                <div className="font-semibold text-purple-900 dark:text-purple-200 mb-2">What happens next?</div>
+                <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-2">
                   <li>✓ Riley will send you a friendly text message</li>
                   <li>✓ She'll walk you through the 9-word line</li>
                   <li>✓ You'll get reminders before your show</li>
@@ -65,7 +65,7 @@ function OnboardSuccessContent() {
 export default function OnboardSuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950 flex items-center justify-center">
         <div className="text-gray-600 dark:text-zinc-400">Loading...</div>
       </div>
     }>

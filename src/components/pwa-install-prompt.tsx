@@ -71,20 +71,20 @@ export function PWAInstallPrompt() {
     <>
       {/* Install Banner */}
       <div className="fixed bottom-20 sm:bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-80 z-50 animate-slide-in">
-        <div className="bg-white rounded-xl shadow-2xl border border-amber-200 p-4">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-2xl border border-amber-200 dark:border-amber-800 p-4">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Download className="w-5 h-5 text-amber-600" />
+              <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Download className="w-5 h-5 text-amber-600 dark:text-amber-300" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 text-sm">Install TrueFans RADIO</h3>
-                <p className="text-xs text-gray-600">Listen anywhere, get notifications</p>
+                <h3 className="font-semibold text-gray-900 dark:text-zinc-100 text-sm">Install TrueFans RADIO</h3>
+                <p className="text-xs text-gray-600 dark:text-zinc-300">Listen anywhere, get notifications</p>
               </div>
             </div>
             <button
               onClick={handleDismiss}
-              className="text-gray-600 hover:text-gray-800 transition-colors p-1"
+              className="text-gray-600 dark:text-zinc-300 hover:text-gray-800 transition-colors p-1"
               aria-label="Dismiss"
             >
               <X className="w-4 h-4" />
@@ -102,14 +102,14 @@ export function PWAInstallPrompt() {
       {/* Installation Guide Modal */}
       {showGuide && (
         <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm mx-0 sm:mx-4 p-6 animate-slide-in">
+          <div className="bg-white dark:bg-zinc-900 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm mx-0 sm:mx-4 p-6 animate-slide-in">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                 {isIOS ? "Install on iOS" : "Install TrueFans RADIO"}
               </h3>
               <button
                 onClick={handleDismiss}
-                className="text-gray-600 hover:text-gray-800 transition-colors"
+                className="text-gray-600 dark:text-zinc-300 hover:text-gray-800 transition-colors"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -118,30 +118,30 @@ export function PWAInstallPrompt() {
             {isIOS ? (
               <ol className="space-y-4 text-sm text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-3">
-                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 text-amber-700 rounded-full text-xs font-bold flex-shrink-0">1</span>
+                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-full text-xs font-bold flex-shrink-0">1</span>
                   <span>Tap the <strong>Share</strong> button in Safari (the square with an arrow pointing up)</span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 text-amber-700 rounded-full text-xs font-bold flex-shrink-0">2</span>
+                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-full text-xs font-bold flex-shrink-0">2</span>
                   <span>Scroll down and tap <strong>&ldquo;Add to Home Screen&rdquo;</strong></span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 text-amber-700 rounded-full text-xs font-bold flex-shrink-0">3</span>
+                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-full text-xs font-bold flex-shrink-0">3</span>
                   <span>Tap <strong>&ldquo;Add&rdquo;</strong> to install the app</span>
                 </li>
               </ol>
             ) : (
               <ol className="space-y-4 text-sm text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-3">
-                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 text-amber-700 rounded-full text-xs font-bold flex-shrink-0">1</span>
+                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-full text-xs font-bold flex-shrink-0">1</span>
                   <span>Click the <strong>install icon</strong> in the address bar (monitor with a down arrow), or open Chrome&apos;s menu (<strong>three dots</strong> at top right)</span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 text-amber-700 rounded-full text-xs font-bold flex-shrink-0">2</span>
+                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-full text-xs font-bold flex-shrink-0">2</span>
                   <span>Select <strong>&ldquo;Install TrueFans RADIO&rdquo;</strong> or <strong>&ldquo;Save and Share &gt; Install&rdquo;</strong></span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 text-amber-700 rounded-full text-xs font-bold flex-shrink-0">3</span>
+                  <span className="inline-flex items-center justify-center w-6 h-6 bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 rounded-full text-xs font-bold flex-shrink-0">3</span>
                   <span>Click <strong>&ldquo;Install&rdquo;</strong> to add the app to your desktop</span>
                 </li>
               </ol>

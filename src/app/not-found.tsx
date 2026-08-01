@@ -4,8 +4,8 @@ import { Home, Radio, Headphones, Calendar, Music } from "lucide-react";
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-        <Radio className="w-16 h-16 text-amber-600 mx-auto mb-4" />
+      <div className="max-w-md w-full bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-8 text-center">
+        <Radio className="w-16 h-16 text-amber-600 dark:text-amber-300 mx-auto mb-4" />
         <div className="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600 mb-4">
           404
         </div>
@@ -28,21 +28,21 @@ export default function NotFound() {
           <div className="flex gap-3 justify-center">
             <Link
               href="/player"
-              className="inline-flex items-center space-x-1 text-amber-700 hover:text-amber-900 text-sm font-medium"
+              className="inline-flex items-center space-x-1 text-amber-700 dark:text-amber-300 hover:text-amber-900 text-sm font-medium"
             >
               <Headphones className="w-4 h-4" />
               <span>Listen Live</span>
             </Link>
             <Link
               href="/schedule"
-              className="inline-flex items-center space-x-1 text-amber-700 hover:text-amber-900 text-sm font-medium"
+              className="inline-flex items-center space-x-1 text-amber-700 dark:text-amber-300 hover:text-amber-900 text-sm font-medium"
             >
               <Calendar className="w-4 h-4" />
               <span>Schedule</span>
             </Link>
             <Link
               href="/onboard"
-              className="inline-flex items-center space-x-1 text-amber-700 hover:text-amber-900 text-sm font-medium"
+              className="inline-flex items-center space-x-1 text-amber-700 dark:text-amber-300 hover:text-amber-900 text-sm font-medium"
             >
               <Music className="w-4 h-4" />
               <span>Submit Music</span>

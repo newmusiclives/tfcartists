@@ -143,12 +143,12 @@ export default function RedeemRewardsPage() {
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/rewards" className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 transition-colors">
+            <Link href="/rewards" className="flex items-center space-x-2 text-amber-700 dark:text-amber-300 hover:text-amber-800 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               <Radio className="w-5 h-5" />
               <span className="font-bold">Rewards</span>
             </Link>
-            <div className="flex items-center space-x-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-bold">
+            <div className="flex items-center space-x-2 bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 px-4 py-2 rounded-full text-sm font-bold">
               <Star className="w-4 h-4" />
               <span>{userXp.toLocaleString()} XP</span>
               <span className="text-amber-600 dark:text-amber-400">Lv.{userLevel}</span>
@@ -160,8 +160,8 @@ export default function RedeemRewardsPage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-4">
-            <Gift className="w-8 h-8 text-amber-700" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 dark:bg-amber-900 rounded-full mb-4">
+            <Gift className="w-8 h-8 text-amber-700 dark:text-amber-300" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Redeem Rewards</h1>
           <p className="mt-2 text-gray-600 dark:text-zinc-400">Spend your XP on merch, shoutouts, and exclusive experiences</p>
@@ -169,13 +169,13 @@ export default function RedeemRewardsPage() {
 
         {/* Messages */}
         {successMessage && (
-          <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-center space-x-3">
-            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-            <span className="text-green-800 font-medium">{successMessage}</span>
+          <div className="mb-6 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-xl p-4 flex items-center space-x-3">
+            <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-300 flex-shrink-0" />
+            <span className="text-green-800 dark:text-green-200 font-medium">{successMessage}</span>
           </div>
         )}
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 text-red-700">
+          <div className="mb-6 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-xl p-4 text-red-700 dark:text-red-300">
             {error}
             {error.includes("register") && (
               <Link href="/listen/register" className="ml-2 underline font-medium">Register here</Link>
@@ -188,7 +188,7 @@ export default function RedeemRewardsPage() {
           <button
             onClick={() => setFilter("all")}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              filter === "all" ? "bg-amber-700 text-white" : "bg-white border text-gray-600 hover:bg-gray-50"
+              filter === "all" ? "bg-amber-700 text-white" : "bg-white dark:bg-zinc-900 border text-gray-600 dark:text-zinc-300 hover:bg-gray-50"
             }`}
           >
             All
@@ -200,7 +200,7 @@ export default function RedeemRewardsPage() {
                 key={cat}
                 onClick={() => setFilter(cat)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center space-x-1.5 ${
-                  filter === cat ? "bg-amber-700 text-white" : "bg-white border text-gray-600 hover:bg-gray-50"
+                  filter === cat ? "bg-amber-700 text-white" : "bg-white dark:bg-zinc-900 border text-gray-600 dark:text-zinc-300 hover:bg-gray-50"
                 }`}
               >
                 {config?.icon}
@@ -233,7 +233,7 @@ export default function RedeemRewardsPage() {
               return (
                 <div
                   key={reward.id}
-                  className={`bg-white rounded-2xl shadow-sm border p-6 transition-all ${
+                  className={`bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6 transition-all ${
                     canRedeem ? "hover:shadow-md hover:border-amber-300" : "opacity-75"
                   }`}
                 >
@@ -260,12 +260,12 @@ export default function RedeemRewardsPage() {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <span className={`text-lg font-bold ${canAfford ? "text-amber-600" : "text-gray-400"}`}>
+                      <span className={`text-lg font-bold ${canAfford ? "text-amber-600 dark:text-amber-300" : "text-gray-400"}`}>
                         {reward.xpCost.toLocaleString()} XP
                       </span>
                       {reward.minLevel > 1 && (
                         <span className={`text-xs px-2 py-0.5 rounded-full ${
-                          meetsLevel ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-gray-100 text-gray-500"
+                          meetsLevel ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400" : "bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400"
                         }`}>
                           Lv.{reward.minLevel}+
                         </span>
@@ -273,7 +273,7 @@ export default function RedeemRewardsPage() {
                     </div>
 
                     {pendingRedemption ? (
-                      <span className="flex items-center space-x-1.5 text-sm text-blue-600 font-medium">
+                      <span className="flex items-center space-x-1.5 text-sm text-blue-600 dark:text-blue-300 font-medium">
                         <Clock className="w-4 h-4" />
                         <span>Pending</span>
                       </span>
@@ -291,7 +291,7 @@ export default function RedeemRewardsPage() {
                         className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                           canRedeem
                             ? "bg-amber-700 text-white hover:bg-amber-700"
-                            : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                            : "bg-gray-200 dark:bg-zinc-800 text-gray-400 cursor-not-allowed"
                         }`}
                       >
                         {isRedeeming ? "Redeeming..." : canAfford ? "Redeem" : "Not Enough XP"}
@@ -306,7 +306,7 @@ export default function RedeemRewardsPage() {
 
         {/* Redemption History */}
         {redemptions.length > 0 && (
-          <div className="mt-8 bg-white rounded-2xl shadow-sm border p-6">
+          <div className="mt-8 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border p-6">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Your Redemptions</h2>
             <div className="space-y-3">
               {redemptions.map((r, idx) => {

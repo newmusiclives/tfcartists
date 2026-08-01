@@ -112,7 +112,7 @@ export default function SponsorPortalPage() {
   // Lookup view
   if (!data && !loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 dark:from-blue-950 to-white dark:to-zinc-900">
         <SharedNav />
         <div className="max-w-xl mx-auto px-4 py-20 text-center">
           <Building2 className="w-12 h-12 text-blue-500 mx-auto mb-4" />
@@ -139,7 +139,7 @@ export default function SponsorPortalPage() {
             </button>
           </div>
           {error && (
-            <p className="text-sm text-red-600 mt-3">{error}</p>
+            <p className="text-sm text-red-600 dark:text-red-300 mt-3">{error}</p>
           )}
           <p className="text-xs text-gray-400 mt-3">
             Your Sponsor ID was provided when your sponsorship was activated. Check your welcome email or contact the team.
@@ -175,7 +175,7 @@ export default function SponsorPortalPage() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{sponsor.businessName}</h1>
-            <p className="text-gray-400 dark:text-zinc-400">
+            <p className="text-gray-600 dark:text-zinc-400">
               {sponsor.contactName} &middot; {sponsor.city}, {sponsor.state}
             </p>
           </div>
@@ -188,20 +188,20 @@ export default function SponsorPortalPage() {
         </div>
 
         {/* Tier Card */}
-        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border-2 border-blue-200 mb-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-sm border-2 border-blue-200 dark:border-blue-800 mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-400 dark:text-zinc-400">Sponsorship Tier</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Sponsorship Tier</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {tier ? tier.name : "Not Active"}
               </p>
-              <p className="text-sm text-gray-400 dark:text-zinc-400 mt-1">
+              <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">
                 {tier ? `$${tier.cost}/month \u2022 ${tier.adSpots} ad spots/month` : "Contact us to activate"}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-400 dark:text-zinc-400">Monthly Investment</p>
-              <p className="text-3xl font-bold text-blue-600">
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Monthly Investment</p>
+              <p className="text-3xl font-bold text-blue-600 dark:text-blue-300">
                 ${sponsor.monthlyAmount || tier?.cost || 0}
               </p>
             </div>
@@ -246,16 +246,16 @@ export default function SponsorPortalPage() {
         {/* Active Ad Spots */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border mb-8">
           <div className="flex items-center justify-between p-6 pb-4">
-            <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
               <Radio className="w-5 h-5 text-gray-400" />
               Active Ad Spots
             </h2>
-            <span className="text-sm text-gray-400 dark:text-zinc-400">
+            <span className="text-sm text-gray-600 dark:text-zinc-400">
               {ads.filter((a) => a.isActive).length} active / {ads.length} total
             </span>
           </div>
           {ads.length === 0 ? (
-            <div className="px-6 pb-6 text-sm text-gray-400 dark:text-zinc-400">
+            <div className="px-6 pb-6 text-sm text-gray-600 dark:text-zinc-400">
               No ad spots found. Contact the station team to set up your first ad.
             </div>
           ) : (
@@ -266,7 +266,7 @@ export default function SponsorPortalPage() {
                     <div className={`w-2 h-2 rounded-full ${ad.isActive ? "bg-green-500" : "bg-gray-300"}`} />
                     <div>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">{ad.title}</p>
-                      <p className="text-xs text-gray-400 dark:text-zinc-400">
+                      <p className="text-xs text-gray-600 dark:text-zinc-400">
                         {ad.tier.charAt(0).toUpperCase() + ad.tier.slice(1)} tier
                         {ad.durationSeconds ? ` \u2022 ${Math.round(ad.durationSeconds)}s` : ""}
                         {ad.lastPlayedAt
@@ -277,7 +277,7 @@ export default function SponsorPortalPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-semibold text-gray-900 dark:text-white">{ad.playCount.toLocaleString()}</p>
-                    <p className="text-xs text-gray-400 dark:text-zinc-400">plays</p>
+                    <p className="text-xs text-gray-600 dark:text-zinc-400">plays</p>
                   </div>
                 </div>
               ))}
@@ -317,9 +317,9 @@ export default function SponsorPortalPage() {
 
         {/* Upgrade CTA */}
         {(!tier || (tier.name !== "Platinum")) && (
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-            <h3 className="font-semibold text-blue-900 mb-2">Upgrade Your Sponsorship</h3>
-            <p className="text-sm text-blue-700 mb-4">
+          <div className="bg-gradient-to-r from-blue-50 dark:from-blue-950 to-indigo-50 dark:to-indigo-950 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+            <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">Upgrade Your Sponsorship</h3>
+            <p className="text-sm text-blue-700 dark:text-blue-300 mb-4">
               Higher tiers mean more ad spots, more reach, and exclusive benefits.
             </p>
             <a
@@ -339,7 +339,7 @@ function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 shadow-sm border">
       <div className="mb-2">{icon}</div>
-      <p className="text-xs text-gray-400 dark:text-zinc-400">{label}</p>
+      <p className="text-xs text-gray-600 dark:text-zinc-400">{label}</p>
       <p className="text-xl font-bold text-gray-900 dark:text-white">{value}</p>
     </div>
   );
@@ -366,7 +366,7 @@ function QuickAction({
     >
       <div className="mb-2">{icon}</div>
       <p className="text-sm font-semibold text-gray-900 dark:text-white">{title}</p>
-      <p className="text-xs text-gray-400 dark:text-zinc-400 mt-1">{description}</p>
+      <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1">{description}</p>
     </a>
   );
 }

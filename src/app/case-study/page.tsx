@@ -96,8 +96,8 @@ export default function CaseStudyPage() {
       {/* Hero */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-6">
-            <Radio className="w-8 h-8 text-amber-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 dark:bg-amber-900 rounded-full mb-6">
+            <Radio className="w-8 h-8 text-amber-600 dark:text-amber-300" />
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Case Study: North Country Radio
@@ -120,11 +120,11 @@ export default function CaseStudyPage() {
                 key={s.label}
                 className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6 text-center"
               >
-                <s.icon className="w-6 h-6 text-amber-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-400 dark:text-zinc-400 mb-1">{s.label}</p>
+                <s.icon className="w-6 h-6 text-amber-600 dark:text-amber-300 mx-auto mb-2" />
+                <p className="text-sm text-gray-600 dark:text-zinc-400 mb-1">{s.label}</p>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">{s.value}</p>
                 {s.sub && (
-                  <p className="text-xs text-gray-400 dark:text-zinc-400">{s.sub}</p>
+                  <p className="text-xs text-gray-600 dark:text-zinc-400">{s.sub}</p>
                 )}
               </div>
             ))}
@@ -134,7 +134,7 @@ export default function CaseStudyPage() {
         {/* The Challenge */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
-            <Building2 className="w-6 h-6 text-amber-600" />
+            <Building2 className="w-6 h-6 text-amber-600 dark:text-amber-300" />
             <span>The Challenge</span>
           </h2>
           <p className="text-lg text-gray-700 dark:text-zinc-300 leading-relaxed">
@@ -148,7 +148,7 @@ export default function CaseStudyPage() {
         {/* The Solution */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
-            <CheckCircle2 className="w-6 h-6 text-green-600" />
+            <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-300" />
             <span>The Solution</span>
           </h2>
           <p className="text-lg text-gray-700 dark:text-zinc-300 leading-relaxed">
@@ -162,7 +162,7 @@ export default function CaseStudyPage() {
         {/* Meet the AI DJs */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8 flex items-center justify-center space-x-2">
-            <Headphones className="w-6 h-6 text-amber-600" />
+            <Headphones className="w-6 h-6 text-amber-600 dark:text-amber-300" />
             <span>Meet the AI DJs</span>
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -178,7 +178,7 @@ export default function CaseStudyPage() {
                     {dj.name.split(" ").map((n) => n[0]).join("")}
                   </div>
                   <h3 className="font-bold text-gray-900 dark:text-white text-lg">{dj.name}</h3>
-                  <p className="text-sm text-amber-700 font-medium mb-1">{dj.time}</p>
+                  <p className="text-sm text-amber-700 dark:text-amber-300 font-medium mb-1">{dj.time}</p>
                   <p className="text-sm text-gray-400 italic">{dj.vibe}</p>
                 </div>
               </div>
@@ -189,7 +189,7 @@ export default function CaseStudyPage() {
         {/* Results */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8 flex items-center justify-center space-x-2">
-            <TrendingUp className="w-6 h-6 text-amber-600" />
+            <TrendingUp className="w-6 h-6 text-amber-600 dark:text-amber-300" />
             <span>Results</span>
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -208,38 +208,38 @@ export default function CaseStudyPage() {
         {/* Revenue Model */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center space-x-2">
-            <BarChart3 className="w-6 h-6 text-amber-600" />
+            <BarChart3 className="w-6 h-6 text-amber-600 dark:text-amber-300" />
             <span>Revenue Model</span>
           </h2>
           <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-amber-50 rounded-lg p-6 border border-amber-100">
+            <div className="bg-amber-50 dark:bg-amber-950 rounded-lg p-6 border border-amber-100">
               <h3 className="font-bold text-gray-900 dark:text-white mb-2">Artist Subscriptions</h3>
-              <p className="text-3xl font-extrabold text-amber-700 mb-1">$3,200<span className="text-lg">/mo</span></p>
+              <p className="text-3xl font-extrabold text-amber-700 dark:text-amber-300 mb-1">$3,200<span className="text-lg">/mo</span></p>
               <p className="text-sm text-gray-600 dark:text-zinc-400">
                 Free to $100/mo tiers — artists pay for premium rotation and analytics
               </p>
             </div>
-            <div className="bg-orange-50 rounded-lg p-6 border border-orange-100">
+            <div className="bg-orange-50 dark:bg-orange-950 rounded-lg p-6 border border-orange-100">
               <h3 className="font-bold text-gray-900 dark:text-white mb-2">Sponsor Revenue</h3>
-              <p className="text-3xl font-extrabold text-orange-700 mb-1">$16,340<span className="text-lg">/mo</span></p>
+              <p className="text-3xl font-extrabold text-orange-700 dark:text-orange-300 mb-1">$16,340<span className="text-lg">/mo</span></p>
               <p className="text-sm text-gray-600 dark:text-zinc-400">
                 $30 – $300/mo tiers — local businesses sponsor the station
               </p>
             </div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 dark:border-zinc-800">
+          <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-6 border border-gray-200 dark:border-zinc-800">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <p className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Revenue Split</p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Revenue Split</p>
                 <p className="text-gray-700 dark:text-zinc-300">
                   <span className="font-bold text-amber-700 dark:text-amber-400">80%</span> to artist pool{" "}
                   <span className="text-gray-400 mx-2">|</span>
-                  <span className="font-bold text-orange-700">20%</span> to operator
+                  <span className="font-bold text-orange-700 dark:text-orange-300">20%</span> to operator
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-400 dark:text-zinc-400 mb-1">Operator Take-Home</p>
-                <p className="text-2xl font-extrabold text-gray-900 dark:text-white">~$6,400<span className="text-base text-gray-400 dark:text-zinc-400">/mo</span></p>
+                <p className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Operator Take-Home</p>
+                <p className="text-2xl font-extrabold text-gray-900 dark:text-white">~$6,400<span className="text-base text-gray-600 dark:text-zinc-400">/mo</span></p>
               </div>
             </div>
           </div>
@@ -248,7 +248,7 @@ export default function CaseStudyPage() {
         {/* How It Works — Timeline */}
         <section className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center space-x-2">
-            <Star className="w-6 h-6 text-amber-600" />
+            <Star className="w-6 h-6 text-amber-600 dark:text-amber-300" />
             <span>How It Works</span>
           </h2>
           <div className="space-y-6">
@@ -264,7 +264,7 @@ export default function CaseStudyPage() {
                   )}
                 </div>
                 <div className="pb-2">
-                  <p className="text-gray-800 font-medium">{step.title}</p>
+                  <p className="text-gray-800 dark:text-zinc-100 font-medium">{step.title}</p>
                 </div>
               </div>
             ))}
@@ -294,13 +294,13 @@ export default function CaseStudyPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/operate"
-              className="bg-white text-amber-700 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-amber-50 transition-colors shadow-lg"
+              className="bg-white dark:bg-zinc-900 text-amber-700 dark:text-amber-300 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-amber-50 transition-colors shadow-lg"
             >
               Become an Operator
             </Link>
             <Link
               href="/schedule"
-              className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white/10 transition-colors"
+              className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white dark:bg-zinc-900/10 transition-colors"
             >
               View Schedule
             </Link>

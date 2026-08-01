@@ -158,21 +158,21 @@ export default function CassidySubmissionsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50">
+    <main className="min-h-screen bg-gradient-to-br from-teal-50 dark:from-teal-950 via-white dark:via-zinc-900 to-cyan-50 dark:to-cyan-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/cassidy"
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Dashboard</span>
             </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <Music className="w-8 h-8 text-teal-600" />
+            <Music className="w-8 h-8 text-teal-600 dark:text-teal-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Review Queue
@@ -195,21 +195,21 @@ export default function CassidySubmissionsPage() {
                 {stats.pendingSubmissions}
               </div>
             </div>
-            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-blue-200 shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-blue-200 dark:border-blue-800 shadow-sm">
               <div className="text-sm text-gray-600 dark:text-zinc-400">In Review</div>
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">
                 {stats.inReview}
               </div>
             </div>
-            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-green-200 shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-green-200 dark:border-green-800 shadow-sm">
               <div className="text-sm text-gray-600 dark:text-zinc-400">Judged This Week</div>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-green-600 dark:text-green-300">
                 {stats.judgedThisWeek}
               </div>
             </div>
-            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-teal-200 shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 rounded-xl p-4 border border-teal-200 dark:border-teal-800 shadow-sm">
               <div className="text-sm text-gray-600 dark:text-zinc-400">Placement Rate</div>
-              <div className="text-2xl font-bold text-teal-600">
+              <div className="text-2xl font-bold text-teal-600 dark:text-teal-300">
                 {stats.placementRate}%
               </div>
             </div>
@@ -226,8 +226,8 @@ export default function CassidySubmissionsPage() {
                 onClick={() => setActiveTab(tab.key)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                   activeTab === tab.key
-                    ? "bg-teal-600 text-gray-600"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "bg-teal-600 text-gray-600 dark:text-zinc-300"
+                    : "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200 hover:bg-gray-200"
                 }`}
               >
                 {tab.label}
@@ -241,7 +241,7 @@ export default function CassidySubmissionsPage() {
               Loading submissions...
             </div>
           ) : submissions.length === 0 ? (
-            <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
+            <div className="text-center py-12 text-gray-600 dark:text-zinc-400">
               No submissions found for this filter.
             </div>
           ) : (
@@ -251,7 +251,7 @@ export default function CassidySubmissionsPage() {
                   statusConfig.PENDING;
                 return (
                   <div key={submission.id}>
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-teal-300 transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-teal-300 transition-colors">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3">
                           <Music className="w-5 h-5 text-gray-400" />
@@ -310,7 +310,7 @@ export default function CassidySubmissionsPage() {
 
                     {/* Tier Assignment Form */}
                     {assigningId === submission.id && (
-                      <div className="mt-2 p-4 bg-teal-50 rounded-lg border border-teal-200">
+                      <div className="mt-2 p-4 bg-teal-50 dark:bg-teal-950 rounded-lg border border-teal-200 dark:border-teal-800">
                         <h4 className="font-semibold text-gray-900 dark:text-white mb-3">
                           Assign Tier for {submission.artistName} &mdash; &ldquo;{submission.trackTitle}&rdquo;
                         </h4>
@@ -386,7 +386,7 @@ export default function CassidySubmissionsPage() {
                           </button>
                           <button
                             onClick={() => setAssigningId(null)}
-                            className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors"
+                            className="px-4 py-2 bg-gray-200 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors"
                           >
                             Cancel
                           </button>

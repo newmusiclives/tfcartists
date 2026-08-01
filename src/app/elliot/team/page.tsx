@@ -207,13 +207,13 @@ export default function ElliotTeamPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 dark:from-blue-950 via-white dark:via-zinc-900 to-cyan-50 dark:to-cyan-950">
       {/* Header */}
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/elliot" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/elliot" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -270,19 +270,19 @@ export default function ElliotTeamPage() {
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">What We Do</h4>
               <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-2">
-                  <span className="text-blue-600 mt-1">✓</span>
+                  <span className="text-blue-600 dark:text-blue-300 mt-1">✓</span>
                   <span>Build a passionate listener community that grows itself</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-blue-600 mt-1">✓</span>
+                  <span className="text-blue-600 dark:text-blue-300 mt-1">✓</span>
                   <span>Convert artist fans into regular station listeners</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-blue-600 mt-1">✓</span>
+                  <span className="text-blue-600 dark:text-blue-300 mt-1">✓</span>
                   <span>Create viral content that drives listener acquisition</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-blue-600 mt-1">✓</span>
+                  <span className="text-blue-600 dark:text-blue-300 mt-1">✓</span>
                   <span>Engineer habit loops for long-term listener retention</span>
                 </li>
               </ul>
@@ -290,21 +290,21 @@ export default function ElliotTeamPage() {
             <div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">The Growth Flywheel</h4>
               <div className="space-y-3">
-                <div className="bg-blue-50 rounded-lg p-3">
+                <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artists bring fans → Fans become listeners</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">River activates artist fan bases</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">River activates artist fan bases</div>
                 </div>
-                <div className="bg-purple-50 rounded-lg p-3">
+                <div className="bg-purple-50 dark:bg-purple-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Viral content → New listener discovery</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">Nova creates shareable moments</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">Nova creates shareable moments</div>
                 </div>
-                <div className="bg-rose-50 rounded-lg p-3">
+                <div className="bg-rose-50 dark:bg-rose-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Community → Loyalty & retention</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">Sage builds belonging</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">Sage builds belonging</div>
                 </div>
-                <div className="bg-indigo-50 rounded-lg p-3">
+                <div className="bg-indigo-50 dark:bg-indigo-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Habits → Regular listening</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">Orion engineers behavior</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">Orion engineers behavior</div>
                 </div>
               </div>
             </div>
@@ -369,7 +369,7 @@ export default function ElliotTeamPage() {
                         <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Key Responsibilities</h5>
                         <ul className="space-y-1">
                           {member.responsibilities.map((resp, idx) => (
-                            <li key={idx} className="text-sm text-gray-700 flex items-start space-x-2">
+                            <li key={idx} className="text-sm text-gray-700 dark:text-zinc-200 flex items-start space-x-2">
                               <span className={`${colors.text} mt-0.5`}>•</span>
                               <span>{resp}</span>
                             </li>
@@ -587,7 +587,7 @@ function TacticCard({
         <div className={`p-2 ${classes.bg} ${classes.text} rounded-lg`}>{icon}</div>
         <div className="flex-1">
           <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{title}</h4>
-          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-2">Owned by {owner}</p>
+          <p className="text-xs text-gray-600 dark:text-zinc-400 mb-2">Owned by {owner}</p>
           <p className="text-sm text-gray-700 dark:text-zinc-300 mb-2">{description}</p>
           <div className={`text-xs font-medium ${classes.text}`}>{kpi}</div>
         </div>

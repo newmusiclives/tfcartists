@@ -361,14 +361,14 @@ export default function CommunityRadioPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/operator/signup?plan=growth"
-                className="inline-flex items-center space-x-2 bg-white text-emerald-700 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-zinc-100 transition-colors shadow-lg w-full sm:w-auto justify-center"
+                className="inline-flex items-center space-x-2 bg-white dark:bg-zinc-900 text-emerald-700 dark:text-emerald-300 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-zinc-100 transition-colors shadow-lg w-full sm:w-auto justify-center"
               >
                 <Users className="w-5 h-5" />
                 <span>Start Your Station</span>
               </Link>
               <Link
                 href="/sponsor"
-                className="inline-flex items-center space-x-2 bg-white/10 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white/20 transition-colors border border-white/20 w-full sm:w-auto justify-center"
+                className="inline-flex items-center space-x-2 bg-white dark:bg-zinc-900/10 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white/20 transition-colors border border-white/20 w-full sm:w-auto justify-center"
               >
                 <Store className="w-5 h-5" />
                 <span>Become a Sponsor</span>

@@ -289,7 +289,7 @@ export default function BillingDashboard() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/harper/team"
-                className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
               >
                 <Users className="w-4 h-4" />
                 <span>View Team</span>
@@ -300,7 +300,7 @@ export default function BillingDashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
+        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-2 text-sm text-amber-700 dark:text-amber-400">
           Sample data shown for layout preview. Live billing data will appear once Manifest Financial is connected.
         </div>
       </div>
@@ -314,34 +314,34 @@ export default function BillingDashboard() {
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Total Invoiced</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">${totalInvoiced.toLocaleString()}</p>
               </div>
-              <FileText className="w-8 h-8 text-blue-600" />
+              <FileText className="w-8 h-8 text-blue-600 dark:text-blue-300" />
             </div>
           </div>
           <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Paid</p>
-                <p className="text-2xl font-bold text-green-600">${totalPaid.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-300">${totalPaid.toLocaleString()}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-600" />
+              <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-300" />
             </div>
           </div>
           <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600">${totalPending.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-300">${totalPending.toLocaleString()}</p>
               </div>
-              <Clock className="w-8 h-8 text-yellow-600" />
+              <Clock className="w-8 h-8 text-yellow-600 dark:text-yellow-300" />
             </div>
           </div>
           <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-zinc-400">Collection Rate</p>
-                <p className="text-2xl font-bold text-purple-600">{collectionRate}%</p>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-300">{collectionRate}%</p>
               </div>
-              <TrendingUp className="w-8 h-8 text-purple-600" />
+              <TrendingUp className="w-8 h-8 text-purple-600 dark:text-purple-300" />
             </div>
           </div>
         </div>
@@ -413,32 +413,32 @@ export default function BillingDashboard() {
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ml-8">
                             <div>
-                              <p className="text-xs text-gray-400 dark:text-zinc-400">Amount</p>
-                              <p className="text-sm font-semibold text-green-600">${invoice.amount}</p>
+                              <p className="text-xs text-gray-600 dark:text-zinc-400">Amount</p>
+                              <p className="text-sm font-semibold text-green-600 dark:text-green-300">${invoice.amount}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-400 dark:text-zinc-400">Billing Period</p>
+                              <p className="text-xs text-gray-600 dark:text-zinc-400">Billing Period</p>
                               <p className="text-sm font-medium">{invoice.billingPeriod}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-gray-400 dark:text-zinc-400">Due Date</p>
+                              <p className="text-xs text-gray-600 dark:text-zinc-400">Due Date</p>
                               <p className="text-sm font-medium">{invoice.dueDate}</p>
                             </div>
                             {invoice.paidDate && (
                               <div>
-                                <p className="text-xs text-gray-400 dark:text-zinc-400">Paid Date</p>
-                                <p className="text-sm font-medium text-green-600">{invoice.paidDate}</p>
+                                <p className="text-xs text-gray-600 dark:text-zinc-400">Paid Date</p>
+                                <p className="text-sm font-medium text-green-600 dark:text-green-300">{invoice.paidDate}</p>
                               </div>
                             )}
                             {invoice.paymentMethod && (
                               <div>
-                                <p className="text-xs text-gray-400 dark:text-zinc-400">Payment Method</p>
+                                <p className="text-xs text-gray-600 dark:text-zinc-400">Payment Method</p>
                                 <p className="text-sm font-medium capitalize">{invoice.paymentMethod.replace('_', ' ')}</p>
                               </div>
                             )}
                           </div>
                           {invoice.notes && (
-                            <p className="text-xs text-gray-600 ml-8 mt-2 italic">{invoice.notes}</p>
+                            <p className="text-xs text-gray-600 dark:text-zinc-300 ml-8 mt-2 italic">{invoice.notes}</p>
                           )}
                         </div>
                         <div className="flex flex-col items-end space-y-2 ml-4">
@@ -446,10 +446,10 @@ export default function BillingDashboard() {
                             {statusConfig[invoice.status].label}
                           </span>
                           <div className="flex space-x-2">
-                            <button className="p-2 text-gray-600 hover:text-gray-900 border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800">
+                            <button className="p-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900 border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800">
                               <Download className="w-4 h-4" />
                             </button>
-                            <button className="p-2 text-gray-600 hover:text-gray-900 border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800">
+                            <button className="p-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900 border rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800">
                               <Mail className="w-4 h-4" />
                             </button>
                           </div>
@@ -471,29 +471,29 @@ export default function BillingDashboard() {
                   February 2024 Revenue Distribution
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                  <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-6">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-semibold text-green-900">Total Sponsor Revenue</h4>
-                      <DollarSign className="w-6 h-6 text-green-600" />
+                      <h4 className="font-semibold text-green-900 dark:text-green-200">Total Sponsor Revenue</h4>
+                      <DollarSign className="w-6 h-6 text-green-600 dark:text-green-300" />
                     </div>
-                    <p className="text-3xl font-bold text-green-600">${thisMonthRevenue.toLocaleString()}</p>
-                    <p className="text-sm text-green-700 mt-2">From paid invoices</p>
+                    <p className="text-3xl font-bold text-green-600 dark:text-green-300">${thisMonthRevenue.toLocaleString()}</p>
+                    <p className="text-sm text-green-700 dark:text-green-300 mt-2">From paid invoices</p>
                   </div>
-                  <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
+                  <div className="bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800 rounded-lg p-6">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-semibold text-purple-900">Artist Pool (80%)</h4>
-                      <TrendingUp className="w-6 h-6 text-purple-600" />
+                      <h4 className="font-semibold text-purple-900 dark:text-purple-200">Artist Pool (80%)</h4>
+                      <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-300" />
                     </div>
-                    <p className="text-3xl font-bold text-purple-600">${artistPoolAmount.toLocaleString()}</p>
-                    <p className="text-sm text-purple-700 mt-2">Distributed to artists</p>
+                    <p className="text-3xl font-bold text-purple-600 dark:text-purple-300">${artistPoolAmount.toLocaleString()}</p>
+                    <p className="text-sm text-purple-700 dark:text-purple-300 mt-2">Distributed to artists</p>
                   </div>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-semibold text-blue-900">Station Operations (20%)</h4>
-                      <Building2 className="w-6 h-6 text-blue-600" />
+                      <h4 className="font-semibold text-blue-900 dark:text-blue-200">Station Operations (20%)</h4>
+                      <Building2 className="w-6 h-6 text-blue-600 dark:text-blue-300" />
                     </div>
-                    <p className="text-3xl font-bold text-blue-600">${stationOpsAmount.toLocaleString()}</p>
-                    <p className="text-sm text-blue-700 mt-2">Operations & overhead</p>
+                    <p className="text-3xl font-bold text-blue-600 dark:text-blue-300">${stationOpsAmount.toLocaleString()}</p>
+                    <p className="text-sm text-blue-700 dark:text-blue-300 mt-2">Operations & overhead</p>
                   </div>
                 </div>
               </div>
@@ -506,16 +506,16 @@ export default function BillingDashboard() {
                     <div key={index} className="border rounded-lg p-4 hover:border-green-500 transition-colors">
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="font-semibold text-gray-900 dark:text-white">{record.month}</h4>
-                        <span className="text-lg font-bold text-green-600">${record.sponsorRevenue.toLocaleString()}</span>
+                        <span className="text-lg font-bold text-green-600 dark:text-green-300">${record.sponsorRevenue.toLocaleString()}</span>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Artist Pool (80%)</p>
-                          <p className="text-sm font-semibold text-purple-600">${record.artistPool.toLocaleString()}</p>
+                          <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Artist Pool (80%)</p>
+                          <p className="text-sm font-semibold text-purple-600 dark:text-purple-300">${record.artistPool.toLocaleString()}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-400 dark:text-zinc-400 mb-1">Station Operations (20%)</p>
-                          <p className="text-sm font-semibold text-blue-600">${record.stationOperations.toLocaleString()}</p>
+                          <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1">Station Operations (20%)</p>
+                          <p className="text-sm font-semibold text-blue-600 dark:text-blue-300">${record.stationOperations.toLocaleString()}</p>
                         </div>
                       </div>
                       <div className="mt-3">
@@ -535,12 +535,12 @@ export default function BillingDashboard() {
         </div>
 
         {/* Info Box */}
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+        <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-6">
           <div className="flex items-start space-x-3">
-            <CreditCard className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+            <CreditCard className="w-6 h-6 text-green-600 dark:text-green-300 flex-shrink-0 mt-0.5" />
             <div>
-              <h4 className="font-semibold text-green-900 mb-2">Revenue Distribution Model</h4>
-              <div className="text-green-800 text-sm space-y-1">
+              <h4 className="font-semibold text-green-900 dark:text-green-200 mb-2">Revenue Distribution Model</h4>
+              <div className="text-green-800 dark:text-green-200 text-sm space-y-1">
                 <p><strong>80% to Artist Pool:</strong> Distributed monthly based on airplay shares</p>
                 <p><strong>20% to Station Operations:</strong> Covers hosting, bandwidth, team operations, and overhead</p>
                 <p><strong>Payment Processing:</strong> Managed through Manifest Financial</p>

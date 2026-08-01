@@ -455,7 +455,7 @@ export default function StationWizard() {
                         ? "bg-green-700 text-white"
                         : i === step
                         ? "bg-amber-600 text-white ring-4 ring-amber-100"
-                        : "bg-gray-200 text-gray-500"
+                        : "bg-gray-200 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400"
                     }`}
                   >
                     {i < step ? (
@@ -468,9 +468,9 @@ export default function StationWizard() {
                     <div
                       className={`text-xs font-semibold ${
                         i === step
-                          ? "text-amber-700"
+                          ? "text-amber-700 dark:text-amber-300"
                           : i < step
-                          ? "text-green-600"
+                          ? "text-green-600 dark:text-green-300"
                           : "text-gray-400"
                       }`}
                     >
@@ -484,7 +484,7 @@ export default function StationWizard() {
                 {i < STEPS.length - 1 && (
                   <div
                     className={`hidden sm:block w-8 lg:w-16 h-0.5 mx-2 ${
-                      i < step ? "bg-green-400" : "bg-gray-200"
+                      i < step ? "bg-green-400" : "bg-gray-200 dark:bg-zinc-800"
                     }`}
                   />
                 )}
@@ -495,7 +495,7 @@ export default function StationWizard() {
 
         {/* Error bar */}
         {error && (
-          <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700 flex items-center gap-2">
+          <div className="mb-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-700 dark:text-red-300 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             {error}
             <button
@@ -520,7 +520,7 @@ export default function StationWizard() {
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                   Station Setup
                 </h2>
-                <p className="text-sm text-gray-400 dark:text-zinc-400">
+                <p className="text-sm text-gray-600 dark:text-zinc-400">
                   Give your station an identity
                 </p>
               </div>
@@ -601,7 +601,7 @@ export default function StationWizard() {
 
               {/* Preview card */}
               {station.name && (
-                <div className="mt-6 p-4 rounded-xl border bg-gradient-to-br from-amber-50 to-orange-50">
+                <div className="mt-6 p-4 rounded-xl border bg-gradient-to-br from-amber-50 dark:from-amber-950 to-orange-50 dark:to-orange-950">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center">
                       <Radio className="w-6 h-6 text-white" />
@@ -611,7 +611,7 @@ export default function StationWizard() {
                         {station.name}
                       </h3>
                       {station.tagline && (
-                        <p className="text-sm text-gray-400 dark:text-zinc-400">
+                        <p className="text-sm text-gray-600 dark:text-zinc-400">
                           {station.tagline}
                         </p>
                       )}
@@ -643,21 +643,21 @@ export default function StationWizard() {
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                   Import Music
                 </h2>
-                <p className="text-sm text-gray-400 dark:text-zinc-400">
+                <p className="text-sm text-gray-600 dark:text-zinc-400">
                   Upload a CSV with your music catalog, or skip and add music
                   later
                 </p>
               </div>
 
               {importResult ? (
-                <div className="bg-green-50 border border-green-200 rounded-xl p-5">
+                <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-xl p-5">
                   <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-6 h-6 text-green-600" />
+                    <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-300" />
                     <div>
-                      <h3 className="font-semibold text-green-800">
+                      <h3 className="font-semibold text-green-800 dark:text-green-200">
                         Import Complete
                       </h3>
-                      <p className="text-sm text-green-700">
+                      <p className="text-sm text-green-700 dark:text-green-300">
                         {importResult.imported} songs imported
                         {importResult.skipped > 0 &&
                           `, ${importResult.skipped} skipped`}
@@ -665,7 +665,7 @@ export default function StationWizard() {
                     </div>
                   </div>
                   {importResult.errors.length > 0 && (
-                    <div className="mt-3 max-h-32 overflow-y-auto text-xs text-red-600 space-y-1">
+                    <div className="mt-3 max-h-32 overflow-y-auto text-xs text-red-600 dark:text-red-300 space-y-1">
                       {importResult.errors.map((err, i) => (
                         <p key={i} className="flex items-center gap-1">
                           <AlertCircle className="w-3 h-3 flex-shrink-0" />{" "}
@@ -715,7 +715,7 @@ export default function StationWizard() {
                   {/* Preview */}
                   {parsedSongs.length > 0 && (
                     <div className="border rounded-xl overflow-hidden">
-                      <div className="px-4 py-3 bg-gray-50 border-b flex items-center justify-between">
+                      <div className="px-4 py-3 bg-gray-50 dark:bg-zinc-900 border-b flex items-center justify-between">
                         <h4 className="font-medium text-sm text-gray-700 dark:text-zinc-300">
                           Preview ({parsedSongs.length} songs found)
                         </h4>
@@ -731,21 +731,21 @@ export default function StationWizard() {
                       </div>
                       <div className="max-h-56 overflow-y-auto">
                         <table className="w-full text-sm">
-                          <thead className="bg-gray-50 sticky top-0">
+                          <thead className="bg-gray-50 dark:bg-zinc-900 sticky top-0">
                             <tr>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-zinc-400">
                                 Title
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-zinc-400">
                                 Artist
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-zinc-400">
                                 Album
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-zinc-400">
                                 Genre
                               </th>
-                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 dark:text-zinc-400">
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-zinc-400">
                                 Duration
                               </th>
                             </tr>
@@ -759,13 +759,13 @@ export default function StationWizard() {
                                 <td className="px-4 py-2 text-gray-600 dark:text-zinc-400">
                                   {song.artist}
                                 </td>
-                                <td className="px-4 py-2 text-gray-400 dark:text-zinc-400">
+                                <td className="px-4 py-2 text-gray-600 dark:text-zinc-400">
                                   {song.album || "--"}
                                 </td>
-                                <td className="px-4 py-2 text-gray-400 dark:text-zinc-400">
+                                <td className="px-4 py-2 text-gray-600 dark:text-zinc-400">
                                   {song.genre || "--"}
                                 </td>
-                                <td className="px-4 py-2 text-gray-400 dark:text-zinc-400">
+                                <td className="px-4 py-2 text-gray-600 dark:text-zinc-400">
                                   {song.duration || "--"}
                                 </td>
                               </tr>
@@ -774,7 +774,7 @@ export default function StationWizard() {
                         </table>
                       </div>
                       {parsedSongs.length > 15 && (
-                        <div className="px-4 py-2 bg-gray-50 border-t text-xs text-gray-500 dark:text-zinc-500">
+                        <div className="px-4 py-2 bg-gray-50 dark:bg-zinc-900 border-t text-xs text-gray-500 dark:text-zinc-500">
                           Showing 15 of {parsedSongs.length} songs
                         </div>
                       )}
@@ -783,7 +783,7 @@ export default function StationWizard() {
 
                   {/* Skip info */}
                   {parsedSongs.length === 0 && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-700">
+                    <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-sm text-blue-700 dark:text-blue-300">
                       No songs to import? No problem. You can always add music
                       later from the Music Library.
                     </div>
@@ -803,7 +803,7 @@ export default function StationWizard() {
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                     Configure DJs
                   </h2>
-                  <p className="text-sm text-gray-400 dark:text-zinc-400">
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">
                     Add AI DJ personalities for your station
                   </p>
                 </div>
@@ -820,7 +820,7 @@ export default function StationWizard() {
 
               {djsSaved ? (
                 <div className="space-y-4">
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-800 flex items-center gap-2">
+                  <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4 text-sm text-green-800 dark:text-green-200 flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5" />
                     {createdDjs.length} DJ
                     {createdDjs.length !== 1 ? "s" : ""} created successfully
@@ -829,7 +829,7 @@ export default function StationWizard() {
                     {createdDjs.map((dj, i) => (
                       <div
                         key={dj.id}
-                        className="flex items-center gap-3 p-4 border rounded-xl bg-gray-50"
+                        className="flex items-center gap-3 p-4 border rounded-xl bg-gray-50 dark:bg-zinc-900"
                       >
                         <div
                           className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
@@ -844,7 +844,7 @@ export default function StationWizard() {
                         </div>
                         <div className="min-w-0">
                           <p className="font-medium text-sm">{dj.name}</p>
-                          <p className="text-xs text-gray-400 dark:text-zinc-400">
+                          <p className="text-xs text-gray-600 dark:text-zinc-400">
                             Voice: {dj.ttsVoice}
                           </p>
                         </div>
@@ -870,7 +870,7 @@ export default function StationWizard() {
                         <span className="text-sm font-semibold text-gray-700 dark:text-zinc-300">
                           DJ #{i + 1}
                           {dj.name && (
-                            <span className="font-normal text-gray-400 dark:text-zinc-400">
+                            <span className="font-normal text-gray-600 dark:text-zinc-400">
                               {" "}
                               -- {dj.name}
                             </span>
@@ -892,7 +892,7 @@ export default function StationWizard() {
                         {/* Row 1: Name & Voice */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
+                            <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1">
                               Name <span className="text-red-400">*</span>
                             </label>
                             <input
@@ -908,7 +908,7 @@ export default function StationWizard() {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
+                            <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1">
                               Voice
                             </label>
                             <select
@@ -931,8 +931,8 @@ export default function StationWizard() {
 
                         {/* Gemini TTS info */}
                         {dj.voice === "gemini" && (
-                          <div className="p-3 rounded-lg bg-indigo-50 border border-indigo-200">
-                            <p className="text-xs font-medium text-indigo-700 mb-2">
+                          <div className="p-3 rounded-lg bg-indigo-50 dark:bg-indigo-950 border border-indigo-200 dark:border-indigo-800">
+                            <p className="text-xs font-medium text-indigo-700 dark:text-indigo-300 mb-2">
                               Google Gemini TTS will be used for this DJ. Voice characteristics are configured automatically based on the DJ&apos;s personality.
                             </p>
                             <p className="text-[10px] text-indigo-500 mt-1">
@@ -943,7 +943,7 @@ export default function StationWizard() {
 
                         {/* Row 2: Bio */}
                         <div>
-                          <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
+                          <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1">
                             Bio
                           </label>
                           <textarea
@@ -962,7 +962,7 @@ export default function StationWizard() {
                         {/* Row 3: Schedule */}
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
+                            <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1">
                               <Clock className="w-3 h-3 inline mr-1" />
                               Start Hour
                             </label>
@@ -986,7 +986,7 @@ export default function StationWizard() {
                             </select>
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-400 dark:text-zinc-400 mb-1">
+                            <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1">
                               <Clock className="w-3 h-3 inline mr-1" />
                               End Hour
                             </label>
@@ -1027,14 +1027,14 @@ export default function StationWizard() {
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                   Set Schedule
                 </h2>
-                <p className="text-sm text-gray-400 dark:text-zinc-400">
+                <p className="text-sm text-gray-600 dark:text-zinc-400">
                   Click cells to assign DJs to time slots. Select a DJ below,
                   then click hours on the grid.
                 </p>
               </div>
 
               {createdDjs.length === 0 ? (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800 dark:text-amber-400">
+                <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-4 text-sm text-amber-800 dark:text-amber-400">
                   No DJs configured yet. Go back to the previous step to add
                   DJs first.
                 </div>
@@ -1049,7 +1049,7 @@ export default function StationWizard() {
                         className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
                           selectedDjForSchedule === dj.id
                             ? "border-gray-900 bg-gray-900 text-white shadow-lg"
-                            : "border-gray-200 dark:border-zinc-800 bg-white hover:border-gray-300 dark:border-zinc-700"
+                            : "border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-gray-300 dark:border-zinc-700"
                         }`}
                       >
                         <div
@@ -1064,7 +1064,7 @@ export default function StationWizard() {
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
                         selectedDjForSchedule === ""
                           ? "border-red-500 bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400"
-                          : "border-gray-200 dark:border-zinc-800 bg-white hover:border-gray-300 dark:border-zinc-700 text-gray-500"
+                          : "border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-gray-300 dark:border-zinc-700 text-gray-500 dark:text-zinc-400"
                       }`}
                     >
                       <Trash2 className="w-3 h-3" />
@@ -1081,7 +1081,7 @@ export default function StationWizard() {
                         {DAYS_OF_WEEK.map((day) => (
                           <div
                             key={day}
-                            className="text-xs font-semibold text-gray-600 dark:text-zinc-400 text-center py-1.5 bg-gray-100 rounded-t"
+                            className="text-xs font-semibold text-gray-600 dark:text-zinc-400 text-center py-1.5 bg-gray-100 dark:bg-zinc-800 rounded-t"
                           >
                             {day}
                           </div>
@@ -1089,11 +1089,11 @@ export default function StationWizard() {
                       </div>
 
                       {/* Hour rows */}
-                      <div className="grid grid-cols-[60px_repeat(7,1fr)] gap-px bg-gray-200 rounded-b-lg overflow-hidden">
+                      <div className="grid grid-cols-[60px_repeat(7,1fr)] gap-px bg-gray-200 dark:bg-zinc-800 rounded-b-lg overflow-hidden">
                         {HOURS.map((hour) => (
                           <React.Fragment key={`row-${hour}`}>
                             <div
-                              className="text-[11px] font-medium text-gray-500 bg-gray-50 flex items-center justify-end pr-2 py-0.5"
+                              className="text-[11px] font-medium text-gray-500 dark:text-zinc-400 bg-gray-50 dark:bg-zinc-900 flex items-center justify-end pr-2 py-0.5"
                             >
                               {formatHour(hour)}
                             </div>
@@ -1128,7 +1128,7 @@ export default function StationWizard() {
                                     }
                                   }}
                                   className={`h-6 transition-all hover:opacity-80 ${
-                                    isAssigned ? "" : "bg-white hover:bg-gray-50 dark:hover:bg-zinc-800"
+                                    isAssigned ? "" : "bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800"
                                   }`}
                                   style={
                                     isAssigned && djIdx >= 0
@@ -1156,7 +1156,7 @@ export default function StationWizard() {
                   </div>
 
                   {/* Schedule summary */}
-                  <div className="flex items-center gap-4 text-xs text-gray-400 dark:text-zinc-400">
+                  <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-zinc-400">
                     <span className="bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400 px-2.5 py-1 rounded-full font-medium">
                       {schedule.length} slots assigned
                     </span>
@@ -1181,7 +1181,7 @@ export default function StationWizard() {
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                   Ready to Go Live
                 </h2>
-                <p className="text-sm text-gray-400 dark:text-zinc-400">
+                <p className="text-sm text-gray-600 dark:text-zinc-400">
                   Review your station setup before launching
                 </p>
               </div>
@@ -1191,34 +1191,34 @@ export default function StationWizard() {
                 {/* Station */}
                 <div className="border rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <Radio className="w-4 h-4 text-amber-600" />
+                    <Radio className="w-4 h-4 text-amber-600 dark:text-amber-300" />
                     <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
                       Station
                     </h3>
                     <button
                       onClick={() => setStep(0)}
-                      className="ml-auto text-xs text-amber-600 hover:text-amber-700 font-medium"
+                      className="ml-auto text-xs text-amber-600 dark:text-amber-300 hover:text-amber-700 font-medium"
                     >
                       Edit
                     </button>
                   </div>
                   <div className="space-y-1.5 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-400 dark:text-zinc-400">Name</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Name</span>
                       <span className="font-medium">{station.name}</span>
                     </div>
                     {station.tagline && (
                       <div className="flex justify-between">
-                        <span className="text-gray-400 dark:text-zinc-400">Tagline</span>
+                        <span className="text-gray-600 dark:text-zinc-400">Tagline</span>
                         <span className="text-gray-700 dark:text-zinc-300">{station.tagline}</span>
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span className="text-gray-400 dark:text-zinc-400">Genre</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Genre</span>
                       <span className="font-medium">{station.genre}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-400 dark:text-zinc-400">Timezone</span>
+                      <span className="text-gray-600 dark:text-zinc-400">Timezone</span>
                       <span className="text-gray-700 dark:text-zinc-300">
                         {TIMEZONE_OPTIONS.find(
                           (t) => t.value === station.timezone
@@ -1231,13 +1231,13 @@ export default function StationWizard() {
                 {/* Music */}
                 <div className="border rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <Music className="w-4 h-4 text-green-600" />
+                    <Music className="w-4 h-4 text-green-600 dark:text-green-300" />
                     <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
                       Music Library
                     </h3>
                     <button
                       onClick={() => setStep(1)}
-                      className="ml-auto text-xs text-amber-600 hover:text-amber-700 font-medium"
+                      className="ml-auto text-xs text-amber-600 dark:text-amber-300 hover:text-amber-700 font-medium"
                     >
                       Edit
                     </button>
@@ -1266,13 +1266,13 @@ export default function StationWizard() {
                 {/* DJs */}
                 <div className="border rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <Users className="w-4 h-4 text-purple-600" />
+                    <Users className="w-4 h-4 text-purple-600 dark:text-purple-300" />
                     <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
                       DJs
                     </h3>
                     <button
                       onClick={() => setStep(2)}
-                      className="ml-auto text-xs text-amber-600 hover:text-amber-700 font-medium"
+                      className="ml-auto text-xs text-amber-600 dark:text-amber-300 hover:text-amber-700 font-medium"
                     >
                       Edit
                     </button>
@@ -1312,13 +1312,13 @@ export default function StationWizard() {
                 {/* Schedule */}
                 <div className="border rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <CalendarDays className="w-4 h-4 text-indigo-600" />
+                    <CalendarDays className="w-4 h-4 text-indigo-600 dark:text-indigo-300" />
                     <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
                       Schedule
                     </h3>
                     <button
                       onClick={() => setStep(3)}
-                      className="ml-auto text-xs text-amber-600 hover:text-amber-700 font-medium"
+                      className="ml-auto text-xs text-amber-600 dark:text-amber-300 hover:text-amber-700 font-medium"
                     >
                       Edit
                     </button>
@@ -1348,7 +1348,7 @@ export default function StationWizard() {
 
               {/* Warnings */}
               {(createdDjs.length === 0 || !importResult) && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800 flex items-start gap-2">
+                <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-sm text-amber-800 dark:text-amber-200 flex items-start gap-2">
                   <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium">Heads up</p>
@@ -1364,7 +1364,7 @@ export default function StationWizard() {
                 </div>
               )}
 
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-700">
+              <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-xl p-4 text-sm text-blue-700 dark:text-blue-300">
                 Clicking <strong>Launch Station</strong> will activate your
                 station and redirect you to the admin dashboard.
               </div>
@@ -1379,7 +1379,7 @@ export default function StationWizard() {
           <button
             onClick={() => setStep(Math.max(0, step - 1))}
             disabled={step === 0}
-            className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-zinc-200 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back

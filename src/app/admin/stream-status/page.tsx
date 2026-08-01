@@ -110,7 +110,7 @@ export default function StreamStatusPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <Activity className="w-6 h-6 text-green-600" />
+            <Activity className="w-6 h-6 text-green-600 dark:text-green-300" />
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Stream Monitor</h1>
           </div>
           <div className="flex items-center gap-3">
@@ -126,7 +126,7 @@ export default function StreamStatusPage() {
             <button
               onClick={runCheck}
               disabled={checking}
-              className="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 disabled:opacity-50 flex items-center gap-2"
+              className="bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-200 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 disabled:opacity-50 flex items-center gap-2"
             >
               <RefreshCw className={`w-4 h-4 ${checking ? "animate-spin" : ""}`} />
               Check Now
@@ -136,16 +136,16 @@ export default function StreamStatusPage() {
 
         {/* Status Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className={`bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border-2 ${latest?.streamOnline ? "border-green-200" : "border-red-200"}`}>
+          <div className={`bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border-2 ${latest?.streamOnline ? "border-green-200 dark:border-green-800" : "border-red-200 dark:border-red-800"}`}>
             <div className="flex items-center gap-2 mb-2">
               {latest?.streamOnline ? (
                 <Wifi className="w-5 h-5 text-green-500" />
               ) : (
                 <WifiOff className="w-5 h-5 text-red-500" />
               )}
-              <span className="text-sm font-medium text-gray-400 dark:text-zinc-400">Stream Status</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-zinc-400">Stream Status</span>
             </div>
-            <p className={`text-2xl font-bold ${latest?.streamOnline ? "text-green-600" : "text-red-600"}`}>
+            <p className={`text-2xl font-bold ${latest?.streamOnline ? "text-green-600 dark:text-green-300" : "text-red-600 dark:text-red-300"}`}>
               {latest?.streamOnline ? "ONLINE" : "OFFLINE"}
             </p>
             <p className="text-xs text-gray-400 mt-1">
@@ -156,7 +156,7 @@ export default function StreamStatusPage() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
             <div className="flex items-center gap-2 mb-2">
               <Clock className="w-5 h-5 text-blue-500" />
-              <span className="text-sm font-medium text-gray-400 dark:text-zinc-400">Response Time</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-zinc-400">Response Time</span>
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{latest?.responseTime || 0}ms</p>
             <p className="text-xs text-gray-400 mt-1">Avg: {avgResponseTime}ms</p>
@@ -165,7 +165,7 @@ export default function StreamStatusPage() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
             <div className="flex items-center gap-2 mb-2">
               <CheckCircle className="w-5 h-5 text-green-500" />
-              <span className="text-sm font-medium text-gray-400 dark:text-zinc-400">Uptime</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-zinc-400">Uptime</span>
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{uptime}%</p>
             <p className="text-xs text-gray-400 mt-1">{checks.length} checks</p>
@@ -174,7 +174,7 @@ export default function StreamStatusPage() {
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 shadow-sm border">
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-5 h-5 text-purple-500" />
-              <span className="text-sm font-medium text-gray-400 dark:text-zinc-400">Listeners</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-zinc-400">Listeners</span>
             </div>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">
               {latest?.nowPlaying?.listener_count ?? "—"}
@@ -208,12 +208,12 @@ export default function StreamStatusPage() {
           <h2 className="font-semibold mb-3">Stream Configuration</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-400 dark:text-zinc-400">Stream URL:</span>
-              <code className="ml-2 bg-gray-100 px-2 py-0.5 rounded text-xs break-all">{STREAM_URL}</code>
+              <span className="text-gray-600 dark:text-zinc-400">Stream URL:</span>
+              <code className="ml-2 bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded text-xs break-all">{STREAM_URL}</code>
             </div>
             <div>
-              <span className="text-gray-400 dark:text-zinc-400">Now Playing API:</span>
-              <code className="ml-2 bg-gray-100 px-2 py-0.5 rounded text-xs">{NOW_PLAYING_URL}</code>
+              <span className="text-gray-600 dark:text-zinc-400">Now Playing API:</span>
+              <code className="ml-2 bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded text-xs">{NOW_PLAYING_URL}</code>
             </div>
           </div>
         </div>
@@ -225,40 +225,40 @@ export default function StreamStatusPage() {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-zinc-900">
                 <tr>
-                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Time</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Status</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">HTTP</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Response</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Track</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-400 dark:text-zinc-400">Listeners</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Time</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Status</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">HTTP</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Response</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Track</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-zinc-400">Listeners</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {checks.map((check, i) => (
                   <tr key={i} className={i === 0 ? "bg-blue-50/30" : ""}>
-                    <td className="px-4 py-2.5 text-gray-600 whitespace-nowrap">
+                    <td className="px-4 py-2.5 text-gray-600 dark:text-zinc-300 whitespace-nowrap">
                       {new Date(check.timestamp).toLocaleTimeString()}
                     </td>
                     <td className="px-4 py-2.5">
                       {check.streamOnline ? (
-                        <span className="flex items-center gap-1 text-green-600">
+                        <span className="flex items-center gap-1 text-green-600 dark:text-green-300">
                           <CheckCircle className="w-3.5 h-3.5" /> Online
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1 text-red-600">
+                        <span className="flex items-center gap-1 text-red-600 dark:text-red-300">
                           <XCircle className="w-3.5 h-3.5" /> Offline
                         </span>
                       )}
                     </td>
                     <td className="px-4 py-2.5 text-gray-600 dark:text-zinc-400">{check.statusCode || "—"}</td>
                     <td className="px-4 py-2.5">
-                      <span className={`${check.responseTime > 3000 ? "text-red-600" : check.responseTime > 1000 ? "text-amber-600" : "text-green-600"}`}>
+                      <span className={`${check.responseTime > 3000 ? "text-red-600 dark:text-red-300" : check.responseTime > 1000 ? "text-amber-600 dark:text-amber-300" : "text-green-600 dark:text-green-300"}`}>
                         {check.responseTime}ms
                       </span>
                     </td>
-                    <td className="px-4 py-2.5 text-gray-600 truncate max-w-[200px]">
+                    <td className="px-4 py-2.5 text-gray-600 dark:text-zinc-300 truncate max-w-[200px]">
                       {check.nowPlaying ? `${check.nowPlaying.title} - ${check.nowPlaying.artist_name}` : "—"}
                     </td>
                     <td className="px-4 py-2.5 text-gray-600 dark:text-zinc-400">

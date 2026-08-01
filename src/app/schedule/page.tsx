@@ -163,11 +163,11 @@ export default async function SchedulePage() {
                     )}
                   </div>
                   <div className="flex flex-wrap gap-3">
-                    <div className="bg-white/10 border border-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-center">
+                    <div className="bg-white dark:bg-zinc-900/10 border border-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-center">
                       <div className="text-2xl font-bold">{block.songsPerHour}</div>
                       <div className="text-xs opacity-80">tracks/hour</div>
                     </div>
-                    <div className="bg-white/10 border border-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-center">
+                    <div className="bg-white dark:bg-zinc-900/10 border border-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-center">
                       <Music className="w-5 h-5 mx-auto mb-1" />
                       <div className="text-xs opacity-80">non-stop</div>
                     </div>
@@ -214,7 +214,7 @@ export default async function SchedulePage() {
             </Link>
             <Link
               href="/station"
-              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-white/5 transition-colors"
+              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-white dark:bg-zinc-900/5 transition-colors"
             >
               <span>Back to Station</span>
             </Link>

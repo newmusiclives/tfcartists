@@ -189,7 +189,7 @@ export default function OutreachPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-zinc-400">Loading artist leads...</p>
@@ -199,13 +199,13 @@ export default function OutreachPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950">
       {/* Header */}
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/riley" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/riley" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -220,11 +220,11 @@ export default function OutreachPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-          <StatCard icon={<Users className="w-6 h-6 text-purple-600" />} value={stats.totalLeads} label="Total Leads" />
-          <StatCard icon={<Plus className="w-6 h-6 text-blue-600" />} value={stats.newLeads} label="New Leads" />
-          <StatCard icon={<Mail className="w-6 h-6 text-yellow-600" />} value={stats.contacted} label="Contacted" />
-          <StatCard icon={<CheckCircle className="w-6 h-6 text-green-600" />} value={stats.converted} label="Converted" />
-          <StatCard icon={<Clock className="w-6 h-6 text-orange-600" />} value={stats.followUpsToday} label="Follow-ups Today" />
+          <StatCard icon={<Users className="w-6 h-6 text-purple-600 dark:text-purple-300" />} value={stats.totalLeads} label="Total Leads" />
+          <StatCard icon={<Plus className="w-6 h-6 text-blue-600 dark:text-blue-300" />} value={stats.newLeads} label="New Leads" />
+          <StatCard icon={<Mail className="w-6 h-6 text-yellow-600 dark:text-yellow-300" />} value={stats.contacted} label="Contacted" />
+          <StatCard icon={<CheckCircle className="w-6 h-6 text-green-600 dark:text-green-300" />} value={stats.converted} label="Converted" />
+          <StatCard icon={<Clock className="w-6 h-6 text-orange-600 dark:text-orange-300" />} value={stats.followUpsToday} label="Follow-ups Today" />
         </div>
 
         {/* View Tabs */}
@@ -244,7 +244,7 @@ export default function OutreachPage() {
               <div className="flex items-center space-x-3">
                 <Link
                   href="/riley/workflows"
-                  className="inline-flex items-center space-x-2 border border-purple-600 text-purple-600 px-4 py-2 rounded-lg hover:bg-purple-50 transition-colors"
+                  className="inline-flex items-center space-x-2 border border-purple-600 text-purple-600 dark:text-purple-300 px-4 py-2 rounded-lg hover:bg-purple-50 transition-colors"
                 >
                   <Send className="w-4 h-4" />
                   <span>Automated Workflows</span>
@@ -338,7 +338,7 @@ export default function OutreachPage() {
                         )}
                       </div>
                       {lead.nextFollowUp && (
-                        <div className="mt-2 inline-flex items-center space-x-2 text-sm text-orange-700 bg-orange-50 px-2 py-1 rounded">
+                        <div className="mt-2 inline-flex items-center space-x-2 text-sm text-orange-700 dark:text-orange-300 bg-orange-50 dark:bg-orange-950 px-2 py-1 rounded">
                           <Calendar className="w-4 h-4" />
                           <span>Follow up: {lead.nextFollowUp}</span>
                         </div>
@@ -349,13 +349,13 @@ export default function OutreachPage() {
                         <a
                           href={`mailto:${lead.email}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="p-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                          className="p-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 transition-colors"
                         >
                           <Mail className="w-4 h-4" />
                         </a>
                       )}
                       {lead.phone && (
-                        <a href={`tel:${lead.phone}`} onClick={(e) => e.stopPropagation()} className="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
+                        <a href={`tel:${lead.phone}`} onClick={(e) => e.stopPropagation()} className="p-2 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg hover:bg-green-200 transition-colors">
                           <Phone className="w-4 h-4" />
                         </a>
                       )}
@@ -365,7 +365,7 @@ export default function OutreachPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="p-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 transition-colors"
+                          className="p-2 bg-pink-100 dark:bg-pink-900 text-pink-600 dark:text-pink-300 rounded-lg hover:bg-pink-200 transition-colors"
                         >
                           <Instagram className="w-4 h-4" />
                         </a>
@@ -377,7 +377,7 @@ export default function OutreachPage() {
             </div>
 
             {filteredLeads.length === 0 && (
-              <div className="text-center py-12 text-gray-400 dark:text-zinc-400">
+              <div className="text-center py-12 text-gray-600 dark:text-zinc-400">
                 <Users className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                 <p>No artists found matching your filters.</p>
               </div>
@@ -428,7 +428,7 @@ export default function OutreachPage() {
 
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-gray-50 dark:bg-zinc-900 border-b">
                   <tr>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Artist</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
@@ -439,12 +439,12 @@ export default function OutreachPage() {
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200 dark:divide-zinc-800">
+                <tbody className="bg-white dark:bg-zinc-900 divide-y divide-gray-200 dark:divide-zinc-800">
                   {filteredLeads.map((lead) => (
                     <tr key={lead.id} className="hover:bg-gray-50 dark:hover:bg-zinc-800">
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900 dark:text-white">{lead.name}</div>
-                        <div className="text-sm text-gray-400 dark:text-zinc-400">{lead.genre}</div>
+                        <div className="text-sm text-gray-600 dark:text-zinc-400">{lead.genre}</div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(lead.status)}`}>
@@ -453,16 +453,16 @@ export default function OutreachPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="inline-flex items-center space-x-1 text-sm text-gray-600 capitalize">
+                        <span className="inline-flex items-center space-x-1 text-sm text-gray-600 dark:text-zinc-300 capitalize">
                           {getSourceIcon(lead.source)}
                           <span>{lead.source}</span>
                         </span>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-400 dark:text-zinc-400">{lead.firstContact || "-"}</td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-400 dark:text-zinc-400">{lead.lastContact || "-"}</td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-400 dark:text-zinc-400">{lead.nextFollowUp || "-"}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-zinc-400">{lead.firstContact || "-"}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-zinc-400">{lead.lastContact || "-"}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-zinc-400">{lead.nextFollowUp || "-"}</td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm">
-                        <button onClick={() => setSelectedLead(lead)} className="text-purple-600 hover:text-purple-700 font-medium">
+                        <button onClick={() => setSelectedLead(lead)} className="text-purple-600 dark:text-purple-300 hover:text-purple-700 font-medium">
                           View Details
                         </button>
                       </td>
@@ -509,7 +509,7 @@ function TabButton({ active, onClick, label, icon }: { active: boolean; onClick:
     <button
       onClick={onClick}
       className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-        active ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-600 hover:bg-gray-100"
+        active ? "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400" : "text-gray-600 dark:text-zinc-300 hover:bg-gray-100"
       }`}
     >
       {icon}
@@ -526,7 +526,7 @@ function CampaignCard({ title, description, stats, type }: { title: string; desc
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{title}</h3>
           <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
         </div>
-        <Send className="w-6 h-6 text-purple-600" />
+        <Send className="w-6 h-6 text-purple-600 dark:text-purple-300" />
       </div>
       <div className="grid grid-cols-3 gap-4 mb-4">
         <div>
@@ -534,11 +534,11 @@ function CampaignCard({ title, description, stats, type }: { title: string; desc
           <div className="text-xs text-gray-600 dark:text-zinc-400">Sent</div>
         </div>
         <div>
-          <div className="text-2xl font-bold text-blue-600">{stats.opened}</div>
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-300">{stats.opened}</div>
           <div className="text-xs text-gray-600 dark:text-zinc-400">Opened</div>
         </div>
         <div>
-          <div className="text-2xl font-bold text-green-600">{stats.responded}</div>
+          <div className="text-2xl font-bold text-green-600 dark:text-green-300">{stats.responded}</div>
           <div className="text-xs text-gray-600 dark:text-zinc-400">Responded</div>
         </div>
       </div>
@@ -641,7 +641,7 @@ Grace`;
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b p-6 z-10">
+        <div className="sticky top-0 bg-white dark:bg-zinc-900 border-b p-6 z-10">
           <div className="flex items-start justify-between">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{lead.name}</h2>
@@ -673,7 +673,7 @@ Grace`;
                   {lead.email && (
                     <div className="flex items-center space-x-2">
                       <Mail className="w-4 h-4 text-gray-400" />
-                      <a href={`mailto:${lead.email}`} className="text-blue-600 hover:underline">
+                      <a href={`mailto:${lead.email}`} className="text-blue-600 dark:text-blue-300 hover:underline">
                         {lead.email}
                       </a>
                     </div>
@@ -681,7 +681,7 @@ Grace`;
                   {lead.phone && (
                     <div className="flex items-center space-x-2">
                       <Phone className="w-4 h-4 text-gray-400" />
-                      <a href={`tel:${lead.phone}`} className="text-blue-600 hover:underline">
+                      <a href={`tel:${lead.phone}`} className="text-blue-600 dark:text-blue-300 hover:underline">
                         {lead.phone}
                       </a>
                     </div>
@@ -689,7 +689,7 @@ Grace`;
                   {lead.socialHandle && (
                     <div className="flex items-center space-x-2">
                       <Instagram className="w-4 h-4 text-gray-400" />
-                      <a href={`https://instagram.com/${lead.socialHandle.replace("@", "")}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                      <a href={`https://instagram.com/${lead.socialHandle.replace("@", "")}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-300 hover:underline">
                         {lead.socialHandle}
                       </a>
                     </div>
@@ -697,7 +697,7 @@ Grace`;
                   {lead.website && (
                     <div className="flex items-center space-x-2">
                       <ExternalLink className="w-4 h-4 text-gray-400" />
-                      <a href={lead.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                      <a href={lead.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-300 hover:underline">
                         {lead.website}
                       </a>
                     </div>
@@ -723,7 +723,7 @@ Grace`;
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">Discovery Source</label>
-                    <div className="px-4 py-2 border rounded-lg bg-gray-50 capitalize">{lead.source}</div>
+                    <div className="px-4 py-2 border rounded-lg bg-gray-50 dark:bg-zinc-900 capitalize">{lead.source}</div>
                   </div>
                 </div>
               </div>
@@ -746,7 +746,7 @@ Grace`;
                       </div>
                     )}
                     {lead.nextFollowUp && (
-                      <div className="flex items-center space-x-2 text-orange-600">
+                      <div className="flex items-center space-x-2 text-orange-600 dark:text-orange-300">
                         <Calendar className="w-4 h-4" />
                         <span className="font-medium">Next Follow-up: {lead.nextFollowUp}</span>
                       </div>
@@ -800,11 +800,11 @@ Grace`;
 
           {activeTab === "communication" && (
             <div className="space-y-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                 <div className="flex items-start space-x-3">
-                  <Mail className="w-5 h-5 text-blue-600 mt-0.5" />
+                  <Mail className="w-5 h-5 text-blue-600 dark:text-blue-300 mt-0.5" />
                   <div className="flex-1">
-                    <div className="font-medium text-blue-900 mb-1">Quick Actions</div>
+                    <div className="font-medium text-blue-900 dark:text-blue-200 mb-1">Quick Actions</div>
                     <div className="space-y-2">
                       {lead.email && (
                         <a
@@ -839,39 +839,39 @@ Grace`;
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Communication History</h3>
                 <div className="space-y-3">
                   {lead.firstContact && (
-                    <div className="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-r-lg">
+                    <div className="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-950 p-4 rounded-r-lg">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-blue-900">Initial Contact Sent</span>
-                        <span className="text-sm text-blue-700">{lead.firstContact}</span>
+                        <span className="font-medium text-blue-900 dark:text-blue-200">Initial Contact Sent</span>
+                        <span className="text-sm text-blue-700 dark:text-blue-300">{lead.firstContact}</span>
                       </div>
-                      <p className="text-sm text-blue-800">Sent initial outreach email introducing TrueFans RADIO and FREE airplay opportunity.</p>
+                      <p className="text-sm text-blue-800 dark:text-blue-200">Sent initial outreach email introducing TrueFans RADIO and FREE airplay opportunity.</p>
                     </div>
                   )}
                   {lead.status === "responded" && (
-                    <div className="border-l-4 border-green-500 bg-green-50 p-4 rounded-r-lg">
+                    <div className="border-l-4 border-green-500 bg-green-50 dark:bg-green-950 p-4 rounded-r-lg">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-green-900">Artist Responded</span>
-                        <span className="text-sm text-green-700">{lead.lastContact}</span>
+                        <span className="font-medium text-green-900 dark:text-green-200">Artist Responded</span>
+                        <span className="text-sm text-green-700 dark:text-green-300">{lead.lastContact}</span>
                       </div>
-                      <p className="text-sm text-green-800">Artist expressed interest in learning more about the program.</p>
+                      <p className="text-sm text-green-800 dark:text-green-200">Artist expressed interest in learning more about the program.</p>
                     </div>
                   )}
                   {lead.status === "invited" && (
-                    <div className="border-l-4 border-purple-500 bg-purple-50 p-4 rounded-r-lg">
+                    <div className="border-l-4 border-purple-500 bg-purple-50 dark:bg-purple-950 p-4 rounded-r-lg">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-purple-900">Track Invitation Sent</span>
-                        <span className="text-sm text-purple-700">{lead.lastContact}</span>
+                        <span className="font-medium text-purple-900 dark:text-purple-200">Track Invitation Sent</span>
+                        <span className="text-sm text-purple-700 dark:text-purple-300">{lead.lastContact}</span>
                       </div>
-                      <p className="text-sm text-purple-800">Sent track submission invitation with instructions.</p>
+                      <p className="text-sm text-purple-800 dark:text-purple-200">Sent track submission invitation with instructions.</p>
                     </div>
                   )}
                   {lead.status === "submitted" && (
-                    <div className="border-l-4 border-indigo-500 bg-indigo-50 p-4 rounded-r-lg">
+                    <div className="border-l-4 border-indigo-500 bg-indigo-50 dark:bg-indigo-950 p-4 rounded-r-lg">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-indigo-900">Track Submitted</span>
-                        <span className="text-sm text-indigo-700">{lead.lastContact}</span>
+                        <span className="font-medium text-indigo-900 dark:text-indigo-200">Track Submitted</span>
+                        <span className="text-sm text-indigo-700 dark:text-indigo-300">{lead.lastContact}</span>
                       </div>
-                      <p className="text-sm text-indigo-800">Artist submitted track for review. Now under quality control review.</p>
+                      <p className="text-sm text-indigo-800 dark:text-indigo-200">Artist submitted track for review. Now under quality control review.</p>
                     </div>
                   )}
                 </div>
@@ -909,20 +909,20 @@ function EmailTemplate({ title, description, content, email }: { title: string; 
           <p className="text-sm text-gray-600 dark:text-zinc-400">{description}</p>
         </div>
         <div className="flex space-x-2">
-          <button onClick={handleCopy} className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-            {copied ? <CheckCircle className="w-4 h-4 text-green-600" /> : <Mail className="w-4 h-4 text-gray-600" />}
+          <button onClick={handleCopy} className="p-2 bg-gray-100 dark:bg-zinc-800 rounded-lg hover:bg-gray-200 transition-colors">
+            {copied ? <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-300" /> : <Mail className="w-4 h-4 text-gray-600 dark:text-zinc-300" />}
           </button>
           {email && (
             <a
               href={`mailto:${email}?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(content)}`}
-              className="p-2 bg-purple-100 text-purple-600 rounded-lg hover:bg-purple-200 transition-colors"
+              className="p-2 bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 rounded-lg hover:bg-purple-200 transition-colors"
             >
               <Send className="w-4 h-4" />
             </a>
           )}
         </div>
       </div>
-      <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 whitespace-pre-wrap font-mono">{content}</div>
+      <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4 text-sm text-gray-700 dark:text-zinc-200 whitespace-pre-wrap font-mono">{content}</div>
     </div>
   );
 }
@@ -966,7 +966,7 @@ function NewLeadModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b p-6 z-10">
+        <div className="sticky top-0 bg-white dark:bg-zinc-900 border-b p-6 z-10">
           <div className="flex items-start justify-between">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Add New Artist Lead</h2>

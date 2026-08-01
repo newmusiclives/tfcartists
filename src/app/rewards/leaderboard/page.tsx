@@ -38,11 +38,11 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50">
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-indigo-50 dark:to-indigo-950">
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/rewards" className="flex items-center space-x-2 text-purple-700 hover:text-purple-800 transition-colors">
+            <Link href="/rewards" className="flex items-center space-x-2 text-purple-700 dark:text-purple-300 hover:text-purple-800 transition-colors">
               <ArrowLeft className="w-4 h-4" />
               <Radio className="w-5 h-5" />
               <span className="font-bold">Rewards</span>
@@ -53,19 +53,19 @@ export default function LeaderboardPage() {
 
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-purple-100 rounded-full mb-3">
-            <Trophy className="w-7 h-7 text-purple-700" />
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-purple-100 dark:bg-purple-900 rounded-full mb-3">
+            <Trophy className="w-7 h-7 text-purple-700 dark:text-purple-300" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Leaderboard</h1>
           <p className="text-gray-600 dark:text-zinc-400 mt-1">Top listeners and artists by XP</p>
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
+        <div className="flex bg-gray-100 dark:bg-zinc-800 rounded-xl p-1 mb-6">
           <button
             onClick={() => setTab("listener")}
             className={`flex-1 flex items-center justify-center space-x-2 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-              tab === "listener" ? "bg-white text-purple-700 shadow-sm" : "text-gray-500"
+              tab === "listener" ? "bg-white dark:bg-zinc-900 text-purple-700 dark:text-purple-300 shadow-sm" : "text-gray-500 dark:text-zinc-400"
             }`}
           >
             <Users className="w-4 h-4" />
@@ -74,7 +74,7 @@ export default function LeaderboardPage() {
           <button
             onClick={() => setTab("artist")}
             className={`flex-1 flex items-center justify-center space-x-2 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-              tab === "artist" ? "bg-white text-purple-700 shadow-sm" : "text-gray-500"
+              tab === "artist" ? "bg-white dark:bg-zinc-900 text-purple-700 dark:text-purple-300 shadow-sm" : "text-gray-500 dark:text-zinc-400"
             }`}
           >
             <Music className="w-4 h-4" />
@@ -87,7 +87,7 @@ export default function LeaderboardPage() {
           {loading ? (
             <div className="p-12 text-center text-gray-400 animate-pulse">Loading leaderboard...</div>
           ) : entries.length === 0 ? (
-            <div className="p-12 text-center text-gray-400 dark:text-zinc-400">
+            <div className="p-12 text-center text-gray-600 dark:text-zinc-400">
               No entries yet. Start earning XP to appear on the leaderboard!
             </div>
           ) : (
@@ -96,7 +96,7 @@ export default function LeaderboardPage() {
                 <div
                   key={entry.id}
                   className={`flex items-center px-6 py-4 ${
-                    index < 3 ? "bg-gradient-to-r from-yellow-50/50 to-transparent" : ""
+                    index < 3 ? "bg-gradient-to-r from-yellow-50 dark:from-yellow-950/50 to-transparent" : ""
                   }`}
                 >
                   {/* Rank */}
@@ -115,8 +115,8 @@ export default function LeaderboardPage() {
 
                   {/* Name */}
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-gray-900 truncate">{entry.name || "Anonymous"}</div>
-                    <div className="text-xs text-gray-400 dark:text-zinc-400">
+                    <div className="font-semibold text-gray-900 dark:text-zinc-100 truncate">{entry.name || "Anonymous"}</div>
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">
                       Level {entry.xpLevel}
                       {entry.badges.length > 0 && ` · ${entry.badges.length} badges`}
                     </div>
@@ -124,7 +124,7 @@ export default function LeaderboardPage() {
 
                   {/* XP */}
                   <div className="text-right">
-                    <div className="font-bold text-purple-600">{entry.xpTotal.toLocaleString()}</div>
+                    <div className="font-bold text-purple-600 dark:text-purple-300">{entry.xpTotal.toLocaleString()}</div>
                     <div className="text-xs text-gray-400">XP</div>
                   </div>
                 </div>

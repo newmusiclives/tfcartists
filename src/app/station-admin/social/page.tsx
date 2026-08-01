@@ -98,7 +98,7 @@ function PlatformToggle({
         }`}
       >
         <div
-          className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
+          className={`absolute top-1 w-4 h-4 rounded-full bg-white dark:bg-zinc-900 transition-transform ${
             enabled ? "translate-x-5" : "translate-x-1"
           }`}
         />

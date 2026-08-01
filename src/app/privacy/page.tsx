@@ -21,12 +21,12 @@ export default function PrivacyPolicyPage() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <Link
           href="/"
-          className="text-amber-700 hover:text-amber-900 text-sm font-medium transition-colors"
+          className="text-amber-700 dark:text-amber-300 hover:text-amber-900 text-sm font-medium transition-colors"
         >
           &larr; Back to Home
         </Link>
 
-        <h1 className="mt-8 text-4xl font-bold text-amber-900">
+        <h1 className="mt-8 text-4xl font-bold text-amber-900 dark:text-amber-200">
           Privacy Policy
         </h1>
         <p className="mt-2 text-gray-400 text-sm">
@@ -41,7 +41,7 @@ export default function PrivacyPolicyPage() {
               &quot;our&quot;) operates the website at{" "}
               <a
                 href="https://truefans-radio.netlify.app"
-                className="text-amber-700 underline hover:text-amber-900"
+                className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
               >
                 truefans-radio.netlify.app
               </a>{" "}
@@ -55,7 +55,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 1. Information We Collect */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               1. Information We Collect
             </h2>
 
@@ -170,7 +170,7 @@ export default function PrivacyPolicyPage() {
               For detailed information about our cookie usage, please see our{" "}
               <Link
                 href="/cookies"
-                className="text-amber-700 underline hover:text-amber-900"
+                className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
               >
                 Cookie Policy
               </Link>
@@ -180,7 +180,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 2. How We Use Your Information */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               2. How We Use Your Information
             </h2>
             <p className="mb-3">
@@ -220,7 +220,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 3. Information Sharing */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               3. Information Sharing
             </h2>
             <p className="mb-3">
@@ -263,7 +263,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 3a. Multi-Tenant Data Isolation */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               3a. Multi-Tenant Data Isolation
             </h2>
             <p className="mb-3">
@@ -302,7 +302,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 3b. Third-Party Services */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               3b. Third-Party Services
             </h2>
             <p className="mb-3">
@@ -342,7 +342,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 4. Data Security */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               4. Data Security
             </h2>
             <p>
@@ -358,7 +358,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 5. Data Retention */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               5. Data Retention and Deletion
             </h2>
             <p className="mb-3">
@@ -401,7 +401,7 @@ export default function PrivacyPolicyPage() {
               your account and personal data at any time by contacting us at{" "}
               <a
                 href="mailto:legal@truefans.radio"
-                className="text-amber-700 underline hover:text-amber-900"
+                className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
               >
                 legal@truefans.radio
               </a>
@@ -414,7 +414,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 6. Your Rights */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               6. Your Rights
             </h2>
             <p className="mb-3">
@@ -452,7 +452,7 @@ export default function PrivacyPolicyPage() {
               To exercise any of these rights, please contact us at{" "}
               <a
                 href="mailto:legal@truefans.radio"
-                className="text-amber-700 underline hover:text-amber-900"
+                className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
               >
                 legal@truefans.radio
               </a>
@@ -462,7 +462,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 7. Children's Privacy */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               7. Children&apos;s Privacy
             </h2>
             <p>
@@ -474,7 +474,7 @@ export default function PrivacyPolicyPage() {
               information from a child under 13, please contact us at{" "}
               <a
                 href="mailto:legal@truefans.radio"
-                className="text-amber-700 underline hover:text-amber-900"
+                className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
               >
                 legal@truefans.radio
               </a>
@@ -484,7 +484,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 8. Third-Party Links */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               8. Third-Party Links
             </h2>
             <p>
@@ -498,7 +498,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 9. Changes to This Policy */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               9. Changes to This Policy
             </h2>
             <p>
@@ -513,7 +513,7 @@ export default function PrivacyPolicyPage() {
 
           {/* 10. Contact Information */}
           <section>
-            <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+            <h2 className="text-2xl font-semibold text-amber-800 dark:text-amber-200 mb-4">
               10. Contact Information
             </h2>
             <p>
@@ -525,7 +525,7 @@ export default function PrivacyPolicyPage() {
                 <strong>Email:</strong>{" "}
                 <a
                   href="mailto:legal@truefans.radio"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   legal@truefans.radio
                 </a>
@@ -534,7 +534,7 @@ export default function PrivacyPolicyPage() {
                 <strong>General Support:</strong>{" "}
                 <a
                   href="mailto:support@truefans.radio"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   support@truefans.radio
                 </a>
@@ -543,7 +543,7 @@ export default function PrivacyPolicyPage() {
                 <strong>Website:</strong>{" "}
                 <a
                   href="https://truefans-radio.netlify.app"
-                  className="text-amber-700 underline hover:text-amber-900"
+                  className="text-amber-700 dark:text-amber-300 underline hover:text-amber-900"
                 >
                   truefans-radio.netlify.app
                 </a>
@@ -560,13 +560,13 @@ export default function PrivacyPolicyPage() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/terms"
-              className="text-amber-700 hover:text-amber-900 font-medium transition-colors"
+              className="text-amber-700 dark:text-amber-300 hover:text-amber-900 font-medium transition-colors"
             >
               Terms of Service
             </Link>
             <Link
               href="/cookies"
-              className="text-amber-700 hover:text-amber-900 font-medium transition-colors"
+              className="text-amber-700 dark:text-amber-300 hover:text-amber-900 font-medium transition-colors"
             >
               Cookie Policy
             </Link>

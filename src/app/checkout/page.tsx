@@ -281,8 +281,8 @@ function CheckoutContent() {
         <SharedNav />
         <div className="max-w-lg mx-auto px-4 py-16 text-center">
           <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-8">
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-6">
+              <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-300" />
             </div>
             <h1 className="text-2xl font-bold text-stone-900 mb-2">
               Purchase Confirmed!
@@ -296,9 +296,9 @@ function CheckoutContent() {
               .
             </p>
 
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 text-left">
-              <h3 className="font-semibold text-amber-900 mb-2">Next Steps</h3>
-              <ul className="text-sm text-amber-800 space-y-1">
+            <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-6 text-left">
+              <h3 className="font-semibold text-amber-900 dark:text-amber-200 mb-2">Next Steps</h3>
+              <ul className="text-sm text-amber-800 dark:text-amber-200 space-y-1">
                 {type === "operator" && (
                   <>
                     <li>1. Check your email for login credentials</li>
@@ -435,8 +435,8 @@ function CheckoutContent() {
               </h3>
 
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
-                  <TypeIcon className="w-5 h-5 text-amber-700" />
+                <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900 flex items-center justify-center">
+                  <TypeIcon className="w-5 h-5 text-amber-700 dark:text-amber-300" />
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wider text-stone-500 font-medium">
@@ -456,7 +456,7 @@ function CheckoutContent() {
               </div>
 
               {selectedPlan.fee && (
-                <p className="text-sm text-amber-700 bg-amber-50 rounded-lg px-3 py-2 mb-4">
+                <p className="text-sm text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950 rounded-lg px-3 py-2 mb-4">
                   Platform fee: {selectedPlan.fee}
                 </p>
               )}
@@ -467,7 +467,7 @@ function CheckoutContent() {
                     key={feature}
                     className="flex items-start gap-2 text-sm text-stone-700"
                   >
-                    <Check className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                    <Check className="w-4 h-4 text-amber-600 dark:text-amber-300 mt-0.5 flex-shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -490,7 +490,7 @@ function CheckoutContent() {
           <div className="md:col-span-3 md:order-1 space-y-6">
             <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6">
               <div className="flex items-center gap-2 mb-6">
-                <CreditCard className="w-5 h-5 text-amber-700" />
+                <CreditCard className="w-5 h-5 text-amber-700 dark:text-amber-300" />
                 <h2 className="text-xl font-bold text-stone-900">
                   Your Information
                 </h2>
@@ -567,7 +567,7 @@ function CheckoutContent() {
                 </div>
 
                 {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg text-sm">
                     {error}
                   </div>
                 )}
@@ -608,7 +608,7 @@ export default function CheckoutPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-stone-50 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-amber-700" />
+          <Loader2 className="w-8 h-8 animate-spin text-amber-700 dark:text-amber-300" />
         </div>
       }
     >

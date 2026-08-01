@@ -247,7 +247,7 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Radio className="w-8 h-8 text-purple-600" />
+              <Radio className="w-8 h-8 text-purple-600 dark:text-purple-300" />
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Command Center</h1>
                 <p className="text-gray-600 dark:text-zinc-400">All teams, financials, and analytics in one place</p>
@@ -256,14 +256,14 @@ export default function AdminDashboard() {
             <div className="flex items-center space-x-3">
               <Link
                 href="/revenue/projections"
-                className="inline-flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-300 rounded-lg text-green-700 hover:from-green-100 hover:to-blue-100 font-semibold transition-all text-sm"
+                className="inline-flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-green-50 dark:from-green-950 to-blue-50 dark:to-blue-950 border-2 border-green-300 dark:border-green-700 rounded-lg text-green-700 dark:text-green-300 hover:from-green-100 hover:to-blue-100 font-semibold transition-all text-sm"
               >
                 <Target className="w-4 h-4" />
                 <span>Revenue Model</span>
               </Link>
               <Link
                 href="/admin/verification"
-                className="inline-flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-300 rounded-lg text-blue-700 hover:from-blue-100 hover:to-purple-100 font-semibold transition-all text-sm"
+                className="inline-flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-50 dark:from-blue-950 to-purple-50 dark:to-purple-950 border-2 border-blue-300 dark:border-blue-700 rounded-lg text-blue-700 dark:text-blue-300 hover:from-blue-100 hover:to-purple-100 font-semibold transition-all text-sm"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Verify Processes</span>
@@ -353,16 +353,16 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <h3 className="text-lg font-bold text-gray-900 dark:text-white">{team.name}</h3>
-                          <p className="text-sm text-gray-400 dark:text-zinc-400">{team.role}</p>
+                          <p className="text-sm text-gray-600 dark:text-zinc-400">{team.role}</p>
                         </div>
                       </div>
                       <ArrowRight className="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform" />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       {team.stats.map((stat) => (
-                        <div key={stat.label} className="bg-gray-50 rounded-lg p-3">
+                        <div key={stat.label} className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3">
                           <div className="text-lg font-bold text-gray-900 dark:text-white">{stat.value}</div>
-                          <div className="text-xs text-gray-400 dark:text-zinc-400">{stat.label}</div>
+                          <div className="text-xs text-gray-600 dark:text-zinc-400">{stat.label}</div>
                         </div>
                       ))}
                     </div>
@@ -379,7 +379,7 @@ export default function AdminDashboard() {
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">Revenue Flow</h2>
             <Link
               href="/revenue"
-              className="text-purple-600 hover:text-purple-700 text-sm font-medium inline-flex items-center space-x-1"
+              className="text-purple-600 dark:text-purple-300 hover:text-purple-700 text-sm font-medium inline-flex items-center space-x-1"
             >
               <span>Full Breakdown</span>
               <ArrowRight className="w-4 h-4" />
@@ -388,64 +388,64 @@ export default function AdminDashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Sponsor Revenue */}
-            <div className="bg-blue-50 rounded-lg p-5 border border-blue-200">
+            <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-5 border border-blue-200 dark:border-blue-800">
               <div className="flex items-center space-x-2 mb-3">
-                <Building2 className="w-5 h-5 text-blue-600" />
-                <span className="text-sm font-semibold text-blue-700">Sponsor Revenue</span>
+                <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">Sponsor Revenue</span>
               </div>
-              <div className="text-2xl font-bold text-blue-900 mb-2">
+              <div className="text-2xl font-bold text-blue-900 dark:text-blue-200 mb-2">
                 ${systemFinancials ? fmt(systemFinancials.sponsorRevenue) : "\u2014"}/mo
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-blue-600">80% to Artist Pool</span>
-                  <span className="font-semibold text-blue-900">${systemFinancials ? fmt(systemFinancials.artistPoolPayout) : "\u2014"}</span>
+                  <span className="text-blue-600 dark:text-blue-300">80% to Artist Pool</span>
+                  <span className="font-semibold text-blue-900 dark:text-blue-200">${systemFinancials ? fmt(systemFinancials.artistPoolPayout) : "\u2014"}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-blue-600">20% to Station</span>
-                  <span className="font-semibold text-blue-900">${systemFinancials ? fmt(Math.round(systemFinancials.sponsorRevenue * 0.2)) : "\u2014"}</span>
+                  <span className="text-blue-600 dark:text-blue-300">20% to Station</span>
+                  <span className="font-semibold text-blue-900 dark:text-blue-200">${systemFinancials ? fmt(Math.round(systemFinancials.sponsorRevenue * 0.2)) : "\u2014"}</span>
                 </div>
               </div>
             </div>
 
             {/* Artist Subscriptions */}
-            <div className="bg-purple-50 rounded-lg p-5 border border-purple-200">
+            <div className="bg-purple-50 dark:bg-purple-950 rounded-lg p-5 border border-purple-200 dark:border-purple-800">
               <div className="flex items-center space-x-2 mb-3">
-                <Users className="w-5 h-5 text-purple-600" />
-                <span className="text-sm font-semibold text-purple-700">Artist Subscriptions</span>
+                <Users className="w-5 h-5 text-purple-600 dark:text-purple-300" />
+                <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">Artist Subscriptions</span>
               </div>
-              <div className="text-2xl font-bold text-purple-900 mb-2">
+              <div className="text-2xl font-bold text-purple-900 dark:text-purple-200 mb-2">
                 ${systemFinancials ? fmt(systemFinancials.artistSubscriptions) : "\u2014"}/mo
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-purple-600">100% to Station</span>
-                  <span className="font-semibold text-purple-900">${systemFinancials ? fmt(systemFinancials.artistSubscriptions) : "\u2014"}</span>
+                  <span className="text-purple-600 dark:text-purple-300">100% to Station</span>
+                  <span className="font-semibold text-purple-900 dark:text-purple-200">${systemFinancials ? fmt(systemFinancials.artistSubscriptions) : "\u2014"}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-purple-600">Airplay tier fees</span>
-                  <span className="font-semibold text-purple-900">{stats?.artists.total || 0} artists</span>
+                  <span className="text-purple-600 dark:text-purple-300">Airplay tier fees</span>
+                  <span className="font-semibold text-purple-900 dark:text-purple-200">{stats?.artists.total || 0} artists</span>
                 </div>
               </div>
             </div>
 
             {/* Net Station Revenue */}
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-5 border-2 border-green-300">
+            <div className="bg-gradient-to-br from-green-50 dark:from-green-950 to-emerald-50 dark:to-emerald-950 rounded-lg p-5 border-2 border-green-300 dark:border-green-700">
               <div className="flex items-center space-x-2 mb-3">
-                <DollarSign className="w-5 h-5 text-green-600" />
-                <span className="text-sm font-semibold text-green-700">Net Station Revenue</span>
+                <DollarSign className="w-5 h-5 text-green-600 dark:text-green-300" />
+                <span className="text-sm font-semibold text-green-700 dark:text-green-300">Net Station Revenue</span>
               </div>
-              <div className="text-2xl font-bold text-green-900 mb-2">
+              <div className="text-2xl font-bold text-green-900 dark:text-green-200 mb-2">
                 ${systemFinancials ? fmt(systemFinancials.stationRetained) : "\u2014"}/mo
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-green-600">Annual Projection</span>
-                  <span className="font-semibold text-green-900">${systemFinancials ? fmt(systemFinancials.stationRetained * 12) : "\u2014"}</span>
+                  <span className="text-green-600 dark:text-green-300">Annual Projection</span>
+                  <span className="font-semibold text-green-900 dark:text-green-200">${systemFinancials ? fmt(systemFinancials.stationRetained * 12) : "\u2014"}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-green-600">Est. Profit (after $5k expenses)</span>
-                  <span className="font-semibold text-green-900">${systemFinancials ? fmt(systemFinancials.stationRetained - 5000) : "\u2014"}</span>
+                  <span className="text-green-600 dark:text-green-300">Est. Profit (after $5k expenses)</span>
+                  <span className="font-semibold text-green-900 dark:text-green-200">${systemFinancials ? fmt(systemFinancials.stationRetained - 5000) : "\u2014"}</span>
                 </div>
               </div>
             </div>
@@ -460,7 +460,7 @@ export default function AdminDashboard() {
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Artist Pipeline (Live)</h2>
               <Link
                 href="/riley/pipeline"
-                className="text-purple-600 hover:text-purple-700 text-sm font-medium inline-flex items-center space-x-1"
+                className="text-purple-600 dark:text-purple-300 hover:text-purple-700 text-sm font-medium inline-flex items-center space-x-1"
               >
                 <span>View Pipeline</span>
                 <ArrowRight className="w-4 h-4" />
@@ -537,7 +537,7 @@ export default function AdminDashboard() {
             <h2 className="text-lg font-bold text-gray-900 dark:text-white">Recent Artists</h2>
             <Link
               href="/admin/artists"
-              className="text-purple-600 hover:text-purple-700 text-sm font-medium inline-flex items-center space-x-1"
+              className="text-purple-600 dark:text-purple-300 hover:text-purple-700 text-sm font-medium inline-flex items-center space-x-1"
             >
               <span>View All</span>
               <ArrowRight className="w-4 h-4" />
@@ -545,7 +545,7 @@ export default function AdminDashboard() {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b">
+              <thead className="bg-gray-50 dark:bg-zinc-900 border-b">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Artist
@@ -574,7 +574,7 @@ export default function AdminDashboard() {
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
                         {artist.name}
                       </div>
-                      <div className="text-sm text-gray-400 dark:text-zinc-400">{artist.genre || "—"}</div>
+                      <div className="text-sm text-gray-600 dark:text-zinc-400">{artist.genre || "—"}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
@@ -597,7 +597,7 @@ export default function AdminDashboard() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <Link
                         href={`/admin/artists/${artist.id}`}
-                        className="text-purple-600 hover:text-purple-900"
+                        className="text-purple-600 dark:text-purple-300 hover:text-purple-900"
                       >
                         View Details
                       </Link>
@@ -644,7 +644,7 @@ function PipelineStage({ label, count, color }: { label: string; count: number; 
       >
         {count}
       </div>
-      <div className="text-xs text-gray-600 font-medium">{label}</div>
+      <div className="text-xs text-gray-600 dark:text-zinc-300 font-medium">{label}</div>
     </div>
   );
 }

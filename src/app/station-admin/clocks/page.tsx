@@ -1061,7 +1061,7 @@ function SlotEditor({
       <div>
         <button
           onClick={() => setShowInsertBreak(!showInsertBreak)}
-          className="flex items-center gap-2 text-sm font-medium text-purple-600 hover:text-purple-800"
+          className="flex items-center gap-2 text-sm font-medium text-purple-600 dark:text-purple-300 hover:text-purple-800"
         >
           <Layers className="w-4 h-4" />
           Insert Break Block
@@ -1848,7 +1848,7 @@ export default function RadioClocksPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Clock className="w-8 h-8 text-blue-600" />
+              <Clock className="w-8 h-8 text-blue-600 dark:text-blue-300" />
               Radio Clocks
             </h1>
             <p className="text-zinc-400 mt-1">
@@ -1942,7 +1942,7 @@ export default function RadioClocksPage() {
         {!loading && djShows.length > 0 && (
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-6">
-              <Users className="w-7 h-7 text-amber-600" />
+              <Users className="w-7 h-7 text-amber-600 dark:text-amber-300" />
               Host Show Clocks
             </h2>
             <p className="text-sm text-zinc-400 mb-4">
@@ -1959,7 +1959,7 @@ export default function RadioClocksPage() {
                   <div className="p-4 flex items-center justify-between border-b border-zinc-800 bg-zinc-900/50">
                     <div className="flex items-center gap-3">
                       <div className="bg-amber-500/15 p-2 rounded-lg">
-                        <Users className="w-5 h-5 text-amber-600" />
+                        <Users className="w-5 h-5 text-amber-600 dark:text-amber-300" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-white">
@@ -2032,7 +2032,7 @@ export default function RadioClocksPage() {
                                 className={`p-1.5 rounded hover:bg-blue-500/15 ${
                                   isEditingThisHour
                                     ? "bg-blue-500/15 text-blue-400"
-                                    : "text-blue-600"
+                                    : "text-blue-600 dark:text-blue-300"
                                 }`}
                                 title="Edit slots"
                               >
@@ -2123,7 +2123,7 @@ export default function RadioClocksPage() {
                   >
                     <div className="flex items-center gap-4">
                       <div className="bg-blue-500/15 p-2.5 rounded-lg">
-                        <Clock className="w-5 h-5 text-blue-600" />
+                        <Clock className="w-5 h-5 text-blue-600 dark:text-blue-300" />
                       </div>
                       <div className="text-left">
                         <h3 className="font-semibold text-white">
@@ -2154,7 +2154,7 @@ export default function RadioClocksPage() {
                               setEditing(isEditing ? null : t.id);
                               setExpanded(t.id);
                             }}
-                            className="p-1.5 rounded hover:bg-blue-500/15 text-blue-600"
+                            className="p-1.5 rounded hover:bg-blue-500/15 text-blue-600 dark:text-blue-300"
                             title="Edit slots"
                           >
                             <Pencil className="w-4 h-4" />
@@ -2164,7 +2164,7 @@ export default function RadioClocksPage() {
                               e.stopPropagation();
                               duplicateTemplate(t);
                             }}
-                            className="p-1.5 rounded hover:bg-green-500/15 text-green-600"
+                            className="p-1.5 rounded hover:bg-green-500/15 text-green-600 dark:text-green-300"
                             title="Duplicate template"
                           >
                             <Copy className="w-4 h-4" />
@@ -2240,7 +2240,7 @@ export default function RadioClocksPage() {
         {/* ================================================================ */}
         <div className="mt-12">
           <h2 className="text-2xl font-bold text-white flex items-center gap-3 mb-6">
-            <Users className="w-7 h-7 text-blue-600" />
+            <Users className="w-7 h-7 text-blue-600 dark:text-blue-300" />
             Host Clock Assignments
           </h2>
 

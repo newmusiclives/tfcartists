@@ -36,14 +36,14 @@ const SOCIAL_METRICS = [
 
 export default function ListenersPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-rose-50">
+    <main className="min-h-screen bg-gradient-to-br from-teal-50 dark:from-teal-950 via-white dark:via-zinc-900 to-rose-50 dark:to-rose-950">
       {/* Header */}
       <div className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/parker"
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center space-x-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Parker Dashboard</span>
@@ -57,7 +57,7 @@ export default function ListenersPage() {
             </Link>
           </div>
           <div className="flex items-center space-x-3">
-            <MessageCircle className="w-8 h-8 text-teal-600" />
+            <MessageCircle className="w-8 h-8 text-teal-600 dark:text-teal-300" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Listener Services Dashboard</h1>
               <p className="text-gray-600 dark:text-zinc-400">Managed by Ivy Brennan</p>
@@ -71,15 +71,15 @@ export default function ListenersPage() {
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <Music className="w-6 h-6 text-teal-600" />
+              <Music className="w-6 h-6 text-teal-600 dark:text-teal-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Requests This Week</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">48</div>
-            <div className="text-xs text-teal-600">+12% from last week</div>
+            <div className="text-xs text-teal-600 dark:text-teal-300">+12% from last week</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <Star className="w-6 h-6 text-amber-600" />
+              <Star className="w-6 h-6 text-amber-600 dark:text-amber-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Satisfaction Score</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">4.7/5</div>
@@ -87,19 +87,19 @@ export default function ListenersPage() {
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <Trophy className="w-6 h-6 text-violet-600" />
+              <Trophy className="w-6 h-6 text-violet-600 dark:text-violet-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Contest Participation</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">320</div>
-            <div className="text-xs text-violet-600">Active entries</div>
+            <div className="text-xs text-violet-600 dark:text-violet-300">Active entries</div>
           </div>
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 shadow-lg">
             <div className="flex items-center space-x-3 mb-3">
-              <Heart className="w-6 h-6 text-rose-600" />
+              <Heart className="w-6 h-6 text-rose-600 dark:text-rose-300" />
               <div className="text-sm font-medium text-gray-600 dark:text-zinc-400">Community Health</div>
             </div>
             <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">92%</div>
-            <div className="text-xs text-rose-600">Engagement score</div>
+            <div className="text-xs text-rose-600 dark:text-rose-300">Engagement score</div>
           </div>
         </section>
 
@@ -108,7 +108,7 @@ export default function ListenersPage() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Recent Song Requests</h2>
           <div className="space-y-3">
             {RECENT_REQUESTS.map((req, idx) => (
-              <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-lg hover:bg-gray-100 transition-colors">
                 <div className="flex items-center space-x-4">
                   <Music className="w-10 h-10 text-gray-400" />
                   <div>
@@ -117,7 +117,7 @@ export default function ListenersPage() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <div className="text-sm text-gray-400 dark:text-zinc-400">{req.time}</div>
+                  <div className="text-sm text-gray-600 dark:text-zinc-400">{req.time}</div>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     req.status === "played"
                       ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
@@ -138,15 +138,15 @@ export default function ListenersPage() {
             {ACTIVE_CONTESTS.map((contest, idx) => (
               <div key={idx} className={`rounded-lg p-5 border-2 ${
                 contest.status === "active"
-                  ? "border-teal-200 bg-teal-50"
-                  : "border-gray-200 dark:border-zinc-800 bg-gray-50"
+                  ? "border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-teal-950"
+                  : "border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900"
               }`}>
                 <div className="flex items-center justify-between mb-3">
-                  <Trophy className={`w-5 h-5 ${contest.status === "active" ? "text-teal-600" : "text-gray-400"}`} />
+                  <Trophy className={`w-5 h-5 ${contest.status === "active" ? "text-teal-600 dark:text-teal-300" : "text-gray-400"}`} />
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                     contest.status === "active"
-                      ? "bg-teal-100 text-teal-700"
-                      : "bg-gray-100 text-gray-600"
+                      ? "bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300"
+                      : "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300"
                   }`}>
                     {contest.status === "active" ? "Active" : "Ended"}
                   </span>
@@ -154,8 +154,8 @@ export default function ListenersPage() {
                 <h3 className="font-bold text-gray-900 dark:text-white mb-1">{contest.name}</h3>
                 <div className="text-sm text-gray-600 dark:text-zinc-400 mb-3">Prize: {contest.prize}</div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-400 dark:text-zinc-400">{contest.entries} entries</span>
-                  <span className="text-gray-400 dark:text-zinc-400">Ends {contest.endDate}</span>
+                  <span className="text-gray-600 dark:text-zinc-400">{contest.entries} entries</span>
+                  <span className="text-gray-600 dark:text-zinc-400">Ends {contest.endDate}</span>
                 </div>
               </div>
             ))}
@@ -167,14 +167,14 @@ export default function ListenersPage() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Social Media Monitoring</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {SOCIAL_METRICS.map((social, idx) => (
-              <div key={idx} className="bg-gray-50 rounded-lg p-4 border border-gray-200 dark:border-zinc-800">
+              <div key={idx} className="bg-gray-50 dark:bg-zinc-900 rounded-lg p-4 border border-gray-200 dark:border-zinc-800">
                 <div className="font-semibold text-gray-900 dark:text-white mb-2">{social.platform}</div>
                 <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{social.followers}</div>
                 <div className="text-sm text-gray-600 dark:text-zinc-400 mb-2">followers</div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-400 dark:text-zinc-400">Engagement: {social.engagement}</span>
+                  <span className="text-sm text-gray-600 dark:text-zinc-400">Engagement: {social.engagement}</span>
                   <span className={`flex items-center space-x-1 text-xs font-medium ${
-                    social.trend === "up" ? "text-green-600" : "text-gray-400"
+                    social.trend === "up" ? "text-green-600 dark:text-green-300" : "text-gray-400"
                   }`}>
                     {social.trend === "up" && <TrendingUp className="w-3 h-3" />}
                     <span>{social.trend === "up" ? "Growing" : "Stable"}</span>
@@ -186,23 +186,23 @@ export default function ListenersPage() {
         </section>
 
         {/* Community Health */}
-        <section className="bg-gradient-to-br from-teal-50 to-white rounded-xl shadow-lg p-6">
+        <section className="bg-gradient-to-br from-teal-50 dark:from-teal-950 to-white dark:to-zinc-900 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Community Health Score</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-4xl font-bold text-teal-600 mb-1">92%</div>
+              <div className="text-4xl font-bold text-teal-600 dark:text-teal-300 mb-1">92%</div>
               <div className="text-sm text-gray-600 dark:text-zinc-400">Overall Score</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-green-600 mb-1">96%</div>
+              <div className="text-4xl font-bold text-green-600 dark:text-green-300 mb-1">96%</div>
               <div className="text-sm text-gray-600 dark:text-zinc-400">Request Fulfillment</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-violet-600 mb-1">88%</div>
+              <div className="text-4xl font-bold text-violet-600 dark:text-violet-300 mb-1">88%</div>
               <div className="text-sm text-gray-600 dark:text-zinc-400">Social Engagement</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-amber-600 mb-1">94%</div>
+              <div className="text-4xl font-bold text-amber-600 dark:text-amber-300 mb-1">94%</div>
               <div className="text-sm text-gray-600 dark:text-zinc-400">Feedback Response</div>
             </div>
           </div>

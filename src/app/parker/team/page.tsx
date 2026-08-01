@@ -198,13 +198,13 @@ export default function ParkerTeamPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50">
+    <main className="min-h-screen bg-gradient-to-br from-rose-50 dark:from-rose-950 via-white dark:via-zinc-900 to-orange-50 dark:to-orange-950">
       {/* Header */}
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/parker" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/parker" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -261,19 +261,19 @@ export default function ParkerTeamPage() {
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">What We Do</h4>
               <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-2">
-                  <span className="text-rose-600 mt-1">&#10003;</span>
+                  <span className="text-rose-600 dark:text-rose-300 mt-1">&#10003;</span>
                   <span>Oversee day-to-day station operations and programming</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-rose-600 mt-1">&#10003;</span>
+                  <span className="text-rose-600 dark:text-rose-300 mt-1">&#10003;</span>
                   <span>Manage music rotation, scheduling, and format compliance</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-rose-600 mt-1">&#10003;</span>
+                  <span className="text-rose-600 dark:text-rose-300 mt-1">&#10003;</span>
                   <span>Handle commercial traffic, ad inventory, and sponsor fulfillment</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-rose-600 mt-1">&#10003;</span>
+                  <span className="text-rose-600 dark:text-rose-300 mt-1">&#10003;</span>
                   <span>Engage listeners through requests, contests, and community building</span>
                 </li>
               </ul>
@@ -281,15 +281,15 @@ export default function ParkerTeamPage() {
             <div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Station Operations</h4>
               <div className="space-y-3">
-                <div className="bg-rose-50 rounded-lg p-3">
+                <div className="bg-rose-50 dark:bg-rose-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Live Programming</div>
-                  <div className="text-2xl font-bold text-rose-600">6am - 6pm</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">12 DJs across weekday & weekend shifts</div>
+                  <div className="text-2xl font-bold text-rose-600 dark:text-rose-300">6am - 6pm</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">12 DJs across weekday & weekend shifts</div>
                 </div>
-                <div className="bg-indigo-50 rounded-lg p-3">
+                <div className="bg-indigo-50 dark:bg-indigo-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Automation</div>
-                  <div className="text-2xl font-bold text-indigo-600">6pm - 6am</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">AI-managed overnight programming</div>
+                  <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-300">6pm - 6am</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">AI-managed overnight programming</div>
                 </div>
               </div>
             </div>
@@ -353,7 +353,7 @@ export default function ParkerTeamPage() {
                         <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Key Responsibilities</h5>
                         <ul className="space-y-1">
                           {member.responsibilities.map((resp, idx) => (
-                            <li key={idx} className="text-sm text-gray-700 flex items-start space-x-2">
+                            <li key={idx} className="text-sm text-gray-700 dark:text-zinc-200 flex items-start space-x-2">
                               <span className={`${colors.text} mt-0.5`}>&bull;</span>
                               <span>{resp}</span>
                             </li>

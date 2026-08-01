@@ -201,13 +201,13 @@ export default function RileyTeamPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950">
       {/* Header */}
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/riley" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/riley" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -264,19 +264,19 @@ export default function RileyTeamPage() {
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">What We Do</h4>
               <ul className="space-y-2 text-gray-700 dark:text-zinc-300">
                 <li className="flex items-start space-x-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <span className="text-purple-600 dark:text-purple-300 mt-1">✓</span>
                   <span>Discover and onboard emerging artists to TrueFans RADIO</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <span className="text-purple-600 dark:text-purple-300 mt-1">✓</span>
                   <span>Manage 5-tier airplay system (FREE, Bronze, Silver, Gold, Platinum)</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <span className="text-purple-600 dark:text-purple-300 mt-1">✓</span>
                   <span>Ensure high-quality content through rigorous vetting</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-purple-600 mt-1">✓</span>
+                  <span className="text-purple-600 dark:text-purple-300 mt-1">✓</span>
                   <span>Distribute revenue pool fairly using share-based system</span>
                 </li>
               </ul>
@@ -284,15 +284,15 @@ export default function RileyTeamPage() {
             <div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Revenue Model</h4>
               <div className="space-y-3">
-                <div className="bg-purple-50 rounded-lg p-3">
+                <div className="bg-purple-50 dark:bg-purple-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Subscriptions (Riley's Revenue)</div>
-                  <div className="text-2xl font-bold text-purple-600">$3,900/month</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">100% retained by station for operations</div>
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">$3,900/month</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">100% retained by station for operations</div>
                 </div>
-                <div className="bg-green-50 rounded-lg p-3">
+                <div className="bg-green-50 dark:bg-green-950 rounded-lg p-3">
                   <div className="text-sm text-gray-600 dark:text-zinc-400 mb-1">Artist Pool (from Harper)</div>
-                  <div className="text-2xl font-bold text-green-600">$6,240/month</div>
-                  <div className="text-xs text-gray-400 dark:text-zinc-400">80% of sponsor revenue → distributed to artists</div>
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-300">$6,240/month</div>
+                  <div className="text-xs text-gray-600 dark:text-zinc-400">80% of sponsor revenue → distributed to artists</div>
                 </div>
               </div>
             </div>
@@ -356,7 +356,7 @@ export default function RileyTeamPage() {
                         <h5 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">Key Responsibilities</h5>
                         <ul className="space-y-1">
                           {member.responsibilities.map((resp, idx) => (
-                            <li key={idx} className="text-sm text-gray-700 flex items-start space-x-2">
+                            <li key={idx} className="text-sm text-gray-700 dark:text-zinc-200 flex items-start space-x-2">
                               <span className={`${colors.text} mt-0.5`}>•</span>
                               <span>{resp}</span>
                             </li>

@@ -24,7 +24,7 @@ export function StationSwitcher() {
     return (
       <div className="flex items-center space-x-2 font-bold text-xl text-amber-700 dark:text-amber-400">
         <Radio className="w-6 h-6" />
-        <span className="bg-amber-100 animate-pulse rounded h-6 w-40" />
+        <span className="bg-amber-100 dark:bg-amber-900 animate-pulse rounded h-6 w-40" />
       </div>
     );
   }
@@ -76,8 +76,8 @@ export function StationSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border py-1 z-50" role="listbox" aria-label="Select radio station">
-          <div className="px-3 py-2 text-xs font-semibold text-gray-400 dark:text-zinc-400 uppercase tracking-wider border-b">
+        <div className="absolute left-0 mt-2 w-64 bg-white dark:bg-zinc-900 rounded-lg shadow-lg border py-1 z-50" role="listbox" aria-label="Select radio station">
+          <div className="px-3 py-2 text-xs font-semibold text-gray-600 dark:text-zinc-400 uppercase tracking-wider border-b">
             Switch Station
           </div>
           {allStations.map((station) => {
@@ -94,7 +94,7 @@ export function StationSwitcher() {
                   setOpen(false);
                 }}
                 className={`w-full text-left px-3 py-2 hover:bg-amber-50 transition-colors flex items-center justify-between ${
-                  isSelected ? "bg-amber-50" : ""
+                  isSelected ? "bg-amber-50 dark:bg-amber-950" : ""
                 }`}
               >
                 <div className="flex items-center space-x-3">
@@ -104,12 +104,12 @@ export function StationSwitcher() {
                   />
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-white text-sm">{station.name}</div>
-                    <div className="text-xs text-gray-400 dark:text-zinc-400">
+                    <div className="text-xs text-gray-600 dark:text-zinc-400">
                       {station.callSign && `${station.callSign} · `}{station.genre}
                     </div>
                   </div>
                 </div>
-                {isSelected && <Check className="w-4 h-4 text-amber-600" />}
+                {isSelected && <Check className="w-4 h-4 text-amber-600 dark:text-amber-300" />}
               </button>
             );
           })}

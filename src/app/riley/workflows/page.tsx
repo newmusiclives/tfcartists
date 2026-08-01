@@ -311,13 +311,13 @@ export default function WorkflowsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <main className="min-h-screen bg-gradient-to-br from-purple-50 dark:from-purple-950 via-white dark:via-zinc-900 to-pink-50 dark:to-pink-950">
       {/* Header */}
       <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <Link href="/riley/outreach" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <Link href="/riley/outreach" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -337,25 +337,25 @@ export default function WorkflowsPage() {
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <StatCard
-            icon={<Zap className="w-6 h-6 text-purple-600" />}
+            icon={<Zap className="w-6 h-6 text-purple-600 dark:text-purple-300" />}
             label="Active Workflows"
             value={totalStats.activeWorkflows}
             color="purple"
           />
           <StatCard
-            icon={<Users className="w-6 h-6 text-blue-600" />}
+            icon={<Users className="w-6 h-6 text-blue-600 dark:text-blue-300" />}
             label="Artists Enrolled"
             value={totalStats.totalEnrolled}
             color="blue"
           />
           <StatCard
-            icon={<CheckCircle className="w-6 h-6 text-green-600" />}
+            icon={<CheckCircle className="w-6 h-6 text-green-600 dark:text-green-300" />}
             label="Completed"
             value={totalStats.totalCompleted}
             color="green"
           />
           <StatCard
-            icon={<TrendingUp className="w-6 h-6 text-orange-600" />}
+            icon={<TrendingUp className="w-6 h-6 text-orange-600 dark:text-orange-300" />}
             label="Avg Conversion"
             value={`${totalStats.avgConversion}%`}
             color="orange"
@@ -380,14 +380,14 @@ export default function WorkflowsPage() {
                             ? "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-400"
                             : workflow.status === "paused"
                             ? "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-400"
-                            : "bg-gray-100 text-gray-600"
+                            : "bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300"
                         }`}
                       >
                         {workflow.status.toUpperCase()}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3">{workflow.description}</p>
-                    <div className="flex items-center space-x-2 text-xs text-gray-500 bg-gray-50 rounded px-3 py-2">
+                    <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-zinc-400 bg-gray-50 dark:bg-zinc-900 rounded px-3 py-2">
                       <Zap className="w-3 h-3" />
                       <span>Trigger: {workflow.trigger}</span>
                     </div>
@@ -396,8 +396,8 @@ export default function WorkflowsPage() {
                     onClick={() => toggleWorkflowStatus(workflow.id)}
                     className={`p-2 rounded-lg transition-colors ${
                       workflow.status === "active"
-                        ? "bg-yellow-100 text-yellow-600 hover:bg-yellow-200"
-                        : "bg-green-100 text-green-700 hover:bg-green-200"
+                        ? "bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 hover:bg-yellow-200"
+                        : "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 hover:bg-green-200"
                     }`}
                   >
                     {workflow.status === "active" ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
@@ -411,11 +411,11 @@ export default function WorkflowsPage() {
                     <div className="text-xs text-gray-600 dark:text-zinc-400">Enrolled</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">{workflow.stats.completed}</div>
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-300">{workflow.stats.completed}</div>
                     <div className="text-xs text-gray-600 dark:text-zinc-400">Completed</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-600">{workflow.stats.conversionRate}%</div>
+                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-300">{workflow.stats.conversionRate}%</div>
                     <div className="text-xs text-gray-600 dark:text-zinc-400">Conversion</div>
                   </div>
                 </div>
@@ -459,28 +459,28 @@ export default function WorkflowsPage() {
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">How Automated Workflows Work</h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 text-purple-600 rounded-full mb-3">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 rounded-full mb-3">
                 <Zap className="w-6 h-6" />
               </div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Trigger</h4>
               <p className="text-sm text-gray-600 dark:text-zinc-400">Workflow starts automatically when condition is met</p>
             </div>
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-700 rounded-full mb-3">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full mb-3">
                 <Mail className="w-6 h-6" />
               </div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Send Emails</h4>
               <p className="text-sm text-gray-600 dark:text-zinc-400">Personalized emails sent at perfect timing</p>
             </div>
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full mb-3">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 rounded-full mb-3">
                 <Clock className="w-6 h-6" />
               </div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Wait & Check</h4>
               <p className="text-sm text-gray-600 dark:text-zinc-400">Smart delays and condition checks</p>
             </div>
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 text-green-700 rounded-full mb-3">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full mb-3">
                 <CheckCircle className="w-6 h-6" />
               </div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Convert</h4>
@@ -494,7 +494,7 @@ export default function WorkflowsPage() {
       {selectedWorkflow && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedWorkflow(null)}>
           <div className="bg-white dark:bg-zinc-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="sticky top-0 bg-white border-b p-6 z-10">
+            <div className="sticky top-0 bg-white dark:bg-zinc-900 border-b p-6 z-10">
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{selectedWorkflow.name}</h2>
@@ -510,10 +510,10 @@ export default function WorkflowsPage() {
               {/* Trigger */}
               <div className="mb-6">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Workflow Trigger</h3>
-                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                <div className="bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
                   <div className="flex items-center space-x-2">
-                    <Zap className="w-5 h-5 text-purple-600" />
-                    <span className="text-purple-900">{selectedWorkflow.trigger}</span>
+                    <Zap className="w-5 h-5 text-purple-600 dark:text-purple-300" />
+                    <span className="text-purple-900 dark:text-purple-200">{selectedWorkflow.trigger}</span>
                   </div>
                 </div>
               </div>
@@ -536,7 +536,7 @@ export default function WorkflowsPage() {
                         <div className="font-semibold text-gray-900 dark:text-white">{step.title}</div>
                         <div className="text-sm text-gray-600 dark:text-zinc-400">{step.description}</div>
                         {step.delay && (
-                          <div className="inline-flex items-center space-x-1 text-xs text-gray-600 dark:text-zinc-500 mt-1 bg-gray-100 px-2 py-1 rounded">
+                          <div className="inline-flex items-center space-x-1 text-xs text-gray-600 dark:text-zinc-500 mt-1 bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded">
                             <Clock className="w-3 h-3" />
                             <span>Delay: {step.delay}</span>
                           </div>

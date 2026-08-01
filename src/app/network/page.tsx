@@ -204,29 +204,29 @@ export default function NetworkPage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
-              <Radio className="w-6 h-6 text-amber-600 mx-auto mb-2" />
+              <Radio className="w-6 h-6 text-amber-600 dark:text-amber-300 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">{networkStats.totalStations}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Active Stations</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Active Stations</div>
             </div>
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
-              <Users className="w-6 h-6 text-purple-600 mx-auto mb-2" />
+              <Users className="w-6 h-6 text-purple-600 dark:text-purple-300 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">{networkStats.totalArtists}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Artists</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Artists</div>
             </div>
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
-              <Headphones className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+              <Headphones className="w-6 h-6 text-blue-600 dark:text-blue-300 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">{networkStats.totalListeners}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Listeners</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Listeners</div>
             </div>
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
-              <Music className="w-6 h-6 text-teal-600 mx-auto mb-2" />
+              <Music className="w-6 h-6 text-teal-600 dark:text-teal-300 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">{networkStats.totalSongs.toLocaleString()}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Songs</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Songs</div>
             </div>
             <div className="bg-gray-800/50 border border-white/10 rounded-xl p-5 text-center">
-              <DollarSign className="w-6 h-6 text-green-600 mx-auto mb-2" />
+              <DollarSign className="w-6 h-6 text-green-600 dark:text-green-300 mx-auto mb-2" />
               <div className="text-2xl font-bold text-amber-400">${networkStats.totalRevenue.toLocaleString()}</div>
-              <div className="text-xs text-gray-400 dark:text-zinc-400">Monthly Revenue</div>
+              <div className="text-xs text-gray-600 dark:text-zinc-400">Monthly Revenue</div>
             </div>
           </div>
         </section>
@@ -243,7 +243,7 @@ export default function NetworkPage() {
 
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-amber-600 dark:text-amber-300" />
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -258,7 +258,7 @@ export default function NetworkPage() {
                 >
                   <div className="absolute top-4 right-4">
                     <span className="inline-flex items-center space-x-1.5 bg-green-700 text-white text-xs font-bold px-3 py-1 rounded-full">
-                      <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                      <span className="w-2 h-2 rounded-full bg-white dark:bg-zinc-900 animate-pulse" />
                       <span>LIVE</span>
                     </span>
                   </div>
@@ -275,24 +275,24 @@ export default function NetworkPage() {
                       </div>
                     </div>
                     {station.tagline && (
-                      <p className="text-gray-700 italic mb-2">&ldquo;{station.tagline}&rdquo;</p>
+                      <p className="text-gray-700 dark:text-zinc-200 italic mb-2">&ldquo;{station.tagline}&rdquo;</p>
                     )}
                     <p className="text-gray-600 dark:text-zinc-400 text-sm mb-4">{station.genre}</p>
 
                     {/* Live KPIs */}
                     {kpi && (
                       <div className="grid grid-cols-3 gap-2 mb-4">
-                        <div className="bg-white/10 rounded-lg p-2 text-center">
+                        <div className="bg-white dark:bg-zinc-900/10 rounded-lg p-2 text-center">
                           <div className="text-lg font-bold text-amber-400">{kpi.kpis.artistCount}</div>
-                          <div className="text-[10px] text-gray-400 dark:text-zinc-400">Artists</div>
+                          <div className="text-[10px] text-gray-600 dark:text-zinc-400">Artists</div>
                         </div>
-                        <div className="bg-white/10 rounded-lg p-2 text-center">
+                        <div className="bg-white dark:bg-zinc-900/10 rounded-lg p-2 text-center">
                           <div className="text-lg font-bold text-amber-400">{kpi.kpis.listenerCount}</div>
-                          <div className="text-[10px] text-gray-400 dark:text-zinc-400">Listeners</div>
+                          <div className="text-[10px] text-gray-600 dark:text-zinc-400">Listeners</div>
                         </div>
-                        <div className="bg-white/10 rounded-lg p-2 text-center">
+                        <div className="bg-white dark:bg-zinc-900/10 rounded-lg p-2 text-center">
                           <div className="text-lg font-bold text-amber-400">{kpi.kpis.songCount.toLocaleString()}</div>
-                          <div className="text-[10px] text-gray-400 dark:text-zinc-400">Songs</div>
+                          <div className="text-[10px] text-gray-600 dark:text-zinc-400">Songs</div>
                         </div>
                       </div>
                     )}
@@ -330,7 +330,7 @@ export default function NetworkPage() {
                   </div>
                 </div>
                 <p className="text-gray-400 text-sm mb-4">{station.genre}</p>
-                <span className="inline-flex items-center space-x-1 bg-white/5 text-gray-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/10">
+                <span className="inline-flex items-center space-x-1 bg-white dark:bg-zinc-900/5 text-gray-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/10">
                   <Clock className="w-3 h-3" />
                   <span>Coming Soon</span>
                 </span>
@@ -358,23 +358,23 @@ export default function NetworkPage() {
                 key={team.name}
                 className={`rounded-2xl p-6 shadow-md border ${
                   team.color === "purple"
-                    ? "bg-purple-50 border-purple-200"
+                    ? "bg-purple-50 dark:bg-purple-950 border-purple-200 dark:border-purple-800"
                     : team.color === "green"
-                    ? "bg-green-50 border-green-200"
+                    ? "bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800"
                     : team.color === "amber"
                     ? "bg-amber-500/10 border-amber-500/20"
-                    : "bg-blue-50 border-blue-200"
+                    : "bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800"
                 }`}
               >
                 <div
                   className={`mb-4 ${
                     team.color === "purple"
-                      ? "text-purple-600"
+                      ? "text-purple-600 dark:text-purple-300"
                       : team.color === "green"
-                      ? "text-green-600"
+                      ? "text-green-600 dark:text-green-300"
                       : team.color === "amber"
-                      ? "text-amber-600"
-                      : "text-blue-600"
+                      ? "text-amber-600 dark:text-amber-300"
+                      : "text-blue-600 dark:text-blue-300"
                   }`}
                 >
                   {team.icon}
@@ -385,12 +385,12 @@ export default function NetworkPage() {
                 <p
                   className={`text-sm font-semibold mb-3 ${
                     team.color === "purple"
-                      ? "text-purple-600"
+                      ? "text-purple-600 dark:text-purple-300"
                       : team.color === "green"
-                      ? "text-green-600"
+                      ? "text-green-600 dark:text-green-300"
                       : team.color === "amber"
-                      ? "text-amber-600"
-                      : "text-blue-600"
+                      ? "text-amber-600 dark:text-amber-300"
+                      : "text-blue-600 dark:text-blue-300"
                   }`}
                 >
                   {team.role}
@@ -403,7 +403,7 @@ export default function NetworkPage() {
           <div className="mt-12 text-center">
             <div className="inline-flex items-center space-x-4 bg-amber-500/10 px-8 py-4 rounded-xl border border-amber-500/20">
               <TrendingUp className="w-6 h-6 text-amber-400" />
-              <p className="text-amber-900 font-medium">
+              <p className="text-amber-900 dark:text-amber-200 font-medium">
                 Same 4 teams. Same playbook. Every station. Infinitely
                 replicable.
               </p>
@@ -434,7 +434,7 @@ export default function NetworkPage() {
             </Link>
             <a
               href="mailto:operate@truefansradio.com?subject=Station%20Operator%20Inquiry"
-              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-white/10 transition-colors"
+              className="inline-flex items-center space-x-2 border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-white dark:bg-zinc-900/10 transition-colors"
             >
               <Mail className="w-5 h-5" />
               <span>Contact Us</span>

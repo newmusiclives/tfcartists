@@ -79,7 +79,7 @@ function ArtworkPlaceholder({ size = "lg" }: { size?: "lg" | "sm" }) {
 
 function TrackRow({ track, showTime = true }: { track: Track; showTime?: boolean }) {
   return (
-    <div className="flex items-center gap-3 py-3 px-2 rounded-lg hover:bg-white/60 transition-colors">
+    <div className="flex items-center gap-3 py-3 px-2 rounded-lg hover:bg-white dark:bg-zinc-900/60 transition-colors">
       {track.artworkUrl ? (
         <Image
           src={track.artworkUrl}
@@ -92,8 +92,8 @@ function TrackRow({ track, showTime = true }: { track: Track; showTime?: boolean
         <ArtworkPlaceholder size="sm" />
       )}
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-gray-900 truncate">{track.title}</p>
-        <p className="text-sm text-gray-600 truncate">{track.artistName}</p>
+        <p className="font-semibold text-gray-900 dark:text-zinc-100 truncate">{track.title}</p>
+        <p className="text-sm text-gray-600 dark:text-zinc-300 truncate">{track.artistName}</p>
       </div>
       {showTime && track.playedAt && (
         <span className="text-xs text-gray-400 whitespace-nowrap flex-shrink-0">
@@ -162,25 +162,25 @@ export default function WhatsPlayingPage() {
         .animate-eq-4 { animation: eq-bounce-4 0.7s ease-in-out infinite; }
       `}</style>
 
-      <main className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
+      <main className="min-h-screen bg-gradient-to-br from-amber-50 dark:from-amber-950 via-orange-50 dark:via-orange-950 to-rose-50 dark:to-rose-950">
         {/* Navigation */}
         <nav className="border-b bg-white/80 dark:bg-zinc-950/90 backdrop-blur-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center space-x-2">
-                <Radio className="w-6 h-6 text-amber-700" />
+                <Radio className="w-6 h-6 text-amber-700 dark:text-amber-300" />
                 <span className="font-bold text-xl text-gray-900 dark:text-white">
                   {data?.stationName || "TrueFans RADIO"}
                 </span>
               </div>
               <div className="flex items-center space-x-4 text-sm">
-                <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
+                <Link href="/" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                   Home
                 </Link>
-                <Link href="/schedule" className="text-gray-600 hover:text-gray-900 transition-colors">
+                <Link href="/schedule" className="text-gray-600 dark:text-zinc-300 hover:text-gray-900 transition-colors">
                   Schedule
                 </Link>
-                <Link href="/station" className="text-amber-700 hover:text-amber-800 font-medium transition-colors">
+                <Link href="/station" className="text-amber-700 dark:text-amber-300 hover:text-amber-800 font-medium transition-colors">
                   Station
                 </Link>
               </div>
@@ -191,7 +191,7 @@ export default function WhatsPlayingPage() {
         {/* Loading state */}
         {!data && !error && (
           <div className="flex items-center justify-center py-32">
-            <div className="w-8 h-8 border-4 border-amber-300 border-t-amber-700 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-amber-300 dark:border-amber-700 border-t-amber-700 rounded-full animate-spin" />
           </div>
         )}
 
@@ -235,7 +235,7 @@ export default function WhatsPlayingPage() {
 
                 {/* Track Info */}
                 <div className="text-center md:text-left flex-1">
-                  <div className="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold mb-4">
+                  <div className="inline-flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold mb-4">
                     <span className="relative flex h-2 w-2 mr-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75" />
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-green-600" />
@@ -266,8 +266,8 @@ export default function WhatsPlayingPage() {
 
                   {/* Current Show Info */}
                   {data.currentShow && (
-                    <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 inline-block shadow-sm">
-                      <div className="flex items-center gap-2 text-amber-800 mb-1">
+                    <div className="bg-white dark:bg-zinc-900/70 backdrop-blur-sm rounded-xl p-4 inline-block shadow-sm">
+                      <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200 mb-1">
                         <Clock className="w-4 h-4" />
                         <span className="text-sm font-medium">
                           {formatHour(data.currentShow.shiftStart)} &ndash;{" "}
@@ -292,10 +292,10 @@ export default function WhatsPlayingPage() {
                 {/* Recently Played */}
                 <div>
                   <h2 className="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-amber-700" />
+                    <Clock className="w-5 h-5 text-amber-700 dark:text-amber-300" />
                     Recently Played
                   </h2>
-                  <div className="bg-white/50 backdrop-blur-sm rounded-xl border border-white/80 shadow-sm divide-y divide-gray-100">
+                  <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-sm rounded-xl border border-white/80 shadow-sm divide-y divide-gray-100">
                     {data.recentlyPlayed.length > 0 ? (
                       data.recentlyPlayed.map((track, i) => (
                         <TrackRow key={track.id || i} track={track} />
@@ -311,10 +311,10 @@ export default function WhatsPlayingPage() {
                 {/* Up Next */}
                 <div>
                   <h2 className="text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                    <Music className="w-5 h-5 text-amber-700" />
+                    <Music className="w-5 h-5 text-amber-700 dark:text-amber-300" />
                     Up Next
                   </h2>
-                  <div className="bg-white/50 backdrop-blur-sm rounded-xl border border-white/80 shadow-sm divide-y divide-gray-100">
+                  <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-sm rounded-xl border border-white/80 shadow-sm divide-y divide-gray-100">
                     {data.upNext.length > 0 ? (
                       data.upNext.map((track, i) => (
                         <TrackRow key={i} track={track} showTime={false} />
@@ -329,7 +329,7 @@ export default function WhatsPlayingPage() {
                   {/* Link to full schedule */}
                   <Link
                     href="/schedule"
-                    className="mt-4 inline-flex items-center gap-1 text-amber-700 hover:text-amber-900 font-medium transition-colors"
+                    className="mt-4 inline-flex items-center gap-1 text-amber-700 dark:text-amber-300 hover:text-amber-900 font-medium transition-colors"
                   >
                     <CalendarDays className="w-4 h-4" />
                     View Full Schedule

@@ -199,7 +199,7 @@ export default function FeatureFlagsPage() {
                             }`}
                           >
                             <span
-                              className={`absolute top-1 w-6 h-6 rounded-full bg-white transition-transform ${
+                              className={`absolute top-1 w-6 h-6 rounded-full bg-white dark:bg-zinc-900 transition-transform ${
                                 f.effective ? "translate-x-7" : "translate-x-1"
                               }`}
                             />
