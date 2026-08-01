@@ -29,17 +29,9 @@ The Hetzner box (~$5/mo) still bills. Nothing else is spending.
 
 These are business calls, not code ones. I have not guessed at any of them.
 
-**1. The published revenue figure is 27% too high.** The model is described
-everywhere as **$22,250/month per station**. From the constants that actually
-ship it computes to **$16,340**. Prices were cut ~35% and the story around them
-never moved. It is hard-coded on 7 pages, **5 customer-facing**: `/docs`,
-`/capacity`, `/station`, `/revenue/projections`, `/revenue`.
-
-Either restore the old prices ($50/$100/$200/$400 sponsor tiers) or restate the
-model at $16,340. Both defensible — $16,340 at 97% margin is still a strong
-story, and the lower prices are easier to sell to local businesses. Full detail
-in `docs/BUSINESS-MODEL-REVIEW.md`; re-check any time with
-`npx tsx scripts/verify-business-model.ts`.
+**1. ~~Revenue figure 27% too high~~ — RESOLVED.** Pricing ladder rebuilt, the
+headline figure is now computed, verifier reports 0 conflicts. See
+`docs/STATION-ECONOMICS.md`.
 
 **2. Three artists are on air but not name-cleared.** `Cypress Junction`
 (unchecked), `Sarah Martinez` (partial), `Callum Dreher` (pending — because you
@@ -51,15 +43,17 @@ I listed them on the artists page (their names are already public via the
 stream) but gave them **no profile page**. Get them cleared in LABEL and re-run
 `npx tsx scripts/import-roster.ts /tmp/mf-new.json --commit`.
 
-**3. Scout commissions are not modelled anywhere.** 25% lifetime on prepurchase
-conversions, 20% falling to 12%, plus 50% first-month sponsor referral bonus.
-None of it is subtracted from revenue. Material at 125 sponsors — worth settling
-before any operator revenue-share conversation.
+**3. ~~Scout commissions not modelled~~ — RESOLVED.** Now modelled at ~8%
+blended plus 2.9% processing, taken off the top in every scenario.
 
-**4. Railway still won't deploy.** `railway up` times out indexing the repo
-(678MB venv). Until it lands: the rights-gate fix, the analytics date-filter
-fix, and DJ voice tracks all stay undeployed. Needs a look in the dashboard, or
-add a `.dockerignore`.
+**4. ~~Railway won't deploy~~ — RESOLVED.** Deployed and verified. One thing
+left, and it needs the dashboard: connect the service to GitHub so production
+runs what is in `main` rather than the last laptop upload.
+
+**5. Connect price to entitlement.** `OPERATOR_PLANS` carries prices and
+enforces nothing; `TIERS` enforces limits and carries no price. Nothing makes
+paying more grant more. This is the last structural gap before selling a
+station to anyone.
 
 ---
 
