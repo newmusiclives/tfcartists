@@ -137,3 +137,67 @@ turning one song into dozens of plays), 280 phantom rows removed.
 - **Catalogue depth** — 55 tracks is a ~3 hour cycle; ~140 would be comfortable.
 - **22 LABEL tracks** held back on lyric-repetition validation — your editorial
   call.
+
+---
+
+# Update — Railway fixed, pricing restored
+
+## Railway is deployed ✅
+
+The blocker was **build artifacts, not dependencies**. Everyone assumed the
+678 MB `venv` and 595 MB `node_modules` — both already excluded. The real
+culprits were `frontend/.netlify` (242 MB) and `frontend/.next` (75 MB), listed
+nowhere. Excluding them took the tree to ~17 MB and it uploaded first try.
+
+Verified live: the analytics date filter returns 200 where every value used to
+return 500, and `song_path` now refuses major-label titles while resolving ours.
+
+**Still worth doing (needs the dashboard):** `railway status` reports
+`source: null` — the service has no repo attached, so production runs whatever
+was last uploaded from a laptop rather than what is in `main`. Connecting it to
+`newmusiclives/BETTERROBODJ` makes pushes deploy. Steps in
+`BETTERROBODJ/docs/RAILWAY-DEPLOY.md`.
+
+**To bring the DJs back** (station is off air, as you asked): uncomment
+`api_source` in `radio_production.liq` — it has restore instructions inline —
+and restart Liquidsoap. The API now only serves cleared audio, so it is safe.
+
+## Pricing restored — see `docs/STATION-ECONOMICS.md`
+
+The old ladder wasn't one: Tier 1 charged **$1.33/spot** against Local Hero's
+**$1.00**, so buying more cost more per spot. Fixed to a real volume ladder:
+
+| Tier | Spots | Price | Per spot |
+|---|---|---|---|
+| Local Hero | 30 | $45 | $1.50 |
+| Tier 1 | 60 | $79 | $1.32 |
+| Tier 2 | 150 | $169 | $1.13 |
+| Tier 3 | 300 | $279 | $0.93 |
+
+**Verifier now reports 0 conflicts.** The headline figure is computed, not
+hard-coded on seven pages.
+
+## Cost and profit per station
+
+**$65/month to run** at 3 DJ links per hour. Even at a link between *every
+song* it is $369 — under 11% of launch-stage revenue. Cost is not the
+constraint; sponsor count is.
+
+| | Launch (25 sponsors) | Established (60) | Full (125) |
+|---|---|---|---|
+| Net revenue | $3,536 | $8,890 | $18,751 |
+| **Profit** | **$3,471** | **$8,825** | **$18,686** |
+
+## What to charge local operators
+
+**$249/month + 10% of net, no setup fee.**
+
+| | Launch | Established | Full |
+|---|---|---|---|
+| Operator keeps | $2,934 (83%) | $7,752 (87%) | $16,627 (89%) |
+| Our profit | $538 | $1,073 | $2,059 |
+
+Two recommendations: **waive the monthly fee until a station clears
+$1,000/month** (costs us $65 to carry, removes the biggest objection), and
+**drop the old $500–$1,000 setup fee** — it recovers nothing real against a $65
+cost base and lands when the operator is least convinced.
