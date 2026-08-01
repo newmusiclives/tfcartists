@@ -80,8 +80,19 @@ export default async function AnalyticsPage() {
           <>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <Stat icon={<Music className="w-4 h-4" />} label="Plays" value={totals.plays.toLocaleString()} />
-              <Stat icon={<Users className="w-4 h-4" />} label="Artists aired" value={totals.artists.toLocaleString()} />
-              <Stat icon={<Music className="w-4 h-4" />} label="Distinct tracks" value={totals.tracks.toLocaleString()} />
+              <Stat
+                icon={<Users className="w-4 h-4" />}
+                label="Artists aired"
+                value={`${totals.artists} of ${totals.catalogueArtists}`}
+              />
+              {/* Played vs held. Showing only the played figure reads as a
+                  catalogue count and invites the conclusion that tracks are
+                  missing - which is exactly how it was first misread. */}
+              <Stat
+                icon={<Music className="w-4 h-4" />}
+                label="Tracks aired"
+                value={`${totals.tracks} of ${totals.catalogueTracks}`}
+              />
               <Stat icon={<Clock className="w-4 h-4" />} label="Hours of music" value={totals.hoursOfMusic.toLocaleString()} />
             </div>
 

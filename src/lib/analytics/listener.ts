@@ -16,6 +16,9 @@ export type Totals = {
   plays: number;
   artists: number;
   tracks: number;
+  /** Tracks in the cleared catalogue, for context against tracks PLAYED. */
+  catalogueTracks: number;
+  catalogueArtists: number;
   hoursOfMusic: number;
   firstPlay: Date | null;
   lastPlay: Date | null;
@@ -40,8 +43,24 @@ export async function getTotals(sinceDays: number): Promise<Totals> {
     FROM "TrackPlayback"
     WHERE "playedAt" >= ${since}
   `;
+  // "tracks" is how many DISTINCT tracks were played in the window, which is
+  // not the same as how many exist. Reporting it alone reads as a catalogue
+  // count and invites the reasonable conclusion that tracks are missing.
+  const cat = await prisma.song.groupBy({
+    by: ["artistName"],
+    where: {
+      rightsStatus: { in: ["owned_ai", "direct_licence", "public_domain"] },
+      retiredAt: null,
+      isActive: true,
+    },
+    _count: { _all: true },
+  });
+  const catalogueTracks = cat.reduce((n, c) => n + c._count._all, 0);
+
   const r = rows[0];
   return {
+    catalogueTracks,
+    catalogueArtists: cat.length,
     plays: Number(r?.plays ?? 0),
     artists: Number(r?.artists ?? 0),
     tracks: Number(r?.tracks ?? 0),

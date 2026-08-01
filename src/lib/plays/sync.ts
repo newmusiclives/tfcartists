@@ -181,6 +181,22 @@ export async function syncPlays(opts: {
     existing.map((e) => key(e.playedAt, e.trackTitle, e.artistName)),
   );
 
+  // Only record plays of music currently in the cleared catalogue.
+  //
+  // The playout database still holds 14,000 historical plays, most of them the
+  // old major-label catalogue. Without this guard an --all backfill would pull
+  // Kelly Clarkson and Johnny Cash straight back into royalty and fairness
+  // figures for music we have no right to.
+  const cleared = await prisma.song.groupBy({
+    by: ["artistName"],
+    where: {
+      rightsStatus: { in: ["owned_ai", "direct_licence", "public_domain"] },
+      retiredAt: null,
+      isActive: true,
+    },
+  });
+  const clearedArtists = new Set(cleared.map((c) => c.artistName.toLowerCase()));
+
   // dj_personality is "loretta_merrick"; the platform keys DJs by slug
   // "loretta-merrick". Unmatched personalities leave djId null rather than
   // guessing - the raw value is kept in metadata so nothing is lost.
@@ -190,6 +206,8 @@ export async function syncPlays(opts: {
   const fresh = [];
   let unmappedDjs = 0;
   for (const r of usable) {
+    if (!clearedArtists.has(r.artist_name!.trim().toLowerCase())) continue;
+
     const playedAt = parsePlayedAt(r.played_at);
     const k = key(playedAt, r.title!, r.artist_name!);
     if (seen.has(k)) continue;
