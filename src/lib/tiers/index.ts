@@ -38,6 +38,25 @@ export interface TierDefinition {
   };
   /** Flags this tier turns on by default */
   includedFlags: FlagKey[];
+  /**
+   * What the operator pays. Price lives WITH the entitlement deliberately.
+   *
+   * Prices and entitlements used to live in different files: OPERATOR_PLANS
+   * carried prices and enforced nothing, TIERS enforced limits and carried no
+   * price, and two more plan arrays were hard-coded inside /pricing and
+   * /operator/signup. Four sources, and they disagreed - a customer was quoted
+   * $200 for a plan the model priced at $150, granting 2 DJs on one page and 4
+   * in the code that actually gates DJ creation. Nothing connected paying more
+   * to getting more.
+   */
+  pricing: {
+    /** Public plan name. The tier id is internal. */
+    planName: string;
+    monthlyPrice: number;
+    /** Share of the station's NET revenue, on top of the monthly fee. */
+    revenueSharePct: number;
+    setupFee: number;
+  };
 }
 
 export const TIERS: Record<TierId, TierDefinition> = {
@@ -47,6 +66,11 @@ export const TIERS: Record<TierId, TierDefinition> = {
     description: "One station, 4 AI DJs, 128kbps stream.",
     limits: { djs: 4, stations: 1, bitrateKbps: 128 },
     includedFlags: [],
+    // $249 + 10% is the local-operator offer modelled in
+    // lib/calculations/operator-economics. No setup fee: against a $65/month
+    // cost base it recovers nothing real and lands at the moment the operator
+    // is least convinced.
+    pricing: { planName: "Launch", monthlyPrice: 249, revenueSharePct: 10, setupFee: 0 },
   },
   plus: {
     id: "plus",
@@ -55,6 +79,7 @@ export const TIERS: Record<TierId, TierDefinition> = {
       "Everything in Basic, plus the full DJ roster, HQ audio, listener requests and podcast replays.",
     limits: { djs: 12, stations: 1, bitrateKbps: 320 },
     includedFlags: ["extra_djs", "hq_stream", "live_requests", "podcast_replays"],
+    pricing: { planName: "Growth", monthlyPrice: 449, revenueSharePct: 8, setupFee: 0 },
   },
   pro: {
     id: "pro",
@@ -73,8 +98,40 @@ export const TIERS: Record<TierId, TierDefinition> = {
       "smart_clocks",
       "ai_show_recaps",
     ],
+    // Lower share at the top: an operator running ten stations is doing the
+    // selling at scale, and a flat percentage would punish exactly the
+    // behaviour we want.
+    pricing: { planName: "Network", monthlyPrice: 899, revenueSharePct: 5, setupFee: 0 },
   },
 };
+
+/**
+ * The public plan list. Pages must render THIS rather than declaring their own
+ * array - two of them used to, which is how the site came to quote three
+ * different prices for the same product.
+ */
+export function operatorPlans() {
+  return TIER_IDS.map((id) => {
+    const t = TIERS[id];
+    return {
+      id,
+      name: t.pricing.planName,
+      description: t.description,
+      monthlyPrice: t.pricing.monthlyPrice,
+      revenueSharePct: t.pricing.revenueSharePct,
+      setupFee: t.pricing.setupFee,
+      stations: t.limits.stations,
+      djs: t.limits.djs,
+      bitrateKbps: t.limits.bitrateKbps,
+      includedFlags: t.includedFlags,
+    };
+  });
+}
+
+/** What a given tier costs. Single source for billing and for display. */
+export function priceFor(tier: TierId) {
+  return TIERS[tier].pricing;
+}
 
 export const TIER_IDS = Object.keys(TIERS) as TierId[];
 

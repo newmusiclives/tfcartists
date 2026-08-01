@@ -1,56 +1,27 @@
 "use client";
 
+import { operatorPlans } from "@/lib/tiers";
+import { ARTIST_CAPACITY } from "@/lib/calculations/station-capacity";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Radio, Building2, ArrowRight, ArrowLeft, Loader2, Check, Star } from "lucide-react";
 
-const OPERATOR_PLANS = [
-  {
-    id: "launch",
-    name: "Launch",
-    price: 200,
-    fee: "15%",
-    setup: 500,
-    stations: 1,
-    djs: "2",
-    artists: 150,
-    recommended: false,
-  },
-  {
-    id: "growth",
-    name: "Growth",
-    price: 300,
-    fee: "10%",
-    setup: 500,
-    stations: 1,
-    djs: "6",
-    artists: 340,
-    recommended: true,
-  },
-  {
-    id: "scale",
-    name: "Scale",
-    price: 500,
-    fee: "7%",
-    setup: 1000,
-    stations: 3,
-    djs: "12",
-    artists: 500,
-    recommended: false,
-  },
-  {
-    id: "network",
-    name: "Network",
-    price: 1000,
-    fee: "5%",
-    setup: 0,
-    stations: 10,
-    djs: "Unlimited",
-    artists: 1000,
-    recommended: false,
-  },
-];
+// Plans come from TIERS - the same definition that enforces the limits and
+// bills the operator. This page used to declare its own array, which is how the
+// site ended up quoting $200 for a plan the model priced at $150 and promising
+// 2 DJs where the entitlement code grants 4.
+const OPERATOR_PLANS = operatorPlans().map((p, i) => ({
+  id: p.id,
+  name: p.name,
+  price: p.monthlyPrice,
+  fee: `${p.revenueSharePct}%`,
+  setup: p.setupFee,
+  stations: p.stations,
+  djs: String(p.djs),
+  artists: ARTIST_CAPACITY.TOTAL,
+  recommended: i === 1,
+}));
 
 export default function OperatorSignupPage() {
   const router = useRouter();

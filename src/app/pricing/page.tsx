@@ -1,5 +1,6 @@
 "use client";
 
+import { operatorPlans } from "@/lib/tiers";
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -22,82 +23,41 @@ import {
 
 type Audience = "operators" | "artists" | "sponsors";
 
-const OPERATOR_PLANS = [
-  {
-    id: "launch",
-    name: "Launch",
-    price: 200,
-    setup: 500,
-    description: "Perfect for getting started with your first station",
-    features: [
-      "1 automated station",
-      "2 host personalities",
-      "12hr/day live programming",
-      "5 operations teams",
-      "Basic imaging package",
-      "Embeddable web player",
-      "Sponsor ad management",
-      "15% platform fee on revenue",
-    ],
-    recommended: false,
-  },
-  {
-    id: "growth",
-    name: "Growth",
-    price: 300,
-    setup: 500,
-    description: "Most popular — full 24/7 station with more hosts",
-    features: [
-      "1 automated station",
-      "6 host personalities",
-      "24/7 live programming",
-      "5 operations teams",
-      "Pro imaging package",
-      "Embeddable web player",
-      "Sponsor ad management",
-      "Analytics dashboard",
-      "10% platform fee on revenue",
-    ],
-    recommended: true,
-  },
-  {
-    id: "scale",
-    name: "Scale",
-    price: 500,
-    setup: 1000,
-    description: "Multiple stations for networks and brands",
-    features: [
-      "Up to 3 stations",
-      "12 host personalities",
-      "24/7 live programming",
-      "5 operations teams per station",
-      "Enterprise imaging package",
-      "Custom branding & white-label",
-      "Priority support",
-      "7% platform fee on revenue",
-    ],
-    recommended: false,
-  },
-  {
-    id: "network",
-    name: "Network",
-    price: 1000,
-    setup: 0,
-    description: "Enterprise — unlimited scale with dedicated support",
-    features: [
-      "Up to 10 stations",
-      "Unlimited hosts",
-      "24/7 live programming",
-      "Full operations team suite",
-      "Enterprise imaging + custom voices",
-      "White-label everything",
-      "Dedicated account manager",
-      "5% platform fee on revenue",
-      "$0 setup fee",
-    ],
-    recommended: false,
-  },
-];
+// Derived from TIERS, which is the same definition that enforces the limits
+// and bills the operator. Previously this page declared its own array and
+// quoted $200 for a plan the model priced at $150, with a DJ count that
+// disagreed with the code gating DJ creation.
+//
+// Feature bullets are generated from the tier's real entitlements so a
+// capability cannot be advertised here without actually being granted.
+const FLAG_LABEL: Record<string, string> = {
+  extra_djs: "Full DJ roster",
+  hq_stream: "320kbps HQ audio",
+  live_requests: "Listener requests",
+  podcast_replays: "Podcast replays",
+  multi_station: "Multiple stations",
+  sponsor_self_serve: "Sponsor self-serve portal",
+  signature_voices: "Signature ElevenLabs voices",
+  smart_clocks: "Automatic clock building",
+  ai_show_recaps: "AI show recaps",
+};
+
+const OPERATOR_PLANS = operatorPlans().map((p, i) => ({
+  id: p.id,
+  name: p.name,
+  price: p.monthlyPrice,
+  setup: p.setupFee,
+  description: p.description,
+  features: [
+    `${p.stations} automated station${p.stations === 1 ? "" : "s"}`,
+    `${p.djs} host personalities`,
+    "24/7 live programming",
+    `${p.bitrateKbps}kbps stream`,
+    ...p.includedFlags.map((f) => FLAG_LABEL[f] ?? f),
+    `${p.revenueSharePct}% platform fee on revenue`,
+  ],
+  recommended: i === 1,
+}));
 
 const ARTIST_PLANS = [
   {

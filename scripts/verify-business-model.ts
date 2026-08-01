@@ -25,7 +25,7 @@ import {
   OPERATOR_PLANS,
   calculateMonthlyAirtime,
 } from "../src/lib/calculations/station-capacity";
-import { TIERS } from "../src/lib/tiers";
+import { TIERS, operatorPlans } from "../src/lib/tiers";
 import { execSync } from "node:child_process";
 
 type Finding = { severity: "conflict" | "warning" | "note"; area: string; detail: string };
@@ -198,25 +198,52 @@ if (capacitySum !== ARTIST_CAPACITY.TOTAL) {
 // ---------------------------------------------------------------------------
 // 4. Operator plans vs the entitlement system that actually enforces limits
 // ---------------------------------------------------------------------------
-console.log("\n  OPERATOR PLANS vs ENFORCED TIERS");
-console.log(`    OPERATOR_PLANS.STARTER : ${OPERATOR_PLANS.STARTER.maxDJs} DJs, ${OPERATOR_PLANS.STARTER.maxLiveHours}h/day, ${money(OPERATOR_PLANS.STARTER.monthlyPrice)}/mo`);
-console.log(`    TIERS.basic (enforced) : ${TIERS.basic.limits.djs} DJs, ${TIERS.basic.limits.bitrateKbps}kbps`);
-if (OPERATOR_PLANS.STARTER.maxDJs !== TIERS.basic.limits.djs) {
+console.log("\n  PRICE <-> ENTITLEMENT");
+for (const p of operatorPlans()) {
+  console.log(
+    `    ${p.name.padEnd(9)} ${money(p.monthlyPrice)}/mo + ${p.revenueSharePct}%   ${p.djs} DJs, ${p.stations} station(s), ${p.bitrateKbps}kbps`,
+  );
+}
+
+// Every plan must grant strictly more than the one below it, or a customer can
+// pay more for the same thing - which is the pricing inversion that already
+// happened once on the sponsor ladder.
+const plans = operatorPlans();
+for (let i = 1; i < plans.length; i++) {
+  const lower = plans[i - 1];
+  const higher = plans[i];
+  if (higher.monthlyPrice <= lower.monthlyPrice) {
+    add("conflict", "plan ladder", `${higher.name} costs no more than ${lower.name}`);
+  }
+  const grantsMore =
+    higher.djs > lower.djs ||
+    higher.stations > lower.stations ||
+    higher.bitrateKbps > lower.bitrateKbps ||
+    higher.includedFlags.length > lower.includedFlags.length;
+  if (!grantsMore) {
+    add(
+      "conflict",
+      "plan ladder",
+      `${higher.name} costs ${money(higher.monthlyPrice)} against ${lower.name}'s ${money(lower.monthlyPrice)} but grants nothing extra`,
+    );
+  }
+}
+
+// A page that declares its own plan array cannot be kept in step with the code
+// that enforces the limits. Three of them did, and the site quoted three
+// different prices for the same product.
+const rogue = execSync(
+  `grep -rln "^const OPERATOR_PLANS = \\[" src/app 2>/dev/null || true`,
+  { encoding: "utf8" },
+).trim().split("\n").filter(Boolean);
+if (rogue.length) {
   add(
     "conflict",
-    "DJ allowance",
-    `OPERATOR_PLANS.STARTER sells ${OPERATOR_PLANS.STARTER.maxDJs} DJs but TIERS.basic - the code that actually gates DJ creation - allows ${TIERS.basic.limits.djs}. ` +
-      `The agreed product is a 4-DJ basic station, so the marketing plan undersells what the platform grants.`,
+    "hard-coded plans",
+    `${rogue.length} page(s) declare their own plan array instead of using operatorPlans(): ${rogue.join(", ")}`,
   );
 }
-if (OPERATOR_PLANS.STARTER.maxLiveHours < 24) {
-  add(
-    "warning",
-    "live hours",
-    `STARTER is sold as ${OPERATOR_PLANS.STARTER.maxLiveHours}h/day, but nothing in the playout chain enforces an hours limit - ` +
-      `a station either runs 24/7 or it is off air. The cheapest plan therefore costs the same to serve as the dearest.`,
-  );
-}
+
 
 // ---------------------------------------------------------------------------
 // 5. Revenue vs cost
