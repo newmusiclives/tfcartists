@@ -6,7 +6,7 @@ import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { useStation } from "@/contexts/StationContext";
 import { ListenerCount } from "@/components/listener-count";
 
-const DEFAULT_STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-hq.mp3";
+const DEFAULT_STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-mobile.mp3";
 const NOW_PLAYING_URL = "/api/now-playing";
 const POLL_INTERVAL = 10_000;
 

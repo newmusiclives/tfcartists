@@ -42,7 +42,7 @@ const DEFAULT_STATION: StationInfo = {
   secondaryColor: process.env.NEXT_PUBLIC_SECONDARY_COLOR || "#c2410c",
   stationCode: process.env.NEXT_PUBLIC_STATION_CODE || "ncr",
   formatType: process.env.NEXT_PUBLIC_FORMAT_TYPE || "americana",
-  streamUrl: process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-hq.mp3",
+  streamUrl: process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-mobile.mp3",
   isActive: true,
 };
 

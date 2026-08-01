@@ -97,3 +97,32 @@
 .animate-slide-in {
   animation: slide-in 0.3s ease-out;
 }
+
+@layer base {
+  /*
+   * Dark-mode defaults for form controls.
+   *
+   * Tailwind preflight strips the browser's native input styling, so a field
+   * with no explicit classes renders white-on-white in dark mode with a border
+   * that fails against its own background - 131 invisible borders and ~50
+   * unreadable fields across the site. Fixing that in the base layer rather
+   * than in each component means anything WITH explicit dark: utilities still
+   * wins (utilities beat base), so deliberate styling is untouched and new
+   * forms are readable by default instead of by remembering.
+   *
+   * zinc-600 for the border, not zinc-700: on a zinc-800 field, zinc-700 only
+   * reaches 1.43:1, which reads as no border at all.
+   */
+  .dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  .dark textarea,
+  .dark select {
+    background-color: rgb(39 39 42);   /* zinc-800 */
+    color: rgb(244 244 245);           /* zinc-100 */
+    border-color: rgb(82 82 91);       /* zinc-600 */
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: rgb(161 161 170);           /* zinc-400 - 4.6:1 on zinc-800 */
+  }
+}

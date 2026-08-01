@@ -77,6 +77,29 @@ export function timeSlotFor(d: Date): string {
   return "evening";
 }
 
+/**
+ * Rows that are not an artist's music and must never count as a play.
+ *
+ * The playout engine writes an "Off Air" placeholder into its plays table when
+ * nothing is on, and station imaging carries the station name as its artist. On
+ * the first sync those made up 182 of 579 plays - 49% - so the top "artist" on
+ * the station was the station itself. That is not just an ugly chart: these
+ * rows feed royalty reporting and the fairness protocol, where a phantom play
+ * dilutes every real artist's share.
+ *
+ * The proper fix is for the playout API not to record them, which is committed
+ * but undeployed. Filtering here as well is correct regardless - this boundary
+ * should not trust the source to be clean.
+ */
+const OFF_AIR_TITLES = new Set(["off air", "offline", "station id", "unknown"]);
+const STATION_NAMES = new Set(["north country radio", "truefans radio", "unknown"]);
+
+function isNotMusic(r: PlayRow): boolean {
+  const title = (r.title ?? "").trim().toLowerCase();
+  const artist = (r.artist_name ?? "").trim().toLowerCase();
+  return OFF_AIR_TITLES.has(title) || STATION_NAMES.has(artist);
+}
+
 const key = (playedAt: Date, title: string, artist: string) =>
   `${playedAt.toISOString()}|${title.toLowerCase()}|${artist.toLowerCase()}`;
 
@@ -140,7 +163,9 @@ export async function syncPlays(opts: {
     : null;
 
   const rows = await fetchPlays(api, since, opts.all ?? false, opts.onProgress);
-  const usable = rows.filter((r) => r.title && r.artist_name && r.played_at);
+  const usable = rows
+    .filter((r) => r.title && r.artist_name && r.played_at)
+    .filter((r) => !isNotMusic(r));
 
   const earliest = usable.reduce<Date | null>((min, r) => {
     const d = parsePlayedAt(r.played_at);

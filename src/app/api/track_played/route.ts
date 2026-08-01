@@ -33,6 +33,26 @@ async function handleTrackPlayed(artist: string | null, title: string | null) {
     return NextResponse.json({ error: "artist and title required" }, { status: 400 });
   }
 
+  // Reject anything that is not an artist's music.
+  //
+  // This endpoint recorded whatever it was handed, and callers hand it the
+  // current now-playing value - which is the literal string "Off Air" when the
+  // station is stopped. With the station off it logged one phantom play every
+  // ten seconds: 182 rows in half an hour, making the station itself the
+  // most-played "artist" at 49% of all airplay.
+  //
+  // These rows feed royalty reporting and the fairness protocol, where a
+  // phantom play dilutes every real artist's share, so this is a data-integrity
+  // guard rather than a cosmetic one.
+  const NOT_MUSIC_TITLES = new Set(["off air", "offline", "station id", "unknown"]);
+  const NOT_MUSIC_ARTISTS = new Set(["north country radio", "truefans radio", "unknown"]);
+  if (
+    NOT_MUSIC_TITLES.has(title.trim().toLowerCase()) ||
+    NOT_MUSIC_ARTISTS.has(artist.trim().toLowerCase())
+  ) {
+    return NextResponse.json({ ok: true, recorded: false, reason: "not_music" });
+  }
+
   try {
     const song = await prisma.song.findFirst({
       where: { artistName: artist, title },
@@ -63,6 +83,22 @@ async function handleTrackPlayed(artist: string | null, title: string | null) {
             ? "evening"
             : "late_night";
     try {
+      // Callers poll rather than fire once per track change, so the same track
+      // arrives repeatedly while it is playing. Without this, one three-minute
+      // song becomes dozens of plays and the fairness figures follow whoever
+      // happens to be on air when a listener has the page open.
+      const recent = await prisma.trackPlayback.findFirst({
+        where: {
+          trackTitle: title,
+          artistName: artist,
+          playedAt: { gte: new Date(Date.now() - 60_000) },
+        },
+        select: { id: true },
+      });
+      if (recent) {
+        return NextResponse.json({ ok: true, recorded: false, reason: "duplicate" });
+      }
+
       await prisma.trackPlayback.create({
         data: {
           trackTitle: title,

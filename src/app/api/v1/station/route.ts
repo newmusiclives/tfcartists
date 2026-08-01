@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireApiKey } from "@/lib/api/api-key-auth";
 import { prisma } from "@/lib/db";
+import { streamUrlFor } from "@/lib/stream";
 
 export const dynamic = "force-dynamic";
-
-const STREAM_URL = process.env.NEXT_PUBLIC_STREAM_URL || "/stream/americana-hq.mp3";
 
 /**
  * GET /api/v1/station
@@ -62,7 +61,9 @@ export async function GET(request: NextRequest) {
           genre: station.genre,
           primaryColor: station.primaryColor,
           secondaryColor: station.secondaryColor,
-          streamUrl: STREAM_URL,
+          // 320k only when the hq_stream addon is on for this station;
+          // otherwise the standard 128k mount.
+          streamUrl: await streamUrlFor(stationId),
           isActive: station.isActive,
         },
         timestamp: new Date().toISOString(),
