@@ -195,7 +195,7 @@ const LAUNCH_PHASES: Phase[] = [
     color: "purple",
     actions: [
       { id: "s1", label: "Riley scales to 340 total artists (272 FREE + 68 paid)", team: "riley", href: "/riley", detail: "Full artist pipeline: discovery → outreach → onboard → tier upgrade" },
-      { id: "s2", label: "Harper scales to 125 active sponsors", team: "harper", href: "/harper", detail: "Full sponsor pipeline: prospect → pitch → close → renew. Target: $22,250/mo ad revenue" },
+      { id: "s2", label: "Harper scales to 125 active sponsors", team: "harper", href: "/harper", detail: "Full sponsor pipeline: prospect → pitch → close → renew. Target: $17,845/mo ad revenue" },
       { id: "s3", label: "Elliot drives 1,250 DAU with 52% retention", team: "elliot", href: "/elliot", detail: "Viral content (50+ TikTok/Reels), referral program, community events" },
       { id: "s4", label: "Cassidy manages 1,000+ tracks with quality curation", team: "cassidy", href: "/cassidy", detail: "Submissions panel, genre diversity, rotation optimization, DJ feedback" },
       { id: "s5", label: "Press & media outreach — 5+ blog/media mentions", team: "elliot", detail: "Story angles: \"Radio that pays artists 80%\", \"AI-powered human-heart radio\"" },
@@ -225,7 +225,7 @@ const KPI_MILESTONES = [
   { period: "Week 1", dau: 300, artists: 50, sponsors: 10, revenue: "$2,000" },
   { period: "Month 1", dau: 800, artists: 200, sponsors: 50, revenue: "$10,000" },
   { period: "Month 2", dau: 1000, artists: 280, sponsors: 90, revenue: "$16,000" },
-  { period: "Month 3", dau: 1250, artists: 340, sponsors: 125, revenue: "$22,250" },
+  { period: "Month 3", dau: 1250, artists: 340, sponsors: 125, revenue: "$17,845" },
 ];
 
 // ─── Component ─────────────────────────────────────────────────────
@@ -562,7 +562,7 @@ export default function LaunchPlanPage() {
                 <Building2 className="w-5 h-5 text-green-600 dark:text-green-300" />
                 <span className="font-bold text-green-700 dark:text-green-300">Sponsor Revenue</span>
               </div>
-              <div className="text-3xl font-bold text-green-700 dark:text-green-300">$22,250</div>
+              <div className="text-3xl font-bold text-green-700 dark:text-green-300">$17,845</div>
               <div className="text-sm text-green-600 dark:text-green-300 mt-1">125 sponsors &times; avg $178/mo</div>
               <div className="mt-3 space-y-1 text-sm">
                 <div className="flex justify-between text-green-700 dark:text-green-300">

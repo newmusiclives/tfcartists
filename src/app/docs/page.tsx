@@ -154,7 +154,7 @@ function LocalhostGuide() {
             <p className="font-semibold mb-2">The Magic Formula:</p>
             <ul className="list-disc ml-6 space-y-1 text-sm">
               <li>Sponsors pay for ads → 80% to artist pool</li>
-              <li>$22,250 sponsor revenue = $17,800 to artists</li>
+              <li>$17,845 sponsor revenue at full capacity</li>
               <li>Artists get shares based on tier</li>
               <li>TIER_20 artist: 25 shares × $2.50 = $62.50/month</li>
             </ul>
@@ -172,7 +172,7 @@ function LocalhostGuide() {
           <div className="bg-gray-50 dark:bg-zinc-900 rounded p-4 mb-3">
             <p className="font-semibold mb-2">Key Metrics:</p>
             <ul className="list-disc ml-6 space-y-1 text-sm">
-              <li>Monthly Recurring Revenue (MRR): $22,250</li>
+              <li>Monthly Recurring Revenue (MRR) at full capacity: $17,845</li>
               <li>125 active sponsors</li>
               <li>Revenue by tier breakdown</li>
               <li>Pipeline conversion stats</li>

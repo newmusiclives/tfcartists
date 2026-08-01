@@ -1,5 +1,6 @@
 "use client";
 
+import { stationRevenuePotential } from "@/lib/calculations/station-capacity";
 import { useState } from "react";
 import { SharedNav } from "@/components/shared-nav";
 import { DollarSign, TrendingUp, Users, Building2, PieChart, ArrowRight, Radio } from "lucide-react";
@@ -51,7 +52,7 @@ export default function RevenueBreakdownPage() {
   };
 
   const totalSponsors = 88;
-  const totalSponsorRevenue = 22250;
+  const totalSponsorRevenue = stationRevenuePotential().total;
   const artistPoolContribution = totalSponsorRevenue * 0.8; // 80%
   const stationRevenue = totalSponsorRevenue * 0.2; // 20%
 

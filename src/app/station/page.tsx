@@ -179,7 +179,7 @@ export default async function StationPage() {
               <h3 className="text-xl font-bold mb-5 text-white">Revenue Model</h3>
               <div className="space-y-3 text-amber-50">
                 <Row label="Artist Subscriptions" value="$3,900" />
-                <Row label="Sponsor Revenue" value="$22,250" />
+                <Row label="Sponsor Revenue" value="$17,845" />
                 <div className="text-amber-200/80">
                   <Row label="  Artist Pool (80%)" value="$17,800" />
                   <Row label="  Station Ops (20%)" value="$4,450" />

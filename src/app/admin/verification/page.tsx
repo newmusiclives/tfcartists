@@ -1,5 +1,6 @@
 "use client";
 
+import { stationRevenuePotential } from "@/lib/calculations/station-capacity";
 import { useState } from "react";
 import { SharedNav } from "@/components/shared-nav";
 import {
@@ -68,7 +69,7 @@ export default function VerificationPage() {
     } : {
       revenue: {
         artistSubs: 10000,
-        sponsors: 22250,
+        sponsors: stationRevenuePotential().total,
         premium: 3000,
         platformFees: 333,
         sponsored: 500,

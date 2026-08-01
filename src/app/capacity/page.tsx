@@ -225,7 +225,7 @@ export default function StationCapacityPage() {
             <div className="bg-white dark:bg-zinc-900 rounded-lg p-6">
               <h3 className="font-semibold text-lg mb-2">Optimal 77% Capacity Model with Local Hero</h3>
               <p className="text-gray-600 dark:text-zinc-400 text-sm mb-4">
-                125 total sponsors generating $22,250/month (base + premium) with $50 entry tier
+                125 total sponsors generating $17,845/month (base + premium) with a $45 entry tier
               </p>
               <div className="grid grid-cols-4 gap-4 mb-4">
                 <div className="text-center">

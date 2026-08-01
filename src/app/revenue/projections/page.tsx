@@ -1,5 +1,6 @@
 "use client";
 
+import { stationRevenuePotential } from "@/lib/calculations/station-capacity";
 import { useState } from "react";
 import { SharedNav } from "@/components/shared-nav";
 import {
@@ -88,7 +89,7 @@ export default function RevenueProjectionsPage() {
         SILVER: 45 * 250,
         GOLD: 25 * 400,
         PLATINUM: 10 * 500,
-        total: 22250,
+        total: stationRevenuePotential().total,
       },
       listenerPremium: 400 * 3, // $1,200 - 4% conversion (realistic for niche radio)
       platformFees: 333, // Transaction fees on donations/tips (2%)
@@ -96,7 +97,9 @@ export default function RevenueProjectionsPage() {
       total: 34283,
     },
     expenses: {
-      artistPool: 22250 * 0.8, // $17,800 - 80% of sponsor revenue (PROTECTED)
+      // 80% of sponsor revenue is protected for artists. Derived, not
+      // restated - the literal here went stale with the price change.
+      artistPool: stationRevenuePotential().total * 0.8,
       scoutCommissions: 3000, // Tiered system with per-tier caps
       gpCommissions: 1833, // Multi-stream earning model
       sponsorAcquisition: 500, // Referral bonuses (50% of first month, amortized)

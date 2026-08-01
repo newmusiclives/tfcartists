@@ -81,14 +81,54 @@ export const SPONSOR_AD_SPOTS = {
   TIER_3: 300,     // 10 spots/day × 30 days
 } as const;
 
+/**
+ * Sponsor pricing — a proper volume ladder.
+ *
+ * The previous prices were not a ladder at all. Tier 1 charged $1.33 a spot
+ * against Local Hero's $1.00, so buying MORE airtime cost more per spot, and
+ * Tiers 2 and 3 offered no discount over the entry tier whatsoever. A sponsor
+ * doing the arithmetic finds the cheapest way to buy 60 spots is two Local
+ * Hero packages, which is a worse outcome for everyone: more invoices, more
+ * admin, and no reason to ever move up.
+ *
+ * Every step now costs less per spot than the one below it:
+ *
+ *   Local Hero   30 spots   $45   $1.50/spot
+ *   Tier 1       60 spots   $79   $1.32/spot
+ *   Tier 2      150 spots  $169   $1.13/spot
+ *   Tier 3      300 spots  $279   $0.93/spot
+ *
+ * Absolute level is set for a local advertiser, not a metro buy: $45/month for
+ * a daily mention is comparable to a boosted social post, which is the budget
+ * this actually competes with. It is deliberately easy to say yes to, because
+ * the constraint on this model is sponsor COUNT, not price - see
+ * REVENUE_SCENARIOS.
+ */
 export const SPONSOR_PRICING = {
-  LOCAL_HERO: 30,
-  TIER_1: 80,
-  TIER_2: 150,
-  TIER_3: 300,
-  NEWS_WEATHER: 300,
-  SPONSORED_HOUR: 200,
-  WEEK_TAKEOVER: 600,
+  LOCAL_HERO: 45,
+  TIER_1: 79,
+  TIER_2: 169,
+  TIER_3: 279,
+  NEWS_WEATHER: 350,
+  SPONSORED_HOUR: 250,
+  WEEK_TAKEOVER: 750,
+} as const;
+
+/**
+ * What a station realistically sells, not what its inventory could hold.
+ *
+ * Every revenue figure on this platform has been quoted at FULL capacity - 125
+ * sponsors. That is a lot of local businesses; a small commercial station
+ * typically carries 20-60 advertisers, and reaching 125 is a multi-year sales
+ * outcome, not a launch state. Quoting the ceiling to a prospective operator
+ * sets them up to feel misled in month two.
+ *
+ * These are the numbers to plan and price against.
+ */
+export const REVENUE_SCENARIOS = {
+  LAUNCH:      { label: "Launch (months 1-6)",  sponsorFill: 0.20, artistFill: 0.15 },
+  ESTABLISHED: { label: "Established (year 1)", sponsorFill: 0.48, artistFill: 0.45 },
+  FULL:        { label: "Full capacity",        sponsorFill: 1.0,  artistFill: 1.0  },
 } as const;
 
 // OPERATOR PLANS - TrueFans Platform Pricing
@@ -99,10 +139,13 @@ export const OPERATOR_PLANS = {
     platformFeePercent: 15,
     setupFee: 500,
     maxStations: 1,
-    maxDJs: 2,
+    // 4, not 2: TIERS.basic is the code that actually gates DJ creation and it
+    // grants 4. The agreed product is a 4-DJ basic station, so selling 2 both
+    // undersold it and disagreed with what the platform handed over.
+    maxDJs: 4,
     maxArtists: 150,
-    maxLiveHours: 12,
-    features: ["1 station", "2 AI DJs", "150 artists", "12hr/day live", "Basic analytics"],
+    maxLiveHours: 24,
+    features: ["1 station", "4 AI DJs", "150 artists", "24/7 live", "Basic analytics"],
   },
   PRO: {
     name: "Growth",
@@ -315,8 +358,14 @@ export function calculateSponsorCapacity(sponsorDistribution: {
 }
 
 /**
- * Calculate maximum sponsor capacity
- * OPTIMAL MODEL: 77% capacity = 125 sponsors generating $22,250/month with Local Hero entry tier
+ * Calculate maximum sponsor capacity.
+ *
+ * The "optimal" mix is 125 sponsors at ~77% of ad inventory, which leaves
+ * headroom for premium takeovers. Deliberately NO revenue figure in this
+ * comment: the previous one asserted $22,250 and stayed put through a price
+ * change, so the code and its own documentation disagreed by 27% while five
+ * customer-facing pages quoted the wrong one. Call stationRevenuePotential()
+ * instead of writing the number down anywhere.
  */
 export function calculateMaxSponsorCapacity() {
   const monthly = calculateMonthlyAirtime();
@@ -340,10 +389,8 @@ export function calculateMaxSponsorCapacity() {
       revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_3) * SPONSOR_PRICING.TIER_3,
     },
     optimal: {
-      // OPTIMAL 77% CAPACITY MODEL WITH LOCAL HERO ENTRY TIER
-      // 45 Local Hero ($2,250), 28 Tier 1 ($2,800), 35 Tier 2 ($7,000), 17 Tier 3 ($6,800) = $18,850
-      // Plus Premium ($3,400) = $22,250 total
-      // 125 sponsors, 13,380 spots (77.4% capacity)
+      // 125 sponsors using 13,380 of 17,280 monthly spots (77.4%).
+      // Counts only - revenue is derived, never restated here.
       LOCAL_HERO: 45,
       TIER_1: 28,
       TIER_2: 35,
@@ -388,14 +435,15 @@ export function calculateMaxSponsorCapacity() {
 }
 
 /**
- * Calculate premium sponsor opportunities
- * Master Overview: News & Weather $400, Sponsored Hours $300, Week Takeover $800
+ * Calculate premium sponsor opportunities.
+ *
+ * Prices come from SPONSOR_PRICING; they used to be restated here and drifted.
  */
 export function calculatePremiumSponsorRevenue() {
   // Master Overview specs
-  const newsWeatherRevenue = STATION_CONSTRAINTS.NEWS_WEATHER_SPONSORS * SPONSOR_PRICING.NEWS_WEATHER; // 2 × $400 = $800/mo
-  const sponsoredHoursRevenue = 6 * SPONSOR_PRICING.SPONSORED_HOUR; // 6 slots × $300 = $1,800/mo
-  const weekTakeoverRevenue = STATION_CONSTRAINTS.MAX_WEEK_TAKEOVERS_PER_MONTH * SPONSOR_PRICING.WEEK_TAKEOVER; // 1 × $800 = $800/mo
+  const newsWeatherRevenue = STATION_CONSTRAINTS.NEWS_WEATHER_SPONSORS * SPONSOR_PRICING.NEWS_WEATHER;
+  const sponsoredHoursRevenue = 6 * SPONSOR_PRICING.SPONSORED_HOUR;
+  const weekTakeoverRevenue = STATION_CONSTRAINTS.MAX_WEEK_TAKEOVERS_PER_MONTH * SPONSOR_PRICING.WEEK_TAKEOVER;
 
   return {
     newsWeather: {
@@ -413,7 +461,7 @@ export function calculatePremiumSponsorRevenue() {
       pricePerWeek: SPONSOR_PRICING.WEEK_TAKEOVER,
       monthlyRevenue: weekTakeoverRevenue,
     },
-    totalPremiumRevenue: newsWeatherRevenue + sponsoredHoursRevenue + weekTakeoverRevenue, // $3,400/mo
+    totalPremiumRevenue: newsWeatherRevenue + sponsoredHoursRevenue + weekTakeoverRevenue,
   };
 }
 
@@ -489,4 +537,17 @@ export function calculatePlatformRevenue(
     operatorNetRevenue: Math.round((operatorMonthlyRevenue - platformFee) * 100) / 100,
     setupFee: planConfig.setupFee,
   };
+}
+
+/**
+ * The station's full-capacity sponsor revenue: base mix plus premium.
+ *
+ * This is the ONLY place the headline figure should come from. It exists
+ * because the number was hard-coded on seven pages and went stale on all of
+ * them at once when prices changed.
+ */
+export function stationRevenuePotential() {
+  const sponsors = calculateMaxSponsorCapacity().optimal.revenue;
+  const premium = calculatePremiumSponsorRevenue().totalPremiumRevenue;
+  return { sponsors, premium, total: sponsors + premium };
 }
