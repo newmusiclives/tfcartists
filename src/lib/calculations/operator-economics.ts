@@ -150,6 +150,11 @@ export type StationEconomics = {
   capacityUsedPct: number;
 };
 
+/** Combined monthly cost of the five AI team automations. */
+export function teamCostTotal(): number {
+  return TEAMS.reduce((n, t) => n + t.monthlyCost, 0);
+}
+
 export function stationEconomics(
   scenario: keyof typeof REVENUE_SCENARIOS,
   voiceTracksPerHour = 3,
@@ -164,7 +169,11 @@ export function stationEconomics(
   const processing = grossRevenue * PAYMENT_PROCESSING;
   const netRevenue = grossRevenue - commissions - processing;
 
-  const cost = stationCost(voiceTracksPerHour).total;
+  // Station cost is the on-air pipeline. The five AI teams are a SEPARATE
+  // monthly cost - the daily automation jobs that find sponsors, recruit
+  // artists and review submissions - and omitting them understated the true
+  // cost to serve by roughly half.
+  const cost = stationCost(voiceTracksPerHour).total + teamCostTotal();
   const profit = netRevenue - cost;
 
   const monthlySpots = 24 * STATION_CONSTRAINTS.MAX_AD_SPOTS_PER_HOUR * 30;
@@ -231,5 +240,110 @@ export function operatorOutcome(
     platformProfit: platformTake - e.cost,
     operatorKeeps,
     operatorMarginPct: e.netRevenue > 0 ? (operatorKeeps / e.netRevenue) * 100 : 0,
+  };
+}
+
+// --- THE AI TEAMS ----------------------------------------------------------
+/**
+ * What each AI team does, what it earns, and what it costs to run.
+ *
+ * Five teams run as daily cron jobs. Only two of them generate revenue
+ * directly; the other three exist to make that revenue possible or defensible.
+ * Worth being explicit about, because "five AI teams" reads like five income
+ * streams and it is two.
+ *
+ * Cost is an ESTIMATE from typical daily job size (roughly ten Claude calls of
+ * ~4k tokens each). It is bounded regardless: AI_DAILY_SPEND_LIMIT is $12/day
+ * and AI_MONTHLY_BUDGET $250/month, so total team spend cannot exceed those
+ * whatever the estimate turns out to be.
+ */
+const CLAUDE_BLENDED_PER_M = 9.0; // ~1200 in / 800 out at $3 / $15
+const TEAM_CALLS_PER_DAY = 10;
+const TEAM_TOKENS_PER_CALL = 4000;
+
+const teamMonthlyCost = (multiplier = 1) =>
+  ((TEAM_CALLS_PER_DAY * TEAM_TOKENS_PER_CALL * 30) / 1_000_000) *
+  CLAUDE_BLENDED_PER_M *
+  multiplier;
+
+export type Team = {
+  key: string;
+  name: string;
+  owns: string;
+  /** "direct" teams bill someone; "enabling" teams make that billing possible. */
+  kind: "direct" | "enabling";
+  revenueAtFull: (fill: number) => number;
+  monthlyCost: number;
+  built: string;
+  missing: string;
+};
+
+export const TEAMS: Team[] = [
+  {
+    key: "harper",
+    name: "Harper — Sponsors",
+    owns: "Local sponsor pipeline: prospect, pitch, close, renew, invoice",
+    kind: "direct",
+    revenueAtFull: (fill) => sponsorRevenueAtFill(fill).revenue + premiumRevenueAtFill(fill),
+    // Highest volume: outreach drafting is the most token-hungry job.
+    monthlyCost: teamMonthlyCost(1.5),
+    built: "Pipeline, inventory, outreach, billing, ROI email, invoice template",
+    missing: "sponsor_self_serve flag unwired — every sale is manual",
+  },
+  {
+    key: "riley",
+    name: "Riley — Artists",
+    owns: "Artist recruitment and the paid airplay tiers",
+    kind: "direct",
+    revenueAtFull: (fill) => artistRevenueAtFill(fill),
+    monthlyCost: teamMonthlyCost(1.2),
+    built: "Discovery, outreach, pipeline, pool calculator, upgrade opportunities",
+    missing: "No submission → payment flow; tiers are not purchasable",
+  },
+  {
+    key: "cassidy",
+    name: "Cassidy — Review panel",
+    owns: "Quality and rights gate on everything entering rotation",
+    kind: "enabling",
+    revenueAtFull: () => 0,
+    monthlyCost: teamMonthlyCost(1),
+    built: "Submission review, rotation management, tier management",
+    missing: "Not wired to the rights model — reviews quality, not clearance",
+  },
+  {
+    key: "parker",
+    name: "Parker — Programming",
+    owns: "Clocks, scheduling and traffic — what airs when",
+    kind: "enabling",
+    revenueAtFull: () => 0,
+    monthlyCost: teamMonthlyCost(1),
+    built: "Programming, music, traffic, listener views",
+    missing: "smart_clocks flag unwired — clocks are hand-built",
+  },
+  {
+    key: "elliot",
+    name: "Elliot — Listeners",
+    owns: "Audience growth, which is what sponsor rates ultimately rest on",
+    kind: "enabling",
+    revenueAtFull: () => 0,
+    monthlyCost: teamMonthlyCost(1.3),
+    built: "Campaigns, community, content, analytics",
+    missing: "No listener metrics feed — campaigns cannot be measured",
+  },
+];
+
+export function teamBreakdown(scenario: keyof typeof REVENUE_SCENARIOS) {
+  const s = REVENUE_SCENARIOS[scenario];
+  return TEAMS.map((t) => ({
+    ...t,
+    revenue: t.revenueAtFull(t.key === "riley" ? s.artistFill : s.sponsorFill),
+  }));
+}
+
+export function teamTotals(scenario: keyof typeof REVENUE_SCENARIOS) {
+  const rows = teamBreakdown(scenario);
+  return {
+    revenue: rows.reduce((n, r) => n + r.revenue, 0),
+    cost: rows.reduce((n, r) => n + r.monthlyCost, 0),
   };
 }

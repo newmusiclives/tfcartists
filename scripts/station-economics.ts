@@ -7,6 +7,8 @@
  *   npx tsx scripts/station-economics.ts
  */
 import {
+  teamBreakdown,
+  teamCostTotal,
   stationCost,
   stationEconomics,
   operatorOutcome,
@@ -30,7 +32,15 @@ console.log(`    Claude scripts    ${pad(m(c.scripts), 8)}`);
 console.log(`    OpenAI TTS        ${pad(m(c.tts), 8)}`);
 console.log(`    features/imaging  ${pad(m(c.features), 8)}`);
 console.log(`    infrastructure    ${pad(m(c.infrastructure), 8)}`);
-console.log(`    TOTAL             ${pad(m(c.total), 8)} / month`);
+console.log(`    subtotal          ${pad(m(c.total), 8)}`);
+console.log(`    AI teams (5 jobs) ${pad(m(teamCostTotal()), 8)}`);
+console.log(`    TRUE COST         ${pad(m(c.total + teamCostTotal()), 8)} / month`);
+
+console.log("\n  WHAT EACH AI TEAM OWNS  (at full capacity)");
+console.log(`    ${"team".padEnd(26)}${"kind".padEnd(10)}${pad("revenue", 9)}${pad("cost", 8)}`);
+for (const t of teamBreakdown("FULL")) {
+  console.log(`    ${t.name.padEnd(26)}${t.kind.padEnd(10)}${pad(m(t.revenue), 9)}${pad(m(t.monthlyCost), 8)}`);
+}
 
 console.log("\n  COST SENSITIVITY  (talk density is the only real lever)");
 console.log(`    ${"links/hr".padEnd(10)}${pad("links/day", 11)}${pad("cost", 9)}`);
