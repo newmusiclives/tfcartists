@@ -1,6 +1,12 @@
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { notifySubscriptionActivated, notifyEarningsAvailable } from "@/lib/messaging/notifications";
+import {
+  AIRPLAY_TIER_TERMS,
+  tierAmountInCents,
+  tierPlanLabel,
+  type AirplayTierKey,
+} from "@/lib/radio/airplay-tiers";
 
 /** Thrown when a webhook signature fails verification, so callers can answer 401. */
 export class InvalidWebhookSignatureError extends Error {
@@ -148,14 +154,12 @@ class ManifestFinancial {
     email: string;
     name: string;
   }): Promise<{ subscriptionId: string; checkoutUrl: string }> {
-    const tierPricing = {
-      TIER_5: { amount: 500, name: "$5/month - 5 shares" },
-      TIER_20: { amount: 2000, name: "$20/month - 25 shares" },
-      TIER_50: { amount: 5000, name: "$50/month - 75 shares" },
-      TIER_120: { amount: 12000, name: "$120/month - 200 shares" },
+    // Derived, never typed out here. This table used to be hardcoded and had
+    // drifted 20-25% above the prices /airplay displays - see airplay-tiers.ts.
+    const pricing = {
+      amount: tierAmountInCents(params.tier),
+      name: tierPlanLabel(params.tier),
     };
-
-    const pricing = tierPricing[params.tier];
 
     logger.info("Creating airplay subscription", {
       artistId: params.artistId,
@@ -453,15 +457,16 @@ class ManifestFinancial {
         if (data.metadata?.type === "airplay" && data.metadata?.artistId) {
           const artist = await prisma.artist.findUnique({ where: { id: data.metadata.artistId } });
           if (artist?.email) {
-            const tierShares: Record<string, number> = { TIER_5: 5, TIER_20: 25, TIER_50: 75, TIER_120: 200 };
-            const tierPrices: Record<string, number> = { TIER_5: 5, TIER_20: 20, TIER_50: 50, TIER_120: 120 };
-            const tier = data.metadata.tier || "TIER_5";
+            const tier = (data.metadata.tier || "TIER_5") as AirplayTierKey;
+            const terms = AIRPLAY_TIER_TERMS[tier] ?? AIRPLAY_TIER_TERMS.TIER_5;
+            // The activation email quotes the price back to the artist, so it
+            // has to come from the same table the charge did.
             notifySubscriptionActivated({
               email: artist.email,
               name: artist.name,
               tier,
-              amount: tierPrices[tier] || 5,
-              shares: tierShares[tier] || 5,
+              amount: terms.price,
+              shares: terms.shares,
             });
           }
         }

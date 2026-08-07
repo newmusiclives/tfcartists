@@ -5,6 +5,13 @@
  */
 
 import { prisma } from "@/lib/db";
+import { AIRPLAY_TIER_TERMS } from "@/lib/radio/airplay-tiers";
+import {
+  ARTIST_POOL_SPLIT,
+  SPONSOR_CHURN_RESERVE,
+  MIN_PER_SHARE_VALUE,
+  MAX_PER_SHARE_VALUE,
+} from "@/lib/radio/pool-policy";
 
 export type AirplayTier = "FREE" | "TIER_5" | "TIER_20" | "TIER_50" | "TIER_120";
 
@@ -14,8 +21,7 @@ export type AirplayTier = "FREE" | "TIER_5" | "TIER_20" | "TIER_50" | "TIER_120"
 export const AIRPLAY_TIERS = {
   FREE: {
     name: "Free Airplay",
-    price: 0,
-    shares: 1,
+    ...AIRPLAY_TIER_TERMS.FREE,
     description: "Get discovered — 1 play/month, station promotion",
     features: [
       "Your track in rotation",
@@ -26,8 +32,7 @@ export const AIRPLAY_TIERS = {
   },
   TIER_5: {
     name: "Bronze Airplay",
-    price: 5,
-    shares: 5,
+    ...AIRPLAY_TIER_TERMS.TIER_5,
     description: "Buy a coffee, get on the radio — 5 plays/month",
     features: [
       "Everything in Free",
@@ -38,8 +43,7 @@ export const AIRPLAY_TIERS = {
   },
   TIER_20: {
     name: "Silver Airplay",
-    price: 15,
-    shares: 20,
+    ...AIRPLAY_TIER_TERMS.TIER_20,
     description: "Less than a Spotify playlist push — 20 plays/month",
     features: [
       "Everything in Bronze",
@@ -51,8 +55,7 @@ export const AIRPLAY_TIERS = {
   },
   TIER_50: {
     name: "Gold Airplay",
-    price: 40,
-    shares: 65,
+    ...AIRPLAY_TIER_TERMS.TIER_50,
     description: "Less than Netflix — 65 plays/month, heavy rotation",
     features: [
       "Everything in Silver",
@@ -65,8 +68,7 @@ export const AIRPLAY_TIERS = {
   },
   TIER_120: {
     name: "Platinum Airplay",
-    price: 100,
-    shares: 250,
+    ...AIRPLAY_TIER_TERMS.TIER_120,
     description: "Power rotation — 250 plays/month, VIP events",
     features: [
       "Everything in Gold",
@@ -78,7 +80,7 @@ export const AIRPLAY_TIERS = {
       "Direct fan messaging",
     ],
   },
-} as const;
+};
 
 /**
  * Get shares for a tier
@@ -154,11 +156,8 @@ export async function calculateRevenuePool(period: string) {
 /**
  * Distribute revenue pool to artists
  */
-// Safeguards for sustainable payouts
-const ARTIST_POOL_SPLIT = 0.8; // 80% of ad revenue to artists
-const MIN_PER_SHARE_VALUE = 0.50; // Floor: $0.50 minimum per share
-const MAX_PER_SHARE_VALUE = 10.00; // Cap: $10 maximum per share (prevents runaway payouts)
-const SPONSOR_CHURN_RESERVE = 0.10; // 10% of pool held in reserve for sponsor churn months
+// Safeguards for sustainable payouts. Defined in pool-policy.ts so the revenue
+// model can subtract the same obligation this code pays out.
 
 export async function distributeRevenuePool(
   period: string,

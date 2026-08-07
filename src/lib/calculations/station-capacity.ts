@@ -5,6 +5,8 @@
  * based on airtime constraints
  */
 
+import { AIRPLAY_TERMS_BY_LEGACY_NAME } from "@/lib/radio/airplay-tiers";
+
 // TYPE DEFINITIONS
 export interface SponsorScenario {
   sponsors: number;
@@ -21,16 +23,37 @@ export interface SponsorDistribution {
 }
 
 // AIRTIME CONSTRAINTS
+//
+// The ad clock: five one-minute breaks an hour, four 15-second spots in each,
+// so 20 spots an hour and five minutes of advertising - a normal commercial
+// load, and the same structure the playout schedules.
+//
+// Only the twelve daytime hours are SOLD. 6pm-6am airs the same breaks as
+// bonus inventory: every sponsor's spots run overnight as well, free, which
+// roughly doubles delivered impressions without costing sellable stock. It
+// gives a rate card something to be generous with instead of discounting.
+//
+// The previous constants claimed 24 spots/hour across all 24 hours - 17,280 a
+// month. Two things were wrong with that. Nothing sold the night, and the
+// playout never aired anything like that volume: streaming.py ran one ad every
+// five songs, about 3 an hour. The model was selling six times the station's
+// real output, so every sponsor revenue figure built on it was inflated by the
+// same factor.
 export const STATION_CONSTRAINTS = {
   // Track rotation
   TRACKS_PER_HOUR: 12,
-  PRIME_HOURS: { start: 6, end: 18 }, // 6am - 6pm
-  SUBPRIME_HOURS: { start: 18, end: 6 }, // 6pm - 6am (next day)
+  PRIME_HOURS: { start: 6, end: 18 }, // 6am - 6pm — the sellable day
+  SUBPRIME_HOURS: { start: 18, end: 6 }, // 6pm - 6am — bonus airings
 
-  // Ad constraints
-  MAX_AD_MINUTES_PER_HOUR: 6,
+  // Ad clock
+  AD_BREAKS_PER_HOUR: 5,
+  SPOTS_PER_BREAK: 4,
   AD_DURATION_SECONDS: 15,
-  MAX_AD_SPOTS_PER_HOUR: 24, // 6 min / 15 sec
+  MAX_AD_SPOTS_PER_HOUR: 20, // 5 breaks x 4 spots
+  MAX_AD_MINUTES_PER_HOUR: 5, // 20 spots x 15 sec
+
+  /** Hours a sponsor can buy. The other twelve are given away. */
+  SELLABLE_HOURS_PER_DAY: 12,
 
   // Premium sponsor opportunities
   MAX_SPONSORED_HOURS_PER_WEEK: 2,
@@ -39,29 +62,32 @@ export const STATION_CONSTRAINTS = {
 } as const;
 
 // AIRPLAY TIERS - Team Riley
+//
+// All three of these now derive from AIRPLAY_TIER_TERMS. They used to be typed
+// out here and had drifted from both the page an artist reads and the amount
+// the payment provider charges - shares in particular disagreed three ways,
+// and shares decide what an artist is paid out of the pool.
+//
+// Shares and plays-per-month are deliberately the same number: an artist told
+// "20 plays a month" who is then weighted as 30 shares has been quoted two
+// different promises, and only one of them can be kept.
 export const AIRPLAY_TIER_SHARES = {
-  FREE: 1,
-  BRONZE: 5,     // $5/month — same
-  SILVER: 30,    // Was 25 — more value at new lower price
-  GOLD: 100,     // Was 75 — significantly more plays
-  PLATINUM: 250, // Was 200 — best value per dollar
+  FREE: AIRPLAY_TERMS_BY_LEGACY_NAME.FREE.shares,
+  BRONZE: AIRPLAY_TERMS_BY_LEGACY_NAME.BRONZE.shares,
+  SILVER: AIRPLAY_TERMS_BY_LEGACY_NAME.SILVER.shares,
+  GOLD: AIRPLAY_TERMS_BY_LEGACY_NAME.GOLD.shares,
+  PLATINUM: AIRPLAY_TERMS_BY_LEGACY_NAME.PLATINUM.shares,
 } as const;
 
 export const AIRPLAY_TIER_PRICING = {
-  FREE: 0,
-  BRONZE: 5,
-  SILVER: 15,
-  GOLD: 40,
-  PLATINUM: 100,
+  FREE: AIRPLAY_TERMS_BY_LEGACY_NAME.FREE.price,
+  BRONZE: AIRPLAY_TERMS_BY_LEGACY_NAME.BRONZE.price,
+  SILVER: AIRPLAY_TERMS_BY_LEGACY_NAME.SILVER.price,
+  GOLD: AIRPLAY_TERMS_BY_LEGACY_NAME.GOLD.price,
+  PLATINUM: AIRPLAY_TERMS_BY_LEGACY_NAME.PLATINUM.price,
 } as const;
 
-export const AIRPLAY_TIER_PLAYS_PER_MONTH = {
-  FREE: 1,
-  BRONZE: 5,
-  SILVER: 20,
-  GOLD: 65,
-  PLATINUM: 250,
-} as const;
+export const AIRPLAY_TIER_PLAYS_PER_MONTH = AIRPLAY_TIER_SHARES;
 
 // MASTER OVERVIEW ARTIST CAPACITY
 export const ARTIST_CAPACITY = {
@@ -196,9 +222,12 @@ export function calculateDailyAirtime() {
     subprimeTracks: subprimeHours * STATION_CONSTRAINTS.TRACKS_PER_HOUR, // 144 tracks
     totalDailyTracks: 24 * STATION_CONSTRAINTS.TRACKS_PER_HOUR, // 288 tracks
 
-    primeAdSpots: primeHours * STATION_CONSTRAINTS.MAX_AD_SPOTS_PER_HOUR, // 288 spots
-    subprimeAdSpots: subprimeHours * STATION_CONSTRAINTS.MAX_AD_SPOTS_PER_HOUR, // 288 spots
-    totalDailyAdSpots: 24 * STATION_CONSTRAINTS.MAX_AD_SPOTS_PER_HOUR, // 576 spots
+    /** Sold. 6am-6pm at 20 spots/hour. */
+    primeAdSpots: primeHours * STATION_CONSTRAINTS.MAX_AD_SPOTS_PER_HOUR, // 240 spots
+    /** Given away as bonus airings. 6pm-6am, same clock. */
+    subprimeAdSpots: subprimeHours * STATION_CONSTRAINTS.MAX_AD_SPOTS_PER_HOUR, // 240 spots
+    /** What actually goes to air across the day, sold and bonus together. */
+    totalDailyAdSpots: 24 * STATION_CONSTRAINTS.MAX_AD_SPOTS_PER_HOUR, // 480 spots
   };
 }
 
@@ -213,9 +242,19 @@ export function calculateMonthlyAirtime(daysInMonth: number = 30) {
     primeMonthlyTracks: daily.primeTracks * daysInMonth, // 4,320 tracks
     subprimeMonthlyTracks: daily.subprimeTracks * daysInMonth, // 4,320 tracks
 
-    totalMonthlyAdSpots: daily.totalDailyAdSpots * daysInMonth, // 17,280 spots
-    primeMonthlyAdSpots: daily.primeAdSpots * daysInMonth, // 8,640 spots
-    subprimeMonthlyAdSpots: daily.subprimeAdSpots * daysInMonth, // 8,640 spots
+    /**
+     * What a sponsor can BUY: daytime only. This is the number every capacity
+     * and revenue calculation must divide by. Selling against the aired total
+     * below is what produced the old six-times-oversold model.
+     */
+    sellableMonthlyAdSpots: daily.primeAdSpots * daysInMonth, // 7,200 spots
+    /** Delivered free on top of every purchase. Never sold, never billed. */
+    bonusMonthlyAdSpots: daily.subprimeAdSpots * daysInMonth, // 7,200 spots
+    /** Everything that goes to air. Useful for playout, not for pricing. */
+    totalMonthlyAdSpots: daily.totalDailyAdSpots * daysInMonth, // 14,400 spots
+
+    primeMonthlyAdSpots: daily.primeAdSpots * daysInMonth, // 7,200 spots
+    subprimeMonthlyAdSpots: daily.subprimeAdSpots * daysInMonth, // 7,200 spots
   };
 }
 
@@ -344,16 +383,21 @@ export function calculateSponsorCapacity(sponsorDistribution: {
     (sponsorDistribution.TIER_2 || 0) * SPONSOR_PRICING.TIER_2 +
     (sponsorDistribution.TIER_3 || 0) * SPONSOR_PRICING.TIER_3;
 
-  const spotsRemaining = monthly.totalMonthlyAdSpots - totalSpotsNeeded;
-  const capacityUtilization = (totalSpotsNeeded / monthly.totalMonthlyAdSpots) * 100;
+  // Sellable, not aired. A sponsor buys daytime; the overnight run is a gift.
+  const spotsRemaining = monthly.sellableMonthlyAdSpots - totalSpotsNeeded;
+  const capacityUtilization = (totalSpotsNeeded / monthly.sellableMonthlyAdSpots) * 100;
 
   return {
     totalSponsors: Object.values(sponsorDistribution).reduce((sum, count) => sum + count, 0),
     totalSpotsNeeded,
-    totalSpotsAvailable: monthly.totalMonthlyAdSpots,
+    totalSpotsAvailable: monthly.sellableMonthlyAdSpots,
     spotsRemaining,
     capacityUtilization,
     monthlyRevenue: revenue,
+    /** Free overnight airings the same purchase delivers. */
+    bonusSpotsDelivered: totalSpotsNeeded,
+    /** What the sponsor actually hears themselves on air: bought plus bonus. */
+    totalSpotsDelivered: totalSpotsNeeded * 2,
   };
 }
 
@@ -369,7 +413,7 @@ export function calculateSponsorCapacity(sponsorDistribution: {
  */
 export function calculateMaxSponsorCapacity() {
   const monthly = calculateMonthlyAirtime();
-  const totalMonthlySpots = monthly.totalMonthlyAdSpots;
+  const totalMonthlySpots = monthly.sellableMonthlyAdSpots;
 
   const scenarios = {
     allLocalHero: {
@@ -389,19 +433,26 @@ export function calculateMaxSponsorCapacity() {
       revenue: Math.floor(totalMonthlySpots / SPONSOR_AD_SPOTS.TIER_3) * SPONSOR_PRICING.TIER_3,
     },
     optimal: {
-      // 125 sponsors using 13,380 of 17,280 monthly spots (77.4%).
+      // 53 sponsors using 5,520 of 7,200 sellable spots (76.7%), leaving
+      // headroom for sponsored hours and the week takeover.
+      //
+      // Was 125 sponsors against 17,280 spots. Both halves of that were wrong:
+      // the inventory counted hours nobody sells, and 125 local advertisers is
+      // a multi-year outcome quoted as a launch state. A small commercial
+      // station carries 20-60, so 53 is the top of a believable range rather
+      // than a ceiling nobody reaches.
+      //
       // Counts only - revenue is derived, never restated here.
-      LOCAL_HERO: 45,
-      TIER_1: 28,
-      TIER_2: 35,
-      TIER_3: 17,
+      LOCAL_HERO: 20,
+      TIER_1: 12,
+      TIER_2: 14,
+      TIER_3: 7,
     },
     balanced: {
-      // Balanced mix using available inventory
-      LOCAL_HERO: 45,
-      TIER_1: 28,
-      TIER_2: 35,
-      TIER_3: 17,
+      LOCAL_HERO: 20,
+      TIER_1: 12,
+      TIER_2: 14,
+      TIER_3: 7,
     },
   };
 
@@ -412,15 +463,22 @@ export function calculateMaxSponsorCapacity() {
     scenarios.optimal.TIER_2 * SPONSOR_PRICING.TIER_2 +
     scenarios.optimal.TIER_3 * SPONSOR_PRICING.TIER_3;
 
+  // Counted, not asserted. The old literal 125 stayed put through a change to
+  // the mix beneath it, and the stale revenue figure in the comment beside it
+  // was quoted on customer-facing pages for months.
+  const optimalSponsorCount =
+    scenarios.optimal.LOCAL_HERO + scenarios.optimal.TIER_1 +
+    scenarios.optimal.TIER_2 + scenarios.optimal.TIER_3;
+
   const optimalWithMetrics: SponsorDistribution = {
     ...scenarios.optimal,
-    sponsors: 125,
-    revenue: optimalRevenue, // Base $18,850 (premium adds $3,400 for $22,250 total)
+    sponsors: optimalSponsorCount,
+    revenue: optimalRevenue,
   };
 
   const balancedWithMetrics: SponsorDistribution = {
     ...scenarios.balanced,
-    sponsors: 125,
+    sponsors: optimalSponsorCount,
     revenue: optimalRevenue,
   };
 

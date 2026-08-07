@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import crypto from "crypto";
+import { AIRPLAY_TIER_TERMS, tierAmountInCents, type AirplayTierKey } from "@/lib/radio/airplay-tiers";
+import { AIRPLAY_TIERS } from "@/lib/radio/airplay-system";
 
 // Mock dependencies before imports
 vi.mock("@/lib/env", () => ({
@@ -53,11 +55,14 @@ describe("ManifestFinancial", () => {
 
   describe("Airplay Subscription Tier Pricing", () => {
     // Test the pricing logic by verifying the API calls made during subscription creation
+    // Derived from the canonical tier table rather than typed out. The literal
+    // amounts that used to be here (2000, 5000, 12000) were the drifted ones,
+    // so the suite was passing precisely because it asserted the defect.
     const tiers = [
-      { tier: "TIER_5" as const, expectedAmount: 500, name: "$5/month" },
-      { tier: "TIER_20" as const, expectedAmount: 2000, name: "$20/month" },
-      { tier: "TIER_50" as const, expectedAmount: 5000, name: "$50/month" },
-      { tier: "TIER_120" as const, expectedAmount: 12000, name: "$120/month" },
+      { tier: "TIER_5" as const, expectedAmount: tierAmountInCents("TIER_5"), name: "$5/month" },
+      { tier: "TIER_20" as const, expectedAmount: tierAmountInCents("TIER_20"), name: "$15/month" },
+      { tier: "TIER_50" as const, expectedAmount: tierAmountInCents("TIER_50"), name: "$40/month" },
+      { tier: "TIER_120" as const, expectedAmount: tierAmountInCents("TIER_120"), name: "$100/month" },
     ];
 
     for (const { tier, expectedAmount, name } of tiers) {
@@ -351,12 +356,14 @@ describe("ManifestFinancial", () => {
         metadata: { type: "airplay", artistId: "a1", tier: "TIER_20" },
       });
 
+      // $15 / 20 shares - what /airplay advertises for Silver. The old
+      // expectation here (amount 20, shares 25) was the drifted pair.
       expect(notifySubscriptionActivated).toHaveBeenCalledWith({
         email: "artist@test.com",
         name: "Test Artist",
         tier: "TIER_20",
-        amount: 20,
-        shares: 25,
+        amount: AIRPLAY_TIER_TERMS.TIER_20.price,
+        shares: AIRPLAY_TIER_TERMS.TIER_20.shares,
       });
     });
 
@@ -501,5 +508,34 @@ describe("ManifestFinancial", () => {
       expect(headers.Authorization).toBe("Bearer test_key_123");
       expect(headers["Content-Type"]).toBe("application/json");
     });
+  });
+});
+
+/**
+ * The check that was missing.
+ *
+ * An artist reads a price on /airplay and is charged by Manifest. Those two
+ * numbers lived in different files and drifted 20-25% apart without a single
+ * test failing, because every test asserted its own file's copy. This asserts
+ * they agree with each other instead.
+ */
+describe("Displayed price matches the amount charged", () => {
+  const tiers = Object.keys(AIRPLAY_TIER_TERMS) as AirplayTierKey[];
+
+  for (const tier of tiers) {
+    it(`${tier}: /airplay price equals the Manifest charge`, () => {
+      const displayed = AIRPLAY_TIERS[tier].price;
+      expect(tierAmountInCents(tier)).toBe(displayed * 100);
+    });
+
+    it(`${tier}: displayed shares equal the shares that set the payout`, () => {
+      expect(AIRPLAY_TIERS[tier].shares).toBe(AIRPLAY_TIER_TERMS[tier].shares);
+    });
+  }
+
+  it("never charges more than the page advertises", () => {
+    for (const tier of tiers) {
+      expect(tierAmountInCents(tier)).toBeLessThanOrEqual(AIRPLAY_TIERS[tier].price * 100);
+    }
   });
 });

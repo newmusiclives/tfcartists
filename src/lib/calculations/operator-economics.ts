@@ -5,7 +5,10 @@ import {
   ARTIST_CAPACITY,
   STATION_CONSTRAINTS,
   REVENUE_SCENARIOS,
+  calculateMaxSponsorCapacity,
+  AIRPLAY_TIER_SHARES,
 } from "./station-capacity";
+import { artistPoolObligation } from "@/lib/radio/pool-policy";
 
 /**
  * What a station actually costs to run, what it earns, and therefore what we
@@ -73,8 +76,13 @@ export function stationCost(voiceTracksPerHour = 3): CostBreakdown {
 }
 
 // --- REVENUE ----------------------------------------------------------------
-/** The sponsor mix the capacity model treats as a full station. */
-const FULL_MIX = { LOCAL_HERO: 45, TIER_1: 28, TIER_2: 35, TIER_3: 17 } as const;
+/**
+ * The sponsor mix the capacity model treats as a full station.
+ *
+ * Taken from calculateMaxSponsorCapacity().optimal rather than copied, because
+ * this file's own copy of the mix silently outlived a change to that one.
+ */
+const FULL_MIX = calculateMaxSponsorCapacity().optimal;
 
 export function sponsorRevenueAtFill(fill: number) {
   const scale = (n: number) => Math.round(n * fill);
@@ -143,12 +151,34 @@ export type StationEconomics = {
   grossRevenue: number;
   commissions: number;
   processing: number;
+  /** 72% of ad revenue, paid to artists. Not the operator's money. */
+  artistPool: number;
+  /** Paid above what the pool held because the $0.50 floor applied. */
+  poolShortfall: number;
   netRevenue: number;
   cost: number;
   profit: number;
   marginPct: number;
   capacityUsedPct: number;
 };
+
+/**
+ * Total pool shares in play at a given artist fill.
+ *
+ * Shares decide how the pool splits, so the roster has to be counted the same
+ * way the payout counts it - including FREE artists, who earn from the pool
+ * without paying into it.
+ */
+export function totalSharesAtFill(fill: number): number {
+  const scale = (n: number) => Math.round(n * fill);
+  return (
+    scale(ARTIST_CAPACITY.FREE) * AIRPLAY_TIER_SHARES.FREE +
+    scale(ARTIST_CAPACITY.BRONZE) * AIRPLAY_TIER_SHARES.BRONZE +
+    scale(ARTIST_CAPACITY.SILVER) * AIRPLAY_TIER_SHARES.SILVER +
+    scale(ARTIST_CAPACITY.GOLD) * AIRPLAY_TIER_SHARES.GOLD +
+    scale(ARTIST_CAPACITY.PLATINUM) * AIRPLAY_TIER_SHARES.PLATINUM
+  );
+}
 
 /** Combined monthly cost of the five AI team automations. */
 export function teamCostTotal(): number {
@@ -167,7 +197,18 @@ export function stationEconomics(
   const grossRevenue = sponsor.revenue + premium + artists;
   const commissions = grossRevenue * SCOUT_COMMISSION_BLENDED;
   const processing = grossRevenue * PAYMENT_PROCESSING;
-  const netRevenue = grossRevenue - commissions - processing;
+
+  // The artist pool. This model used to stop at commissions and processing and
+  // call the rest profit, while RadioRevenuePool promised 80% of ad revenue to
+  // artists and a cron paid it out every month. The same money was counted
+  // twice, which overstated profit three to four fold.
+  //
+  // Only AD revenue feeds the pool - artist subscription income is retained by
+  // the station, so it is excluded from the base here.
+  const adRevenue = sponsor.revenue + premium;
+  const pool = artistPoolObligation(adRevenue, totalSharesAtFill(s.artistFill));
+
+  const netRevenue = grossRevenue - commissions - processing - pool.paidOut;
 
   // Station cost is the on-air pipeline. The five AI teams are a SEPARATE
   // monthly cost - the daily automation jobs that find sponsors, recruit
@@ -176,7 +217,10 @@ export function stationEconomics(
   const cost = stationCost(voiceTracksPerHour).total + teamCostTotal();
   const profit = netRevenue - cost;
 
-  const monthlySpots = 24 * STATION_CONSTRAINTS.MAX_AD_SPOTS_PER_HOUR * 30;
+  // Sellable hours only. Dividing by all 24 made a full station look
+  // half-empty, which is how 125 sponsors ever looked like a sane target.
+  const monthlySpots =
+    STATION_CONSTRAINTS.SELLABLE_HOURS_PER_DAY * STATION_CONSTRAINTS.MAX_AD_SPOTS_PER_HOUR * 30;
 
   return {
     label: s.label,
@@ -185,6 +229,8 @@ export function stationEconomics(
     grossRevenue,
     commissions,
     processing,
+    artistPool: pool.paidOut,
+    poolShortfall: pool.shortfall,
     netRevenue,
     cost,
     profit,
