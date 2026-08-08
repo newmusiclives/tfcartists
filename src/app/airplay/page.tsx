@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Radio, ArrowLeft, Check, TrendingUp, DollarSign, Loader2, X } from "lucide-react";
 import { AIRPLAY_TIERS, estimateMonthlyEarnings } from "@/lib/radio/airplay-system";
+import { csrfFetch } from "@/lib/csrf-client";
 
 export default function AirplayPage() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
@@ -28,9 +29,11 @@ export default function AirplayPage() {
     setCheckoutLoading(true);
     setCheckoutError("");
     try {
-      const res = await fetch("/api/payments/subscribe", {
+      // csrfFetch: /api/payments/subscribe is not CSRF-exempt, so a plain fetch
+      // was rejected before it ever reached the payment provider. Same defect
+      // the self-serve page had - the checkout button simply did not work.
+      const res = await csrfFetch("/api/payments/subscribe", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "airplay",
           entityId: checkoutForm.artistId,

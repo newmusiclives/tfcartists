@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Radio, ArrowLeft, Check, Loader2, Moon, Mic } from "lucide-react";
+import { csrfFetch } from "@/lib/csrf-client";
 import {
   SPONSOR_PACKAGE_LIST,
   totalAiringsPerMonth,
@@ -63,9 +64,12 @@ export default function AdvertisePage() {
     setErrorField("");
 
     try {
-      const res = await fetch("/api/sponsors/self-serve", {
+      // csrfFetch, not fetch. The middleware sets a csrf-token cookie on every
+      // response and rejects state-changing requests without the matching
+      // header, so a plain fetch here failed with "CSRF token validation
+      // failed" at the moment of purchase - the one step that must not break.
+      const res = await csrfFetch("/api/sponsors/self-serve", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, packageKey: selected }),
       });
       const data = await res.json();
