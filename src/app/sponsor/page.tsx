@@ -215,11 +215,38 @@ export default function SponsorPage() {
         </div>
       </section>
 
+      {/* Self-serve. This page is the inquiry route - "we'll be in touch" -
+          and a $45/month sponsorship cannot pay for the conversation it asks
+          for. Anyone who already knows what they want should be able to buy
+          without waiting for a call, so the fast path goes above the form. */}
+      <section className="px-4 pt-4">
+        <div className="max-w-4xl mx-auto rounded-xl border-2 border-green-600 bg-green-50 dark:bg-green-950 p-6 md:p-8">
+          <div className="md:flex md:items-center md:justify-between md:gap-6">
+            <div>
+              <h2 className="text-xl font-bold text-green-900 dark:text-green-100 mb-2">
+                Already know what you want? Buy airtime now.
+              </h2>
+              <p className="text-sm text-green-800 dark:text-green-200 max-w-xl">
+                Pick a package from $45/month, write your ad, pay by card. One of
+                our presenters voices it and it goes to air — no call, no waiting.
+                Every package also airs free overnight.
+              </p>
+            </div>
+            <Link
+              href="/advertise"
+              className="mt-4 md:mt-0 inline-flex flex-shrink-0 items-center justify-center rounded-lg bg-green-700 px-5 py-3 font-semibold text-white hover:bg-green-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+            >
+              Buy airtime
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* How It Works */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-10">
-            How It Works
+            Prefer to talk it through?
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
             {[

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import crypto from "crypto";
 import { AIRPLAY_TIER_TERMS, tierAmountInCents, type AirplayTierKey } from "@/lib/radio/airplay-tiers";
+import { SPONSOR_PACKAGES, SPONSOR_PACKAGE_LIST, packageAmountInCents } from "@/lib/sponsors/packages";
 import { AIRPLAY_TIERS } from "@/lib/radio/airplay-system";
 
 // Mock dependencies before imports
@@ -111,12 +112,14 @@ describe("ManifestFinancial", () => {
   });
 
   describe("Sponsorship Subscription Tier Pricing", () => {
-    const sponsorTiers = [
-      { tier: "bronze" as const, expectedAmount: 10000 },
-      { tier: "silver" as const, expectedAmount: 25000 },
-      { tier: "gold" as const, expectedAmount: 40000 },
-      { tier: "platinum" as const, expectedAmount: 50000 },
-    ];
+    // The rate card, not the old bronze/silver/gold/platinum table. Those
+    // amounts ($100-$500) were 2-3x what the station actually sells packages
+    // for, and callers passed `local_hero` into that lookup, so it returned
+    // undefined and the call threw before it could charge anything.
+    const sponsorTiers = SPONSOR_PACKAGE_LIST.map((p) => ({
+      tier: p.key,
+      expectedAmount: packageAmountInCents(p.key),
+    }));
 
     for (const { tier, expectedAmount } of sponsorTiers) {
       it(`creates ${tier} sponsorship with amount ${expectedAmount} cents`, async () => {
@@ -144,6 +147,8 @@ describe("ManifestFinancial", () => {
         const subBody = JSON.parse(mockFetch.mock.calls[1][1].body);
         expect(subBody.amount).toBe(expectedAmount);
         expect(subBody.planId).toBe(`sponsor_${tier}`);
+        // Never above the advertised rate-card price.
+        expect(subBody.amount).toBe(SPONSOR_PACKAGES[tier].price * 100);
         expect(subBody.metadata.type).toBe("sponsorship");
       });
     }

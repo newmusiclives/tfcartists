@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SPONSOR_PACKAGE_LIST, resolveSponsorPackage } from "@/lib/sponsors/packages";
 import { prisma } from "@/lib/db";
 import { requireAuth } from "@/lib/api/auth";
 import { handleApiError } from "@/lib/api/errors";
@@ -18,16 +19,17 @@ export async function POST(
     const body = await request.json();
     const { tier, startDate, durationMonths } = body;
 
-    const tierPricing: Record<string, number> = {
-      local_hero: 30,
-      tier_1: 80,
-      tier_2: 150,
-      tier_3: 300,
-    };
+    // This route had its own price list - $30/$80/$150/$300 - which matched
+    // neither the rate card ($45/$79/$169/$279) nor the payment layer. It set
+    // Sponsor.monthlyAmount, so the figure the station believed it was owed
+    // came from here while the card was charged something else entirely.
+    const pkg = tier ? resolveSponsorPackage(String(tier)) : null;
 
-    if (!tier || !(tier in tierPricing)) {
+    if (!pkg) {
       return NextResponse.json(
-        { error: `Invalid tier. Valid tiers: ${Object.keys(tierPricing).join(", ")}` },
+        {
+          error: `Invalid package. Valid packages: ${SPONSOR_PACKAGE_LIST.map((p) => p.key).join(", ")}`,
+        },
         { status: 400 }
       );
     }
@@ -37,7 +39,7 @@ export async function POST(
       return NextResponse.json({ error: "Sponsor not found" }, { status: 404 });
     }
 
-    const monthlyAmount = tierPricing[tier];
+    const monthlyAmount = pkg.price;
     const start = startDate ? new Date(startDate) : new Date();
     const months = durationMonths || 1;
     const end = new Date(start);
@@ -50,7 +52,7 @@ export async function POST(
       try {
         const subscription = await manifest.createSponsorshipSubscription({
           sponsorId: id,
-          tier: tier as "bronze" | "silver" | "gold" | "platinum",
+          tier: pkg.key,
           email: body.email || "",
           businessName: sponsor.businessName,
         });
@@ -58,17 +60,17 @@ export async function POST(
         // Create local records
         const [sponsorship] = await prisma.$transaction([
           prisma.sponsorship.create({
-            data: { sponsorId: id, tier, monthlyAmount, startDate: start, endDate: end, status: "active" },
+            data: { sponsorId: id, tier: pkg.key, monthlyAmount, startDate: start, endDate: end, status: "active" },
           }),
           prisma.sponsor.update({
             where: { id },
-            data: { sponsorshipTier: tier, monthlyAmount, contractStart: start, contractEnd: end, status: "ACTIVE" },
+            data: { sponsorshipTier: pkg.key, monthlyAmount, contractStart: start, contractEnd: end, status: "ACTIVE" },
           }),
         ]);
 
         return NextResponse.json({
           success: true,
-          sponsorship: { id: sponsorship.id, tier, monthlyAmount, startDate: start, endDate: end },
+          sponsorship: { id: sponsorship.id, tier: pkg.key, monthlyAmount, startDate: start, endDate: end },
           subscriptionId: subscription.subscriptionId,
           checkoutUrl: subscription.checkoutUrl,
         });
@@ -83,7 +85,7 @@ export async function POST(
       prisma.sponsorship.create({
         data: {
           sponsorId: id,
-          tier,
+          tier: pkg.key,
           monthlyAmount,
           startDate: start,
           endDate: end,
@@ -93,7 +95,7 @@ export async function POST(
       prisma.sponsor.update({
         where: { id },
         data: {
-          sponsorshipTier: tier,
+          sponsorshipTier: pkg.key,
           monthlyAmount,
           contractStart: start,
           contractEnd: end,
@@ -106,7 +108,7 @@ export async function POST(
       success: true,
       sponsorship: {
         id: sponsorship.id,
-        tier,
+        tier: pkg.key,
         monthlyAmount,
         startDate: start,
         endDate: end,

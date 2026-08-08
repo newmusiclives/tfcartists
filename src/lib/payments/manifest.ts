@@ -2,6 +2,12 @@ import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { notifySubscriptionActivated, notifyEarningsAvailable } from "@/lib/messaging/notifications";
 import {
+  SPONSOR_PACKAGE_LIST,
+  packageAmountInCents,
+  packagePlanLabel,
+  resolveSponsorPackage,
+} from "@/lib/sponsors/packages";
+import {
   AIRPLAY_TIER_TERMS,
   tierAmountInCents,
   tierPlanLabel,
@@ -212,18 +218,25 @@ class ManifestFinancial {
    */
   async createSponsorshipSubscription(params: {
     sponsorId: string;
-    tier: "bronze" | "silver" | "gold" | "platinum";
+    /** A package key, or any of the legacy spellings still in the database. */
+    tier: string;
     email: string;
     businessName: string;
   }): Promise<{ subscriptionId: string; checkoutUrl: string }> {
-    const tierPricing = {
-      bronze: { amount: 10000, name: "Bronze - $100/month" },
-      silver: { amount: 25000, name: "Silver - $250/month" },
-      gold: { amount: 40000, name: "Gold - $400/month" },
-      platinum: { amount: 50000, name: "Platinum - $500/month" },
-    };
+    // This table used to be keyed bronze/silver/gold/platinum at $100-$500,
+    // while the rate card sold Local Hero to Tier 3 at $45-$279 and callers
+    // passed `local_hero`. The lookup therefore returned undefined and the
+    // request threw - the sponsor payment path had never worked with a
+    // provider configured. Resolve through the canonical packages instead.
+    const pkg = resolveSponsorPackage(params.tier);
+    if (!pkg) {
+      throw new Error(
+        `Unknown sponsorship package "${params.tier}". ` +
+          `Valid packages: ${SPONSOR_PACKAGE_LIST.map((p) => p.key).join(", ")}`,
+      );
+    }
 
-    const pricing = tierPricing[params.tier];
+    const pricing = { amount: packageAmountInCents(pkg.key), name: packagePlanLabel(pkg.key) };
 
     logger.info("Creating sponsorship subscription", {
       sponsorId: params.sponsorId,
@@ -469,6 +482,36 @@ class ManifestFinancial {
               shares: terms.shares,
             });
           }
+        }
+
+        // Sponsorships had no branch here at all. A self-serve advertiser could
+        // pay and stay `pending_payment` for ever - money taken, nothing on
+        // air, and no operator involved to notice.
+        if (data.metadata?.type === "sponsorship" && data.metadata?.sponsorId) {
+          const sponsorId = data.metadata.sponsorId;
+          const start = new Date();
+          const end = new Date(start);
+          end.setMonth(end.getMonth() + 1);
+
+          const activated = await prisma.sponsorship.updateMany({
+            where: { sponsorId, status: "pending_payment" },
+            data: { status: "active", startDate: start, endDate: end },
+          });
+
+          await prisma.sponsor.update({
+            where: { id: sponsorId },
+            data: {
+              status: "ACTIVE",
+              pipelineStage: "closed",
+              contractStart: start,
+              contractEnd: end,
+            },
+          });
+
+          logger.info("Sponsorship activated by payment", {
+            sponsorId,
+            sponsorshipsActivated: activated.count,
+          });
         }
         break;
 

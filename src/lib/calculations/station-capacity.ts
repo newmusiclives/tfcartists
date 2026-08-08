@@ -6,6 +6,7 @@
  */
 
 import { AIRPLAY_TERMS_BY_LEGACY_NAME } from "@/lib/radio/airplay-tiers";
+import { SPONSOR_PACKAGES } from "@/lib/sponsors/packages";
 
 // TYPE DEFINITIONS
 export interface SponsorScenario {
@@ -100,11 +101,13 @@ export const ARTIST_CAPACITY = {
 } as const;
 
 // SPONSOR TIERS - Team Harper (4-tier model with Local Hero entry level)
+// Derived from the canonical package table. Sponsor pricing lived in three
+// files that disagreed, one of which was the payment layer.
 export const SPONSOR_AD_SPOTS = {
-  LOCAL_HERO: 30,  // 1 spot/day × 30 days (ENTRY LEVEL)
-  TIER_1: 60,      // 2 spots/day × 30 days
-  TIER_2: 150,     // 5 spots/day × 30 days
-  TIER_3: 300,     // 10 spots/day × 30 days
+  LOCAL_HERO: SPONSOR_PACKAGES.LOCAL_HERO.spotsPerMonth,
+  TIER_1: SPONSOR_PACKAGES.TIER_1.spotsPerMonth,
+  TIER_2: SPONSOR_PACKAGES.TIER_2.spotsPerMonth,
+  TIER_3: SPONSOR_PACKAGES.TIER_3.spotsPerMonth,
 } as const;
 
 /**
@@ -131,10 +134,10 @@ export const SPONSOR_AD_SPOTS = {
  * REVENUE_SCENARIOS.
  */
 export const SPONSOR_PRICING = {
-  LOCAL_HERO: 45,
-  TIER_1: 79,
-  TIER_2: 169,
-  TIER_3: 279,
+  LOCAL_HERO: SPONSOR_PACKAGES.LOCAL_HERO.price,
+  TIER_1: SPONSOR_PACKAGES.TIER_1.price,
+  TIER_2: SPONSOR_PACKAGES.TIER_2.price,
+  TIER_3: SPONSOR_PACKAGES.TIER_3.price,
   NEWS_WEATHER: 350,
   SPONSORED_HOUR: 250,
   WEEK_TAKEOVER: 750,
