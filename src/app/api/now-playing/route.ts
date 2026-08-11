@@ -107,7 +107,30 @@ async function readIcecastMetadata(url: string): Promise<string | null> {
  * 3. Railway backend — may be stale
  * 4. Station info only
  */
+/**
+ * Every player polls this every 10s (POLL_INTERVAL in radio-player.tsx) and
+ * dj-chat polls it again on its own timer. Uncached, that is one function
+ * invocation and up to seven queries per listener per ten seconds — a bill that
+ * grows in step with the audience. A shared CDN cache collapses all of it to
+ * roughly six origin hits a minute however many people are listening.
+ *
+ * s-maxage matches the client poll interval, so nobody sees staler data than
+ * they would have anyway; stale-while-revalidate lets the edge serve the last
+ * value while it refreshes, so no listener waits on the Icecast metadata read.
+ */
+const CACHE_HEADER = "public, s-maxage=10, stale-while-revalidate=30";
+
 export async function GET() {
+  const response = await handleNowPlaying();
+  // Only cache success. A 404 (no active station) or a 500 must not pin itself
+  // to the edge for ten seconds after the station comes back up.
+  if (response.ok) {
+    response.headers.set("Cache-Control", CACHE_HEADER);
+  }
+  return response;
+}
+
+async function handleNowPlaying(): Promise<NextResponse> {
   try {
     // Import Liquidsoap push data (same process, in-memory)
     const { getLiquidoapNowPlaying } = await import("@/lib/radio/liquidsoap-state");

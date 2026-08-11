@@ -11,8 +11,18 @@ import { Handler, schedule } from "@netlify/functions";
  *
  * Deliberately NOT gated on STATION_PAUSED: if the station is paused we still
  * want the plays that happened before the pause to land.
+ *
+ * SYNC_PLAYS_PAUSED is the separate, explicit switch for when the station is
+ * off air entirely and there is nothing left to catch up on. It is deliberately
+ * not STATION_PAUSED, because the exemption above is intentional and should
+ * stay that way — turning this one off is a distinct decision, and it keeps
+ * Neon from being woken every 15 minutes to sync an empty playout.
  */
 const handler: Handler = schedule("*/15 * * * *", async () => {
+  if (process.env.SYNC_PLAYS_PAUSED === "true") {
+    console.log("[kill-switch] SYNC_PLAYS_PAUSED=true, skipping");
+    return { statusCode: 200, body: JSON.stringify({ paused: true }) };
+  }
   try {
     const baseUrl =
       process.env.URL || process.env.NEXTAUTH_URL || "http://localhost:3000";
