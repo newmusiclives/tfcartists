@@ -22,8 +22,12 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// Allow ISR with 60-second revalidation for better performance
-export const revalidate = 60;
+// ISR revalidation. The shortest revalidate in a route's tree wins, so this
+// value is a floor for every page beneath it — at 60s it was forcing pages that
+// ask for 300 to regenerate five times more often than they wanted, and each
+// regeneration is a function invocation plus the resolveBranding() query below.
+// Matched to the pages' own 300 so nothing regenerates more often than it asked.
+export const revalidate = 300;
 
 // Configurable branding — operators can override via environment variables.
 // In a multi-station network, each deployment sets these per-operator.

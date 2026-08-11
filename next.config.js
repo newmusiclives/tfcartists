@@ -14,6 +14,13 @@ const nextConfig = {
     ];
   },
   images: {
+    // Next defaults this to 60 seconds, which means a transformed image falls
+    // out of cache within the minute and gets re-transformed on the next
+    // request. Image transforms are billed per operation, so the default turns
+    // a fixed set of artwork into a recurring charge. Portraits and album art
+    // do not change under a stable URL — when they do, the URL changes with
+    // them — so a long TTL costs nothing in freshness.
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
     remotePatterns: [
       {
         protocol: "https",

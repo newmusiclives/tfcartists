@@ -118,7 +118,10 @@ async function readIcecastMetadata(url: string): Promise<string | null> {
  * they would have anyway; stale-while-revalidate lets the edge serve the last
  * value while it refreshes, so no listener waits on the Icecast metadata read.
  */
-const CACHE_HEADER = "public, s-maxage=10, stale-while-revalidate=30";
+// max-age=0 keeps browsers revalidating so nobody sits on a stale private copy;
+// s-maxage is what the shared edge cache acts on, and is where the saving is.
+const CACHE_HEADER =
+  "public, max-age=0, s-maxage=10, stale-while-revalidate=30";
 
 export async function GET() {
   const response = await handleNowPlaying();

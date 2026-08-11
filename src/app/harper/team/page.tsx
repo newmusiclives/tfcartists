@@ -44,7 +44,7 @@ export default function HarperTeamPage() {
       title: "Team Lead & Strategy",
       avatar: "HA",
       color: "green",
-      photoUrl: "/team/harper-ai.png",
+      photoUrl: "/team/harper-ai.webp",
       icon: <Sparkles className="w-6 h-6" />,
       responsibilities: [
         "Overall team strategy and coordination",
@@ -69,7 +69,7 @@ export default function HarperTeamPage() {
       title: "First Contact Specialist",
       avatar: "BM",
       color: "blue",
-      photoUrl: "/team/blake-morrison.png",
+      photoUrl: "/team/blake-morrison.webp",
       icon: <Search className="w-6 h-6" />,
       responsibilities: [
         "Sponsor discovery (local businesses, craft makers)",
@@ -94,7 +94,7 @@ export default function HarperTeamPage() {
       title: "Sponsor Success Manager",
       avatar: "CW",
       color: "indigo",
-      photoUrl: "/team/cameron-wells.png",
+      photoUrl: "/team/cameron-wells.webp",
       icon: <BarChart3 className="w-6 h-6" />,
       responsibilities: [
         "Sponsor account management (24 sponsors)",
@@ -119,7 +119,7 @@ export default function HarperTeamPage() {
       title: "Broadcast Quality Manager",
       avatar: "DC",
       color: "purple",
-      photoUrl: "/team/dakota-chen.png",
+      photoUrl: "/team/dakota-chen.webp",
       icon: <CheckCircle className="w-6 h-6" />,
       responsibilities: [
         "Ad spot scheduling and rotation",
@@ -144,7 +144,7 @@ export default function HarperTeamPage() {
       title: "Financial Operations",
       avatar: "RN",
       color: "emerald",
-      photoUrl: "/team/riley-nguyen.png",
+      photoUrl: "/team/riley-nguyen.webp",
       icon: <DollarSign className="w-6 h-6" />,
       responsibilities: [
         "Monthly billing and invoicing ($7,800/month)",

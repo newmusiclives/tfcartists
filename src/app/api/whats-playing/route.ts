@@ -12,8 +12,27 @@ export const dynamic = "force-dynamic";
  *   - recentlyPlayed: last 10 tracks from TrackPlayback
  *   - upNext: upcoming tracks from the current HourPlaylist slots
  *   - currentShow: DJ show name, host, time slot
+ *
+ * Public and identical for every visitor, and the twelve-odd queries behind it
+ * are the same twelve however many people have the page open. Cached at the
+ * edge for the same reason as /api/now-playing: without it the cost of this
+ * page scales with the size of the audience rather than with the schedule.
  */
+// max-age=0 keeps browsers revalidating so nobody sits on a stale private copy;
+// s-maxage is what the shared edge cache acts on, and is where the saving is.
+const CACHE_HEADER =
+  "public, max-age=0, s-maxage=15, stale-while-revalidate=45";
+
 export async function GET() {
+  const response = await handleWhatsPlaying();
+  // Success only — a 404 or 500 must not be pinned to the edge.
+  if (response.ok) {
+    response.headers.set("Cache-Control", CACHE_HEADER);
+  }
+  return response;
+}
+
+async function handleWhatsPlaying(): Promise<NextResponse> {
   try {
     const station = await prisma.station.findFirst({
       where: { isActive: true },

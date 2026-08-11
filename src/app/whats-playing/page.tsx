@@ -113,7 +113,11 @@ export default function WhatsPlayingPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch("/api/whats-playing", { cache: "no-store" });
+      // No cache:"no-store" — the route sets max-age=0 with a short s-maxage,
+      // so the browser still revalidates every poll while the shared edge cache
+      // absorbs them. Forcing no-store here would bypass that and put every
+      // listener's poll back on the origin.
+      const res = await fetch("/api/whats-playing");
       if (!res.ok) throw new Error("fetch failed");
       const json: WhatsPlayingData = await res.json();
       setData(json);

@@ -45,7 +45,7 @@ export default function ElliotTeamPage() {
       title: "Team Lead & Strategy",
       avatar: "EB",
       color: "blue",
-      photoUrl: "/team/elliot-brooks.png",
+      photoUrl: "/team/elliot-brooks.webp",
       icon: <Target className="w-6 h-6" />,
       personality: "Warm, strategic, visionary - like Head of Audience at NPR/Spotify",
       responsibilities: [
@@ -71,7 +71,7 @@ export default function ElliotTeamPage() {
       title: "Viral Content Creator",
       avatar: "NL",
       color: "purple",
-      photoUrl: "/team/nova-lane.png",
+      photoUrl: "/team/nova-lane.webp",
       icon: <Share2 className="w-6 h-6" />,
       personality: "Energetic, fun, ultra-online - TikTok growth hacker meets content creator",
       responsibilities: [
@@ -97,7 +97,7 @@ export default function ElliotTeamPage() {
       title: "Bridge to Team Riley",
       avatar: "RM",
       color: "teal",
-      photoUrl: "/team/river-maxwell.png",
+      photoUrl: "/team/river-maxwell.webp",
       icon: <UserPlus className="w-6 h-6" />,
       personality: "Empathetic, supportive, artist-first - bridge between artists and listeners",
       responsibilities: [
@@ -123,7 +123,7 @@ export default function ElliotTeamPage() {
       title: "Belonging Architect",
       avatar: "SH",
       color: "rose",
-      photoUrl: "/team/sage-hart.png",
+      photoUrl: "/team/sage-hart.webp",
       icon: <Heart className="w-6 h-6" />,
       personality: "Heart-centered, warm, community-builder - like a pastor meets community manager",
       responsibilities: [
@@ -149,7 +149,7 @@ export default function ElliotTeamPage() {
       title: "Behavioral Scientist",
       avatar: "OP",
       color: "indigo",
-      photoUrl: "/team/orion-pike.png",
+      photoUrl: "/team/orion-pike.webp",
       icon: <BarChart3 className="w-6 h-6" />,
       personality: "Analytical but human, strategic, pattern-finder - behavioral psychologist meets data scientist",
       responsibilities: [

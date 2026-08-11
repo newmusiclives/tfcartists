@@ -44,7 +44,7 @@ export default function RileyTeamPage() {
       title: "Team Lead & Strategy",
       avatar: "RC",
       color: "purple",
-      photoUrl: "/team/riley-carpenter.png",
+      photoUrl: "/team/riley-carpenter.webp",
       icon: <Sparkles className="w-6 h-6" />,
       responsibilities: [
         "Overall team strategy and coordination",
@@ -69,7 +69,7 @@ export default function RileyTeamPage() {
       title: "First Contact Specialist",
       avatar: "GH",
       color: "indigo",
-      photoUrl: "/team/grace-holland.png",
+      photoUrl: "/team/grace-holland.webp",
       icon: <Search className="w-6 h-6" />,
       responsibilities: [
         "Artist discovery across social platforms",
@@ -94,7 +94,7 @@ export default function RileyTeamPage() {
       title: "Artist Success Manager",
       avatar: "MT",
       color: "blue",
-      photoUrl: "/team/marcus-tate.png",
+      photoUrl: "/team/marcus-tate.webp",
       icon: <BarChart3 className="w-6 h-6" />,
       responsibilities: [
         "Artist roster management (340 artists)",
@@ -119,7 +119,7 @@ export default function RileyTeamPage() {
       title: "Quality Assurance Lead",
       avatar: "SP",
       color: "green",
-      photoUrl: "/team/sienna-park.png",
+      photoUrl: "/team/sienna-park.webp",
       icon: <CheckCircle className="w-6 h-6" />,
       responsibilities: [
         "Track submission review and approval",
@@ -144,7 +144,7 @@ export default function RileyTeamPage() {
       title: "Financial Operations",
       avatar: "JC",
       color: "emerald",
-      photoUrl: "/team/jordan-cross.png",
+      photoUrl: "/team/jordan-cross.webp",
       icon: <DollarSign className="w-6 h-6" />,
       responsibilities: [
         "Monthly pool share calculations ($6,240/month)",

@@ -45,7 +45,7 @@ export default function CassidyTeamPage() {
       title: "Head of Curation & Final Authority",
       avatar: "CM",
       color: "teal",
-      photoUrl: "/team/cassidy-monroe.png",
+      photoUrl: "/team/cassidy-monroe.webp",
       icon: <Award className="w-6 h-6" />,
       responsibilities: [
         "Final tier placement decisions (Bronze/Silver/Gold/Platinum)",
@@ -70,7 +70,7 @@ export default function CassidyTeamPage() {
       title: "Technical Assessment Specialist",
       avatar: "DW",
       color: "cyan",
-      photoUrl: "/team/dakota-wells.png",
+      photoUrl: "/team/dakota-wells.webp",
       icon: <Headphones className="w-6 h-6" />,
       responsibilities: [
         "Production quality and warmth assessment",
@@ -94,7 +94,7 @@ export default function CassidyTeamPage() {
       title: "Commercial Viability & Playlist Strategy",
       avatar: "MR",
       color: "blue",
-      photoUrl: "/team/maya-reeves.png",
+      photoUrl: "/team/maya-reeves.webp",
       icon: <Radio className="w-6 h-6" />,
       responsibilities: [
         "Rotation compatibility and flow assessment",
@@ -118,7 +118,7 @@ export default function CassidyTeamPage() {
       title: "Performance & Development Specialist",
       avatar: "JC",
       color: "indigo",
-      photoUrl: "/team/jesse-coleman.png",
+      photoUrl: "/team/jesse-coleman.webp",
       icon: <Mic className="w-6 h-6" />,
       responsibilities: [
         "Vocal performance and emotional delivery",
@@ -142,7 +142,7 @@ export default function CassidyTeamPage() {
       title: "Cultural Context & Artistic Merit",
       avatar: "SC",
       color: "purple",
-      photoUrl: "/team/dr-sam-chen.png",
+      photoUrl: "/team/dr-sam-chen.webp",
       icon: <BookOpen className="w-6 h-6" />,
       responsibilities: [
         "Musical composition quality evaluation",
@@ -166,7 +166,7 @@ export default function CassidyTeamPage() {
       title: "Growth Potential & Analytics",
       avatar: "WC",
       color: "emerald",
-      photoUrl: "/team/whitley-cross.png",
+      photoUrl: "/team/whitley-cross.webp",
       icon: <TrendingUp className="w-6 h-6" />,
       responsibilities: [
         "Market positioning and demographic analysis",
