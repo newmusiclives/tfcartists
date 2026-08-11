@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth/config";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { validateCsrf, ensureCsrfCookie } from "@/lib/csrf";
+import { handleComingSoon } from "@/lib/coming-soon/gate";
 
 /**
  * Security Headers Configuration
@@ -180,6 +181,19 @@ export default auth(async (req) => {
   if (req.method === "OPTIONS") {
     const response = NextResponse.json({}, { status: 200 });
     return addCorsHeaders(response, req);
+  }
+
+  // --- Coming-soon gate ---
+  // First, so a hidden site does no work it doesn't have to: no CSRF check, no
+  // rate-limit bookkeeping, no branding lookup, and above all no page render.
+  const gate = await handleComingSoon(req, {
+    isAdmin: req.auth?.user?.role === "admin",
+  });
+  if (gate) {
+    addSecurityHeaders(gate, pathname);
+    // The hold page's signup POST needs the double-submit cookie.
+    ensureCsrfCookie(req, gate);
+    return gate;
   }
 
   // CSRF validation for state-changing API requests

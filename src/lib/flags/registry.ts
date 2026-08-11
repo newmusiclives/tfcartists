@@ -141,6 +141,16 @@ export const FLAGS = {
     scope: "global",
     category: "rights",
   },
+  coming_soon: {
+    label: "Coming-soon hold page",
+    description:
+      "Hide the entire site behind a launch placeholder. Middleware serves the hold page before any route renders, so nothing of the real site is reachable - not a page, not an API. " +
+      "Signed-in admins are never gated, and COMING_SOON_BYPASS_TOKEN opens the site for one browser via ?preview=<token>. " +
+      "Prefer setting FLAG_COMING_SOON in the environment: an env value takes the database out of the decision, so a database outage cannot quietly publish the site.",
+    defaultValue: false,
+    scope: "global",
+    category: "platform",
+  },
   listener_analytics: {
     label: "Listener analytics",
     description:
@@ -165,6 +175,6 @@ export function flagConfigKey(key: FlagKey, stationId?: string | null): string {
 }
 
 /** Emergency environment override, e.g. FLAG_RIGHTS_GATE=true */
-export function flagEnvKey(key: FlagKey): string {
-  return `FLAG_${key.toUpperCase()}`;
+export function flagEnvKey<K extends FlagKey>(key: K): `FLAG_${Uppercase<K>}` {
+  return `FLAG_${key.toUpperCase() as Uppercase<K>}`;
 }
