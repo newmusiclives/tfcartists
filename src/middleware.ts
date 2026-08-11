@@ -291,7 +291,14 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
+     *
+     * Static assets are excluded by extension so they are served straight from
+     * the CDN. Every extension missing from this list is a file that pays for a
+     * middleware invocation on every request and cannot be served while the
+     * coming-soon gate is up — which is what happened when the portraits moved
+     * from .png to .webp, since only the older formats were listed. Keep this in
+     * step with the formats actually shipped in public/.
      */
-    "/((?!_next/static|_next/image|favicon.ico|api/notify_now_playing|api/track_played|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.svg$|.*\\.mp3$|.*\\.wav$|.*\\.ogg$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/notify_now_playing|api/track_played|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.webp$|.*\\.avif$|.*\\.gif$|.*\\.ico$|.*\\.svg$|.*\\.woff2$|.*\\.woff$|.*\\.ttf$|.*\\.mp3$|.*\\.wav$|.*\\.ogg$).*)",
   ],
 };
